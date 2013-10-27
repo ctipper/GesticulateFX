@@ -45,4 +45,11 @@
                 <goal>jfx:jar</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-Build Native Bundle</actionName>
+            <displayName>Build Native Bundle</displayName>
+            <goals>
+                <goal>jfx:native</goal>
+            </goals>
+        </action>
     </actions>
