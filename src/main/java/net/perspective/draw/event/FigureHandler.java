@@ -116,13 +116,9 @@ public class FigureHandler extends HandlerAdapter {
                     double h = (double) c.getTempY() - p0.getY();
                     double l = Math.max(Math.abs(w), Math.abs(h));
                     points = new ArrayList<>();
-                    p1 = new CanvasPoint(p0.getX(), p0.getY() + l
-                        * Math.signum(h));
-                    p2 = new CanvasPoint(p0.getX() + l
-                        * Math.signum(w), p0.getY() + l
-                        * Math.signum(h));
-                    p3 = new CanvasPoint(p0.getX() + l
-                        * Math.signum(w), p0.getY());
+                    p1 = new CanvasPoint(p0.getX(), p0.getY() + l * Math.signum(h));
+                    p2 = new CanvasPoint(p0.getX() + l * Math.signum(w), p0.getY() + l * Math.signum(h));
+                    p3 = new CanvasPoint(p0.getX() + l * Math.signum(w), p0.getY());
                     points.add(p0);
                     points.add(p1);
                     points.add(p2);
@@ -149,13 +145,9 @@ public class FigureHandler extends HandlerAdapter {
                     double h = (double) c.getTempY() - p0.getY();
                     double l = Math.max(Math.abs(w), Math.abs(h));
                     points = new ArrayList<>();
-                    p0 = new CanvasPoint(p1.getX() + l
-                        * Math.signum(w) / 2, p0.getY());
-                    p1 = new CanvasPoint(p1.getX(), p0.getY() + l
-                        * Math.signum(h));
-                    p2 = new CanvasPoint(p1.getX() + l
-                        * Math.signum(w), p0.getY() + l
-                        * Math.signum(h));
+                    p0 = new CanvasPoint(p1.getX() + l * Math.signum(w) / 2, p0.getY());
+                    p1 = new CanvasPoint(p1.getX(), p0.getY() + l * Math.signum(h));
+                    p2 = new CanvasPoint(p1.getX() + l * Math.signum(w), p0.getY() + l * Math.signum(h));
                     points.add(p0);
                     points.add(p1);
                     points.add(p2);
