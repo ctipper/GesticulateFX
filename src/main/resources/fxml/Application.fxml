@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.perspective.draw.ApplicationController">
+  <children>
+    <BorderPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <bottom>
+        <Pane id="statusbar" prefHeight="20.0" prefWidth="200.0" />
+      </bottom>
+      <center>
+        <ScrollPane id="scroll" content="$null" fitToWidth="true" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" />
+      </center>
+      <left>
+        <VBox prefHeight="-1.0" prefWidth="40.0" style="-fx-border-color: rgb(243.0, 243.0, 243.0);">
+          <children>
+            <Button id="buttnewcanvas" mnemonicParsing="false" onAction="#handleWipeAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="">
+              <VBox.margin>
+                <Insets bottom="3.0" left="2.0" right="2.0" top="3.0" fx:id="x1" />
+              </VBox.margin>
+            </Button>
+            <Button id="buttselect" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="34.0" prefWidth="34.0" style="" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttrotate" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttslope" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttcircle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttsquare" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="butttriangle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttpolygon" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttsketch" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSketchAction" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="butttext" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" style="&#10;" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <CheckBox alignment="CENTER_LEFT" contentDisplay="LEFT" focusTraversable="false" mnemonicParsing="false" text="">
+              <VBox.margin>
+                <Insets left="10.0" top="8.0" />
+              </VBox.margin>
+            </CheckBox>
+            <Label text="Grid">
+              <font>
+                <Font size="12.0" />
+              </font>
+              <VBox.margin>
+                <Insets left="6.0" top="4.0" />
+              </VBox.margin>
+            </Label>
+          </children>
+        </VBox>
+      </left>
+      <top>
+        <ToolBar prefHeight="60.0" style="">
+          <items>
+            <Label focusTraversable="false" text="Stroke" />
+            <ComboBox focusTraversable="false">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Label focusTraversable="false" text="Style" />
+            <ComboBox focusTraversable="false">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Label focusTraversable="false" text="Color" />
+            <Button focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="36.0" style="-fx-background-color: black;" text="" />
+            <Label focusTraversable="false" text="Fill" />
+            <Button focusTraversable="false" mnemonicParsing="false" prefWidth="36.0" style="-fx-background-color: rgb(153, 204, 255);" text="" />
+            <Slider blockIncrement="5.0" focusTraversable="false" minorTickCount="2" prefWidth="90.0" showTickLabels="true" showTickMarks="true" snapToTicks="false" value="100.0" />
+            <Label focusTraversable="false" text="Font" />
+            <ComboBox focusTraversable="false">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Label focusTraversable="false" text="Size" />
+            <ComboBox focusTraversable="false">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" style="" styleClass="formatbuttons" text="">
+              <font>
+                <Font name="System Bold" size="12.0" />
+              </font>
+            </Button>
+            <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" style="" styleClass="formatbuttons" text="">
+              <font>
+                <Font size="13.0" />
+              </font>
+            </Button>
+            <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" underline="false" />
+            <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
+          </items>
+        </ToolBar>
+      </top>
+    </BorderPane>
+  </children>
+  <stylesheets>
+    <URL value="@../stylesheets/application.css" />
+  </stylesheets>
+</AnchorPane>

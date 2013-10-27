@@ -1,0 +1,100 @@
+.toolbutton {
+    /* lion */
+    -fx-background-color:
+        rgba(0,0,0,0.08),
+        linear-gradient(#9a9a9a, #909090),
+        linear-gradient(white 0%, #f3f3f3 50%, #ececec 51%, #f2f2f2 100%);
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-background-radius: 5,5,4;
+    -fx-padding: 3;
+    -fx-text-fill: #242d35;
+    -fx-font-size: 14px;
+}
+.formatbuttons {
+    -fx-background-color: 
+        linear-gradient(rgb(245.0, 245.0, 245.0), rgb(185.0, 185.0, 185.0));
+    -fx-background-insets:0.0;
+    -fx-background-radius: 3.5, 3.5;
+    -fx-border-radius: 4.0;
+    -fx-border-width: 0.4;
+    -fx-border-insets: 0, 0;
+    -fx-border-color: 
+        linear-gradient(rgb(147.0, 147.0, 147.0), rgb(131.0, 131.0, 131.0)),
+        linear-gradient(rgb(116.0, 116.0, 116.0), rgb(105.0, 105.0, 105.0));
+    -fx-padding: 3 13 3 13;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+}
+#statusbar {
+    -fx-background-color: rgb(185.0, 185.0, 185.0);
+}
+#buttnewcanvas {
+    -fx-background-image: url('../images/canvas-new.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttselect {
+    -fx-background-image: url('../images/select.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttrotate {
+    -fx-background-image: url('../images/rotate.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttslope {
+    -fx-background-image: url('../images/slope.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttcircle {
+    -fx-background-image: url('../images/circle.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsquare {
+    -fx-background-image: url('../images/square.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#butttriangle {
+    -fx-background-image: url('../images/triangle.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttpolygon {
+    -fx-background-image: url('../images/polygon.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsketch {
+    -fx-background-image: url('../images/sketch.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#butttext {
+    -fx-background-image: url('../images/text.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttbold {
+    -fx-background-image: url('../images/bold.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttitalic {
+    -fx-background-image: url('../images/italic.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttunderlined {
+    -fx-background-image: url('../images/underlined.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttvertical {
+    -fx-background-image: url('../images/perpendicular.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
