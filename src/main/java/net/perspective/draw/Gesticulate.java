@@ -7,8 +7,6 @@
 package net.perspective.draw;
 
 import java.net.URL;
-import java.util.logging.Logger;
-import static java.util.logging.Logger.getLogger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -22,10 +20,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -50,7 +49,7 @@ public class Gesticulate extends Application {
     static final int duration = 25;
     private static final Duration REFRESH_FREQUENCY = Duration.millis(duration);
     
-    private static final Logger logger = getLogger(Gesticulate.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
     @Override
     public void start(Stage stage) throws Exception {

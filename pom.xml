@@ -32,7 +32,7 @@
                 <configuration>
 
                     <mainClass>net.perspective.draw.Gesticulate</mainClass>
-					<jfxMainAppJarName>${project.build.finalName}.jar</jfxMainAppJarName>
+                    <jfxMainAppJarName>${project.build.finalName}.jar</jfxMainAppJarName>
 					
                     <!-- only required if signing the jar file -->
                     <keyStoreAlias>example-user</keyStoreAlias>

@@ -6,8 +6,6 @@
  */
 package net.perspective.draw;
 
-import java.util.logging.Logger;
-import static java.util.logging.Logger.getLogger;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,6 +19,8 @@ import net.perspective.draw.event.HandlerType;
 import net.perspective.draw.event.RotationHandler;
 import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.geom.Figure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,7 +37,7 @@ public class DrawingCanvas {
     private double tempX, tempY;
     private boolean smoothed;
 
-    private static final Logger logger = getLogger(DrawingCanvas.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DrawingCanvas.class.getName());
 
     /**
      * Creates a new instance of <code>DrawingCanvas</code>

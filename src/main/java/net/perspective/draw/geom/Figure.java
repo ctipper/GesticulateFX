@@ -37,7 +37,7 @@ public class Figure {
 
     public Figure() {
         this.points = new ArrayList<>();
-        this.factory = new ConcretePathFactory();
+        this.factory = new FigurePathFactory();
         this.path = new GeneralPath();
         this.angle = 0;
         this.closed = false;

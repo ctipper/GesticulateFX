@@ -1,5 +1,5 @@
 /*
- * ConcretePathFactory.java
+ * FigurePathFactory.java
  * 
  * Created on Oct 19, 2013 6:07:12 PM
  * 
@@ -16,11 +16,11 @@ import org.jhotdraw.geom.Bezier;
  * @author ctipper
  */
 
-public class ConcretePathFactory implements PathFactory {
+public class FigurePathFactory implements PathFactory {
 	
 	GeneralPath path;
 
-	public ConcretePathFactory() {
+	public FigurePathFactory() {
 		
 	}
 	
