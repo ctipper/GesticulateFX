@@ -123,7 +123,6 @@ public class Gesticulate extends Application {
         stage.setY(frameTop);
         stage.setWidth(xWidth);
         stage.setHeight(yHeight);
-        stage.getIcons().add(new Image("/images/gesticulate-48.png"));
         stage.setTitle("Gesticulate");
     }
     
