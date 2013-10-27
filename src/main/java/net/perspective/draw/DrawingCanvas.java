@@ -18,6 +18,7 @@ import net.perspective.draw.event.HandlerAdapter;
 import net.perspective.draw.event.HandlerType;
 import net.perspective.draw.event.RotationHandler;
 import net.perspective.draw.event.SelectionHandler;
+import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +122,8 @@ public class DrawingCanvas {
             case ROTATION:
                 this.handler = new RotationHandler(this);
                 break;
+            case SKETCH:
+                this.handler = new SketchHandler(this);
             default:
                 break;
         }
@@ -171,7 +174,7 @@ public class DrawingCanvas {
                     touchMove(event);
                 }
             });
-        this.changeHandler(HandlerType.FIGURE);
+        this.changeHandler(HandlerType.SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {

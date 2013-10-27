@@ -70,13 +70,13 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handlePolygonAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.POLYGON);
-        drawcanvas.changeHandler(HandlerType.FIGURE);
+        drawcanvas.changeHandler(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.SKETCH);
-        drawcanvas.changeHandler(HandlerType.FIGURE);
+        drawcanvas.changeHandler(HandlerType.SKETCH);
     }
     
     @Override

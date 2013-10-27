@@ -12,5 +12,5 @@ package net.perspective.draw.event;
  */
 
 public enum HandlerType {
-    SELECTION, FIGURE, ROTATION
+    SELECTION, FIGURE, ROTATION, SKETCH
 }
