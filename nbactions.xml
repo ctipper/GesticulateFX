@@ -39,8 +39,8 @@
             </properties>
         </action>
         <action>
-            <actionName>CUSTOM-Build Executeable JAR</actionName>
-            <displayName>Build Executeable JAR</displayName>
+            <actionName>CUSTOM-Build Executable JAR</actionName>
+            <displayName>Build Executable JAR</displayName>
             <goals>
                 <goal>jfx:jar</goal>
             </goals>
