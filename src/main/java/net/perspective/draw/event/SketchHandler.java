@@ -60,6 +60,7 @@ public class SketchHandler extends HandlerAdapter  {
     public void moveEvent() {
         java.util.List<CanvasPoint> points;
         FigureType type;
+        
         view.setOldItem(view.getNewItem());
         if (view.getOldItem() instanceof Figure) {
             type = ((Figure) view.getOldItem()).getType();
@@ -72,7 +73,7 @@ public class SketchHandler extends HandlerAdapter  {
         item.setType(type);
         CanvasPoint point = new CanvasPoint(c.getTempX(), c.getTempY());
         if ((type.equals(FigureType.SKETCH)) || (type.equals(FigureType.POLYGON))) {
-            points = view.getOldItem().getPoints();
+            points = ((Figure) view.getOldItem()).getPoints();
             points.add(point);
             item.setPoints(points);
         } else {

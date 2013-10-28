@@ -44,6 +44,7 @@ public class FigureHandler extends HandlerAdapter {
     public void moveEvent() {
         java.util.List<CanvasPoint> points;
         FigureType type;
+        
         type = view.getFigureType();
         Figure item = new Figure();
         item.setStroke(6.0);
