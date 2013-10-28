@@ -44,25 +44,14 @@ public class FigureHandler extends HandlerAdapter {
     public void dragEvent() {
         java.util.List<CanvasPoint> points;
         FigureType type;
-        
+
         type = view.getFigureType();
-        Figure item = new Figure();
+        Figure item = new Figure(type);
         item.setStroke(6.0);
         item.setColor("#4860E0");
-        item.setType(type);
         points = pointFactory.createPoints(type, c.getStartX(), c.getStartY(), 
                 c.getTempX(), c.getTempY());
         item.setPoints(points);
-        switch (item.getType()) {
-            case SQUARE:
-            case CIRCLE:
-            case TRIANGLE:
-                item.setClosed(true);
-                break;
-            default:
-                item.setClosed(false);
-                break;
-        }
         item.setPath();
         view.setNewItem(item);
     }

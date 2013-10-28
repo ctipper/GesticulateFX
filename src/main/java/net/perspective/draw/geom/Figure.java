@@ -36,13 +36,18 @@ public class Figure {
     boolean closed;
 
     public Figure() {
-        this.points = new ArrayList<>();
-        this.factory = new FigurePathFactory();
-        this.path = new GeneralPath();
         this.angle = 0;
         this.closed = false;
     }
 
+    public Figure(FigureType t) {
+        this();
+        this.type = t;
+        this.points = new ArrayList<>();
+        this.factory = new FigurePathFactory();
+        this.path = new GeneralPath();
+    }
+    
     public void setPoints(List<CanvasPoint> points) {
         this.points = points;
     }
@@ -97,6 +102,17 @@ public class Figure {
 
     public void setPath() {
         this.path = factory.createPath(this);
+        switch (this.type) {
+            case SQUARE:
+            case CIRCLE:
+            case TRIANGLE:
+            case POLYGON:
+                this.setClosed(true);
+                break;
+            default:
+                this.setClosed(false);
+                break;
+        }
     }
 
     public boolean contains(double x, double y) {

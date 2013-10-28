@@ -41,7 +41,7 @@ public class SketchHandler extends HandlerAdapter  {
 
         view.setDrawing(true);
         // Create Figure
-        Figure item = new Figure();
+        Figure item = new Figure(view.getFigureType());
         item.setStroke(6.0);
         item.setColor("#4860E0");
         // Initialise sketch
@@ -49,11 +49,6 @@ public class SketchHandler extends HandlerAdapter  {
         points = new ArrayList<>();
         points.add(point);
 	    item.setPoints(points);
-        type = view.getFigureType();
-        item.setType(type);
-        if (type.equals(FigureType.POLYGON)) {
-            item.setClosed(true);
-        }
     	item.setPath();
         view.setNewItem(item);
     }
@@ -70,7 +65,7 @@ public class SketchHandler extends HandlerAdapter  {
             type = FigureType.NONE;
         }
         // Create Figure
-        Figure item = new Figure();
+        Figure item = new Figure(view.getFigureType());
         item.setStroke(6.0);
         item.setColor("#4860E0");
         CanvasPoint point = new CanvasPoint(c.getTempX(), c.getTempY());
@@ -82,11 +77,6 @@ public class SketchHandler extends HandlerAdapter  {
             points = new ArrayList<>();
             points.add(point);
             item.setPoints(points);
-        }
-        type = view.getFigureType();
-        item.setType(type);
-        if (type.equals(FigureType.POLYGON)) {
-            item.setClosed(true);
         }
         item.setPath();
         view.setNewItem(item);
