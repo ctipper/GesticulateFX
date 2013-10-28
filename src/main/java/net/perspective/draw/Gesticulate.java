@@ -90,7 +90,7 @@ public class Gesticulate extends Application {
                 Duration.ZERO,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent actionEvent) {
-                        drawcanvas.doUpdate();
+                        drawcanvas.repaint();
                     }
                 }
             ),

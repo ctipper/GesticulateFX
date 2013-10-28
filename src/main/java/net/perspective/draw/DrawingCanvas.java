@@ -80,7 +80,7 @@ public class DrawingCanvas {
         cxt.restore();
     }
 
-    public void doUpdate() {
+    public void repaint() {
         // update the buffer canvas
         this.clear(context);
         if (smoothed) {
