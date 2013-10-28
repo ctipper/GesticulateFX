@@ -35,20 +35,22 @@ public class SketchHandler extends HandlerAdapter  {
 
     @Override
     public void downEvent() {
-        FigureType type;
         java.util.List<CanvasPoint> points;
+        FigureType type;
         CanvasPoint point;
 
         view.setDrawing(true);
-        type = view.getFigureType();
+        // Create Figure
         Figure item = new Figure();
         item.setStroke(6.0);
         item.setColor("#4860E0");
-        item.setType(type);
+        // Initialise sketch
         point = new CanvasPoint(c.getStartX(), c.getStartY());
         points = new ArrayList<>();
         points.add(point);
 	    item.setPoints(points);
+        type = view.getFigureType();
+        item.setType(type);
         if (type.equals(FigureType.POLYGON)) {
             item.setClosed(true);
         }
@@ -60,17 +62,17 @@ public class SketchHandler extends HandlerAdapter  {
     public void dragEvent() {
         java.util.List<CanvasPoint> points;
         FigureType type;
-        
+
         view.setOldItem(view.getNewItem());
         if (view.getOldItem() instanceof Figure) {
             type = ((Figure) view.getOldItem()).getType();
         } else {
             type = FigureType.NONE;
         }
+        // Create Figure
         Figure item = new Figure();
         item.setStroke(6.0);
         item.setColor("#4860E0");
-        item.setType(type);
         CanvasPoint point = new CanvasPoint(c.getTempX(), c.getTempY());
         if ((type.equals(FigureType.SKETCH)) || (type.equals(FigureType.POLYGON))) {
             points = ((Figure) view.getOldItem()).getPoints();
@@ -81,7 +83,9 @@ public class SketchHandler extends HandlerAdapter  {
             points.add(point);
             item.setPoints(points);
         }
-        if (view.getFigureType().equals(FigureType.POLYGON)) {
+        type = view.getFigureType();
+        item.setType(type);
+        if (type.equals(FigureType.POLYGON)) {
             item.setClosed(true);
         }
         item.setPath();
