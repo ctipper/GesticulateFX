@@ -33,7 +33,6 @@ public class DrawingCanvas {
     private final Canvas canvas;
     private final GraphicsContext context;
     private HandlerAdapter handler;
-    private boolean mousedown, touchdown = false;
     private double startX, startY;
     private double tempX, tempY;
     private boolean smoothed;
@@ -150,7 +149,7 @@ public class DrawingCanvas {
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    mouseMove(event);
+                    mouseMoved(event);
                 }
             });
         canvas.addEventHandler(TouchEvent.TOUCH_RELEASED,
@@ -171,7 +170,7 @@ public class DrawingCanvas {
             new EventHandler<TouchEvent>() {
                 @Override
                 public void handle(TouchEvent event) {
-                    touchMove(event);
+                    touchMoved(event);
                 }
             });
         this.changeHandler(HandlerType.SKETCH);
@@ -179,7 +178,6 @@ public class DrawingCanvas {
 
     public void mouseUp(MouseEvent event) {
         handler.upEvent();
-        mousedown = false;
         view.setDrawing(false);
     }
 
@@ -187,20 +185,16 @@ public class DrawingCanvas {
         startX = event.getX();
         startY = event.getY();
         handler.downEvent();
-        mousedown = true;
     }
 
-    public void mouseMove(MouseEvent event) {
-        if (mousedown) {
-            tempX = event.getX();
-            tempY = event.getY();
-            handler.moveEvent();
-        }
+    public void mouseMoved(MouseEvent event) {
+        tempX = event.getX();
+        tempY = event.getY();
+        handler.dragEvent();
     }
 
     public void touchEnd(TouchEvent event) {
         handler.upEvent();
-        touchdown = false;
         view.setDrawing(false);
     }
 
@@ -209,16 +203,13 @@ public class DrawingCanvas {
         startX = touch.getX();
         startY = touch.getY();
         handler.downEvent();
-        touchdown = true;
     }
 
-    public void touchMove(TouchEvent event) {
-        if (touchdown) {
-            TouchPoint touch = event.getTouchPoints().get(0);
-            tempX = touch.getX();
-            tempY = touch.getY();
-            handler.moveEvent();
-        }
+    public void touchMoved(TouchEvent event) {
+        TouchPoint touch = event.getTouchPoints().get(0);
+        tempX = touch.getX();
+        tempY = touch.getY();
+        handler.dragEvent();
     }
 
     public void setStartX(double x) {

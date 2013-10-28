@@ -41,7 +41,7 @@ public class SelectionHandler extends HandlerAdapter {
     }
 
     @Override
-    public void moveEvent() {
+    public void dragEvent() {
         int selection = view.getSelected();
         if (selection != -1) {
             double xinc = c.getTempX() - c.getStartX();

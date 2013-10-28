@@ -29,5 +29,5 @@ public abstract class HandlerAdapter {
     
     public abstract void downEvent();
 
-    public abstract void moveEvent();
+    public abstract void dragEvent();
 }

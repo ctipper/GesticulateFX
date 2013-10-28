@@ -57,7 +57,7 @@ public class SketchHandler extends HandlerAdapter  {
     }
 
     @Override
-    public void moveEvent() {
+    public void dragEvent() {
         java.util.List<CanvasPoint> points;
         FigureType type;
         

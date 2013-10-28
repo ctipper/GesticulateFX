@@ -46,7 +46,7 @@ public class RotationHandler extends HandlerAdapter {
     }
 
     @Override
-    public void moveEvent() {
+    public void dragEvent() {
         CanvasPoint A, B;
 
         int selection = view.getSelected();
