@@ -53,11 +53,15 @@ public class FigureHandler extends HandlerAdapter {
         points = pointFactory.createPoints(type, c.getStartX(), c.getStartY(), 
                 c.getTempX(), c.getTempY());
         item.setPoints(points);
-        if ((item.getType().equals(FigureType.SQUARE)) ||
-            (item.getType().equals(FigureType.CIRCLE)) ||
-            (item.getType().equals(FigureType.TRIANGLE)) ||
-            (item.getType().equals(FigureType.POLYGON))) {
-            item.setClosed(true);
+        switch (item.getType()) {
+            case SQUARE:
+            case CIRCLE:
+            case TRIANGLE:
+                item.setClosed(true);
+                break;
+            default:
+                item.setClosed(false);
+                break;
         }
         item.setPath();
         view.setNewItem(item);
