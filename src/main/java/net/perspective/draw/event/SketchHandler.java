@@ -7,10 +7,10 @@
 package net.perspective.draw.event;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.perspective.draw.DocView;
 import net.perspective.draw.DrawingCanvas;
 import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -35,8 +35,7 @@ public class SketchHandler extends HandlerAdapter  {
 
     @Override
     public void downEvent() {
-        java.util.List<CanvasPoint> points;
-        FigureType type;
+        List<CanvasPoint> points;
         CanvasPoint point;
 
         view.setDrawing(true);
@@ -55,8 +54,7 @@ public class SketchHandler extends HandlerAdapter  {
 
     @Override
     public void dragEvent() {
-        java.util.List<CanvasPoint> points;
-        FigureType type;
+        List<CanvasPoint> points;
 
         view.setOldItem(view.getNewItem());
         // Create Figure
@@ -65,7 +63,7 @@ public class SketchHandler extends HandlerAdapter  {
         item.setColor("#4860E0");
         // continue sketch
         CanvasPoint point = new CanvasPoint(c.getTempX(), c.getTempY());
-        points = ((Figure) view.getOldItem()).getPoints();
+        points = view.getOldItem().getPoints();
         points.add(point);
         item.setPoints(points);
         item.setPath();
