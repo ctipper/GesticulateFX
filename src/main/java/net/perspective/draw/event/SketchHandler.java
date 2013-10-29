@@ -59,25 +59,15 @@ public class SketchHandler extends HandlerAdapter  {
         FigureType type;
 
         view.setOldItem(view.getNewItem());
-        if (view.getOldItem() instanceof Figure) {
-            type = ((Figure) view.getOldItem()).getType();
-        } else {
-            type = FigureType.NONE;
-        }
         // Create Figure
         Figure item = new Figure(view.getFigureType());
         item.setStroke(6.0);
         item.setColor("#4860E0");
+        // continue sketch
         CanvasPoint point = new CanvasPoint(c.getTempX(), c.getTempY());
-        if ((type.equals(FigureType.SKETCH)) || (type.equals(FigureType.POLYGON))) {
-            points = ((Figure) view.getOldItem()).getPoints();
-            points.add(point);
-            item.setPoints(points);
-        } else {
-            points = new ArrayList<>();
-            points.add(point);
-            item.setPoints(points);
-        }
+        points = ((Figure) view.getOldItem()).getPoints();
+        points.add(point);
+        item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
     }
