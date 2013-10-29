@@ -81,7 +81,6 @@ public class Gesticulate extends Application {
         this.setOnResize(pane);
         // init, canvas handlers
         drawcanvas.clear();
-        drawcanvas.setSmoothed(true);
         drawcanvas.setHandlers();
         
         // need to set up timer loop

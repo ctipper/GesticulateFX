@@ -30,7 +30,6 @@ public class DrawingCanvas {
     private HandlerAdapter handler;
     private double startX, startY;
     private double tempX, tempY;
-    private boolean smoothed;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawingCanvas.class.getName());
 
@@ -78,31 +77,15 @@ public class DrawingCanvas {
     public void repaint() {
         // update the buffer canvas
         this.clear(context);
-        if (smoothed) {
-            for (Figure item : view.getDrawings()) {
-                item.draw(context);
-            }
-            if (view.getSelected() != -1) {
-                view.getDrawings().get(view.getSelected()).drawAnchors(context);
-            }
-            if (view.isDrawing()) {
-                view.getNewItem().draw(context);
-            }
-        } else {
-            for (Figure item : view.getDrawings()) {
-                item.sketch(context);
-            }
-            if (view.getSelected() != -1) {
-                view.getDrawings().get(view.getSelected()).drawAnchors(context);
-            }
-            if (view.isDrawing()) {
-                view.getNewItem().sketch(context);
-            }
+        for (Figure item : view.getDrawings()) {
+            item.draw(context);
         }
-    }
-
-    public void setSmoothed(boolean s) {
-        smoothed = s;
+        if (view.getSelected() != -1) {
+            view.getDrawings().get(view.getSelected()).drawAnchors(context);
+        }
+        if (view.isDrawing()) {
+            view.getNewItem().sketch(context);
+        }
     }
 
     public void changeHandler(HandlerType h) {

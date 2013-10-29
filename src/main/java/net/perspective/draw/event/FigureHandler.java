@@ -37,7 +37,6 @@ public class FigureHandler extends HandlerAdapter {
 
     @Override
     public void downEvent() {
-        view.setDrawing(true);
     }
 
     @Override
@@ -45,12 +44,13 @@ public class FigureHandler extends HandlerAdapter {
         java.util.List<CanvasPoint> points;
         FigureType type;
 
+        view.setDrawing(true);
         type = view.getFigureType();
         Figure item = new Figure(type);
         item.setStroke(6.0);
         item.setColor("#4860E0");
-        points = pointFactory.createPoints(type, c.getStartX(), c.getStartY(), 
-                c.getTempX(), c.getTempY());
+        points = pointFactory.createPoints(type, 
+            c.getStartX(), c.getStartY(), c.getTempX(), c.getTempY());
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);

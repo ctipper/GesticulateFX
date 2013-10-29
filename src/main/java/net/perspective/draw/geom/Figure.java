@@ -179,7 +179,6 @@ public class Figure {
 
     public void draw(GraphicsContext context) {
         AffineTransform at;
-        double[] coords = {0, 0, 0, 0, 0, 0};
 
         at = this.getTransform();
 
@@ -188,6 +187,26 @@ public class Figure {
         context.setLineWidth(this.getStroke());
         context.setLineJoin(StrokeLineJoin.ROUND);
         context.setLineCap(StrokeLineCap.SQUARE);
+        this.drawPath(context, at);
+        if (this.isClosed()) {
+            context.closePath();
+            context.fill();
+        }
+        context.stroke();
+    }
+
+    public void sketch(GraphicsContext context) {
+        context.setStroke(Color.LIGHTGREY);
+        context.setLineWidth(this.getStroke());
+        this.drawPath(context, new AffineTransform());
+        if (this.isClosed()) {
+            context.closePath();
+        }
+        context.stroke();
+    }
+    
+    private void drawPath(GraphicsContext context, AffineTransform at) {
+        double[] coords = {0, 0, 0, 0, 0, 0};
         context.beginPath();
         PathIterator iterator = path.getPathIterator(at);
         while (!iterator.isDone()) {
@@ -203,7 +222,7 @@ public class Figure {
                     break;
                 case PathIterator.SEG_CUBICTO:
                     context.bezierCurveTo(coords[0], coords[1], coords[2], coords[3],
-                            coords[4], coords[5]);
+                        coords[4], coords[5]);
                     break;
                 case PathIterator.SEG_CLOSE:
                     context.closePath();
@@ -213,28 +232,5 @@ public class Figure {
             }
             iterator.next();
         }
-        if (this.isClosed()) {
-            context.fill();
-        }
-        context.stroke();
-    }
-
-    public void sketch(GraphicsContext context) {
-        context.setStroke(Color.web(this.getColor()));
-        context.setLineWidth(this.getStroke());
-        context.beginPath();
-        boolean start = true;
-        for (CanvasPoint p : points) {
-            if (start) {
-                context.moveTo(p.getX(), p.getY());
-                start = false;
-            } else {
-                context.lineTo(p.getX(), p.getY());
-            }
-        }
-        if (closed) {
-            context.closePath();
-        }
-        context.stroke();
     }
 }
