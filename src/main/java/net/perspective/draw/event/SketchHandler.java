@@ -49,6 +49,7 @@ public class SketchHandler extends HandlerAdapter  {
 	    item.setPoints(points);
     	item.setPath();
         view.setNewItem(item);
+        view.setDrawing(true);
     }
 
     @Override
@@ -67,6 +68,5 @@ public class SketchHandler extends HandlerAdapter  {
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
-        view.setDrawing(true);
     }
 }
