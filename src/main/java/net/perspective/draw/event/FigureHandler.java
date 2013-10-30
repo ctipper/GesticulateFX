@@ -44,7 +44,6 @@ public class FigureHandler extends HandlerAdapter {
         java.util.List<CanvasPoint> points;
         FigureType type;
 
-        view.setDrawing(true);
         type = view.getFigureType();
         Figure item = new Figure(type);
         item.setStroke(6.0);
@@ -54,5 +53,6 @@ public class FigureHandler extends HandlerAdapter {
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
+        view.setDrawing(true);
     }
 }

@@ -38,7 +38,6 @@ public class SketchHandler extends HandlerAdapter  {
         List<CanvasPoint> points;
         CanvasPoint point;
 
-        view.setDrawing(true);
         // Create Figure
         Figure item = new Figure(view.getFigureType());
         item.setStroke(6.0);
@@ -68,5 +67,6 @@ public class SketchHandler extends HandlerAdapter  {
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
+        view.setDrawing(true);
     }
 }
