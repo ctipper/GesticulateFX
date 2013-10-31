@@ -198,6 +198,8 @@ public class Figure {
     public void sketch(GraphicsContext context) {
         context.setStroke(Color.LIGHTGREY);
         context.setLineWidth(this.getStroke());
+        context.setLineJoin(StrokeLineJoin.ROUND);
+        context.setLineCap(StrokeLineCap.SQUARE);
         this.drawPath(context, new AffineTransform());
         if (this.isClosed()) {
             context.closePath();
