@@ -8,9 +8,7 @@ package net.perspective.draw.event;
 
 import net.perspective.draw.DocView;
 import net.perspective.draw.DrawingCanvas;
-import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigurePointFactory;
-import net.perspective.draw.geom.FigureType;
+import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -21,7 +19,7 @@ import net.perspective.draw.util.CanvasPoint;
 public class FigureHandler extends HandlerAdapter {
 
     private final DocView view;
-    private final FigurePointFactory pointFactory;
+    private final PointFactory pointFactory;
 
     public FigureHandler(DrawingCanvas c) {
         super(c);
@@ -31,7 +29,6 @@ public class FigureHandler extends HandlerAdapter {
 
     @Override
     public void upEvent() {
-        view.setDrawing(false);
         view.addDrawItemToCanvas(view.getNewItem());
     }
 
@@ -53,6 +50,5 @@ public class FigureHandler extends HandlerAdapter {
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
-        view.setDrawing(true);
     }
 }

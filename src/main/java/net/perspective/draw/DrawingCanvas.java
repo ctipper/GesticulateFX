@@ -169,13 +169,14 @@ public class DrawingCanvas {
         tempX = event.getX();
         tempY = event.getY();
         handler.dragEvent();
+        view.setDrawing(true);
     }
 
     public void touchEnd(TouchEvent event) {
         handler.upEvent();
         view.setDrawing(false);
     }
-
+    
     public void touchStart(TouchEvent event) {
         TouchPoint touch = event.getTouchPoints().get(0);
         startX = touch.getX();
@@ -188,6 +189,7 @@ public class DrawingCanvas {
         tempX = touch.getX();
         tempY = touch.getY();
         handler.dragEvent();
+        view.setDrawing(true);
     }
 
     public void setStartX(double x) {

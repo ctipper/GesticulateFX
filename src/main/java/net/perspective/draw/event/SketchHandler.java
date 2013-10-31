@@ -29,7 +29,6 @@ public class SketchHandler extends HandlerAdapter  {
 
     @Override
     public void upEvent() {
-        view.setDrawing(false);
         view.addDrawItemToCanvas(view.getNewItem());
     }
 
@@ -55,6 +54,7 @@ public class SketchHandler extends HandlerAdapter  {
     @Override
     public void dragEvent() {
         List<CanvasPoint> points;
+        CanvasPoint point;
 
         view.setOldItem(view.getNewItem());
         // Create Figure
@@ -62,7 +62,7 @@ public class SketchHandler extends HandlerAdapter  {
         item.setStroke(6.0);
         item.setColor("#4860E0");
         // continue sketch
-        CanvasPoint point = new CanvasPoint(c.getTempX(), c.getTempY());
+        point = new CanvasPoint(c.getTempX(), c.getTempY());
         points = view.getOldItem().getPoints();
         points.add(point);
         item.setPoints(points);
