@@ -29,6 +29,7 @@ public class SketchHandler extends HandlerAdapter  {
 
     @Override
     public void upEvent() {
+        view.setDrawing(false);
         view.addDrawItemToCanvas(view.getNewItem());
     }
 

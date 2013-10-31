@@ -29,6 +29,7 @@ public class FigureHandler extends HandlerAdapter {
 
     @Override
     public void upEvent() {
+        view.setDrawing(false);
         view.addDrawItemToCanvas(view.getNewItem());
     }
 
@@ -50,5 +51,6 @@ public class FigureHandler extends HandlerAdapter {
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
+        view.setDrawing(true);
     }
 }
