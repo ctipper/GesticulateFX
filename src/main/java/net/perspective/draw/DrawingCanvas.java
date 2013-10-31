@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DrawingCanvas {
 
-    private final DocView view;
+    private final DocModel model;
     private final Canvas canvas;
     private final GraphicsContext context;
     private HandlerAdapter handler;
@@ -42,12 +42,12 @@ public class DrawingCanvas {
     public DrawingCanvas(double width, double height) {
         canvas = new Canvas(width, height);
         context = canvas.getGraphicsContext2D();
-        view = new DocView();
+        model = new DocModel();
         canvas.setFocusTraversable(false);
     }
 
     void initCanvas() {
-        view.initView();
+        model.initModel();
         this.clear();
     }
 
@@ -55,8 +55,8 @@ public class DrawingCanvas {
         return canvas;
     }
 
-    public DocView getView() {
-        return view;
+    public DocModel getView() {
+        return model;
     }
 
     public void clear() {
@@ -77,14 +77,14 @@ public class DrawingCanvas {
     public void repaint() {
         // update the buffer canvas
         this.clear(context);
-        for (Figure item : view.getDrawings()) {
+        for (Figure item : model.getDrawings()) {
             item.draw(context);
         }
-        if (view.getSelected() != -1) {
-            view.getDrawings().get(view.getSelected()).drawAnchors(context);
+        if (model.getSelected() != -1) {
+            model.getDrawings().get(model.getSelected()).drawAnchors(context);
         }
-        if (view.isDrawing()) {
-            view.getNewItem().sketch(context);
+        if (model.isDrawing()) {
+            model.getNewItem().sketch(context);
         }
     }
 
@@ -104,8 +104,8 @@ public class DrawingCanvas {
             default:
                 break;
         }
-        view.setSelected(-1);
-        view.setDrawing(false);
+        model.setSelected(-1);
+        model.setDrawing(false);
     }
 
     void setHandlers() {

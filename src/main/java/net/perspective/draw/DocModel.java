@@ -1,5 +1,5 @@
 /*
- * DocView.java
+ * DocModel.java
  * 
  * Created on Oct 20, 2013 11:14:58 AM
  * 
@@ -15,7 +15,7 @@ import net.perspective.draw.geom.FigureType;
  *
  * @author ctipper
  */
-public class DocView {
+public class DocModel {
 
     private java.util.List<Figure> drawings;
     private FigureType figuretype;
@@ -26,7 +26,7 @@ public class DocView {
     /**
      * Creates a new instance of <code>DocView</code>
      */
-    public DocView() {
+    public DocModel() {
         newitem = new Figure();
         olditem = null;
         drawings = new ArrayList<>();
@@ -34,7 +34,7 @@ public class DocView {
         selection = -1;
     }
 
-    public void initView() {
+    public void initModel() {
         this.setFigureType(FigureType.SKETCH);
         this.deleteContents();
         this.setSelected(-1);

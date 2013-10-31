@@ -7,7 +7,7 @@
 package net.perspective.draw.event;
 
 import java.util.List;
-import net.perspective.draw.DocView;
+import net.perspective.draw.DocModel;
 import net.perspective.draw.DrawingCanvas;
 import net.perspective.draw.geom.Figure;
 
@@ -18,11 +18,11 @@ import net.perspective.draw.geom.Figure;
 
 public class SelectionHandler extends HandlerAdapter {
 
-    DocView view;
+    DocModel model;
 
     public SelectionHandler(DrawingCanvas c) {
         super(c);
-        view = c.getView();
+        model = c.getView();
     }
 
     @Override
@@ -31,22 +31,22 @@ public class SelectionHandler extends HandlerAdapter {
 
     @Override
     public void downEvent() {
-        view.setSelected(-1);
-        List<Figure> drawings = view.getDrawings();
+        model.setSelected(-1);
+        List<Figure> drawings = model.getDrawings();
         for (Figure figure : drawings) {
             if (figure.contains(c.getStartX(), c.getStartY())) {
-                view.setSelected(drawings.indexOf(figure));
+                model.setSelected(drawings.indexOf(figure));
             }
         }
     }
 
     @Override
     public void dragEvent() {
-        int selection = view.getSelected();
+        int selection = model.getSelected();
         if (selection != -1) {
             double xinc = c.getTempX() - c.getStartX();
             double yinc = c.getTempY() - c.getStartY();
-            view.getDrawings().get(selection).moveFigure(xinc, yinc);
+            model.getDrawings().get(selection).moveFigure(xinc, yinc);
             c.setStartX(c.getTempX());
             c.setStartY(c.getTempY());
         }
