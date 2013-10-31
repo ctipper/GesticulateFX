@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.event;
 
-import net.perspective.draw.DocModel;
+import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingCanvas;
 import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
@@ -18,19 +18,19 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class FigureHandler extends HandlerAdapter {
 
-    private final DocModel model;
+    private final CanvasView view;
     private final PointFactory pointFactory;
 
     public FigureHandler(DrawingCanvas c) {
         super(c);
-        this.model = c.getView();
+        this.view = c.getView();
         this.pointFactory = new FigurePointFactory();
     }
 
     @Override
     public void upEvent() {
-        model.setDrawing(false);
-        model.addDrawItemToCanvas(model.getNewItem());
+        view.setDrawing(false);
+        view.addDrawItemToCanvas(view.getNewItem());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FigureHandler extends HandlerAdapter {
         java.util.List<CanvasPoint> points;
         FigureType type;
 
-        type = model.getFigureType();
+        type = view.getFigureType();
         Figure item = new Figure(type);
         item.setStroke(6.0);
         item.setColor("#4860E0");
@@ -50,7 +50,7 @@ public class FigureHandler extends HandlerAdapter {
             c.getStartX(), c.getStartY(), c.getTempX(), c.getTempY());
         item.setPoints(points);
         item.setPath();
-        model.setNewItem(item);
-        model.setDrawing(true);
+        view.setNewItem(item);
+        view.setDrawing(true);
     }
 }

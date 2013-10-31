@@ -8,7 +8,7 @@ package net.perspective.draw.event;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.perspective.draw.DocModel;
+import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingCanvas;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.util.CanvasPoint;
@@ -20,17 +20,17 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class SketchHandler extends HandlerAdapter  {
     
-    private final DocModel model;
+    private final CanvasView view;
 
     public SketchHandler(DrawingCanvas c) {
         super(c);
-        this.model = c.getView();
+        this.view = c.getView();
     }
 
     @Override
     public void upEvent() {
-        model.setDrawing(false);
-        model.addDrawItemToCanvas(model.getNewItem());
+        view.setDrawing(false);
+        view.addDrawItemToCanvas(view.getNewItem());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SketchHandler extends HandlerAdapter  {
         CanvasPoint point;
 
         // Create Figure
-        Figure item = new Figure(model.getFigureType());
+        Figure item = new Figure(view.getFigureType());
         item.setStroke(6.0);
         item.setColor("#4860E0");
         // Initialise sketch
@@ -48,8 +48,8 @@ public class SketchHandler extends HandlerAdapter  {
         points.add(point);
 	    item.setPoints(points);
     	item.setPath();
-        model.setNewItem(item);
-        model.setDrawing(true);
+        view.setNewItem(item);
+        view.setDrawing(true);
     }
 
     @Override
@@ -57,17 +57,17 @@ public class SketchHandler extends HandlerAdapter  {
         List<CanvasPoint> points;
         CanvasPoint point;
 
-        model.setOldItem(model.getNewItem());
+        view.setOldItem(view.getNewItem());
         // Create Figure
-        Figure item = new Figure(model.getFigureType());
+        Figure item = new Figure(view.getFigureType());
         item.setStroke(6.0);
         item.setColor("#4860E0");
         // continue sketch
         point = new CanvasPoint(c.getTempX(), c.getTempY());
-        points = model.getOldItem().getPoints();
+        points = view.getOldItem().getPoints();
         points.add(point);
         item.setPoints(points);
         item.setPath();
-        model.setNewItem(item);
+        view.setNewItem(item);
     }
 }

@@ -7,7 +7,7 @@
 package net.perspective.draw.event;
 
 import java.util.List;
-import net.perspective.draw.DocModel;
+import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingCanvas;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
@@ -21,11 +21,11 @@ import net.perspective.draw.util.V2;
 
 public class RotationHandler extends HandlerAdapter {
 
-    DocModel model;
+    CanvasView view;
 
     public RotationHandler(DrawingCanvas c) {
         super(c);
-        model = c.getView();
+        view = c.getView();
     }
 
     @Override
@@ -34,12 +34,12 @@ public class RotationHandler extends HandlerAdapter {
 
     @Override
     public void downEvent() {
-        model.setSelected(-1);
-        List<Figure> drawings = model.getDrawings();
+        view.setSelected(-1);
+        List<Figure> drawings = view.getDrawings();
         for (Figure figure : drawings) {
             if (!(figure.getType().equals(FigureType.LINE))) {
                 if (figure.contains(c.getStartX(), c.getStartY())) {
-                    model.setSelected(drawings.indexOf(figure));
+                    view.setSelected(drawings.indexOf(figure));
                 }
             }
         }
@@ -49,9 +49,9 @@ public class RotationHandler extends HandlerAdapter {
     public void dragEvent() {
         CanvasPoint A, B;
 
-        int selection = model.getSelected();
+        int selection = view.getSelected();
         if (selection != -1) {
-            Figure item = model.getDrawings().get(selection);
+            Figure item = view.getDrawings().get(selection);
             double angle = item.getAngle();
             CanvasPoint centre = item.rotationCentre();
             A = B = new CanvasPoint(1, 1);

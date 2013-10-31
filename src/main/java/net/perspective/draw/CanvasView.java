@@ -1,5 +1,5 @@
 /*
- * DocModel.java
+ * CanvasView.java
  * 
  * Created on Oct 20, 2013 11:14:58 AM
  * 
@@ -15,7 +15,7 @@ import net.perspective.draw.geom.FigureType;
  *
  * @author ctipper
  */
-public class DocModel {
+public class CanvasView {
 
     private java.util.List<Figure> drawings;
     private FigureType figuretype;
@@ -26,7 +26,7 @@ public class DocModel {
     /**
      * Creates a new instance of <code>DocView</code>
      */
-    public DocModel() {
+    public CanvasView() {
         newitem = new Figure();
         olditem = null;
         drawings = new ArrayList<>();
@@ -34,7 +34,7 @@ public class DocModel {
         selection = -1;
     }
 
-    public void initModel() {
+    public void initView() {
         this.setFigureType(FigureType.SKETCH);
         this.deleteContents();
         this.setSelected(-1);

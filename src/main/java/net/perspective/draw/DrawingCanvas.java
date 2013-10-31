@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DrawingCanvas {
 
-    private final DocModel model;
+    private final CanvasView model;
     private final Canvas canvas;
     private final GraphicsContext context;
     private HandlerAdapter handler;
@@ -42,12 +42,12 @@ public class DrawingCanvas {
     public DrawingCanvas(double width, double height) {
         canvas = new Canvas(width, height);
         context = canvas.getGraphicsContext2D();
-        model = new DocModel();
+        model = new CanvasView();
         canvas.setFocusTraversable(false);
     }
 
     void initCanvas() {
-        model.initModel();
+        model.initView();
         this.clear();
     }
 
@@ -55,7 +55,7 @@ public class DrawingCanvas {
         return canvas;
     }
 
-    public DocModel getView() {
+    public CanvasView getView() {
         return model;
     }
 
