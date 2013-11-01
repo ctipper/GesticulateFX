@@ -81,7 +81,7 @@ public class Gesticulate extends Application {
         this.setOnResize(pane);
         // init, canvas handlers
         drawcanvas.clear();
-        drawcanvas.setHandlers();
+        drawcanvas.initHandlers();
         
         // need to set up timer loop
         timeline = new Timeline(

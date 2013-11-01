@@ -49,6 +49,7 @@ public class DrawingCanvas {
     void initCanvas() {
         view.initView();
         this.clear();
+        setHandler(HandlerType.SKETCH);
     }
 
     Canvas getCanvas() {
@@ -88,7 +89,7 @@ public class DrawingCanvas {
         }
     }
 
-    public void changeHandler(HandlerType h) {
+    public void setHandler(HandlerType h) {
         switch (h) {
             case SELECTION:
                 this.handler = new SelectionHandler(this);
@@ -108,7 +109,7 @@ public class DrawingCanvas {
         view.setDrawing(false);
     }
 
-    void setHandlers() {
+    void initHandlers() {
         canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
             new EventHandler<MouseEvent>() {
                 @Override
@@ -151,7 +152,7 @@ public class DrawingCanvas {
                     touchMoved(event);
                 }
             });
-        this.changeHandler(HandlerType.SKETCH);
+        this.setHandler(HandlerType.SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {

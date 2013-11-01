@@ -37,6 +37,7 @@ public class CanvasView {
     public void initView() {
         this.deleteContents();
         this.setSelected(-1);
+        this.setFigureType(FigureType.SKETCH);
     }
     
     public void deleteContents() {

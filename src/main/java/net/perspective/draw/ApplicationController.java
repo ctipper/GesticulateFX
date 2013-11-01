@@ -35,48 +35,48 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handleSelectionAction(ActionEvent event) {
-        drawcanvas.changeHandler(HandlerType.SELECTION);
+        drawcanvas.setHandler(HandlerType.SELECTION);
     }
     
     @FXML
     private void handleRotationAction(ActionEvent event) {
-        drawcanvas.changeHandler(HandlerType.ROTATION);
+        drawcanvas.setHandler(HandlerType.ROTATION);
     }
     
     @FXML
     private void handleLineAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.LINE);
-        drawcanvas.changeHandler(HandlerType.FIGURE);
+        drawcanvas.setHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleCircleAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.CIRCLE);
-        drawcanvas.changeHandler(HandlerType.FIGURE);
+        drawcanvas.setHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleSquareAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.SQUARE);
-        drawcanvas.changeHandler(HandlerType.FIGURE);
+        drawcanvas.setHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.TRIANGLE);
-        drawcanvas.changeHandler(HandlerType.FIGURE);
+        drawcanvas.setHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.POLYGON);
-        drawcanvas.changeHandler(HandlerType.SKETCH);
+        drawcanvas.setHandler(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent event) {
         drawcanvas.getView().setFigureType(FigureType.SKETCH);
-        drawcanvas.changeHandler(HandlerType.SKETCH);
+        drawcanvas.setHandler(HandlerType.SKETCH);
     }
     
     @Override
