@@ -6,6 +6,7 @@
  */
 package net.perspective.draw;
 
+import com.google.inject.assistedinject.Assisted;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
+import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
@@ -39,8 +41,9 @@ public class DrawingCanvas {
      * @param width
      * @param height
      */
-    public DrawingCanvas(double width, double height) {
-        canvas = new Canvas(width, height);
+    @Inject
+    public DrawingCanvas(@Assisted("width") Double width, @Assisted("height") Double height) {
+        canvas = new Canvas(width.doubleValue(), height.doubleValue());
         context = canvas.getGraphicsContext2D();
         view = new CanvasView();
         canvas.setFocusTraversable(false);

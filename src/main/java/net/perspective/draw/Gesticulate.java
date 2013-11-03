@@ -6,16 +6,12 @@
  */
 package net.perspective.draw;
 
-import java.net.URL;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +19,17 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import com.google.inject.*;
+import com.google.inject.assistedinject.*;
+
+import com.cathive.fx.guice.GuiceApplication;
+import com.cathive.fx.guice.GuiceFXMLLoader;
+import com.cathive.fx.guice.GuiceFXMLLoader.Result;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +37,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
-public class Gesticulate extends Application {
+public class Gesticulate extends GuiceApplication {
 
-    DrawingCanvas drawcanvas;
+    @Inject private GuiceFXMLLoader fxmlLoader;
+    
+    @Inject private CanvasFactory canvasFactory;
+
+    private DrawingCanvas drawcanvas;
+    
     private Timeline timeline;
     
     // canvas size, in px (width set dynamically)
@@ -51,13 +63,18 @@ public class Gesticulate extends Application {
     
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
+
+    @Override
+    public void init(List<Module> modules) throws Exception {
+        modules.add(new FxmlModule());
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
-        URL location = getClass().getResource("/fxml/Application.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(location);
-        fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        Parent root = (Parent) fxmlLoader.load(location.openStream());
+        Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
+        
+        ApplicationController controller = (ApplicationController) result.getController();
+        Parent root = (Parent) result.getRoot();
 
         // create the scene
         Scene scene = new Scene(root);
@@ -70,10 +87,10 @@ public class Gesticulate extends Application {
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        drawcanvas = new DrawingCanvas(pane.getWidth(), pane.getHeight());
+        
+        drawcanvas = canvasFactory.create(pane.getWidth(), pane.getHeight());
         
         // set up controller
-        ApplicationController controller = (ApplicationController)fxmlLoader.getController();
         controller.setCanvas(drawcanvas);
         
         // install the canvas
@@ -129,6 +146,20 @@ public class Gesticulate extends Application {
         timeline.stop();
     }
 
+    class FxmlModule extends AbstractModule {
+
+        @Override
+        protected void configure() {
+            install(new FactoryModuleBuilder().implement(DrawingCanvas.class, DrawingCanvas.class)
+                .build(CanvasFactory.class));
+        }
+    }
+    
+    public interface CanvasFactory {
+
+        public DrawingCanvas create(@Assisted("width") Double width, @Assisted("height") Double height);
+    }
+    
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be

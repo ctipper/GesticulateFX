@@ -22,7 +22,7 @@ import net.perspective.draw.geom.FigureType;
 
 public class ApplicationController implements Initializable {
     
-    DrawingCanvas drawcanvas;
+    private DrawingCanvas drawcanvas;
     
     void setCanvas(DrawingCanvas d) {
         drawcanvas = d;

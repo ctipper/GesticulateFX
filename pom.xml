@@ -17,6 +17,7 @@
 
     <properties>
         <slf4j.version>1.6.1</slf4j.version>
+        <fx-guice.version>2.1.2</fx-guice.version>
     </properties>
 
     <build>
@@ -91,7 +92,16 @@
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.cathive.fx</groupId>
+            <artifactId>fx-guice</artifactId>
+            <version>${fx-guice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>3.0</version>
+        </dependency>
     </dependencies>
 
 </project>
