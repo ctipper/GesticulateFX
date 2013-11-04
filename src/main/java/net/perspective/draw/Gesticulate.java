@@ -21,8 +21,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.google.inject.*;
 import com.google.inject.assistedinject.*;
 
