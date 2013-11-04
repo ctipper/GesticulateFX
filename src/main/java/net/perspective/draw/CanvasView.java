@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
+import com.google.inject.Singleton;
 
 /**
  *
  * @author ctipper
  */
+@Singleton
 public class CanvasView {
 
     private java.util.List<Figure> drawings;
