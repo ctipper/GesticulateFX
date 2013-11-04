@@ -21,7 +21,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.List;
 
-import com.google.inject.*;
+import javax.inject.Inject;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import com.google.inject.assistedinject.*;
 
 import com.cathive.fx.guice.GuiceApplication;
@@ -61,7 +64,11 @@ public class Gesticulate extends GuiceApplication {
     
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
-
+    /**
+     *
+     * @param modules
+     * @throws Exception
+     */
     @Override
     public void init(List<Module> modules) throws Exception {
         modules.add(new FxmlModule());

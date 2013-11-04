@@ -17,8 +17,9 @@ import javafx.scene.paint.Color;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.google.inject.assistedinject.Assisted;
 
 import org.slf4j.Logger;
