@@ -19,20 +19,19 @@ import net.perspective.draw.util.V2;
  * @author ctipper
  */
 
-public class RotationHandler extends HandlerAdapter {
+public class RotationHandler implements HandlerAdapter {
 
-    CanvasView view;
+    private final DrawingCanvas c;
+    private final CanvasView view;
 
     public RotationHandler(DrawingCanvas c) {
-        super(c);
+        this.c = c;
         view = c.getView();
     }
 
-    @Override
     public void upEvent() {
     }
 
-    @Override
     public void downEvent() {
         view.setSelected(-1);
         List<Figure> drawings = view.getDrawings();
@@ -45,7 +44,6 @@ public class RotationHandler extends HandlerAdapter {
         }
     }
 
-    @Override
     public void dragEvent() {
         CanvasPoint A, B;
 

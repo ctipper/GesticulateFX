@@ -16,20 +16,19 @@ import net.perspective.draw.geom.Figure;
  * @author ctipper
  */
 
-public class SelectionHandler extends HandlerAdapter {
+public class SelectionHandler implements HandlerAdapter {
 
-    CanvasView view;
+    private final DrawingCanvas c;
+    private final CanvasView view;
 
     public SelectionHandler(DrawingCanvas c) {
-        super(c);
+        this.c = c;
         view = c.getView();
     }
 
-    @Override
     public void upEvent() {
     }
 
-    @Override
     public void downEvent() {
         view.setSelected(-1);
         List<Figure> drawings = view.getDrawings();
@@ -40,7 +39,6 @@ public class SelectionHandler extends HandlerAdapter {
         }
     }
 
-    @Override
     public void dragEvent() {
         int selection = view.getSelected();
         if (selection != -1) {

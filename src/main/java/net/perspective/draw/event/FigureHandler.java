@@ -16,28 +16,26 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class FigureHandler extends HandlerAdapter {
+public class FigureHandler implements HandlerAdapter {
 
+    private final DrawingCanvas c;
     private final CanvasView view;
     private final PointFactory pointFactory;
 
     public FigureHandler(DrawingCanvas c) {
-        super(c);
+        this.c = c;
         this.view = c.getView();
         this.pointFactory = new FigurePointFactory();
     }
 
-    @Override
     public void upEvent() {
         view.setDrawing(false);
         view.addDrawItemToCanvas(view.getNewItem());
     }
 
-    @Override
     public void downEvent() {
     }
 
-    @Override
     public void dragEvent() {
         java.util.List<CanvasPoint> points;
         FigureType type;

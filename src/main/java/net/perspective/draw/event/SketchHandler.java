@@ -18,22 +18,21 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class SketchHandler extends HandlerAdapter  {
+public class SketchHandler implements HandlerAdapter  {
     
+    private final DrawingCanvas c;
     private final CanvasView view;
 
     public SketchHandler(DrawingCanvas c) {
-        super(c);
+        this.c = c;
         this.view = c.getView();
     }
 
-    @Override
     public void upEvent() {
         view.setDrawing(false);
         view.addDrawItemToCanvas(view.getNewItem());
     }
 
-    @Override
     public void downEvent() {
         List<CanvasPoint> points;
         CanvasPoint point;
@@ -52,7 +51,6 @@ public class SketchHandler extends HandlerAdapter  {
         view.setDrawing(true);
     }
 
-    @Override
     public void dragEvent() {
         List<CanvasPoint> points;
         CanvasPoint point;

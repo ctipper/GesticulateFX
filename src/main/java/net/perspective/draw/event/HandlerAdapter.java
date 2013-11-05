@@ -6,24 +6,12 @@
  */
 package net.perspective.draw.event;
 
-import net.perspective.draw.DrawingCanvas;
-
 /**
  *
  * @author ctipper
  */
 
-public abstract class HandlerAdapter {
-
-    protected DrawingCanvas c;
-
-    /**
-     *
-     * @param c
-     */
-    public HandlerAdapter(DrawingCanvas c) {
-        this.c = c;
-    }
+public interface HandlerAdapter {
 
     public abstract void upEvent();
     
