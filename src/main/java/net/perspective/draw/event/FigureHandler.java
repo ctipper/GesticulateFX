@@ -16,7 +16,7 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class FigureHandler implements HandlerAdapter {
+public class FigureHandler implements Handler {
 
     private final DrawingCanvas c;
     private final CanvasView view;

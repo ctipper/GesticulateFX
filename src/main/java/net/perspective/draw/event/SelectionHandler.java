@@ -16,7 +16,7 @@ import net.perspective.draw.geom.Figure;
  * @author ctipper
  */
 
-public class SelectionHandler implements HandlerAdapter {
+public class SelectionHandler implements Handler {
 
     private final DrawingCanvas c;
     private final CanvasView view;

@@ -35,7 +35,7 @@ public class DrawingCanvas {
     @Inject private CanvasView view;
     private final Canvas canvas;
     private final GraphicsContext context;
-    private HandlerAdapter handler;
+    private Handler handler;
     private double startX, startY;
     private double tempX, tempY;
 
