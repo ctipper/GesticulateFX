@@ -16,13 +16,12 @@ import net.perspective.draw.geom.Figure;
  * @author ctipper
  */
 
-public class SelectionHandler implements Handler {
+public class SelectionHandler extends Handler {
 
-    private final DrawingCanvas c;
     private final CanvasView view;
 
     public SelectionHandler(DrawingCanvas c) {
-        this.c = c;
+        super(c);
         view = c.getView();
     }
 

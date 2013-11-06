@@ -19,13 +19,12 @@ import net.perspective.draw.util.V2;
  * @author ctipper
  */
 
-public class RotationHandler implements Handler {
+public class RotationHandler extends Handler {
 
-    private final DrawingCanvas c;
     private final CanvasView view;
 
     public RotationHandler(DrawingCanvas c) {
-        this.c = c;
+        super(c);
         view = c.getView();
     }
 

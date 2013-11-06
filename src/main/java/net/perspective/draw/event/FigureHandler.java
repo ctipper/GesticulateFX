@@ -16,14 +16,13 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class FigureHandler implements Handler {
+public class FigureHandler extends Handler {
 
-    private final DrawingCanvas c;
     private final CanvasView view;
     private final PointFactory pointFactory;
 
     public FigureHandler(DrawingCanvas c) {
-        this.c = c;
+        super(c);
         this.view = c.getView();
         this.pointFactory = new FigurePointFactory();
     }

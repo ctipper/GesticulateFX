@@ -18,13 +18,12 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class SketchHandler implements Handler  {
+public class SketchHandler extends Handler  {
     
-    private final DrawingCanvas c;
     private final CanvasView view;
 
     public SketchHandler(DrawingCanvas c) {
-        this.c = c;
+        super(c);
         this.view = c.getView();
     }
 
