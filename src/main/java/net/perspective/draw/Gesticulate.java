@@ -6,6 +6,12 @@
  */
 package net.perspective.draw;
 
+import javafx.scene.SceneBuilder;
+import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
+import javafx.stage.StageBuilder;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
@@ -13,12 +19,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,9 +42,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Gesticulate extends GuiceApplication {
 
-    @Inject private GuiceFXMLLoader fxmlLoader;
+    @Inject 
+    private GuiceFXMLLoader fxmlLoader;
     
-    @Inject private CanvasFactory canvasFactory;
+    @Inject 
+    private CanvasFactory canvasFactory;
 
     private DrawingCanvas drawcanvas;
     
@@ -64,48 +68,57 @@ public class Gesticulate extends GuiceApplication {
     
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
-    /**
-     *
-     * @param modules
-     * @throws Exception
-     */
     @Override
-    public void init(List<Module> modules) throws Exception {
+    public void init(final List<Module> modules) throws Exception {
         modules.add(new FxmlModule());
     }
 
+    /**
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(final Stage primaryStage) throws Exception {
         Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
         
-        ApplicationController controller = (ApplicationController) result.getController();
-        Parent root = (Parent) result.getRoot();
+        final ApplicationController controller = (ApplicationController) result.getController();
+        final Parent root = result.getRoot();
 
-        // create the scene
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        // size the stage
-        this.setStage(stage);
-        stage.show();
+        // Put the loaded user interface onto the primary primaryStage.
+        StageBuilder.create()
+        .title("Gesticulate")
+        .resizable(true)
+        .scene(SceneBuilder.create()
+            .root(root)
+            .build())
+        .applyTo(primaryStage);
+        
+        // Size the primary primaryStage
+        sizeStage(primaryStage);
 
-        // init the scroll area
-        final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
+        // Show the primary primaryStage
+        primaryStage.show();
+
+        // Initialise the scroll area
+        final ScrollPane pane = (ScrollPane) primaryStage.getScene().lookup("#scroll");
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
         drawcanvas = canvasFactory.create(pane.getWidth(), pane.getHeight());
         
-        // set up controller
+        // Apply drawcanvas to controller
         controller.setCanvas(drawcanvas);
         
-        // install the canvas
+        // Install the canvas
         pane.setContent(drawcanvas.getCanvas());
-        this.setOnResize(pane);
-        // init, canvas handlers
+        setOnResize(pane);
+        
+        // Initialize canvas and apply handlers
         drawcanvas.clear();
         drawcanvas.initHandlers();
         
-        // need to set up timer loop
+        // To set up a timer loop
         timeline = new Timeline(
             new KeyFrame(
                 Duration.ZERO,
@@ -138,12 +151,11 @@ public class Gesticulate extends GuiceApplication {
         });
     }
     
-    public void setStage(Stage stage) {
+    public void sizeStage(Stage stage) {
         stage.setX(frameLeft);
         stage.setY(frameTop);
         stage.setWidth(xWidth);
         stage.setHeight(yHeight);
-        stage.setTitle("Gesticulate");
     }
     
     @Override
@@ -151,7 +163,7 @@ public class Gesticulate extends GuiceApplication {
         timeline.stop();
     }
 
-    class FxmlModule extends AbstractModule {
+    private static class FxmlModule extends AbstractModule {
 
         @Override
         protected void configure() {

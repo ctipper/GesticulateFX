@@ -32,7 +32,8 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DrawingCanvas {
 
-    @Inject private CanvasView view;
+    @Inject 
+    private CanvasView view;
     private final Canvas canvas;
     private final GraphicsContext context;
     private Handler handler;
@@ -58,14 +59,6 @@ public class DrawingCanvas {
         view.initView();
         this.clear();
         setHandler(HandlerType.SKETCH);
-    }
-
-    Canvas getCanvas() {
-        return canvas;
-    }
-
-    public CanvasView getView() {
-        return view;
     }
 
     public void clear() {
@@ -195,6 +188,14 @@ public class DrawingCanvas {
         tempX = touch.getX();
         tempY = touch.getY();
         handler.dragEvent();
+    }
+
+    Canvas getCanvas() {
+        return canvas;
+    }
+
+    public CanvasView getView() {
+        return view;
     }
 
     public void setStartX(double x) {
