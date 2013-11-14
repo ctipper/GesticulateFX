@@ -85,7 +85,7 @@ public class Gesticulate extends GuiceApplication {
         final ApplicationController controller = (ApplicationController) result.getController();
         final Parent root = result.getRoot();
 
-        // Put the loaded user interface onto the primary primaryStage.
+        // Put the loaded user interface onto the primary stage.
         StageBuilder.create()
         .title("Gesticulate")
         .resizable(true)
@@ -94,10 +94,10 @@ public class Gesticulate extends GuiceApplication {
             .build())
         .applyTo(primaryStage);
         
-        // Size the primary primaryStage
+        // Size the primary stage
         sizeStage(primaryStage);
 
-        // Show the primary primaryStage
+        // Show the primary stage
         primaryStage.show();
 
         // Initialise the scroll area
