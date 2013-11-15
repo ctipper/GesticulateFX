@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DrawingCanvas {
 
-    @Inject 
-    private CanvasView view;
+    @Inject private CanvasView view;
     private final Canvas canvas;
     private final GraphicsContext context;
     private Handler handler;

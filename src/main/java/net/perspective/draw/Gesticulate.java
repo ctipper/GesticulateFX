@@ -52,8 +52,6 @@ public class Gesticulate extends GuiceApplication {
     
     private Timeline timeline;
     
-    // canvas size, in px (width set dynamically)
-    static final int height = 1_300;
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
     private final Rectangle2D screenSize = screen.getVisualBounds();
