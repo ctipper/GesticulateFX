@@ -78,12 +78,11 @@ public class CanvasTransferHandler {
     }
 
     protected void exportDone(Transferable data, int action) {
-        if ((action & MOVE) == MOVE) {
+        if (action == MOVE) {
             canvas.getView().deleteSelectedItem();
             logger.debug("Deleted selected item");
             shift = 0;
-        }
-        if ((action & COPY) == COPY) {
+        } else {
             shift = 20.0;
         }
         logger.debug("ExportDone");
