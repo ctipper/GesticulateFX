@@ -7,6 +7,8 @@
 package net.perspective.draw.geom;
 
 import java.awt.geom.*;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,12 +22,12 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class Figure {
+public class Figure implements Serializable {
 
     List<CanvasPoint> points;
     FigureType type;
-    PathFactory factory;
-    GeneralPath path;
+    transient GeneralPath path;
+    transient PathFactory factory;
     String color;
     double width;
     double angle;
@@ -234,5 +236,16 @@ public class Figure {
             }
             iterator.next();
         }
+    }
+
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.factory = new FigurePathFactory();
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out)
+            throws IOException {
+        out.defaultWriteObject();
     }
 }

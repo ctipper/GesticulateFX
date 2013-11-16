@@ -13,6 +13,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
+import javafx.event.ActionEvent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.*;
 
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
@@ -21,6 +25,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.google.inject.assistedinject.Assisted;
+
+import java.awt.datatransfer.Transferable;
+import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import static net.perspective.draw.CanvasTransferHandler.COPY;
+import static net.perspective.draw.event.HandlerType.SKETCH;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +47,12 @@ public class DrawingCanvas {
     private Handler handler;
     private double startX, startY;
     private double tempX, tempY;
+    
+    Transferable clipboard;
+    CanvasTransferHandler transferhandler;
+
+    final ContextMenu contextmenu;
+    EventHandler popuplistener;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawingCanvas.class.getName());
 
@@ -52,12 +67,15 @@ public class DrawingCanvas {
         canvas = new Canvas(width.doubleValue(), height.doubleValue());
         context = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(false);
+        transferhandler = new CanvasTransferHandler(this);
+        contextmenu = new ContextMenu();
+        popuplistener = null;
     }
 
-    void initCanvas() {
+    public void initCanvas() {
         view.initView();
         this.clear();
-        setHandler(HandlerType.SKETCH);
+        setHandler(SKETCH);
     }
 
     public void clear() {
@@ -90,15 +108,18 @@ public class DrawingCanvas {
     }
 
     public void setHandler(HandlerType h) {
+        canvas.setOnContextMenuRequested(null);
         switch (h) {
             case SELECTION:
                 this.handler = new SelectionHandler(this);
+                canvas.setOnContextMenuRequested(popuplistener);
                 break;
             case FIGURE:
                 this.handler = new FigureHandler(this);
                 break;
             case ROTATION:
                 this.handler = new RotationHandler(this);
+                canvas.setOnContextMenuRequested(popuplistener);
                 break;
             case SKETCH:
                 this.handler = new SketchHandler(this);
@@ -152,7 +173,8 @@ public class DrawingCanvas {
                     touchMoved(event);
                 }
             });
-        this.setHandler(HandlerType.SKETCH);
+        addContextMenu();
+        this.setHandler(SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {
@@ -189,7 +211,45 @@ public class DrawingCanvas {
         handler.dragEvent();
     }
 
-    Canvas getCanvas() {
+    public void addContextMenu() {
+        MenuItem cxtCutMenu = new MenuItem("Cut");
+        cxtCutMenu.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+        	    if (view.getSelected() != -1) {
+                    clipboard = transferhandler.createTransferable();
+                    transferhandler.exportDone(clipboard, MOVE);
+                    view.setSelected(-1);
+                }
+            }
+        });
+        MenuItem cxtCopyMenu = new MenuItem("Copy");
+        cxtCopyMenu.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+        	    if (view.getSelected() != -1) {
+                    clipboard = transferhandler.createTransferable();
+                    transferhandler.exportDone(clipboard, COPY);
+                }
+            }
+        });
+        MenuItem cxtPasteMenu = new MenuItem("Paste");
+        cxtPasteMenu.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                if (clipboard != null) {
+                    transferhandler.importData(clipboard);
+                    view.setSelected(-1);
+                }
+            }
+        });
+        contextmenu.getItems().addAll(cxtCutMenu, cxtCopyMenu, cxtPasteMenu);
+        popuplistener = new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
+            }
+        };
+    }
+    
+    public Canvas getCanvas() {
         return canvas;
     }
 

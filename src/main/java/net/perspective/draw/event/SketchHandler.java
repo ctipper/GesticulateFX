@@ -29,7 +29,7 @@ public class SketchHandler extends Handler  {
 
     public void upEvent() {
         view.setDrawing(false);
-        view.addDrawItemToCanvas(view.getNewItem());
+        view.addItemToCanvas(view.getNewItem());
     }
 
     public void downEvent() {

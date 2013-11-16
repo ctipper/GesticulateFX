@@ -48,8 +48,19 @@ public class CanvasView {
         drawings = new ArrayList<>();
     }
     
-    public void addDrawItemToCanvas(Figure i) {
-        drawings.add(i);
+    public void addItemToCanvas(Figure f) {
+        // to update properties here
+        drawings.add(f);
+    }
+    
+    public void appendItemToCanvas(Figure f) {
+        drawings.add(f);
+    }
+
+    public void deleteSelectedItem() {
+        if (getSelected() != -1) {
+            drawings.remove(getSelected());
+        }
     }
 
     public List<Figure> getDrawings() {
