@@ -10,7 +10,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import static javax.swing.TransferHandler.MOVE;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
