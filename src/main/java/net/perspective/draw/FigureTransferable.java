@@ -37,7 +37,7 @@ public class FigureTransferable implements Transferable {
             logger.warn("I/O Exception");
         }
 
-        //Try to create a DataFlavor for drawItems.
+        //Try to create a DataFlavor for Figures
         try {
             dataFlavor = new DataFlavor(mimeType);
         } catch (ClassNotFoundException e) {
