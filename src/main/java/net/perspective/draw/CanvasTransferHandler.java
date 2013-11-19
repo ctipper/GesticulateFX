@@ -63,7 +63,7 @@ public class CanvasTransferHandler {
                 logger.warn("importData: I/O exception");
             }
         }
-        logger.debug("ImportData");
+        logger.trace("ImportData");
         return false;
     }
 
@@ -73,7 +73,7 @@ public class CanvasTransferHandler {
             return null;
         }
         Figure data = canvas.getView().getDrawings().get(selected);
-        logger.debug("Created Transferable");
+        logger.trace("Created Transferable");
         return new FigureTransferable(data);
     }
 
@@ -86,7 +86,7 @@ public class CanvasTransferHandler {
             shift = 20.0;
             logger.debug("Copied selected item");
         }
-        logger.debug("ExportDone");
+        logger.trace("ExportDone");
     }
 
     protected boolean hasDrawItemFlavor(DataFlavor[] flavors) {
