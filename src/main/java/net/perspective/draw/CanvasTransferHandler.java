@@ -84,6 +84,7 @@ public class CanvasTransferHandler {
             shift = 0;
         } else {
             shift = 20.0;
+            logger.debug("Copied selected item");
         }
         logger.debug("ExportDone");
     }

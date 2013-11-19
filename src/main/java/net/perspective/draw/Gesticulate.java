@@ -32,6 +32,7 @@ import com.google.inject.assistedinject.*;
 import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
+import javafx.scene.Scene;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +100,8 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.show();
 
         // Initialise the scroll area
-        final ScrollPane pane = (ScrollPane) primaryStage.getScene().lookup("#scroll");
+        Scene scene = primaryStage.getScene();
+        final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
