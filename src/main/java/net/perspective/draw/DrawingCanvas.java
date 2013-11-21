@@ -45,6 +45,7 @@ public class DrawingCanvas {
     private final Canvas canvas;
     private final GraphicsContext context;
     private Handler handler;
+
     private double startX, startY;
     private double tempX, tempY;
     
@@ -73,6 +74,9 @@ public class DrawingCanvas {
     }
 
     public void initCanvas() {
+        view.setNewItem(null);
+        view.setStroke(6.0);
+        view.setColor("#4860E0");
         view.initView();
         this.clear();
         setHandler(SKETCH);

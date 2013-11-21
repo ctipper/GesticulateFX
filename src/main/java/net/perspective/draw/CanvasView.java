@@ -8,11 +8,12 @@ package net.perspective.draw;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Singleton;
 
 import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigurePointFactory;
 import net.perspective.draw.geom.FigureType;
+import net.perspective.draw.util.CanvasPoint;
 
 /**
  *
@@ -25,17 +26,28 @@ public class CanvasView {
     private FigureType figuretype;
     private Figure olditem, newitem;
     private int selection;
-    private boolean isDrawing = false;
+    private boolean isDrawing;
+    private final FigurePointFactory factory;
+    private double stroke;
+    private String color;
 
     /**
      * Creates a new instance of <code>DocView</code>
      */
     public CanvasView() {
-        newitem = new Figure();
+        factory = new FigurePointFactory();
+//        newitem = new Figure(FigureType.SKETCH);
+//        List<CanvasPoint> points = factory.createPoints(FigureType.LINE, 0.0, 0.0, 0.0, 0.0);
+//        ((Figure) newitem).setPoints(points);
+//        ((Figure) newitem).setPath();
+//        ((Figure) newitem).setStroke(6.0);
+//        ((Figure) newitem).setColor("#4860E0");
+        newitem = null;
         olditem = null;
         drawings = new ArrayList<>();
         figuretype = FigureType.SKETCH;
         selection = -1;
+        isDrawing = false;
     }
 
     public void initView() {
@@ -105,5 +117,21 @@ public class CanvasView {
 
     public Figure getOldItem() {
         return olditem;
+    }
+
+    public double getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(double stroke) {
+        this.stroke = stroke;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
