@@ -61,7 +61,6 @@ public class CanvasView {
     public void appendItemToCanvas(Figure f) {
         if (f != null) {
             drawings.add(f);
-            setNewItem(null);
         }
     }
 

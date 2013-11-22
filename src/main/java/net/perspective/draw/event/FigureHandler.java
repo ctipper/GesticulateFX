@@ -30,6 +30,7 @@ public class FigureHandler extends Handler {
     public void upEvent() {
         view.setDrawing(false);
         view.addItemToCanvas(view.getNewItem());
+        view.setNewItem(null);
     }
 
     public void downEvent() {
