@@ -13,7 +13,6 @@ import javax.inject.Singleton;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigurePointFactory;
 import net.perspective.draw.geom.FigureType;
-import net.perspective.draw.util.CanvasPoint;
 
 /**
  *
@@ -36,8 +35,8 @@ public class CanvasView {
      */
     public CanvasView() {
         factory = new FigurePointFactory();
-        newitem = new Figure();
-        olditem = new Figure();
+        newitem = null;
+        olditem = null;
         drawings = new ArrayList<>();
         figuretype = FigureType.SKETCH;
         selection = -1;
@@ -56,11 +55,14 @@ public class CanvasView {
     
     public void addItemToCanvas(Figure f) {
         // to update properties here
-        drawings.add(f);
+        appendItemToCanvas(f);
     }
     
     public void appendItemToCanvas(Figure f) {
-        drawings.add(f);
+        if (f != null) {
+            drawings.add(f);
+            setNewItem(null);
+        }
     }
 
     public void deleteSelectedItem() {
@@ -105,11 +107,11 @@ public class CanvasView {
         return newitem;
     }
 
-    public void setOldItem(Figure s) {
+    public void setPreviousItem(Figure s) {
         olditem = s;
     }
 
-    public Figure getOldItem() {
+    public Figure getPreviousItem() {
         return olditem;
     }
 

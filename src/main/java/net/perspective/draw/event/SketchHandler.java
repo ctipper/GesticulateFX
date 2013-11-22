@@ -54,14 +54,14 @@ public class SketchHandler extends Handler  {
         List<CanvasPoint> points;
         CanvasPoint point;
 
-        view.setOldItem(view.getNewItem());
+        view.setPreviousItem(view.getNewItem());
         // Create Figure
         Figure item = new Figure(view.getFigureType());
         item.setStroke(view.getStroke());
         item.setColor(view.getColor());
         // continue sketch
         point = new CanvasPoint(c.getTempX(), c.getTempY());
-        points = view.getOldItem().getPoints();
+        points = view.getPreviousItem().getPoints();
         points.add(point);
         item.setPoints(points);
         item.setPath();
