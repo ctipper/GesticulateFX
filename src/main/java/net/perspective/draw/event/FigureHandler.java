@@ -43,7 +43,8 @@ public class FigureHandler extends Handler {
         Figure item = new Figure(type);
         item.setStroke(view.getStroke());
         item.setColor(view.getColor());
-        points = pointFactory.createPoints(type, c.getStartX(), c.getStartY(), c.getTempX(), c.getTempY());
+        points = pointFactory.createPoints(type,
+            c.getStartX(), c.getStartY(), c.getTempX(), c.getTempY());
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
