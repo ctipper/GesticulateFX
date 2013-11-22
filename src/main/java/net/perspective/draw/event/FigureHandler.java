@@ -28,10 +28,10 @@ public class FigureHandler extends Handler {
     }
 
     public void upEvent() {
-        view.setDrawing(false);
-        if (view.getNewItem() != null) {
+        if (view.isDrawing()) {
             view.addItemToCanvas(view.getNewItem());
         }
+        view.setDrawing(false);
     }
 
     public void downEvent() {

@@ -36,14 +36,8 @@ public class CanvasView {
      */
     public CanvasView() {
         factory = new FigurePointFactory();
-//        newitem = new Figure(FigureType.SKETCH);
-//        List<CanvasPoint> points = factory.createPoints(FigureType.LINE, 0.0, 0.0, 0.0, 0.0);
-//        ((Figure) newitem).setPoints(points);
-//        ((Figure) newitem).setPath();
-//        ((Figure) newitem).setStroke(6.0);
-//        ((Figure) newitem).setColor("#4860E0");
-        newitem = null;
-        olditem = null;
+        newitem = new Figure();
+        olditem = new Figure();
         drawings = new ArrayList<>();
         figuretype = FigureType.SKETCH;
         selection = -1;

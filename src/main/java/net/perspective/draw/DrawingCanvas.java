@@ -74,7 +74,6 @@ public class DrawingCanvas {
     }
 
     public void initCanvas() {
-        view.setNewItem(null);
         view.setStroke(6.0);
         view.setColor("#4860E0");
         view.initView();
