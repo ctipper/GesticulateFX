@@ -54,19 +54,20 @@ public class CanvasView {
     }
     
     public void addItemToCanvas(Figure f) {
-        // to update properties here
-        appendItemToCanvas(f);
+        if (f != null) {
+            // to update properties here
+            drawings.add(f);
+        }
     }
     
     public void appendItemToCanvas(Figure f) {
-        if (f != null) {
-            drawings.add(f);
-        }
+        drawings.add(f);
     }
 
     public void deleteSelectedItem() {
         if (getSelected() != -1) {
             drawings.remove(getSelected());
+            setSelected(-1);
         }
     }
 
