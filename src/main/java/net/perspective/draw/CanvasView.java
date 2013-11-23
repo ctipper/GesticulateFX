@@ -8,6 +8,7 @@ package net.perspective.draw;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Singleton;
 
 import net.perspective.draw.geom.Figure;
