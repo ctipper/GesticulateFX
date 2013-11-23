@@ -11,7 +11,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigurePointFactory;
 import net.perspective.draw.geom.FigureType;
 
 /**
@@ -26,7 +25,6 @@ public class CanvasView {
     private Figure olditem, newitem;
     private int selection;
     private boolean isDrawing;
-    private final FigurePointFactory factory;
     private double stroke;
     private String color;
 
@@ -34,7 +32,6 @@ public class CanvasView {
      * Creates a new instance of <code>DocView</code>
      */
     public CanvasView() {
-        factory = new FigurePointFactory();
         newitem = null;
         olditem = null;
         drawings = new ArrayList<>();

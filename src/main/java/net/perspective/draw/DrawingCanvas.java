@@ -53,7 +53,7 @@ public class DrawingCanvas {
     CanvasTransferHandler transferhandler;
 
     final ContextMenu contextmenu;
-    EventHandler popuplistener;
+    EventHandler contextlistener, popuplistener;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawingCanvas.class.getName());
 
@@ -70,7 +70,7 @@ public class DrawingCanvas {
         canvas.setFocusTraversable(false);
         transferhandler = new CanvasTransferHandler(this);
         contextmenu = new ContextMenu();
-        popuplistener = null;
+        contextlistener = null;
     }
 
     public void initCanvas() {
@@ -112,17 +112,20 @@ public class DrawingCanvas {
 
     public void setHandler(HandlerType h) {
         canvas.setOnContextMenuRequested(null);
+        canvas.setOnTouchStationary(null);
         switch (h) {
             case SELECTION:
                 this.handler = new SelectionHandler(this);
-                canvas.setOnContextMenuRequested(popuplistener);
+                canvas.setOnContextMenuRequested(contextlistener);
+                canvas.setOnTouchStationary(popuplistener);
                 break;
             case FIGURE:
                 this.handler = new FigureHandler(this);
                 break;
             case ROTATION:
                 this.handler = new RotationHandler(this);
-                canvas.setOnContextMenuRequested(popuplistener);
+                canvas.setOnContextMenuRequested(contextlistener);
+                canvas.setOnTouchStationary(popuplistener);
                 break;
             case SKETCH:
                 this.handler = new SketchHandler(this);
@@ -244,10 +247,17 @@ public class DrawingCanvas {
             }
         });
         contextmenu.getItems().addAll(cxtCutMenu, cxtCopyMenu, cxtPasteMenu);
-        popuplistener = new EventHandler<ContextMenuEvent>() {
+        contextlistener = new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent event) {
                 contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
+            }
+        };
+        popuplistener = new EventHandler<TouchEvent>() {
+            @Override
+            public void handle(TouchEvent event) {
+                TouchPoint touch = event.getTouchPoints().get(0);
+                contextmenu.show(canvas, touch.getScreenX(), touch.getScreenY());
             }
         };
     }
