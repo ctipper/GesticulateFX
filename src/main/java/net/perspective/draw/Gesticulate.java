@@ -7,6 +7,7 @@
 package net.perspective.draw;
 
 import javafx.scene.SceneBuilder;
+import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.StageBuilder;
@@ -32,7 +33,6 @@ import com.google.inject.assistedinject.*;
 import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
-import javafx.scene.Scene;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

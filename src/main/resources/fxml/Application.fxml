@@ -100,18 +100,18 @@
                 </FXCollections>
               </items>
             </ComboBox>
-            <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" style="" styleClass="formatbuttons" text="">
+            <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" prefHeight="23.0" prefWidth="26.0" style="" styleClass="formatbuttons" text="">
               <font>
                 <Font name="System Bold" size="12.0" />
               </font>
             </Button>
-            <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" style="" styleClass="formatbuttons" text="">
+            <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" prefHeight="23.0" prefWidth="26.0" style="" styleClass="formatbuttons" text="">
               <font>
                 <Font size="13.0" />
               </font>
             </Button>
-            <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" underline="false" />
-            <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
+            <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" prefHeight="23.0" prefWidth="26.0" styleClass="formatbuttons" text="" underline="false" />
+            <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" prefHeight="23.0" prefWidth="26.0" styleClass="formatbuttons" text="" />
           </items>
         </ToolBar>
       </top>
