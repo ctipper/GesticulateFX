@@ -49,7 +49,7 @@ public class Gesticulate extends GuiceApplication {
     @Inject 
     private CanvasFactory canvasFactory;
 
-    private DrawingCanvas drawcanvas;
+    private DrawingArea drawingarea;
     
     private Timeline timeline;
     
@@ -105,18 +105,18 @@ public class Gesticulate extends GuiceApplication {
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
-        drawcanvas = canvasFactory.create(pane.getWidth(), pane.getHeight());
+        drawingarea = canvasFactory.create(pane.getWidth(), pane.getHeight());
         
-        // Apply drawcanvas to controller
-        controller.setCanvas(drawcanvas);
+        // Apply drawingarea to controller
+        controller.setDrawArea(drawingarea);
         
         // Install the canvas
-        pane.setContent(drawcanvas.getCanvas());
+        pane.setContent(drawingarea.getCanvas());
         setOnResize(pane);
         
         // Initialize the canvas and apply handlers
-        drawcanvas.initHandlers();
-        drawcanvas.initCanvas();
+        drawingarea.initHandlers();
+        drawingarea.initCanvas();
         
         // Setup timer
         timeline = new Timeline(
@@ -124,7 +124,7 @@ public class Gesticulate extends GuiceApplication {
                 Duration.ZERO,
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent actionEvent) {
-                        drawcanvas.repaint();
+                        drawingarea.repaint();
                     }
                 }
             ),
@@ -140,13 +140,13 @@ public class Gesticulate extends GuiceApplication {
         p.heightProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
-                drawcanvas.getCanvas().setHeight((double) new_val);
+                drawingarea.getCanvas().setHeight((double) new_val);
             }
         });
         p.widthProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
-                drawcanvas.getCanvas().setWidth((double) new_val);
+                drawingarea.getCanvas().setWidth((double) new_val);
             }
         });
     }
@@ -167,14 +167,14 @@ public class Gesticulate extends GuiceApplication {
 
         @Override
         protected void configure() {
-            install(new FactoryModuleBuilder().implement(DrawingCanvas.class, DrawingCanvas.class)
+            install(new FactoryModuleBuilder().implement(DrawingArea.class, DrawingArea.class)
                 .build(CanvasFactory.class));
         }
     }
     
     public interface CanvasFactory {
 
-        public DrawingCanvas create(@Assisted("width") Double width, @Assisted("height") Double height);
+        public DrawingArea create(@Assisted("width") Double width, @Assisted("height") Double height);
     }
     
     /**

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public class CanvasTransferHandler {
 
-    DrawingCanvas canvas;
+    DrawingArea canvas;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
             + ";class=net.perspective.draw.geom.Figure";
     DataFlavor dataFlavor;
@@ -32,7 +32,7 @@ public class CanvasTransferHandler {
     
     private static final Logger logger = LoggerFactory.getLogger(CanvasTransferHandler.class.getName());
     
-    public CanvasTransferHandler(DrawingCanvas c) {
+    public CanvasTransferHandler(DrawingArea c) {
         canvas = c;
         //Try to create a DataFlavor for drawItems.
         try {

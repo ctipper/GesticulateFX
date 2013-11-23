@@ -8,7 +8,7 @@ package net.perspective.draw.event;
 
 import java.util.List;
 import net.perspective.draw.CanvasView;
-import net.perspective.draw.DrawingCanvas;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
 
 /**
@@ -20,7 +20,7 @@ public class SelectionHandler extends Handler {
 
     private final CanvasView view;
 
-    public SelectionHandler(DrawingCanvas c) {
+    public SelectionHandler(DrawingArea c) {
         super(c);
         view = c.getView();
     }

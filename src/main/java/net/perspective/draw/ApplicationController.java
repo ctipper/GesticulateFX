@@ -22,61 +22,61 @@ import net.perspective.draw.geom.FigureType;
 
 public class ApplicationController implements Initializable {
     
-    private DrawingCanvas drawcanvas;
+    private DrawingArea drawarea;
     
-    void setCanvas(DrawingCanvas d) {
-        drawcanvas = d;
+    void setDrawArea(DrawingArea d) {
+        drawarea = d;
     }
 
     @FXML
     private void handleWipeAction(ActionEvent event) {
-        drawcanvas.initCanvas();
+        drawarea.initCanvas();
     }
     
     @FXML
     private void handleSelectionAction(ActionEvent event) {
-        drawcanvas.setHandler(HandlerType.SELECTION);
+        drawarea.setHandler(HandlerType.SELECTION);
     }
     
     @FXML
     private void handleRotationAction(ActionEvent event) {
-        drawcanvas.setHandler(HandlerType.ROTATION);
+        drawarea.setHandler(HandlerType.ROTATION);
     }
     
     @FXML
     private void handleLineAction(ActionEvent event) {
-        drawcanvas.getView().setFigureType(FigureType.LINE);
-        drawcanvas.setHandler(HandlerType.FIGURE);
+        drawarea.getView().setFigureType(FigureType.LINE);
+        drawarea.setHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleCircleAction(ActionEvent event) {
-        drawcanvas.getView().setFigureType(FigureType.CIRCLE);
-        drawcanvas.setHandler(HandlerType.FIGURE);
+        drawarea.getView().setFigureType(FigureType.CIRCLE);
+        drawarea.setHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleSquareAction(ActionEvent event) {
-        drawcanvas.getView().setFigureType(FigureType.SQUARE);
-        drawcanvas.setHandler(HandlerType.FIGURE);
+        drawarea.getView().setFigureType(FigureType.SQUARE);
+        drawarea.setHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent event) {
-        drawcanvas.getView().setFigureType(FigureType.TRIANGLE);
-        drawcanvas.setHandler(HandlerType.FIGURE);
+        drawarea.getView().setFigureType(FigureType.TRIANGLE);
+        drawarea.setHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent event) {
-        drawcanvas.getView().setFigureType(FigureType.POLYGON);
-        drawcanvas.setHandler(HandlerType.SKETCH);
+        drawarea.getView().setFigureType(FigureType.POLYGON);
+        drawarea.setHandler(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent event) {
-        drawcanvas.getView().setFigureType(FigureType.SKETCH);
-        drawcanvas.setHandler(HandlerType.SKETCH);
+        drawarea.getView().setFigureType(FigureType.SKETCH);
+        drawarea.setHandler(HandlerType.SKETCH);
     }
     
     @Override

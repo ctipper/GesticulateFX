@@ -7,7 +7,7 @@
 package net.perspective.draw.event;
 
 import net.perspective.draw.CanvasView;
-import net.perspective.draw.DrawingCanvas;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
 
@@ -21,7 +21,7 @@ public class FigureHandler extends Handler {
     private final CanvasView view;
     private final PointFactory pointFactory;
 
-    public FigureHandler(DrawingCanvas c) {
+    public FigureHandler(DrawingArea c) {
         super(c);
         this.view = c.getView();
         this.pointFactory = new FigurePointFactory();

@@ -8,7 +8,7 @@ package net.perspective.draw.event;
 
 import java.util.List;
 import net.perspective.draw.CanvasView;
-import net.perspective.draw.DrawingCanvas;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
@@ -23,7 +23,7 @@ public class RotationHandler extends Handler {
 
     private final CanvasView view;
 
-    public RotationHandler(DrawingCanvas c) {
+    public RotationHandler(DrawingArea c) {
         super(c);
         view = c.getView();
     }

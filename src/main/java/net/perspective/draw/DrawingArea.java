@@ -1,5 +1,5 @@
 /*
- * DrawingCanvas.java
+ * DrawingArea.java
  * 
  * Created on Oct 20, 2013 10:56:32 AM
  * 
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author ctipper
  */
 @Singleton
-public class DrawingCanvas {
+public class DrawingArea {
 
     @Inject private CanvasView view;
     private final Canvas canvas;
@@ -55,7 +55,7 @@ public class DrawingCanvas {
     final ContextMenu contextmenu;
     EventHandler contextlistener, popuplistener;
 
-    private static final Logger logger = LoggerFactory.getLogger(DrawingCanvas.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
 
     /**
      * Creates a new instance of <code>DrawingCanvas</code>
@@ -64,7 +64,7 @@ public class DrawingCanvas {
      * @param height
      */
     @Inject
-    public DrawingCanvas(@Assisted("width") Double width, @Assisted("height") Double height) {
+    public DrawingArea(@Assisted("width") Double width, @Assisted("height") Double height) {
         canvas = new Canvas(width.doubleValue(), height.doubleValue());
         context = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(false);

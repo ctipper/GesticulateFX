@@ -9,7 +9,7 @@ package net.perspective.draw.event;
 import java.util.ArrayList;
 import java.util.List;
 import net.perspective.draw.CanvasView;
-import net.perspective.draw.DrawingCanvas;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.util.CanvasPoint;
 
@@ -22,7 +22,7 @@ public class SketchHandler extends Handler  {
     
     private final CanvasView view;
 
-    public SketchHandler(DrawingCanvas c) {
+    public SketchHandler(DrawingArea c) {
         super(c);
         this.view = c.getView();
     }
