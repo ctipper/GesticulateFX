@@ -162,7 +162,7 @@ public class Gesticulate extends GuiceApplication {
     public void stop() {
         timeline.stop();
     }
-
+    
     private static class FxmlModule extends AbstractModule {
 
         @Override
@@ -171,7 +171,7 @@ public class Gesticulate extends GuiceApplication {
                 .build(CanvasFactory.class));
         }
     }
-    
+
     public interface CanvasFactory {
 
         public DrawingArea create(@Assisted("width") Double width, @Assisted("height") Double height);
