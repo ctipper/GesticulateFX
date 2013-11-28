@@ -38,7 +38,7 @@ public class SketchHandler extends Handler  {
         CanvasPoint point;
 
         // Create Figure
-        Figure item = new Figure(view.getFigureType());
+        Figure item = new Figure(canvas.getFigureType());
         item.setStroke(canvas.getStroke());
         item.setColor(canvas.getColor());
         // Initialise sketch
@@ -57,7 +57,7 @@ public class SketchHandler extends Handler  {
 
         view.setPreviousItem(view.getNewItem());
         // Create Figure
-        Figure item = new Figure(view.getFigureType());
+        Figure item = new Figure(canvas.getFigureType());
         item.setStroke(canvas.getStroke());
         item.setColor(canvas.getColor());
         // continue sketch

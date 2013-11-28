@@ -40,7 +40,7 @@ public class FigureHandler extends Handler {
         java.util.List<CanvasPoint> points;
         FigureType type;
 
-        type = view.getFigureType();
+        type = canvas.getFigureType();
         Figure item = new Figure(type);
         item.setStroke(canvas.getStroke());
         item.setColor(canvas.getColor());

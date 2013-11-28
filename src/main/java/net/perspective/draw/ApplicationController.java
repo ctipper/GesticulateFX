@@ -45,37 +45,37 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handleLineAction(ActionEvent event) {
-        drawarea.getView().setFigureType(FigureType.LINE);
+        drawarea.setFigureType(FigureType.LINE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleCircleAction(ActionEvent event) {
-        drawarea.getView().setFigureType(FigureType.CIRCLE);
+        drawarea.setFigureType(FigureType.CIRCLE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleSquareAction(ActionEvent event) {
-        drawarea.getView().setFigureType(FigureType.SQUARE);
+        drawarea.setFigureType(FigureType.SQUARE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent event) {
-        drawarea.getView().setFigureType(FigureType.TRIANGLE);
+        drawarea.setFigureType(FigureType.TRIANGLE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent event) {
-        drawarea.getView().setFigureType(FigureType.POLYGON);
+        drawarea.setFigureType(FigureType.POLYGON);
         drawarea.changeHandler(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent event) {
-        drawarea.getView().setFigureType(FigureType.SKETCH);
+        drawarea.setFigureType(FigureType.SKETCH);
         drawarea.changeHandler(HandlerType.SKETCH);
     }
     

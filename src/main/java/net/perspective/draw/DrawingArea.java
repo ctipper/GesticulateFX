@@ -30,6 +30,7 @@ import java.awt.datatransfer.Transferable;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.event.HandlerType.SKETCH;
+import net.perspective.draw.geom.FigureType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,7 @@ public class DrawingArea {
     private final GraphicsContext context;
     private Handler handler;
 
+    private FigureType figuretype;
     private double stroke;
     private String color;
     private double startX, startY;
@@ -73,6 +75,7 @@ public class DrawingArea {
         transferhandler = new CanvasTransferHandler(this);
         contextmenu = new ContextMenu();
         contextlistener = null;
+        figuretype = FigureType.SKETCH;
     }
 
     public void setView() {
@@ -80,6 +83,7 @@ public class DrawingArea {
     }
     
     public void prepareDrawing() {
+        setFigureType(FigureType.SKETCH);
         setStroke(6.0);
         setColor("#4860E0");
         view.clearView();
@@ -274,6 +278,14 @@ public class DrawingArea {
 
     public CanvasView getView() {
         return view;
+    }
+
+    public void setFigureType(FigureType t) {
+        this.figuretype = t;
+    }
+
+    public FigureType getFigureType() {
+        return figuretype;
     }
 
     public void setStartX(double x) {

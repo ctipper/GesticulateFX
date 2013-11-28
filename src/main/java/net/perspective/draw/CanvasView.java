@@ -23,7 +23,6 @@ public class CanvasView {
 
     private DrawingArea drawarea;
     private java.util.List<Figure> drawings;
-    private FigureType figuretype;
     private Figure olditem, newitem;
     private int selection;
     private boolean isDrawing;
@@ -35,7 +34,6 @@ public class CanvasView {
         newitem = null;
         olditem = null;
         drawings = new ArrayList<>();
-        figuretype = FigureType.SKETCH;
         selection = -1;
         isDrawing = false;
     }
@@ -47,7 +45,6 @@ public class CanvasView {
     public void clearView() {
         this.deleteContents();
         this.setSelected(-1);
-        this.setFigureType(FigureType.SKETCH);
     }
     
     public void deleteContents() {
@@ -90,14 +87,6 @@ public class CanvasView {
 
     public int getSelected() {
         return selection;
-    }
-
-    public void setFigureType(FigureType t) {
-        this.figuretype = t;
-    }
-
-    public FigureType getFigureType() {
-        return figuretype;
     }
 
     public void setNewItem(Figure s) {
