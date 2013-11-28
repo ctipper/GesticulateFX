@@ -30,53 +30,53 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleWipeAction(ActionEvent event) {
-        drawarea.initCanvas();
+        drawarea.prepareDrawing();
     }
     
     @FXML
     private void handleSelectionAction(ActionEvent event) {
-        drawarea.setHandler(HandlerType.SELECTION);
+        drawarea.changeHandler(HandlerType.SELECTION);
     }
     
     @FXML
     private void handleRotationAction(ActionEvent event) {
-        drawarea.setHandler(HandlerType.ROTATION);
+        drawarea.changeHandler(HandlerType.ROTATION);
     }
     
     @FXML
     private void handleLineAction(ActionEvent event) {
         drawarea.getView().setFigureType(FigureType.LINE);
-        drawarea.setHandler(HandlerType.FIGURE);
+        drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleCircleAction(ActionEvent event) {
         drawarea.getView().setFigureType(FigureType.CIRCLE);
-        drawarea.setHandler(HandlerType.FIGURE);
+        drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleSquareAction(ActionEvent event) {
         drawarea.getView().setFigureType(FigureType.SQUARE);
-        drawarea.setHandler(HandlerType.FIGURE);
+        drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent event) {
         drawarea.getView().setFigureType(FigureType.TRIANGLE);
-        drawarea.setHandler(HandlerType.FIGURE);
+        drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent event) {
         drawarea.getView().setFigureType(FigureType.POLYGON);
-        drawarea.setHandler(HandlerType.SKETCH);
+        drawarea.changeHandler(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent event) {
         drawarea.getView().setFigureType(FigureType.SKETCH);
-        drawarea.setHandler(HandlerType.SKETCH);
+        drawarea.changeHandler(HandlerType.SKETCH);
     }
     
     @Override

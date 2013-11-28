@@ -36,7 +36,7 @@ public class RotationHandler extends Handler {
         List<Figure> drawings = view.getDrawings();
         for (Figure figure : drawings) {
             if (!(figure.getType().equals(FigureType.LINE))) {
-                if (figure.contains(c.getStartX(), c.getStartY())) {
+                if (figure.contains(canvas.getStartX(), canvas.getStartY())) {
                     view.setSelected(drawings.indexOf(figure));
                 }
             }
@@ -55,8 +55,8 @@ public class RotationHandler extends Handler {
 
             FigureType type = item.getType();
             if (!type.equals(FigureType.LINE)) {
-                A = new CanvasPoint(c.getStartX() - centre.x, c.getStartY() - centre.y);
-                B = new CanvasPoint(c.getTempX() - centre.x, c.getTempY() - centre.y);
+                A = new CanvasPoint(canvas.getStartX() - centre.x, canvas.getStartY() - centre.y);
+                B = new CanvasPoint(canvas.getTempX() - centre.x, canvas.getTempY() - centre.y);
             }
 
             double h1 = V2.L2(A);
@@ -78,8 +78,8 @@ public class RotationHandler extends Handler {
                 item.setAngle(angle + 2 * Math.PI);
             }
 
-            c.setStartX(c.getTempX());
-            c.setStartY(c.getTempY());
+            canvas.setStartX(canvas.getTempX());
+            canvas.setStartY(canvas.getTempY());
         }
     }
 }

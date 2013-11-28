@@ -39,10 +39,10 @@ public class SketchHandler extends Handler  {
 
         // Create Figure
         Figure item = new Figure(view.getFigureType());
-        item.setStroke(view.getStroke());
-        item.setColor(view.getColor());
+        item.setStroke(canvas.getStroke());
+        item.setColor(canvas.getColor());
         // Initialise sketch
-        point = new CanvasPoint(c.getStartX(), c.getStartY());
+        point = new CanvasPoint(canvas.getStartX(), canvas.getStartY());
         points = new ArrayList<>();
         points.add(point);
 	    item.setPoints(points);
@@ -58,10 +58,10 @@ public class SketchHandler extends Handler  {
         view.setPreviousItem(view.getNewItem());
         // Create Figure
         Figure item = new Figure(view.getFigureType());
-        item.setStroke(view.getStroke());
-        item.setColor(view.getColor());
+        item.setStroke(canvas.getStroke());
+        item.setColor(canvas.getColor());
         // continue sketch
-        point = new CanvasPoint(c.getTempX(), c.getTempY());
+        point = new CanvasPoint(canvas.getTempX(), canvas.getTempY());
         points = view.getPreviousItem().getPoints();
         points.add(point);
         item.setPoints(points);

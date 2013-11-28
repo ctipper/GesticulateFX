@@ -21,13 +21,12 @@ import net.perspective.draw.geom.FigureType;
 @Singleton
 public class CanvasView {
 
+    private DrawingArea drawarea;
     private java.util.List<Figure> drawings;
     private FigureType figuretype;
     private Figure olditem, newitem;
     private int selection;
     private boolean isDrawing;
-    private double stroke;
-    private String color;
 
     /**
      * Creates a new instance of <code>DocView</code>
@@ -41,7 +40,11 @@ public class CanvasView {
         isDrawing = false;
     }
 
-    public void initView() {
+    public void setDrawArea(DrawingArea c) {
+        this.drawarea = c;
+    }
+    
+    public void clearView() {
         this.deleteContents();
         this.setSelected(-1);
         this.setFigureType(FigureType.SKETCH);
@@ -111,21 +114,5 @@ public class CanvasView {
 
     public Figure getPreviousItem() {
         return olditem;
-    }
-
-    public double getStroke() {
-        return stroke;
-    }
-
-    public void setStroke(double stroke) {
-        this.stroke = stroke;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 }

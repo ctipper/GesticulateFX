@@ -115,8 +115,9 @@ public class Gesticulate extends GuiceApplication {
         setOnResize(pane);
         
         // Initialize the canvas and apply handlers
-        drawingarea.initHandlers();
-        drawingarea.initCanvas();
+        drawingarea.setView();
+        drawingarea.setHandlers();
+        drawingarea.prepareDrawing();
         
         // Setup timer
         timeline = new Timeline(

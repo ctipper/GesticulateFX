@@ -46,6 +46,8 @@ public class DrawingArea {
     private final GraphicsContext context;
     private Handler handler;
 
+    private double stroke;
+    private String color;
     private double startX, startY;
     private double tempX, tempY;
     
@@ -73,12 +75,16 @@ public class DrawingArea {
         contextlistener = null;
     }
 
-    public void initCanvas() {
-        view.setStroke(6.0);
-        view.setColor("#4860E0");
-        view.initView();
+    public void setView() {
+        view.setDrawArea(this);
+    }
+    
+    public void prepareDrawing() {
+        setStroke(6.0);
+        setColor("#4860E0");
+        view.clearView();
         this.clear();
-        setHandler(SKETCH);
+        changeHandler(SKETCH);
     }
 
     public void clear() {
@@ -110,7 +116,7 @@ public class DrawingArea {
         }
     }
 
-    public void setHandler(HandlerType h) {
+    public void changeHandler(HandlerType h) {
         canvas.setOnContextMenuRequested(null);
         canvas.setOnTouchStationary(null);
         switch (h) {
@@ -136,7 +142,7 @@ public class DrawingArea {
         view.setDrawing(false);
     }
 
-    void initHandlers() {
+    void setHandlers() {
         canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
             new EventHandler<MouseEvent>() {
                 @Override
@@ -180,7 +186,7 @@ public class DrawingArea {
                 }
             });
         addContextMenu();
-        this.setHandler(SKETCH);
+        this.changeHandler(SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {
@@ -300,5 +306,21 @@ public class DrawingArea {
 
     public double getTempY() {
         return tempY;
+    }
+
+    public double getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(double stroke) {
+        this.stroke = stroke;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

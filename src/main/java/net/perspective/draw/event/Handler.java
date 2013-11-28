@@ -15,10 +15,10 @@ import net.perspective.draw.DrawingArea;
 
 public abstract class Handler {
     
-    DrawingArea c;
+    DrawingArea canvas;
     
     public Handler(DrawingArea c) {
-        this.c = c;
+        this.canvas = c;
     }
 
     public abstract void upEvent();

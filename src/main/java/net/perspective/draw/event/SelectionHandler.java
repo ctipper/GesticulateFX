@@ -32,7 +32,7 @@ public class SelectionHandler extends Handler {
         view.setSelected(-1);
         List<Figure> drawings = view.getDrawings();
         for (Figure figure : drawings) {
-            if (figure.contains(c.getStartX(), c.getStartY())) {
+            if (figure.contains(canvas.getStartX(), canvas.getStartY())) {
                 view.setSelected(drawings.indexOf(figure));
             }
         }
@@ -41,11 +41,11 @@ public class SelectionHandler extends Handler {
     public void dragEvent() {
         int selection = view.getSelected();
         if (selection != -1) {
-            double xinc = c.getTempX() - c.getStartX();
-            double yinc = c.getTempY() - c.getStartY();
+            double xinc = canvas.getTempX() - canvas.getStartX();
+            double yinc = canvas.getTempY() - canvas.getStartY();
             view.getDrawings().get(selection).moveFigure(xinc, yinc);
-            c.setStartX(c.getTempX());
-            c.setStartY(c.getTempY());
+            canvas.setStartX(canvas.getTempX());
+            canvas.setStartY(canvas.getTempY());
         }
     }
 }
