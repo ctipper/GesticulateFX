@@ -53,11 +53,12 @@ public class DrawingArea {
     private double startX, startY;
     private double tempX, tempY;
     
-    Transferable clipboard;
-    CanvasTransferHandler transferhandler;
+    private Transferable clipboard;
+    private final CanvasTransferHandler transferhandler;
 
-    final ContextMenu contextmenu;
-    EventHandler contextlistener, popuplistener;
+    private final ContextMenu contextmenu;
+    private EventHandler<ContextMenuEvent> contextlistener;
+    private EventHandler<TouchEvent> popuplistener;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
 

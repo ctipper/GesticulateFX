@@ -53,6 +53,9 @@
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <executable>${env.JAVA_HOME}/bin/javac</executable>
+                    <compilerArgs>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
  
