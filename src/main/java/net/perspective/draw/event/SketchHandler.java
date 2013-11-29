@@ -18,7 +18,7 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class SketchHandler extends Handler  {
+public class SketchHandler extends HandlerAdapter  {
     
     private final CanvasView view;
 
@@ -38,11 +38,11 @@ public class SketchHandler extends Handler  {
         CanvasPoint point;
 
         // Create Figure
-        Figure item = new Figure(canvas.getFigureType());
-        item.setStroke(canvas.getStroke());
-        item.setColor(canvas.getColor());
+        Figure item = new Figure(drawarea.getFigureType());
+        item.setStroke(drawarea.getStroke());
+        item.setColor(drawarea.getColor());
         // Initialise sketch
-        point = new CanvasPoint(canvas.getStartX(), canvas.getStartY());
+        point = new CanvasPoint(drawarea.getStartX(), drawarea.getStartY());
         points = new ArrayList<>();
         points.add(point);
 	    item.setPoints(points);
@@ -57,11 +57,11 @@ public class SketchHandler extends Handler  {
 
         view.setPreviousItem(view.getNewItem());
         // Create Figure
-        Figure item = new Figure(canvas.getFigureType());
-        item.setStroke(canvas.getStroke());
-        item.setColor(canvas.getColor());
+        Figure item = new Figure(drawarea.getFigureType());
+        item.setStroke(drawarea.getStroke());
+        item.setColor(drawarea.getColor());
         // continue sketch
-        point = new CanvasPoint(canvas.getTempX(), canvas.getTempY());
+        point = new CanvasPoint(drawarea.getTempX(), drawarea.getTempY());
         points = view.getPreviousItem().getPoints();
         points.add(point);
         item.setPoints(points);

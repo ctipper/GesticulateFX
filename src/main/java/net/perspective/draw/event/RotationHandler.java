@@ -19,7 +19,7 @@ import net.perspective.draw.util.V2;
  * @author ctipper
  */
 
-public class RotationHandler extends Handler {
+public class RotationHandler extends HandlerAdapter {
 
     private final CanvasView view;
 
@@ -36,7 +36,7 @@ public class RotationHandler extends Handler {
         List<Figure> drawings = view.getDrawings();
         for (Figure figure : drawings) {
             if (!(figure.getType().equals(FigureType.LINE))) {
-                if (figure.contains(canvas.getStartX(), canvas.getStartY())) {
+                if (figure.contains(drawarea.getStartX(), drawarea.getStartY())) {
                     view.setSelected(drawings.indexOf(figure));
                 }
             }
@@ -55,8 +55,8 @@ public class RotationHandler extends Handler {
 
             FigureType type = item.getType();
             if (!type.equals(FigureType.LINE)) {
-                A = new CanvasPoint(canvas.getStartX() - centre.x, canvas.getStartY() - centre.y);
-                B = new CanvasPoint(canvas.getTempX() - centre.x, canvas.getTempY() - centre.y);
+                A = new CanvasPoint(drawarea.getStartX() - centre.x, drawarea.getStartY() - centre.y);
+                B = new CanvasPoint(drawarea.getTempX() - centre.x, drawarea.getTempY() - centre.y);
             }
 
             double h1 = V2.L2(A);
@@ -78,8 +78,8 @@ public class RotationHandler extends Handler {
                 item.setAngle(angle + 2 * Math.PI);
             }
 
-            canvas.setStartX(canvas.getTempX());
-            canvas.setStartY(canvas.getTempY());
+            drawarea.setStartX(drawarea.getTempX());
+            drawarea.setStartY(drawarea.getTempY());
         }
     }
 }

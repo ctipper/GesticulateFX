@@ -1,5 +1,5 @@
 /*
- * Handler.java
+ * HandlerAdapter.java
  * 
  * Created on Oct 19, 2013 8:18:21 PM
  * 
@@ -13,12 +13,12 @@ import net.perspective.draw.DrawingArea;
  * @author ctipper
  */
 
-public abstract class Handler {
+public abstract class HandlerAdapter {
     
-    DrawingArea canvas;
+    DrawingArea drawarea;
     
-    public Handler(DrawingArea c) {
-        this.canvas = c;
+    public HandlerAdapter(DrawingArea c) {
+        this.drawarea = c;
     }
 
     public abstract void upEvent();

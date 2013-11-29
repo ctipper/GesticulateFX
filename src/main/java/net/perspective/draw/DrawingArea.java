@@ -45,7 +45,7 @@ public class DrawingArea {
     @Inject private CanvasView view;
     private final Canvas canvas;
     private final GraphicsContext context;
-    private Handler handler;
+    private HandlerAdapter handler;
 
     private FigureType figuretype;
     private double stroke;

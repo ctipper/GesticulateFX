@@ -16,7 +16,7 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class FigureHandler extends Handler {
+public class FigureHandler extends HandlerAdapter {
 
     private final CanvasView view;
     private final PointFactory pointFactory;
@@ -40,12 +40,12 @@ public class FigureHandler extends Handler {
         java.util.List<CanvasPoint> points;
         FigureType type;
 
-        type = canvas.getFigureType();
+        type = drawarea.getFigureType();
         Figure item = new Figure(type);
-        item.setStroke(canvas.getStroke());
-        item.setColor(canvas.getColor());
+        item.setStroke(drawarea.getStroke());
+        item.setColor(drawarea.getColor());
         points = pointFactory.createPoints(type,
-            canvas.getStartX(), canvas.getStartY(), canvas.getTempX(), canvas.getTempY());
+            drawarea.getStartX(), drawarea.getStartY(), drawarea.getTempX(), drawarea.getTempY());
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);

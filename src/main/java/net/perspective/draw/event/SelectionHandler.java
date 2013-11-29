@@ -16,7 +16,7 @@ import net.perspective.draw.geom.Figure;
  * @author ctipper
  */
 
-public class SelectionHandler extends Handler {
+public class SelectionHandler extends HandlerAdapter {
 
     private final CanvasView view;
 
@@ -32,7 +32,7 @@ public class SelectionHandler extends Handler {
         view.setSelected(-1);
         List<Figure> drawings = view.getDrawings();
         for (Figure figure : drawings) {
-            if (figure.contains(canvas.getStartX(), canvas.getStartY())) {
+            if (figure.contains(drawarea.getStartX(), drawarea.getStartY())) {
                 view.setSelected(drawings.indexOf(figure));
             }
         }
@@ -41,11 +41,11 @@ public class SelectionHandler extends Handler {
     public void dragEvent() {
         int selection = view.getSelected();
         if (selection != -1) {
-            double xinc = canvas.getTempX() - canvas.getStartX();
-            double yinc = canvas.getTempY() - canvas.getStartY();
+            double xinc = drawarea.getTempX() - drawarea.getStartX();
+            double yinc = drawarea.getTempY() - drawarea.getStartY();
             view.getDrawings().get(selection).moveFigure(xinc, yinc);
-            canvas.setStartX(canvas.getTempX());
-            canvas.setStartY(canvas.getTempY());
+            drawarea.setStartX(drawarea.getTempX());
+            drawarea.setStartY(drawarea.getTempY());
         }
     }
 }
