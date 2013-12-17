@@ -6,6 +6,7 @@
  */
 package net.perspective.draw.geom;
 
+import java.awt.Shape;
 import java.awt.geom.*;
 import java.io.IOException;
 import java.io.Serializable;
@@ -113,8 +114,8 @@ public class Figure implements Serializable {
         }
     }
 
-    public boolean contains(double x, double y) {
-        return path.intersects(x - 3, y - 3, 6, 6);
+    public GeneralPath getPath() {
+        return this.path;
     }
 
     public void moveFigure(double xinc, double yinc) {
@@ -138,22 +139,33 @@ public class Figure implements Serializable {
 
     protected AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
-        AffineTransform translate = new AffineTransform();
-        translate.setToTranslation(centre.x, centre.y);
+        AffineTransform transform = new AffineTransform();
+        transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
             // rotate figure about centroid
-            translate.rotate(this.getAngle());
+            transform.rotate(this.getAngle());
         }
-        translate.translate(-centre.x, -centre.y);
-        return translate;
+        transform.translate(-centre.x, -centre.y);
+        return transform;
     }
 
     public CanvasPoint rotationCentre() {
-        GeneralPath p = (GeneralPath) path.clone();
+        GeneralPath p = (GeneralPath) this.getPath().clone();
         p.closePath();
         Area area = new Area(p);
         Rectangle2D bound = area.getBounds2D();
         return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+    }
+
+    public Shape bounds() {
+        AffineTransform trans = this.getTransform();
+        GeneralPath p = (GeneralPath) this.getPath().clone();
+        p.transform(trans);
+        return p;
+    }
+
+    public boolean contains(double x, double y) {
+        return this.bounds().intersects(x - 5, y - 5, 10, 10);
     }
 
     public void drawAnchors(GraphicsContext context) {
