@@ -12,7 +12,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigureType;
 
 /**
  *
