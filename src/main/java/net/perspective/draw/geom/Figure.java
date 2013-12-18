@@ -32,7 +32,7 @@ public class Figure implements Serializable {
     String color;
     double width;
     double angle;
-    boolean closed;
+    private boolean closed;
 
     public Figure() {
         this.angle = 0;
@@ -92,11 +92,11 @@ public class Figure implements Serializable {
     }
 
     public void setAngle(double a) {
-        angle = a;
+        this.angle = a;
     }
 
     public double getAngle() {
-        return angle;
+        return this.angle;
     }
 
     public void setPath() {
@@ -224,7 +224,7 @@ public class Figure implements Serializable {
     private void drawPath(GraphicsContext context, AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
         context.beginPath();
-        PathIterator iterator = path.getPathIterator(at);
+        PathIterator iterator = this.getPath().getPathIterator(at);
         while (!iterator.isDone()) {
             switch (iterator.currentSegment(coords)) {
                 case PathIterator.SEG_MOVETO:
