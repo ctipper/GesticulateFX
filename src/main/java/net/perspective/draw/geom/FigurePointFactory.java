@@ -17,7 +17,7 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class FigurePointFactory implements PointFactory {
 
-    /** Creates a new instance of <code>FigurePointFactory</code> */
+    /** Creates a newidtheight instance of <code>FigurePointFactory</code> */
     public FigurePointFactory() {
     }
     
