@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.perspective</groupId>
+    <groupId>net.perspective.draw</groupId>
     <artifactId>gesticulate-fx</artifactId>
     <name>gesticulate-fx</name>
 
