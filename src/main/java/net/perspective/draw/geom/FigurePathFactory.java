@@ -23,8 +23,9 @@ public class FigurePathFactory implements PathFactory {
         CanvasPoint p0, p1, p2, p3;
         double x, y, w, h;
         CanvasPoint[] cPoints;
-        java.util.List<CanvasPoint> points = fig.getPoints();
+        
         path = new GeneralPath();
+        java.util.List<CanvasPoint> points = fig.getPoints();
         FigureType type = fig.getType();
         switch (type) {
             case LINE:
