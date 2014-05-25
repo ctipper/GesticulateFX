@@ -28,12 +28,10 @@ import javax.inject.Inject;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.google.inject.assistedinject.*;
 
 import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
-import javax.inject.Singleton;
 import net.perspective.draw.event.*;
 
 import org.slf4j.Logger;
@@ -45,14 +43,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Gesticulate extends GuiceApplication {
 
-    @Inject 
-    private GuiceFXMLLoader fxmlLoader;
+    @Inject private GuiceFXMLLoader fxmlLoader;
     
-//    @Inject 
-//    private CanvasFactory canvasFactory;
-
-    @Inject
-    private DrawingArea drawingarea;
+    @Inject private DrawingArea drawingarea;
     
     private Timeline timeline;
     
