@@ -33,6 +33,8 @@ import com.google.inject.assistedinject.*;
 import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
+import javax.inject.Singleton;
+import net.perspective.draw.event.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +48,10 @@ public class Gesticulate extends GuiceApplication {
     @Inject 
     private GuiceFXMLLoader fxmlLoader;
     
-    @Inject 
-    private CanvasFactory canvasFactory;
+//    @Inject 
+//    private CanvasFactory canvasFactory;
 
+    @Inject
     private DrawingArea drawingarea;
     
     private Timeline timeline;
@@ -105,7 +108,8 @@ public class Gesticulate extends GuiceApplication {
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
-        drawingarea = canvasFactory.create(pane.getWidth(), pane.getHeight());
+        // Initialize the canvas and apply handlers
+        drawingarea.init(pane.getWidth(), pane.getHeight());
         
         // Apply drawingarea to controller
         controller.setDrawArea(drawingarea);
@@ -113,11 +117,6 @@ public class Gesticulate extends GuiceApplication {
         // Install the canvas
         pane.setContent(drawingarea.getCanvas());
         setOnResize(pane);
-        
-        // Initialize the canvas and apply handlers
-        drawingarea.setView();
-        drawingarea.setHandlers();
-        drawingarea.prepareDrawing();
         
         // Setup timer
         timeline = new Timeline(
@@ -168,14 +167,13 @@ public class Gesticulate extends GuiceApplication {
 
         @Override
         protected void configure() {
-            install(new FactoryModuleBuilder().implement(DrawingArea.class, DrawingArea.class)
-                .build(CanvasFactory.class));
+            bind(DrawingArea.class);
+            bind(CanvasView.class);
+            bind(FigureHandler.class);
+            bind(RotationHandler.class);
+            bind(SelectionHandler.class);
+            bind(SketchHandler.class);
         }
-    }
-
-    public interface CanvasFactory {
-
-        public DrawingArea create(@Assisted("width") Double width, @Assisted("height") Double height);
     }
     
     /**

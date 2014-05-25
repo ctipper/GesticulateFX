@@ -9,6 +9,7 @@ package net.perspective.draw;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import net.perspective.draw.geom.Figure;
@@ -20,7 +21,7 @@ import net.perspective.draw.geom.Figure;
 @Singleton
 public class CanvasView {
 
-    private DrawingArea drawarea;
+    @Inject private DrawingArea drawarea;
     private java.util.List<Figure> drawings;
     private Figure olditem, newitem;
     private int selection;
@@ -37,10 +38,6 @@ public class CanvasView {
         isDrawing = false;
     }
 
-    public void setDrawArea(DrawingArea c) {
-        this.drawarea = c;
-    }
-    
     public void clearView() {
         this.deleteContents();
         this.setSelected(-1);

@@ -6,6 +6,7 @@
  */
 package net.perspective.draw.event;
 
+import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.*;
@@ -16,16 +17,16 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class FigureHandler extends HandlerAdapter {
+public class FigureHandler implements Handler {
 
-    private final CanvasView view;
+    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
+
     private final PointFactory pointFactory;
 
-    public FigureHandler(DrawingArea c) {
-        super(c);
-        this.view = c.getView();
+    public FigureHandler() {
         this.pointFactory = new FigurePointFactory();
-    }
+    }    
 
     public void upEvent() {
         view.setDrawing(false);
