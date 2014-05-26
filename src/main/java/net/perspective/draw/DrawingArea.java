@@ -137,6 +137,7 @@ public class DrawingArea {
                 break;
             case SKETCH:
                 this.handler = injector.getInstance(SketchHandler.class);
+                break;
             default:
                 break;
         }
