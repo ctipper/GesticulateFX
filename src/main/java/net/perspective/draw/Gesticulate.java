@@ -104,9 +104,6 @@ public class Gesticulate extends GuiceApplication {
         // Initialize the canvas and apply handlers
         drawingarea.init(pane.getWidth(), pane.getHeight());
         
-        // Apply drawingarea to controller
-        controller.setDrawArea(drawingarea);
-        
         // Install the canvas
         pane.setContent(drawingarea.getCanvas());
         setOnResize(pane);

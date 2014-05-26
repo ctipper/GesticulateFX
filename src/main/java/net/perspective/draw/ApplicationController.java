@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javax.inject.Inject;
 import net.perspective.draw.event.HandlerType;
 import net.perspective.draw.geom.FigureType;
 
@@ -22,12 +23,8 @@ import net.perspective.draw.geom.FigureType;
 
 public class ApplicationController implements Initializable {
     
-    private DrawingArea drawarea;
+    @Inject private DrawingArea drawarea;
     
-    void setDrawArea(DrawingArea d) {
-        drawarea = d;
-    }
-
     @FXML
     private void handleWipeAction(ActionEvent event) {
         drawarea.prepareDrawing();

@@ -10,11 +10,10 @@ package net.perspective.draw.event;
  *
  * @author ctipper
  */
-
 public interface Handler {
-    
+
     void upEvent();
-    
+
     void downEvent();
 
     void dragEvent();
