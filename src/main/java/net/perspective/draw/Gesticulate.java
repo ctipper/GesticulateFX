@@ -6,11 +6,9 @@
  */
 package net.perspective.draw;
 
-import javafx.scene.SceneBuilder;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
-import javafx.stage.StageBuilder;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.animation.KeyFrame;
@@ -77,17 +75,13 @@ public class Gesticulate extends GuiceApplication {
     public void start(final Stage primaryStage) throws Exception {
         Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
         
-        final ApplicationController controller = (ApplicationController) result.getController();
         final Parent root = result.getRoot();
 
         // Put the loaded user interface onto the primary stage.
-        StageBuilder.create()
-        .title("Gesticulate")
-        .resizable(true)
-        .scene(SceneBuilder.create()
-            .root(root)
-            .build())
-        .applyTo(primaryStage);
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Gesticulate");
+        primaryStage.setResizable(true);
+        primaryStage.setScene(scene);
         
         // Size the primary stage
         sizeStage(primaryStage);
@@ -96,7 +90,6 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.show();
 
         // Initialise the scroll area
-        Scene scene = primaryStage.getScene();
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
