@@ -19,19 +19,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-
 import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import net.perspective.draw.event.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +54,7 @@ public class Gesticulate extends GuiceApplication {
     static final int duration = 25;
     private static final Duration REFRESH_FREQUENCY = Duration.millis(duration);
     
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
     @Override

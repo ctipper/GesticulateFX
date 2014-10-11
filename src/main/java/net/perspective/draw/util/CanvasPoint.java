@@ -14,6 +14,8 @@ import java.io.Serializable;
 
 public class CanvasPoint implements Serializable, Cloneable {
 
+    private static final long serialVersionUID = 1L;
+    
     public double x, y;
 
     public CanvasPoint() {

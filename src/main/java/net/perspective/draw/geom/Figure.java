@@ -33,6 +33,7 @@ public class Figure implements Serializable {
     double width;
     double angle;
     private boolean closed;
+    private static final long serialVersionUID = 1L;
 
     public Figure() {
         this.angle = 0;

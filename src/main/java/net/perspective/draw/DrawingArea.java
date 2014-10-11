@@ -17,20 +17,16 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
-
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import com.google.inject.Injector;
-
 import java.awt.datatransfer.Transferable;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.event.HandlerType.SKETCH;
 import net.perspective.draw.geom.FigureType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +56,7 @@ public class DrawingArea {
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
 
+    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
 
     /**
