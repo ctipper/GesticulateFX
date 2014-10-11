@@ -8,6 +8,7 @@ package net.perspective.draw.event;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
@@ -18,14 +19,10 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class SketchHandler extends HandlerAdapter  {
-    
-    private final CanvasView view;
+public class SketchHandler implements Handler  {
 
-    public SketchHandler(DrawingArea c) {
-        super(c);
-        this.view = c.getView();
-    }
+    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
 
     public void upEvent() {
         view.setDrawing(false);

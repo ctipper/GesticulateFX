@@ -6,11 +6,9 @@
  */
 package net.perspective.draw;
 
-import javafx.scene.SceneBuilder;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
-import javafx.stage.StageBuilder;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.animation.KeyFrame;
@@ -28,11 +26,11 @@ import javax.inject.Inject;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.google.inject.assistedinject.*;
 
 import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
+import net.perspective.draw.event.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,13 +41,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Gesticulate extends GuiceApplication {
 
-    @Inject 
-    private GuiceFXMLLoader fxmlLoader;
+    @Inject private GuiceFXMLLoader fxmlLoader;
     
-    @Inject 
-    private CanvasFactory canvasFactory;
-
-    private DrawingArea drawingarea;
+    @Inject private DrawingArea drawingarea;
     
     private Timeline timeline;
     
@@ -81,17 +75,13 @@ public class Gesticulate extends GuiceApplication {
     public void start(final Stage primaryStage) throws Exception {
         Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
         
-        final ApplicationController controller = (ApplicationController) result.getController();
         final Parent root = result.getRoot();
 
         // Put the loaded user interface onto the primary stage.
-        StageBuilder.create()
-        .title("Gesticulate")
-        .resizable(true)
-        .scene(SceneBuilder.create()
-            .root(root)
-            .build())
-        .applyTo(primaryStage);
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Gesticulate");
+        primaryStage.setResizable(true);
+        primaryStage.setScene(scene);
         
         // Size the primary stage
         sizeStage(primaryStage);
@@ -100,24 +90,16 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.show();
 
         // Initialise the scroll area
-        Scene scene = primaryStage.getScene();
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
-        drawingarea = canvasFactory.create(pane.getWidth(), pane.getHeight());
-        
-        // Apply drawingarea to controller
-        controller.setDrawArea(drawingarea);
+        // Initialize the canvas and apply handlers
+        drawingarea.init(pane.getWidth(), pane.getHeight());
         
         // Install the canvas
         pane.setContent(drawingarea.getCanvas());
         setOnResize(pane);
-        
-        // Initialize the canvas and apply handlers
-        drawingarea.setView();
-        drawingarea.setHandlers();
-        drawingarea.prepareDrawing();
         
         // Setup timer
         timeline = new Timeline(
@@ -168,14 +150,13 @@ public class Gesticulate extends GuiceApplication {
 
         @Override
         protected void configure() {
-            install(new FactoryModuleBuilder().implement(DrawingArea.class, DrawingArea.class)
-                .build(CanvasFactory.class));
+            bind(DrawingArea.class);
+            bind(CanvasView.class);
+            bind(FigureHandler.class);
+            bind(RotationHandler.class);
+            bind(SelectionHandler.class);
+            bind(SketchHandler.class);
         }
-    }
-
-    public interface CanvasFactory {
-
-        public DrawingArea create(@Assisted("width") Double width, @Assisted("height") Double height);
     }
     
     /**

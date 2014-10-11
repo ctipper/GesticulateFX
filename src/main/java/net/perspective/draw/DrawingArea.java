@@ -23,8 +23,7 @@ import net.perspective.draw.geom.Figure;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.inject.assistedinject.Assisted;
+import com.google.inject.Injector;
 
 import java.awt.datatransfer.Transferable;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
@@ -42,10 +41,11 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DrawingArea {
 
+    @Inject Injector injector;
     @Inject private CanvasView view;
-    private final Canvas canvas;
-    private final GraphicsContext context;
-    private HandlerAdapter handler;
+    private Canvas canvas;
+    private GraphicsContext context;
+    private Handler handler;
 
     private FigureType figuretype;
     private double stroke;
@@ -54,9 +54,9 @@ public class DrawingArea {
     private double tempX, tempY;
     
     private Transferable clipboard;
-    private final CanvasTransferHandler transferhandler;
+    private CanvasTransferHandler transferhandler;
 
-    private final ContextMenu contextmenu;
+    private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
 
@@ -64,25 +64,22 @@ public class DrawingArea {
 
     /**
      * Creates a new instance of <code>DrawingCanvas</code>
-     *
-     * @param width
-     * @param height
      */
     @Inject
-    public DrawingArea(@Assisted("width") Double width, @Assisted("height") Double height) {
-        canvas = new Canvas(width.doubleValue(), height.doubleValue());
+    public DrawingArea() {
+    }
+
+    void init(double width, double height) {
+        canvas = new Canvas(width, height);
         context = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(false);
         transferhandler = new CanvasTransferHandler(this);
         contextmenu = new ContextMenu();
         contextlistener = null;
-        figuretype = FigureType.SKETCH;
+        prepareDrawing();
+        setHandlers();
     }
 
-    public void setView() {
-        view.setDrawArea(this);
-    }
-    
     public void prepareDrawing() {
         setFigureType(FigureType.SKETCH);
         setStroke(6.0);
@@ -126,20 +123,21 @@ public class DrawingArea {
         canvas.setOnTouchStationary(null);
         switch (h) {
             case SELECTION:
-                this.handler = new SelectionHandler(this);
+                this.handler = injector.getInstance(SelectionHandler.class);
                 canvas.setOnContextMenuRequested(contextlistener);
                 canvas.setOnTouchStationary(popuplistener);
                 break;
             case FIGURE:
-                this.handler = new FigureHandler(this);
+                this.handler = injector.getInstance(FigureHandler.class);
                 break;
             case ROTATION:
-                this.handler = new RotationHandler(this);
+                this.handler = injector.getInstance(RotationHandler.class);
                 canvas.setOnContextMenuRequested(contextlistener);
                 canvas.setOnTouchStationary(popuplistener);
                 break;
             case SKETCH:
-                this.handler = new SketchHandler(this);
+                this.handler = injector.getInstance(SketchHandler.class);
+                break;
             default:
                 break;
         }

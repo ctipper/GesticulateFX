@@ -7,6 +7,7 @@
 package net.perspective.draw.event;
 
 import java.util.List;
+import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
@@ -19,14 +20,10 @@ import net.perspective.draw.util.V2;
  * @author ctipper
  */
 
-public class RotationHandler extends HandlerAdapter {
+public class RotationHandler implements Handler {
 
-    private final CanvasView view;
-
-    public RotationHandler(DrawingArea c) {
-        super(c);
-        view = c.getView();
-    }
+    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
 
     public void upEvent() {
     }

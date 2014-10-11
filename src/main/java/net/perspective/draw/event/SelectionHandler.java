@@ -7,6 +7,7 @@
 package net.perspective.draw.event;
 
 import java.util.List;
+import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
@@ -16,14 +17,10 @@ import net.perspective.draw.geom.Figure;
  * @author ctipper
  */
 
-public class SelectionHandler extends HandlerAdapter {
+public class SelectionHandler implements Handler {
 
-    private final CanvasView view;
-
-    public SelectionHandler(DrawingArea c) {
-        super(c);
-        view = c.getView();
-    }
+    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
 
     public void upEvent() {
     }
