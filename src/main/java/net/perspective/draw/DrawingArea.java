@@ -17,6 +17,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
+import gwt.awt.Stroke;
+import gwt.awt.BasicStroke;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
 import javax.inject.Inject;
@@ -44,7 +46,7 @@ public class DrawingArea {
     private Handler handler;
 
     private FigureType figuretype;
-    private double stroke;
+    private Stroke stroke;
     private String color;
     private double startX, startY;
     private double tempX, tempY;
@@ -79,7 +81,7 @@ public class DrawingArea {
 
     public void prepareDrawing() {
         setFigureType(FigureType.SKETCH);
-        setStroke(6.0);
+        setStroke(new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
         setColor("#4860E0");
         view.clearView();
         this.clear();
@@ -316,11 +318,11 @@ public class DrawingArea {
         return tempY;
     }
 
-    public double getStroke() {
+    public Stroke getStroke() {
         return stroke;
     }
 
-    public void setStroke(double stroke) {
+    public void setStroke(Stroke stroke) {
         this.stroke = stroke;
     }
 

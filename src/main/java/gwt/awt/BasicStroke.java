@@ -1,7 +1,10 @@
 package gwt.awt;
 
 import java.beans.ConstructorProperties;
+import java.io.Serializable;
 import java.lang.annotation.Native;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 
 /**
  * The <code>BasicStroke</code> class defines a basic set of rendering
@@ -10,7 +13,7 @@ import java.lang.annotation.Native;
  * this <code>BasicStroke</code>.
  **/
 
-public class BasicStroke implements Stroke {
+public class BasicStroke implements Stroke, Serializable {
 
     protected float width;
     protected int join;
@@ -68,16 +71,16 @@ public class BasicStroke implements Stroke {
      *         hint setting.
      * @param cap the decoration of the ends of a <code>BasicStroke</code>
      * @param join the decoration applied where path segments meet
-     * @param miterlimit the limit to trim the miter join.  The miterlimit
-     *        must be greater than or equal to 1.0f.
+     * @param miterlimit the limit to trim the miter jfxjoin.  The miterlimit
+        must be greater than or equal to 1.0f.
      * @param dash the array representing the dashing pattern
      * @param dash_phase the offset to start the dashing pattern
      * @throws IllegalArgumentException if <code>width</code> is negative
      * @throws IllegalArgumentException if <code>cap</code> is not either
      *         CAP_BUTT, CAP_ROUND or CAP_SQUARE
      * @throws IllegalArgumentException if <code>miterlimit</code> is less
-     *         than 1 and <code>join</code> is JOIN_MITER
-     * @throws IllegalArgumentException if <code>join</code> is not
+     *         than 1 and <code>jfxjoin</code> is JOIN_MITER
+     * @throws IllegalArgumentException if <code>jfxjoin</code> is not
      *         either JOIN_ROUND, JOIN_BEVEL, or JOIN_MITER
      * @throws IllegalArgumentException if <code>dash_phase</code>
      *         is negative and <code>dash</code> is not <code>null</code>
@@ -134,13 +137,13 @@ public class BasicStroke implements Stroke {
      * @param width the width of the <code>PlainStroke</code>
      * @param cap the decoration of the ends of a <code>PlainStroke</code>
      * @param join the decoration applied where path segments meet
-     * @param miterlimit the limit to trim the miter join
+     * @param miterlimit the limit to trim the miter jfxjoin
      * @throws IllegalArgumentException if <code>width</code> is negative
      * @throws IllegalArgumentException if <code>cap</code> is not either
      *         CAP_BUTT, CAP_ROUND or CAP_SQUARE
      * @throws IllegalArgumentException if <code>miterlimit</code> is less
-     *         than 1 and <code>join</code> is JOIN_MITER
-     * @throws IllegalArgumentException if <code>join</code> is not
+     *         than 1 and <code>jfxjoin</code> is JOIN_MITER
+     * @throws IllegalArgumentException if <code>jfxjoin</code> is not
      *         either JOIN_ROUND, JOIN_BEVEL, or JOIN_MITER
      */
     public BasicStroke(float width, int cap, int join, float miterlimit) {
@@ -158,7 +161,7 @@ public class BasicStroke implements Stroke {
      * @throws IllegalArgumentException if <code>width</code> is negative
      * @throws IllegalArgumentException if <code>cap</code> is not either
      *         CAP_BUTT, CAP_ROUND or CAP_SQUARE
-     * @throws IllegalArgumentException if <code>join</code> is not
+     * @throws IllegalArgumentException if <code>jfxjoin</code> is not
      *         either JOIN_ROUND, JOIN_BEVEL, or JOIN_MITER
      */
     public BasicStroke(float width, int cap, int join) {
@@ -167,8 +170,8 @@ public class BasicStroke implements Stroke {
 
     /**
      * Constructs a solid <code>PlainStroke</code> with the specified
-     * line width and with default values for the cap and join
-     * styles.
+ line width and with default values for the cap and jfxjoin
+ styles.
      * @param width the width of the <code>PlainStroke</code>
      * @throws IllegalArgumentException if <code>width</code> is negative
      */
@@ -189,7 +192,7 @@ public class BasicStroke implements Stroke {
 //    public Shape createStrokedShape(Shape s) {
 //        sun.java2d.pipe.RenderingEngine re =
 //            sun.java2d.pipe.RenderingEngine.getInstance();
-//        return re.createStrokedShape(s, width, cap, join, miterlimit,
+//        return re.createStrokedShape(s, width, cap, jfxjoin, miterlimit,
 //                                     dash, dash_phase);
 //    }
 
@@ -275,5 +278,43 @@ public class BasicStroke implements Stroke {
         }
     
         return true;
+    }
+
+    public StrokeLineJoin getJfxJoin() {
+        javafx.scene.shape.StrokeLineJoin jfxjoin;
+        switch (this.getLineJoin()) {
+            case JOIN_MITER:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
+                break;
+            case JOIN_ROUND:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
+                break;
+            case JOIN_BEVEL:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.BEVEL;
+                break;
+            default:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
+                break;
+        }
+        return jfxjoin;
+    }
+
+    public StrokeLineCap getJfxCap() {
+        javafx.scene.shape.StrokeLineCap jfxcap;
+        switch (this.getEndCap()) {
+            case CAP_BUTT:
+                jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
+                break;
+            case CAP_ROUND:
+                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
+                break;
+            case CAP_SQUARE:
+                jfxcap = javafx.scene.shape.StrokeLineCap.SQUARE;
+                break;
+            default:
+                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
+                break;
+        }
+        return jfxcap;
     }
 }

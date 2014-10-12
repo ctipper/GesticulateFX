@@ -6,10 +6,9 @@
  */
 package net.perspective.draw.geom;
 
-import gwt.awt.Shape;
+import gwt.awt.*;
 import gwt.awt.geom.*;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,13 +24,16 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class Figure implements Serializable {
 
-    List<CanvasPoint> points;
-    FigureType type;
-    transient GeneralPath path;
-    transient PathFactory factory;
-    String color;
+    private List<CanvasPoint> points;
+    private FigureType type;
+    private transient GeneralPath path;
+    private transient PathFactory factory;
+    protected Stroke stroke;
+    private String color, fillcolor;
     double width;
-    double angle;
+    private double angle;
+    // closed indicates to draw() whether 
+    // shape should be filled
     private boolean closed;
     
     private static final long serialVersionUID = 1L;
@@ -77,20 +79,36 @@ public class Figure implements Serializable {
         return this.closed;
     }
 
-    public void setStroke(double width) {
-        this.width = width;
-    }
-
-    public double getStroke() {
-        return this.width;
-    }
-
     public void setColor(String color) {
         this.color = color;
     }
 
     public String getColor() {
         return this.color;
+    }
+
+    public void setFillColor(String c) {
+        fillcolor = c;
+    }
+
+    public String getFillColor() {
+        return fillcolor;
+    }
+
+//    public void setStroke(double width) {
+//        this.width = width;
+//    }
+//
+//    public double getStroke() {
+//        return this.width;
+//    }
+
+    public void setStroke(Stroke s) {
+        stroke = s;
+    }
+
+    public Stroke getStroke() {
+        return stroke;
     }
 
     public void setAngle(double a) {
@@ -172,7 +190,7 @@ public class Figure implements Serializable {
 
     public void drawAnchors(GraphicsContext context) {
         if (!(this.type.equals(FigureType.SKETCH)
-                || this.type.equals(FigureType.POLYGON))) {
+            || this.type.equals(FigureType.POLYGON))) {
             for (CanvasPoint point : points) {
                 this.anchor(context, point.getX(), point.getY());
             }
@@ -200,9 +218,9 @@ public class Figure implements Serializable {
 
         context.setStroke(Color.web(this.getColor()));
         context.setFill(Color.web(this.getColor()));
-        context.setLineWidth(this.getStroke());
-        context.setLineJoin(StrokeLineJoin.ROUND);
-        context.setLineCap(StrokeLineCap.SQUARE);
+        context.setLineWidth(((BasicStroke) this.getStroke()).getLineWidth());
+        context.setLineJoin(((BasicStroke) this.getStroke()).getJfxJoin());
+        context.setLineCap(((BasicStroke) this.getStroke()).getJfxCap());
         this.drawPath(context, at);
         if (this.isClosed()) {
             context.closePath();
@@ -213,9 +231,9 @@ public class Figure implements Serializable {
 
     public void sketch(GraphicsContext context) {
         context.setStroke(Color.LIGHTGREY);
-        context.setLineWidth(this.getStroke());
-        context.setLineJoin(StrokeLineJoin.ROUND);
-        context.setLineCap(StrokeLineCap.SQUARE);
+        context.setLineWidth(((BasicStroke) this.getStroke()).getLineWidth());
+        context.setLineJoin(((BasicStroke) this.getStroke()).getJfxJoin());
+        context.setLineCap(((BasicStroke) this.getStroke()).getJfxCap());
         this.drawPath(context, new AffineTransform());
         if (this.isClosed()) {
             context.closePath();
@@ -252,14 +270,15 @@ public class Figure implements Serializable {
         }
     }
 
-    private void readObject(java.io.ObjectInputStream in)
+    private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         this.factory = new FigurePathFactory();
     }
 
-    private void writeObject(java.io.ObjectOutputStream out)
+    private void writeObject(ObjectOutputStream out)
             throws IOException {
         out.defaultWriteObject();
     }
+
 }
