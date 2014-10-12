@@ -14,10 +14,10 @@
 
 package org.jhotdraw.geom;
 
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
+import gwt.awt.Shape;
+import gwt.awt.geom.AffineTransform;
+import gwt.awt.geom.PathIterator;
+import gwt.awt.geom.Point2D;
 
 /**
  * Shapes.

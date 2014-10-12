@@ -6,8 +6,8 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.Shape;
-import java.awt.geom.*;
+import gwt.awt.Shape;
+import gwt.awt.geom.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;

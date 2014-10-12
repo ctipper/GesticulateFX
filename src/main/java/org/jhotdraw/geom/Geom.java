@@ -13,10 +13,10 @@
  */
 package org.jhotdraw.geom;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.*;
+import gwt.awt.Point;
+import gwt.awt.Rectangle;
+import gwt.awt.Shape;
+import gwt.awt.geom.*;
 import static java.lang.Math.*;
 
 /**

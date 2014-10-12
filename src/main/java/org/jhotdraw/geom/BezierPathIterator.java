@@ -14,8 +14,8 @@
 
 package org.jhotdraw.geom;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
+import gwt.awt.geom.AffineTransform;
+import gwt.awt.geom.PathIterator;
 
 /**
  * This class represents the iterator for a BezierPath.

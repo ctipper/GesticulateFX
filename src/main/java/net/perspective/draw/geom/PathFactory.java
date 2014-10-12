@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.geom.GeneralPath;
+import gwt.awt.geom.GeneralPath;
 
 /**
  *
