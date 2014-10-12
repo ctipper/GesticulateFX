@@ -1,10 +1,7 @@
 package gwt.awt;
 
+import java.awt.Graphics2D;
 import java.beans.ConstructorProperties;
-import java.io.Serializable;
-import java.lang.annotation.Native;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
 
 /**
  * The <code>BasicStroke</code> class defines a basic set of rendering
@@ -13,55 +10,13 @@ import javafx.scene.shape.StrokeLineJoin;
  * this <code>BasicStroke</code>.
  **/
 
-public class BasicStroke implements Stroke, Serializable {
+public class BasicStroke extends Stroke {
 
-    protected float width;
-    protected int join;
-    protected int cap;
     protected float miterlimit;
     protected float dash[];
     protected float dash_phase;
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Joins path segments by extending their outside edges until
-     * they meet.
-     */
-    @Native
-    public final static int JOIN_MITER = 0;
-    /**
-     * Joins path segments by rounding off the corner at a radius
-     * of half the line width.
-     */
-    @Native
-    public final static int JOIN_ROUND = 1;
-    /**
-     * Joins path segments by connecting the outer corners of their
-     * wide outlines with a straight segment.
-     */
-    @Native
-    public final static int JOIN_BEVEL = 2;
-    /**
-     * Ends unclosed subpaths and dash segments with no added
-     * decoration.
-     */
-    @Native
-    public final static int CAP_BUTT = 0;
-    /**
-     * Ends unclosed subpaths and dash segments with a round
-     * decoration that has a radius equal to half of the width
-     * of the pen.
-     */
-    @Native
-    public final static int CAP_ROUND = 1;
-    /**
-     * Ends unclosed subpaths and dash segments with a square
-     * projection that extends beyond the end of the segment
-     * to a distance equal to half of the line width.
-     */
-    @Native
-    public final static int CAP_SQUARE = 2;
 
     /**
      * Constructs a new <code>BasicStroke</code> with the specified
@@ -123,9 +78,9 @@ public class BasicStroke implements Stroke, Serializable {
                 throw new IllegalArgumentException("dash lengths all zero");
             }
         }
-        this.width      = width;
-        this.cap        = cap;
-        this.join       = join;
+        this.line_width      = width;
+        this.end_cap        = cap;
+        this.line_join       = join;
         this.miterlimit = miterlimit;
         if (dash != null) {
             this.dash = (float []) dash.clone();
@@ -198,18 +153,6 @@ public class BasicStroke implements Stroke, Serializable {
 //                                     dash, dash_phase);
 //    }
 
-    public float getLineWidth() {
-        return width;
-    }
-
-    public int getEndCap() {
-        return cap;
-    }
-
-    public int getLineJoin() {
-        return join;
-    }
-
     public float getMiterLimit() {
         return miterlimit;
     }
@@ -227,9 +170,9 @@ public class BasicStroke implements Stroke, Serializable {
     }
 
     public int hashCode() {
-        int hash = Float.floatToIntBits(width);
-        hash = hash * 31 + join;
-        hash = hash * 31 + cap;
+        int hash = Float.floatToIntBits(line_width);
+        hash = hash * 31 + line_join;
+        hash = hash * 31 + end_cap;
         hash = hash * 31 + Float.floatToIntBits(miterlimit);
         if (dash != null) {
             hash = hash * 31 + Float.floatToIntBits(dash_phase);
@@ -250,15 +193,15 @@ public class BasicStroke implements Stroke, Serializable {
         }
     
         BasicStroke bs = (BasicStroke) obj;
-        if (width != bs.width) {
+        if (line_width != bs.line_width) {
             return false;
         }
     
-        if (join != bs.join) {
+        if (line_join != bs.line_join) {
             return false;
         }
     
-        if (cap != bs.cap) {
+        if (end_cap != bs.end_cap) {
             return false;
         }
     
@@ -282,41 +225,4 @@ public class BasicStroke implements Stroke, Serializable {
         return true;
     }
 
-    public StrokeLineJoin getJfxJoin() {
-        javafx.scene.shape.StrokeLineJoin jfxjoin;
-        switch (this.getLineJoin()) {
-            case JOIN_MITER:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
-                break;
-            case JOIN_ROUND:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
-                break;
-            case JOIN_BEVEL:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.BEVEL;
-                break;
-            default:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
-                break;
-        }
-        return jfxjoin;
-    }
-
-    public StrokeLineCap getJfxCap() {
-        javafx.scene.shape.StrokeLineCap jfxcap;
-        switch (this.getEndCap()) {
-            case CAP_BUTT:
-                jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
-                break;
-            case CAP_ROUND:
-                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
-                break;
-            case CAP_SQUARE:
-                jfxcap = javafx.scene.shape.StrokeLineCap.SQUARE;
-                break;
-            default:
-                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
-                break;
-        }
-        return jfxcap;
-    }
 }

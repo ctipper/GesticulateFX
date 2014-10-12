@@ -26,12 +26,10 @@ public class Figure implements Serializable {
     private FigureType type;
     private transient GeneralPath path;
     private transient PathFactory factory;
-    protected Stroke stroke;
+    private Stroke stroke;
     private String color, fillcolor;
-    double width;
     private double angle;
-    // closed indicates to draw() whether 
-    // shape should be filled
+    // closed indicates to draw() whether shape should be filled
     private boolean closed;
     
     private static final long serialVersionUID = 1L;
@@ -137,7 +135,6 @@ public class Figure implements Serializable {
 
     private CanvasPoint getTransform(CanvasPoint point) {
         CanvasPoint centre = this.rotationCentre();
-
         point.translate(-centre.x, -centre.y);
         if (this.getAngle() != 0) {
             // rotate shape about centroid
@@ -179,8 +176,8 @@ public class Figure implements Serializable {
     }
 
     public void drawAnchors(GraphicsContext context) {
-        if (!(this.type.equals(FigureType.SKETCH)
-            || this.type.equals(FigureType.POLYGON))) {
+        if (!(this.type.equals(FigureType.SKETCH) 
+           || this.type.equals(FigureType.POLYGON))) {
             for (CanvasPoint point : points) {
                 this.anchor(context, point.getX(), point.getY());
             }
@@ -208,9 +205,9 @@ public class Figure implements Serializable {
 
         context.setStroke(Color.web(this.getColor()));
         context.setFill(Color.web(this.getColor()));
-        context.setLineWidth(((BasicStroke) this.getStroke()).getLineWidth());
-        context.setLineJoin(((BasicStroke) this.getStroke()).getJfxJoin());
-        context.setLineCap(((BasicStroke) this.getStroke()).getJfxCap());
+        context.setLineWidth(this.getStroke().getLineWidth());
+        context.setLineJoin(this.getStroke().getJoin());
+        context.setLineCap(this.getStroke().getCap());
         this.drawPath(context, at);
         if (this.isClosed()) {
             context.closePath();
@@ -221,9 +218,9 @@ public class Figure implements Serializable {
 
     public void sketch(GraphicsContext context) {
         context.setStroke(Color.LIGHTGREY);
-        context.setLineWidth(((BasicStroke) this.getStroke()).getLineWidth());
-        context.setLineJoin(((BasicStroke) this.getStroke()).getJfxJoin());
-        context.setLineCap(((BasicStroke) this.getStroke()).getJfxCap());
+        context.setLineWidth(this.getStroke().getLineWidth());
+        context.setLineJoin(this.getStroke().getJoin());
+        context.setLineCap(this.getStroke().getCap());
         this.drawPath(context, new AffineTransform());
         if (this.isClosed()) {
             context.closePath();
