@@ -142,18 +142,6 @@ public class Gesticulate extends GuiceApplication {
         timeline.stop();
     }
     
-    private static class FxmlModule extends AbstractModule {
-
-        @Override
-        protected void configure() {
-            bind(DrawingArea.class);
-            bind(CanvasView.class);
-            bind(FigureHandler.class);
-            bind(RotationHandler.class);
-            bind(SelectionHandler.class);
-            bind(SketchHandler.class);
-        }
-    }
     
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
@@ -165,5 +153,18 @@ public class Gesticulate extends GuiceApplication {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private static class FxmlModule extends AbstractModule {
+
+        @Override
+        protected void configure() {
+            bind(DrawingArea.class);
+            bind(CanvasView.class);
+            bind(FigureHandler.class);
+            bind(RotationHandler.class);
+            bind(SelectionHandler.class);
+            bind(SketchHandler.class);
+        }
     }
 }
