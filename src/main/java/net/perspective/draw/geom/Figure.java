@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -94,14 +92,6 @@ public class Figure implements Serializable {
     public String getFillColor() {
         return fillcolor;
     }
-
-//    public void setStroke(double width) {
-//        this.width = width;
-//    }
-//
-//    public double getStroke() {
-//        return this.width;
-//    }
 
     public void setStroke(Stroke s) {
         stroke = s;

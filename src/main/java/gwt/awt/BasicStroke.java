@@ -22,6 +22,8 @@ public class BasicStroke implements Stroke, Serializable {
     protected float dash[];
     protected float dash_phase;
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Joins path segments by extending their outside edges until
      * they meet.
