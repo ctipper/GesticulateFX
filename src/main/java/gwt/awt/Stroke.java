@@ -31,9 +31,9 @@ import javafx.scene.shape.StrokeLineJoin;
 
 public abstract class Stroke implements Serializable {
 
-    protected float line_width;
-    protected int line_join;
-    protected int end_cap;
+    protected float width;
+    protected int join;
+    protected int cap;
     
     private static final long serialVersionUID = 1L;
 
@@ -76,20 +76,20 @@ public abstract class Stroke implements Serializable {
     public final static int CAP_SQUARE = 2;
 
     public float getLineWidth() {
-        return line_width;
+        return width;
     }
 
     public int getEndCap() {
-        return end_cap;
+        return cap;
     }
 
     public int getLineJoin() {
-        return line_join;
+        return join;
     }
     
     public StrokeLineJoin getJoin() {
         javafx.scene.shape.StrokeLineJoin jfxjoin;
-        switch (line_join) {
+        switch (join) {
             case JOIN_MITER:
                 jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
                 break;
@@ -108,7 +108,7 @@ public abstract class Stroke implements Serializable {
 
     public StrokeLineCap getCap() {
         javafx.scene.shape.StrokeLineCap jfxcap;
-        switch (end_cap) {
+        switch (cap) {
             case CAP_BUTT:
                 jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
                 break;

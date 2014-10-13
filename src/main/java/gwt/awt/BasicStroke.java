@@ -78,9 +78,9 @@ public class BasicStroke extends Stroke {
                 throw new IllegalArgumentException("dash lengths all zero");
             }
         }
-        this.line_width      = width;
-        this.end_cap        = cap;
-        this.line_join       = join;
+        this.width      = width;
+        this.cap        = cap;
+        this.join       = join;
         this.miterlimit = miterlimit;
         if (dash != null) {
             this.dash = (float []) dash.clone();
@@ -170,9 +170,9 @@ public class BasicStroke extends Stroke {
     }
 
     public int hashCode() {
-        int hash = Float.floatToIntBits(line_width);
-        hash = hash * 31 + line_join;
-        hash = hash * 31 + end_cap;
+        int hash = Float.floatToIntBits(width);
+        hash = hash * 31 + join;
+        hash = hash * 31 + cap;
         hash = hash * 31 + Float.floatToIntBits(miterlimit);
         if (dash != null) {
             hash = hash * 31 + Float.floatToIntBits(dash_phase);
@@ -193,15 +193,15 @@ public class BasicStroke extends Stroke {
         }
     
         BasicStroke bs = (BasicStroke) obj;
-        if (line_width != bs.line_width) {
+        if (width != bs.width) {
             return false;
         }
     
-        if (line_join != bs.line_join) {
+        if (join != bs.join) {
             return false;
         }
     
-        if (end_cap != bs.end_cap) {
+        if (cap != bs.cap) {
             return false;
         }
     
