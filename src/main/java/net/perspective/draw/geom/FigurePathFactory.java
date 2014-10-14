@@ -6,8 +6,8 @@
  */
 package net.perspective.draw.geom;
 
-import gwt.awt.geom.Ellipse2D;
-import gwt.awt.geom.GeneralPath;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
 import net.perspective.draw.util.CanvasPoint;
 import org.jhotdraw.geom.Bezier;
 

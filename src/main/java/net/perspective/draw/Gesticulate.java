@@ -6,11 +6,7 @@
  */
 package net.perspective.draw;
 
-import javafx.scene.Scene;
-import javafx.scene.Parent;
-import javafx.scene.control.ScrollPane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
@@ -18,17 +14,21 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.List;
 import javax.inject.Inject;
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-import com.cathive.fx.guice.GuiceApplication;
-import com.cathive.fx.guice.GuiceFXMLLoader;
-import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import net.perspective.draw.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.cathive.fx.guice.GuiceApplication;
+import com.cathive.fx.guice.GuiceFXMLLoader;
+import com.cathive.fx.guice.GuiceFXMLLoader.Result;
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 
 /**
  *

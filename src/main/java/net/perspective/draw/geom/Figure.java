@@ -6,8 +6,8 @@
  */
 package net.perspective.draw.geom;
 
-import gwt.awt.*;
-import gwt.awt.geom.*;
+import java.awt.*;
+import java.awt.geom.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -208,8 +208,8 @@ public class Figure implements Serializable {
         context.setStroke(Color.web(this.getColor()));
         context.setFill(Color.web(this.getColor()));
         context.setLineWidth(this.getLineWidth());
-        context.setLineJoin(this.getJoin());
-        context.setLineCap(this.getCap());
+        context.setLineJoin(this.getLineJoin());
+        context.setLineCap(this.getLineCap());
         this.drawPath(context, at);
         if (this.isClosed()) {
             context.closePath();
@@ -221,8 +221,8 @@ public class Figure implements Serializable {
     public void sketch(GraphicsContext context) {
         context.setStroke(Color.LIGHTGREY);
         context.setLineWidth(this.getLineWidth());
-        context.setLineJoin(this.getJoin());
-        context.setLineCap(this.getCap());
+        context.setLineJoin(this.getLineJoin());
+        context.setLineCap(this.getLineCap());
         this.drawPath(context, new AffineTransform());
         if (this.isClosed()) {
             context.closePath();
@@ -260,12 +260,12 @@ public class Figure implements Serializable {
     }
 
     public double getLineWidth() {
-        return this.getStroke().getLineWidth();
+        return ((BasicStroke) this.getStroke()).getLineWidth();
     }
     
-    public StrokeLineJoin getJoin() {
+    public StrokeLineJoin getLineJoin() {
         javafx.scene.shape.StrokeLineJoin jfxjoin;
-        switch (this.getStroke().getLineJoin()) {
+        switch (((BasicStroke) this.getStroke()).getLineJoin()) {
             case BasicStroke.JOIN_MITER:
                 jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
                 break;
@@ -282,9 +282,9 @@ public class Figure implements Serializable {
         return jfxjoin;
     }
 
-    public StrokeLineCap getCap() {
+    public StrokeLineCap getLineCap() {
         javafx.scene.shape.StrokeLineCap jfxcap;
-        switch (this.getStroke().getEndCap()) {
+        switch (((BasicStroke) this.getStroke()).getEndCap()) {
             case BasicStroke.CAP_BUTT:
                 jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
                 break;

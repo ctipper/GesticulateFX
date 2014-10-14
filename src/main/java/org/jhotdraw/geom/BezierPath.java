@@ -13,9 +13,9 @@
  */
 package org.jhotdraw.geom;
 
-import gwt.awt.Rectangle;
-import gwt.awt.Shape;
-import gwt.awt.geom.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

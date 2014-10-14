@@ -6,31 +6,28 @@
  */
 package net.perspective.draw;
 
+import static net.perspective.draw.CanvasTransferHandler.COPY;
+import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import static net.perspective.draw.event.HandlerType.SKETCH;
+import java.awt.BasicStroke;
+import java.awt.Stroke;
+import java.awt.datatransfer.Transferable;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
-import javafx.scene.input.TouchPoint;
-import javafx.scene.paint.Color;
-import javafx.event.ActionEvent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
-import gwt.awt.Stroke;
-import gwt.awt.BasicStroke;
-import net.perspective.draw.event.*;
-import net.perspective.draw.geom.Figure;
+import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import com.google.inject.Injector;
-import java.awt.datatransfer.Transferable;
-import static net.perspective.draw.CanvasTransferHandler.MOVE;
-import static net.perspective.draw.CanvasTransferHandler.COPY;
-import static net.perspective.draw.event.HandlerType.SKETCH;
+import net.perspective.draw.event.*;
+import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.inject.Injector;
 
 /**
  *
