@@ -28,7 +28,7 @@ public class Figure implements Serializable {
     private FigureType type;
     private transient GeneralPath path;
     private transient PathFactory factory;
-    private Stroke stroke;
+    private transient Stroke stroke;
     private String color, fillcolor;
     private double angle;
     // closed indicates to draw() whether shape should be filled
