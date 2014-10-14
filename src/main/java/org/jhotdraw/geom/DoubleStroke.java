@@ -33,13 +33,15 @@ import java.io.*;
  * <br>1.0 21. March 2006 Created.
  */
 public class DoubleStroke implements Stroke, Serializable {
-    transient private BasicStroke outlineStroke;
-    
+
     float innerWidth;
     float outlineWidth;
     double miterLimit;
     float[] dashes;
     float dashPhase;
+    transient private BasicStroke outlineStroke;
+    
+    private static final long serialVersionUID = 1L;
     
     public DoubleStroke() {
     }
@@ -303,7 +305,7 @@ public class DoubleStroke implements Stroke, Serializable {
         Stroke result = null;
         boolean isNull = stream.readBoolean();
         if (!isNull) {
-            Class c = (Class) stream.readObject();
+            Class<?> c = (Class<?>) stream.readObject();
             if (c.equals(BasicStroke.class)) {
                 float width = stream.readFloat();
                 int cap = stream.readInt();
