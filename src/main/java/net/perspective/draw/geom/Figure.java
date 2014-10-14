@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -205,9 +207,9 @@ public class Figure implements Serializable {
 
         context.setStroke(Color.web(this.getColor()));
         context.setFill(Color.web(this.getColor()));
-        context.setLineWidth(this.getStroke().getLineWidth());
-        context.setLineJoin(this.getStroke().getJoin());
-        context.setLineCap(this.getStroke().getCap());
+        context.setLineWidth(this.getLineWidth());
+        context.setLineJoin(this.getJoin());
+        context.setLineCap(this.getCap());
         this.drawPath(context, at);
         if (this.isClosed()) {
             context.closePath();
@@ -218,9 +220,9 @@ public class Figure implements Serializable {
 
     public void sketch(GraphicsContext context) {
         context.setStroke(Color.LIGHTGREY);
-        context.setLineWidth(this.getStroke().getLineWidth());
-        context.setLineJoin(this.getStroke().getJoin());
-        context.setLineCap(this.getStroke().getCap());
+        context.setLineWidth(this.getLineWidth());
+        context.setLineJoin(this.getJoin());
+        context.setLineCap(this.getCap());
         this.drawPath(context, new AffineTransform());
         if (this.isClosed()) {
             context.closePath();
@@ -257,15 +259,104 @@ public class Figure implements Serializable {
         }
     }
 
+    public double getLineWidth() {
+        return this.getStroke().getLineWidth();
+    }
+    
+    public StrokeLineJoin getJoin() {
+        javafx.scene.shape.StrokeLineJoin jfxjoin;
+        switch (this.getStroke().getLineJoin()) {
+            case BasicStroke.JOIN_MITER:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
+                break;
+            case BasicStroke.JOIN_ROUND:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
+                break;
+            case BasicStroke.JOIN_BEVEL:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.BEVEL;
+                break;
+            default:
+                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
+                break;
+        }
+        return jfxjoin;
+    }
+
+    public StrokeLineCap getCap() {
+        javafx.scene.shape.StrokeLineCap jfxcap;
+        switch (this.getStroke().getEndCap()) {
+            case BasicStroke.CAP_BUTT:
+                jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
+                break;
+            case BasicStroke.CAP_ROUND:
+                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
+                break;
+            case BasicStroke.CAP_SQUARE:
+                jfxcap = javafx.scene.shape.StrokeLineCap.SQUARE;
+                break;
+            default:
+                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
+                break;
+        }
+        return jfxcap;
+    }
+
     private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
+        this.setStroke(readStroke(in));
         this.factory = new FigurePathFactory();
     }
 
     private void writeObject(ObjectOutputStream out)
             throws IOException {
         out.defaultWriteObject();
+        writeStroke(this.getStroke(), out);
+    }
+
+    public static Stroke readStroke(ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+
+        Stroke result = null;
+        boolean isNull = stream.readBoolean();
+        if (!isNull) {
+            Class<?> c = (Class<?>) stream.readObject();
+            if (c.equals(BasicStroke.class)) {
+                float width = stream.readFloat();
+                int cap = stream.readInt();
+                int join = stream.readInt();
+                float miterLimit = stream.readFloat();
+                float[] dash = (float[]) stream.readObject();
+                float dashPhase = stream.readFloat();
+                result = new BasicStroke(width, cap, join, miterLimit, dash, dashPhase);
+            } else {
+                result = (Stroke) stream.readObject();
+            }
+        }
+        return result;
+    }
+
+    public static void writeStroke(Stroke stroke,
+            ObjectOutputStream stream) throws IOException {
+
+        if (stroke != null) {
+            stream.writeBoolean(false);
+            if (stroke instanceof BasicStroke) {
+                BasicStroke s = (BasicStroke) stroke;
+                stream.writeObject(BasicStroke.class);
+                stream.writeFloat(s.getLineWidth());
+                stream.writeInt(s.getEndCap());
+                stream.writeInt(s.getLineJoin());
+                stream.writeFloat(s.getMiterLimit());
+                stream.writeObject(s.getDashArray());
+                stream.writeFloat(s.getDashPhase());
+            } else {
+                stream.writeObject(stroke.getClass());
+                stream.writeObject(stroke);
+            }
+        } else {
+            stream.writeBoolean(true);
+        }
     }
 
 }
