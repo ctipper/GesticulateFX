@@ -55,7 +55,6 @@ public class DrawingArea {
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
 
-    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
 
     /**

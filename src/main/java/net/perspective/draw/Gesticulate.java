@@ -54,7 +54,6 @@ public class Gesticulate extends GuiceApplication {
     static final int duration = 25;
     private static final Duration REFRESH_FREQUENCY = Duration.millis(duration);
     
-    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
     @Override

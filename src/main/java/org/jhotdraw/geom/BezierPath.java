@@ -31,13 +31,19 @@ import net.perspective.draw.util.CanvasPoint;
  *
  * @author Werner Randelshofer
  * @version 1.4 2008-05-23 Method findSegment uses now double precision for the
- * tolerance paremeters. <br>1.3 BezierPath has now its own BezierPathIterator.
- * <br>1.2.1 Issue #1628647: Method splitSegment created incorrect control point
- * masks. <br>1.2 2006-12-09 Method setWindingRule added. <br>1.1 2006-03-22
- * Methods moveTo, lineTo and quadTo added. <br>1.0 January 20, 2006 Created.
+ * tolerance paremeters. <br>
+ * 1.3 BezierPath has now its own BezierPathIterator. <br>
+ * 1.2.1 Issue #1628647: Method splitSegment created incorrect control point
+ * masks. <br>
+ * 1.2 2006-12-09 Method setWindingRule added. <br>
+ * 1.1 2006-03-22
+ * Methods moveTo, lineTo and quadTo added. <br>
+ * 1.0 January 20, 2006 Created.
  */
 public class BezierPath extends ArrayList<BezierPath.Node>
         implements Shape, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Constant for having only control point C0 in effect. C0 is the point
@@ -89,6 +95,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * </li> <li>C2 is used to control the curve going away from C0.</li> </ul>
      */
     public static final class Node implements Cloneable, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         /**
          * This mask is used to describe which control points in addition to C0
