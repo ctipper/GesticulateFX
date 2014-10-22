@@ -6,10 +6,9 @@
  */
 package net.perspective.draw;
 
-//import java.awt.Color;
 import java.util.List;
 //import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+//import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 //import javafx.event.ActionEvent;
@@ -18,10 +17,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+//import javafx.util.Duration;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import org.slf4j.Logger;
@@ -42,7 +40,7 @@ public class Gesticulate extends GuiceApplication {
     
     @Inject private DrawingArea drawingarea;
     
-    private Timeline timeline;
+    //private Timeline timeline;
     
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
@@ -53,8 +51,8 @@ public class Gesticulate extends GuiceApplication {
     private final int frameTop = (int) (screenSize.getMaxY() - yHeight) / 5;
     
     // timer refresh rate, in milliseconds
-    static final int duration = 25;
-    private static final Duration REFRESH_FREQUENCY = Duration.millis(duration);
+//    static final int duration = 25;
+//    private static final Duration REFRESH_FREQUENCY = Duration.millis(duration);
     
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 

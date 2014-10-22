@@ -6,12 +6,12 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Stroke;
 import java.awt.geom.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.Node;
 //import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
