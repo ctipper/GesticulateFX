@@ -11,7 +11,7 @@
     </appender>
 
     <logger name="net.perspective.draw">
-        <level value="TRACE"/>
+        <level value="DEBUG"/>
     </logger>
 
     <root>
