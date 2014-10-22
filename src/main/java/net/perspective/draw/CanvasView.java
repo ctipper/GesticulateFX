@@ -30,7 +30,6 @@ public class CanvasView {
     private ObservableList<Figure> drawings;
     private Figure olditem, newitem;
     private int selection;
-    private List<Integer> deleted;
     private boolean isDrawing;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
@@ -42,20 +41,18 @@ public class CanvasView {
         newitem = null;
         olditem = null;
         list = new ArrayList<>();
-        deleted = new ArrayList<>();
         selection = -1;
         isDrawing = false;
+        this.setDrawingListener();
     }
 
     public void clearView() {
-        this.setDrawingListener();
         this.deleteContents();
         this.setSelected(-1);
     }
     
     public void deleteContents() {
-        drawings.clear();
-        deleted.clear();
+        list.clear();
     }
     
     public void setDrawingListener() {
@@ -64,37 +61,42 @@ public class CanvasView {
 
             @Override
             public void onChanged(Change<? extends Figure> c) {
+                int i;
                 while (c.next()) {
                     ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                     if (c.wasPermutated()) {
-                        for (int i = c.getFrom(); i < c.getTo(); ++i) {
+                        for (i = c.getFrom(); i < c.getTo(); ++i) {
                             // permutate
+                            nodes.set(c.getPermutation(i), drawings.get(i).draw());
+                            logger.trace("node " + c.getPermutation(i) + " updated from " + i);
                         }
-                    } else if (c.wasUpdated()) {
-                        for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                            // update item
-                            logger.debug("node " + i + " updated.");
-                            nodes.set(i, drawings.get(i).draw());
-                        }
-                    } else {
-                        List<Node> removed = new ArrayList<>();
-                        for (int d : deleted) {
-                            // removed
-                            removed.add(nodes.get(d));
-                        }
-                        for (Node remitem : removed) {
-                            // remove them
-                            logger.debug("node " + removed.indexOf(remitem) + " removed");
-                            nodes.remove(remitem);
-                        }
-                        for (Figure additem : c.getAddedSubList()) {
-                            // added
-                            logger.debug("added node");
-                            nodes.add(additem.draw());
+                    } 
+                    if (c.wasRemoved()) {
+                        i = 0;
+                        for (Figure remitem : c.getRemoved()) {
+                            // remove item
+                            nodes.remove(c.getFrom() + i);
+                            i++;
+                            logger.trace("node " + (c.getFrom() + i) + " removed.");
                         }
                     }
+                    if (c.wasAdded()) {
+                        i = 0;
+                        for (Figure additem : c.getAddedSubList()) {
+                            // add item
+                            nodes.add(c.getFrom() + i, additem.draw());
+                            i++;
+                            logger.trace("node added");
+                        }
+                    }
+                    if (c.wasUpdated()) {
+                        for (i = c.getFrom(); i < c.getTo(); ++i) {
+                            // update item
+                            nodes.set(i, drawings.get(i).draw());
+                            logger.trace("node " + i + " updated");
+                        }
+                    }                     
                 }
-                deleted.clear();
             }
         });
     }
@@ -122,7 +124,6 @@ public class CanvasView {
     
     public void deleteSelectedItem() {
         if (getSelected() != -1) {
-            deleted.add(getSelected());
             drawings.remove(getSelected());
             setSelected(-1);
         }
@@ -152,7 +153,6 @@ public class CanvasView {
         if (newitem == null) {
             this.addItemToCanvas(s);
         } else {
-            deleted.add(drawings.size() - 1);
             this.updateCanvasItem(drawings.size() - 1, s);
         }
         newitem = s;

@@ -40,7 +40,9 @@ public class SelectionHandler implements Handler {
         if (selection != -1) {
             double xinc = drawarea.getTempX() - drawarea.getStartX();
             double yinc = drawarea.getTempY() - drawarea.getStartY();
-            view.getDrawings().get(selection).moveFigure(xinc, yinc);
+            Figure item = view.getDrawings().get(selection); 
+            item.moveFigure(xinc, yinc);
+            view.updateCanvasItem(selection, item);
             drawarea.setStartX(drawarea.getTempX());
             drawarea.setStartY(drawarea.getTempY());
         }
