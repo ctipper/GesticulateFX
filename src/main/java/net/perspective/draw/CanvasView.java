@@ -73,6 +73,7 @@ public class CanvasView {
                     } else if (c.wasUpdated()) {
                         for (int i = c.getFrom(); i < c.getTo(); ++i) {
                             // update item
+                            logger.debug("node " + i + " updated.");
                             nodes.set(i, drawings.get(i).draw());
                         }
                     } else {
@@ -81,17 +82,19 @@ public class CanvasView {
                             // removed
                             removed.add(nodes.get(d));
                         }
-                        deleted.clear();
                         for (Node remitem : removed) {
                             // remove them
+                            logger.debug("node " + removed.indexOf(remitem) + " removed");
                             nodes.remove(remitem);
                         }
                         for (Figure additem : c.getAddedSubList()) {
                             // added
+                            logger.debug("added node");
                             nodes.add(additem.draw());
                         }
                     }
                 }
+                deleted.clear();
             }
         });
     }
@@ -119,8 +122,8 @@ public class CanvasView {
     
     public void deleteSelectedItem() {
         if (getSelected() != -1) {
-            drawings.remove(getSelected());
             deleted.add(getSelected());
+            drawings.remove(getSelected());
             setSelected(-1);
         }
     }
@@ -146,19 +149,25 @@ public class CanvasView {
     }
 
     public void setNewItem(Figure s) {
-        if (s != null) {
-            if (newitem == null) {
-                this.addItemToCanvas(s);
-            } else {
-                deleted.add(drawings.size()-1);
-                this.updateCanvasItem(drawings.size()-1, s);
-            }
+        if (newitem == null) {
+            this.addItemToCanvas(s);
+        } else {
+            deleted.add(drawings.size() - 1);
+            this.updateCanvasItem(drawings.size() - 1, s);
         }
         newitem = s;
+    }
+    
+    public void resetNewItem() {
+        newitem = null;
     }
 
     public Figure getNewItem() {
         return newitem;
+    }
+    
+    public int getNewItemIndex() {
+        return drawings.size()-1;
     }
 
     public void setPreviousItem(Figure s) {

@@ -31,8 +31,8 @@ public class SketchHandler implements Handler  {
         item.setStroke(drawarea.getStroke());
         item.setColor(drawarea.getColor());
         item.setFillColor(drawarea.getFillColor());
-        view.addItemToCanvas(item);
-        view.setNewItem(null);
+        view.setNewItem(item);
+        view.resetNewItem();
     }
 
     public void downEvent() {
