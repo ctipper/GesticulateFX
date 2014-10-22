@@ -68,20 +68,17 @@ public class CanvasView {
                     } else if (c.wasUpdated()) {
                         for (int i = c.getFrom(); i < c.getTo(); ++i) {
                             // update item
-                            //drawarea.getCanvas().getChildren().remove(i);
                             drawarea.getCanvas().getChildren().set(i, drawings.get(i).draw());
                         }
                     } else {
                         int i = 0;
                         for (Figure remitem : c.getRemoved()) {
-                            //remitem.remove(Outer.this);
-                            logger.debug("removed");
+                            // removed
                             drawarea.getCanvas().getChildren().remove(c.getFrom()+i);
                             i++;
                         }
                         for (Figure additem : c.getAddedSubList()) {
-                            //additem.add(Outer.this);
-                            logger.debug("added");
+                            // added
                             drawarea.getCanvas().getChildren().add(additem.draw());
                         }
                     }
@@ -93,34 +90,26 @@ public class CanvasView {
     public void addItemToCanvas(Figure f) {
         if (f != null) {
             // to update properties here
-//            drawings.add(f);
             drawings.add(f);
         }
     }
     
     public void appendItemToCanvas(Figure f) {
-        //drawings.add(f);
         drawings.add(f);
     }
 
     public void updateCanvasItem(int i, Figure f) {
-//        if (i < drawings.size()) {
-        logger.debug("updated");
         drawings.set(i, f);
-//        } else {
-//            this.addItemToCanvas(f);
-//        }
     }
     
     public void updateSelectedItem() {
         if (this.getSelected() != -1) {
-            
+            // to update properties here
         }
     }
     
     public void deleteSelectedItem() {
         if (getSelected() != -1) {
-            //drawings.remove(getSelected());
             drawings.remove(getSelected());
             setSelected(-1);
         }
@@ -147,8 +136,6 @@ public class CanvasView {
     }
 
     public void setNewItem(Figure s) {
-        // newitem = s;
-        // if (s != null) drawarea.getCanvas().getChildren().add(s.draw());
         if (s != null) {
             if (newitem == null) {
                 this.addItemToCanvas(s);

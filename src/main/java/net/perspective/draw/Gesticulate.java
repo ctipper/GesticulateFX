@@ -88,15 +88,15 @@ public class Gesticulate extends GuiceApplication {
 
         // Initialise the scroll area
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
-//        pane.setFitToWidth(true);
-//        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        pane.setFitToWidth(true);
+        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
         // Initialize the canvas and apply handlers
         drawingarea.init(pane.getWidth(), pane.getHeight());
         
         // Install the canvas
         pane.setContent(drawingarea.getScene());
-//        setOnResize(pane);
+        setOnResize(pane);
         
 //        // Setup timer
 //        timeline = new Timeline(
@@ -116,20 +116,20 @@ public class Gesticulate extends GuiceApplication {
 //        timeline.play();
     }
     
-//    public void setOnResize(ScrollPane p) {
-//        p.heightProperty().addListener(new ChangeListener<Number>() {
-//            public void changed(ObservableValue<? extends Number> ov,
-//                Number old_val, Number new_val) {
-//                drawingarea.getCanvas().setHeight((double) new_val);
-//            }
-//        });
-//        p.widthProperty().addListener(new ChangeListener<Number>() {
-//            public void changed(ObservableValue<? extends Number> ov,
-//                Number old_val, Number new_val) {
-//                drawingarea.getCanvas().setWidth((double) new_val);
-//            }
-//        });
-//    }
+    public void setOnResize(ScrollPane p) {
+        p.heightProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                drawingarea.getScene().setHeight((double) new_val);
+            }
+        });
+        p.widthProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                drawingarea.getScene().setWidth((double) new_val);
+            }
+        });
+    }
     
     public void sizeStage(Stage stage) {
         stage.setX(frameLeft);
