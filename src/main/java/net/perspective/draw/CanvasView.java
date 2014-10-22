@@ -76,12 +76,16 @@ public class CanvasView {
                             nodes.set(i, drawings.get(i).draw());
                         }
                     } else {
-                        //int i = 0;
+                        List<Node> removed = new ArrayList<>();
                         for (int d : deleted) {
                             // removed
-                            nodes.remove(d);
+                            removed.add(nodes.get(d));
                         }
                         deleted.clear();
+                        for (Node remitem : removed) {
+                            // remove them
+                            nodes.remove(remitem);
+                        }
                         for (Figure additem : c.getAddedSubList()) {
                             // added
                             nodes.add(additem.draw());
