@@ -13,6 +13,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javax.inject.Singleton;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.perspective.draw.geom.Figure;
 
 /**
@@ -23,19 +25,21 @@ import net.perspective.draw.geom.Figure;
 public class CanvasView {
 
     @Inject private DrawingArea drawarea;
-    private java.util.List<Figure> drawings;
-    private ObservableList<Figure> observableList;
+    private java.util.List<Figure> list;
+    private ObservableList<Figure> drawings;
     private Figure olditem, newitem;
     private int selection;
     private boolean isDrawing;
 
+    private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
+    
     /**
      * Creates a new instance of <code>DocView</code>
      */
     public CanvasView() {
         newitem = null;
         olditem = null;
-        drawings = new ArrayList<>();
+        list = new ArrayList<>();
         selection = -1;
         isDrawing = false;
     }
@@ -47,12 +51,12 @@ public class CanvasView {
     }
     
     public void deleteContents() {
-        drawings = new ArrayList<>();
+        list = new ArrayList<>();
     }
     
     public void setDrawingListener() {
-        observableList = FXCollections.observableList(drawings);
-        observableList.addListener(new ListChangeListener<Figure>() {
+        drawings = FXCollections.observableList(list);
+        drawings.addListener(new ListChangeListener<Figure>() {
 
             @Override
             public void onChanged(Change<? extends Figure> c) {
@@ -64,13 +68,20 @@ public class CanvasView {
                     } else if (c.wasUpdated()) {
                         for (int i = c.getFrom(); i < c.getTo(); ++i) {
                             // update item
+                            //drawarea.getCanvas().getChildren().remove(i);
+                            drawarea.getCanvas().getChildren().set(i, drawings.get(i).draw());
                         }
                     } else {
+                        int i = 0;
                         for (Figure remitem : c.getRemoved()) {
                             //remitem.remove(Outer.this);
+                            logger.debug("removed");
+                            drawarea.getCanvas().getChildren().remove(c.getFrom()+i);
+                            i++;
                         }
                         for (Figure additem : c.getAddedSubList()) {
                             //additem.add(Outer.this);
+                            logger.debug("added");
                             drawarea.getCanvas().getChildren().add(additem.draw());
                         }
                     }
@@ -83,25 +94,40 @@ public class CanvasView {
         if (f != null) {
             // to update properties here
 //            drawings.add(f);
-            observableList.add(f);
+            drawings.add(f);
         }
     }
     
     public void appendItemToCanvas(Figure f) {
         //drawings.add(f);
-        observableList.add(f);
+        drawings.add(f);
     }
 
+    public void updateCanvasItem(int i, Figure f) {
+//        if (i < drawings.size()) {
+        logger.debug("updated");
+        drawings.set(i, f);
+//        } else {
+//            this.addItemToCanvas(f);
+//        }
+    }
+    
+    public void updateSelectedItem() {
+        if (this.getSelected() != -1) {
+            
+        }
+    }
+    
     public void deleteSelectedItem() {
         if (getSelected() != -1) {
             //drawings.remove(getSelected());
-            observableList.remove(getSelected());
+            drawings.remove(getSelected());
             setSelected(-1);
         }
     }
 
     public List<Figure> getDrawings() {
-        return drawings;
+        return list;
     }
 
     public void setDrawing(boolean d) {
@@ -121,8 +147,16 @@ public class CanvasView {
     }
 
     public void setNewItem(Figure s) {
+        // newitem = s;
+        // if (s != null) drawarea.getCanvas().getChildren().add(s.draw());
+        if (s != null) {
+            if (newitem == null) {
+                this.addItemToCanvas(s);
+            } else {
+                this.updateCanvasItem(drawings.size() - 1, s);
+            }
+        }
         newitem = s;
-        if (s != null) drawarea.getCanvas().getChildren().add(s.sketch());
     }
 
     public Figure getNewItem() {

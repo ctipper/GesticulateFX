@@ -98,19 +98,18 @@ public class DrawingArea {
         changeHandler(HandlerType.FIGURE);
         //drawMiniFig();
     }
-
     
-    private void drawMiniFig() {
-        FigurePointFactory pointFactory = new FigurePointFactory();
-        Figure item = new Figure(FigureType.SQUARE);
-        item.setStroke(getStroke());
-        item.setColor(getColor());
-        List<CanvasPoint> points = pointFactory.createPoints(FigureType.SQUARE, 200, 200, 100, 100);
-        item.setPoints(points);
-        item.setAngle(Math.PI/4);
-        item.setPath();
-        root.getChildren().add(item.draw());
-    }
+//    private void drawMiniFig() {
+//        FigurePointFactory pointFactory = new FigurePointFactory();
+//        Figure item = new Figure(FigureType.SQUARE);
+//        item.setStroke(getStroke());
+//        item.setColor(getColor());
+//        List<CanvasPoint> points = pointFactory.createPoints(FigureType.SQUARE, 200, 200, 100, 100);
+//        item.setPoints(points);
+//        item.setAngle(Math.PI/4);
+//        item.setPath();
+//        root.getChildren().add(item.draw());
+//    }
 
     public void clear() {
         //this.clear(context);

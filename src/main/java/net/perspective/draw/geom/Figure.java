@@ -200,6 +200,20 @@ public class Figure implements Serializable {
 //        context.strokeOval(u.x-3, u.y-3, 6.0, 6.0);
 //    }
 
+    public Path draw() {
+        AffineTransform at;
+        at = this.getTransform();
+        Path path = drawPath(at);
+        path.setStroke(Color.web(this.getColor()));
+        path.setStrokeWidth(getLineWidth());
+        path.setStrokeLineJoin(getLineJoin());
+        path.setStrokeLineCap(getLineCap());
+        if (this.isClosed()) {
+            path.setFill(Color.web(this.getColor()));
+        }
+        return path;
+    }
+    
     public Path drawPath(AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
         Path path = new Path();
@@ -208,21 +222,18 @@ public class Figure implements Serializable {
         while (!iterator.isDone()) {
             switch (iterator.currentSegment(coords)) {
             case PathIterator.SEG_MOVETO:
-//                context.moveTo(coords[0], coords[1]);
                 MoveTo moveTo = new MoveTo();
                 moveTo.setX(coords[0]);
                 moveTo.setY(coords[1]);
                 path.getElements().add(moveTo);
                 break;
             case PathIterator.SEG_LINETO:
-//                context.lineTo(coords[0], coords[1]);
                 LineTo lineTo = new LineTo();
                 lineTo.setX(coords[0]);
                 lineTo.setY(coords[1]);                
                 path.getElements().add(lineTo);
                 break;
             case PathIterator.SEG_QUADTO:
-//                context.quadraticCurveTo(coords[0], coords[1], coords[2], coords[3]);
                 QuadCurveTo quadCurveTo = new QuadCurveTo();
                 quadCurveTo.setX(coords[2]);
                 quadCurveTo.setY(coords[3]);
@@ -231,7 +242,6 @@ public class Figure implements Serializable {
                 path.getElements().add(quadCurveTo);
                 break;
             case PathIterator.SEG_CUBICTO:
-//                context.bezierCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
                 CubicCurveTo cubicTo = new CubicCurveTo();
                 cubicTo.setX(coords[4]);
                 cubicTo.setY(coords[5]);
@@ -250,13 +260,6 @@ public class Figure implements Serializable {
             }
             iterator.next();
         }
-        path.setStroke(Color.web(this.getColor()));
-        if (isClosed()) {
-            path.setFill(Color.web(this.getColor()));
-        }
-        path.setStrokeWidth(getLineWidth());
-        path.setStrokeLineJoin(getLineJoin());
-        path.setStrokeLineCap(getLineCap());
         return path;
     }
     
@@ -319,16 +322,6 @@ public class Figure implements Serializable {
 //        }
 //    }
 
-    public Path draw() {
-        AffineTransform at;
-        at = this.getTransform();
-        return drawPath(at);
-    }
-    
-    public Path sketch() {
-        return drawPath(new AffineTransform());
-    }
-    
     public double getLineWidth() {
         return (double) ((BasicStroke) this.getStroke()).getLineWidth();
     }
