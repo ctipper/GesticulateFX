@@ -208,8 +208,8 @@ public class Figure implements Serializable {
         path.setStrokeWidth(getLineWidth());
         path.setStrokeLineJoin(getLineJoin());
         path.setStrokeLineCap(getLineCap());
-        if (this.isClosed()) {
-            path.setFill(Color.web(this.getColor()));
+        if (this.isClosed() && !"white".equals(this.getFillColor())) {
+            path.setFill(Color.web(this.getFillColor()));
         }
         return path;
     }

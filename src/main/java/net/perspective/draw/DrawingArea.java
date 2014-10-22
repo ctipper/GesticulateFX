@@ -45,7 +45,7 @@ public class DrawingArea {
 
     private FigureType figuretype;
     private Stroke stroke;
-    private String color;
+    private String color, fillcolor;
     private double startX, startY;
     private double tempX, tempY;
     
@@ -83,6 +83,7 @@ public class DrawingArea {
         setFigureType(FigureType.CIRCLE);
         setStroke(new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
         setColor("#4860E0");
+        setFillColor("#4860E0");
         view.clearView();
         this.clear();
         changeHandler(HandlerType.FIGURE);
@@ -331,15 +332,23 @@ public class DrawingArea {
         return stroke;
     }
 
-    public void setStroke(Stroke stroke) {
-        this.stroke = stroke;
+    public void setStroke(Stroke s) {
+        this.stroke = s;
     }
 
     public String getColor() {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColor(String c) {
+        this.color = c;
+    }
+
+    public String getFillColor() {
+        return fillcolor;
+    }
+    
+    public void setFillColor(String c) {
+        fillcolor = c;
     }
 }

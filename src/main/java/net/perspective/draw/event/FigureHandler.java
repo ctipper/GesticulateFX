@@ -30,7 +30,12 @@ public class FigureHandler implements Handler {
 
     public void upEvent() {
         view.setDrawing(false);
-        view.addItemToCanvas(view.getNewItem());
+        // add figure to canvas
+        Figure item = view.getNewItem();
+        item.setStroke(drawarea.getStroke());
+        item.setColor(drawarea.getColor());
+        item.setFillColor(drawarea.getFillColor());
+        view.addItemToCanvas(item);
         view.setNewItem(null);
     }
 
@@ -44,7 +49,8 @@ public class FigureHandler implements Handler {
         type = drawarea.getFigureType();
         Figure item = new Figure(type);
         item.setStroke(drawarea.getStroke());
-        item.setColor(drawarea.getColor());
+        item.setColor("lightgray");
+        item.setFillColor("white");
         points = pointFactory.createPoints(type, 
                 drawarea.getStartX(), drawarea.getStartY(), drawarea.getTempX(), drawarea.getTempY());
         item.setPoints(points);

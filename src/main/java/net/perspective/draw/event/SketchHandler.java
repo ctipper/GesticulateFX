@@ -26,7 +26,12 @@ public class SketchHandler implements Handler  {
 
     public void upEvent() {
         view.setDrawing(false);
-        view.addItemToCanvas(view.getNewItem());
+        // add figure to canvas
+        Figure item = view.getNewItem();
+        item.setStroke(drawarea.getStroke());
+        item.setColor(drawarea.getColor());
+        item.setFillColor(drawarea.getFillColor());
+        view.addItemToCanvas(item);
         view.setNewItem(null);
     }
 
@@ -37,7 +42,8 @@ public class SketchHandler implements Handler  {
         // Create Figure
         Figure item = new Figure(drawarea.getFigureType());
         item.setStroke(drawarea.getStroke());
-        item.setColor(drawarea.getColor());
+        item.setColor("lightgray");
+        item.setFillColor("white");
         // Initialise sketch
         point = new CanvasPoint(drawarea.getStartX(), drawarea.getStartY());
         points = new ArrayList<>();
@@ -56,7 +62,8 @@ public class SketchHandler implements Handler  {
         // Create Figure
         Figure item = new Figure(drawarea.getFigureType());
         item.setStroke(drawarea.getStroke());
-        item.setColor(drawarea.getColor());
+        item.setColor("lightgray");
+        item.setFillColor("white");
         // continue sketch
         point = new CanvasPoint(drawarea.getTempX(), drawarea.getTempY());
         points = view.getPreviousItem().getPoints();
