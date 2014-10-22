@@ -80,13 +80,13 @@ public class DrawingArea {
     }
 
     public void prepareDrawing() {
-        setFigureType(FigureType.CIRCLE);
+        setFigureType(FigureType.SKETCH);
         setStroke(new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
         setColor("#4860E0");
         setFillColor("#4860E0");
         view.clearView();
         this.clear();
-        changeHandler(HandlerType.FIGURE);
+        changeHandler(HandlerType.SKETCH);
     }
     
     public void clear() {
@@ -190,7 +190,7 @@ public class DrawingArea {
                 }
             });
         addContextMenu();
-        this.changeHandler(HandlerType.FIGURE);
+        this.changeHandler(HandlerType.SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {
