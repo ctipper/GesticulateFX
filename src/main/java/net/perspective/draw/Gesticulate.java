@@ -6,17 +6,19 @@
  */
 package net.perspective.draw;
 
+//import java.awt.Color;
 import java.util.List;
-import javafx.animation.KeyFrame;
+//import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+//import javafx.event.ActionEvent;
+//import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -86,48 +88,48 @@ public class Gesticulate extends GuiceApplication {
 
         // Initialise the scroll area
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
-        pane.setFitToWidth(true);
-        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//        pane.setFitToWidth(true);
+//        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
         // Initialize the canvas and apply handlers
         drawingarea.init(pane.getWidth(), pane.getHeight());
         
         // Install the canvas
-        pane.setContent(drawingarea.getCanvas());
-        setOnResize(pane);
+        pane.setContent(drawingarea.getScene());
+//        setOnResize(pane);
         
-        // Setup timer
-        timeline = new Timeline(
-            new KeyFrame(
-                Duration.ZERO,
-                new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent actionEvent) {
-                        drawingarea.repaint();
-                    }
-                }
-            ),
-            new KeyFrame(
-                REFRESH_FREQUENCY
-            )
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+//        // Setup timer
+//        timeline = new Timeline(
+//            new KeyFrame(
+//                Duration.ZERO,
+//                new EventHandler<ActionEvent>() {
+//                    public void handle(ActionEvent actionEvent) {
+//                        drawingarea.repaint();
+//                    }
+//                }
+//            ),
+//            new KeyFrame(
+//                REFRESH_FREQUENCY
+//            )
+//        );
+//        timeline.setCycleCount(Timeline.INDEFINITE);
+//        timeline.play();
     }
     
-    public void setOnResize(ScrollPane p) {
-        p.heightProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) {
-                drawingarea.getCanvas().setHeight((double) new_val);
-            }
-        });
-        p.widthProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) {
-                drawingarea.getCanvas().setWidth((double) new_val);
-            }
-        });
-    }
+//    public void setOnResize(ScrollPane p) {
+//        p.heightProperty().addListener(new ChangeListener<Number>() {
+//            public void changed(ObservableValue<? extends Number> ov,
+//                Number old_val, Number new_val) {
+//                drawingarea.getCanvas().setHeight((double) new_val);
+//            }
+//        });
+//        p.widthProperty().addListener(new ChangeListener<Number>() {
+//            public void changed(ObservableValue<? extends Number> ov,
+//                Number old_val, Number new_val) {
+//                drawingarea.getCanvas().setWidth((double) new_val);
+//            }
+//        });
+//    }
     
     public void sizeStage(Stage stage) {
         stage.setX(frameLeft);
@@ -136,11 +138,11 @@ public class Gesticulate extends GuiceApplication {
         stage.setHeight(yHeight);
     }
     
-    @Override
-    public void stop() {
-        timeline.stop();
-    }
-    
+//    @Override
+//    public void stop() {
+//        timeline.stop();
+//    }
+//    
     
     /**
      * The main() method is ignored in correctly deployed JavaFX application.

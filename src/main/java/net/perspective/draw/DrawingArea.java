@@ -10,11 +10,17 @@ import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import static net.perspective.draw.event.HandlerType.SKETCH;
 import java.awt.BasicStroke;
+//import java.awt.Color;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
+import java.awt.geom.GeneralPath;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.SubScene;
+//import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -24,7 +30,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigurePointFactory;
+//import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
+import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
@@ -38,7 +47,9 @@ public class DrawingArea {
 
     @Inject Injector injector;
     @Inject private CanvasView view;
-    private Canvas canvas;
+    private SubScene canvas;
+    private Group root;
+//    private Canvas canvas;
     private GraphicsContext context;
     private Handler handler;
 
@@ -65,9 +76,12 @@ public class DrawingArea {
     }
 
     void init(double width, double height) {
-        canvas = new Canvas(width, height);
-        context = canvas.getGraphicsContext2D();
-        canvas.setFocusTraversable(false);
+//        canvas = new Canvas(width, height);
+//        context = canvas.getGraphicsContext2D();
+//        canvas.setFocusTraversable(false);
+        root = new Group();
+        canvas = new SubScene(root, width, height);
+        canvas.setFill(Color.WHITE);
         transferhandler = new CanvasTransferHandler(this);
         contextmenu = new ContextMenu();
         contextlistener = null;
@@ -76,42 +90,57 @@ public class DrawingArea {
     }
 
     public void prepareDrawing() {
-        setFigureType(FigureType.SKETCH);
+        setFigureType(FigureType.CIRCLE);
         setStroke(new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
         setColor("#4860E0");
         view.clearView();
         this.clear();
-        changeHandler(SKETCH);
+        changeHandler(HandlerType.FIGURE);
+        //drawMiniFig();
+    }
+
+    
+    private void drawMiniFig() {
+        FigurePointFactory pointFactory = new FigurePointFactory();
+        Figure item = new Figure(FigureType.SQUARE);
+        item.setStroke(getStroke());
+        item.setColor(getColor());
+        List<CanvasPoint> points = pointFactory.createPoints(FigureType.SQUARE, 200, 200, 100, 100);
+        item.setPoints(points);
+        item.setAngle(Math.PI/4);
+        item.setPath();
+        root.getChildren().add(item.draw());
     }
 
     public void clear() {
-        this.clear(context);
+        //this.clear(context);
+        ((Group) canvas.getRoot()).getChildren().clear();
     }
 
-    private void clear(GraphicsContext cxt) {
-        // Store the current transformation matrix
-        cxt.save();
+//    private void clear(GraphicsContext cxt) {
+//        // Store the current transformation matrix
+//        cxt.save();
+//
+//        cxt.setFill(Color.WHITE);
+//        cxt.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//
+//        // Restore the transform
+//        cxt.restore();
+//    }
 
-        cxt.setFill(Color.WHITE);
-        cxt.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        // Restore the transform
-        cxt.restore();
-    }
-
-    public void repaint() {
-        // update the buffer canvas
-        this.clear(context);
-        for (Figure item : view.getDrawings()) {
-            item.draw(context);
-        }
-        if (view.getSelected() != -1) {
-            view.getDrawings().get(view.getSelected()).drawAnchors(context);
-        }
-        if (view.isDrawing()) {
-            view.getNewItem().sketch(context);
-        }
-    }
+//    public void repaint() {
+//        // update the buffer canvas
+//        this.clear(context);
+//        for (Figure item : view.getDrawings()) {
+//            item.draw(context);
+//        }
+//        if (view.getSelected() != -1) {
+//            view.getDrawings().get(view.getSelected()).drawAnchors(context);
+//        }
+//        if (view.isDrawing()) {
+//            view.getNewItem().sketch(context);
+//        }
+//    }
 
     public void changeHandler(HandlerType h) {
         canvas.setOnContextMenuRequested(null);
@@ -184,7 +213,7 @@ public class DrawingArea {
                 }
             });
         addContextMenu();
-        this.changeHandler(SKETCH);
+        this.changeHandler(HandlerType.FIGURE);
     }
 
     public void mouseUp(MouseEvent event) {
@@ -265,10 +294,18 @@ public class DrawingArea {
             }
         };
     }
-    
-    public Canvas getCanvas() {
+
+    public SubScene getScene() {
         return canvas;
     }
+    
+    public Group getCanvas() {
+        return root;
+    }
+
+//    public Canvas getCanvas() {
+//        return canvas;
+//    }
 
     public CanvasView getView() {
         return view;

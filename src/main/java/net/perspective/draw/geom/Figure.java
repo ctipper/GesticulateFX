@@ -11,10 +11,10 @@ import java.awt.geom.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.Node;
+//import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.*;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -166,7 +166,7 @@ public class Figure implements Serializable {
         return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
     }
 
-    public Shape bounds() {
+    public java.awt.Shape bounds() {
         AffineTransform trans = this.getTransform();
         GeneralPath p = (GeneralPath) this.getPath().clone();
         p.transform(trans);
@@ -177,90 +177,160 @@ public class Figure implements Serializable {
         return this.bounds().intersects(x - 5, y - 5, 10, 10);
     }
 
-    public void drawAnchors(GraphicsContext context) {
-        if (!(this.type.equals(FigureType.SKETCH) 
-           || this.type.equals(FigureType.POLYGON))) {
-            for (CanvasPoint point : points) {
-                this.anchor(context, point.getX(), point.getY());
-            }
-        } else {
-            CanvasPoint start = points.get(0);
-            CanvasPoint end = points.get(points.size() - 1);
-            this.anchor(context, start.getX(), start.getY());
-            this.anchor(context, end.getX(), end.getY());
-        }
-    }
+//    public void drawAnchors(GraphicsContext context) {
+//        if (!(this.type.equals(FigureType.SKETCH) 
+//           || this.type.equals(FigureType.POLYGON))) {
+//            for (CanvasPoint point : points) {
+//                this.anchor(context, point.getX(), point.getY());
+//            }
+//        } else {
+//            CanvasPoint start = points.get(0);
+//            CanvasPoint end = points.get(points.size() - 1);
+//            this.anchor(context, start.getX(), start.getY());
+//            this.anchor(context, end.getX(), end.getY());
+//        }
+//    }
+//
+//    protected void anchor(GraphicsContext context, double x, double y) {
+//        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
+//        context.setLineWidth(1.0);
+//        context.setFill(Color.WHITE);
+//        context.fillOval(u.x-3, u.y-3, 6.0, 6.0);
+//        context.setStroke(Color.BLACK);
+//        context.strokeOval(u.x-3, u.y-3, 6.0, 6.0);
+//    }
 
-    protected void anchor(GraphicsContext context, double x, double y) {
-        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
-        context.setLineWidth(1.0);
-        context.setFill(Color.WHITE);
-        context.fillOval(u.x-3, u.y-3, 6.0, 6.0);
-        context.setStroke(Color.BLACK);
-        context.strokeOval(u.x-3, u.y-3, 6.0, 6.0);
-    }
-
-    public void draw(GraphicsContext context) {
-        AffineTransform at;
-
-        at = this.getTransform();
-
-        context.setStroke(Color.web(this.getColor()));
-        context.setFill(Color.web(this.getColor()));
-        context.setLineWidth(this.getLineWidth());
-        context.setLineJoin(this.getLineJoin());
-        context.setLineCap(this.getLineCap());
-        this.drawPath(context, at);
-        if (this.isClosed()) {
-            context.closePath();
-            context.fill();
-        }
-        context.stroke();
-    }
-
-    public void sketch(GraphicsContext context) {
-        context.setStroke(Color.LIGHTGREY);
-        context.setLineWidth(this.getLineWidth());
-        context.setLineJoin(this.getLineJoin());
-        context.setLineCap(this.getLineCap());
-        this.drawPath(context, new AffineTransform());
-        if (this.isClosed()) {
-            context.closePath();
-        }
-        context.stroke();
-    }
-    
-    private void drawPath(GraphicsContext context, AffineTransform at) {
+    public Path drawPath(AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
-        context.beginPath();
+        Path path = new Path();
+
         PathIterator iterator = this.getPath().getPathIterator(at);
         while (!iterator.isDone()) {
             switch (iterator.currentSegment(coords)) {
-                case PathIterator.SEG_MOVETO:
-                    context.moveTo(coords[0], coords[1]);
-                    break;
-                case PathIterator.SEG_LINETO:
-                    context.lineTo(coords[0], coords[1]);
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    context.quadraticCurveTo(coords[0], coords[1], coords[2], coords[3]);
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    context.bezierCurveTo(coords[0], coords[1], coords[2], coords[3],
-                        coords[4], coords[5]);
-                    break;
-                case PathIterator.SEG_CLOSE:
-                    context.closePath();
-                    break;
-                default:
-                    break;
+            case PathIterator.SEG_MOVETO:
+//                context.moveTo(coords[0], coords[1]);
+                MoveTo moveTo = new MoveTo();
+                moveTo.setX(coords[0]);
+                moveTo.setY(coords[1]);
+                path.getElements().add(moveTo);
+                break;
+            case PathIterator.SEG_LINETO:
+//                context.lineTo(coords[0], coords[1]);
+                LineTo lineTo = new LineTo();
+                lineTo.setX(coords[0]);
+                lineTo.setY(coords[1]);                
+                path.getElements().add(lineTo);
+                break;
+            case PathIterator.SEG_QUADTO:
+//                context.quadraticCurveTo(coords[0], coords[1], coords[2], coords[3]);
+                QuadCurveTo quadCurveTo = new QuadCurveTo();
+                quadCurveTo.setX(coords[2]);
+                quadCurveTo.setY(coords[3]);
+                quadCurveTo.setControlX(coords[0]);
+                quadCurveTo.setControlY(coords[1]);                
+                path.getElements().add(quadCurveTo);
+                break;
+            case PathIterator.SEG_CUBICTO:
+//                context.bezierCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
+                CubicCurveTo cubicTo = new CubicCurveTo();
+                cubicTo.setX(coords[4]);
+                cubicTo.setY(coords[5]);
+                cubicTo.setControlX1(coords[0]);
+                cubicTo.setControlY1(coords[1]);
+                cubicTo.setControlX2(coords[2]);
+                cubicTo.setControlY2(coords[3]);
+                path.getElements().add(cubicTo);
+                break;
+            case PathIterator.SEG_CLOSE:
+                ClosePath closePath = new ClosePath();
+                path.getElements().add(closePath);
+                break;
+            default:
+                break;
             }
             iterator.next();
         }
+        path.setStroke(Color.web(this.getColor()));
+        if (isClosed()) {
+            path.setFill(Color.web(this.getColor()));
+        }
+        path.setStrokeWidth(getLineWidth());
+        path.setStrokeLineJoin(getLineJoin());
+        path.setStrokeLineCap(getLineCap());
+        return path;
     }
+    
+//    public void draw(GraphicsContext context) {
+//        AffineTransform at;
+//
+//        at = this.getTransform();
+//
+//        context.setStroke(Color.web(this.getColor()));
+//        context.setFill(Color.web(this.getColor()));
+//        context.setLineWidth(this.getLineWidth());
+//        context.setLineJoin(this.getLineJoin());
+//        context.setLineCap(this.getLineCap());
+//        this.drawPath(context, at);
+//        if (this.isClosed()) {
+//            context.closePath();
+//            context.fill();
+//        }
+//        context.stroke();
+//    }
+//
+//    public void sketch(GraphicsContext context) {
+//        context.setStroke(Color.LIGHTGREY);
+//        context.setLineWidth(this.getLineWidth());
+//        context.setLineJoin(this.getLineJoin());
+//        context.setLineCap(this.getLineCap());
+//        this.drawPath(context, new AffineTransform());
+//        if (this.isClosed()) {
+//            context.closePath();
+//        }
+//        context.stroke();
+//    }
+//    
+//    private void drawPath(GraphicsContext context, AffineTransform at) {
+//        double[] coords = {0, 0, 0, 0, 0, 0};
+//        context.beginPath();
+//        PathIterator iterator = this.getPath().getPathIterator(at);
+//        while (!iterator.isDone()) {
+//            switch (iterator.currentSegment(coords)) {
+//                case PathIterator.SEG_MOVETO:
+//                    context.moveTo(coords[0], coords[1]);
+//                    break;
+//                case PathIterator.SEG_LINETO:
+//                    context.lineTo(coords[0], coords[1]);
+//                    break;
+//                case PathIterator.SEG_QUADTO:
+//                    context.quadraticCurveTo(coords[0], coords[1], coords[2], coords[3]);
+//                    break;
+//                case PathIterator.SEG_CUBICTO:
+//                    context.bezierCurveTo(coords[0], coords[1], coords[2], coords[3],
+//                        coords[4], coords[5]);
+//                    break;
+//                case PathIterator.SEG_CLOSE:
+//                    context.closePath();
+//                    break;
+//                default:
+//                    break;
+//            }
+//            iterator.next();
+//        }
+//    }
 
+    public Path draw() {
+        AffineTransform at;
+        at = this.getTransform();
+        return drawPath(at);
+    }
+    
+    public Path sketch() {
+        return drawPath(new AffineTransform());
+    }
+    
     public double getLineWidth() {
-        return ((BasicStroke) this.getStroke()).getLineWidth();
+        return (double) ((BasicStroke) this.getStroke()).getLineWidth();
     }
     
     public StrokeLineJoin getLineJoin() {

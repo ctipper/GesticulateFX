@@ -26,7 +26,7 @@ public class FigureHandler implements Handler {
 
     public FigureHandler() {
         this.pointFactory = new FigurePointFactory();
-    }    
+    }
 
     public void upEvent() {
         view.setDrawing(false);
@@ -45,8 +45,8 @@ public class FigureHandler implements Handler {
         Figure item = new Figure(type);
         item.setStroke(drawarea.getStroke());
         item.setColor(drawarea.getColor());
-        points = pointFactory.createPoints(type,
-            drawarea.getStartX(), drawarea.getStartY(), drawarea.getTempX(), drawarea.getTempY());
+        points = pointFactory.createPoints(type, 
+                drawarea.getStartX(), drawarea.getStartY(), drawarea.getTempX(), drawarea.getTempY());
         item.setPoints(points);
         item.setPath();
         view.setNewItem(item);
