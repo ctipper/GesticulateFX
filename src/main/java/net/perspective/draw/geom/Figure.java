@@ -214,7 +214,7 @@ public class Figure implements Serializable {
         return path;
     }
     
-    public Path drawPath(AffineTransform at) {
+    private Path drawPath(AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
         Path path = new Path();
 
