@@ -199,7 +199,7 @@ public class Figure implements Serializable {
         Circle anchor = new Circle();
         anchor.setCenterX(u.x);
         anchor.setCenterY(u.y);
-        anchor.setRadius(3.0);
+        anchor.setRadius(5.0);
         anchor.setFill(Color.web("white"));
         anchor.setStroke(Color.web("black"));
         anchor.setStrokeWidth(1.0);
