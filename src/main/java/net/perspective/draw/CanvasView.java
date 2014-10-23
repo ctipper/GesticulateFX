@@ -52,7 +52,7 @@ public class CanvasView {
     }
     
     public void deleteContents() {
-        list.clear();
+        drawings.clear();
     }
     
     public void setDrawingListener() {
@@ -61,27 +61,31 @@ public class CanvasView {
 
             @Override
             public void onChanged(Change<? extends Figure> c) {
-                int i;
                 while (c.next()) {
                     ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                     if (c.wasPermutated()) {
-                        for (i = c.getFrom(); i < c.getTo(); ++i) {
+                        for (int i = c.getFrom(); i < c.getTo(); ++i) {
                             // permutate
                             nodes.set(c.getPermutation(i), drawings.get(i).draw());
                             logger.trace("node " + c.getPermutation(i) + " updated from " + i);
                         }
                     } 
                     if (c.wasRemoved()) {
-                        i = 0;
+                        int i = 0;
+                        List<Node> deleted = new ArrayList<>();
                         for (Figure remitem : c.getRemoved()) {
                             // remove item
-                            nodes.remove(c.getFrom() + i);
+                            deleted.add(nodes.get(c.getFrom() + i));
                             i++;
                             logger.trace("node " + (c.getFrom() + i) + " removed.");
                         }
+                        // delete the nodes from the scene graph
+                        for (Node delete : deleted) {
+                            nodes.remove(delete);
+                        }
                     }
                     if (c.wasAdded()) {
-                        i = 0;
+                        int i = 0;
                         for (Figure additem : c.getAddedSubList()) {
                             // add item
                             nodes.add(c.getFrom() + i, additem.draw());
@@ -90,7 +94,7 @@ public class CanvasView {
                         }
                     }
                     if (c.wasUpdated()) {
-                        for (i = c.getFrom(); i < c.getTo(); ++i) {
+                        for (int i = c.getFrom(); i < c.getTo(); ++i) {
                             // update item
                             nodes.set(i, drawings.get(i).draw());
                             logger.trace("node " + i + " updated");
