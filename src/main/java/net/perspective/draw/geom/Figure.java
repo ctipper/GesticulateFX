@@ -12,6 +12,8 @@ import java.awt.geom.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.Group;
+import javafx.scene.Node;
 //import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -200,6 +202,34 @@ public class Figure implements Serializable {
 //        context.strokeOval(u.x-3, u.y-3, 6.0, 6.0);
 //    }
 
+    public Node drawAnchors() {
+        Group anchors = new Group();
+        if (!(this.type.equals(FigureType.SKETCH) 
+           || this.type.equals(FigureType.POLYGON))) {
+            for (CanvasPoint point : points) {
+                anchors.getChildren().add(this.anchor(point.getX(), point.getY()));
+            }
+        } else {
+            CanvasPoint start = points.get(0);
+            CanvasPoint end = points.get(points.size() - 1);
+            anchors.getChildren().add(this.anchor(start.getX(), start.getY()));
+            anchors.getChildren().add(this.anchor(end.getX(), end.getY()));
+        }
+        return anchors;
+    }
+    
+    protected Shape anchor(double x, double y) {
+        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
+        Circle anchor = new Circle();
+        anchor.setCenterX(u.x);
+        anchor.setCenterY(u.y);
+        anchor.setRadius(6.0);
+        anchor.setFill(Color.web("white"));
+        anchor.setStroke(Color.web("black"));
+        anchor.setStrokeWidth(1.0);
+        return anchor;
+    }
+    
     public Path draw() {
         AffineTransform at;
         at = this.getTransform();
