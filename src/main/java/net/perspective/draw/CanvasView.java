@@ -170,10 +170,6 @@ public class CanvasView {
         return newitem;
     }
     
-    public int getNewItemIndex() {
-        return drawings.size()-1;
-    }
-
     public void setPreviousItem(Figure s) {
         olditem = s;
     }
