@@ -43,6 +43,7 @@ public class SelectionHandler implements Handler {
             Figure item = view.getDrawings().get(selection); 
             item.moveFigure(xinc, yinc);
             view.updateCanvasItem(selection, item);
+            view.moveSelection(selection);
             drawarea.setStartX(drawarea.getTempX());
             drawarea.setStartY(drawarea.getTempY());
         }

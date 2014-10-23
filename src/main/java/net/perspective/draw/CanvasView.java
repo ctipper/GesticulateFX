@@ -31,6 +31,7 @@ public class CanvasView {
     private Figure olditem, newitem;
     private int selection;
     private boolean isDrawing;
+    private Node anchors;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
     
@@ -146,9 +147,37 @@ public class CanvasView {
     }
 
     public void setSelected(int s) {
+        if (selection == -1 && s != -1) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            anchors = drawings.get(s).drawAnchors();
+            nodes.add(anchors);
+        }
+        if (selection != -1 && s == -1) {
+            if (anchors != null) {
+                ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+                nodes.remove(anchors);
+                anchors = null;
+            }
+        }
+        if (s == -1) {
+            anchors = null;
+        }
         selection = s;
     }
 
+    public void moveSelection(int s) {
+        if (anchors != null) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(anchors);
+            anchors = null;
+        }        
+        if (s != -1) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            anchors = drawings.get(s).drawAnchors();
+            nodes.add(anchors);
+        }   
+    }
+    
     public int getSelected() {
         return selection;
     }
