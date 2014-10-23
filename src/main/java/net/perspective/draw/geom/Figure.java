@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Node;
-//import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import net.perspective.draw.util.CanvasPoint;
@@ -178,29 +177,6 @@ public class Figure implements Serializable {
     public boolean contains(double x, double y) {
         return this.bounds().intersects(x - 5, y - 5, 10, 10);
     }
-
-//    public void drawAnchors(GraphicsContext context) {
-//        if (!(this.type.equals(FigureType.SKETCH) 
-//           || this.type.equals(FigureType.POLYGON))) {
-//            for (CanvasPoint point : points) {
-//                this.anchor(context, point.getX(), point.getY());
-//            }
-//        } else {
-//            CanvasPoint start = points.get(0);
-//            CanvasPoint end = points.get(points.size() - 1);
-//            this.anchor(context, start.getX(), start.getY());
-//            this.anchor(context, end.getX(), end.getY());
-//        }
-//    }
-//
-//    protected void anchor(GraphicsContext context, double x, double y) {
-//        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
-//        context.setLineWidth(1.0);
-//        context.setFill(Color.WHITE);
-//        context.fillOval(u.x-3, u.y-3, 6.0, 6.0);
-//        context.setStroke(Color.BLACK);
-//        context.strokeOval(u.x-3, u.y-3, 6.0, 6.0);
-//    }
 
     public Node drawAnchors() {
         Group anchors = new Group();

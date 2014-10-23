@@ -39,7 +39,6 @@ public class DrawingArea {
     @Inject private CanvasView view;
     private SubScene canvas;
     private Group root;
-//    private Canvas canvas;
     private GraphicsContext context;
     private Handler handler;
 
@@ -66,9 +65,6 @@ public class DrawingArea {
     }
 
     void init(double width, double height) {
-//        canvas = new Canvas(width, height);
-//        context = canvas.getGraphicsContext2D();
-//        canvas.setFocusTraversable(false);
         root = new Group();
         canvas = new SubScene(root, width, height);
         canvas.setFill(Color.WHITE);
@@ -90,34 +86,8 @@ public class DrawingArea {
     }
     
     public void clear() {
-        //this.clear(context);
         ((Group) canvas.getRoot()).getChildren().clear();
     }
-
-//    private void clear(GraphicsContext cxt) {
-//        // Store the current transformation matrix
-//        cxt.save();
-//
-//        cxt.setFill(Color.WHITE);
-//        cxt.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//
-//        // Restore the transform
-//        cxt.restore();
-//    }
-
-//    public void repaint() {
-//        // update the buffer canvas
-//        this.clear(context);
-//        for (Figure item : view.getDrawings()) {
-//            item.draw(context);
-//        }
-//        if (view.getSelected() != -1) {
-//            view.getDrawings().get(view.getSelected()).drawAnchors(context);
-//        }
-//        if (view.isDrawing()) {
-//            view.getNewItem().sketch(context);
-//        }
-//    }
 
     public void changeHandler(HandlerType h) {
         canvas.setOnContextMenuRequested(null);

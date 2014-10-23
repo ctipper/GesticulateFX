@@ -7,19 +7,14 @@
 package net.perspective.draw;
 
 import java.util.List;
-//import javafx.animation.KeyFrame;
-//import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-//import javafx.event.ActionEvent;
-//import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-//import javafx.util.Duration;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import org.slf4j.Logger;
@@ -40,8 +35,6 @@ public class Gesticulate extends GuiceApplication {
     
     @Inject private DrawingArea drawingarea;
     
-    //private Timeline timeline;
-    
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
     private final Rectangle2D screenSize = screen.getVisualBounds();
@@ -49,10 +42,6 @@ public class Gesticulate extends GuiceApplication {
     private final int yHeight = (int) (screenSize.getMaxY() * .8);
     private final int frameLeft = (int) (screenSize.getMaxX() - xWidth) / 3;
     private final int frameTop = (int) (screenSize.getMaxY() - yHeight) / 5;
-    
-    // timer refresh rate, in milliseconds
-//    static final int duration = 25;
-//    private static final Duration REFRESH_FREQUENCY = Duration.millis(duration);
     
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
@@ -95,23 +84,6 @@ public class Gesticulate extends GuiceApplication {
         // Install the canvas
         pane.setContent(drawingarea.getScene());
         setOnResize(pane);
-        
-//        // Setup timer
-//        timeline = new Timeline(
-//            new KeyFrame(
-//                Duration.ZERO,
-//                new EventHandler<ActionEvent>() {
-//                    public void handle(ActionEvent actionEvent) {
-//                        drawingarea.repaint();
-//                    }
-//                }
-//            ),
-//            new KeyFrame(
-//                REFRESH_FREQUENCY
-//            )
-//        );
-//        timeline.setCycleCount(Timeline.INDEFINITE);
-//        timeline.play();
     }
     
     public void setOnResize(ScrollPane p) {
@@ -135,12 +107,6 @@ public class Gesticulate extends GuiceApplication {
         stage.setWidth(xWidth);
         stage.setHeight(yHeight);
     }
-    
-//    @Override
-//    public void stop() {
-//        timeline.stop();
-//    }
-//    
     
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
