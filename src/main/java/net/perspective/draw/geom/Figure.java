@@ -292,65 +292,6 @@ public class Figure implements Serializable {
         return path;
     }
     
-//    public void draw(GraphicsContext context) {
-//        AffineTransform at;
-//
-//        at = this.getTransform();
-//
-//        context.setStroke(Color.web(this.getColor()));
-//        context.setFill(Color.web(this.getColor()));
-//        context.setLineWidth(this.getLineWidth());
-//        context.setLineJoin(this.getLineJoin());
-//        context.setLineCap(this.getLineCap());
-//        this.drawPath(context, at);
-//        if (this.isClosed()) {
-//            context.closePath();
-//            context.fill();
-//        }
-//        context.stroke();
-//    }
-//
-//    public void sketch(GraphicsContext context) {
-//        context.setStroke(Color.LIGHTGREY);
-//        context.setLineWidth(this.getLineWidth());
-//        context.setLineJoin(this.getLineJoin());
-//        context.setLineCap(this.getLineCap());
-//        this.drawPath(context, new AffineTransform());
-//        if (this.isClosed()) {
-//            context.closePath();
-//        }
-//        context.stroke();
-//    }
-//    
-//    private void drawPath(GraphicsContext context, AffineTransform at) {
-//        double[] coords = {0, 0, 0, 0, 0, 0};
-//        context.beginPath();
-//        PathIterator iterator = this.getPath().getPathIterator(at);
-//        while (!iterator.isDone()) {
-//            switch (iterator.currentSegment(coords)) {
-//                case PathIterator.SEG_MOVETO:
-//                    context.moveTo(coords[0], coords[1]);
-//                    break;
-//                case PathIterator.SEG_LINETO:
-//                    context.lineTo(coords[0], coords[1]);
-//                    break;
-//                case PathIterator.SEG_QUADTO:
-//                    context.quadraticCurveTo(coords[0], coords[1], coords[2], coords[3]);
-//                    break;
-//                case PathIterator.SEG_CUBICTO:
-//                    context.bezierCurveTo(coords[0], coords[1], coords[2], coords[3],
-//                        coords[4], coords[5]);
-//                    break;
-//                case PathIterator.SEG_CLOSE:
-//                    context.closePath();
-//                    break;
-//                default:
-//                    break;
-//            }
-//            iterator.next();
-//        }
-//    }
-
     public double getLineWidth() {
         return (double) ((BasicStroke) this.getStroke()).getLineWidth();
     }
