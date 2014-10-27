@@ -27,6 +27,7 @@ public class Figure implements Serializable {
 
     private List<CanvasPoint> points;
     private FigureType type;
+    private CanvasPoint start, end;
     private transient GeneralPath path;
     private transient PathFactory factory;
     private transient Stroke stroke;
@@ -50,64 +51,84 @@ public class Figure implements Serializable {
         this.path = new GeneralPath();
     }
     
-    public void setPoints(List<CanvasPoint> points) {
-        this.points = points;
+    public CanvasPoint getStart() {
+        return start;
+    }
+
+    public void setStart(double x, double y) {
+        this.start = new CanvasPoint(x,y);
+    }
+
+    public CanvasPoint getEnd() {
+        return end;
+    }
+
+    public void setEnd(double x, double y) {
+        this.end = new CanvasPoint(x,y);
     }
 
     public List<CanvasPoint> getPoints() {
         return this.points;
     }
 
-    public void addPoint(CanvasPoint points) {
-        this.points.add(points);
+    public void setPoints(List<CanvasPoint> points) {
+        this.points = points;
     }
 
-    public void setType(FigureType t) {
-        this.type = t;
+    public void addPoint(CanvasPoint points) {
+        this.points.add(points);
     }
 
     public FigureType getType() {
         return this.type;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+    public void setType(FigureType t) {
+        this.type = t;
     }
 
     public boolean isClosed() {
         return this.closed;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
     public String getColor() {
         return this.color;
     }
 
-    public void setFillColor(String c) {
-        fillcolor = c;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getFillColor() {
         return fillcolor;
     }
 
-    public void setStroke(Stroke s) {
-        stroke = s;
+    public void setFillColor(String c) {
+        fillcolor = c;
     }
 
     public Stroke getStroke() {
         return stroke;
     }
 
-    public void setAngle(double a) {
-        this.angle = a;
+    public void setStroke(Stroke s) {
+        stroke = s;
     }
 
     public double getAngle() {
         return this.angle;
+    }
+
+    public void setAngle(double a) {
+        this.angle = a;
+    }
+
+    public GeneralPath getPath() {
+        return this.path;
     }
 
     public void setPath() {
@@ -123,10 +144,6 @@ public class Figure implements Serializable {
                 this.setClosed(false);
                 break;
         }
-    }
-
-    public GeneralPath getPath() {
-        return this.path;
     }
 
     public void moveFigure(double xinc, double yinc) {
