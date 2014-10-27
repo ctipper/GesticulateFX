@@ -51,9 +51,9 @@ public class FigureHandler implements Handler {
         item.setStroke(drawarea.getStroke());
         item.setColor("lightgray");
         item.setFillColor("white");
-        points = pointFactory.createPoints(type, 
-                drawarea.getStartX(), drawarea.getStartY(), drawarea.getTempX(), drawarea.getTempY());
-        item.setPoints(points);
+        item.setStart(drawarea.getStartX(), drawarea.getStartY());
+        item.setEnd(drawarea.getTempX(), drawarea.getTempY());
+        item.setPoints();
         item.setPath();
         view.setNewItem(item);
         view.setDrawing(true);

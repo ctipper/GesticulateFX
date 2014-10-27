@@ -29,7 +29,8 @@ public class Figure implements Serializable {
     private FigureType type;
     private CanvasPoint start, end;
     private transient GeneralPath path;
-    private transient PathFactory factory;
+    private transient PointFactory pointfactory;
+    private transient PathFactory pathfactory;
     private transient Stroke stroke;
     private String color, fillcolor;
     private double angle;
@@ -47,7 +48,8 @@ public class Figure implements Serializable {
         this();
         this.type = t;
         this.points = new ArrayList<>();
-        this.factory = new FigurePathFactory();
+        this.pathfactory = new FigurePathFactory();
+        this.pointfactory = new FigurePointFactory();
         this.path = new GeneralPath();
     }
     
@@ -71,6 +73,10 @@ public class Figure implements Serializable {
         return this.points;
     }
 
+    public void setPoints() {
+        this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
+    }
+    
     public void setPoints(List<CanvasPoint> points) {
         this.points = points;
     }
@@ -132,7 +138,7 @@ public class Figure implements Serializable {
     }
 
     public void setPath() {
-        this.path = factory.createPath(this);
+        this.path = pathfactory.createPath(this);
         switch (this.type) {
             case SQUARE:
             case CIRCLE:
@@ -391,7 +397,8 @@ public class Figure implements Serializable {
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         this.setStroke(readStroke(in));
-        this.factory = new FigurePathFactory();
+        this.pointfactory = new FigurePointFactory();
+        this.pathfactory = new FigurePathFactory();
     }
 
     private void writeObject(ObjectOutputStream out)
