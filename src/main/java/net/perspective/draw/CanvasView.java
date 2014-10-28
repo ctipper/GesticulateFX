@@ -159,6 +159,16 @@ public class CanvasView {
                 anchors = null;
             }
         }
+        if (selection != s && s != -1) {
+            if (anchors != null) {
+                ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+                nodes.remove(anchors);
+                anchors = null;
+            }
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            anchors = drawings.get(s).drawAnchors();
+            nodes.add(anchors);
+        }
         if (s == -1) {
             anchors = null;
         }

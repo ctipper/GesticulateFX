@@ -74,7 +74,10 @@ public class Figure implements Serializable {
     }
 
     public void setPoints() {
-        this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
+        if (!this.type.equals(FigureType.SKETCH)
+            && !this.type.equals(FigureType.POLYGON)) {
+            this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
+        }
     }
     
     public void setPoints(List<CanvasPoint> points) {
@@ -84,7 +87,28 @@ public class Figure implements Serializable {
     public void addPoint(CanvasPoint points) {
         this.points.add(points);
     }
-
+    
+    public void setEndPoints() {
+        switch (this.type) {
+            case CIRCLE:
+            case ELLIPSE:
+            case SQUARE:
+            case RECTANGLE:
+                start = new CanvasPoint(points.get(0).x, points.get(0).y);
+                end = new CanvasPoint(points.get(2).x, points.get(2).y);
+                break;
+            case TRIANGLE:
+            case ISOSCELES:
+                start = new CanvasPoint(points.get(1).x, points.get(0).y);
+                end = new CanvasPoint(points.get(2).x, points.get(2).y);
+                break;
+            default:
+                start = points.get(0);
+                end = points.get(points.size() - 1);
+                break;
+        }
+    }
+    
     public FigureType getType() {
         return this.type;
     }
@@ -140,23 +164,83 @@ public class Figure implements Serializable {
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
-            case SQUARE:
-            case CIRCLE:
-            case TRIANGLE:
-            case POLYGON:
-                this.setClosed(true);
+            case SKETCH:
+            case LINE:
+                this.setClosed(false);
                 break;
             default:
-                this.setClosed(false);
+                this.setClosed(true);
                 break;
         }
     }
 
-    public void moveFigure(double xinc, double yinc) {
-        for (CanvasPoint point : points) {
-            point.translate(xinc, yinc);
+    public CanvasPoint getTop() {
+        double x = Math.min(start.x, end.x);
+        double y = Math.min(start.y, end.y);
+        if (type.equals(FigureType.SKETCH)
+            || type.equals(FigureType.POLYGON)) { 
+            Rectangle2D bound = this.getBounds2D();
+            CanvasPoint s = new CanvasPoint(bound.getX(), bound.getY());
+            return s;
+        } else {
+            CanvasPoint s = new CanvasPoint(x, y);
+            s = this.getTransform(s);
+            return s;
         }
-        this.setPath();
+    }
+
+    public CanvasPoint getUp() {
+        double x = Math.min(start.x, end.x);
+        double y = Math.min(start.y, end.y);
+        double w = Math.max(start.x, end.x);
+        double h = Math.max(start.y, end.y);
+        if (type.equals(FigureType.SKETCH)
+            || type.equals(FigureType.POLYGON)) { 
+            Rectangle2D bound = this.getBounds2D();
+            CanvasPoint up = new CanvasPoint(bound.getX() + bound.getWidth(),
+                    bound.getY());
+            return up;
+        } else {
+            CanvasPoint up = new CanvasPoint(w, y);
+            up = this.getTransform(up);
+            return up;
+        }
+    }
+
+    public CanvasPoint getDown() {
+        double x = Math.min(start.x, end.x);
+        double y = Math.min(start.y, end.y);
+        double w = Math.max(start.x, end.x);
+        double h = Math.max(start.y, end.y);
+        if (type.equals(FigureType.SKETCH)
+            || type.equals(FigureType.POLYGON)) { 
+            Rectangle2D bound = this.getBounds2D();
+            CanvasPoint down = new CanvasPoint(bound.getX(),
+                    bound.getY() + bound.getHeight());
+            return down;
+        } else {
+            CanvasPoint down = new CanvasPoint(x, h);
+            down = this.getTransform(down);
+            return down;
+        }
+    }
+
+    public CanvasPoint getBottom() {
+        double x = Math.min(start.x, end.x);
+        double y = Math.min(start.y, end.y);
+        double w = Math.max(start.x, end.x);
+        double h = Math.max(start.y, end.y);
+        if (type.equals(FigureType.SKETCH)
+            || type.equals(FigureType.POLYGON)) { 
+            Rectangle2D bound = this.getBounds2D();
+            CanvasPoint e = new CanvasPoint(bound.getX() + bound.getWidth(),
+                    bound.getY() + bound.getHeight());
+            return e;
+        } else {
+            CanvasPoint e = new CanvasPoint(w, h);
+            e = this.getTransform(e);
+            return e;
+        }
     }
 
     private CanvasPoint getTransform(CanvasPoint point) {
@@ -182,12 +266,26 @@ public class Figure implements Serializable {
         return transform;
     }
 
+    public void moveFigure(double xinc, double yinc) {
+        for (CanvasPoint p : points) {
+            p.translate(xinc, yinc);
+        }
+        this.setEndPoints();
+        this.setPath();
+    }
+
     public CanvasPoint rotationCentre() {
         GeneralPath p = (GeneralPath) this.getPath().clone();
         p.closePath();
         Area area = new Area(p);
         Rectangle2D bound = area.getBounds2D();
         return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+    }
+
+    public Rectangle2D getBounds2D() {
+        java.awt.Shape area = this.bounds();
+        Rectangle2D bound = area.getBounds2D();
+        return bound;
     }
 
     public java.awt.Shape bounds() {
@@ -203,16 +301,22 @@ public class Figure implements Serializable {
 
     public Node drawAnchors() {
         Group anchors = new Group();
-        if (!(this.type.equals(FigureType.SKETCH) 
-           || this.type.equals(FigureType.POLYGON))) {
-            for (CanvasPoint point : points) {
-                anchors.getChildren().add(this.anchor(point.getX(), point.getY()));
-            }
-        } else {
-            CanvasPoint start = points.get(0);
-            CanvasPoint end = points.get(points.size() - 1);
-            anchors.getChildren().add(this.anchor(start.getX(), start.getY()));
-            anchors.getChildren().add(this.anchor(end.getX(), end.getY()));
+        switch (this.type) {
+            case LINE:
+            case SKETCH:
+            case POLYGON:
+                // end points marked
+                anchors.getChildren().add(this.anchor(start.x, start.y));
+                anchors.getChildren().add(this.anchor(end.x, end.y));
+                break;
+            case NONE:
+                break;
+            default:
+                anchors.getChildren().add(this.anchor(start.x, start.y));
+                anchors.getChildren().add(this.anchor(end.x, start.y));
+                anchors.getChildren().add(this.anchor(start.x, end.y));
+                anchors.getChildren().add(this.anchor(end.x, end.y));
+                break;
         }
         return anchors;
     }

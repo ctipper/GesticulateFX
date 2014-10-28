@@ -250,10 +250,6 @@ public class DrawingArea {
         return root;
     }
 
-//    public Canvas getCanvas() {
-//        return canvas;
-//    }
-
     public CanvasView getView() {
         return view;
     }

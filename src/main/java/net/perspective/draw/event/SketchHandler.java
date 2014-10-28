@@ -31,6 +31,7 @@ public class SketchHandler implements Handler  {
         item.setStroke(drawarea.getStroke());
         item.setColor(drawarea.getColor());
         item.setFillColor(drawarea.getFillColor());
+        item.setEndPoints();
         view.setNewItem(item);
         view.resetNewItem();
     }
@@ -48,7 +49,7 @@ public class SketchHandler implements Handler  {
         point = new CanvasPoint(drawarea.getStartX(), drawarea.getStartY());
         points = new ArrayList<>();
         points.add(point);
-	    item.setPoints(points);
+	item.setPoints(points);
     	item.setPath();
         view.setNewItem(item);
         view.setDrawing(true);

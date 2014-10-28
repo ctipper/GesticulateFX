@@ -17,7 +17,7 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class FigurePointFactory implements PointFactory {
 
-    /** Creates a newidtheight instance of <code>FigurePointFactory</code> */
+    /** Creates a new instance of <code>FigurePointFactory</code> */
     public FigurePointFactory() {
     }
     
@@ -42,7 +42,7 @@ public class FigurePointFactory implements PointFactory {
                 points = new ArrayList<>();
                 points.add(new CanvasPoint(startX, startY));
                 points.add(new CanvasPoint(endX, endY));
-                return points;
+                break;
             case CIRCLE:
             case SQUARE:
                 points = new ArrayList<>();
@@ -59,7 +59,19 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p1);
                 points.add(p2);
                 points.add(p3);
-                return points;
+                break;
+            case RECTANGLE:
+            case ELLIPSE:
+                points = new ArrayList<>();
+                p0 = new CanvasPoint(startX, startY);
+                p1 = new CanvasPoint(startX, endY);
+                p2 = new CanvasPoint(endX, endY);
+                p3 = new CanvasPoint(endX, startY);
+                points.add(p0);
+                points.add(p1);
+                points.add(p2);
+                points.add(p3);
+                break;
             case TRIANGLE:
                 points = new ArrayList<>();
                 width = endX - startX;
@@ -71,12 +83,26 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p0);
                 points.add(p1);
                 points.add(p2);
-                return points;
+                break;
+            case ISOSCELES:
+                points = new ArrayList<>();
+                width = endX - startX;
+                height = endY - startY;
+                p0 = new CanvasPoint(startX + width / 2, startY);
+                p1 = new CanvasPoint(startX, startY + height);
+                p2 = new CanvasPoint(startX + width, startY + height);
+                points.add(p0);
+                points.add(p1);
+                points.add(p2);
+                break;
             case SKETCH:
             case POLYGON:
-                return new ArrayList<>();
+                points = new ArrayList<>();
+                break;
             default:
-                return new ArrayList<>();
+                points = new ArrayList<>();
+                break;
         }
+        return points;
     }
 }

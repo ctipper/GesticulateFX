@@ -8,6 +8,7 @@ package net.perspective.draw.geom;
 
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.RoundRectangle2D;
 import net.perspective.draw.util.CanvasPoint;
 import org.jhotdraw.geom.Bezier;
 
@@ -30,13 +31,16 @@ public class FigurePathFactory implements PathFactory {
         switch (type) {
             case LINE:
                 if (points.size() > 1) {
-                    path.moveTo(points.get(0).getX(), points.get(0).getY());
-                    path.lineTo(points.get(1).getX(), points.get(1).getY());
-                    return path;
+                    path.moveTo((float) points.get(0).x, (float) points.get(0).y);
+                    path.lineTo((float) points.get(1).x, (float) points.get(1).y);
                 } else {
                     return null;
                 }
+            break;
+            case SQUARE:
+            case RECTANGLE:
             case CIRCLE:
+            case ELLIPSE:
                 if (points.size() > 3) {
                     x = y = w = h = 0;
                     p0 = points.get(0);
@@ -44,66 +48,61 @@ public class FigurePathFactory implements PathFactory {
                     p2 = points.get(2);
                     p3 = points.get(3);
                     // handles cases where clockwise/anti-clockwise points
-                    if ((p0.getX() < p2.getX()) && (p0.getY() < p2.getY())) {
-                        x = p0.getX();
-                        y = p0.getY();
-                        w = (p2.getX() - x);
-                        h = (p2.getY() - y);
-                    } else if ((p0.getX() > p2.getX()) && (p0.getY() > p2.getY())) {
-                        x = p2.getX();
-                        y = p2.getY();
-                        w = (p0.getX() - x);
-                        h = (p0.getY() - y);
-                    } else if ((p3.getX() > p1.getX()) && (p3.getY() > p1.getY())) {
-                        x = p1.getX();
-                        y = p1.getY();
-                        w = (p3.getX() - x);
-                        h = (p3.getY() - y);
-                    } else if ((p3.getX() < p1.getX()) && (p3.getY() < p1.getY())) {
-                        x = p3.getX();
-                        y = p3.getY();
-                        w = (p1.getX() - x);
-                        h = (p1.getY() - y);
+                    if (p0.x < p2.x && p0.y < p2.y) {
+                        x = p0.x;
+                        y = p0.y;
+                        w = p2.x - x;
+                        h = p2.y - y;
+                    } else if (p0.x > p2.x && p0.y > p2.y) {
+                        x = p2.x;
+                        y = p2.y;
+                        w = p0.x - x;
+                        h = p0.y - y;
+                    } else if (p3.x > p1.x && p3.y > p1.y) {
+                        x = p1.x;
+                        y = p1.y;
+                        w = p3.x - x;
+                        h = p3.y - y;
+                    } else if (p3.x < p1.x && p3.y < p1.y) {
+                        x = p3.x;
+                        y = p3.y;
+                        w = p1.x - x;
+                        h = p1.y - y;
                     }
-                    path = new GeneralPath(new Ellipse2D.Double(x, y, w, h));
-                    return path;
+                    if (type.equals(FigureType.CIRCLE) || type.equals(FigureType.ELLIPSE)) {
+                        path = new GeneralPath(new Ellipse2D.Double(x, y, w, h));
+                    } else {
+                        path = new GeneralPath(new RoundRectangle2D.Double(x, y, w, h, 5, 5));
+                    }
                 } else {
                     return null;
                 }
-            case SQUARE:
-                if (points.size() > 3) {
-                    path.moveTo(points.get(0).getX(), points.get(0).getY());
-                    path.lineTo(points.get(1).getX(), points.get(1).getY());
-                    path.lineTo(points.get(2).getX(), points.get(2).getY());
-                    path.lineTo(points.get(3).getX(), points.get(3).getY());
-                    path.closePath();
-                    return path;
-                } else {
-                    return null;
-                }
+                break;
             case TRIANGLE:
+            case ISOSCELES:
                 if (points.size() > 2) {
-                    path.moveTo(points.get(0).getX(), points.get(0).getY());
-                    path.lineTo(points.get(1).getX(), points.get(1).getY());
-                    path.lineTo(points.get(2).getX(), points.get(2).getY());
+                    path.moveTo((float) points.get(0).x, (float) points.get(0).y);
+                    path.lineTo((float) points.get(1).x, (float) points.get(1).y);
+                    path.lineTo((float) points.get(2).x, (float) points.get(2).y);
                     path.closePath();
-                    return path;
                 } else {
                     return null;
                 }
+                break;
             case SKETCH:
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);
                 path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
-                return path;
+                break;
             case POLYGON:
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);
                 path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
                 path.closePath();
-                return path;
+                break;
             default:
                 return null;
         }
+        return path;
     }
 }

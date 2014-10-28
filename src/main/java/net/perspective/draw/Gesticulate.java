@@ -24,6 +24,7 @@ import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import net.perspective.draw.event.behaviours.BehaviourContext;
 
 /**
  *
@@ -130,6 +131,7 @@ public class Gesticulate extends GuiceApplication {
             bind(RotationHandler.class);
             bind(SelectionHandler.class);
             bind(SketchHandler.class);
+            bind(BehaviourContext.class);
         }
     }
 }

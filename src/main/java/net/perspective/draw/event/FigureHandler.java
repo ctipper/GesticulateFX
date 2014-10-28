@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.*;
-import net.perspective.draw.util.CanvasPoint;
 
 /**
  *
@@ -22,10 +21,7 @@ public class FigureHandler implements Handler {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
 
-    private final PointFactory pointFactory;
-
     public FigureHandler() {
-        this.pointFactory = new FigurePointFactory();
     }
 
     public void upEvent() {
@@ -35,6 +31,20 @@ public class FigureHandler implements Handler {
         item.setStroke(drawarea.getStroke());
         item.setColor(drawarea.getColor());
         item.setFillColor(drawarea.getFillColor());
+        // following enables flexible redraw
+        FigureType type = item.getType();
+        switch (type) {
+            case SQUARE:
+                item.setType(FigureType.RECTANGLE);
+                break;
+            case CIRCLE:
+                item.setType(FigureType.ELLIPSE);
+                break;
+            case TRIANGLE:
+                item.setType(FigureType.ISOSCELES);
+                break;
+        }
+        item.setEndPoints();
         view.setNewItem(item);
         view.resetNewItem();
     }
@@ -43,7 +53,6 @@ public class FigureHandler implements Handler {
     }
 
     public void dragEvent() {
-        java.util.List<CanvasPoint> points;
         FigureType type;
 
         type = drawarea.getFigureType();
