@@ -34,15 +34,17 @@ public class FigureHandler implements Handler {
         // following enables flexible redraw
         FigureType type = item.getType();
         switch (type) {
-            case SQUARE:
-                item.setType(FigureType.RECTANGLE);
-                break;
-            case CIRCLE:
-                item.setType(FigureType.ELLIPSE);
-                break;
-            case TRIANGLE:
-                item.setType(FigureType.ISOSCELES);
-                break;
+        case SQUARE:
+            item.setType(FigureType.RECTANGLE);
+            break;
+        case CIRCLE:
+            item.setType(FigureType.ELLIPSE);
+            break;
+        case TRIANGLE:
+            item.setType(FigureType.ISOSCELES);
+            break;
+        default:
+            break;
         }
         item.setEndPoints();
         view.setNewItem(item);
