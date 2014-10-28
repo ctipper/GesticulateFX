@@ -31,8 +31,8 @@ public class FigurePathFactory implements PathFactory {
         switch (type) {
             case LINE:
                 if (points.size() > 1) {
-                    path.moveTo((float) points.get(0).x, (float) points.get(0).y);
-                    path.lineTo((float) points.get(1).x, (float) points.get(1).y);
+                    path.moveTo(points.get(0).x, points.get(0).y);
+                    path.lineTo(points.get(1).x, points.get(1).y);
                 } else {
                     return null;
                 }
@@ -81,9 +81,9 @@ public class FigurePathFactory implements PathFactory {
             case TRIANGLE:
             case ISOSCELES:
                 if (points.size() > 2) {
-                    path.moveTo((float) points.get(0).x, (float) points.get(0).y);
-                    path.lineTo((float) points.get(1).x, (float) points.get(1).y);
-                    path.lineTo((float) points.get(2).x, (float) points.get(2).y);
+                    path.moveTo(points.get(0).x, points.get(0).y);
+                    path.lineTo(points.get(1).x, points.get(1).y);
+                    path.lineTo(points.get(2).x, points.get(2).y);
                     path.closePath();
                 } else {
                     return null;
