@@ -141,6 +141,5 @@ public class FigureItemBehaviour implements ItemBehaviours {
         } else { // All other Figures
             item.moveFigure(xinc, yinc);
         }
-        item.setEndPoints();
     }
 }
