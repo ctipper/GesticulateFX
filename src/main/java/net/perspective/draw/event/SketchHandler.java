@@ -7,12 +7,10 @@
 package net.perspective.draw.event;
 
 //import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
-import net.perspective.draw.util.CanvasPoint;
 
 /**
  *
@@ -37,9 +35,6 @@ public class SketchHandler implements Handler  {
     }
 
     public void downEvent() {
-        List<CanvasPoint> points;
-        CanvasPoint point;
-
         // Create Figure
         Figure item = new Figure(drawarea.getFigureType());
         item.setStroke(drawarea.getStroke());
@@ -54,9 +49,6 @@ public class SketchHandler implements Handler  {
     }
 
     public void dragEvent() {
-        List<CanvasPoint> points;
-        CanvasPoint point;
-
         // Create Figure
         Figure item = view.getNewItem();
         // continue sketch

@@ -32,8 +32,7 @@ public class FigureHandler implements Handler {
         item.setColor(drawarea.getColor());
         item.setFillColor(drawarea.getFillColor());
         // following enables flexible redraw
-        FigureType type = item.getType();
-        switch (type) {
+        switch (item.getType()) {
         case SQUARE:
             item.setType(FigureType.RECTANGLE);
             break;
@@ -55,10 +54,7 @@ public class FigureHandler implements Handler {
     }
 
     public void dragEvent() {
-        FigureType type;
-
-        type = drawarea.getFigureType();
-        Figure item = new Figure(type);
+        Figure item = new Figure(drawarea.getFigureType());
         item.setStroke(drawarea.getStroke());
         item.setColor("lightgray");
         item.setFillColor("white");
