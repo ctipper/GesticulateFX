@@ -49,7 +49,7 @@ public class BehaviourContext {
 
     public Area getRegion(CanvasPoint p) {
         Rectangle2D rect;
-        rect = new Rectangle2D.Double(p.x - 20.0, p.y - 20.0, 40.0, 40.0);
+        rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
         return new Area(rect);
     }
 }
