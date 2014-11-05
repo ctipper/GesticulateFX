@@ -46,9 +46,6 @@ public class SketchHandler implements Handler  {
         item.setColor("lightgray");
         item.setFillColor("white");
         // Initialise sketch
-        item.setStroke(drawarea.getStroke());
-        item.setColor("lightgray");
-        item.setFillColor("white");
         item.setPoints();
         item.addPoint(drawarea.getStartX(), drawarea.getStartY());
     	item.setPath();
