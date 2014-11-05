@@ -28,7 +28,7 @@ public class CanvasView {
     @Inject private DrawingArea drawarea;
     private java.util.List<Figure> list;
     private ObservableList<Figure> drawings;
-    private Figure olditem, newitem;
+    private Figure newitem;
     private int selection;
     private boolean isDrawing;
     private Node anchors;
@@ -40,7 +40,6 @@ public class CanvasView {
      */
     public CanvasView() {
         newitem = null;
-        olditem = null;
         list = new ArrayList<>();
         selection = -1;
         isDrawing = false;
@@ -208,12 +207,5 @@ public class CanvasView {
     public Figure getNewItem() {
         return newitem;
     }
-    
-    public void setPreviousItem(Figure s) {
-        olditem = s;
-    }
 
-    public Figure getPreviousItem() {
-        return olditem;
-    }
 }

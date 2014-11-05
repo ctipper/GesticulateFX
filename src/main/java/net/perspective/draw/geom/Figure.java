@@ -53,39 +53,37 @@ public class Figure implements Serializable {
         this.path = new GeneralPath();
     }
     
-    public CanvasPoint getStart() {
-        return start;
-    }
-
     public void setStart(double x, double y) {
         this.start = new CanvasPoint(x,y);
     }
 
-    public CanvasPoint getEnd() {
-        return end;
+    public CanvasPoint getStart() {
+        return start;
     }
 
     public void setEnd(double x, double y) {
         this.end = new CanvasPoint(x,y);
     }
 
-    public List<CanvasPoint> getPoints() {
-        return this.points;
+    public CanvasPoint getEnd() {
+        return end;
     }
 
     public void setPoints() {
         if (!this.type.equals(FigureType.SKETCH)
             && !this.type.equals(FigureType.POLYGON)) {
             this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
+        } else {
+            this.points = new ArrayList<>();
         }
     }
     
-    public void setPoints(List<CanvasPoint> points) {
-        this.points = points;
+    public List<CanvasPoint> getPoints() {
+        return this.points;
     }
 
-    public void addPoint(CanvasPoint points) {
-        this.points.add(points);
+    public void addPoint(double x, double y) {
+        this.points.add(new CanvasPoint(x, y));
     }
     
     public void setEndPoints() {

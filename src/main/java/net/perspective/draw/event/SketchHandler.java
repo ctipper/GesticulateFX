@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.event;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
@@ -46,10 +46,11 @@ public class SketchHandler implements Handler  {
         item.setColor("lightgray");
         item.setFillColor("white");
         // Initialise sketch
-        point = new CanvasPoint(drawarea.getStartX(), drawarea.getStartY());
-        points = new ArrayList<>();
-        points.add(point);
-	item.setPoints(points);
+        item.setStroke(drawarea.getStroke());
+        item.setColor("lightgray");
+        item.setFillColor("white");
+        item.setPoints();
+        item.addPoint(drawarea.getStartX(), drawarea.getStartY());
     	item.setPath();
         view.setNewItem(item);
         view.setDrawing(true);
@@ -59,17 +60,10 @@ public class SketchHandler implements Handler  {
         List<CanvasPoint> points;
         CanvasPoint point;
 
-        view.setPreviousItem(view.getNewItem());
         // Create Figure
-        Figure item = new Figure(drawarea.getFigureType());
-        item.setStroke(drawarea.getStroke());
-        item.setColor("lightgray");
-        item.setFillColor("white");
+        Figure item = view.getNewItem();
         // continue sketch
-        point = new CanvasPoint(drawarea.getTempX(), drawarea.getTempY());
-        points = view.getPreviousItem().getPoints();
-        points.add(point);
-        item.setPoints(points);
+        item.addPoint(drawarea.getTempX(), drawarea.getTempY());
         item.setPath();
         view.setNewItem(item);
     }
