@@ -268,7 +268,8 @@ public class Figure implements Serializable {
         for (CanvasPoint p : points) {
             p.translate(xinc, yinc);
         }
-        this.setEndPoints();
+        start.translate(xinc, yinc);
+        end.translate(xinc, yinc);
         this.setPath();
     }
 
