@@ -173,72 +173,71 @@ public class Figure implements Serializable {
     }
 
     public CanvasPoint getTop() {
-        double x = Math.min(start.x, end.x);
-        double y = Math.min(start.y, end.y);
-        if (type.equals(FigureType.SKETCH)
-            || type.equals(FigureType.POLYGON)) { 
-            Rectangle2D bound = this.getBounds2D();
-            CanvasPoint s = new CanvasPoint(bound.getX(), bound.getY());
-            return s;
-        } else {
-            CanvasPoint s = new CanvasPoint(x, y);
-            s = this.getTransform(s);
-            return s;
+        CanvasPoint s;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                s = new CanvasPoint(bound.getX(), bound.getY());
+                break;
+            default:
+                s = new CanvasPoint(start.x, start.y);
+                s = this.getTransform(s);
+                break;
         }
+        return s;
     }
 
     public CanvasPoint getUp() {
-        double x = Math.min(start.x, end.x);
-        double y = Math.min(start.y, end.y);
-        double w = Math.max(start.x, end.x);
-        double h = Math.max(start.y, end.y);
-        if (type.equals(FigureType.SKETCH)
-            || type.equals(FigureType.POLYGON)) { 
-            Rectangle2D bound = this.getBounds2D();
-            CanvasPoint up = new CanvasPoint(bound.getX() + bound.getWidth(),
-                    bound.getY());
-            return up;
-        } else {
-            CanvasPoint up = new CanvasPoint(w, y);
-            up = this.getTransform(up);
-            return up;
+        CanvasPoint up;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
+                break;
+            default:
+                up = new CanvasPoint(end.x, start.y);
+                up = this.getTransform(up);
+                break;
         }
+        return up;
     }
 
     public CanvasPoint getDown() {
-        double x = Math.min(start.x, end.x);
-        double y = Math.min(start.y, end.y);
-        double w = Math.max(start.x, end.x);
-        double h = Math.max(start.y, end.y);
-        if (type.equals(FigureType.SKETCH)
-            || type.equals(FigureType.POLYGON)) { 
-            Rectangle2D bound = this.getBounds2D();
-            CanvasPoint down = new CanvasPoint(bound.getX(),
-                    bound.getY() + bound.getHeight());
-            return down;
-        } else {
-            CanvasPoint down = new CanvasPoint(x, h);
-            down = this.getTransform(down);
-            return down;
+        CanvasPoint down;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
+                break;
+            default:
+                down = new CanvasPoint(start.x, end.y);
+                down = this.getTransform(down);
+                break;
         }
+        return down;
     }
 
     public CanvasPoint getBottom() {
-        double x = Math.min(start.x, end.x);
-        double y = Math.min(start.y, end.y);
-        double w = Math.max(start.x, end.x);
-        double h = Math.max(start.y, end.y);
-        if (type.equals(FigureType.SKETCH)
-            || type.equals(FigureType.POLYGON)) { 
-            Rectangle2D bound = this.getBounds2D();
-            CanvasPoint e = new CanvasPoint(bound.getX() + bound.getWidth(),
-                    bound.getY() + bound.getHeight());
-            return e;
-        } else {
-            CanvasPoint e = new CanvasPoint(w, h);
-            e = this.getTransform(e);
-            return e;
+        CanvasPoint bottom;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+                Rectangle2D bound = this.getBounds2D();
+                bottom = new CanvasPoint(bound.getX() + bound.getWidth(),
+                                         bound.getY() + bound.getHeight());
+                break;
+            default:
+                bottom = new CanvasPoint(end.x, end.y);
+                bottom = this.getTransform(bottom);
+                break;
         }
+        return bottom;
     }
 
     private CanvasPoint getTransform(CanvasPoint point) {
