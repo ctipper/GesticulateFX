@@ -78,6 +78,10 @@ public class Figure implements Serializable {
         }
     }
     
+    public List<CanvasPoint> getPoints() {
+        return this.points;
+    }
+
     public void setEndPoints() {
         switch (this.type) {
             case CIRCLE:
@@ -99,10 +103,6 @@ public class Figure implements Serializable {
         }
     }
     
-    public List<CanvasPoint> getPoints() {
-        return this.points;
-    }
-
     public void addPoint(double x, double y) {
         this.points.add(new CanvasPoint(x, y));
     }
@@ -124,12 +124,12 @@ public class Figure implements Serializable {
         return this.path;
     }
 
-    public FigureType getType() {
-        return this.type;
-    }
-
     public void setType(FigureType t) {
         this.type = t;
+    }
+
+    public FigureType getType() {
+        return this.type;
     }
 
     public List<CanvasPoint> getVertices() {
@@ -156,6 +156,7 @@ public class Figure implements Serializable {
 
     private CanvasPoint getTransform(CanvasPoint point) {
         CanvasPoint centre = this.rotationCentre();
+        
         point.translate(-centre.x, -centre.y);
         if (this.getAngle() != 0) {
             // rotate shape about centroid
@@ -167,6 +168,7 @@ public class Figure implements Serializable {
 
     protected AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
+        
         AffineTransform transform = new AffineTransform();
         transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
@@ -175,14 +177,6 @@ public class Figure implements Serializable {
         }
         transform.translate(-centre.x, -centre.y);
         return transform;
-    }
-
-    public void moveFigure(double xinc, double yinc) {
-        for (CanvasPoint p : points) {
-            p.translate(xinc, yinc);
-        }
-        this.setEndPoints();
-        this.setPath();
     }
 
     public CanvasPoint rotationCentre() {
@@ -208,6 +202,14 @@ public class Figure implements Serializable {
 
     public boolean contains(double x, double y) {
         return this.bounds().intersects(x - 5, y - 5, 10, 10);
+    }
+
+    public void moveFigure(double xinc, double yinc) {
+        for (CanvasPoint p : points) {
+            p.translate(xinc, yinc);
+        }
+        this.setEndPoints();
+        this.setPath();
     }
 
     public Node drawAnchors() {
