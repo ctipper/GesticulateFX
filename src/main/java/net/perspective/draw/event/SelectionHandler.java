@@ -63,7 +63,7 @@ public class SelectionHandler implements Handler {
             } else {
                 List<TouchPoint> starters = drawarea.getStartTouches();
                 List<TouchPoint> tempers = drawarea.getTempTouches();
-                for (int i=0; i < starters.size() - 1; i++) {
+                for (int i=0; i < starters.size(); i++) {
                     if (i < tempers.size()) {
                         xinc = tempers.get(i).getX() - starters.get(i).getX();
                         yinc = tempers.get(i).getY() - starters.get(i).getY();
