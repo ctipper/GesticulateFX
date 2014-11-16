@@ -6,6 +6,7 @@
  */
 package net.perspective.draw.event.behaviours;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import javax.inject.Inject;
@@ -117,9 +118,12 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case ISOSCELES:
                 if (!context.getContainment().getFirst().equals(ContainsType.SHAPE)
                     && !context.getContainment().getFirst().equals(ContainsType.NONE)) {
-                    contains = context.getContainment();
-                    for (int i=0; i < contains.size(); i++) {
-                        contains.addLast(R2.permute(contains.pollLast(), st, item.rotationCentre()));
+                    contains = new ArrayDeque<>();
+                    Deque<ContainsType> cxt = context.getContainment();
+                    for (int i = 0; i < cxt.size(); i++) {
+                        ContainsType c = cxt.pollFirst();
+                        contains.addLast(R2.permute(c, st, item.rotationCentre()));
+                        cxt.addLast(c);
                     }
                 } else {
                     contains = context.getContainment();
