@@ -154,6 +154,74 @@ public class Figure implements Serializable {
         return vertices;
     }
 
+    public CanvasPoint getTop() {
+        CanvasPoint s;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                s = new CanvasPoint(bound.getX(), bound.getY());
+                break;
+            default:
+                s = new CanvasPoint(start.x, start.y);
+                s = this.getTransform(s);
+                break;
+        }
+        return s;
+    }
+
+    public CanvasPoint getUp() {
+        CanvasPoint up;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
+                break;
+            default:
+                up = new CanvasPoint(end.x, start.y);
+                up = this.getTransform(up);
+                break;
+        }
+        return up;
+    }
+
+    public CanvasPoint getDown() {
+        CanvasPoint down;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
+                break;
+            default:
+                down = new CanvasPoint(start.x, end.y);
+                down = this.getTransform(down);
+                break;
+        }
+        return down;
+    }
+
+    public CanvasPoint getBottom() {
+        CanvasPoint bottom;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+                Rectangle2D bound = this.getBounds2D();
+                bottom = new CanvasPoint(bound.getX() + bound.getWidth(),
+                                         bound.getY() + bound.getHeight());
+                break;
+            default:
+                bottom = new CanvasPoint(end.x, end.y);
+                bottom = this.getTransform(bottom);
+                break;
+        }
+        return bottom;
+    }
+
     private CanvasPoint getTransform(CanvasPoint point) {
         CanvasPoint centre = this.rotationCentre();
         
@@ -349,75 +417,6 @@ public class Figure implements Serializable {
                 break;
         }
         return jfxcap;
-    }
-
-
-    public CanvasPoint getTop() {
-        CanvasPoint s;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-            case LINE:
-                Rectangle2D bound = this.getBounds2D();
-                s = new CanvasPoint(bound.getX(), bound.getY());
-                break;
-            default:
-                s = new CanvasPoint(start.x, start.y);
-                s = this.getTransform(s);
-                break;
-        }
-        return s;
-    }
-
-    public CanvasPoint getUp() {
-        CanvasPoint up;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-            case LINE:
-                Rectangle2D bound = this.getBounds2D();
-                up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
-                break;
-            default:
-                up = new CanvasPoint(end.x, start.y);
-                up = this.getTransform(up);
-                break;
-        }
-        return up;
-    }
-
-    public CanvasPoint getDown() {
-        CanvasPoint down;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-            case LINE:
-                Rectangle2D bound = this.getBounds2D();
-                down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
-                break;
-            default:
-                down = new CanvasPoint(start.x, end.y);
-                down = this.getTransform(down);
-                break;
-        }
-        return down;
-    }
-
-    public CanvasPoint getBottom() {
-        CanvasPoint bottom;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-                Rectangle2D bound = this.getBounds2D();
-                bottom = new CanvasPoint(bound.getX() + bound.getWidth(),
-                                         bound.getY() + bound.getHeight());
-                break;
-            default:
-                bottom = new CanvasPoint(end.x, end.y);
-                bottom = this.getTransform(bottom);
-                break;
-        }
-        return bottom;
     }
 
     public boolean isClosed() {
