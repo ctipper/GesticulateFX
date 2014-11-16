@@ -11,6 +11,7 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -54,6 +55,7 @@ public class DrawingArea {
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
+    private List<TouchPoint> starters, tempers = null;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
 
@@ -181,9 +183,12 @@ public class DrawingArea {
 
     public void touchEnd(TouchEvent event) {
         handler.upEvent();
+        this.setStartTouches(null);
+        this.setTempTouches(null);
     }
     
     public void touchStart(TouchEvent event) {
+        this.setStartTouches(event.getTouchPoints());
         TouchPoint touch = event.getTouchPoints().get(0);
         startX = touch.getX();
         startY = touch.getY();
@@ -191,6 +196,7 @@ public class DrawingArea {
     }
 
     public void touchMoved(TouchEvent event) {
+        this.setTempTouches(event.getTouchPoints());
         TouchPoint touch = event.getTouchPoints().get(0);
         tempX = touch.getX();
         tempY = touch.getY();
@@ -292,6 +298,22 @@ public class DrawingArea {
 
     public double getTempY() {
         return tempY;
+    }
+    
+    public void setStartTouches(List<TouchPoint> touches) {
+        this.starters = touches;
+    }
+    
+    public List<TouchPoint> getStartTouches() {
+        return starters;
+    }
+
+    public void setTempTouches(List<TouchPoint> touches) {
+        this.tempers = touches;
+    }
+    
+    public List<TouchPoint> getTempTouches() {
+        return tempers;
     }
 
     public Stroke getStroke() {

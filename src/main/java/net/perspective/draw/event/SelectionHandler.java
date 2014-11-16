@@ -8,6 +8,7 @@ package net.perspective.draw.event;
 
 import com.google.inject.Injector;
 import java.util.List;
+import javafx.scene.input.TouchPoint;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
@@ -55,9 +56,22 @@ public class SelectionHandler implements Handler {
         if (view.getSelected() != -1) {
             double xinc = drawarea.getTempX() - drawarea.getStartX();
             double yinc = drawarea.getTempY() - drawarea.getStartY();
-            Figure item = view.getDrawings().get(view.getSelected()); 
-            context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-            context.alter(item, xinc, yinc);
+            Figure item = view.getDrawings().get(view.getSelected());
+            if (drawarea.getStartTouches() == null) {
+                context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                context.alter(item, xinc, yinc);
+            } else {
+                List<TouchPoint> starters = drawarea.getStartTouches();
+                List<TouchPoint> tempers = drawarea.getTempTouches();
+                for (int i=0; i < starters.size() - 1; i++) {
+                    if (i < tempers.size()) {
+                        xinc = tempers.get(i).getX() - starters.get(i).getX();
+                        yinc = tempers.get(i).getY() - starters.get(i).getY();
+                        context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                        context.alter(item, xinc, yinc);
+                    }
+                }
+            }
             view.updateCanvasItem(view.getSelected(), item);
             view.moveSelection(view.getSelected());
             drawarea.setStartX(drawarea.getTempX());
