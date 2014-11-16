@@ -78,14 +78,6 @@ public class Figure implements Serializable {
         }
     }
     
-    public List<CanvasPoint> getPoints() {
-        return this.points;
-    }
-
-    public void addPoint(double x, double y) {
-        this.points.add(new CanvasPoint(x, y));
-    }
-    
     public void setEndPoints() {
         switch (this.type) {
             case CIRCLE:
@@ -107,58 +99,14 @@ public class Figure implements Serializable {
         }
     }
     
-    public FigureType getType() {
-        return this.type;
+    public List<CanvasPoint> getPoints() {
+        return this.points;
     }
 
-    public void setType(FigureType t) {
-        this.type = t;
+    public void addPoint(double x, double y) {
+        this.points.add(new CanvasPoint(x, y));
     }
-
-    public boolean isClosed() {
-        return this.closed;
-    }
-
-    public void setClosed(boolean closed) {
-        this.closed = closed;
-    }
-
-    public String getColor() {
-        return this.color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getFillColor() {
-        return fillcolor;
-    }
-
-    public void setFillColor(String c) {
-        fillcolor = c;
-    }
-
-    public Stroke getStroke() {
-        return stroke;
-    }
-
-    public void setStroke(Stroke s) {
-        stroke = s;
-    }
-
-    public double getAngle() {
-        return this.angle;
-    }
-
-    public void setAngle(double a) {
-        this.angle = a;
-    }
-
-    public GeneralPath getPath() {
-        return this.path;
-    }
-
+    
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
@@ -172,72 +120,38 @@ public class Figure implements Serializable {
         }
     }
 
-    public CanvasPoint getTop() {
-        CanvasPoint s;
+    public GeneralPath getPath() {
+        return this.path;
+    }
+
+    public FigureType getType() {
+        return this.type;
+    }
+
+    public void setType(FigureType t) {
+        this.type = t;
+    }
+
+    public List<CanvasPoint> getVertices() {
+        List<CanvasPoint> vertices = new ArrayList<>();
         switch (this.getType()) {
             case SKETCH:
             case POLYGON:
             case LINE:
-                Rectangle2D bound = this.getBounds2D();
-                s = new CanvasPoint(bound.getX(), bound.getY());
+                vertices.add(new CanvasPoint(start.x, start.y));
+                vertices.add(new CanvasPoint(end.x, end.y));
                 break;
             default:
-                s = new CanvasPoint(start.x, start.y);
-                s = this.getTransform(s);
+                vertices.add(new CanvasPoint(start.x, start.y));
+                vertices.add(new CanvasPoint(start.x, end.y));
+                vertices.add(new CanvasPoint(end.x, end.y));
+                vertices.add(new CanvasPoint(end.x, start.y));
                 break;
         }
-        return s;
-    }
-
-    public CanvasPoint getUp() {
-        CanvasPoint up;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-            case LINE:
-                Rectangle2D bound = this.getBounds2D();
-                up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
-                break;
-            default:
-                up = new CanvasPoint(end.x, start.y);
-                up = this.getTransform(up);
-                break;
+        for (CanvasPoint vertex : vertices) {
+            this.getTransform(vertex);
         }
-        return up;
-    }
-
-    public CanvasPoint getDown() {
-        CanvasPoint down;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-            case LINE:
-                Rectangle2D bound = this.getBounds2D();
-                down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
-                break;
-            default:
-                down = new CanvasPoint(start.x, end.y);
-                down = this.getTransform(down);
-                break;
-        }
-        return down;
-    }
-
-    public CanvasPoint getBottom() {
-        CanvasPoint bottom;
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-                Rectangle2D bound = this.getBounds2D();
-                bottom = new CanvasPoint(bound.getX() + bound.getWidth(),
-                                         bound.getY() + bound.getHeight());
-                break;
-            default:
-                bottom = new CanvasPoint(end.x, end.y);
-                bottom = this.getTransform(bottom);
-                break;
-        }
-        return bottom;
+        return vertices;
     }
 
     private CanvasPoint getTransform(CanvasPoint point) {
@@ -333,20 +247,20 @@ public class Figure implements Serializable {
     public Path draw() {
         AffineTransform at;
         at = this.getTransform();
-        Path path = drawPath(at);
-        path.setStroke(Color.web(this.getColor()));
-        path.setStrokeWidth(getLineWidth());
-        path.setStrokeLineJoin(getLineJoin());
-        path.setStrokeLineCap(getLineCap());
+        Path fxpath = drawPath(at);
+        fxpath.setStroke(Color.web(this.getColor()));
+        fxpath.setStrokeWidth(getLineWidth());
+        fxpath.setStrokeLineJoin(getLineJoin());
+        fxpath.setStrokeLineCap(getLineCap());
         if (this.isClosed() && !"white".equals(this.getFillColor())) {
-            path.setFill(Color.web(this.getFillColor()));
+            fxpath.setFill(Color.web(this.getFillColor()));
         }
-        return path;
+        return fxpath;
     }
     
     private Path drawPath(AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
-        Path path = new Path();
+        Path fxpath = new Path();
 
         PathIterator iterator = this.getPath().getPathIterator(at);
         while (!iterator.isDone()) {
@@ -355,13 +269,13 @@ public class Figure implements Serializable {
                 MoveTo moveTo = new MoveTo();
                 moveTo.setX(coords[0]);
                 moveTo.setY(coords[1]);
-                path.getElements().add(moveTo);
+                fxpath.getElements().add(moveTo);
                 break;
             case PathIterator.SEG_LINETO:
                 LineTo lineTo = new LineTo();
                 lineTo.setX(coords[0]);
                 lineTo.setY(coords[1]);                
-                path.getElements().add(lineTo);
+                fxpath.getElements().add(lineTo);
                 break;
             case PathIterator.SEG_QUADTO:
                 QuadCurveTo quadCurveTo = new QuadCurveTo();
@@ -369,7 +283,7 @@ public class Figure implements Serializable {
                 quadCurveTo.setY(coords[3]);
                 quadCurveTo.setControlX(coords[0]);
                 quadCurveTo.setControlY(coords[1]);                
-                path.getElements().add(quadCurveTo);
+                fxpath.getElements().add(quadCurveTo);
                 break;
             case PathIterator.SEG_CUBICTO:
                 CubicCurveTo cubicTo = new CubicCurveTo();
@@ -379,18 +293,18 @@ public class Figure implements Serializable {
                 cubicTo.setControlY1(coords[1]);
                 cubicTo.setControlX2(coords[2]);
                 cubicTo.setControlY2(coords[3]);
-                path.getElements().add(cubicTo);
+                fxpath.getElements().add(cubicTo);
                 break;
             case PathIterator.SEG_CLOSE:
                 ClosePath closePath = new ClosePath();
-                path.getElements().add(closePath);
+                fxpath.getElements().add(closePath);
                 break;
             default:
                 break;
             }
             iterator.next();
         }
-        return path;
+        return fxpath;
     }
     
     public double getLineWidth() {
@@ -433,6 +347,115 @@ public class Figure implements Serializable {
                 break;
         }
         return jfxcap;
+    }
+
+
+    public CanvasPoint getTop() {
+        CanvasPoint s;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                s = new CanvasPoint(bound.getX(), bound.getY());
+                break;
+            default:
+                s = new CanvasPoint(start.x, start.y);
+                s = this.getTransform(s);
+                break;
+        }
+        return s;
+    }
+
+    public CanvasPoint getUp() {
+        CanvasPoint up;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
+                break;
+            default:
+                up = new CanvasPoint(end.x, start.y);
+                up = this.getTransform(up);
+                break;
+        }
+        return up;
+    }
+
+    public CanvasPoint getDown() {
+        CanvasPoint down;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                Rectangle2D bound = this.getBounds2D();
+                down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
+                break;
+            default:
+                down = new CanvasPoint(start.x, end.y);
+                down = this.getTransform(down);
+                break;
+        }
+        return down;
+    }
+
+    public CanvasPoint getBottom() {
+        CanvasPoint bottom;
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+                Rectangle2D bound = this.getBounds2D();
+                bottom = new CanvasPoint(bound.getX() + bound.getWidth(),
+                                         bound.getY() + bound.getHeight());
+                break;
+            default:
+                bottom = new CanvasPoint(end.x, end.y);
+                bottom = this.getTransform(bottom);
+                break;
+        }
+        return bottom;
+    }
+
+    public boolean isClosed() {
+        return this.closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getFillColor() {
+        return fillcolor;
+    }
+
+    public void setFillColor(String c) {
+        fillcolor = c;
+    }
+
+    public Stroke getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(Stroke s) {
+        stroke = s;
+    }
+
+    public double getAngle() {
+        return this.angle;
+    }
+
+    public void setAngle(double a) {
+        this.angle = a;
     }
 
     private void readObject(ObjectInputStream in)

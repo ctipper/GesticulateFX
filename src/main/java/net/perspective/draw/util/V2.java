@@ -14,12 +14,6 @@ package net.perspective.draw.util;
  */
 public class V2 {
 
-    /**
-     * Prevent instance creation
-     */
-    private V2() {
-    }
-
     public static CanvasPoint rot(double x, double y, double theta) {
         CanvasPoint vec = new CanvasPoint();
         double rx, ry;
@@ -43,5 +37,41 @@ public class V2 {
 
     public static CanvasPoint rot90(CanvasPoint p) {
         return new CanvasPoint(-p.y, p.x);
+    }
+
+    public static double declination(double x, double y) {
+        CanvasPoint B = new CanvasPoint(x, y);
+        double h2 = V2.L2(B);
+        CanvasPoint q1 = new CanvasPoint(B.x / h2, B.y / h2);
+        CanvasPoint q2 = new CanvasPoint(1, 0);
+
+        double cos_t = V2.dot(q1, q2);
+        double sin_t = V2.dot(V2.rot90(q1), q2);
+
+        return Math.atan2(sin_t, cos_t);
+    }
+
+    public static int quadrant(double angle) {
+        int offset = -1;
+        if ((angle >= 0) && (angle < Math.PI / 2)) {
+            offset = 0;
+        }
+        if ((angle >= Math.PI / 2) && (angle < Math.PI)) {
+            offset = 1;
+        }
+        if (((angle >= -Math.PI) && (angle < -Math.PI / 2))
+            || (Math.abs(angle) == Math.PI)) {
+            offset = 2;
+        }
+        if ((angle >= -Math.PI / 2) && (angle < 0)) {
+            offset = 3;
+        }
+        return offset;
+    }
+
+    /**
+     * Prevent instance creation
+     */
+    private V2() {
     }
 }
