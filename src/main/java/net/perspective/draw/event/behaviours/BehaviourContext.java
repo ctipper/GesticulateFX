@@ -27,7 +27,6 @@ public class BehaviourContext {
 
     ItemBehaviours strategy;
     @Inject DrawingArea drawarea;
-    //private ContainsType containment = ContainsType.NONE;
     private Deque<ContainsType> containment;
     
     public BehaviourContext() {

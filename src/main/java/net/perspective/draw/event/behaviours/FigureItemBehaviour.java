@@ -87,14 +87,14 @@ public class FigureItemBehaviour implements ItemBehaviours {
     }
     
     public void alterItem(Figure item, double xinc, double yinc) {
-        Deque<ContainsType> contains;
+        ContainsType contains;
 
         FigureType type = item.getType();
         CanvasPoint st = item.getStart();
         CanvasPoint en = item.getEnd();
         switch (type) {
             case LINE:
-            // item is Line
+                // item is Line
                 // allows alternate drag of end-points
                 if (context.getRegion(st).contains(drawarea.getStartX(), drawarea.getStartY())) {
                     st.translate(xinc, yinc);
@@ -116,64 +116,60 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case RECTANGLE:
             case ELLIPSE:
             case ISOSCELES:
-                if (!context.getContainment().getFirst().equals(ContainsType.SHAPE)
-                    && !context.getContainment().getFirst().equals(ContainsType.NONE)) {
-                    contains = new ArrayDeque<>();
-                    Deque<ContainsType> cxt = context.getContainment();
-                    for (int i = 0; i < cxt.size(); i++) {
-                        ContainsType c = cxt.pollFirst();
-                        contains.addLast(R2.permute(c, st, item.rotationCentre()));
-                        cxt.addLast(c);
-                    }
+                ContainsType c = context.getContainment().pollFirst();
+                if (!c.equals(ContainsType.SHAPE)
+                    && !c.equals(ContainsType.NONE)) {
+                    contains = R2.permute(c, st, item.rotationCentre());
                 } else {
-                    contains = context.getContainment();
+                    contains = c;
                 }
-                for (int i = 0; i < contains.size(); i++) {
-                    switch (contains.getFirst()) {
-                        case TL:
-                            st.translate(xinc, yinc);
-                            item.setStart(st.x, st.y);
-                            item.setEnd(en.x, en.y);
-                            item.setPoints();
-                            item.setPath();
-                            break;
-                        case BL:
-                            st.translate(xinc, 0);
-                            en.translate(0, yinc);
-                            item.setStart(st.x, st.y);
-                            item.setEnd(en.x, en.y);
-                            item.setPoints();
-                            item.setPath();
-                            break;
-                        case BR:
-                            en.translate(xinc, yinc);
-                            item.setStart(st.x, st.y);
-                            item.setEnd(en.x, en.y);
-                            item.setPoints();
-                            item.setPath();
-                            break;
-                        case TR:
-                            st.translate(0, yinc);
-                            en.translate(xinc, 0);
-                            item.setStart(st.x, st.y);
-                            item.setEnd(en.x, en.y);
-                            item.setPoints();
-                            item.setPath();
-                            break;
-                        case SHAPE:
-                            item.moveFigure(xinc, yinc);
-                            break;
-                        case NONE:
-                        default:
-                            break;
-                    }
-                    contains.addLast(contains.pollFirst());
+                switch (contains) {
+                    case TL:
+                        st.translate(xinc, yinc);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        item.setPoints();
+                        item.setPath();
+                        break;
+                    case BL:
+                        st.translate(xinc, 0);
+                        en.translate(0, yinc);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        item.setPoints();
+                        item.setPath();
+                        break;
+                    case BR:
+                        en.translate(xinc, yinc);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        item.setPoints();
+                        item.setPath();
+                        break;
+                    case TR:
+                        st.translate(0, yinc);
+                        en.translate(xinc, 0);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        item.setPoints();
+                        item.setPath();
+                        break;
+                    case SHAPE:
+                        item.moveFigure(xinc, yinc);
+                        break;
+                    case NONE:
+                    default:
+                        break;
                 }
+                context.setContainment(c);
                 break;
             default:
                 // All other Figures
                 item.moveFigure(xinc, yinc);
                 break;
+        }
+        if (context.getContainment().getFirst().equals(ContainsType.NONE)) {
+            context.setContainment(context.getContainment().pollFirst());
         }
     }
 }
