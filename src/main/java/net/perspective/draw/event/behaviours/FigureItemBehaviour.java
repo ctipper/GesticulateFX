@@ -6,6 +6,7 @@
  */
 package net.perspective.draw.event.behaviours;
 
+import java.util.Deque;
 import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
@@ -28,7 +29,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     @Inject private CanvasView view;
     @Inject private BehaviourContext context;
 
-    public boolean selectItem(Figure item, int index) {
+    public boolean selectItem(Figure item, int index, double startx, double starty) {
         boolean found = false;
         int quad = -1;
 
@@ -39,7 +40,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             List<CanvasPoint> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
             for (CanvasPoint vertex : vertices) {
-                if (context.getRegion(vertex).contains(drawarea.getStartX(), drawarea.getStartY())) {
+                if (context.getRegion(vertex).contains(startx, starty)) {
                     quad = R2.quadrant(vertex, centre);
                 }
             }
@@ -68,14 +69,14 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     break;
             }
             
-            if (!found && item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+            if (!found && item.contains(startx, starty)) {
                 view.setSelected(index);
                 context.setContainment(ContainsType.SHAPE);
                 found = true;
             }
             
             Logger.getLogger(FigureItemBehaviour.class.getName()).debug("Containment: " + context.getContainment().toString());
-        } else if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+        } else if (item.contains(startx, starty)) {
             // All other figures
             view.setSelected(index);
             context.setContainment(ContainsType.SHAPE);
@@ -85,7 +86,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     }
     
     public void alterItem(Figure item, double xinc, double yinc) {
-        ContainsType contains;
+        Deque<ContainsType> contains;
 
         FigureType type = item.getType();
         CanvasPoint st = item.getStart();
@@ -114,49 +115,55 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case RECTANGLE:
             case ELLIPSE:
             case ISOSCELES:
-                if (!context.getContainment().equals(ContainsType.SHAPE)
-                    && !context.getContainment().equals(ContainsType.NONE)) {
-                    contains = R2.permute(context.getContainment(), st, item.rotationCentre());
+                if (!context.getContainment().getFirst().equals(ContainsType.SHAPE)
+                    && !context.getContainment().getFirst().equals(ContainsType.NONE)) {
+                    contains = context.getContainment();
+                    for (int i=0; i < contains.size(); i++) {
+                        contains.addLast(R2.permute(contains.pollLast(), st, item.rotationCentre()));
+                    }
                 } else {
                     contains = context.getContainment();
                 }
-                switch (contains) {
-                    case TL:
-                        st.translate(xinc, yinc);
-                        item.setStart(st.x, st.y);
-                        item.setEnd(en.x, en.y);
-                        item.setPoints();
-                        item.setPath();
-                        break;
-                    case BL:
-                        st.translate(xinc, 0);
-                        en.translate(0, yinc);
-                        item.setStart(st.x, st.y);
-                        item.setEnd(en.x, en.y);
-                        item.setPoints();
-                        item.setPath();
-                        break;
-                    case BR:
-                        en.translate(xinc, yinc);
-                        item.setStart(st.x, st.y);
-                        item.setEnd(en.x, en.y);
-                        item.setPoints();
-                        item.setPath();
-                        break;
-                    case TR:
-                        st.translate(0, yinc);
-                        en.translate(xinc, 0);
-                        item.setStart(st.x, st.y);
-                        item.setEnd(en.x, en.y);
-                        item.setPoints();
-                        item.setPath();
-                        break;
-                    case SHAPE:
-                        item.moveFigure(xinc, yinc);
-                        break;
-                    case NONE:
-                    default:
-                        break;
+                for (int i = 0; i < contains.size(); i++) {
+                    switch (contains.getFirst()) {
+                        case TL:
+                            st.translate(xinc, yinc);
+                            item.setStart(st.x, st.y);
+                            item.setEnd(en.x, en.y);
+                            item.setPoints();
+                            item.setPath();
+                            break;
+                        case BL:
+                            st.translate(xinc, 0);
+                            en.translate(0, yinc);
+                            item.setStart(st.x, st.y);
+                            item.setEnd(en.x, en.y);
+                            item.setPoints();
+                            item.setPath();
+                            break;
+                        case BR:
+                            en.translate(xinc, yinc);
+                            item.setStart(st.x, st.y);
+                            item.setEnd(en.x, en.y);
+                            item.setPoints();
+                            item.setPath();
+                            break;
+                        case TR:
+                            st.translate(0, yinc);
+                            en.translate(xinc, 0);
+                            item.setStart(st.x, st.y);
+                            item.setEnd(en.x, en.y);
+                            item.setPoints();
+                            item.setPath();
+                            break;
+                        case SHAPE:
+                            item.moveFigure(xinc, yinc);
+                            break;
+                        case NONE:
+                        default:
+                            break;
+                    }
+                    contains.addLast(contains.pollFirst());
                 }
                 break;
             default:

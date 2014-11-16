@@ -30,9 +30,11 @@ public class SelectionHandler implements Handler {
     @Inject private BehaviourContext context;
     
     public void upEvent() {
+        context.resetContainment();
     }
 
     public void downEvent() {
+        boolean found = false;
         List<Figure> drawings = view.getDrawings();
         context.setContainment(ContainsType.NONE);
         if (!drawings.isEmpty()) {
@@ -40,14 +42,21 @@ public class SelectionHandler implements Handler {
             do {
                 Figure figure = drawings.get(i);
                 context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-                boolean found = context.select(figure, i);
+                if (drawarea.getStartTouches() == null) {
+                    found = context.select(figure, i, drawarea.getStartX(), drawarea.getStartY());
+                } else {
+                    List<TouchPoint> starters = drawarea.getStartTouches();
+                    for (TouchPoint starter : starters) {
+                        found = context.select(figure, i, starter.getX(), starter.getY());
+                    }
+                }
                 if (found) {
                     break;
                 }
                 i--;
             } while (i >= 0);
         }
-        if (context.getContainment().equals(ContainsType.NONE)) {
+        if (context.getContainment().getLast().equals(ContainsType.NONE)) {
             view.setSelected(-1);
         }
     }
@@ -63,11 +72,11 @@ public class SelectionHandler implements Handler {
             } else {
                 List<TouchPoint> starters = drawarea.getStartTouches();
                 List<TouchPoint> tempers = drawarea.getTempTouches();
+                context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                 for (int i=0; i < starters.size(); i++) {
                     if (i < tempers.size()) {
                         xinc = tempers.get(i).getX() - starters.get(i).getX();
                         yinc = tempers.get(i).getY() - starters.get(i).getY();
-                        context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                         context.alter(item, xinc, yinc);
                     }
                 }

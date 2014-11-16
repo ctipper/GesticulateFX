@@ -8,6 +8,8 @@ package net.perspective.draw.event.behaviours;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.DrawingArea;
@@ -25,10 +27,15 @@ public class BehaviourContext {
 
     ItemBehaviours strategy;
     @Inject DrawingArea drawarea;
-    private ContainsType containment = ContainsType.NONE;
+    //private ContainsType containment = ContainsType.NONE;
+    private Deque<ContainsType> containment;
     
-    public boolean select(Figure item, int index) {
-        return strategy.selectItem(item, index);
+    public BehaviourContext() {
+        containment = new ArrayDeque<>();
+    }
+    
+    public boolean select(Figure item, int index, double startx, double starty) {
+        return strategy.selectItem(item, index, startx, starty);
     }
 
     public void alter(Figure item, double xinc, double yinc) {
@@ -39,12 +46,16 @@ public class BehaviourContext {
         this.strategy = s;
     }
 
-    public ContainsType getContainment() {
+    public Deque<ContainsType> getContainment() {
         return containment;
     }
 
     public void setContainment(ContainsType containment) {
-        this.containment = containment;
+        this.containment.addLast(containment);
+    }
+    
+    public void resetContainment() {
+        containment = new ArrayDeque<>();
     }
 
     public Area getRegion(CanvasPoint p) {
