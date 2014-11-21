@@ -6,8 +6,6 @@
  */
 package net.perspective.draw.event.behaviours;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
@@ -32,7 +30,6 @@ public class FigureItemBehaviour implements ItemBehaviours {
 
     public boolean selectItem(Figure item, int index, double startx, double starty) {
         boolean found = false;
-        int quad = -1;
 
         FigureType type = item.getType();
         if (!type.equals(FigureType.SKETCH)
@@ -42,32 +39,32 @@ public class FigureItemBehaviour implements ItemBehaviours {
             CanvasPoint centre = item.rotationCentre();
             for (CanvasPoint vertex : vertices) {
                 if (context.getRegion(vertex).contains(startx, starty)) {
-                    quad = R2.quadrant(vertex, centre);
+                    int quad = R2.quadrant(vertex, centre);
+                    switch (quad) {
+                        case 0:
+                            view.setSelected(index);
+                            context.setContainment(ContainsType.TR);
+                            found = true;
+                            break;
+                        case 1:
+                            view.setSelected(index);
+                            context.setContainment(ContainsType.TL);
+                            found = true;
+                            break;
+                        case 2:
+                            view.setSelected(index);
+                            context.setContainment(ContainsType.BL);
+                            found = true;
+                            break;
+                        case 3:
+                            view.setSelected(index);
+                            context.setContainment(ContainsType.BR);
+                            found = true;
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-            switch (quad) {
-                case 0:
-                    view.setSelected(index);
-                    context.setContainment(ContainsType.TR);
-                    found = true;
-                    break;
-                case 1:
-                    view.setSelected(index);
-                    context.setContainment(ContainsType.TL);
-                    found = true;
-                    break;
-                case 2:
-                    view.setSelected(index);
-                    context.setContainment(ContainsType.BL);
-                    found = true;
-                    break;
-                case 3:
-                    view.setSelected(index);
-                    context.setContainment(ContainsType.BR);
-                    found = true;
-                    break;
-                default:
-                    break;
             }
             
             if (!found && item.contains(startx, starty)) {
