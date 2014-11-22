@@ -12,6 +12,7 @@ package net.perspective.draw.util;
  *
  * @author ctipper
  */
+
 public class V2 {
 
     public static CanvasPoint rot(double x, double y, double theta) {
@@ -35,14 +36,19 @@ public class V2 {
         return Math.hypot(p.x, p.y);
     }
 
+    // Compute the L2, or euclidean, norm of (x, y).
+    public static double L2(double x, double y) {
+        return Math.hypot(x, y);
+    }
+
     public static CanvasPoint rot90(CanvasPoint p) {
         return new CanvasPoint(-p.y, p.x);
     }
 
     public static double declination(double x, double y) {
-        CanvasPoint B = new CanvasPoint(x, y);
-        double h2 = V2.L2(B);
-        CanvasPoint q1 = new CanvasPoint(B.x / h2, B.y / h2);
+        CanvasPoint A = new CanvasPoint(x, y);
+        double h1 = V2.L2(A);
+        CanvasPoint q1 = new CanvasPoint(A.x / h1, A.y / h1);
         CanvasPoint q2 = new CanvasPoint(1, 0);
 
         double cos_t = V2.dot(q1, q2);
@@ -53,6 +59,15 @@ public class V2 {
 
     public static int quadrant(double angle) {
         int offset = -1;
+        
+        // condition angle
+        if (angle > Math.PI) {
+            angle -= 2 * Math.PI;
+        }
+        if (angle < -Math.PI) {
+            angle += 2 * Math.PI;
+        }
+        
         if ((angle >= 0) && (angle < Math.PI / 2)) {
             offset = 0;
         }

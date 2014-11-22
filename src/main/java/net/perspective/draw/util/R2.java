@@ -14,13 +14,13 @@ import net.perspective.draw.enums.ContainsType;
 
 public class R2 {
 
-    static ContainsType[] flip1Array = {ContainsType.TR, ContainsType.BL, ContainsType.BR, ContainsType.TL};
+    static ContainsType[] flip1Array = { ContainsType.TR, ContainsType.BL, ContainsType.BR, ContainsType.TL };
 
-    static ContainsType[] flip2Array = {ContainsType.BR, ContainsType.BL, ContainsType.TR, ContainsType.TL};
+    static ContainsType[] flip2Array = { ContainsType.BR, ContainsType.BL, ContainsType.TR, ContainsType.TL };
 
-    static ContainsType[] flip3Array = {ContainsType.TL, ContainsType.BR, ContainsType.BL, ContainsType.TR};
+    static ContainsType[] flip3Array = { ContainsType.TL, ContainsType.BR, ContainsType.BL, ContainsType.TR };
 
-    static ContainsType[] flip4Array = {ContainsType.BL, ContainsType.BR, ContainsType.TL, ContainsType.TR};
+    static ContainsType[] flip4Array = { ContainsType.BL, ContainsType.BR, ContainsType.TL, ContainsType.TR };
 
     public static int quadrant(CanvasPoint vertex, CanvasPoint centre) {
         double theta = V2.declination(vertex.x - centre.x, vertex.y - centre.y);
@@ -96,7 +96,7 @@ public class R2 {
 
         return flip4Array[((index - quad) + 4) % 4];
     }
-    
+
     /**
      * Prevent instance creation
      */
