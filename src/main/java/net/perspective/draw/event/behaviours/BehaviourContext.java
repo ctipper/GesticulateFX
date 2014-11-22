@@ -8,8 +8,6 @@ package net.perspective.draw.event.behaviours;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.DrawingArea;

@@ -8,7 +8,6 @@ package net.perspective.draw.event;
 
 import com.google.inject.Injector;
 import java.util.List;
-import javafx.scene.input.TouchPoint;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
