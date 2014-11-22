@@ -27,12 +27,7 @@ public class BehaviourContext {
 
     ItemBehaviours strategy;
     @Inject DrawingArea drawarea;
-    private Deque<ContainsType> containment, contains;
-    
-    public BehaviourContext() {
-        containment = new ArrayDeque<>();
-        contains = new ArrayDeque<>();
-    }
+    private ContainsType containment = ContainsType.NONE, contains = ContainsType.NONE;
     
     public boolean select(Figure item, int index, double startx, double starty) {
         return strategy.selectItem(item, index, startx, starty);
@@ -47,24 +42,24 @@ public class BehaviourContext {
     }
 
     public void setContainment(ContainsType containment) {
-        this.containment.addLast(containment);
+        this.containment = containment;
     }
-    
-    public Deque<ContainsType> getContainment() {
+
+    public ContainsType getContainment() {
         return containment;
     }
 
     public void setContains(ContainsType containment) {
-        this.contains.addLast(containment);
-    }
-    
-    public Deque<ContainsType> getContains() {
-        return contains;
+        this.contains = containment;
     }
 
+    public ContainsType getContains() {
+        return contains;
+    }
+    
     public void resetContainment() {
-        containment = new ArrayDeque<>();
-        contains = new ArrayDeque<>();
+        containment = ContainsType.NONE;
+        contains = ContainsType.NONE;
     }
 
     public Area getRegion(CanvasPoint p) {

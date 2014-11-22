@@ -113,24 +113,14 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case RECTANGLE:
             case ELLIPSE:
             case ISOSCELES:
-                if (context.getContains().isEmpty()) {
-                    // copy and permute to contains
-                    for (ContainsType cont : context.getContainment()) {
-                        context.setContains(R2.permute(cont, st, item.rotationCentre()));
+                if (!context.getContainment().equals(ContainsType.SHAPE)
+                    && !context.getContainment().equals(ContainsType.NONE)) {
+                    if (context.getContains().equals(ContainsType.NONE)) {
+                        context.setContains(R2.permute(context.getContainment(), st, item.rotationCentre()));
                     }
-                }
-                ContainsType c = context.getContainment().pollFirst();
-                //Logger.getLogger(FigureItemBehaviour.class.getName()).debug("Contains: " + context.getContains().toString());
-                if (!c.equals(ContainsType.SHAPE)
-                    && !c.equals(ContainsType.NONE)) {
-                    contains = context.getContains().pollFirst();
-                    if (contains.equals(ContainsType.NONE)) {
-                        context.setContains(contains);
-                        contains = context.getContains().pollFirst();
-                    }
-                    context.setContains(contains);
+                    contains = context.getContains();
                 } else {
-                    contains = c;
+                    contains = context.getContainment();
                 }
                 switch (contains) {
                     case TL:
@@ -170,7 +160,6 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     default:
                         break;
                 }
-                context.setContainment(c);
                 break;
             default:
                 // All other Figures
