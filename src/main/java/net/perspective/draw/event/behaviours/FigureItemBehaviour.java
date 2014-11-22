@@ -113,10 +113,22 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case RECTANGLE:
             case ELLIPSE:
             case ISOSCELES:
+                if (context.getContains().isEmpty()) {
+                    // copy and permute to contains
+                    for (ContainsType cont : context.getContainment()) {
+                        context.setContains(R2.permute(cont, st, item.rotationCentre()));
+                    }
+                }
                 ContainsType c = context.getContainment().pollFirst();
+                //Logger.getLogger(FigureItemBehaviour.class.getName()).debug("Contains: " + context.getContains().toString());
                 if (!c.equals(ContainsType.SHAPE)
                     && !c.equals(ContainsType.NONE)) {
-                    contains = R2.permute(c, st, item.rotationCentre());
+                    contains = context.getContains().pollFirst();
+                    if (contains.equals(ContainsType.NONE)) {
+                        context.setContains(contains);
+                        contains = context.getContains().pollFirst();
+                    }
+                    context.setContains(contains);
                 } else {
                     contains = c;
                 }
@@ -164,9 +176,6 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 // All other Figures
                 item.moveFigure(xinc, yinc);
                 break;
-        }
-        if (context.getContainment().getFirst().equals(ContainsType.NONE)) {
-            context.setContainment(context.getContainment().pollFirst());
         }
     }
 }

@@ -28,6 +28,7 @@ public class R2 {
     }
 
     public static ContainsType permute(ContainsType contains, CanvasPoint vertex, CanvasPoint centre) {
+        if (contains.equals(ContainsType.NONE)) return contains;
         int quad = R2.quadrant(vertex, centre);
         switch (quad) {
             case 0:
@@ -43,7 +44,7 @@ public class R2 {
                 contains = R2.flip4(contains, quad);
                 break;
             default:
-                contains = R2.flip2(contains, quad);
+                contains = ContainsType.NONE;
                 break;
         }
         return contains;
