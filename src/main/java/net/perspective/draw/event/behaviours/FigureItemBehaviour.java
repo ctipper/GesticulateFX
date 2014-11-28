@@ -15,6 +15,7 @@ import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.R2;
+import net.perspective.draw.util.V2;
 import org.apache.log4j.Logger;
 
 /**
@@ -122,32 +123,38 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else {
                     contains = context.getContainment();
                 }
+                double t = item.getAngle();
+                double cos_t = Math.cos(t);
+                double sin_t = Math.sin(t);
+                CanvasPoint inc = V2.rot(xinc, yinc, t);
                 switch (contains) {
                     case TL:
-                        st.translate(xinc, yinc);
+                        st.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
+                        en.translate(sin_t * inc.x, -sin_t * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
                         item.setPath();
                         break;
                     case BL:
-                        st.translate(xinc, 0);
-                        en.translate(0, yinc);
+                        st.translate((cos_t + sin_t) * inc.x, sin_t * inc.y);
+                        en.translate(-sin_t * inc.x, (cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
                         item.setPath();
                         break;
                     case BR:
-                        en.translate(xinc, yinc);
+                        st.translate(sin_t * inc.x, -sin_t * inc.y);
+                        en.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
                         item.setPath();
                         break;
                     case TR:
-                        st.translate(0, yinc);
-                        en.translate(xinc, 0);
+                        st.translate(-sin_t * inc.x, (cos_t - sin_t) * inc.y);
+                        en.translate((cos_t + sin_t) * inc.x, sin_t * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
