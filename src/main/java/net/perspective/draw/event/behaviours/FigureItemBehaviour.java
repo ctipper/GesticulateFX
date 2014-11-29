@@ -130,22 +130,22 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 switch (contains) {
                     case TL:
                         st.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
-                        en.translate(sin_t * inc.x, -sin_t * inc.y);
+                        en.translate((-cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
                         item.setPath();
                         break;
                     case BL:
-                        st.translate((cos_t + sin_t) * inc.x, sin_t * inc.y);
-                        en.translate(-sin_t * inc.x, (cos_t - sin_t) * inc.y);
+                        st.translate((cos_t + sin_t) * inc.x, (-cos_t + sin_t) * inc.y);
+                        en.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
                         item.setPath();
                         break;
                     case BR:
-                        st.translate(sin_t * inc.x, -sin_t * inc.y);
+                        st.translate((-cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
                         en.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
@@ -153,8 +153,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         item.setPath();
                         break;
                     case TR:
-                        st.translate(-sin_t * inc.x, (cos_t - sin_t) * inc.y);
-                        en.translate((cos_t + sin_t) * inc.x, sin_t * inc.y);
+                        st.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
+                        en.translate((cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
