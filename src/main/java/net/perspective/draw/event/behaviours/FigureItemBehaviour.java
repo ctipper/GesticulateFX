@@ -117,15 +117,19 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 if (!context.getContainment().equals(ContainsType.SHAPE)
                     && !context.getContainment().equals(ContainsType.NONE)) {
                     if (context.getContains().equals(ContainsType.NONE)) {
-                        context.setContains(R2.permute(context.getContainment(), st, item.rotationCentre()));
+                        context.setContains(R2.permute(context.getContainment(), R2.quadrant(st, item.rotationCentre())));
                     }
                     contains = context.getContains();
                 } else {
                     contains = context.getContainment();
                 }
+                if (context.getQuad() == -1) {
+                    context.setQuad(R2.quadrant(item.getTop(), item.rotationCentre()));
+                }
+                double[] flip = R2.flip(context.getQuad());
+                double cos_t = flip[0];
+                double sin_t = flip[1];
                 double t = item.getAngle();
-                double cos_t = Math.cos(t);
-                double sin_t = Math.sin(t);
                 CanvasPoint inc = V2.rot(xinc, yinc, t);
                 switch (contains) {
                     case TL:

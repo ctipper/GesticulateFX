@@ -26,6 +26,7 @@ public class BehaviourContext {
     ItemBehaviours strategy;
     @Inject DrawingArea drawarea;
     private ContainsType containment = ContainsType.NONE, contains = ContainsType.NONE;
+    private int quad = -1;
     
     public boolean select(Figure item, int index, double startx, double starty) {
         return strategy.selectItem(item, index, startx, starty);
@@ -58,6 +59,15 @@ public class BehaviourContext {
     public void resetContainment() {
         containment = ContainsType.NONE;
         contains = ContainsType.NONE;
+        quad = -1;
+    }
+
+    public void setQuad(int quad) {
+        this.quad = quad;
+    }
+
+    public int getQuad() {
+        return quad;
     }
 
     public Area getRegion(CanvasPoint p) {
