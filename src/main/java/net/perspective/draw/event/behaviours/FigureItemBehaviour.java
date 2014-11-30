@@ -158,7 +158,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         break;
                     case TR:
                         st.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
-                        en.translate((cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
+                        en.translate((cos_t + sin_t) * inc.x, (-cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         item.setPoints();
