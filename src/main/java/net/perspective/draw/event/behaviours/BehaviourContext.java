@@ -25,8 +25,13 @@ public class BehaviourContext {
 
     ItemBehaviours strategy;
     @Inject DrawingArea drawarea;
-    private ContainsType containment = ContainsType.NONE, contains = ContainsType.NONE;
+    private ContainsType containment, contains;
     private int quad = -1;
+
+    public BehaviourContext() {
+        this.containment = ContainsType.NONE;
+        this.contains = ContainsType.NONE;
+    }
     
     public boolean select(Figure item, int index, double startx, double starty) {
         return strategy.selectItem(item, index, startx, starty);
