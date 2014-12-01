@@ -16,6 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -164,7 +165,7 @@ public class Figure implements Serializable {
                 s = new CanvasPoint(bound.getX(), bound.getY());
                 break;
             default:
-                s = new CanvasPoint(start.x, start.y);
+                s = getVertex(ContainsType.TL);
                 s = this.getTransform(s);
                 break;
         }
@@ -181,7 +182,7 @@ public class Figure implements Serializable {
                 up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
                 break;
             default:
-                up = new CanvasPoint(end.x, start.y);
+                up = getVertex(ContainsType.TR);
                 up = this.getTransform(up);
                 break;
         }
@@ -198,7 +199,7 @@ public class Figure implements Serializable {
                 down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
                 break;
             default:
-                down = new CanvasPoint(start.x, end.y);
+                down = getVertex(ContainsType.BL);
                 down = this.getTransform(down);
                 break;
         }
@@ -215,7 +216,7 @@ public class Figure implements Serializable {
                                          bound.getY() + bound.getHeight());
                 break;
             default:
-                bottom = new CanvasPoint(end.x, end.y);
+                bottom = getVertex(ContainsType.BR);
                 bottom = this.getTransform(bottom);
                 break;
         }
@@ -419,44 +420,79 @@ public class Figure implements Serializable {
         return jfxcap;
     }
 
-    public boolean isClosed() {
-        return this.closed;
-    }
-
     public void setClosed(boolean closed) {
         this.closed = closed;
     }
 
-    public String getColor() {
-        return this.color;
+    public boolean isClosed() {
+        return this.closed;
     }
 
     public void setColor(String color) {
         this.color = color;
     }
 
-    public String getFillColor() {
-        return fillcolor;
+    public String getColor() {
+        return this.color;
     }
 
     public void setFillColor(String c) {
         fillcolor = c;
     }
 
-    public Stroke getStroke() {
-        return stroke;
+    public String getFillColor() {
+        return fillcolor;
     }
 
     public void setStroke(Stroke s) {
         stroke = s;
     }
 
-    public double getAngle() {
-        return this.angle;
+    public Stroke getStroke() {
+        return stroke;
     }
 
     public void setAngle(double a) {
         this.angle = a;
+    }
+
+    public double getAngle() {
+        return this.angle;
+    }
+
+    private CanvasPoint getVertex(ContainsType contains) {
+        CanvasPoint p;
+        double x = Math.min(start.x, end.x);
+        double y = Math.min(start.y, end.y);
+        double width = Math.abs(start.x - end.x);
+        double height = Math.abs(start.y - end.y);
+        switch (type) {
+            case CIRCLE:
+            case SQUARE:
+            case TRIANGLE:
+                switch (contains) {
+                    case TL:
+                        p = new CanvasPoint(x, y);
+                        break;
+                    case BL:
+                        p = new CanvasPoint(x, y + height);
+                        break;
+                    case BR:
+                        p = new CanvasPoint(x + width, y + height);
+                        break;
+                    case TR:
+                        p = new CanvasPoint(x + width, y);
+                        break;
+                    default:
+                        p = new CanvasPoint(x, y);
+                        break;
+                }
+                break;
+            default:
+                p = new CanvasPoint(x, y);
+                break;
+        }
+        return p;
     }
 
     private void readObject(ObjectInputStream in)
