@@ -26,9 +26,12 @@ public class BehaviourContext {
     ItemBehaviours strategy;
     @Inject DrawingArea drawarea;
     private ContainsType containment, contains;
-    private int quad = -1;
+    private int quad;
+    private double sgnd_area;
 
     public BehaviourContext() {
+        this.quad = -1;
+        this.sgnd_area = -1.0;
         this.containment = ContainsType.NONE;
         this.contains = ContainsType.NONE;
     }
@@ -65,6 +68,7 @@ public class BehaviourContext {
         containment = ContainsType.NONE;
         contains = ContainsType.NONE;
         quad = -1;
+        sgnd_area = -1.0;
     }
 
     public void setQuad(int quad) {
@@ -73,6 +77,14 @@ public class BehaviourContext {
 
     public int getQuad() {
         return quad;
+    }
+
+    public void setSgndArea(double sgndarea) {
+        this.sgnd_area = sgndarea;
+    }
+
+    public double getSgndArea() {
+        return sgnd_area;
     }
 
     public Area getRegion(CanvasPoint p) {

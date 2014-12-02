@@ -123,8 +123,16 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else {
                     contains = context.getContainment();
                 }
+                if (context.getSgndArea() < 0) {
+                    context.setSgndArea(((Figure) item).sgnd_area());
+                }
                 if (context.getQuad() == -1) {
-                    context.setQuad(R2.quadrant(item.getTop(), item.rotationCentre()));
+                    int quad = R2.quadrant(item.getTop(), item.rotationCentre());
+                    if (context.getSgndArea() >= 0 && (quad == 0 || quad == 2)) {
+                        context.setQuad(R2.quadrant(item.getBottom(), item.rotationCentre()));
+                    } else {
+                        context.setQuad(quad);
+                    }
                 }
                 double[] flip = R2.flip(context.getQuad());
                 double cos_t = flip[0];

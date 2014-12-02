@@ -460,6 +460,14 @@ public class Figure implements Serializable {
         return this.angle;
     }
 
+    public double sgnd_area() {
+        CanvasPoint p1 = points.get(0);
+        CanvasPoint p2 = points.get(1);
+        CanvasPoint p3 = points.get(2);
+        double _area = (p1.x * p2.y - p2.x * p1.y) + (p2.x * p3.y - p3.x * p2.y) + (p3.x * p1.y - p1.x * p3.y);
+        return Math.signum(_area);
+    }
+    
     private CanvasPoint getVertex(ContainsType contains) {
         CanvasPoint p;
         double x = Math.min(start.x, end.x);
