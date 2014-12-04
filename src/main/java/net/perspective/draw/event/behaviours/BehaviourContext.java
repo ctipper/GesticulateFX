@@ -31,7 +31,7 @@ public class BehaviourContext {
 
     public BehaviourContext() {
         this.quad = -1;
-        this.sgnd_area = -1.0;
+        this.sgnd_area = -1d;
         this.containment = ContainsType.NONE;
         this.contains = ContainsType.NONE;
     }
@@ -68,7 +68,7 @@ public class BehaviourContext {
         containment = ContainsType.NONE;
         contains = ContainsType.NONE;
         quad = -1;
-        sgnd_area = -1.0;
+        sgnd_area = -1d;
     }
 
     public void setQuad(int quad) {

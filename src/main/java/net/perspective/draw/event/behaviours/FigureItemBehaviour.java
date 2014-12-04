@@ -138,7 +138,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 double cos_t = flip[0];
                 double sin_t = flip[1];
                 double t = item.getAngle();
-                CanvasPoint inc = V2.rot(xinc, yinc, t);
+                double delta = V2.norm_angle(4 * t + 2 * Math.PI) / 2;
+                CanvasPoint inc = V2.rot(xinc, yinc, t - delta);
                 switch (contains) {
                     case TL:
                         st.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);

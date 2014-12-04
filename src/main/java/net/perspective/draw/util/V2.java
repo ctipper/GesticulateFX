@@ -57,16 +57,22 @@ public class V2 {
         return Math.atan2(sin_t, cos_t);
     }
 
+    public static double norm_angle(double angle) {
+        // condition angle
+        while (angle > Math.PI || angle < -Math.PI) {
+            if (angle > Math.PI) {
+                angle -= 2 * Math.PI;
+            }
+            if (angle < -Math.PI) {
+                angle += 2 * Math.PI;
+            }
+        }
+        return angle;
+    }
+    
     public static int quadrant(double angle) {
         int offset = -1;
-        
-        // condition angle
-        if (angle > Math.PI) {
-            angle -= 2 * Math.PI;
-        }
-        if (angle < -Math.PI) {
-            angle += 2 * Math.PI;
-        }
+        angle = V2.norm_angle(angle);
         
         if ((angle >= 0) && (angle < Math.PI / 2)) {
             offset = 0;
