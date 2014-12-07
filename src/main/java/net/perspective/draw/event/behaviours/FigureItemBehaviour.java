@@ -36,11 +36,11 @@ public class FigureItemBehaviour implements ItemBehaviours {
         if (!type.equals(FigureType.SKETCH)
             && !type.equals(FigureType.POLYGON)
             && !type.equals(FigureType.LINE)) {
-            List<CanvasPoint> vertices = ((Figure) item).getVertices();
+            List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
-            for (CanvasPoint vertex : vertices) {
-                if (context.getRegion(vertex).contains(startx, starty)) {
-                    int quad = R2.quadrant(vertex, centre);
+            for (CanvasPoint vertex[] : vertices) {
+                if (context.getRegion(vertex[0]).contains(startx, starty)) {
+                    int quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
                         case 0:
                             view.setSelected(index);
@@ -127,9 +127,9 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     context.setSgndArea(((Figure) item).sgnd_area());
                 }
                 if (context.getQuad() == -1) {
-                    int quad = R2.quadrant(item.getTop(), item.rotationCentre());
+                    int quad = R2.quadrant(item.getTop()[1], item.rotationCentre());
                     if (context.getSgndArea() >= 0 && (quad == 0 || quad == 2)) {
-                        context.setQuad(R2.quadrant(item.getBottom(), item.rotationCentre()));
+                        context.setQuad(R2.quadrant(item.getBottom()[1], item.rotationCentre()));
                     } else {
                         context.setQuad(quad);
                     }

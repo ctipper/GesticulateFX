@@ -133,94 +133,77 @@ public class Figure implements Serializable {
         return this.type;
     }
 
-    public List<CanvasPoint> getVertices() {
-        List<CanvasPoint> vertices = new ArrayList<>();
-        switch (this.getType()) {
-            case SKETCH:
-            case POLYGON:
-            case LINE:
-                vertices.add(new CanvasPoint(start.x, start.y));
-                vertices.add(new CanvasPoint(end.x, end.y));
-                break;
-            default:
-                vertices.add(new CanvasPoint(start.x, start.y));
-                vertices.add(new CanvasPoint(start.x, end.y));
-                vertices.add(new CanvasPoint(end.x, end.y));
-                vertices.add(new CanvasPoint(end.x, start.y));
-                break;
-        }
-        for (CanvasPoint vertex : vertices) {
-            this.getTransform(vertex);
-        }
-        return vertices;
-    }
-
-    public CanvasPoint getTop() {
-        CanvasPoint s;
+    public CanvasPoint[] getTop() {
+        CanvasPoint s[];
         switch (this.getType()) {
             case SKETCH:
             case POLYGON:
             case LINE:
                 Rectangle2D bound = this.getBounds2D();
-                s = new CanvasPoint(bound.getX(), bound.getY());
+                CanvasPoint b = new CanvasPoint(bound.getX(), bound.getY());
+                s = new CanvasPoint[] { b, b };
                 break;
             default:
-                s = getVertex(ContainsType.TL);
-                s = this.getTransform(s);
+                CanvasPoint[] p = getVertex(ContainsType.TL);
+                s = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
                 break;
         }
         return s;
     }
 
-    public CanvasPoint getUp() {
-        CanvasPoint up;
+    public CanvasPoint[] getUp() {
+        CanvasPoint up[];
         switch (this.getType()) {
             case SKETCH:
             case POLYGON:
             case LINE:
                 Rectangle2D bound = this.getBounds2D();
-                up = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
+                CanvasPoint b = new CanvasPoint(bound.getX() + bound.getWidth(), bound.getY());
+                up = new CanvasPoint[] { b, b };
                 break;
             default:
-                up = getVertex(ContainsType.TR);
-                up = this.getTransform(up);
+                CanvasPoint[] p = getVertex(ContainsType.TR);
+                up = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
                 break;
         }
         return up;
     }
 
-    public CanvasPoint getDown() {
-        CanvasPoint down;
+    public CanvasPoint[] getDown() {
+        CanvasPoint down[];
         switch (this.getType()) {
             case SKETCH:
             case POLYGON:
             case LINE:
                 Rectangle2D bound = this.getBounds2D();
-                down = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
+                CanvasPoint b = new CanvasPoint(bound.getX(), bound.getY() + bound.getHeight());
+                down = new CanvasPoint[] { b, b };
                 break;
             default:
-                down = getVertex(ContainsType.BL);
-                down = this.getTransform(down);
+                CanvasPoint[] p = getVertex(ContainsType.BL);
+                down = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
                 break;
         }
         return down;
     }
 
-    public CanvasPoint getBottom() {
-        CanvasPoint bottom;
+    public CanvasPoint[] getBottom() {
+        CanvasPoint e[];
         switch (this.getType()) {
             case SKETCH:
             case POLYGON:
+            case LINE:
                 Rectangle2D bound = this.getBounds2D();
-                bottom = new CanvasPoint(bound.getX() + bound.getWidth(),
-                                         bound.getY() + bound.getHeight());
+                CanvasPoint b = new CanvasPoint(bound.getX() + bound.getWidth(),
+                                                bound.getY() + bound.getHeight());
+                e = new CanvasPoint[] { b, b };
                 break;
             default:
-                bottom = getVertex(ContainsType.BR);
-                bottom = this.getTransform(bottom);
+                CanvasPoint[] p = getVertex(ContainsType.BR);
+                e = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
                 break;
         }
-        return bottom;
+        return e;
     }
 
     private CanvasPoint getTransform(CanvasPoint point) {
@@ -468,39 +451,91 @@ public class Figure implements Serializable {
         return Math.signum(_area);
     }
     
-    private CanvasPoint getVertex(ContainsType contains) {
-        CanvasPoint p;
+    /* 
+     * return 2-point array of vert, second point normalized
+     */
+    private CanvasPoint[] getVertex(ContainsType contains) {
+        CanvasPoint p[];
         double x = Math.min(start.x, end.x);
         double y = Math.min(start.y, end.y);
         double width = Math.abs(start.x - end.x);
         double height = Math.abs(start.y - end.y);
+        double side = 0.25 * (width + height); // half average side
+        CanvasPoint cxy = this.rotationCentre();
         switch (type) {
             case CIRCLE:
             case SQUARE:
             case TRIANGLE:
                 switch (contains) {
                     case TL:
-                        p = new CanvasPoint(x, y);
+                        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
                         break;
                     case BL:
-                        p = new CanvasPoint(x, y + height);
+                        p = new CanvasPoint[] { new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side) };
                         break;
                     case BR:
-                        p = new CanvasPoint(x + width, y + height);
+                        p = new CanvasPoint[] { new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side) };
                         break;
                     case TR:
-                        p = new CanvasPoint(x + width, y);
+                        p = new CanvasPoint[] { new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side) };
                         break;
                     default:
-                        p = new CanvasPoint(x, y);
+                        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
                         break;
                 }
                 break;
             default:
-                p = new CanvasPoint(x, y);
+                p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
                 break;
         }
         return p;
+    }
+
+    /*
+     * return 2-point array of vert, second point normalized
+     * note that the points may not be cyclical
+     */
+    public List<CanvasPoint[]> getVertices() {
+        double sx, sy, ex, ey;
+        List<CanvasPoint[]> vert = new ArrayList<>();
+        List<CanvasPoint[]> vertices = new ArrayList<>();
+        switch (this.getType()) {
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
+                break;
+            default:
+                double width = Math.abs(start.x - end.x);
+                double height = Math.abs(start.y - end.y);
+                double side = 0.25 * (width + height); // half average side
+                CanvasPoint cxy = this.rotationCentre();
+                if (start.x < end.x) {
+                    sx = cxy.x - side;
+                    ex = cxy.x + side;
+                } else {
+                    sx = cxy.x + side;
+                    ex = cxy.x - side;
+                }
+                if (start.y < end.y) {
+                    sy = cxy.y - side;
+                    ey = cxy.y + side;
+                } else {
+                    sy = cxy.y + side;
+                    ey = cxy.y - side;
+                }
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(sx, sy) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });
+                break;
+        }
+        for (CanvasPoint[] p : vert) {
+            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
+            vertices.add(point);
+        }
+        return vertices;
     }
 
     private void readObject(ObjectInputStream in)
