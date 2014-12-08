@@ -452,7 +452,7 @@ public class Figure implements Serializable {
     }
     
     /* 
-     * return 2-point array of vert, second point normalized
+     * Return 2-point array of vertex, second point normalized.
      */
     private CanvasPoint[] getVertex(ContainsType contains) {
         CanvasPoint p[];
@@ -492,8 +492,8 @@ public class Figure implements Serializable {
     }
 
     /*
-     * return 2-point array of vert, second point normalized
-     * note that the points may not be cyclical
+     * Return 2-point array of vertices, second point normalized.
+     * Note that the points may not be cyclical.
      */
     public List<CanvasPoint[]> getVertices() {
         double sx, sy, ex, ey;
