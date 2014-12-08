@@ -38,7 +38,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             && !type.equals(FigureType.LINE)) {
             List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
-            for (CanvasPoint vertex[] : vertices) {
+            for (CanvasPoint[] vertex : vertices) {
                 if (context.getRegion(vertex[0]).contains(startx, starty)) {
                     int quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
