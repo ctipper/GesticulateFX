@@ -403,44 +403,44 @@ public class Figure implements Serializable {
         return jfxcap;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
-    }
-
     public boolean isClosed() {
         return this.closed;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
     public String getColor() {
         return this.color;
     }
 
-    public void setFillColor(String c) {
-        fillcolor = c;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getFillColor() {
         return fillcolor;
     }
 
-    public void setStroke(Stroke s) {
-        stroke = s;
+    public void setFillColor(String c) {
+        fillcolor = c;
     }
 
     public Stroke getStroke() {
         return stroke;
     }
 
-    public void setAngle(double a) {
-        this.angle = a;
+    public void setStroke(Stroke s) {
+        stroke = s;
     }
 
     public double getAngle() {
         return this.angle;
+    }
+
+    public void setAngle(double a) {
+        this.angle = a;
     }
 
     public double sgnd_area() {
