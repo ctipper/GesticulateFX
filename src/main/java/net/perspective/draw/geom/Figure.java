@@ -463,9 +463,12 @@ public class Figure implements Serializable {
         double side = 0.25 * (width + height); // half average side
         CanvasPoint cxy = this.rotationCentre();
         switch (type) {
-            case CIRCLE:
-            case SQUARE:
-            case TRIANGLE:
+            case SKETCH:
+            case POLYGON:
+            case LINE:
+                p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
+                break;
+            default:
                 switch (contains) {
                     case TL:
                         p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
@@ -483,9 +486,6 @@ public class Figure implements Serializable {
                         p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
                         break;
                 }
-                break;
-            default:
-                p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
                 break;
         }
         return p;

@@ -124,12 +124,15 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     contains = context.getContainment();
                 }
                 if (context.getSgndArea() < 0) {
-                    context.setSgndArea(((Figure) item).sgnd_area());
+                    context.setSgndArea(item.sgnd_area());
                 }
                 if (context.getQuad() == -1) {
                     int quad = R2.quadrant(item.getTop()[1], item.rotationCentre());
+                    Logger.getLogger(FigureItemBehaviour.class.getName()).debug("sgnd_area: " + context.getSgndArea());
                     if (context.getSgndArea() >= 0 && (quad == 0 || quad == 2)) {
                         context.setQuad(R2.quadrant(item.getBottom()[1], item.rotationCentre()));
+                        Logger.getLogger(FigureItemBehaviour.class.getName()).debug("quad: " + R2.quadrant(item.getTop()[1], item.rotationCentre()));
+                        Logger.getLogger(FigureItemBehaviour.class.getName()).debug("quad_bot: " + R2.quadrant(item.getBottom()[1], item.rotationCentre()));
                     } else {
                         context.setQuad(quad);
                     }
