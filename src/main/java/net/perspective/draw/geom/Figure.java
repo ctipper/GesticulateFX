@@ -54,20 +54,20 @@ public class Figure implements Serializable {
         this.path = new GeneralPath();
     }
     
-    public void setStart(double x, double y) {
-        this.start = new CanvasPoint(x,y);
-    }
-
     public CanvasPoint getStart() {
         return start;
     }
 
-    public void setEnd(double x, double y) {
-        this.end = new CanvasPoint(x,y);
+    public void setStart(double x, double y) {
+        this.start = new CanvasPoint(x,y);
     }
 
     public CanvasPoint getEnd() {
         return end;
+    }
+
+    public void setEnd(double x, double y) {
+        this.end = new CanvasPoint(x,y);
     }
 
     public void setPoints() {
@@ -108,6 +108,18 @@ public class Figure implements Serializable {
         this.points.add(new CanvasPoint(x, y));
     }
     
+    public void setType(FigureType t) {
+        this.type = t;
+    }
+
+    public FigureType getType() {
+        return this.type;
+    }
+
+    private GeneralPath getPath() {
+        return this.path;
+    }
+
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
@@ -119,18 +131,6 @@ public class Figure implements Serializable {
                 this.setClosed(true);
                 break;
         }
-    }
-
-    public GeneralPath getPath() {
-        return this.path;
-    }
-
-    public void setType(FigureType t) {
-        this.type = t;
-    }
-
-    public FigureType getType() {
-        return this.type;
     }
 
     public CanvasPoint[] getTop() {
@@ -411,6 +411,14 @@ public class Figure implements Serializable {
         this.closed = closed;
     }
 
+    public Stroke getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(Stroke s) {
+        stroke = s;
+    }
+
     public String getColor() {
         return this.color;
     }
@@ -425,14 +433,6 @@ public class Figure implements Serializable {
 
     public void setFillColor(String c) {
         fillcolor = c;
-    }
-
-    public Stroke getStroke() {
-        return stroke;
-    }
-
-    public void setStroke(Stroke s) {
-        stroke = s;
     }
 
     public double getAngle() {
