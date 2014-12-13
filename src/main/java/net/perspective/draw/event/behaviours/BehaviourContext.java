@@ -8,12 +8,8 @@ package net.perspective.draw.event.behaviours;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.perspective.draw.CanvasView;
-import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
-import net.perspective.draw.event.Handler;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.util.CanvasPoint;
 
