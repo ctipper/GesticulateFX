@@ -316,27 +316,28 @@ public class DrawingArea {
         return tempers;
     }
 
+    public void setStroke(Stroke stroke) {
+        this.stroke = stroke;
+    }
+
     public Stroke getStroke() {
         return stroke;
     }
 
-    public void setStroke(Stroke s) {
-        this.stroke = s;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getColor() {
         return color;
     }
 
-    public void setColor(String c) {
-        this.color = c;
+    public void setFillColor(String color) {
+        this.fillcolor = color;
     }
 
     public String getFillColor() {
         return fillcolor;
     }
     
-    public void setFillColor(String c) {
-        fillcolor = c;
-    }
 }
