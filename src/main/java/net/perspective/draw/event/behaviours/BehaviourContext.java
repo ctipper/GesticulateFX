@@ -10,8 +10,10 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
+import net.perspective.draw.event.Handler;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.util.CanvasPoint;
 
@@ -24,7 +26,6 @@ import net.perspective.draw.util.CanvasPoint;
 public class BehaviourContext {
 
     ItemBehaviours strategy;
-    @Inject DrawingArea drawarea;
     private ContainsType containment, contains;
     private int quad;
     private double sgnd_area;
@@ -37,11 +38,11 @@ public class BehaviourContext {
     }
     
     public boolean select(Figure item, int index, double startx, double starty) {
-        return strategy.selectItem(item, index, startx, starty);
+        return strategy.selectItem(this, item, index);
     }
 
     public void alter(Figure item, double xinc, double yinc) {
-        strategy.alterItem(item, xinc, yinc);
+        strategy.alterItem(this, item, xinc, yinc);
     }
     
     public void setBehaviour(ItemBehaviours s) {

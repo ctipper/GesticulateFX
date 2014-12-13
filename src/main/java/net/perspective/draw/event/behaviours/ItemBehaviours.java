@@ -15,7 +15,7 @@ import net.perspective.draw.geom.Figure;
 
 public interface ItemBehaviours {
 
-    boolean selectItem(Figure item, int index, double startx, double starty);
+    boolean selectItem(BehaviourContext context, Figure item, int index);
     
-    void alterItem(Figure item, double xinc, double yinc);
+    void alterItem(BehaviourContext context, Figure item, double xinc, double yinc);
 }

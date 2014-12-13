@@ -27,9 +27,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
     
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
-    @Inject private BehaviourContext context;
 
-    public boolean selectItem(Figure item, int index, double startx, double starty) {
+    public boolean selectItem(BehaviourContext context, Figure item, int index) {
         boolean found = false;
 
         FigureType type = item.getType();
@@ -39,7 +38,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
             for (CanvasPoint[] vertex : vertices) {
-                if (context.getRegion(vertex[0]).contains(startx, starty)) {
+                if (context.getRegion(vertex[0]).contains(drawarea.getStartX(), drawarea.getStartY())) {
                     int quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
                         case 0:
@@ -68,14 +67,14 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 }
             }
             
-            if (!found && item.contains(startx, starty)) {
+            if (!found && item.contains(drawarea.getStartX(), drawarea.getStartY())) {
                 view.setSelected(index);
                 context.setContainment(ContainsType.SHAPE);
                 found = true;
             }
             
             Logger.getLogger(FigureItemBehaviour.class.getName()).debug("Containment: " + context.getContainment().toString());
-        } else if (item.contains(startx, starty)) {
+        } else if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
             // All other figures
             view.setSelected(index);
             context.setContainment(ContainsType.SHAPE);
@@ -84,7 +83,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
         return found;
     }
     
-    public void alterItem(Figure item, double xinc, double yinc) {
+    public void alterItem(BehaviourContext context, Figure item, double xinc, double yinc) {
         ContainsType contains;
 
         FigureType type = item.getType();
@@ -128,11 +127,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 }
                 if (context.getQuad() == -1) {
                     int quad = R2.quadrant(item.getTop()[1], item.rotationCentre());
-                    Logger.getLogger(FigureItemBehaviour.class.getName()).debug("sgnd_area: " + context.getSgndArea());
                     if (context.getSgndArea() >= 0 && (quad == 0 || quad == 2)) {
                         context.setQuad(R2.quadrant(item.getBottom()[1], item.rotationCentre()));
-                        Logger.getLogger(FigureItemBehaviour.class.getName()).debug("quad: " + R2.quadrant(item.getTop()[1], item.rotationCentre()));
-                        Logger.getLogger(FigureItemBehaviour.class.getName()).debug("quad_bot: " + R2.quadrant(item.getBottom()[1], item.rotationCentre()));
                     } else {
                         context.setQuad(quad);
                     }
