@@ -8,6 +8,7 @@ package net.perspective.draw.geom;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -21,7 +22,7 @@ public class FigurePointFactory implements PointFactory {
     public FigurePointFactory() {
     }
     
-    public List<CanvasPoint> createPoints(FigureType description, double... coords) {
+    public List<CanvasPoint> createPoints(DrawingType description, double... coords) {
         List<CanvasPoint> points;
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 0.0;
         CanvasPoint p0, p1, p2, p3;

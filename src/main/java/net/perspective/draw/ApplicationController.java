@@ -13,8 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javax.inject.Inject;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.HandlerType;
-import net.perspective.draw.geom.FigureType;
 
 /**
  *
@@ -42,37 +42,37 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handleLineAction(ActionEvent event) {
-        drawarea.setFigureType(FigureType.LINE);
+        drawarea.setDrawType(DrawingType.LINE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleCircleAction(ActionEvent event) {
-        drawarea.setFigureType(FigureType.CIRCLE);
+        drawarea.setDrawType(DrawingType.CIRCLE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleSquareAction(ActionEvent event) {
-        drawarea.setFigureType(FigureType.SQUARE);
+        drawarea.setDrawType(DrawingType.SQUARE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent event) {
-        drawarea.setFigureType(FigureType.TRIANGLE);
+        drawarea.setDrawType(DrawingType.TRIANGLE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent event) {
-        drawarea.setFigureType(FigureType.POLYGON);
+        drawarea.setDrawType(DrawingType.POLYGON);
         drawarea.changeHandler(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent event) {
-        drawarea.setFigureType(FigureType.SKETCH);
+        drawarea.setDrawType(DrawingType.SKETCH);
         drawarea.changeHandler(HandlerType.SKETCH);
     }
     

@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigureFactory;
+import net.perspective.draw.geom.FigureFactoryImpl;
 
 /**
  *
@@ -21,6 +23,11 @@ public class SketchHandler implements Handler  {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    private final FigureFactory figurefactory;
+
+    public SketchHandler() {
+        this.figurefactory = new FigureFactoryImpl();
+    }
 
     public void upEvent() {
         view.setDrawing(false);
@@ -35,13 +42,14 @@ public class SketchHandler implements Handler  {
     }
 
     public void downEvent() {
-        // Create Figure
-        Figure item = new Figure(drawarea.getFigureType());
+        // Create figure
+        Figure item = figurefactory.createFigure(drawarea.getDrawType());
+        // Initialise sketch
         item.setStroke(drawarea.getStroke());
         item.setColor("lightgray");
         item.setFillColor("white");
         // Initialise sketch
-        item.setPoints();
+        item.setPoints(drawarea.getDrawType());
         item.addPoint(drawarea.getStartX(), drawarea.getStartY());
     	item.setPath();
         view.setNewItem(item);

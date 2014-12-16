@@ -6,8 +6,7 @@
  */
 package net.perspective.draw;
 
-import static net.perspective.draw.CanvasTransferHandler.COPY;
-import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
@@ -23,11 +22,13 @@ import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.*;
-import net.perspective.draw.geom.FigureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.inject.Injector;
+
+import static net.perspective.draw.CanvasTransferHandler.COPY;
+import static net.perspective.draw.CanvasTransferHandler.MOVE;
 
 /**
  *
@@ -43,7 +44,7 @@ public class DrawingArea {
     private GraphicsContext context;
     private Handler handler;
 
-    private FigureType figuretype;
+    private DrawingType drawtype;
     private Stroke stroke;
     private String color, fillcolor;
     private double startX, startY;
@@ -78,7 +79,7 @@ public class DrawingArea {
     }
 
     public void prepareDrawing() {
-        setFigureType(FigureType.SKETCH);
+        setDrawType(DrawingType.SKETCH);
         setStroke(new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
         setColor("#4860E0");
         setFillColor("#4860E0");
@@ -260,12 +261,12 @@ public class DrawingArea {
         return view;
     }
 
-    public void setFigureType(FigureType t) {
-        this.figuretype = t;
+    public void setDrawType(DrawingType s) {
+        drawtype = s;
     }
 
-    public FigureType getFigureType() {
-        return figuretype;
+    public DrawingType getDrawType() {
+        return drawtype;
     }
 
     public void setStartX(double x) {

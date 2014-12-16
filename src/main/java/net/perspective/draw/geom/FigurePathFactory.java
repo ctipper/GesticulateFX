@@ -38,9 +38,7 @@ public class FigurePathFactory implements PathFactory {
                 }
             break;
             case SQUARE:
-            case RECTANGLE:
             case CIRCLE:
-            case ELLIPSE:
                 if (points.size() > 3) {
                     x = y = w = h = 0;
                     p0 = points.get(0);
@@ -69,7 +67,7 @@ public class FigurePathFactory implements PathFactory {
                         w = p1.x - x;
                         h = p1.y - y;
                     }
-                    if (type.equals(FigureType.CIRCLE) || type.equals(FigureType.ELLIPSE)) {
+                    if (type.equals(FigureType.CIRCLE)) {
                         path = new GeneralPath(new Ellipse2D.Double(x, y, w, h));
                     } else {
                         path = new GeneralPath(new RoundRectangle2D.Double(x, y, w, h, 5, 5));
@@ -79,7 +77,6 @@ public class FigurePathFactory implements PathFactory {
                 }
                 break;
             case TRIANGLE:
-            case ISOSCELES:
                 if (points.size() > 2) {
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);

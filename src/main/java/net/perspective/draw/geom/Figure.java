@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import net.perspective.draw.enums.ContainsType;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -70,10 +71,19 @@ public class Figure implements Serializable {
         this.end = new CanvasPoint(x,y);
     }
 
-    public void setPoints() {
+//    public void setPoints() {
+//        if (!this.type.equals(FigureType.SKETCH)
+//            && !this.type.equals(FigureType.POLYGON)) {
+//            this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
+//        } else {
+//            this.points = new ArrayList<>();
+//        }
+//    }
+    
+    public void setPoints(DrawingType drawtype) {
         if (!this.type.equals(FigureType.SKETCH)
             && !this.type.equals(FigureType.POLYGON)) {
-            this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
+            this.points = pointfactory.createPoints(drawtype, start.x, start.y, end.x, end.y);
         } else {
             this.points = new ArrayList<>();
         }
@@ -86,14 +96,14 @@ public class Figure implements Serializable {
     public void setEndPoints() {
         switch (this.type) {
             case CIRCLE:
-            case ELLIPSE:
+//            case ELLIPSE:
             case SQUARE:
-            case RECTANGLE:
+//            case RECTANGLE:
                 start = new CanvasPoint(points.get(0).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
                 break;
             case TRIANGLE:
-            case ISOSCELES:
+//            case ISOSCELES:
                 start = new CanvasPoint(points.get(1).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
                 break;

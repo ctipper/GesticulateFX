@@ -12,11 +12,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javax.inject.Singleton;
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.perspective.draw.geom.Figure;
 
 /**
  *

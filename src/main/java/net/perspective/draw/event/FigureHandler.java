@@ -20,8 +20,10 @@ public class FigureHandler implements Handler {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    private final FigureFactory figurefactory;
 
     public FigureHandler() {
+        this.figurefactory = new FigureFactoryImpl();
     }
 
     public void upEvent() {
@@ -31,20 +33,6 @@ public class FigureHandler implements Handler {
         item.setStroke(drawarea.getStroke());
         item.setColor(drawarea.getColor());
         item.setFillColor(drawarea.getFillColor());
-        // following enables flexible redraw
-        switch (item.getType()) {
-        case SQUARE:
-            item.setType(FigureType.RECTANGLE);
-            break;
-        case CIRCLE:
-            item.setType(FigureType.ELLIPSE);
-            break;
-        case TRIANGLE:
-            item.setType(FigureType.ISOSCELES);
-            break;
-        default:
-            break;
-        }
         item.setEndPoints();
         view.setNewItem(item);
         view.resetNewItem();
@@ -54,13 +42,13 @@ public class FigureHandler implements Handler {
     }
 
     public void dragEvent() {
-        Figure item = new Figure(drawarea.getFigureType());
+        Figure item = figurefactory.createFigure(drawarea.getDrawType());
         item.setStroke(drawarea.getStroke());
         item.setColor("lightgray");
         item.setFillColor("white");
         item.setStart(drawarea.getStartX(), drawarea.getStartY());
         item.setEnd(drawarea.getTempX(), drawarea.getTempY());
-        item.setPoints();
+        item.setPoints(drawarea.getDrawType());
         item.setPath();
         view.setNewItem(item);
         view.setDrawing(true);

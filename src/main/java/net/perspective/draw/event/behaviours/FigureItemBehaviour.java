@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
@@ -85,6 +86,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     
     public void alterItem(BehaviourContext context, Figure item, double xinc, double yinc) {
         ContainsType contains;
+        DrawingType drawType;
 
         FigureType type = item.getType();
         CanvasPoint st = item.getStart();
@@ -96,12 +98,12 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 if (context.getRegion(st).contains(drawarea.getStartX(), drawarea.getStartY())) {
                     st.translate(xinc, yinc);
                     item.setStart(st.x, st.y);
-                    item.setPoints();
+                    item.setPoints(DrawingType.LINE);
                     item.setPath();
                 } else if (context.getRegion(en).contains(drawarea.getStartX(), drawarea.getStartY())) {
                     en.translate(xinc, yinc);
                     item.setEnd(en.x, en.y);
-                    item.setPoints();
+                    item.setPoints(DrawingType.LINE);
                     item.setPath();
                 } else {
                     item.moveFigure(xinc, yinc);
@@ -110,9 +112,17 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case SQUARE:
             case CIRCLE:
             case TRIANGLE:
-            case RECTANGLE:
-            case ELLIPSE:
-            case ISOSCELES:
+                switch (type) {
+                    case SQUARE:
+                        drawType = DrawingType.RECTANGLE;
+                        break;
+                    case CIRCLE:
+                        drawType = DrawingType.ELLIPSE;
+                        break;
+                    default:
+                        drawType = DrawingType.ISOSCELES;
+                        break;
+                }
                 if (!context.getContainment().equals(ContainsType.SHAPE)
                     && !context.getContainment().equals(ContainsType.NONE)) {
                     if (context.getContains().equals(ContainsType.NONE)) {
@@ -145,7 +155,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         en.translate((-cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints();
+                        item.setPoints(drawType);
                         item.setPath();
                         break;
                     case BL:
@@ -153,7 +163,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         en.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints();
+                        item.setPoints(drawType);
                         item.setPath();
                         break;
                     case BR:
@@ -161,7 +171,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         en.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints();
+                        item.setPoints(drawType);
                         item.setPath();
                         break;
                     case TR:
@@ -169,7 +179,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         en.translate((cos_t + sin_t) * inc.x, (-cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints();
+                        item.setPoints(drawType);
                         item.setPath();
                         break;
                     case SHAPE:

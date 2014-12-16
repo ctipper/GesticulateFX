@@ -6,6 +6,11 @@
  */
 package net.perspective.draw;
 
+import com.cathive.fx.guice.GuiceApplication;
+import com.cathive.fx.guice.GuiceFXMLLoader;
+import com.cathive.fx.guice.GuiceFXMLLoader.Result;
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,14 +22,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
+import net.perspective.draw.event.behaviours.BehaviourContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.cathive.fx.guice.GuiceApplication;
-import com.cathive.fx.guice.GuiceFXMLLoader;
-import com.cathive.fx.guice.GuiceFXMLLoader.Result;
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-import net.perspective.draw.event.behaviours.BehaviourContext;
 
 /**
  *
