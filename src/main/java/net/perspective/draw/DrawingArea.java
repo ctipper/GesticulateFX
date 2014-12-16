@@ -41,7 +41,6 @@ public class DrawingArea {
     @Inject private CanvasView view;
     private SubScene canvas;
     private Group root;
-    private GraphicsContext context;
     private Handler handler;
 
     private DrawingType drawtype;

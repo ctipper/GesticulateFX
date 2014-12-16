@@ -71,15 +71,6 @@ public class Figure implements Serializable {
         this.end = new CanvasPoint(x,y);
     }
 
-//    public void setPoints() {
-//        if (!this.type.equals(FigureType.SKETCH)
-//            && !this.type.equals(FigureType.POLYGON)) {
-//            this.points = pointfactory.createPoints(this.type, start.x, start.y, end.x, end.y);
-//        } else {
-//            this.points = new ArrayList<>();
-//        }
-//    }
-    
     public void setPoints(DrawingType drawtype) {
         if (!this.type.equals(FigureType.SKETCH)
             && !this.type.equals(FigureType.POLYGON)) {
@@ -96,14 +87,11 @@ public class Figure implements Serializable {
     public void setEndPoints() {
         switch (this.type) {
             case CIRCLE:
-//            case ELLIPSE:
             case SQUARE:
-//            case RECTANGLE:
                 start = new CanvasPoint(points.get(0).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
                 break;
             case TRIANGLE:
-//            case ISOSCELES:
                 start = new CanvasPoint(points.get(1).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
                 break;

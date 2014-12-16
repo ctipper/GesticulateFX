@@ -207,5 +207,4 @@ public class CanvasView {
     public Figure getNewItem() {
         return newitem;
     }
-
 }

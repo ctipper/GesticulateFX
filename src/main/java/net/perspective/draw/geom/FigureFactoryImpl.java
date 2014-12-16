@@ -18,7 +18,7 @@ public class FigureFactoryImpl implements FigureFactory {
         Figure drawItem;
 
         switch (drawType) {
-            case POINT:
+            case LINE:
                 drawItem = new Figure(FigureType.LINE);
                 break;
             case CIRCLE:
