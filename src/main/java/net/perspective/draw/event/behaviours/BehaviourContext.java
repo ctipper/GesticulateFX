@@ -33,7 +33,7 @@ public class BehaviourContext {
         this.contains = ContainsType.NONE;
     }
     
-    public boolean select(Figure item, int index, double startx, double starty) {
+    public boolean select(Figure item, int index) {
         return strategy.selectItem(this, item, index);
     }
 

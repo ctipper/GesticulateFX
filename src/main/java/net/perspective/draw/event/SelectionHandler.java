@@ -40,7 +40,7 @@ public class SelectionHandler implements Handler {
             do {
                 Figure figure = drawings.get(i);
                 context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-                boolean found = context.select(figure, i, drawarea.getStartX(), drawarea.getStartY());
+                boolean found = context.select(figure, i);
 
                 if (found) {
                     break;
