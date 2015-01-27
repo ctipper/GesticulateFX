@@ -230,11 +230,34 @@ public class Figure implements Serializable {
     }
 
     public CanvasPoint rotationCentre() {
-        GeneralPath p = (GeneralPath) this.getPath().clone();
-        p.closePath();
-        Area area = new Area(p);
-        Rectangle2D bound = area.getBounds2D();
-        return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+        CanvasPoint p = new CanvasPoint();
+        double x, y, w, h;
+        if (start.x < end.x && start.y < end.y) {
+            x = start.x;
+            y = start.y;
+            w = end.x - start.x;
+            h = end.y - start.y;
+            p = new CanvasPoint(x + w/2, y + h/2);
+        } else if (start.x > end.x && start.y > end.y) {
+            x = end.x;
+            y = end.y;
+            w = start.x - end.x;
+            h = start.y - end.y;
+            p = new CanvasPoint(x + w/2, y + h/2);
+        } else if (start.x > end.x && start.y < end.y) {
+            x = end.x;
+            y = start.y;
+            w = start.x - end.x;
+            h = end.y - start.y;
+            p = new CanvasPoint(x + w/2, y + h/2);
+        } else if (start.x < end.x && start.y > end.y) {
+            x = start.x;
+            y = end.y;
+            w = end.x - start.x;
+            h = start.y - end.y;
+            p = new CanvasPoint(x + w/2, y + h/2);
+        }
+        return p;
     }
 
     public Rectangle2D getBounds2D() {
