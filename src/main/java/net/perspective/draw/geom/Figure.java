@@ -238,19 +238,19 @@ public class Figure implements Serializable {
             w = end.x - start.x;
             h = end.y - start.y;
             p = new CanvasPoint(x + w/2, y + h/2);
-        } else if (start.x > end.x && start.y > end.y) {
+        } else if (start.x >= end.x && start.y >= end.y) {
             x = end.x;
             y = end.y;
             w = start.x - end.x;
             h = start.y - end.y;
             p = new CanvasPoint(x + w/2, y + h/2);
-        } else if (start.x > end.x && start.y < end.y) {
+        } else if (start.x >= end.x && start.y < end.y) {
             x = end.x;
             y = start.y;
             w = start.x - end.x;
             h = end.y - start.y;
             p = new CanvasPoint(x + w/2, y + h/2);
-        } else if (start.x < end.x && start.y > end.y) {
+        } else if (start.x < end.x && start.y >= end.y) {
             x = start.x;
             y = end.y;
             w = end.x - start.x;
