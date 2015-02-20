@@ -69,37 +69,37 @@ public class CanvasView {
                             nodes.set(c.getPermutation(i), drawings.get(i).draw());
                             logger.trace("node " + c.getPermutation(i) + " updated from " + i);
                         }
-                    } 
-                    if (c.wasRemoved()) {
-                        int i = 0;
-                        List<Node> deleted = new ArrayList<>();
-                        for (Figure remitem : c.getRemoved()) {
-                            // remove item
-                            deleted.add(nodes.get(c.getFrom() + i));
-                            i++;
-                            logger.trace("node " + (c.getFrom() + i) + " removed.");
-                        }
-                        // delete the nodes from the scene graph
-                        for (Node delete : deleted) {
-                            nodes.remove(delete);
-                        }
-                    }
-                    if (c.wasAdded()) {
-                        int i = 0;
-                        for (Figure additem : c.getAddedSubList()) {
-                            // add item
-                            nodes.add(c.getFrom() + i, additem.draw());
-                            i++;
-                            logger.trace("node added");
-                        }
-                    }
-                    if (c.wasUpdated()) {
+                    } else if (c.wasUpdated()) {
                         for (int i = c.getFrom(); i < c.getTo(); ++i) {
                             // update item
                             nodes.set(i, drawings.get(i).draw());
                             logger.trace("node " + i + " updated");
                         }
-                    }                     
+                    } else {               
+                        if (c.wasRemoved()) {
+                            int i = 0;
+                            List<Node> deleted = new ArrayList<>();
+                            for (Figure remitem : c.getRemoved()) {
+                                // remove item
+                                deleted.add(nodes.get(c.getFrom() + i));
+                                i++;
+                                logger.trace("node " + (c.getFrom() + i) + " removed.");
+                            }
+                            // delete the nodes from the scene graph
+                            for (Node delete : deleted) {
+                                nodes.remove(delete);
+                            }
+                        } 
+                        if (c.wasAdded()) {
+                            int i = 0;
+                            for (Figure additem : c.getAddedSubList()) {
+                                // add item
+                                nodes.add(c.getFrom() + i, additem.draw());
+                                i++;
+                                logger.trace("node added");
+                            }
+                        }
+                    }
                 }
             }
         });
