@@ -51,6 +51,7 @@ public class SketchHandler implements Handler  {
         // Initialise sketch
         item.setPoints(drawarea.getDrawType());
         item.addPoint(drawarea.getStartX(), drawarea.getStartY());
+        item.setEndPoints();
     	item.setPath();
         view.setNewItem(item);
         view.setDrawing(true);
@@ -61,6 +62,7 @@ public class SketchHandler implements Handler  {
         Figure item = view.getNewItem();
         // continue sketch
         item.addPoint(drawarea.getTempX(), drawarea.getTempY());
+        item.setEndPoints();
         item.setPath();
         view.setNewItem(item);
     }
