@@ -234,7 +234,6 @@ public class Figure implements Serializable {
         switch (this.getType()) {
             case SKETCH:
             case POLYGON:
-            case LINE:
                 GeneralPath pa = (GeneralPath) this.getPath().clone();
                 pa.closePath();
                 Area area = new Area(pa);
