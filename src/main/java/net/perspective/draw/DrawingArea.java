@@ -72,6 +72,7 @@ public class DrawingArea {
         transferhandler = new CanvasTransferHandler(this);
         contextmenu = new ContextMenu();
         contextlistener = null;
+        view.setDrawingListener();
         prepareDrawing();
         setHandlers();
     }

@@ -19,7 +19,7 @@ public class FigureFactoryImpl implements FigureFactory {
 
         switch (drawType) {
             case LINE:
-                drawItem = new Figure(FigureType.LINE);
+                drawItem = new Edge(FigureType.LINE);
                 break;
             case CIRCLE:
             case ELLIPSE:
@@ -33,10 +33,10 @@ public class FigureFactoryImpl implements FigureFactory {
                 drawItem = new Figure(FigureType.TRIANGLE);
                 break;
             case POLYGON:
-                drawItem = new Figure(FigureType.POLYGON);
+                drawItem = new Edge(FigureType.POLYGON);
                 break;
             case SKETCH:
-                drawItem = new Figure(FigureType.SKETCH);
+                drawItem = new Edge(FigureType.SKETCH);
                 break;
             default:
                 drawItem = new Figure();

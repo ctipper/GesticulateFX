@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class CanvasView {
 
     @Inject private DrawingArea drawarea;
-    private java.util.List<Figure> list;
+    private final java.util.List<Figure> list;
     private ObservableList<Figure> drawings;
     private Figure newitem;
     private int selection;
@@ -43,7 +43,6 @@ public class CanvasView {
         list = new ArrayList<>();
         selection = -1;
         isDrawing = false;
-        this.setDrawingListener();
     }
 
     public void clearView() {
