@@ -36,8 +36,7 @@ public class Edge extends Figure implements Serializable {
     }
     
     public void setPoints(DrawingType drawtype) {
-        if (!this.type.equals(FigureType.SKETCH)
-            && !this.type.equals(FigureType.POLYGON)) {
+        if (this.type.equals(FigureType.LINE)) {
             this.points = pointfactory.createPoints(drawtype, start.x, start.y, end.x, end.y);
         } else {
             this.points = new ArrayList<>();
@@ -124,42 +123,11 @@ public class Edge extends Figure implements Serializable {
         return bounds;
     }
 
-    public Node drawAnchors() {
-        Group anchors = new Group();
-        switch (this.type) {
-            case NONE:
-                break;
-            default:
-                // end points marked
-                anchors.getChildren().add(this.anchor(start.x, start.y));
-                anchors.getChildren().add(this.anchor(end.x, end.y));
-                break;
-        }
-        return anchors;
-    }
-    
-    /* 
-     * Return 2-point array of vertex, second point normalized.
-     */
-    private CanvasPoint[] getVertex(ContainsType contains) {
-        CanvasPoint p[];
-        double x = Math.min(start.x, end.x);
-        double y = Math.min(start.y, end.y);
-        double width = Math.abs(start.x - end.x);
-        double height = Math.abs(start.y - end.y);
-        double side = 0.25 * (width + height); // half average side
-        CanvasPoint cxy = this.rotationCentre();
-    
-        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
-        return p;
-    }
-
     /*
      * Return 2-point array of vertices, second point normalized.
      * Note that the points may not be cyclical.
      */
     public List<CanvasPoint[]> getVertices() {
-        double sx, sy, ex, ey;
         List<CanvasPoint[]> vert = new ArrayList<>();
         List<CanvasPoint[]> vertices = new ArrayList<>();
         vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });

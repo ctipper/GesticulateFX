@@ -33,7 +33,7 @@ public class Figure implements Serializable {
     protected transient GeneralPath path;
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
-    private transient Stroke stroke;
+    protected transient Stroke stroke;
     private String color, fillcolor;
     private double angle;
     // closed indicates to draw() whether shape should be filled
@@ -209,6 +209,7 @@ public class Figure implements Serializable {
     }
 
     public java.awt.Shape bounds() {
+        // Get transformed path
         AffineTransform transform = this.getTransform();
         GeneralPath p = (GeneralPath) this.getPath().clone();
         p.transform(transform);
@@ -230,6 +231,13 @@ public class Figure implements Serializable {
     public Node drawAnchors() {
         Group anchors = new Group();
         switch (this.type) {
+            case LINE:
+            case SKETCH:
+            case POLYGON:
+                // end points marked
+                anchors.getChildren().add(this.anchor(start.x, start.y));
+                anchors.getChildren().add(this.anchor(end.x, end.y));
+                break;
             case NONE:
                 break;
             default:
@@ -359,20 +367,20 @@ public class Figure implements Serializable {
         return jfxcap;
     }
 
-    public void setClosed(boolean closed) {
+    protected void setClosed(boolean closed) {
         this.closed = closed;
     }
 
-    public boolean isClosed() {
+    private boolean isClosed() {
         return this.closed;
     }
 
     public void setStroke(Stroke s) {
-        stroke = s;
+        this.stroke = s;
     }
 
     public Stroke getStroke() {
-        return stroke;
+        return this.stroke;
     }
 
     public void setColor(String color) {
@@ -384,11 +392,11 @@ public class Figure implements Serializable {
     }
 
     public void setFillColor(String c) {
-        fillcolor = c;
+        this.fillcolor = c;
     }
 
     public String getFillColor() {
-        return fillcolor;
+        return this.fillcolor;
     }
 
     public void setAngle(double a) {
@@ -418,18 +426,27 @@ public class Figure implements Serializable {
         double height = Math.abs(start.y - end.y);
         double side = 0.25 * (width + height); // half average side
         CanvasPoint cxy = this.rotationCentre();
-        switch (contains) {
-            case TL:
-                p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
-                break;
-            case BL:
-                p = new CanvasPoint[] { new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side) };
-                break;
-            case BR:
-                p = new CanvasPoint[] { new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side) };
-                break;
-            case TR:
-                p = new CanvasPoint[] { new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side) };
+        switch (type) {
+            case CIRCLE:
+            case SQUARE:
+            case TRIANGLE:
+                switch (contains) {
+                    case TL:
+                        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
+                        break;
+                    case BL:
+                        p = new CanvasPoint[] { new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side) };
+                        break;
+                    case BR:
+                        p = new CanvasPoint[] { new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side) };
+                        break;
+                    case TR:
+                        p = new CanvasPoint[] { new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side) };
+                        break;
+                    default:
+                        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
+                        break;
+                }
                 break;
             default:
                 p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
@@ -446,28 +463,38 @@ public class Figure implements Serializable {
         double sx, sy, ex, ey;
         List<CanvasPoint[]> vert = new ArrayList<>();
         List<CanvasPoint[]> vertices = new ArrayList<>();
-        double width = Math.abs(start.x - end.x);
-        double height = Math.abs(start.y - end.y);
-        double side = 0.25 * (width + height); // half average side
-        CanvasPoint cxy = this.rotationCentre();
-        if (start.x < end.x) {
-            sx = cxy.x - side;
-            ex = cxy.x + side;
-        } else {
-            sx = cxy.x + side;
-            ex = cxy.x - side;
+        switch (this.getType()) {
+            case SQUARE:
+            case CIRCLE:
+            case TRIANGLE:
+                double width = Math.abs(start.x - end.x);
+                double height = Math.abs(start.y - end.y);
+                double side = 0.25 * (width + height); // half average side
+                CanvasPoint cxy = this.rotationCentre();
+                if (start.x < end.x) {
+                    sx = cxy.x - side;
+                    ex = cxy.x + side;
+                } else {
+                    sx = cxy.x + side;
+                    ex = cxy.x - side;
+                }
+                if (start.y < end.y) {
+                    sy = cxy.y - side;
+                    ey = cxy.y + side;
+                } else {
+                    sy = cxy.y + side;
+                    ey = cxy.y - side;
+                }
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(sx, sy) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });
+                break;
+            default:
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
+                break;
         }
-        if (start.y < end.y) {
-            sy = cxy.y - side;
-            ey = cxy.y + side;
-        } else {
-            sy = cxy.y + side;
-            ey = cxy.y - side;
-        }
-        vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(sx, sy) });
-        vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });
-        vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });
-        vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });
         for (CanvasPoint[] p : vert) {
             CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
             vertices.add(point);
