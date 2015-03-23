@@ -25,6 +25,8 @@ import net.perspective.draw.util.V2;
 
 public class Edge extends Figure implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public Edge() {
         super();
     }
