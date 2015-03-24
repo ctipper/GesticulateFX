@@ -92,7 +92,7 @@ public class Edge extends Figure implements Serializable {
     }
 
     public CanvasPoint rotationCentre() {
-        GeneralPath pa = (GeneralPath) this.getPath().clone();
+        Path2D.Double pa = (Path2D.Double) this.getPath().clone();
         pa.closePath();
         Area area = new Area(pa);
         Rectangle2D bound = area.getBounds2D();

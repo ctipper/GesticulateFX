@@ -33,6 +33,7 @@ public class FigureHandler implements Handler {
         item.setStroke(drawarea.getStroke());
         item.setColor(drawarea.getColor());
         item.setFillColor(drawarea.getFillColor());
+        item.setEndPoints();
         view.setNewItem(item);
         view.resetNewItem();
     }

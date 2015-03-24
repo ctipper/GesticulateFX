@@ -7,7 +7,7 @@
 package net.perspective.draw.geom;
 
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import net.perspective.draw.util.CanvasPoint;
 import org.jhotdraw.geom.Bezier;
@@ -18,14 +18,14 @@ import org.jhotdraw.geom.Bezier;
  */
 public class FigurePathFactory implements PathFactory {
 
-    GeneralPath path;
+    Path2D.Double path;
 
-    public GeneralPath createPath(Figure fig) {
+    public Path2D.Double createPath(Figure fig) {
         CanvasPoint p0, p1, p2, p3;
         double x, y, w, h;
         CanvasPoint[] cPoints;
         
-        path = new GeneralPath();
+        path = new Path2D.Double();
         java.util.List<CanvasPoint> points = fig.getPoints();
         FigureType type = fig.getType();
         switch (type) {
@@ -68,9 +68,9 @@ public class FigurePathFactory implements PathFactory {
                         h = p1.y - y;
                     }
                     if (type.equals(FigureType.CIRCLE)) {
-                        path = new GeneralPath(new Ellipse2D.Double(x, y, w, h));
+                        path = new Path2D.Double(new Ellipse2D.Double(x, y, w, h));
                     } else {
-                        path = new GeneralPath(new RoundRectangle2D.Double(x, y, w, h, 5, 5));
+                        path = new Path2D.Double(new RoundRectangle2D.Double(x, y, w, h, 5, 5));
                     }
                 } else {
                     return null;

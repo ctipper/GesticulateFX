@@ -30,7 +30,7 @@ public class Figure implements Serializable {
     protected List<CanvasPoint> points;
     protected FigureType type;
     protected CanvasPoint start, end;
-    protected transient GeneralPath path;
+    protected transient Path2D.Double path;
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
     protected transient Stroke stroke;
@@ -52,7 +52,7 @@ public class Figure implements Serializable {
         this.points = new ArrayList<>();
         this.pathfactory = new FigurePathFactory();
         this.pointfactory = new FigurePointFactory();
-        this.path = new GeneralPath();
+        this.path = new Path2D.Double();
     }
     
     public CanvasPoint getStart() {
@@ -109,7 +109,7 @@ public class Figure implements Serializable {
         return this.type;
     }
 
-    public GeneralPath getPath() {
+    public Path2D.Double getPath() {
         return this.path;
     }
 
@@ -211,7 +211,7 @@ public class Figure implements Serializable {
     public java.awt.Shape bounds() {
         // Get transformed path
         AffineTransform transform = this.getTransform();
-        GeneralPath p = (GeneralPath) this.getPath().clone();
+        Path2D.Double p = (Path2D.Double) this.getPath().clone();
         p.transform(transform);
         return p;
     }

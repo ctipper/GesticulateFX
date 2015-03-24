@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 
 /**
  *
@@ -14,5 +14,5 @@ import java.awt.geom.GeneralPath;
  */
 
 public interface PathFactory {
-    public GeneralPath createPath(Figure fig);    
+    public Path2D.Double createPath(Figure fig);    
 }

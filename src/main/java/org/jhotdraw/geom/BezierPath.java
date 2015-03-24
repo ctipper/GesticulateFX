@@ -31,19 +31,13 @@ import net.perspective.draw.util.CanvasPoint;
  *
  * @author Werner Randelshofer
  * @version 1.4 2008-05-23 Method findSegment uses now double precision for the
- * tolerance paremeters. <br>
- * 1.3 BezierPath has now its own BezierPathIterator. <br>
- * 1.2.1 Issue #1628647: Method splitSegment created incorrect control point
- * masks. <br>
- * 1.2 2006-12-09 Method setWindingRule added. <br>
- * 1.1 2006-03-22
- * Methods moveTo, lineTo and quadTo added. <br>
- * 1.0 January 20, 2006 Created.
+ * tolerance paremeters. <br>1.3 BezierPath has now its own BezierPathIterator.
+ * <br>1.2.1 Issue #1628647: Method splitSegment created incorrect control point
+ * masks. <br>1.2 2006-12-09 Method setWindingRule added. <br>1.1 2006-03-22
+ * Methods moveTo, lineTo and quadTo added. <br>1.0 January 20, 2006 Created.
  */
 public class BezierPath extends ArrayList<BezierPath.Node>
         implements Shape, Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * Constant for having only control point C0 in effect. C0 is the point
@@ -69,7 +63,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * We cache a GeneralPath instance to speed up Shape operations.
      */
-    private transient GeneralPath generalPath;
+    private transient Path2D.Double generalPath;
     /**
      * We cache a Rectangle2D.Double instance to speed up getBounds operations.
      */
@@ -86,7 +80,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * The winding rule for filling the bezier path.
      */
-    private int windingRule = GeneralPath.WIND_EVEN_ODD;
+    private int windingRule = Path2D.Double.WIND_EVEN_ODD;
 
     /**
      * Defines a vertex (node) of the bezier path. <p> A vertex consists of
@@ -95,8 +89,6 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * </li> <li>C2 is used to control the curve going away from C0.</li> </ul>
      */
     public static final class Node implements Cloneable, Serializable {
-
-        private static final long serialVersionUID = 1L;
 
         /**
          * This mask is used to describe which control points in addition to C0
@@ -210,9 +202,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 that.y = this.y.clone();
                 return that;
             } catch (CloneNotSupportedException e) {
-                InternalError error = new InternalError();
-                error.initCause(e);
-                throw error;
+                throw new InternalError(e);
             }
         }
 
@@ -334,22 +324,22 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Converts the BezierPath into a GeneralPath.
      */
-    public GeneralPath toGeneralPath() {
-        GeneralPath gp = new GeneralPath();
+    public Path2D.Double toGeneralPath() {
+        Path2D.Double gp = new Path2D.Double();
         gp.setWindingRule(windingRule);
         if (size() == 0) {
             gp.moveTo(0, 0);
             gp.lineTo(0, 0 + 1);
         } else if (size() == 1) {
             Node current = get(0);
-            gp.moveTo((float) current.x[0], (float) current.y[0]);
-            gp.lineTo((float) current.x[0], (float) current.y[0] + 1);
+            gp.moveTo(current.x[0], current.y[0]);
+            gp.lineTo(current.x[0], current.y[0] + 1);
         } else {
             Node previous;
             Node current;
 
             previous = current = get(0);
-            gp.moveTo((float) current.x[0], (float) current.y[0]);
+            gp.moveTo(current.x[0], current.y[0]);
             for (int i = 1, n = size(); i < n; i++) {
                 previous = current;
                 current = get(i);
@@ -357,22 +347,22 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 if ((previous.mask & C2_MASK) == 0) {
                     if ((current.mask & C1_MASK) == 0) {
                         gp.lineTo(
-                                (float) current.x[0], (float) current.y[0]);
+                                current.x[0], current.y[0]);
                     } else {
                         gp.quadTo(
-                                (float) current.x[1], (float) current.y[1],
-                                (float) current.x[0], (float) current.y[0]);
+                                current.x[1], current.y[1],
+                                current.x[0], current.y[0]);
                     }
                 } else {
                     if ((current.mask & C1_MASK) == 0) {
                         gp.quadTo(
-                                (float) previous.x[2], (float) previous.y[2],
-                                (float) current.x[0], (float) current.y[0]);
+                                previous.x[2], previous.y[2],
+                                current.x[0], current.y[0]);
                     } else {
                         gp.curveTo(
-                                (float) previous.x[2], (float) previous.y[2],
-                                (float) current.x[1], (float) current.y[1],
-                                (float) current.x[0], (float) current.y[0]);
+                                previous.x[2], previous.y[2],
+                                current.x[1], current.y[1],
+                                current.x[0], current.y[0]);
                     }
                 }
             }
@@ -384,22 +374,22 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                     if ((previous.mask & C2_MASK) == 0) {
                         if ((current.mask & C1_MASK) == 0) {
                             gp.lineTo(
-                                    (float) current.x[0], (float) current.y[0]);
+                                    current.x[0], current.y[0]);
                         } else {
                             gp.quadTo(
-                                    (float) current.x[1], (float) current.y[1],
-                                    (float) current.x[0], (float) current.y[0]);
+                                    current.x[1], current.y[1],
+                                    current.x[0], current.y[0]);
                         }
                     } else {
                         if ((current.mask & C1_MASK) == 0) {
                             gp.quadTo(
-                                    (float) previous.x[2], (float) previous.y[2],
-                                    (float) current.x[0], (float) current.y[0]);
+                                    previous.x[2], previous.y[2],
+                                    current.x[0], current.y[0]);
                         } else {
                             gp.curveTo(
-                                    (float) previous.x[2], (float) previous.y[2],
-                                    (float) current.x[1], (float) current.y[1],
-                                    (float) current.x[0], (float) current.y[0]);
+                                    previous.x[2], previous.y[2],
+                                    current.x[1], current.y[1],
+                                    current.x[0], current.y[0]);
                         }
                     }
                 }
@@ -413,8 +403,6 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         validatePath();
         return generalPath.contains(p);
     }
-
-    ;
 
     /**
      * Returns true, if the outline of this bezier path contains the specified
