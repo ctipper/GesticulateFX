@@ -414,19 +414,31 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     public boolean outlineContains(CanvasPoint p, double tolerance) {
         Point2D.Double pdash = new Point2D.Double(p.x, p.y);
         return Shapes.outlineContains(this, pdash, tolerance);
-        /*
+
+        /**
          * validatePath();
-         *
+         * 
          * PathIterator i = generalPath.getPathIterator(new AffineTransform(),
-         * tolerance);
-         *
-         * double[] coords = new double[6]; int type = i.currentSegment(coords);
-         * double prevX = coords[0]; double prevY = coords[1]; i.next(); while
-         * (! i.isDone()) { i.currentSegment(coords); if
-         * (Geom.lineContainsPoint( prevX, prevY, coords[0], coords[1], p.x,
-         * p.y, tolerance) ) { return true; } prevX = coords[0]; prevY =
-         * coords[1]; i.next(); } return false;
-         */
+         *    tolerance);
+         * 
+         * double[] coords = new double[6];
+         * int type = i.currentSegment(coords);
+         * double prevX = coords[0];
+         * double prevY = coords[1];
+         * i.next();
+         * while (!i.isDone()) {
+         *     i.currentSegment(coords);
+         *     if (Geom.lineContainsPoint(prevX, prevY, coords[0], coords[1], p.x,
+         *         p.y, tolerance)) {
+         *         return true;
+         *     }
+         *     prevX = coords[0];
+         *     prevY
+         *         = coords[1];
+         *     i.next();
+         * }
+         * return false;
+         **/
     }
 
     public boolean intersects(Rectangle2D r) {
@@ -435,22 +447,30 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     }
 
     public PathIterator getPathIterator(AffineTransform at) {
-        /*
-         * validatePath(); PathIterator git = generalPath.getPathIterator(at);
-         * PathIterator bit = new BezierPathIterator(this, at); float gcoords[]
-         * = new float[6]; float bcoords[] = new float[6]; int i=0; while (!
-         * git.isDone() && ! bit.isDone()) { int gtype =
-         * git.currentSegment(gcoords); int btype = bit.currentSegment(bcoords);
-         * System.out.println(i+"
-         * "+gtype+"["+gcoords[0]+","+gcoords[1]+","+gcoords[2]+","+gcoords[3]+","+gcoords[4]+","+gcoords[5]+
-         * "]="+btype+"["+bcoords[0]+","+bcoords[1]+","+bcoords[2]+","+bcoords[3]+","+bcoords[4]+","+bcoords[5]+"]");
-         * git.next(); bit.next(); i++; } System.out.println("-
-         * "+git.isDone()+"="+bit.isDone());
-         *
-         *
-         * // return generalPath.getPathIterator(at);
-         */
-        return new BezierPathIterator(this, at);
+        /**
+         * validatePath();
+         * PathIterator git = generalPath.getPathIterator(at);
+         * PathIterator bit = new BezierPathIterator(this, at);
+         * float gcoords[] = new float[6];
+         * float bcoords[] = new float[6];
+         * int i = 0;
+         * while (!git.isDone() && !bit.isDone()) {
+         *     int gtype = git.currentSegment(gcoords);
+         *     int btype = bit.currentSegment(bcoords);
+         *     System.out.println(i +""+gtype+"["+gcoords[0]+","+gcoords[1]+","+gcoords[2]+
+         *                                    ","+gcoords[3]+","+gcoords[4]+","+gcoords[5]+"]="+
+         *                          btype + "[" + bcoords[0] + "," + bcoords[1] + "," + bcoords[2] + 
+         *                                  "," + bcoords[3] + "," + bcoords[4] + "," + bcoords[5] + "]");
+         *   git.next();
+         *     bit.next();
+         *     i++;
+         *  }
+         *  System.out.println("-"+git.isDone()+"="+bit.isDone());
+         * 
+         * return generalPath.getPathIterator(at);
+         **/
+
+          return new BezierPathIterator(this, at);
     }
 
     public PathIterator getPathIterator(AffineTransform at, double flatness) {
@@ -717,37 +737,62 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         Point2D.Double pdash2 = Geom.chop(generalPath, pdash);
         CanvasPoint pdash3 = new CanvasPoint(pdash2.x, pdash2.y);
         return pdash3;
-        /*
+        /**
          * CanvasPoint ctr = getCenter();
-         *
+         * 
          * // Chopped point double cx = -1; double cy = -1; double len =
          * Double.MAX_VALUE;
-         *
-         * // Try for points along edge validatePath(); PathIterator i =
-         * generalPath.getPathIterator(new AffineTransform(), 1); double[]
-         * coords = new double[6]; int type = i.currentSegment(coords); double
-         * prevX = coords[0]; double prevY = coords[1]; i.next(); for (; !
-         * i.isDone(); i.next()) { i.currentSegment(coords); CanvasPoint chop =
-         * Geom.intersect( prevX, prevY, coords[0], coords[1], p.x, p.y, ctr.x,
-         * ctr.y );
-         *
-         * if (chop != null) { double cl = Geom.length2(chop.x, chop.y, p.x,
-         * p.y); if (cl < len) { len = cl; cx = chop.x; cy = chop.y; } }
-         *
-         * prevX = coords[0]; prevY = coords[1]; }
-         *
-         * // if (isClosed() && size() > 1) { Node first = get(0); Node last =
-         * get(size() - 1); CanvasPoint chop = Geom.intersect( first.x[0],
-         * first.y[0], last.x[0], last.y[0], p.x, p.y, ctr.x, ctr.y ); if (chop
-         * != null) { double cl = Geom.length2(chop.x, chop.y, p.x, p.y); if (cl
-         * < len) { len = cl; cx = chop.x; cy = chop.y; } } }
-         *
-         *
+         * 
+         * // Try for points along edge validatePath(); 
+         * PathIterator i = generalPath.getPathIterator(new AffineTransform(), 1);
+         * double[] coords = new double[6];
+         * int type = i.currentSegment(coords);
+         * double prevX = coords[0];
+         * double prevY = coords[1];
+         * i.next();
+         * for (; !i.isDone(); i.next()) {
+         *     i.currentSegment(coords);
+         *     CanvasPoint chop = Geom.intersect(prevX, prevY, coords[0], coords[1], p.x, p.y, ctr.x, ctr.y);
+         * 
+         *     if (chop != null) {
+         *         double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+         *         if (cl < len) {
+         *             len = cl;
+         *             cx = chop.x;
+         *             cy = chop.y;
+         *         }
+         *     }
+         * 
+         *     prevX = coords[0];
+         *     prevY = coords[1];
+         *  }
+         * 
+         * // if (isClosed() && size() > 1) {
+         *    Node first = get(0);
+         *    Node last = get(size() - 1);
+         *    CanvasPoint chop = Geom.intersect(first.x[0], first.y[0], last.x[0], last.y[0], p.x, p.y, ctr.x, ctr.y);
+         *    if (chop != null) {
+         *        double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+         *        if (cl < len) {
+         *            len = cl;
+         *            cx = chop.x;
+         *            cy = chop.y;
+         *        }
+         *    }
+         * 
          * // if none found, pick closest vertex if (len == Double.MAX_VALUE) {
-         * for (int j = 0, n = size(); j < n; j++) { Node cp = get(j); double l
-         * = Geom.length2(cp.x[0], cp.y[0], p.x, p.y); if (l < len) { len = l;
-         * cx = cp.x[0]; cy = cp.y[0]; } } } return new CanvasPoint(cx, cy);
-         */
+         * for (int j = 0, n = size(); j< n ; j++) { 
+         *     Node cp = get(j);
+         *     double l = Geom.length2(cp.x[0], cp.y[0], p.x, p.y);
+         *     if (l < len) {
+         *         len = l;
+         *         cx = cp.x[0];
+         *         cy = cp.y[0];
+         *     }
+         *  }
+         * 
+         * return new CanvasPoint(cx, cy);
+         **/
     }
 
     /**
@@ -811,11 +856,9 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 //if (true) return new CanvasPoint(coords[0], coords[1]);
                 // Compute the relative CanvasPoint on the line
                 /*
-                 * return new CanvasPoint( prevX * pos / len + coords[0] * (pos
-                 * + segLen) / len, prevY * pos / len + coords[1] * (pos +
-                 * segLen) / len
-                );
-                 */
+                 * return new CanvasPoint(prevX * pos / len + coords[0] * (pos +
+                 *   segLen) / len, prevY * pos / len + coords[1] * (pos + segLen) / len);
+                */
                 double factor = (relativeLen - pos) / segLen;
 
                 return new CanvasPoint(
