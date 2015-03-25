@@ -39,6 +39,8 @@ import net.perspective.draw.util.CanvasPoint;
 public class BezierPath extends ArrayList<BezierPath.Node>
         implements Shape, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Constant for having only control point C0 in effect. C0 is the point
      * through whitch the curve passes.
@@ -89,6 +91,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * </li> <li>C2 is used to control the curve going away from C0.</li> </ul>
      */
     public static final class Node implements Cloneable, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         /**
          * This mask is used to describe which control points in addition to C0
