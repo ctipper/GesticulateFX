@@ -8,9 +8,8 @@
 
 package org.jhotdraw.geom;
 
-import java.awt.geom.*;
-
-import static java.awt.geom.PathIterator.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 
 /**
  * This class represents the iterator for a BezierPath.

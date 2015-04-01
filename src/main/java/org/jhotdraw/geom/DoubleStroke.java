@@ -286,7 +286,7 @@ public class DoubleStroke implements Stroke {
         Stroke result = null;
         boolean isNull = stream.readBoolean();
         if (!isNull) {
-            Class c = (Class) stream.readObject();
+            Class<?> c = (Class<?>) stream.readObject();
             if (c.equals(BasicStroke.class)) {
                 float width = stream.readFloat();
                 int cap = stream.readInt();
