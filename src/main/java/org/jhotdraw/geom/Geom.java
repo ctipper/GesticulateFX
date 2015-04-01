@@ -1,21 +1,13 @@
 /*
- * @(#)Geom.java  2.3  2009-05-04
+ * @(#)Geom.java
  *
- * Copyright (c) 1996-2009 by the original authors of JHotDraw
- * and all its contributors.
- * All rights reserved.
- *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
  */
 package org.jhotdraw.geom;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.*;
 
 import static java.lang.Math.*;
@@ -23,9 +15,7 @@ import static java.lang.Math.*;
 /**
  * Some geometric utilities.
  *
- * @version 2.3 2009-05-04 Method contains(Rectangle2D.Double, Rectangle2D.Double) added.
- * <br>2.2 2006-07-04 Method grow(Rectangle2D.Double) added.
- * <br>2.1 2006-01-20 Support for double precision coordinates enhanced.
+ * @version $Id: Geom.java 785 2013-12-01 19:16:30Z rawcoder $
  */
 public class Geom {
 
@@ -101,8 +91,8 @@ public class Geom {
             return (abs(py - y1) <= tolerance);
         }
 
-        a = (double) (y1 - y2) / (double) (x1 - x2);
-        b = (double) y1 - a * (double) x1;
+        a = (y1 - y2) / (x1 - x2);
+        b = y1 - a * x1;
         x = (py - b) / a;
         y = a * px + b;
 
@@ -244,9 +234,10 @@ public class Geom {
     }
 
     /**
-     * Returns a point on the edge of the bezier path which crosses the line
-     * from the center of the bezier path to the specified point.
-     * If no edge crosses the line, the nearest C0 control point is returned.
+     * Returns a point on the edge of the shape which crosses the line
+     * from the center of the shape to the specified point.
+     * If no edge crosses of the shape crosses the line, the nearest control
+     * point of the shape is returned.
      */
     public static Point2D.Double chop(Shape shape, Point2D.Double p) {
         Rectangle2D bounds = shape.getBounds2D();
@@ -260,7 +251,6 @@ public class Geom {
         // Try for points along edge
         PathIterator i = shape.getPathIterator(new AffineTransform(), 1);
         double[] coords = new double[6];
-        int type = i.currentSegment(coords);
         double prevX = coords[0];
         double prevY = coords[1];
         double moveToX = prevX;
@@ -545,10 +535,10 @@ public class Geom {
 
     /**
      * Standard line intersection algorithm
-     * Return the point of intersection if it exists, else null
+     * Return the point of intersection if it exists, else null.
      **/
-    // from Doug Lea's PolygonFigure
     public static Point intersect(int xa, // line 1 point 1 x
+            // from Doug Lea's PolygonFigure
             int ya, // line 1 point 1 y
             int xb, // line 1 point 2 x
             int yb, // line 1 point 2 y
@@ -575,8 +565,8 @@ public class Geom {
 
         if (denom == 0.0) { // parallel
             if (rnum == 0.0) { // coincident; pick one end of first line
-                if ((xa < xb && (xb < xc || xb < xd)) ||
-                        (xa > xb && (xb > xc || xb > xd))) {
+                if ((xa < xb && (xb < xc || xb < xd))
+                        || (xa > xb && (xb > xc || xb > xd))) {
                     return new Point(xb, yb);
                 } else {
                     return new Point(xa, ya);
@@ -631,8 +621,8 @@ public class Geom {
 
         if (denom == 0.0) { // parallel
             if (rnum == 0.0) { // coincident; pick one end of first line
-                if ((xa < xb && (xb < xc || xb < xd)) ||
-                        (xa > xb && (xb > xc || xb > xd))) {
+                if ((xa < xb && (xb < xc || xb < xd))
+                        || (xa > xb && (xb > xc || xb > xd))) {
                     return new Point2D.Double(xb, yb);
                 } else {
                     return new Point2D.Double(xa, ya);
@@ -684,8 +674,8 @@ public class Geom {
 
         if (denom == 0.0) { // parallel
             if (rnum == 0.0) { // coincident; pick one end of first line
-                if ((xa < xb && (xb < xc || xb < xd)) ||
-                        (xa > xb && (xb > xc || xb > xd))) {
+                if ((xa < xb && (xb < xc || xb < xd))
+                        || (xa > xb && (xb > xc || xb > xd))) {
                     return new Point2D.Double(xb, yb);
                 } else {
                     return new Point2D.Double(xa, ya);
@@ -707,10 +697,10 @@ public class Geom {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
 
-            if (length(xa, ya, px, py) <= limit ||
-                    length(xb, yb, px, py) <= limit ||
-                    length(xc, yc, px, py) <= limit ||
-                    length(xd, yd, px, py) <= limit) {
+            if (length(xa, ya, px, py) <= limit
+                    || length(xb, yb, px, py) <= limit
+                    || length(xc, yc, px, py) <= limit
+                    || length(xd, yd, px, py) <= limit) {
                 return new Point2D.Double(px, py);
             }
 
@@ -784,14 +774,14 @@ public class Geom {
         double yd = yc - yi;
         return sqrt(xd * xd + yd * yd);
 
-    /*
-    for directional version, instead use
-    double snum =  (ya-yc) * (xb-xa) - (xa-xc) * (yb-ya);
-    double s = snum / l2;
+        /*
+        for directional version, instead use
+        double snum =  (ya-yc) * (xb-xa) - (xa-xc) * (yb-ya);
+        double s = snum / l2;
 
-    double l = sqrt((double)l2);
-    return = s * l;
-     */
+        double l = sqrt((double)l2);
+        return = s * l;
+         */
     }
 
     /**
@@ -836,10 +826,10 @@ public class Geom {
      * @return true if r1 contains r2.
      */
     public static boolean contains(Rectangle2D.Double r1, Rectangle2D.Double r2) {
-        return (r2.x >= r1.x &&
-                r2.y >= r1.y &&
-                (r2.x + max(0, r2.width)) <= r1.x + max(0, r1.width) &&
-                (r2.y + max(0, r2.height)) <= r1.y + max(0, r1.height));
+        return (r2.x >= r1.x
+                && r2.y >= r1.y
+                && (r2.x + max(0, r2.width)) <= r1.x + max(0, r1.width)
+                && (r2.y + max(0, r2.height)) <= r1.y + max(0, r1.height));
     }
 
     /**
@@ -854,10 +844,9 @@ public class Geom {
      * @return true if r1 contains r2.
      */
     public static boolean contains(Rectangle2D r1, Rectangle2D r2) {
-        return (r2.getX()) >= r1.getX() &&
-                r2.getY() >= r1.getY() &&
-                (r2.getX() + max(0, r2.getWidth())) <= r1.getX() + max(0, r1.getWidth()) &&
-                (r2.getY() + max(0, r2.getHeight())) <= r1.getY() + max(0, r1.getHeight());
+        return (r2.getX()) >= r1.getX()
+                && r2.getY() >= r1.getY()
+                && (r2.getX() + max(0, r2.getWidth())) <= r1.getX() + max(0, r1.getWidth())
+                && (r2.getY() + max(0, r2.getHeight())) <= r1.getY() + max(0, r1.getHeight());
     }
 }
-

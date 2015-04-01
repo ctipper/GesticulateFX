@@ -1,20 +1,13 @@
 /*
- * @(#)Bezier.java 2.0.1  2006-06-14
+ * @(#)Bezier.java
  *
- * Copyright (c) 1996-2006 by the original authors of JHotDraw
- * and all its contributors.
- * All rights reserved.
- *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
  */
 package org.jhotdraw.geom;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -22,19 +15,15 @@ import net.perspective.draw.util.CanvasPoint;
  * <p>
  * Source:<br>
  * Phoenix: An Interactive Curve Design System Based on the Automatic Fitting
- * of Hand-Sketched Curves.
+ * of Hand-Sketched Curves.<br>
  * © Copyright by Philip J. Schneider 1988.<br>
  * A thesis submitted in partial fulfillment of the requirements for the degree
  * of Master of Science, University of Washington.
  * <p>
  * http://autotrace.sourceforge.net/Interactive_Curve_Design.ps.gz
  *
- * @version 3.0 2008-06-03 Totally rewritten.
- * <br>2.0.1 2006-06-14 Fit bezier curve must preserve closed state of
- * fitted BezierPath object.
- * <br>2.0 2006-01-14 Changed to support double precision coordinates.
- * <br>1.0 March 14, 2004.
  * @author Werner Randelshofer
+ * @version $Id: Bezier.java 789 2014-03-22 13:14:07Z rawcoder $
  */
 public class Bezier {
 
@@ -42,7 +31,8 @@ public class Bezier {
     private Bezier() {
     }
 
-/*    public static void main(String[] args) {
+    /*
+    public static void main(String[] args) {
         ArrayList<CanvasPoint> d = new ArrayList<CanvasPoint>();
         d.add(new CanvasPoint(0, 0));
         d.add(new CanvasPoint(5, 1));
@@ -61,9 +51,9 @@ public class Bezier {
     /**
      * Fits a bezier path to the specified list of digitized points.
      * <p>
-     * This is a convenience method for calling fitCubicSegments(List<CanvasPoint>, double);
+     * This is a convenience method for calling {@link #fitBezierPath}
      * 
-     * @param digitizedPoints digitized points.
+     * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points. 
      */
@@ -74,7 +64,7 @@ public class Bezier {
     /**
      * Fits a bezier path to the specified list of digitized points.
      * 
-     * @param digitizedPoints digitized points.
+     * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
      * digitized points. 
      */
@@ -142,7 +132,7 @@ public class Bezier {
     /**
      * Fits a bezier path to the specified list of digitized points.
      * <p>
-     * This is a convenience method for calling fitCubicSegments(List<CanvasPoint>, double);
+     * This is a convenience method for calling {@link #fitBezierPath}.
      * 
      * @param digitizedPoints digited points.
      * @param error the maximal allowed error between the bezier path and the
@@ -362,8 +352,8 @@ public class Bezier {
      *
      * @param d  Array of digitized points. Must not contain subsequent 
      * coincident points.
-     * @param first Index of first point in d.
-     * @param last Index of last point in d.
+     * @param first Indice of first point in d.
+     * @param last Indice of last point in d.
      * @param tHat1 Unit tangent vectors at start point.
      * @param tHat2 Unit tanget vector at end point.
      * @param errorSquared User-defined errorSquared squared.
@@ -515,7 +505,8 @@ public class Bezier {
      * @param center Index to "center" end of region.
      */
     private static CanvasPoint computeCenterTangent(ArrayList<CanvasPoint> d, int center) {
-        CanvasPoint V1, V2, tHatCenter = new CanvasPoint();
+        CanvasPoint V1, V2,
+                tHatCenter = new CanvasPoint();
 
         V1 = v2SubII(d.get(center - 1), d.get(center));
         V2 = v2SubII(d.get(center), d.get(center + 1));
@@ -530,8 +521,8 @@ public class Bezier {
      * using relative distances between points.
      *
      * @param d Digitized points.
-     * @param first Index of first point of region in d.
-     * @param last Index of last point of region in d.
+     * @param first Indice of first point of region in d.
+     * @param last Indice of last point of region in d.
      */
     private static double[] chordLengthParameterize(ArrayList<CanvasPoint> d, int first, int last) {
         int i;
@@ -546,7 +537,7 @@ public class Bezier {
         }
 
         for (i = first + 1; i <= last; i++) {
-            u[i - first] /= u[last - first];
+            u[i - first] = u[i - first] / u[last - first];
         }
 
         return (u);
@@ -557,8 +548,8 @@ public class Bezier {
      * a better parameterization.
      *
      * @param d  Array of digitized points.
-     * @param first Index of first point of region in d.
-     * @param last Index of last point of region in d.
+     * @param first Indice of first point of region in d.
+     * @param last Indice of last point of region in d.
      * @param u Current parameter values.
      * @param bezCurve Current fitted curve.
      */
@@ -624,8 +615,8 @@ public class Bezier {
      * to fitted curve.
      *
      * @param d Digitized points.
-     * @param first Index of first point of region in d.
-     * @param last Index of last point of region in d.
+     * @param first Indice of first point of region in d.
+     * @param last Indice of last point of region in d.
      * @param bezCurve Fitted Bezier curve
      * @param u Parameterization of points*
      * @param splitPoint Point of maximum error (input/output parameter, must be
@@ -635,8 +626,8 @@ public class Bezier {
         int i;
         double maxDist;		/*  Maximum error */
         double dist;		/*  Current error */
-        CanvasPoint P;          /*  Point on curve */
-        CanvasPoint v;          /*  Vector from point to curve */
+        CanvasPoint P; /*  Point on curve */
+        CanvasPoint v; /*  Vector from point to curve */
 
         splitPoint[0] = (last - first + 1) / 2;
         maxDist = 0.0;
@@ -656,11 +647,11 @@ public class Bezier {
      * Use least-squares method to find Bezier control points for region.
      *
      * @param d  Array of digitized points.
-     * @param first Index of first point in d.
-     * @param last Index of last point in d.
+     * @param first Indice of first point in d.
+     * @param last Indice of last point in d.
      * @param uPrime Parameter values for region .
      * @param tHat1 Unit tangent vectors at start point.
-     * @param tHat2 Unit tangent vector at end point.
+     * @param tHat2 Unit tanget vector at end point.
      * @return A cubic bezier curve consisting of 4 control points.
      */
     private static CanvasPoint[] generateBezier(ArrayList<CanvasPoint> d, int first, int last, double[] uPrime, CanvasPoint tHat1, CanvasPoint tHat2) {
@@ -697,7 +688,8 @@ public class Bezier {
         /* Copy array	*/
         vTemp = new CanvasPoint[degree + 1];
         for (i = 0; i <= degree; i++) {
-            try { vTemp[i] = (CanvasPoint) V[i].clone();
+            try {
+                vTemp[i] = (CanvasPoint) V[i].clone();
             } catch (CloneNotSupportedException e) {}
         }
 

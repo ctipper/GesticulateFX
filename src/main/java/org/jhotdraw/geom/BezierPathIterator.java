@@ -1,21 +1,16 @@
 /*
- * @(#)BezierPathIterator.java  1.0  7. Mai 2007
+ * @(#)BezierPathIterator.java
  *
- * Copyright (c) 1996-2006 by the original authors of JHotDraw
- * and all its contributors.
- * All rights reserved.
- *
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
- * the copyright holders. For details see accompanying license terms. 
+ * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
+ * You may not use, copy or modify this file, except in compliance with the 
+ * accompanying license terms.
  */
 
 package org.jhotdraw.geom;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
+import java.awt.geom.*;
+
+import static java.awt.geom.PathIterator.*;
 
 /**
  * This class represents the iterator for a BezierPath.
@@ -27,7 +22,7 @@ import java.awt.geom.PathIterator;
  * Subsequent iterations require a new iterator.
  *
  * @author Werner Randelshofer
- * @version 1.0 7. Mai 2007 Created.
+ * @version $Id: BezierPathIterator.java 785 2013-12-01 19:16:30Z rawcoder $
  */
 public class BezierPathIterator implements PathIterator {
     /**
@@ -70,6 +65,7 @@ public class BezierPathIterator implements PathIterator {
      * @see PathIterator#WIND_EVEN_ODD
      * @see PathIterator#WIND_NON_ZERO
      */
+    @Override
     public int getWindingRule() {
         return path.getWindingRule();
     }
@@ -78,6 +74,7 @@ public class BezierPathIterator implements PathIterator {
      * Tests if there are more points to read.
      * @return true if there are more points to read
      */
+    @Override
     public boolean isDone() {
         return (index >= path.size() + (path.isClosed() ? 2 : 0));
     }
@@ -87,6 +84,7 @@ public class BezierPathIterator implements PathIterator {
      * along the primary direction of traversal as long as there are
      * more points in that direction.
      */
+    @Override
     public void next() {
         if (! isDone()) {
             index++;
@@ -111,6 +109,7 @@ public class BezierPathIterator implements PathIterator {
      * @see PathIterator#SEG_CUBICTO
      * @see PathIterator#SEG_CLOSE
      */
+    @Override
     public int currentSegment(float[] coords) {
         int numCoords = 0;
         int type = 0;
@@ -229,6 +228,7 @@ public class BezierPathIterator implements PathIterator {
      * @see PathIterator#SEG_CUBICTO
      * @see PathIterator#SEG_CLOSE
      */
+    @Override
     public int currentSegment(double[] coords) {
         int numCoords = 0;
         int type = 0;
