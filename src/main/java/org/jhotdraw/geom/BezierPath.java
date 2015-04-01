@@ -192,7 +192,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
-    @Override
+        @Override
         public String toString() {
             StringBuilder buf = new StringBuilder();
             buf.append(super.toString());
@@ -219,14 +219,14 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             return buf.toString();
         }
 
-    @Override
+        @Override
         public int hashCode() {
             return (mask & 0x3) << 29
                     | (Arrays.hashCode(x) & 0x3fff0000)
                     | (Arrays.hashCode(y) & 0xffff);
         }
 
-    @Override
+        @Override
         public boolean equals(Object o) {
             if (o instanceof BezierPath.Node) {
                 BezierPath.Node that = (BezierPath.Node) o;
