@@ -9,9 +9,7 @@ package org.jhotdraw.geom;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * Draws a double stroke (an outline of an outline).
@@ -22,9 +20,9 @@ import java.io.ObjectOutputStream;
  * @author Werner Randelshofer
  * @version $Id: DoubleStroke.java 785 2013-12-01 19:16:30Z rawcoder $
  */
-public class DoubleStroke implements Stroke {
+public class DoubleStroke implements Stroke, Serializable {
 
-    private BasicStroke outlineStroke;
+    transient private BasicStroke outlineStroke;
     private double innerWidth;
     private double outlineWidth;
     private double miterLimit;
@@ -280,51 +278,6 @@ public class DoubleStroke implements Stroke {
         return corners;
     }
 
-    public static Stroke readStroke(ObjectInputStream stream)
-            throws IOException, ClassNotFoundException {
-
-        Stroke result = null;
-        boolean isNull = stream.readBoolean();
-        if (!isNull) {
-            Class<?> c = (Class<?>) stream.readObject();
-            if (c.equals(BasicStroke.class)) {
-                float width = stream.readFloat();
-                int cap = stream.readInt();
-                int join = stream.readInt();
-                float miterLimit = stream.readFloat();
-                float[] dash = (float[]) stream.readObject();
-                float dashPhase = stream.readFloat();
-                result = new BasicStroke(width, cap, join, miterLimit, dash, dashPhase);
-            } else {
-                result = (Stroke) stream.readObject();
-            }
-        }
-        return result;
-   }
-
-    public static void writeStroke(Stroke stroke,
-            ObjectOutputStream stream) throws IOException {
-
-        if (stroke != null) {
-            stream.writeBoolean(false);
-            if (stroke instanceof BasicStroke) {
-                BasicStroke s = (BasicStroke) stroke;
-                stream.writeObject(BasicStroke.class);
-                stream.writeFloat(s.getLineWidth());
-                stream.writeInt(s.getEndCap());
-                stream.writeInt(s.getLineJoin());
-                stream.writeFloat(s.getMiterLimit());
-                stream.writeObject(s.getDashArray());
-                stream.writeFloat(s.getDashPhase());
-            } else {
-                stream.writeObject(stroke.getClass());
-                stream.writeObject(stroke);
-            }
-        } else {
-            stream.writeBoolean(true);
-        }
-    }
-
     public void setInnerWidth(float i) {
         innerWidth = i;
     }
@@ -375,5 +328,50 @@ public class DoubleStroke implements Stroke {
             throws IOException {
         out.defaultWriteObject();
         writeStroke(outlineStroke, out);
+    }
+
+    public static Stroke readStroke(ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+
+        Stroke result = null;
+        boolean isNull = stream.readBoolean();
+        if (!isNull) {
+            Class<?> c = (Class<?>) stream.readObject();
+            if (c.equals(BasicStroke.class)) {
+                float width = stream.readFloat();
+                int cap = stream.readInt();
+                int join = stream.readInt();
+                float miterLimit = stream.readFloat();
+                float[] dash = (float[]) stream.readObject();
+                float dashPhase = stream.readFloat();
+                result = new BasicStroke(width, cap, join, miterLimit, dash, dashPhase);
+            } else {
+                result = (Stroke) stream.readObject();
+            }
+        }
+        return result;
+   }
+
+    public static void writeStroke(Stroke stroke,
+            ObjectOutputStream stream) throws IOException {
+
+        if (stroke != null) {
+            stream.writeBoolean(false);
+            if (stroke instanceof BasicStroke) {
+                BasicStroke s = (BasicStroke) stroke;
+                stream.writeObject(BasicStroke.class);
+                stream.writeFloat(s.getLineWidth());
+                stream.writeInt(s.getEndCap());
+                stream.writeInt(s.getLineJoin());
+                stream.writeFloat(s.getMiterLimit());
+                stream.writeObject(s.getDashArray());
+                stream.writeFloat(s.getDashPhase());
+            } else {
+                stream.writeObject(stroke.getClass());
+                stream.writeObject(stroke);
+            }
+        } else {
+            stream.writeBoolean(true);
+        }
     }
 }
