@@ -18,20 +18,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
-
 public class CanvasTransferHandler {
 
     DrawingArea canvas;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
-            + ";class=net.perspective.draw.geom.Figure";
+        + ";class=net.perspective.draw.geom.Figure";
     DataFlavor dataFlavor;
     private double shift;
-    
+
     public static int COPY = 1;
     public static int MOVE = 2;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(CanvasTransferHandler.class.getName());
-    
+
     public CanvasTransferHandler(DrawingArea c) {
         canvas = c;
         //Try to create a DataFlavor for drawItems.
@@ -53,7 +52,7 @@ public class CanvasTransferHandler {
                     // add item to Canvas
                     item.moveFigure(shift, shift);
                     canvas.getView().appendItemToCanvas(item);
-                } 
+                }
                 shift = shift + 20.0;
                 logger.debug("Figure added to canvas");
                 return true;

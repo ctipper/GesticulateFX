@@ -18,11 +18,10 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
-
 public class FigureTransferable implements Transferable {
 
     String mimeType = DataFlavor.javaSerializedObjectMimeType
-            + ";class=net.perspective.draw.geom.Figure";
+        + ";class=net.perspective.draw.geom.Figure";
     DataFlavor dataFlavor;
     private final ByteArrayOutputStream out;
 
@@ -46,7 +45,7 @@ public class FigureTransferable implements Transferable {
     }
 
     public Object getTransferData(DataFlavor flavor)
-            throws UnsupportedFlavorException {
+        throws UnsupportedFlavorException {
         if (!isDataFlavorSupported(flavor)) {
             throw new UnsupportedFlavorException(flavor);
         }
@@ -64,7 +63,7 @@ public class FigureTransferable implements Transferable {
     }
 
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[]{dataFlavor};
+        return new DataFlavor[] { dataFlavor };
     }
 
     public boolean isDataFlavorSupported(DataFlavor flavor) {
