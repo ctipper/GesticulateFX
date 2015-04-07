@@ -28,6 +28,9 @@ public class FigureHandler implements Handler {
 
     public void upEvent() {
         view.setDrawing(false);
+        if (view.getNewItem() == null || drawarea.getDrawType() == null) {
+            return;
+        }
         // add figure to canvas
         Figure item = view.getNewItem();
         item.setStroke(drawarea.getStroke());
