@@ -29,6 +29,8 @@ public class DoubleStroke implements Stroke, Serializable {
     private float[] dashes;
     private float dashPhase;
 
+    private static final long serialVersionUID = 1L;
+
     public DoubleStroke(double innerWidth, double outlineWidth) {
         this(innerWidth, outlineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 10f, null, 0f);
     }
