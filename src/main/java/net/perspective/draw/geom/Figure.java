@@ -55,20 +55,20 @@ public class Figure implements Serializable {
         this.path = new Path2D.Double();
     }
     
-    public CanvasPoint getStart() {
-        return start;
-    }
-
     public void setStart(double x, double y) {
         this.start = new CanvasPoint(x,y);
     }
 
-    public CanvasPoint getEnd() {
-        return end;
+    public CanvasPoint getStart() {
+        return start;
     }
 
     public void setEnd(double x, double y) {
         this.end = new CanvasPoint(x,y);
+    }
+
+    public CanvasPoint getEnd() {
+        return end;
     }
 
     public void setPoints(DrawingType drawtype) {
@@ -101,21 +101,21 @@ public class Figure implements Serializable {
         this.points.add(new CanvasPoint(x, y));
     }
     
-    public void setType(FigureType t) {
-        this.type = t;
-    }
-
-    public FigureType getType() {
-        return this.type;
+    public void setPath() {
+        this.path = pathfactory.createPath(this);
+        this.setClosed(true);
     }
 
     public Path2D.Double getPath() {
         return this.path;
     }
 
-    public void setPath() {
-        this.path = pathfactory.createPath(this);
-        this.setClosed(true);
+    public void setType(FigureType t) {
+        this.type = t;
+    }
+
+    public FigureType getType() {
+        return this.type;
     }
 
     public CanvasPoint[] getTop() {
@@ -228,40 +228,6 @@ public class Figure implements Serializable {
         this.setPath();
     }
 
-    public Node drawAnchors() {
-        Group anchors = new Group();
-        switch (this.type) {
-            case LINE:
-            case SKETCH:
-            case POLYGON:
-                // end points marked
-                anchors.getChildren().add(this.anchor(start.x, start.y));
-                anchors.getChildren().add(this.anchor(end.x, end.y));
-                break;
-            case NONE:
-                break;
-            default:
-                anchors.getChildren().add(this.anchor(start.x, start.y));
-                anchors.getChildren().add(this.anchor(end.x, start.y));
-                anchors.getChildren().add(this.anchor(start.x, end.y));
-                anchors.getChildren().add(this.anchor(end.x, end.y));
-                break;
-        }
-        return anchors;
-    }
-    
-    protected Shape anchor(double x, double y) {
-        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
-        Circle anchor = new Circle();
-        anchor.setCenterX(u.x);
-        anchor.setCenterY(u.y);
-        anchor.setRadius(5.0);
-        anchor.setFill(Color.web("white"));
-        anchor.setStroke(Color.web("black"));
-        anchor.setStrokeWidth(1.0);
-        return anchor;
-    }
-    
     public Path draw() {
         AffineTransform at;
         at = this.getTransform();
@@ -325,6 +291,40 @@ public class Figure implements Serializable {
         return fxpath;
     }
     
+    public Node drawAnchors() {
+        Group anchors = new Group();
+        switch (this.type) {
+            case LINE:
+            case SKETCH:
+            case POLYGON:
+                // end points marked
+                anchors.getChildren().add(this.anchor(start.x, start.y));
+                anchors.getChildren().add(this.anchor(end.x, end.y));
+                break;
+            case NONE:
+                break;
+            default:
+                anchors.getChildren().add(this.anchor(start.x, start.y));
+                anchors.getChildren().add(this.anchor(end.x, start.y));
+                anchors.getChildren().add(this.anchor(start.x, end.y));
+                anchors.getChildren().add(this.anchor(end.x, end.y));
+                break;
+        }
+        return anchors;
+    }
+    
+    protected Shape anchor(double x, double y) {
+        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
+        Circle anchor = new Circle();
+        anchor.setCenterX(u.x);
+        anchor.setCenterY(u.y);
+        anchor.setRadius(5.0);
+        anchor.setFill(Color.web("white"));
+        anchor.setStroke(Color.web("black"));
+        anchor.setStrokeWidth(1.0);
+        return anchor;
+    }
+    
     public double getLineWidth() {
         return (double) ((BasicStroke) this.getStroke()).getLineWidth();
     }
@@ -375,18 +375,6 @@ public class Figure implements Serializable {
         return this.closed;
     }
 
-    public void setStroke(Stroke s) {
-        this.stroke = s;
-    }
-
-    public Stroke getStroke() {
-        return this.stroke;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getColor() {
         return this.color;
     }
@@ -397,6 +385,18 @@ public class Figure implements Serializable {
 
     public String getFillColor() {
         return this.fillcolor;
+    }
+
+    public void setStroke(Stroke s) {
+        this.stroke = s;
+    }
+
+    public Stroke getStroke() {
+        return this.stroke;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public void setAngle(double a) {
