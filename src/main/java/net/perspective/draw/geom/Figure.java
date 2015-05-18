@@ -55,20 +55,20 @@ public class Figure implements Serializable {
         this.path = new Path2D.Double();
     }
     
-    public CanvasPoint getStart() {
-        return start;
-    }
-
     public void setStart(double x, double y) {
         this.start = new CanvasPoint(x,y);
     }
 
-    public CanvasPoint getEnd() {
-        return end;
+    public CanvasPoint getStart() {
+        return start;
     }
 
     public void setEnd(double x, double y) {
         this.end = new CanvasPoint(x,y);
+    }
+
+    public CanvasPoint getEnd() {
+        return end;
     }
 
     public void setPoints(DrawingType drawtype) {
@@ -109,13 +109,13 @@ public class Figure implements Serializable {
         return this.type;
     }
 
-    public Path2D.Double getPath() {
-        return this.path;
-    }
-
     public void setPath() {
         this.path = pathfactory.createPath(this);
         this.setClosed(true);
+    }
+
+    public Path2D.Double getPath() {
+        return this.path;
     }
 
     public CanvasPoint[] getTop() {
