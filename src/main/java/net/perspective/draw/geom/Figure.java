@@ -46,9 +46,9 @@ public class Figure implements Serializable {
         this.closed = false;
     }
 
-    public Figure(FigureType t) {
+    public Figure(FigureType type) {
         this();
-        this.type = t;
+        this.type = type;
         this.points = new ArrayList<>();
         this.pathfactory = new FigurePathFactory();
         this.pointfactory = new FigurePointFactory();
@@ -110,8 +110,8 @@ public class Figure implements Serializable {
         return this.path;
     }
 
-    public void setType(FigureType t) {
-        this.type = t;
+    public void setType(FigureType type) {
+        this.type = type;
     }
 
     public FigureType getType() {
@@ -375,32 +375,32 @@ public class Figure implements Serializable {
         return this.closed;
     }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     public String getColor() {
         return this.color;
     }
 
-    public void setFillColor(String c) {
-        this.fillcolor = c;
+    public void setFillColor(String fillcolor) {
+        this.fillcolor = fillcolor;
     }
 
     public String getFillColor() {
         return this.fillcolor;
     }
 
-    public void setStroke(Stroke s) {
-        this.stroke = s;
+    public void setStroke(Stroke stroke) {
+        this.stroke = stroke;
     }
 
     public Stroke getStroke() {
         return this.stroke;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setAngle(double a) {
-        this.angle = a;
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
     public double getAngle() {

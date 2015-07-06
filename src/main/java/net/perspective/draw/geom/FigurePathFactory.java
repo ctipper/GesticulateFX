@@ -20,14 +20,14 @@ public class FigurePathFactory implements PathFactory {
 
     Path2D.Double path;
 
-    public Path2D.Double createPath(Figure fig) {
+    public Path2D.Double createPath(Figure figure) {
         CanvasPoint p0, p1, p2, p3;
         double x, y, w, h;
         CanvasPoint[] cPoints;
         
         path = new Path2D.Double();
-        java.util.List<CanvasPoint> points = fig.getPoints();
-        FigureType type = fig.getType();
+        java.util.List<CanvasPoint> points = figure.getPoints();
+        FigureType type = figure.getType();
         switch (type) {
             case LINE:
                 if (points.size() > 1) {

@@ -28,8 +28,8 @@ public class Edge extends Figure implements Serializable {
         super();
     }
     
-    public Edge(FigureType t) {
-        super(t);
+    public Edge(FigureType type) {
+        super(type);
     }
     
     public void setPoints(DrawingType drawtype) {
