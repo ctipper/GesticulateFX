@@ -32,6 +32,7 @@ public class Edge extends Figure implements Serializable {
         super(type);
     }
     
+    @Override
     public void setPoints(DrawingType drawtype) {
         if (this.type.equals(FigureType.LINE)) {
             this.points = pointfactory.createPoints(drawtype, start.x, start.y, end.x, end.y);
@@ -40,11 +41,13 @@ public class Edge extends Figure implements Serializable {
         }
     }
 
+    @Override
     public void setEndPoints() {
         start = points.get(0);
         end = points.get(points.size() - 1);
     }
 
+    @Override
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
@@ -58,6 +61,7 @@ public class Edge extends Figure implements Serializable {
         }
     }
 
+    @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s[];
         Rectangle2D bound = this.getBounds2D();
@@ -66,6 +70,7 @@ public class Edge extends Figure implements Serializable {
         return s;
     }
 
+    @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up[];
         Rectangle2D bound = this.getBounds2D();
@@ -74,6 +79,7 @@ public class Edge extends Figure implements Serializable {
         return up;
     }
 
+    @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down[];
         Rectangle2D bound = this.getBounds2D();
@@ -82,6 +88,7 @@ public class Edge extends Figure implements Serializable {
         return down;
     }
 
+    @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e[];
         Rectangle2D bound = this.getBounds2D();
@@ -91,6 +98,7 @@ public class Edge extends Figure implements Serializable {
         return e;
     }
 
+    @Override
     public CanvasPoint rotationCentre() {
         Path2D.Double pa = (Path2D.Double) this.getPath().clone();
         pa.closePath();
@@ -99,6 +107,7 @@ public class Edge extends Figure implements Serializable {
         return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
     }
     
+    @Override
     public Shape bounds() {
         Shape bounds;
 
@@ -124,6 +133,7 @@ public class Edge extends Figure implements Serializable {
      * Return 2-point array of vertices, second point normalized.
      * Note that the points may not be cyclical.
      */
+    @Override
     public List<CanvasPoint[]> getVertices() {
         List<CanvasPoint[]> vert = new ArrayList<>();
         List<CanvasPoint[]> vertices = new ArrayList<>();
