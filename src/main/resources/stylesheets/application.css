@@ -21,9 +21,11 @@
     -fx-border-color: 
         linear-gradient(rgb(147.0, 147.0, 147.0), rgb(131.0, 131.0, 131.0)),
         linear-gradient(rgb(116.0, 116.0, 116.0), rgb(105.0, 105.0, 105.0));
-    -fx-padding: 3 13 3 13;
+    -fx-padding: 3 14 3 14;
     -fx-text-fill: black;
     -fx-font-size: 14px;
+    -fx-width: 27px;
+    -fx-height: 27px;
 }
 #statusbar {
     -fx-background-color: rgb(185.0, 185.0, 185.0);
@@ -95,6 +97,11 @@
 }
 #buttvertical {
     -fx-background-image: url('../images/perpendicular.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttwireframe {
+    -fx-background-image: url('../images/wireframe.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
