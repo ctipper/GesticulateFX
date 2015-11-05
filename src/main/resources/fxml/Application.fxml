@@ -83,8 +83,8 @@
             <Label focusTraversable="false" text="Color" />
             <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
                 <Region prefWidth="5.0" />
-            <ToggleButton id="buttwireframe" onTouchPressed="#handleOpacityAction" onMouseClicked="#handleOpacityAction"  focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="" />
             <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
+            <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#handleOpacityAction" onTouchPressed="#handleOpacityAction" styleClass="togglebuttons" text="" />
                 <Region prefWidth="50.0" />
             <Label focusTraversable="false" text="Font" />
             <ComboBox focusTraversable="false">
