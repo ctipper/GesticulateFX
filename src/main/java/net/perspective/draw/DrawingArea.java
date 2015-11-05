@@ -45,6 +45,7 @@ public class DrawingArea {
     private DrawingType drawtype;
     private Stroke stroke;
     private String color, fillcolor;
+    private int transparency;
     private double startX, startY;
     private double tempX, tempY;
     
@@ -79,9 +80,10 @@ public class DrawingArea {
 
     public void prepareDrawing() {
         setDrawType(DrawingType.SKETCH);
-        setStroke(new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
-        setColor("#4860E0");
-        setFillColor("#4860E0");
+        this.stroke = new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+        this.color = "#4860E0";
+        this.fillcolor = "#4860E0";
+        this.transparency = 100;
         view.clearView();
         this.clear();
         changeHandler(HandlerType.SKETCH);
@@ -305,7 +307,7 @@ public class DrawingArea {
     }
     
     public List<TouchPoint> getStartTouches() {
-        return starters;
+        return this.starters;
     }
 
     public void setTempTouches(List<TouchPoint> touches) {
@@ -313,31 +315,43 @@ public class DrawingArea {
     }
     
     public List<TouchPoint> getTempTouches() {
-        return tempers;
+        return this.tempers;
     }
 
     public void setStroke(Stroke stroke) {
         this.stroke = stroke;
-    }
+        view.updateSelectedItem();
+}
 
     public Stroke getStroke() {
-        return stroke;
+        return this.stroke;
     }
 
     public void setColor(String color) {
         this.color = color;
+        view.updateSelectedItem();
     }
 
     public String getColor() {
-        return color;
+        return this.color;
     }
 
-    public void setFillColor(String color) {
-        this.fillcolor = color;
+    public void setFillColor(String fillcolor) {
+        this.fillcolor = fillcolor;
+        view.updateSelectedItem();
     }
 
     public String getFillColor() {
-        return fillcolor;
+        return this.fillcolor;
     }
     
+    public void setTransparency(int transparency) {
+        this.transparency = transparency;
+        view.updateSelectedItem();
+    }
+
+    public int getTransparency() {
+        return this.transparency;
+    }
+
 }

@@ -1,5 +1,5 @@
 .toolbutton {
-    /* lion */
+    /* Mac style buttons */
     -fx-background-color:
         rgba(0,0,0,0.08),
         linear-gradient(#9a9a9a, #909090),
@@ -26,6 +26,27 @@
     -fx-font-size: 14px;
     -fx-width: 27px;
     -fx-height: 27px;
+}
+.togglebuttons {
+    -fx-background-color: 
+        linear-gradient(rgb(245.0, 245.0, 245.0), rgb(185.0, 185.0, 185.0));
+    -fx-background-insets:0.0;
+    -fx-background-radius: 3.5, 3.5;
+    -fx-border-radius: 4.0;
+    -fx-border-width: 0.4;
+    -fx-border-insets: 0, 0;
+    -fx-border-color: 
+        linear-gradient(rgb(147.0, 147.0, 147.0), rgb(131.0, 131.0, 131.0)),
+        linear-gradient(rgb(116.0, 116.0, 116.0), rgb(105.0, 105.0, 105.0));
+    -fx-padding: 3 14 3 14;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-width: 27px;
+    -fx-height: 27px;
+}
+.togglebuttons:selected {
+    -fx-background-color: 
+        linear-gradient(rgb(195.0, 195.0, 195.0), rgb(125.0, 125.0, 125.0));
 }
 #statusbar {
     -fx-background-color: rgb(185.0, 185.0, 185.0);

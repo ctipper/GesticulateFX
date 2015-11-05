@@ -104,24 +104,27 @@ public class CanvasView {
         });
     }
     
-    public void addItemToCanvas(Figure f) {
-        if (f != null) {
-            // to update properties here
-            drawings.add(f);
+    public void addItemToCanvas(Figure item) {
+        if (item != null) {
+            item.updateProperties(drawarea);
+            drawings.add(item);
         }
     }
     
-    public void appendItemToCanvas(Figure f) {
-        drawings.add(f);
+    public void appendItemToCanvas(Figure item) {
+        item.updateProperties(drawarea);
+        drawings.add(item);
     }
 
-    public void updateCanvasItem(int i, Figure f) {
-        drawings.set(i, f);
+    public void updateCanvasItem(int i, Figure item) {
+        item.updateProperties(drawarea);
+        drawings.set(i, item);
     }
     
     public void updateSelectedItem() {
         if (this.getSelected() != -1) {
-            // to update properties here
+            Figure item = drawings.get(this.getSelected());
+            this.updateCanvasItem(this.getSelected(), item);
         }
     }
     

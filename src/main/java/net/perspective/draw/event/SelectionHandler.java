@@ -29,7 +29,10 @@ public class SelectionHandler implements Handler {
     @Inject private BehaviourContext context;
     
     public void upEvent() {
-        context.resetContainment();
+        if ((view.getSelected() != -1)) {
+            view.updateSelectedItem();
+            context.resetContainment();
+        }
     }
 
     public void downEvent() {

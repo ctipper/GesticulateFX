@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
 import javax.inject.Inject;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.HandlerType;
@@ -76,6 +78,17 @@ public class ApplicationController implements Initializable {
         drawarea.changeHandler(HandlerType.SKETCH);
     }
     
+    @FXML
+    private void handleOpacityAction(InputEvent event) {
+        javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) event.getSource();
+        if (button.isSelected()) {
+            drawarea.setTransparency(0);
+        } else {
+            drawarea.setTransparency(100);
+        }
+        event.consume();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    

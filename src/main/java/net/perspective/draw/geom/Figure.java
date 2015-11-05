@@ -16,6 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
@@ -35,6 +36,7 @@ public class Figure implements Serializable {
     protected transient PathFactory pathfactory;
     protected transient Stroke stroke;
     private String color, fillcolor;
+    private int transparency;
     private double angle;
     // closed indicates to draw() whether shape should be filled
     private boolean closed;
@@ -42,6 +44,7 @@ public class Figure implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Figure() {
+        this.transparency = 0;
         this.angle = 0;
         this.closed = false;
     }
@@ -116,6 +119,13 @@ public class Figure implements Serializable {
 
     public FigureType getType() {
         return this.type;
+    }
+
+    public void updateProperties(DrawingArea canvas) {
+        this.setColor(canvas.getColor());
+        this.setFillColor(canvas.getFillColor());
+        this.setStroke(canvas.getStroke());
+        this.setTransparency(canvas.getTransparency());
     }
 
     public CanvasPoint[] getTop() {
@@ -236,8 +246,8 @@ public class Figure implements Serializable {
         fxpath.setStrokeWidth(getLineWidth());
         fxpath.setStrokeLineJoin(getLineJoin());
         fxpath.setStrokeLineCap(getLineCap());
-        if (this.isClosed() && !"white".equals(this.getFillColor())) {
-            fxpath.setFill(Color.web(this.getFillColor()));
+        if (this.isClosed()) {
+            fxpath.setFill(Color.web(this.getFillColor(), ((double) this.transparency) / 100));
         }
         return fxpath;
     }
@@ -397,6 +407,14 @@ public class Figure implements Serializable {
 
     public Stroke getStroke() {
         return this.stroke;
+    }
+
+    public void setTransparency(int transparency) {
+        this.transparency = transparency;
+    }
+
+    public int getTransparency() {
+        return this.transparency;
     }
 
     public void setAngle(double angle) {
