@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.InputEvent;
-import javafx.scene.input.MouseEvent;
 import javax.inject.Inject;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.HandlerType;
