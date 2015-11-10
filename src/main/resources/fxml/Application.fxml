@@ -20,25 +20,25 @@
         <ScrollPane id="scroll" content="$null" fitToWidth="true" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" />
       </center>
       <left>
-        <VBox prefHeight="-1.0" prefWidth="40.0" style="-fx-border-color: rgb(243.0, 243.0, 243.0);">
+        <VBox prefHeight="-1.0" prefWidth="50.0" style="-fx-background-color: white; -fx-border-color: rgb(243.0, 243.0, 243.0);">
           <children>
-            <Button id="buttnewcanvas" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleWipeAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="">
+            <Button id="buttnewcanvas" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleWipeAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="">
               <VBox.margin>
-                <Insets bottom="3.0" left="2.0" right="2.0" top="3.0" fx:id="x1" />
+                <Insets bottom="3.0" left="4.0" right="4.0" top="3.0" fx:id="x1" />
               </VBox.margin>
             </Button>
-            <Button id="buttselect" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="buttrotate" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="buttslope" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="buttcircle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="buttsquare" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="butttriangle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="buttpolygon" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="buttsketch" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSketchAction" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-            <Button id="butttext" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttselect" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttrotate" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttslope" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttcircle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttsquare" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="butttriangle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttpolygon" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="buttsketch" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSketchAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+            <Button id="butttext" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
             <CheckBox alignment="BOTTOM_CENTER" focusTraversable="false" mnemonicParsing="false" text="">
               <VBox.margin>
-                <Insets left="10.0" top="8.0" />
+                <Insets left="16.0" top="8.0" />
               </VBox.margin>
             </CheckBox>
             <Label text="Grid">
@@ -46,7 +46,7 @@
                 <Font size="12.0" />
               </font>
               <VBox.margin>
-                <Insets left="7.0" top="4.0" />
+                <Insets left="14.0" top="4.0" />
               </VBox.margin>
             </Label>
           </children>
@@ -76,9 +76,10 @@
               </items>
             </ComboBox>
             <Label focusTraversable="false" text="Fill">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding></Label>
+                <padding>
+                    <Insets left="5.0" />
+                </padding>
+            </Label>
             <Button id="fillcolor" focusTraversable="false" mnemonicParsing="false" prefWidth="45.0" style="-fx-background-color: rgb(153, 204, 255);" text="" />
             <Label focusTraversable="false" text="Color" />
             <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
@@ -116,6 +117,7 @@
     </BorderPane>
   </children>
   <stylesheets>
+    <URL value="@../stylesheets/jmetro-light.css" />
     <URL value="@../stylesheets/application.css" />
   </stylesheets>
 </AnchorPane>
