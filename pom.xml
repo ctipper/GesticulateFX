@@ -107,11 +107,6 @@
             <version>${fx-guice.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>gwt.g2d</groupId>
-            <artifactId>gwt-g2d-v008</artifactId>
-            <version>1.0</version>
-        </dependency>
     </dependencies>
 
 </project>
