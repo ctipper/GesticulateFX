@@ -78,14 +78,13 @@ public class ApplicationController implements Initializable {
     }
     
     @FXML
-    private void handleOpacityAction(InputEvent event) {
+    private void handleOpacityAction(ActionEvent event) {
         javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) event.getSource();
         if (button.isSelected()) {
             drawarea.setTransparency(0);
         } else {
             drawarea.setTransparency(100);
         }
-        event.consume();
     }
 
     @Override

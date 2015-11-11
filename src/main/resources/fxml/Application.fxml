@@ -56,7 +56,7 @@
         <ToolBar prefHeight="60.0" style="">
           <items>
             <Label focusTraversable="false" text="Stroke" />
-            <ComboBox focusTraversable="false">
+            <ComboBox focusTraversable="false" prefWidth="90.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
@@ -66,7 +66,7 @@
               </items>
             </ComboBox>
             <Label focusTraversable="false" text="Style" />
-            <ComboBox focusTraversable="false">
+            <ComboBox focusTraversable="false" prefWidth="90.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
@@ -75,20 +75,17 @@
                 </FXCollections>
               </items>
             </ComboBox>
-            <Label focusTraversable="false" text="Fill">
-                <padding>
-                    <Insets left="5.0" />
-                </padding>
-            </Label>
+                <Region prefWidth="5.0" />
+            <Label focusTraversable="false" text="Fill" />
             <Button id="fillcolor" focusTraversable="false" mnemonicParsing="false" prefWidth="45.0" style="-fx-background-color: rgb(153, 204, 255);" text="" />
             <Label focusTraversable="false" text="Color" />
             <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
                 <Region prefWidth="5.0" />
             <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
-            <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#handleOpacityAction" onTouchPressed="#handleOpacityAction" styleClass="togglebuttons" text="" />
-                <Region prefWidth="50.0" />
+            <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="" />
+                <Region prefWidth="40.0" />
             <Label focusTraversable="false" text="Font" />
-            <ComboBox focusTraversable="false">
+            <ComboBox focusTraversable="false" prefWidth="90.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
@@ -98,7 +95,7 @@
               </items>
             </ComboBox>
             <Label focusTraversable="false" text="Size" />
-            <ComboBox focusTraversable="false">
+            <ComboBox focusTraversable="false" prefWidth="90.0">
               <items>
                 <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Item 1" />
