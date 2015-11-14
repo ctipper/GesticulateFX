@@ -18,6 +18,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javax.inject.Inject;
@@ -81,6 +82,12 @@ public class Gesticulate extends GuiceApplication {
         
         // Initialize the canvas and apply handlers
         drawingarea.init(pane.getWidth(), pane.getHeight());
+        
+        // Initialise tool button
+        Object button = scene.lookup("#buttsketch");
+        if (button instanceof ToggleButton) {
+            ((ToggleButton) button).setSelected(true);
+        }
         
         // Install the canvas
         pane.setContent(drawingarea.getScene());

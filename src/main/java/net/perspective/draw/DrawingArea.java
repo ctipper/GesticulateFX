@@ -75,18 +75,18 @@ public class DrawingArea {
         contextlistener = null;
         view.setDrawingListener();
         prepareDrawing();
+        setDrawType(DrawingType.SKETCH);
+        changeHandler(HandlerType.SKETCH);
         setHandlers();
     }
 
     public void prepareDrawing() {
-        setDrawType(DrawingType.SKETCH);
         this.stroke = new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
         this.color = "#4860E0";
         this.fillcolor = "#4860E0";
         this.transparency = 100;
         view.clearView();
         this.clear();
-        changeHandler(HandlerType.SKETCH);
     }
     
     public void clear() {
