@@ -1,6 +1,9 @@
 .toolbutton {
     -fx-background-color: #eeeeee;
 }
+.toolbutton:selected, .toolbutton:selected:hover {
+    -fx-background-color: #c8c8c8;
+}
 .formatbuttons {
     -fx-background-color: white;
 }
