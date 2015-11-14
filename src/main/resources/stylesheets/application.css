@@ -46,7 +46,7 @@
     -fx-text-fill: white;
 }
 #buttnewcanvas {
-    -fx-background-image: url('../images/canvas-new.png');
+    -fx-background-image: url('../images/new-canvas.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }

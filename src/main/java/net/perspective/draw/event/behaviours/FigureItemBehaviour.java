@@ -17,7 +17,6 @@ import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.R2;
 import net.perspective.draw.util.V2;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -73,8 +72,6 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 context.setContainment(ContainsType.SHAPE);
                 found = true;
             }
-            
-            Logger.getLogger(FigureItemBehaviour.class.getName()).debug("Containment: " + context.getContainment().toString());
         } else if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
             // All other figures
             view.setSelected(index);

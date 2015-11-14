@@ -78,6 +78,11 @@ public class ApplicationController implements Initializable {
     }
     
     @FXML
+    private void handleTextAction(ActionEvent event) {
+        // not implemented
+    }
+    
+    @FXML
     private void handleOpacityAction(ActionEvent event) {
         javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) event.getSource();
         if (button.isSelected()) {
