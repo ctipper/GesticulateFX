@@ -44,7 +44,7 @@ public class DrawingArea {
 
     private DrawingType drawtype;
     private Stroke stroke;
-    private String color, fillcolor;
+    private Color color, fillcolor;
     private int transparency;
     private double startX, startY;
     private double tempX, tempY;
@@ -82,8 +82,8 @@ public class DrawingArea {
 
     public void prepareDrawing() {
         this.stroke = new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
-        this.color = "#4860E0";
-        this.fillcolor = "#4860E0";
+        this.color = Color.web("#4860E0");
+        this.fillcolor = Color.web("#4860E0");
         this.transparency = 100;
         view.clearView();
         this.clear();
@@ -327,21 +327,21 @@ public class DrawingArea {
         return this.stroke;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
         view.updateSelectedItem();
     }
 
-    public String getColor() {
+    public Color getColor() {
         return this.color;
     }
 
-    public void setFillColor(String fillcolor) {
+    public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
         view.updateSelectedItem();
     }
 
-    public String getFillColor() {
+    public Color getFillColor() {
         return this.fillcolor;
     }
     

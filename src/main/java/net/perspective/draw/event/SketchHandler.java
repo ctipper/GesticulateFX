@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.event;
 
-//import java.util.ArrayList;
+import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
@@ -37,8 +37,8 @@ public class SketchHandler implements Handler  {
         // add figure to canvas
         Figure item = view.getNewItem();
         item.setStroke(drawarea.getStroke());
-        item.setColor(drawarea.getColor());
-        item.setFillColor(drawarea.getFillColor());
+        item.setJfxColor(drawarea.getColor());
+        item.setJfxFillColor(drawarea.getFillColor());
         item.setEndPoints();
         view.setNewItem(item);
         view.resetNewItem();
@@ -49,8 +49,8 @@ public class SketchHandler implements Handler  {
         Figure item = figurefactory.createFigure(drawarea.getDrawType());
         // Initialise sketch
         item.setStroke(drawarea.getStroke());
-        item.setColor("lightgray");
-        item.setFillColor("white");
+        item.setJfxColor(Color.web("lightgray"));
+        item.setJfxFillColor(Color.web("white"));
         // Initialise sketch
         item.setPoints(drawarea.getDrawType());
         item.addPoint(drawarea.getStartX(), drawarea.getStartY());

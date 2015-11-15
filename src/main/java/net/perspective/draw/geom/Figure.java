@@ -35,7 +35,7 @@ public class Figure implements Serializable {
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
     protected transient Stroke stroke;
-    private String color, fillcolor;
+    private Color color, fillcolor;
     private int transparency;
     private double angle;
     // closed indicates to draw() whether shape should be filled
@@ -122,8 +122,8 @@ public class Figure implements Serializable {
     }
 
     public void updateProperties(DrawingArea canvas) {
-        this.setColor(canvas.getColor());
-        this.setFillColor(canvas.getFillColor());
+        this.setJfxColor(canvas.getColor());
+        this.setJfxFillColor(canvas.getFillColor());
         this.setStroke(canvas.getStroke());
         this.setTransparency(canvas.getTransparency());
     }
@@ -242,12 +242,16 @@ public class Figure implements Serializable {
         AffineTransform at;
         at = this.getTransform();
         Path fxpath = drawPath(at);
-        fxpath.setStroke(Color.web(this.getColor()));
+        fxpath.setStroke(this.color);
         fxpath.setStrokeWidth(getLineWidth());
         fxpath.setStrokeLineJoin(getLineJoin());
         fxpath.setStrokeLineCap(getLineCap());
         if (this.isClosed()) {
-            fxpath.setFill(Color.web(this.getFillColor(), ((double) this.transparency) / 100));
+            Color transcolor = Color.color(this.getJfxFillColor().getRed(), 
+                this.getJfxFillColor().getGreen(), 
+                this.getJfxFillColor().getBlue(),
+                ((double) this.transparency) / 100);
+            fxpath.setFill(transcolor);
         }
         return fxpath;
     }
@@ -385,19 +389,19 @@ public class Figure implements Serializable {
         return this.closed;
     }
 
-    public void setColor(String color) {
+    public void setJfxColor(Color color) {
         this.color = color;
     }
 
-    public String getColor() {
+    public Color getJfxColor() {
         return this.color;
     }
 
-    public void setFillColor(String fillcolor) {
+    public void setJfxFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
     }
 
-    public String getFillColor() {
+    public Color getJfxFillColor() {
         return this.fillcolor;
     }
 
@@ -423,6 +427,36 @@ public class Figure implements Serializable {
 
     public double getAngle() {
         return this.angle;
+    }
+
+    /**
+     * Auxiliary color methods for legacy support
+     */
+    
+    @Deprecated
+    public void setColor(java.awt.Color color) {
+        this.color = Color.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+
+    @Deprecated
+    public java.awt.Color getColor() {
+        return new java.awt.Color((float) color.getRed(), 
+            (float) color.getGreen(), 
+            (float) color.getBlue(), 
+            (float) color.getOpacity());
+    }
+
+    @Deprecated
+    public void setFillColor(java.awt.Color fillcolor) {
+        this.fillcolor = Color.color(fillcolor.getRed(), fillcolor.getGreen(), fillcolor.getBlue(), fillcolor.getAlpha());
+    }
+
+    @Deprecated
+    public java.awt.Color getFillColor() {
+        return new java.awt.Color((float) fillcolor.getRed(), 
+            (float) fillcolor.getGreen(), 
+            (float) fillcolor.getBlue(), 
+            (float) fillcolor.getOpacity());
     }
 
     public double sgnd_area() {
