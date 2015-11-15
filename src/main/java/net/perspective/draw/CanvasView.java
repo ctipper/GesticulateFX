@@ -59,41 +59,41 @@ public class CanvasView {
         drawings.addListener(new ListChangeListener<Figure>() {
 
             @Override
-            public void onChanged(Change<? extends Figure> c) {
-                while (c.next()) {
+            public void onChanged(Change<? extends Figure> change) {
+                while (change.next()) {
                     ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-                    if (c.wasPermutated()) {
-                        for (int i = c.getFrom(); i < c.getTo(); ++i) {
+                    if (change.wasPermutated()) {
+                        for (int i = change.getFrom(); i < change.getTo(); ++i) {
                             // permutate
-                            nodes.set(c.getPermutation(i), drawings.get(i).draw());
-                            logger.trace("node " + c.getPermutation(i) + " updated from " + i);
+                            nodes.set(change.getPermutation(i), drawings.get(i).draw());
+                            logger.trace("node " + change.getPermutation(i) + " updated from " + i);
                         }
-                    } else if (c.wasUpdated()) {
-                        for (int i = c.getFrom(); i < c.getTo(); ++i) {
+                    } else if (change.wasUpdated()) {
+                        for (int i = change.getFrom(); i < change.getTo(); ++i) {
                             // update item
                             nodes.set(i, drawings.get(i).draw());
                             logger.trace("node " + i + " updated");
                         }
                     } else {               
-                        if (c.wasRemoved()) {
+                        if (change.wasRemoved()) {
                             int i = 0;
                             List<Node> deleted = new ArrayList<>();
-                            for (Figure remitem : c.getRemoved()) {
+                            for (Figure removal : change.getRemoved()) {
                                 // remove item
-                                deleted.add(nodes.get(c.getFrom() + i));
+                                deleted.add(nodes.get(change.getFrom() + i));
                                 i++;
-                                logger.trace("node " + (c.getFrom() + i) + " removed.");
+                                logger.trace("node " + (change.getFrom() + i) + " removed.");
                             }
                             // delete the nodes from the scene graph
                             for (Node delete : deleted) {
                                 nodes.remove(delete);
                             }
                         } 
-                        if (c.wasAdded()) {
+                        if (change.wasAdded()) {
                             int i = 0;
-                            for (Figure additem : c.getAddedSubList()) {
+                            for (Figure additem : change.getAddedSubList()) {
                                 // add item
-                                nodes.add(c.getFrom() + i, additem.draw());
+                                nodes.add(change.getFrom() + i, additem.draw());
                                 i++;
                                 logger.trace("node added");
                             }
@@ -116,9 +116,9 @@ public class CanvasView {
         drawings.add(item);
     }
 
-    public void updateCanvasItem(int i, Figure item) {
+    public void updateCanvasItem(int index, Figure item) {
         item.updateProperties(drawarea);
-        drawings.set(i, item);
+        drawings.set(index, item);
     }
     
     public void updateSelectedItem() {
@@ -129,8 +129,8 @@ public class CanvasView {
     }
     
     public void deleteSelectedItem() {
-        if (getSelected() != -1) {
-            drawings.remove(getSelected());
+        if (this.getSelected() != -1) {
+            drawings.remove(this.getSelected());
             setSelected(-1);
         }
     }
@@ -139,52 +139,52 @@ public class CanvasView {
         return list;
     }
 
-    public void setDrawing(boolean d) {
-        isDrawing = d;
+    public void setDrawing(boolean isDrawing) {
+        this.isDrawing = isDrawing;
     }
 
     public boolean isDrawing() {
         return isDrawing;
     }
 
-    public void setSelected(int s) {
-        if (selection == -1 && s != -1) {
+    public void setSelected(int select) {
+        if (selection == -1 && select != -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(s).drawAnchors();
+            anchors = drawings.get(select).drawAnchors();
             nodes.add(anchors);
         }
-        if (selection != -1 && s == -1) {
+        if (selection != -1 && select == -1) {
             if (anchors != null) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                 nodes.remove(anchors);
                 anchors = null;
             }
         }
-        if (selection != s && s != -1) {
+        if (selection != select && select != -1) {
             if (anchors != null) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                 nodes.remove(anchors);
                 anchors = null;
             }
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(s).drawAnchors();
+            anchors = drawings.get(select).drawAnchors();
             nodes.add(anchors);
         }
-        if (s == -1) {
+        if (select == -1) {
             anchors = null;
         }
-        selection = s;
+        selection = select;
     }
 
-    public void moveSelection(int s) {
+    public void moveSelection(int select) {
         if (anchors != null) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(anchors);
             anchors = null;
         }        
-        if (s != -1) {
+        if (select != -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(s).drawAnchors();
+            anchors = drawings.get(select).drawAnchors();
             nodes.add(anchors);
         }   
     }
@@ -193,13 +193,13 @@ public class CanvasView {
         return selection;
     }
 
-    public void setNewItem(Figure s) {
+    public void setNewItem(Figure item) {
         if (newitem == null) {
-            this.addItemToCanvas(s);
+            this.addItemToCanvas(item);
         } else {
-            this.updateCanvasItem(drawings.size() - 1, s);
+            this.updateCanvasItem(drawings.size() - 1, item);
         }
-        newitem = s;
+        newitem = item;
     }
     
     public void resetNewItem() {

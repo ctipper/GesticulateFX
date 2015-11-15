@@ -75,7 +75,7 @@ public class RotationHandler implements Handler {
                 item.setAngle(angle + 2 * Math.PI);
             }
 
-            view.updateCanvasItem(selection, view.getDrawings().get(selection));
+            view.updateCanvasItem(selection, item);
             view.moveSelection(selection);
             drawarea.setStartX(drawarea.getTempX());
             drawarea.setStartY(drawarea.getTempY());

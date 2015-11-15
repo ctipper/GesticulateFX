@@ -121,11 +121,11 @@ public class Figure implements Serializable {
         return this.type;
     }
 
-    public void updateProperties(DrawingArea canvas) {
-        this.setJfxColor(canvas.getColor());
-        this.setJfxFillColor(canvas.getFillColor());
-        this.setStroke(canvas.getStroke());
-        this.setTransparency(canvas.getTransparency());
+    public void updateProperties(DrawingArea drawarea) {
+        this.setJfxColor(drawarea.getColor());
+        this.setJfxFillColor(drawarea.getFillColor());
+        this.setStroke(drawarea.getStroke());
+        this.setTransparency(drawarea.getTransparency());
     }
 
     public CanvasPoint[] getTop() {

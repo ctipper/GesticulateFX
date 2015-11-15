@@ -34,9 +34,6 @@ public class FigureHandler implements Handler {
         }
         // add figure to canvas
         Figure item = view.getNewItem();
-        item.setStroke(drawarea.getStroke());
-        item.setJfxColor(drawarea.getColor());
-        item.setJfxFillColor(drawarea.getFillColor());
         item.setEndPoints();
         view.setNewItem(item);
         view.resetNewItem();
