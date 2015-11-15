@@ -35,7 +35,7 @@ public class Figure implements Serializable {
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
     protected transient Stroke stroke;
-    private Color color, fillcolor;
+    private java.awt.Color color, fillcolor;
     private int transparency;
     private double angle;
     // closed indicates to draw() whether shape should be filled
@@ -122,8 +122,8 @@ public class Figure implements Serializable {
     }
 
     public void updateProperties(DrawingArea drawarea) {
-        this.setJfxColor(drawarea.getColor());
-        this.setJfxFillColor(drawarea.getFillColor());
+        this.setColor(drawarea.getColor());
+        this.setFillColor(drawarea.getFillColor());
         this.setStroke(drawarea.getStroke());
         this.setTransparency(drawarea.getTransparency());
     }
@@ -242,14 +242,14 @@ public class Figure implements Serializable {
         AffineTransform at;
         at = this.getTransform();
         Path fxpath = drawPath(at);
-        fxpath.setStroke(this.color);
-        fxpath.setStrokeWidth(getLineWidth());
-        fxpath.setStrokeLineJoin(getLineJoin());
-        fxpath.setStrokeLineCap(getLineCap());
+        fxpath.setStroke(this.getColor());
+        fxpath.setStrokeWidth(this.getLineWidth());
+        fxpath.setStrokeLineJoin(this.getLineJoin());
+        fxpath.setStrokeLineCap(this.getLineCap());
         if (this.isClosed()) {
-            Color transcolor = Color.color(this.getJfxFillColor().getRed(), 
-                this.getJfxFillColor().getGreen(), 
-                this.getJfxFillColor().getBlue(),
+            Color transcolor = Color.color(this.getFillColor().getRed(), 
+                this.getFillColor().getGreen(), 
+                this.getFillColor().getBlue(),
                 ((double) this.transparency) / 100);
             fxpath.setFill(transcolor);
         }
@@ -389,20 +389,30 @@ public class Figure implements Serializable {
         return this.closed;
     }
 
-    public void setJfxColor(Color color) {
+    public void setColor(Color color) {
+        this.color = Figure.fxToAwt(color);
+    }
+
+    @Deprecated
+    public void setColor(java.awt.Color color) {
         this.color = color;
     }
 
-    public Color getJfxColor() {
-        return this.color;
+    public Color getColor() {
+        return Figure.awtToFx(this.color);
     }
 
-    public void setJfxFillColor(Color fillcolor) {
+    public void setFillColor(Color fillcolor) {
+        this.fillcolor = Figure.fxToAwt(fillcolor);
+    }
+
+    @Deprecated
+    public void setFillColor(java.awt.Color fillcolor) {
         this.fillcolor = fillcolor;
     }
 
-    public Color getJfxFillColor() {
-        return this.fillcolor;
+    public Color getFillColor() {
+        return Figure.awtToFx(this.fillcolor);
     }
 
     public void setStroke(Stroke stroke) {
@@ -427,36 +437,6 @@ public class Figure implements Serializable {
 
     public double getAngle() {
         return this.angle;
-    }
-
-    /**
-     * Auxiliary color methods for legacy support
-     */
-    
-    @Deprecated
-    public void setColor(java.awt.Color color) {
-        this.color = Color.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-    }
-
-    @Deprecated
-    public java.awt.Color getColor() {
-        return new java.awt.Color((float) color.getRed(), 
-            (float) color.getGreen(), 
-            (float) color.getBlue(), 
-            (float) color.getOpacity());
-    }
-
-    @Deprecated
-    public void setFillColor(java.awt.Color fillcolor) {
-        this.fillcolor = Color.color(fillcolor.getRed(), fillcolor.getGreen(), fillcolor.getBlue(), fillcolor.getAlpha());
-    }
-
-    @Deprecated
-    public java.awt.Color getFillColor() {
-        return new java.awt.Color((float) fillcolor.getRed(), 
-            (float) fillcolor.getGreen(), 
-            (float) fillcolor.getBlue(), 
-            (float) fillcolor.getOpacity());
     }
 
     public double sgnd_area() {
@@ -611,6 +591,32 @@ public class Figure implements Serializable {
         } else {
             stream.writeBoolean(true);
         }
+    }
+
+    /**
+     * javafx.scene.paint.Color not serialisable
+     * 
+     * @param color javafx.scene.paint.Color
+     * @return java.awt.Color
+     */
+    public static java.awt.Color fxToAwt(javafx.scene.paint.Color color){
+        return new java.awt.Color((float) color.getRed(), 
+            (float) color.getGreen(), 
+            (float) color.getBlue(), 
+            (float) color.getOpacity());
+    }
+
+    /**
+     * javafx.scene.paint.Color not serialisable
+     * 
+     * @param color java.awt.Color
+     * @return javafx.scene.paint.Color
+     */
+    public static javafx.scene.paint.Color awtToFx(java.awt.Color color){
+        return new javafx.scene.paint.Color(color.getRed() / 255.0, 
+            color.getGreen() / 255.0, 
+            color.getBlue() / 255.0, 
+            color.getAlpha() / 255.0);
     }
 
 }

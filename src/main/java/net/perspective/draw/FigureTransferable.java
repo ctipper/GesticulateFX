@@ -27,13 +27,13 @@ public class FigureTransferable implements Transferable {
 
     private static final Logger logger = LoggerFactory.getLogger(FigureTransferable.class.getName());
 
-    public FigureTransferable(Figure f) {
+    public FigureTransferable(Figure fig) {
         out = new ByteArrayOutputStream();
         try {
             ObjectOutputStream item = new ObjectOutputStream(out);
-            item.writeObject(f);
+            item.writeObject(fig);
         } catch (IOException e) {
-            logger.warn("I/O Exception");
+            logger.warn("I/O Exception " + e.getMessage());
         }
 
         //Try to create a DataFlavor for Figures
@@ -49,10 +49,10 @@ public class FigureTransferable implements Transferable {
         if (!isDataFlavorSupported(flavor)) {
             throw new UnsupportedFlavorException(flavor);
         }
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        ByteArrayInputStream bin = new ByteArrayInputStream(out.toByteArray());
         try {
-            ObjectInputStream s = new ObjectInputStream(in);
-            Figure item = (Figure) s.readObject();
+            ObjectInputStream in = new ObjectInputStream(bin);
+            Figure item = (Figure) in.readObject();
             return item;
         } catch (IOException e) {
             logger.warn("I/O Exception");

@@ -46,8 +46,8 @@ public class SketchHandler implements Handler  {
         Figure item = figurefactory.createFigure(drawarea.getDrawType());
         // Initialise sketch
         item.setStroke(drawarea.getStroke());
-        item.setJfxColor(Color.web("lightgray"));
-        item.setJfxFillColor(Color.web("white"));
+        item.setColor(Color.web("lightgray"));
+        item.setFillColor(Color.web("white"));
         // Initialise sketch
         item.setPoints(drawarea.getDrawType());
         item.addPoint(drawarea.getStartX(), drawarea.getStartY());
