@@ -35,7 +35,7 @@ public class Figure implements Serializable {
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
     protected transient Stroke stroke;
-    private java.awt.Color color, fillcolor;
+    private transient Color color, fillcolor;
     private int transparency;
     private double angle;
     // closed indicates to draw() whether shape should be filled
@@ -390,29 +390,29 @@ public class Figure implements Serializable {
     }
 
     public void setColor(Color color) {
-        this.color = Figure.fxToAwt(color);
+        this.color = color;
     }
 
     @Deprecated
     public void setColor(java.awt.Color color) {
-        this.color = color;
+        this.color = Figure.awtToFx(color);
     }
 
     public Color getColor() {
-        return Figure.awtToFx(this.color);
+        return this.color;
     }
 
     public void setFillColor(Color fillcolor) {
-        this.fillcolor = Figure.fxToAwt(fillcolor);
+        this.fillcolor = fillcolor;
     }
 
     @Deprecated
     public void setFillColor(java.awt.Color fillcolor) {
-        this.fillcolor = fillcolor;
+        this.fillcolor = Figure.awtToFx(fillcolor);
     }
 
     public Color getFillColor() {
-        return Figure.awtToFx(this.fillcolor);
+        return this.fillcolor;
     }
 
     public void setStroke(Stroke stroke) {
@@ -537,6 +537,14 @@ public class Figure implements Serializable {
     private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
+
+        // deserialise colors from awt.Color
+        Class<?> c = (Class<?>) in.readObject();
+        this.color = Figure.awtToFx((java.awt.Color) in.readObject());
+        c = (Class<?>) in.readObject();
+        this.fillcolor = Figure.awtToFx((java.awt.Color) in.readObject());
+        
+        // deserialise Stroke
         this.setStroke(readStroke(in));
         this.pointfactory = new FigurePointFactory();
         this.pathfactory = new FigurePathFactory();
@@ -545,6 +553,10 @@ public class Figure implements Serializable {
     private void writeObject(ObjectOutputStream out)
             throws IOException {
         out.defaultWriteObject();
+        out.writeObject(java.awt.Color.class);
+        out.writeObject(Figure.fxToAwt(this.color));
+        out.writeObject(java.awt.Color.class);
+        out.writeObject(Figure.fxToAwt(this.fillcolor));
         writeStroke(this.getStroke(), out);
     }
 
