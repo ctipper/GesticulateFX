@@ -51,7 +51,7 @@
     -fx-background-position: center;
 }
 #buttsaveto {
-    -fx-background-image: url('../images/save-to-2.png');
+    -fx-background-image: url('../images/save-to.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
