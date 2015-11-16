@@ -50,6 +50,11 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+#buttsaveto {
+    -fx-background-image: url('../images/save-to.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
 #buttselect {
     -fx-background-image: url('../images/select.png');
     -fx-background-repeat: no-repeat;
