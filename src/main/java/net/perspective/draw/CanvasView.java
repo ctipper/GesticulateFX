@@ -105,14 +105,11 @@ public class CanvasView {
     }
     
     public void addItemToCanvas(Figure item) {
-        if (item != null) {
-            item.updateProperties(drawarea);
-            drawings.add(item);
-        }
+        item.updateProperties(drawarea);
+        appendItemToCanvas(item);
     }
     
     public void appendItemToCanvas(Figure item) {
-        item.updateProperties(drawarea);
         drawings.add(item);
     }
 
