@@ -26,12 +26,14 @@
                         <ToggleGroup fx:id="toolToggles"/>
                     </fx:define>
                     <children>
+                        <Region prefHeight="8.0" />
                         <Button id="buttnewcanvas" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleWipeAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="">
                             <VBox.margin>
                                 <Insets bottom="3.0" left="4.0" right="4.0" top="3.0" fx:id="x1" />
                             </VBox.margin>
                         </Button>
                         <Button id="buttsaveto" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleWipeAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
+                        <Region prefHeight="5.0" />
                         <ToggleButton id="buttselect" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
                         <ToggleButton id="buttrotate" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
                         <ToggleButton id="buttslope" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
