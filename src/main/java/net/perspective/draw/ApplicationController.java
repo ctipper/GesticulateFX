@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.input.InputEvent;
 import javax.inject.Inject;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.HandlerType;
@@ -29,6 +28,16 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleWipeAction(ActionEvent event) {
         drawarea.prepareDrawing();
+    }
+    
+    @FXML
+    private void handleOpenInAction(ActionEvent event) {
+        // not implemented
+    }
+    
+    @FXML
+    private void handleSaveToAction(ActionEvent event) {
+        // not implemented
     }
     
     @FXML

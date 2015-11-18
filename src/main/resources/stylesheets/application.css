@@ -50,6 +50,11 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+#buttopenin {
+    -fx-background-image: url('../images/open-in.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
 #buttsaveto {
     -fx-background-image: url('../images/save-to.png');
     -fx-background-repeat: no-repeat;
