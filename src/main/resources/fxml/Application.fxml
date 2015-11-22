@@ -37,6 +37,7 @@
                         <Region prefHeight="5.0" />
                         <ToggleButton id="buttselect" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
                         <ToggleButton id="buttrotate" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
+                        <Region prefHeight="5.0" />
                         <ToggleButton id="buttslope" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
                         <ToggleButton id="buttcircle" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
                         <ToggleButton id="buttsquare" toggleGroup="$toolToggles" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1"/>
