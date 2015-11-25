@@ -24,8 +24,6 @@ import javafx.stage.Stage;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -40,13 +38,11 @@ public class Gesticulate extends GuiceApplication {
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
     private final Rectangle2D screenSize = screen.getVisualBounds();
-    private final int xWidth = 1_000;
-    private final int yHeight = (int) (screenSize.getMaxY() * .8);
-    private final int frameLeft = (int) (screenSize.getMaxX() - xWidth) / 3;
-    private final int frameTop = (int) (screenSize.getMaxY() - yHeight) / 5;
+    private final int sceneWidth = 1_000;
+    private final int sceneHeight = (int) (screenSize.getMaxY() * .8);
+    private final int frameLeft = (int) (screenSize.getMaxX() - sceneWidth) / 3;
+    private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
     
-    private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
-
     @Override
     public void init(final List<Module> modules) throws Exception {
         modules.add(new FxmlModule());
@@ -70,7 +66,7 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.setScene(scene);
         
         // Size the primary stage
-        sizeStage(primaryStage);
+        this.sizeStage(primaryStage);
 
         // Show the primary stage
         primaryStage.show();
@@ -82,26 +78,21 @@ public class Gesticulate extends GuiceApplication {
         
         // Initialize the canvas and apply handlers
         drawingarea.init(pane.getWidth(), pane.getHeight());
-        
-        // Initialise tool button
-        Object button = scene.lookup("#buttsketch");
-        if (button instanceof ToggleButton) {
-            ((ToggleButton) button).setSelected(true);
-        }
+        this.initialiseToolbar(scene);
         
         // Install the canvas
         pane.setContent(drawingarea.getScene());
-        setOnResize(pane);
+        this.setOnResize(pane);
     }
     
-    public void setOnResize(ScrollPane p) {
-        p.heightProperty().addListener(new ChangeListener<Number>() {
+    public void setOnResize(ScrollPane pane) {
+        pane.heightProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
                 drawingarea.getScene().setHeight((double) new_val);
             }
         });
-        p.widthProperty().addListener(new ChangeListener<Number>() {
+        pane.widthProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
                 drawingarea.getScene().setWidth((double) new_val);
@@ -112,8 +103,16 @@ public class Gesticulate extends GuiceApplication {
     public void sizeStage(Stage stage) {
         stage.setX(frameLeft);
         stage.setY(frameTop);
-        stage.setWidth(xWidth);
-        stage.setHeight(yHeight);
+        stage.setWidth(sceneWidth);
+        stage.setHeight(sceneHeight);
+    }
+
+    private void initialiseToolbar(Scene scene) {
+        // Toolbar state
+        Object button = scene.lookup("#buttsketch");
+        if (button instanceof ToggleButton) {
+            ((ToggleButton) button).setSelected(true);
+        }
     }
     
     /**

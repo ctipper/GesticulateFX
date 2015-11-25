@@ -55,6 +55,7 @@ public class DrawingArea {
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
+    private EventHandler<InputEvent> arealistener;
     private List<TouchPoint> starters, tempers = null;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
@@ -96,11 +97,15 @@ public class DrawingArea {
     public void changeHandler(HandlerType h) {
         canvas.setOnContextMenuRequested(null);
         canvas.setOnTouchStationary(null);
+        canvas.setOnMouseClicked(null);
+        canvas.setOnTouchPressed(null);
         switch (h) {
             case SELECTION:
                 this.handler = injector.getInstance(SelectionHandler.class);
                 canvas.setOnContextMenuRequested(contextlistener);
                 canvas.setOnTouchStationary(popuplistener);
+                canvas.setOnMousePressed(arealistener);
+                canvas.setOnTouchPressed(arealistener);
                 break;
             case FIGURE:
                 this.handler = injector.getInstance(FigureHandler.class);
@@ -109,6 +114,8 @@ public class DrawingArea {
                 this.handler = injector.getInstance(RotationHandler.class);
                 canvas.setOnContextMenuRequested(contextlistener);
                 canvas.setOnTouchStationary(popuplistener);
+                canvas.setOnMousePressed(arealistener);
+                canvas.setOnTouchPressed(arealistener);
                 break;
             case SKETCH:
                 this.handler = injector.getInstance(SketchHandler.class);
@@ -206,8 +213,10 @@ public class DrawingArea {
     }
 
     public void addContextMenu() {
-        MenuItem cxtCutMenu = new MenuItem("Cut");
-        cxtCutMenu.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem menuCut = new MenuItem("Cut");
+        menuCut.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
             public void handle(ActionEvent e) {
         	    if (view.getSelected() != -1) {
                     clipboard = transferhandler.createTransferable();
@@ -216,8 +225,10 @@ public class DrawingArea {
                 }
             }
         });
-        MenuItem cxtCopyMenu = new MenuItem("Copy");
-        cxtCopyMenu.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem menuCopy = new MenuItem("Copy");
+        menuCopy.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
             public void handle(ActionEvent e) {
         	    if (view.getSelected() != -1) {
                     clipboard = transferhandler.createTransferable();
@@ -225,8 +236,10 @@ public class DrawingArea {
                 }
             }
         });
-        MenuItem cxtPasteMenu = new MenuItem("Paste");
-        cxtPasteMenu.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem menuPaste = new MenuItem("Paste");
+        menuPaste.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
             public void handle(ActionEvent e) {
                 if (clipboard != null) {
                     transferhandler.importData(clipboard);
@@ -234,19 +247,31 @@ public class DrawingArea {
                 }
             }
         });
-        contextmenu.getItems().addAll(cxtCutMenu, cxtCopyMenu, cxtPasteMenu);
+        contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
         contextlistener = new EventHandler<ContextMenuEvent>() {
+
             @Override
             public void handle(ContextMenuEvent event) {
                 contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
             }
         };
         popuplistener = new EventHandler<TouchEvent>() {
+
             @Override
             public void handle(TouchEvent event) {
                 TouchPoint touch = event.getTouchPoints().get(0);
                 contextmenu.show(canvas, touch.getScreenX(), touch.getScreenY());
             }
+        };
+        arealistener = new EventHandler<InputEvent>() {
+
+            @Override
+            public void handle(InputEvent event) {
+                if (contextmenu.isShowing()) {
+                    contextmenu.hide();
+                }
+            }
+            
         };
     }
 
