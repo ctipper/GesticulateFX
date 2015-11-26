@@ -65,7 +65,7 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.setTitle("Gesticulate");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
-        primaryStage.setOnCloseRequest((WindowEvent t) -> {
+        primaryStage.setOnCloseRequest((WindowEvent e) -> {
             Platform.exit();
             System.exit(0);
         });

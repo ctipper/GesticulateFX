@@ -26,74 +26,74 @@ public class ApplicationController implements Initializable {
     @Inject private DrawingArea drawarea;
     
     @FXML
-    private void handleWipeAction(ActionEvent event) {
+    private void handleWipeAction(ActionEvent e) {
         drawarea.prepareDrawing();
     }
     
     @FXML
-    private void handleOpenInAction(ActionEvent event) {
+    private void handleOpenInAction(ActionEvent e) {
         // not implemented
     }
     
     @FXML
-    private void handleSaveToAction(ActionEvent event) {
+    private void handleSaveToAction(ActionEvent e) {
         // not implemented
     }
     
     @FXML
-    private void handleSelectionAction(ActionEvent event) {
+    private void handleSelectionAction(ActionEvent e) {
         drawarea.changeHandler(HandlerType.SELECTION);
     }
     
     @FXML
-    private void handleRotationAction(ActionEvent event) {
+    private void handleRotationAction(ActionEvent e) {
         drawarea.changeHandler(HandlerType.ROTATION);
     }
     
     @FXML
-    private void handleLineAction(ActionEvent event) {
+    private void handleLineAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.LINE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
-    private void handleCircleAction(ActionEvent event) {
+    private void handleCircleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.CIRCLE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
     
     @FXML
-    private void handleSquareAction(ActionEvent event) {
+    private void handleSquareAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.SQUARE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
-    private void handleTriangleAction(ActionEvent event) {
+    private void handleTriangleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.TRIANGLE);
         drawarea.changeHandler(HandlerType.FIGURE);
     }
 
     @FXML
-    private void handlePolygonAction(ActionEvent event) {
+    private void handlePolygonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.POLYGON);
         drawarea.changeHandler(HandlerType.SKETCH);
     }
 
     @FXML
-    private void handleSketchAction(ActionEvent event) {
+    private void handleSketchAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.SKETCH);
         drawarea.changeHandler(HandlerType.SKETCH);
     }
     
     @FXML
-    private void handleTextAction(ActionEvent event) {
+    private void handleTextAction(ActionEvent e) {
         // not implemented
     }
     
     @FXML
-    private void handleOpacityAction(ActionEvent event) {
-        javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) event.getSource();
+    private void handleOpacityAction(ActionEvent e) {
+        javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) e.getSource();
         if (button.isSelected()) {
             drawarea.setTransparency(0);
         } else {
