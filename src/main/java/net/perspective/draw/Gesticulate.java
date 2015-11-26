@@ -12,7 +12,6 @@ import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -86,17 +85,11 @@ public class Gesticulate extends GuiceApplication {
     }
     
     public void setOnResize(ScrollPane pane) {
-        pane.heightProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) {
-                drawingarea.getScene().setHeight((double) new_val);
-            }
+        pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            drawingarea.getScene().setHeight((double) new_val);
         });
-        pane.widthProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) {
-                drawingarea.getScene().setWidth((double) new_val);
-            }
+        pane.widthProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            drawingarea.getScene().setWidth((double) new_val);
         });
     }
     

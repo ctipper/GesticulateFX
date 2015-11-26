@@ -30,7 +30,7 @@ public class Figure implements Serializable {
 
     protected List<CanvasPoint> points;
     protected FigureType type;
-    protected CanvasPoint start, end;
+    protected CanvasPoint start, end;       // start, end are _untransformed_ canvas coordinates of TL/BR corners
     protected transient Path2D.Double path;
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
@@ -38,8 +38,7 @@ public class Figure implements Serializable {
     private transient Color color, fillcolor;
     private int transparency;
     private double angle;
-    // closed indicates to draw() whether shape should be filled
-    private boolean closed;
+    private boolean closed;                 // closed indicates to draw() whether figure should be filled
     
     private static final long serialVersionUID = 1L;
 
@@ -231,9 +230,9 @@ public class Figure implements Serializable {
     }
 
     public void moveFigure(double xinc, double yinc) {
-        for (CanvasPoint p : points) {
+        points.stream().forEach((p) -> {
             p.translate(xinc, yinc);
-        }
+        });
         this.setEndPoints();
         this.setPath();
     }
@@ -527,10 +526,9 @@ public class Figure implements Serializable {
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
                 break;
         }
-        for (CanvasPoint[] p : vert) {
-            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
+        vert.stream().map((p) -> new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) }).forEach((point) -> {
             vertices.add(point);
-        }
+        });
         return vertices;
     }
 

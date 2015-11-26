@@ -23,8 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
@@ -58,10 +56,8 @@ public class DrawingArea {
     private EventHandler<InputEvent> arealistener;
     private List<TouchPoint> starters, tempers = null;
 
-    private static final Logger logger = LoggerFactory.getLogger(DrawingArea.class.getName());
-
     /**
-     * Creates a new instance of <code>DrawingCanvas</code>
+     * Creates a new instance of <code>DrawingArea</code>
      */
     @Inject
     public DrawingArea() {
@@ -128,48 +124,24 @@ public class DrawingArea {
     }
 
     void setHandlers() {
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED,
-            new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    mouseUp(event);
-                }
-            });
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,
-            new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    mouseDown(event);
-                }
-            });
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-            new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    mouseMoved(event);
-                }
-            });
-        canvas.addEventHandler(TouchEvent.TOUCH_RELEASED,
-            new EventHandler<TouchEvent>() {
-                @Override
-                public void handle(TouchEvent event) {
-                    touchEnd(event);
-                }
-            });
-        canvas.addEventHandler(TouchEvent.TOUCH_PRESSED,
-            new EventHandler<TouchEvent>() {
-                @Override
-                public void handle(TouchEvent event) {
-                    touchStart(event);
-                }
-            });
-        canvas.addEventHandler(TouchEvent.TOUCH_MOVED,
-            new EventHandler<TouchEvent>() {
-                @Override
-                public void handle(TouchEvent event) {
-                    touchMoved(event);
-                }
-            });
+        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
+            mouseUp(event);
+        });
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+            mouseDown(event);
+        });
+        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
+            mouseMoved(event);
+        });
+        canvas.addEventHandler(TouchEvent.TOUCH_RELEASED, (TouchEvent event) -> {
+            touchEnd(event);
+        });
+        canvas.addEventHandler(TouchEvent.TOUCH_PRESSED, (TouchEvent event) -> {
+            touchStart(event);
+        });
+        canvas.addEventHandler(TouchEvent.TOUCH_MOVED, (TouchEvent event) -> {
+            touchMoved(event);
+        });
         addContextMenu();
         this.changeHandler(HandlerType.SKETCH);
     }
@@ -214,64 +186,40 @@ public class DrawingArea {
 
     public void addContextMenu() {
         MenuItem menuCut = new MenuItem("Cut");
-        menuCut.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-        	    if (view.getSelected() != -1) {
-                    clipboard = transferhandler.createTransferable();
-                    transferhandler.exportDone(clipboard, MOVE);
-                    view.setSelected(-1);
-                }
+        menuCut.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                clipboard = transferhandler.createTransferable();
+                transferhandler.exportDone(clipboard, MOVE);
+                view.setSelected(-1);
             }
         });
         MenuItem menuCopy = new MenuItem("Copy");
-        menuCopy.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-        	    if (view.getSelected() != -1) {
-                    clipboard = transferhandler.createTransferable();
-                    transferhandler.exportDone(clipboard, COPY);
-                }
+        menuCopy.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                clipboard = transferhandler.createTransferable();
+                transferhandler.exportDone(clipboard, COPY);
             }
         });
         MenuItem menuPaste = new MenuItem("Paste");
-        menuPaste.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                if (clipboard != null) {
-                    transferhandler.importData(clipboard);
-                    view.setSelected(-1);
-                }
+        menuPaste.setOnAction((ActionEvent e) -> {
+            if (clipboard != null) {
+                transferhandler.importData(clipboard);
+                view.setSelected(-1);
             }
         });
         contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
-        contextlistener = new EventHandler<ContextMenuEvent>() {
 
-            @Override
-            public void handle(ContextMenuEvent event) {
-                contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
-            }
+        contextlistener = (ContextMenuEvent event) -> {
+            contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
         };
-        popuplistener = new EventHandler<TouchEvent>() {
-
-            @Override
-            public void handle(TouchEvent event) {
-                TouchPoint touch = event.getTouchPoints().get(0);
-                contextmenu.show(canvas, touch.getScreenX(), touch.getScreenY());
-            }
+        popuplistener = (TouchEvent event) -> {
+            TouchPoint touch = event.getTouchPoints().get(0);
+            contextmenu.show(canvas, touch.getScreenX(), touch.getScreenY());
         };
-        arealistener = new EventHandler<InputEvent>() {
-
-            @Override
-            public void handle(InputEvent event) {
-                if (contextmenu.isShowing()) {
-                    contextmenu.hide();
-                }
+        arealistener = (InputEvent event) -> {
+            if (contextmenu.isShowing()) {
+                contextmenu.hide();
             }
-            
         };
     }
 

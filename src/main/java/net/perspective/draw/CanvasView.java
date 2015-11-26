@@ -36,7 +36,7 @@ public class CanvasView {
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
     
     /**
-     * Creates a new instance of <code>DocView</code>
+     * Creates a new instance of <code>CanvasView</code>
      */
     public CanvasView() {
         newitem = null;
@@ -56,54 +56,50 @@ public class CanvasView {
     
     public void setDrawingListener() {
         drawings = FXCollections.observableList(list);
-        drawings.addListener(new ListChangeListener<Figure>() {
-
-            @Override
-            public void onChanged(Change<? extends Figure> change) {
-                while (change.next()) {
-                    ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-                    if (change.wasPermutated()) {
-                        for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                            // permutate
-                            nodes.set(change.getPermutation(i), drawings.get(i).draw());
-                            logger.trace("node " + change.getPermutation(i) + " updated from " + i);
+        drawings.addListener((ListChangeListener.Change<? extends Figure> change) -> {
+            while (change.next()) {
+                ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+                if (change.wasPermutated()) {
+                    for (int i = change.getFrom(); i < change.getTo(); ++i) {
+                        // permutate
+                        nodes.set(change.getPermutation(i), drawings.get(i).draw());
+                        logger.trace("node " + change.getPermutation(i) + " updated from " + i);
+                    }
+                } else if (change.wasUpdated()) {
+                    for (int i = change.getFrom(); i < change.getTo(); ++i) {
+                        // update item
+                        nodes.set(i, drawings.get(i).draw());
+                        logger.trace("node " + i + " updated");
+                    }
+                } else {
+                    if (change.wasRemoved()) {
+                        int i = 0;
+                        List<Node> deleted = new ArrayList<>();
+                        for (Figure removal : change.getRemoved()) {
+                            // remove item
+                            deleted.add(nodes.get(change.getFrom() + i));
+                            i++;
+                            logger.trace("node " + (change.getFrom() + i) + " removed.");
                         }
-                    } else if (change.wasUpdated()) {
-                        for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                            // update item
-                            nodes.set(i, drawings.get(i).draw());
-                            logger.trace("node " + i + " updated");
-                        }
-                    } else {               
-                        if (change.wasRemoved()) {
-                            int i = 0;
-                            List<Node> deleted = new ArrayList<>();
-                            for (Figure removal : change.getRemoved()) {
-                                // remove item
-                                deleted.add(nodes.get(change.getFrom() + i));
-                                i++;
-                                logger.trace("node " + (change.getFrom() + i) + " removed.");
-                            }
-                            // delete the nodes from the scene graph
-                            for (Node delete : deleted) {
-                                nodes.remove(delete);
-                            }
-                        } 
-                        if (change.wasAdded()) {
-                            int i = 0;
-                            for (Figure additem : change.getAddedSubList()) {
-                                // add item
-                                nodes.add(change.getFrom() + i, additem.draw());
-                                i++;
-                                logger.trace("node added");
-                            }
+                        // delete the nodes from the scene graph
+                        deleted.stream().forEach((delete) -> {
+                            nodes.remove(delete);
+                        });
+                    }
+                    if (change.wasAdded()) {
+                        int i = 0;
+                        for (Figure additem : change.getAddedSubList()) {
+                            // add item
+                            nodes.add(change.getFrom() + i, additem.draw());
+                            i++;
+                            logger.trace("node added");
                         }
                     }
                 }
             }
         });
     }
-    
+
     public void addItemToCanvas(Figure item) {
         item.updateProperties(drawarea);
         appendItemToCanvas(item);
