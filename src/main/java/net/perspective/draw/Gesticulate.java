@@ -12,6 +12,7 @@ import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import java.util.List;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
@@ -63,6 +65,10 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.setTitle("Gesticulate");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest((WindowEvent t) -> {
+            Platform.exit();
+            System.exit(0);
+        });
         
         // Size the primary stage
         this.sizeStage(primaryStage);
