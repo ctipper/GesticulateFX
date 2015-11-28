@@ -26,6 +26,9 @@ public class RotationHandler implements Handler {
     @Inject private CanvasView view;
 
     public void upEvent() {
+        if (view.getSelected() != -1) {
+            view.updateSelectedItem();
+        }
     }
 
     public void downEvent() {
