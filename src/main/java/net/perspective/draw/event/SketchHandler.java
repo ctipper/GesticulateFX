@@ -45,7 +45,7 @@ public class SketchHandler implements Handler  {
     public void downEvent() {
         // Create figure
         Figure item = figurefactory.createFigure(drawarea.getDrawType());
-        // Initialise sketch
+        // Initialise stroke and fill
         item.setStroke(drawarea.getStroke());
         item.setColor(Color.web("lightgray"));
         item.setFillColor(Color.web("white"));

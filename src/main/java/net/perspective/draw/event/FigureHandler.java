@@ -44,10 +44,13 @@ public class FigureHandler implements Handler {
     }
 
     public void dragEvent() {
+        // Create figure
         Figure item = figurefactory.createFigure(drawarea.getDrawType());
+        // Initialise stroke and fill
         item.setStroke(drawarea.getStroke());
         item.setColor(Color.web("lightgray"));
         item.setFillColor(Color.web("white"));
+        // Initialise figure
         item.setStart(drawarea.getStartX(), drawarea.getStartY());
         item.setEnd(drawarea.getTempX(), drawarea.getTempY());
         item.setPoints(drawarea.getDrawType());
