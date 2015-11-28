@@ -37,6 +37,7 @@ public class SketchHandler implements Handler  {
         // add figure to canvas
         Figure item = view.getNewItem();
         item.setEndPoints();
+        item.updateProperties(drawarea);
         view.setNewItem(item);
         view.resetNewItem();
     }

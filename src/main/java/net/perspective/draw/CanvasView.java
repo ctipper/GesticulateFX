@@ -101,7 +101,6 @@ public class CanvasView {
     }
 
     public void addItemToCanvas(Figure item) {
-        item.updateProperties(drawarea);
         appendItemToCanvas(item);
     }
     
@@ -110,13 +109,13 @@ public class CanvasView {
     }
 
     public void updateCanvasItem(int index, Figure item) {
-        item.updateProperties(drawarea);
         drawings.set(index, item);
     }
     
     public void updateSelectedItem() {
         if (this.getSelected() != -1) {
             Figure item = drawings.get(this.getSelected());
+            item.updateProperties(drawarea);
             this.updateCanvasItem(this.getSelected(), item);
         }
     }
