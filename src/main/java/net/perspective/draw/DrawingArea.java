@@ -70,10 +70,10 @@ public class DrawingArea {
         contextmenu = new ContextMenu();
         contextlistener = null;
         view.setDrawingListener();
-        prepareDrawing();
-        setDrawType(DrawingType.SKETCH);
-        changeHandler(HandlerType.SKETCH);
-        setHandlers();
+        this.prepareDrawing();
+        this.setDrawType(DrawingType.SKETCH);
+        this.changeHandlers(HandlerType.SKETCH);
+        this.initializeHandlers();
     }
 
     public void prepareDrawing() {
@@ -89,28 +89,19 @@ public class DrawingArea {
         ((Group) canvas.getRoot()).getChildren().clear();
     }
 
-    public void changeHandler(HandlerType h) {
-        canvas.setOnContextMenuRequested(null);
-        canvas.setOnTouchStationary(null);
-        canvas.setOnMouseClicked(null);
-        canvas.setOnTouchPressed(null);
+    public void changeHandlers(HandlerType h) {
+        this.resetContextHandlers();
         switch (h) {
             case SELECTION:
                 this.handler = injector.getInstance(SelectionHandler.class);
-                canvas.setOnContextMenuRequested(contextlistener);
-                canvas.setOnTouchStationary(popuplistener);
-                canvas.setOnMousePressed(arealistener);
-                canvas.setOnTouchPressed(arealistener);
+                this.setContextHandlers();
                 break;
             case FIGURE:
                 this.handler = injector.getInstance(FigureHandler.class);
                 break;
             case ROTATION:
                 this.handler = injector.getInstance(RotationHandler.class);
-                canvas.setOnContextMenuRequested(contextlistener);
-                canvas.setOnTouchStationary(popuplistener);
-                canvas.setOnMousePressed(arealistener);
-                canvas.setOnTouchPressed(arealistener);
+                this.setContextHandlers();
                 break;
             case SKETCH:
                 this.handler = injector.getInstance(SketchHandler.class);
@@ -122,7 +113,21 @@ public class DrawingArea {
         view.setDrawing(false);
     }
 
-    void setHandlers() {
+    void resetContextHandlers() {
+        canvas.setOnContextMenuRequested(null);
+        canvas.setOnTouchStationary(null);
+        canvas.setOnMousePressed(null);
+        canvas.setOnTouchPressed(null);
+    }
+    
+    void setContextHandlers() {
+        canvas.setOnContextMenuRequested(contextlistener);
+        canvas.setOnTouchStationary(popuplistener);
+        canvas.setOnMousePressed(arealistener);
+        canvas.setOnTouchPressed(arealistener);
+    }
+
+    void initializeHandlers() {
         canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
             mouseUp(event);
         });
@@ -142,7 +147,7 @@ public class DrawingArea {
             touchMoved(event);
         });
         addContextMenu();
-        this.changeHandler(HandlerType.SKETCH);
+        this.changeHandlers(HandlerType.SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {

@@ -42,48 +42,48 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handleSelectionAction(ActionEvent e) {
-        drawarea.changeHandler(HandlerType.SELECTION);
+        drawarea.changeHandlers(HandlerType.SELECTION);
     }
     
     @FXML
     private void handleRotationAction(ActionEvent e) {
-        drawarea.changeHandler(HandlerType.ROTATION);
+        drawarea.changeHandlers(HandlerType.ROTATION);
     }
     
     @FXML
     private void handleLineAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.LINE);
-        drawarea.changeHandler(HandlerType.FIGURE);
+        drawarea.changeHandlers(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleCircleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.CIRCLE);
-        drawarea.changeHandler(HandlerType.FIGURE);
+        drawarea.changeHandlers(HandlerType.FIGURE);
     }
     
     @FXML
     private void handleSquareAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.SQUARE);
-        drawarea.changeHandler(HandlerType.FIGURE);
+        drawarea.changeHandlers(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.TRIANGLE);
-        drawarea.changeHandler(HandlerType.FIGURE);
+        drawarea.changeHandlers(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.POLYGON);
-        drawarea.changeHandler(HandlerType.SKETCH);
+        drawarea.changeHandlers(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.SKETCH);
-        drawarea.changeHandler(HandlerType.SKETCH);
+        drawarea.changeHandlers(HandlerType.SKETCH);
     }
     
     @FXML
