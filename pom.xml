@@ -24,6 +24,14 @@
 
     <dependencies>
 
+        <!-- Guice -->
+
+        <dependency>
+            <groupId>com.cathive.fx</groupId>
+            <artifactId>fx-guice</artifactId>
+            <version>${fx-guice.version}</version>
+        </dependency>
+
         <!-- Apache Commons -->
 
         <dependency>
@@ -32,7 +40,7 @@
             <version>2.6</version>
         </dependency>
 
-        <!-- Logging  -->
+        <!-- sl4j logging  -->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -40,11 +48,7 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+        <!-- log4j logging -->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -58,12 +62,30 @@
             <version>1.2.17</version>
         </dependency>
 
-        <!-- Guice -->
+        <!-- commons logging -->
 
         <dependency>
-            <groupId>com.cathive.fx</groupId>
-            <artifactId>fx-guice</artifactId>
-            <version>${fx-guice.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- NOP logging -->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Test dependencies -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
