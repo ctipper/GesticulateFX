@@ -10,7 +10,6 @@ import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
-import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
