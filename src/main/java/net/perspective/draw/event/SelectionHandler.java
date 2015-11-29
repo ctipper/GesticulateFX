@@ -57,14 +57,16 @@ public class SelectionHandler implements Handler {
     }
 
     public void dragEvent() {
-        if (view.getSelected() != -1) {
+        int selection = view.getSelected();
+        if (selection != -1) {
             double xinc = drawarea.getTempX() - drawarea.getStartX();
             double yinc = drawarea.getTempY() - drawarea.getStartY();
-            Figure item = view.getDrawings().get(view.getSelected());
+            Figure item = view.getDrawings().get(selection);
             context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
             context.alter(item, xinc, yinc);
-            view.updateCanvasItem(view.getSelected(), item);
-            view.moveSelection(view.getSelected());
+            item.updateProperties(drawarea);
+            view.updateCanvasItem(selection, item);
+            view.moveSelection(selection);
             drawarea.setStartX(drawarea.getTempX());
             drawarea.setStartY(drawarea.getTempY());
         }
