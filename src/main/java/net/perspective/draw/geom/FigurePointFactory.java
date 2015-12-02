@@ -61,8 +61,8 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p2);
                 points.add(p3);
                 break;
-            case RECTANGLE:
             case ELLIPSE:
+            case RECTANGLE:
                 points = new ArrayList<>();
                 p0 = new CanvasPoint(startX, startY);
                 p1 = new CanvasPoint(startX, endY);
