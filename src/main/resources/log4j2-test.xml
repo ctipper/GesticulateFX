@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p %-10c\n%-20M - %m%n"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+
+    <Logger name="net.perspective.draw" level="debug"/>
+
+    <Root level="info">
+      <AppenderRef ref="console"/>
+    </Root>
+  
+  </Loggers>
+
+</Configuration>

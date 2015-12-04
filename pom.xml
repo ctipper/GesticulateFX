@@ -19,6 +19,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.13</slf4j.version>
+        <log4j.version>2.4.1</log4j.version>
         <fx-guice.version>8.0.0</fx-guice.version>
     </properties>
 
@@ -51,17 +52,17 @@
         <!-- log4j logging -->
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+        	<groupId>org.apache.logging.log4j</groupId>
+        	<artifactId>log4j-core</artifactId>
+        	<version>${log4j.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+        	<groupId>org.apache.logging.log4j</groupId>
+        	<artifactId>log4j-slf4j-impl</artifactId>
+        	<version>${log4j.version}</version>
         </dependency>
-
+        
         <!-- commons logging -->
 
         <dependency>
