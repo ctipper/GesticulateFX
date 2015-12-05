@@ -29,8 +29,8 @@ public class FigureFactoryImpl implements FigureFactory {
             case RECTANGLE:
                 item = new Figure(FigureType.SQUARE);
                 break;
-            case ISOSCELES:
             case TRIANGLE:
+            case ISOSCELES:
                 item = new Figure(FigureType.TRIANGLE);
                 break;
             case POLYGON:
