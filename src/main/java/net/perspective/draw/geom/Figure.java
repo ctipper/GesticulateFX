@@ -43,7 +43,6 @@ public class Figure implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Figure() {
-        this.type = FigureType.NONE;
         this.transparency = 0;
         this.angle = 0;
         this.closed = false;
@@ -227,11 +226,7 @@ public class Figure implements Serializable {
     }
 
     public boolean contains(double x, double y) {
-        if (type.equals(FigureType.NONE)) {
-            return false;
-        } else {
-            return this.bounds().intersects(x - 5, y - 5, 10, 10);
-        }
+        return this.bounds().intersects(x - 5, y - 5, 10, 10);
     }
 
     public void moveFigure(double xinc, double yinc) {
