@@ -43,6 +43,7 @@ public class Figure implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Figure() {
+        this.type = FigureType.NONE;
         this.transparency = 0;
         this.angle = 0;
         this.closed = false;
@@ -226,7 +227,11 @@ public class Figure implements Serializable {
     }
 
     public boolean contains(double x, double y) {
-        return this.bounds().intersects(x - 5, y - 5, 10, 10);
+        if (type.equals(FigureType.NONE)) {
+            return false;
+        } else {
+            return this.bounds().intersects(x - 5, y - 5, 10, 10);
+        }
     }
 
     public void moveFigure(double xinc, double yinc) {
@@ -239,6 +244,7 @@ public class Figure implements Serializable {
 
     public Path draw() {
         AffineTransform at;
+        
         at = this.getTransform();
         Path fxpath = drawPath(at);
         fxpath.setStroke(this.getColor());
