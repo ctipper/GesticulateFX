@@ -129,21 +129,4 @@ public class Edge extends Figure implements Serializable {
         return bounds;
     }
 
-    /*
-     * Return 2-point array of vertices, second point normalized.
-     * Note that the points may not be cyclical.
-     */
-    @Override
-    public List<CanvasPoint[]> getVertices() {
-        List<CanvasPoint[]> vert = new ArrayList<>();
-        List<CanvasPoint[]> vertices = new ArrayList<>();
-        vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
-        vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
-        for (CanvasPoint[] p : vert) {
-            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
-            vertices.add(point);
-        }
-        return vertices;
-    }
-
 }
