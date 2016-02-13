@@ -6,8 +6,7 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.BasicStroke;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.geom.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -332,7 +331,7 @@ public class Figure implements Serializable {
         return anchors;
     }
     
-    protected Shape anchor(double x, double y) {
+    protected javafx.scene.shape.Shape anchor(double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
         anchor.setCenterX(u.x);
@@ -344,6 +343,35 @@ public class Figure implements Serializable {
         return anchor;
     }
     
+    /**
+     * Draw to a Java2d canvas for output
+     * 
+     * @param g2 Java2d graphics context
+     */
+    public void draw(Graphics2D g2) {
+        AffineTransform defaultTransform, transform;
+        
+        defaultTransform = g2.getTransform();
+
+        transform = this.getTransform();
+        g2.transform(transform);
+
+        if (this.isClosed()) {
+            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) getTransparency() / 100);
+            g2.setComposite(ac);
+            g2.setColor(Figure.fxToAwt(this.fillcolor));
+            g2.fill(this.getPath());
+            ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 1.0);
+            g2.setComposite(ac);
+        }
+        g2.setStroke(this.getStroke());
+        g2.setColor(Figure.fxToAwt(this.color));
+        g2.draw(this.getPath());
+
+        // reset graphics context
+        g2.setTransform(defaultTransform);
+    }
+
     public double getLineWidth() {
         return (double) ((BasicStroke) this.getStroke()).getLineWidth();
     }

@@ -11,6 +11,7 @@ import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import java.io.File;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -19,12 +20,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import javafx.stage.*;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
+import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.workers.SVGWorker;
 
 /**
  *
@@ -33,8 +34,8 @@ import net.perspective.draw.event.behaviours.BehaviourContext;
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
-    
     @Inject private DrawingArea drawingarea;
+    private Stage stage;
     
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
@@ -75,6 +76,7 @@ public class Gesticulate extends GuiceApplication {
 
         // Show the primary stage
         primaryStage.show();
+        this.stage = primaryStage;
 
         // Initialise the scroll area
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
@@ -114,6 +116,30 @@ public class Gesticulate extends GuiceApplication {
         }
     }
     
+    public void exportSVG() {
+        File f;
+        FileChooser chooser = new FileChooser();
+        
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        chooser.setInitialDirectory(userDirectory);        
+        chooser.setTitle("Export SVG...");
+        File result = chooser.showSaveDialog(stage);
+        if (result == null) {
+            return;
+        }
+
+        final File file = FileUtils.cleanseFileName(result, "svg");
+
+        // launch progress bar
+//        jProgressBar.setValue(0);
+//        jProgressBar.setVisible(true);
+//        jProgressBar.setIndeterminate(true);
+        SVGWorker svgThread = new SVGWorker(this, file);
+        svgThread.execute();
+//        this.setStatus("SVG export started.");
+    }
+
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be

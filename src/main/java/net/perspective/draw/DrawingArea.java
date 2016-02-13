@@ -8,6 +8,7 @@ package net.perspective.draw;
 
 import com.google.inject.Injector;
 import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
 import javafx.event.ActionEvent;
@@ -21,7 +22,9 @@ import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.enums.Media;
 import net.perspective.draw.event.*;
+import net.perspective.draw.geom.Figure;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
@@ -220,6 +223,18 @@ public class DrawingArea {
                 contextmenu.hide();
             }
         };
+    }
+
+    /**
+     * Draw to a Java2d canvas
+     * @param g2
+     * @param media 
+     */
+    public void drawCanvas(Graphics2D g2, Media media) {
+        java.util.List<Figure> drawings = view.getDrawings();
+        for (Figure item : drawings) {
+            item.draw(g2);
+        }
     }
 
     public SubScene getScene() {
