@@ -22,7 +22,6 @@ import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
-import net.perspective.draw.enums.Media;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.Figure;
 
@@ -230,11 +229,10 @@ public class DrawingArea {
      * @param g2
      * @param media 
      */
-    public void drawCanvas(Graphics2D g2, Media media) {
-        java.util.List<Figure> drawings = view.getDrawings();
-        for (Figure item : drawings) {
+    public void drawCanvas(Graphics2D g2) {
+        view.getDrawings().stream().forEach((item) -> {
             item.draw(g2);
-        }
+        });
     }
 
     public SubScene getScene() {

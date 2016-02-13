@@ -23,6 +23,7 @@ import net.perspective.draw.event.HandlerType;
 
 public class ApplicationController implements Initializable {
     
+    @Inject private Gesticulate application;
     @Inject private DrawingArea drawarea;
     
     @FXML
@@ -101,6 +102,11 @@ public class ApplicationController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleSvgExportAction(ActionEvent e) {
+        application.exportSVG();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    

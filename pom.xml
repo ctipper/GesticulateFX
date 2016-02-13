@@ -18,9 +18,10 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.13</slf4j.version>
+        <slf4j.version>1.7.16</slf4j.version>
         <log4j.version>2.4.1</log4j.version>
         <fx-guice.version>8.0.0</fx-guice.version>
+        <batik.version>1.8</batik.version>
     </properties>
 
     <dependencies>
@@ -38,13 +39,25 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svggen</artifactId>
-            <version>1.8</version>
+            <version>${batik.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svg-dom</artifactId>
+            <version>${batik.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-dom</artifactId>
-            <version>1.8</version>
+            <version>${batik.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-parser</artifactId>
+            <version>${batik.version}</version>
         </dependency>
 
         <!-- sl4j logging  -->
@@ -58,7 +71,7 @@
         <!-- log4j logging -->
 
         <dependency>
-        	  <groupId>org.apache.logging.log4j</groupId>
+            <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
@@ -69,13 +82,18 @@
             <version>${log4j.version}</version>
         </dependency>
 
-        <!-- NOP logging -->
+        <!-- SL4j bridges -->
 
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-nop</artifactId>
+            <artifactId>jul-to-slf4j</artifactId>
             <version>${slf4j.version}</version>
-            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- Test dependencies -->

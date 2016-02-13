@@ -74,16 +74,6 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <Label focusTraversable="false" text="Style" />
-                        <ComboBox focusTraversable="false" prefWidth="90.0">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Item 1" />
-                                    <String fx:value="Item 2" />
-                                    <String fx:value="Item 3" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
                         <Region prefWidth="5.0" />
                         <Label focusTraversable="false" text="Fill" />
                         <Button id="fillcolor" focusTraversable="false" mnemonicParsing="false" prefWidth="45.0" style="-fx-background-color: rgb(153, 204, 255);" text="" />
@@ -117,6 +107,8 @@
                         <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
                         <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
                         <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
+                        <Region prefWidth="10.0" />
+                        <Button id="buttexportsvg" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbuttons" text="SVG" />
                     </items>
                 </ToolBar>
             </top>

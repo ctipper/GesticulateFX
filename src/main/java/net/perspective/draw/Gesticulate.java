@@ -117,25 +117,29 @@ public class Gesticulate extends GuiceApplication {
     }
     
     public void exportSVG() {
-        File f;
+        File result;
+
         FileChooser chooser = new FileChooser();
-        
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
-        chooser.setInitialDirectory(userDirectory);        
+        chooser.setInitialDirectory(userDirectory);
         chooser.setTitle("Export SVG...");
-        File result = chooser.showSaveDialog(stage);
+        chooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("SVG", "*.svg"),
+            new FileChooser.ExtensionFilter("All Images", "*.*"));
+        result = chooser.showSaveDialog(stage);
         if (result == null) {
             return;
         }
 
+        // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "svg");
 
         // launch progress bar
 //        jProgressBar.setValue(0);
 //        jProgressBar.setVisible(true);
 //        jProgressBar.setIndeterminate(true);
-        SVGWorker svgThread = new SVGWorker(this, file);
+        SVGWorker svgThread = new SVGWorker(file);
         svgThread.execute();
 //        this.setStatus("SVG export started.");
     }
