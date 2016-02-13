@@ -230,9 +230,9 @@ public class DrawingArea {
      * @param media 
      */
     public void drawCanvas(Graphics2D g2) {
-        view.getDrawings().stream().forEach((item) -> {
+        for (Figure item : view.getDrawings()) {
             item.draw(g2);
-        });
+        }
     }
 
     public SubScene getScene() {

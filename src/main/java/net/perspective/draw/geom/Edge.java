@@ -10,7 +10,6 @@ import java.awt.Shape;
 import java.awt.geom.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
@@ -118,7 +117,7 @@ public class Edge extends Figure implements Serializable {
             double a = Math.atan2(end.y - start.y, end.x - start.x);
 
             Area area = new Area(rectangle);
-            AffineTransform transform = new AffineTransform();
+            java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
             transform.setToTranslation(start.x, start.y);
             transform.rotate(a);
             area.transform(transform);

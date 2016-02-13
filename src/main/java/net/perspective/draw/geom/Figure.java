@@ -7,7 +7,9 @@
 package net.perspective.draw.geom;
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,10 +169,10 @@ public class Figure implements Serializable {
         return point;
     }
 
-    protected AffineTransform getTransform() {
+    protected java.awt.geom.AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
         
-        AffineTransform transform = new AffineTransform();
+        java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
         transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
             // rotate figure about centroid
@@ -219,7 +221,7 @@ public class Figure implements Serializable {
 
     public java.awt.Shape bounds() {
         // Get transformed path
-        AffineTransform transform = this.getTransform();
+        java.awt.geom.AffineTransform transform = this.getTransform();
         Path2D.Double p = (Path2D.Double) this.getPath().clone();
         p.transform(transform);
         return p;
@@ -242,7 +244,7 @@ public class Figure implements Serializable {
     }
 
     public Path draw() {
-        AffineTransform at;
+        java.awt.geom.AffineTransform at;
         
         at = this.getTransform();
         Path fxpath = drawPath(at);
@@ -260,7 +262,7 @@ public class Figure implements Serializable {
         return fxpath;
     }
     
-    private Path drawPath(AffineTransform at) {
+    private Path drawPath(java.awt.geom.AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
         Path fxpath = new Path();
 
@@ -349,7 +351,7 @@ public class Figure implements Serializable {
      * @param g2 Java2d graphics context
      */
     public void draw(Graphics2D g2) {
-        AffineTransform defaultTransform, transform;
+        java.awt.geom.AffineTransform defaultTransform, transform;
         
         defaultTransform = g2.getTransform();
 
