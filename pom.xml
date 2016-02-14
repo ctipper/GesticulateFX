@@ -57,6 +57,12 @@
 <!--
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-codec</artifactId>
+            <version>${batik.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-gvt</artifactId>
             <version>${batik.version}</version>
         </dependency>
@@ -82,12 +88,6 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-gui-util</artifactId>
-            <version>${batik.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-codec</artifactId>
             <version>${batik.version}</version>
         </dependency>
 

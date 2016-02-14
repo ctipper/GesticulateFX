@@ -34,7 +34,7 @@ import net.perspective.draw.workers.SVGWorker;
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
-    @Inject private DrawingArea drawingarea;
+    @Inject private DrawingArea drawarea;
     private Stage stage;
     
     // parameters for sizing the stage
@@ -84,20 +84,20 @@ public class Gesticulate extends GuiceApplication {
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
         // Initialize the canvas and apply handlers
-        drawingarea.init(pane.getWidth(), pane.getHeight());
+        drawarea.init(pane.getWidth(), pane.getHeight());
         this.initialiseToolbar(scene);
         
         // Install the canvas
-        pane.setContent(drawingarea.getScene());
+        pane.setContent(drawarea.getScene());
         this.setOnResize(pane);
     }
     
     public void setOnResize(ScrollPane pane) {
         pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawingarea.getScene().setHeight((double) new_val);
+            drawarea.getScene().setHeight((double) new_val);
         });
         pane.widthProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawingarea.getScene().setWidth((double) new_val);
+            drawarea.getScene().setWidth((double) new_val);
         });
     }
     
@@ -135,13 +135,8 @@ public class Gesticulate extends GuiceApplication {
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "svg");
 
-        // launch progress bar
-//        jProgressBar.setValue(0);
-//        jProgressBar.setVisible(true);
-//        jProgressBar.setIndeterminate(true);
-        SVGWorker svgThread = new SVGWorker(file);
+        SVGWorker svgThread = new SVGWorker(drawarea.getView(), file);
         svgThread.execute();
-//        this.setStatus("SVG export started.");
     }
 
     /**
