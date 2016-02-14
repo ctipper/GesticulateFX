@@ -108,7 +108,7 @@
                         <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
                         <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
                         <Region prefWidth="10.0" />
-                        <Button id="buttexportsvg" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbuttons" text="SVG" />
+                        <Button id="buttexportsvg" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbuttons" text="" />
                     </items>
                 </ToolBar>
             </top>

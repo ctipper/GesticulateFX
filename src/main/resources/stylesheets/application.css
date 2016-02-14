@@ -130,3 +130,8 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+#buttexportsvg {
+    -fx-background-image: url('../images/share-button.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
