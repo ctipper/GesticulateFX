@@ -10,6 +10,7 @@ import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import java.io.File;
 import java.util.List;
@@ -34,6 +35,7 @@ import net.perspective.draw.workers.SVGWorker;
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
+    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     private Stage stage;
     
@@ -134,8 +136,8 @@ public class Gesticulate extends GuiceApplication {
 
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "svg");
-
-        SVGWorker svgThread = new SVGWorker(drawarea.getView(), file);
+        SVGWorker svgThread = injector.getInstance(SVGWorker.class);
+        svgThread.setFile(file);
         svgThread.execute();
     }
 

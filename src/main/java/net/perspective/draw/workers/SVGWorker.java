@@ -7,15 +7,9 @@
 package net.perspective.draw.workers;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import net.perspective.draw.CanvasView;
-import net.perspective.draw.DrawingArea;
-import net.perspective.draw.geom.Figure;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.CachedImageHandlerBase64Encoder;
 import org.apache.batik.svggen.GenericImageHandler;
@@ -33,17 +27,20 @@ import org.w3c.dom.DOMImplementation;
 
 public class SVGWorker extends SwingWorker {
 
-    protected File file;
-    protected CanvasView view;
-    
+    @Inject private CanvasView view;
+    private File file;
+
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
     /**
      * Creates a new instance of
      * <code>SVGWorker</code>
      */
-    public SVGWorker(CanvasView view, File file) {
-        this.view = view;
+    @Inject
+    public SVGWorker() {
+    }
+
+    public void setFile(File file) {
         this.file = file;
     }
 

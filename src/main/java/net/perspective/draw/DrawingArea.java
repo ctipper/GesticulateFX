@@ -33,7 +33,7 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 @Singleton
 public class DrawingArea {
 
-    @Inject Injector injector;
+    @Inject private Injector injector;
     @Inject private CanvasView view;
     private SubScene canvas;
     private Group root;
