@@ -57,6 +57,10 @@ public class CanvasPoint implements Serializable, Cloneable {
         x *= sx;
         y *= sy;
     }
+    
+    public CanvasPoint scale(double scale) {
+        return new CanvasPoint(x * scale, y * scale);
+    }
 
     public void rotate(double angle) {
         CanvasPoint point = V2.rot(x, y, angle);

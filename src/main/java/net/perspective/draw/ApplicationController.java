@@ -107,6 +107,11 @@ public class ApplicationController implements Initializable {
         application.exportSVG();
     }
     
+    @FXML
+    private void handlePngExportAction(ActionEvent e) {
+        application.exportPNG();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    

@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.Figure;
+import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,4 +202,37 @@ public class CanvasView {
     public Figure getNewItem() {
         return newitem;
     }
+    
+    public CanvasPoint[] getBounds() {
+        CanvasPoint topleft, bottomright;
+        
+        List<CanvasPoint> points = new ArrayList<>();
+        CanvasPoint start = new CanvasPoint();
+        CanvasPoint end = new CanvasPoint();
+
+        for (Figure shape : list) {
+            points.add(shape.getTop()[0]);
+            points.add(shape.getBottom()[0]);
+            points.add(shape.getUp()[0]);
+            points.add(shape.getDown()[0]);
+        }
+        try {
+            topleft = (CanvasPoint) points.get(0).clone();
+            bottomright = (CanvasPoint) points.get(1).clone();
+            
+            for (CanvasPoint point : points) {
+                topleft.x = Math.min(point.x, topleft.x);
+                topleft.y = Math.min(point.y, topleft.y);
+                bottomright.x = Math.max(point.x, bottomright.x);
+                bottomright.y = Math.max(point.y, bottomright.y);
+            }
+
+            start = new CanvasPoint(topleft.x, topleft.y);
+            end = new CanvasPoint(bottomright.x, bottomright.y);
+        } catch (CloneNotSupportedException ex) {
+            logger.error(null, ex);
+        }
+        return new CanvasPoint[] {start, end};
+    }
+
 }

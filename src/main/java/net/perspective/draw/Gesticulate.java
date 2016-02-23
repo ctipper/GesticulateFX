@@ -13,7 +13,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
@@ -26,6 +30,7 @@ import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.SVGWorker;
 
 /**
@@ -37,6 +42,7 @@ public class Gesticulate extends GuiceApplication {
     @Inject private GuiceFXMLLoader fxmlLoader;
     @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
     private Stage stage;
     
     // parameters for sizing the stage
@@ -139,6 +145,35 @@ public class Gesticulate extends GuiceApplication {
         SVGWorker svgThread = injector.getInstance(SVGWorker.class);
         svgThread.setFile(file);
         svgThread.execute();
+    }
+
+    public void exportPNG() {
+        File result;
+        
+        // Detect empty canvas
+        if (view.getDrawings().isEmpty()) {
+            return;
+        }
+        
+        FileChooser chooser = new FileChooser();
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        chooser.setInitialDirectory(userDirectory);
+        chooser.setTitle("Export Image...");
+        chooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("PNG", "*.png"),
+            new FileChooser.ExtensionFilter("All Images", "*.*"));
+        result = chooser.showSaveDialog(stage);
+        if (result == null) {
+            return;
+        }
+
+        // wrangle filename with correct extension
+        final File file = FileUtils.cleanseFileName(result, "png");
+        PNGWorker pngThread = injector.getInstance(PNGWorker.class);
+        pngThread.setFile(file);
+        pngThread.setOpacity(false);
+        pngThread.execute();
     }
 
     /**
