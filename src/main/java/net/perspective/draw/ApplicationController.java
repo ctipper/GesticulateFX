@@ -112,6 +112,11 @@ public class ApplicationController implements Initializable {
         application.exportPNG();
     }
     
+    @FXML
+    private void handlePngSnapshotAction(ActionEvent e) {
+        application.snapshotPNG();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }    

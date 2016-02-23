@@ -109,7 +109,7 @@
                         <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
                         <Region prefWidth="10.0" />
                         <Button id="buttexportoptions" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbuttons" text="" />
-                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" styleClass="formatbuttons" text="" />
+                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbuttons" text="" />
                     </items>
                 </ToolBar>
             </top>

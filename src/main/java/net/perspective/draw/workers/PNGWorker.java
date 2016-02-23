@@ -60,7 +60,7 @@ public class PNGWorker extends SwingWorker {
 
     final class Serialiser {
         
-        private boolean opacity;
+        private final boolean opacity;
 
         Serialiser(boolean opacity) {
             logger.info("PNG export initialised.");
@@ -70,7 +70,7 @@ public class PNGWorker extends SwingWorker {
 
         public void make() {
             double scale = 1.375;
-            double margin = 10.0;  // take into account max stroke width
+            double margin = 6.0;  // max stroke width
             
             // Calculate draw area
             final CanvasPoint[] bounds = view.getBounds();

@@ -125,8 +125,6 @@ public class Gesticulate extends GuiceApplication {
     }
     
     public void exportSVG() {
-        File result;
-
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
@@ -135,7 +133,7 @@ public class Gesticulate extends GuiceApplication {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("SVG", "*.svg"),
             new FileChooser.ExtensionFilter("All Images", "*.*"));
-        result = chooser.showSaveDialog(stage);
+        File result = chooser.showSaveDialog(stage);
         if (result == null) {
             return;
         }
@@ -148,8 +146,6 @@ public class Gesticulate extends GuiceApplication {
     }
 
     public void exportPNG() {
-        File result;
-        
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
             return;
@@ -163,7 +159,7 @@ public class Gesticulate extends GuiceApplication {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("PNG", "*.png"),
             new FileChooser.ExtensionFilter("All Images", "*.*"));
-        result = chooser.showSaveDialog(stage);
+        File result = chooser.showSaveDialog(stage);
         if (result == null) {
             return;
         }
@@ -173,6 +169,28 @@ public class Gesticulate extends GuiceApplication {
         PNGWorker pngThread = injector.getInstance(PNGWorker.class);
         pngThread.setFile(file);
         pngThread.setOpacity(false);
+        pngThread.execute();
+    }
+
+    public void snapshotPNG() {
+        // Detect empty canvas
+        if (view.getDrawings().isEmpty()) {
+            return;
+        }
+
+        Date d = new Date();
+        // Snap Shot 2015-04-14 at 17.17.29
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd' at 'HH.mm.ss");
+        TimeZone tz = TimeZone.getDefault();
+        df.setTimeZone(tz);
+        String now = df.format(d);
+        
+        // Name file and add timestamp, save to Desktop
+        String path = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
+        File file = new File(path);
+        
+        PNGWorker pngThread = injector.getInstance(PNGWorker.class);
+        pngThread.setFile(file);
         pngThread.execute();
     }
 
