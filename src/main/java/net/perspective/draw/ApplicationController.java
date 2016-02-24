@@ -122,11 +122,13 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleSvgExportAction(ActionEvent e) {
         share.exportSVG();
+        menubutton.fire();
     }
     
     @FXML
     private void handlePngExportAction(ActionEvent e) {
         share.exportPNG();
+        menubutton.fire();
     }
     
     @FXML

@@ -17,9 +17,6 @@
     -fx-background-color: white;
     -fx-padding: 5 5 5 5;
 }
-.menubutton:hover {
-    -fx-background-color: #ddf2ff;
-}
 .togglebuttons {
     -fx-background-color: white;
 }
@@ -60,9 +57,9 @@
 }
 .ttip {
     -fx-background-radius: 2 2 2 2;
-    -fx-text-fill: darkslategray;
+    -fx-text-fill: saddlebrown;
     -fx-background-color: linear-gradient(springgreen, lightgreen);
-    -fx-opacity: .7;
+    -fx-opacity: .8;
 }
 #buttnewcanvas {
     -fx-background-image: url('../images/new-canvas.png');

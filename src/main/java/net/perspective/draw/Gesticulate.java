@@ -23,6 +23,8 @@ import javafx.stage.*;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
+import net.perspective.draw.workers.PNGWorker;
+import net.perspective.draw.workers.SVGWorker;
 
 /**
  *
@@ -140,6 +142,9 @@ public class Gesticulate extends GuiceApplication {
             bind(SelectionHandler.class);
             bind(SketchHandler.class);
             bind(BehaviourContext.class);
+            bind(SVGWorker.class);
+            bind(PNGWorker.class);
+            bind(ShareUtils.class);
         }
     }
 }
