@@ -17,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.util.Duration;
 import javax.inject.Inject;
 import net.perspective.draw.enums.DrawingType;
@@ -33,9 +34,9 @@ public class ApplicationController implements Initializable {
     @Inject private ShareUtils share;
 
     @FXML
-    private Button menu;
+    private Button menubutton;
     @FXML
-    private GridPane navList;
+    private GridPane appmenu;
 
     @FXML
     private void handleWipeAction(ActionEvent e) {
@@ -135,21 +136,22 @@ public class ApplicationController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        navList.getColumnConstraints().add(new ColumnConstraints(20)); // column 0 is 80 wide
-        navList.getColumnConstraints().add(new ColumnConstraints(160));
-        navList.setPadding(new Insets(10, 10, 10, 10));
+        appmenu.getColumnConstraints().add(new ColumnConstraints(20)); // column 0 is 80 wide
+        appmenu.getColumnConstraints().add(new ColumnConstraints(160));
+        appmenu.setPadding(new Insets(10, 10, 10, 10));
+        appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         prepareSlideMenuAnimation();
     }
     
     private void prepareSlideMenuAnimation() {
-        TranslateTransition openNav = new TranslateTransition(new Duration(350), navList);
+        TranslateTransition openNav = new TranslateTransition(new Duration(350), appmenu);
         openNav.setToX(0);
-        TranslateTransition closeNav = new TranslateTransition(new Duration(350), navList);
-        menu.setOnAction((ActionEvent evt) -> {
-            if (navList.getTranslateX() != 0) {
+        TranslateTransition closeNav = new TranslateTransition(new Duration(350), appmenu);
+        menubutton.setOnAction((ActionEvent evt) -> {
+            if (appmenu.getTranslateX() != 0) {
                 openNav.play();
             } else {
-                closeNav.setToX(-(navList.getWidth()));
+                closeNav.setToX(-(appmenu.getWidth()));
                 closeNav.play();
             }
         });

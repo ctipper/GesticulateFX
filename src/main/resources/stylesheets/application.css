@@ -58,6 +58,12 @@
     -fx-background-color: #4860e0;
     -fx-text-fill: white;
 }
+.ttip {
+    -fx-background-radius: 2 2 2 2;
+    -fx-text-fill: darkslategray;
+    -fx-background-color: linear-gradient(springgreen, lightgreen);
+    -fx-opacity: .7;
+}
 #buttnewcanvas {
     -fx-background-image: url('../images/new-canvas.png');
     -fx-background-repeat: no-repeat;
@@ -118,7 +124,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
-#buttmenu {
+#butthamburger {
     -fx-background-image: url('../images/menu.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -145,11 +151,6 @@
 }
 #buttwireframe {
     -fx-background-image: url('../images/wireframe.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-}
-#buttexportoptions {
-    -fx-background-image: url('../images/share.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }

@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" fx:controller="net.perspective.draw.ApplicationController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" fx:controller="net.perspective.draw.ApplicationController">
     <children>
         <BorderPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <bottom>
@@ -64,7 +64,7 @@
             <top>
                 <ToolBar prefHeight="60.0" style="">
                     <items>
-                        <Button fx:id="menu" id="buttmenu" focusTraversable="false" mnemonicParsing="false" onAction="#handleMenuAction" styleClass="menubutton" text="" />
+                        <Button fx:id="menubutton" id="butthamburger" focusTraversable="false" mnemonicParsing="false" onAction="#handleMenuAction" styleClass="menubutton" text="" />
                         <Label focusTraversable="false" text="Stroke" />
                         <ComboBox focusTraversable="false" prefWidth="80.0">
                             <items>
@@ -82,7 +82,11 @@
                         <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
                         <Region prefWidth="5.0" />
                         <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
-                        <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="" />
+                        <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
+                            <tooltip>
+                                <Tooltip text="Draw as outline" styleClass="ttip"/>
+                            </tooltip>
+                        </ToggleButton>
                         <Region prefWidth="30.0" />
                         <Label focusTraversable="false" text="Font" />
                         <ComboBox focusTraversable="false" prefWidth="80.0">
@@ -109,13 +113,16 @@
                         <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Region prefWidth="10.0" />
-                        <Button id="buttexportoptions" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbutton" text="" />
-                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="" />
+                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
+                            <tooltip>
+                                <Tooltip text="Send snapshot to desktop" styleClass="ttip"/>
+                            </tooltip>
+                        </Button>
                     </items>
                 </ToolBar>
             </top>
         </BorderPane>
-        <GridPane fx:id="navList" AnchorPane.topAnchor="60.0" AnchorPane.bottomAnchor="0.0" prefHeight="600.0" prefWidth="200.0" translateX="-200" style="-fx-background-color:white">
+        <GridPane fx:id="appmenu" AnchorPane.topAnchor="60.0" AnchorPane.bottomAnchor="0.0" prefHeight="600.0" prefWidth="200.0" translateX="-200" style="-fx-background-color:white">
             <children>
                 <Label text="(S)" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                 <Button GridPane.columnIndex="1" GridPane.rowIndex="0" onAction="#handleSvgExportAction" styleClass="menuitem" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" text="Export to SVG..." />    
