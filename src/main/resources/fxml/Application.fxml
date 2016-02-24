@@ -11,7 +11,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.perspective.draw.ApplicationController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" fx:controller="net.perspective.draw.ApplicationController">
     <children>
         <BorderPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <bottom>
@@ -64,8 +64,9 @@
             <top>
                 <ToolBar prefHeight="60.0" style="">
                     <items>
+                        <Button fx:id="menu" id="buttmenu" focusTraversable="false" mnemonicParsing="false" onAction="#handleMenuAction" styleClass="menubutton" text="" />
                         <Label focusTraversable="false" text="Stroke" />
-                        <ComboBox focusTraversable="false" prefWidth="90.0">
+                        <ComboBox focusTraversable="false" prefWidth="80.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Item 1" />
@@ -80,11 +81,11 @@
                         <Label focusTraversable="false" text="Color" />
                         <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
                         <Region prefWidth="5.0" />
-                        <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
+                        <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="" />
-                        <Region prefWidth="40.0" />
+                        <Region prefWidth="30.0" />
                         <Label focusTraversable="false" text="Font" />
-                        <ComboBox focusTraversable="false" prefWidth="90.0">
+                        <ComboBox focusTraversable="false" prefWidth="80.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Item 1" />
@@ -94,7 +95,7 @@
                             </items>
                         </ComboBox>
                         <Label focusTraversable="false" text="Size" />
-                        <ComboBox focusTraversable="false" prefWidth="90.0">
+                        <ComboBox focusTraversable="false" prefWidth="80.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Item 1" />
@@ -104,16 +105,24 @@
                             </items>
                         </ComboBox>
                         <Region prefWidth="5.0" />
-                        <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
-                        <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
-                        <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbuttons" text="" />
+                        <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
+                        <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
+                        <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Region prefWidth="10.0" />
-                        <Button id="buttexportoptions" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbuttons" text="" />
-                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbuttons" text="" />
+                        <Button id="buttexportoptions" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="formatbutton" text="" />
+                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="" />
                     </items>
                 </ToolBar>
             </top>
         </BorderPane>
+        <GridPane fx:id="navList" AnchorPane.topAnchor="60.0" AnchorPane.bottomAnchor="0.0" prefHeight="600.0" prefWidth="200.0" translateX="-200" style="-fx-background-color:white">
+            <children>
+                <Label text="(S)" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="0" onAction="#handleSvgExportAction" styleClass="menuitem" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" text="Export to SVG..." />    
+                <Label text="(P)" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#handlePngExportAction" styleClass="menuitem" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" text="Export to Image..." />    
+            </children>
+        </GridPane>
     </children>
     <stylesheets>
         <URL value="@../stylesheets/jmetro-light.css" />

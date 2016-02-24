@@ -9,9 +9,15 @@ package net.perspective.draw;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import javax.inject.Inject;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.HandlerType;
@@ -23,9 +29,14 @@ import net.perspective.draw.event.HandlerType;
 
 public class ApplicationController implements Initializable {
     
-    @Inject private Gesticulate application;
     @Inject private DrawingArea drawarea;
-    
+    @Inject private ShareUtils share;
+
+    @FXML
+    private Button menu;
+    @FXML
+    private GridPane navList;
+
     @FXML
     private void handleWipeAction(ActionEvent e) {
         drawarea.prepareDrawing();
@@ -93,6 +104,11 @@ public class ApplicationController implements Initializable {
     }
     
     @FXML
+    private void handleMenuAction(ActionEvent e) {
+        // not implemented
+    }
+    
+    @FXML
     private void handleOpacityAction(ActionEvent e) {
         javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) e.getSource();
         if (button.isSelected()) {
@@ -104,20 +120,39 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleSvgExportAction(ActionEvent e) {
-        application.exportSVG();
+        share.exportSVG();
     }
     
     @FXML
     private void handlePngExportAction(ActionEvent e) {
-        application.exportPNG();
+        share.exportPNG();
     }
     
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
-        application.snapshotPNG();
+        share.snapshotPNG();
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    }    
+        navList.getColumnConstraints().add(new ColumnConstraints(20)); // column 0 is 80 wide
+        navList.getColumnConstraints().add(new ColumnConstraints(160));
+        navList.setPadding(new Insets(10, 10, 10, 10));
+        prepareSlideMenuAnimation();
+    }
+    
+    private void prepareSlideMenuAnimation() {
+        TranslateTransition openNav = new TranslateTransition(new Duration(350), navList);
+        openNav.setToX(0);
+        TranslateTransition closeNav = new TranslateTransition(new Duration(350), navList);
+        menu.setOnAction((ActionEvent evt) -> {
+            if (navList.getTranslateX() != 0) {
+                openNav.play();
+            } else {
+                closeNav.setToX(-(navList.getWidth()));
+                closeNav.play();
+            }
+        });
+    }
+
 }

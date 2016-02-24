@@ -10,14 +10,8 @@ import com.cathive.fx.guice.GuiceApplication;
 import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
 import com.google.inject.Module;
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
@@ -29,9 +23,6 @@ import javafx.stage.*;
 import javax.inject.Inject;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
-import net.perspective.draw.util.FileUtils;
-import net.perspective.draw.workers.PNGWorker;
-import net.perspective.draw.workers.SVGWorker;
 
 /**
  *
@@ -40,9 +31,7 @@ import net.perspective.draw.workers.SVGWorker;
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
-    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
     private Stage stage;
     
     // parameters for sizing the stage
@@ -115,6 +104,10 @@ public class Gesticulate extends GuiceApplication {
         stage.setWidth(sceneWidth);
         stage.setHeight(sceneHeight);
     }
+    
+    public Stage getStage() {
+        return this.stage;
+    }
 
     private void initialiseToolbar(Scene scene) {
         // Toolbar state
@@ -124,76 +117,6 @@ public class Gesticulate extends GuiceApplication {
         }
     }
     
-    public void exportSVG() {
-        FileChooser chooser = new FileChooser();
-        String userDirectoryString = System.getProperty("user.home");
-        File userDirectory = new File(userDirectoryString);
-        chooser.setInitialDirectory(userDirectory);
-        chooser.setTitle("Export SVG...");
-        chooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("SVG", "*.svg"),
-            new FileChooser.ExtensionFilter("All Images", "*.*"));
-        File result = chooser.showSaveDialog(stage);
-        if (result == null) {
-            return;
-        }
-
-        // wrangle filename with correct extension
-        final File file = FileUtils.cleanseFileName(result, "svg");
-        SVGWorker svgThread = injector.getInstance(SVGWorker.class);
-        svgThread.setFile(file);
-        svgThread.execute();
-    }
-
-    public void exportPNG() {
-        // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
-            return;
-        }
-        
-        FileChooser chooser = new FileChooser();
-        String userDirectoryString = System.getProperty("user.home");
-        File userDirectory = new File(userDirectoryString);
-        chooser.setInitialDirectory(userDirectory);
-        chooser.setTitle("Export Image...");
-        chooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("PNG", "*.png"),
-            new FileChooser.ExtensionFilter("All Images", "*.*"));
-        File result = chooser.showSaveDialog(stage);
-        if (result == null) {
-            return;
-        }
-
-        // wrangle filename with correct extension
-        final File file = FileUtils.cleanseFileName(result, "png");
-        PNGWorker pngThread = injector.getInstance(PNGWorker.class);
-        pngThread.setFile(file);
-        pngThread.setOpacity(false);
-        pngThread.execute();
-    }
-
-    public void snapshotPNG() {
-        // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
-            return;
-        }
-
-        Date d = new Date();
-        // Snap Shot 2015-04-14 at 17.17.29
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd' at 'HH.mm.ss");
-        TimeZone tz = TimeZone.getDefault();
-        df.setTimeZone(tz);
-        String now = df.format(d);
-        
-        // Name file and add timestamp, save to Desktop
-        String path = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
-        File file = new File(path);
-        
-        PNGWorker pngThread = injector.getInstance(PNGWorker.class);
-        pngThread.setFile(file);
-        pngThread.execute();
-    }
-
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
