@@ -12,6 +12,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,9 +35,11 @@ public class ShareUtils {
     @Inject private Injector injector;
     @Inject private Gesticulate application;
     @Inject private CanvasView view;
+    private final ExecutorService executor;
 
     /** Creates a new instance of <code>ShareUtils</code> */
     public ShareUtils() {
+        this.executor = Executors.newCachedThreadPool();
     }
 
     public void exportSVG() {
@@ -51,9 +58,9 @@ public class ShareUtils {
 
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "svg");
-        SVGWorker svgThread = injector.getInstance(SVGWorker.class);
-        svgThread.setFile(file);
-        svgThread.execute();
+        SVGWorker svgWorker = injector.getInstance(SVGWorker.class);
+        svgWorker.setFile(file);
+        executor.submit(svgWorker);
     }
 
     public void exportPNG() {
@@ -77,10 +84,10 @@ public class ShareUtils {
 
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "png");
-        PNGWorker pngThread = injector.getInstance(PNGWorker.class);
-        pngThread.setFile(file);
-        pngThread.setOpacity(false);
-        pngThread.execute();
+        PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
+        pngWorker.setFile(file);
+        pngWorker.setOpacity(false);
+        executor.submit(pngWorker);
     }
 
     public void snapshotPNG() {
@@ -100,9 +107,9 @@ public class ShareUtils {
         String path = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
         File file = new File(path);
         
-        PNGWorker pngThread = injector.getInstance(PNGWorker.class);
-        pngThread.setFile(file);
-        pngThread.execute();
+        PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
+        pngWorker.setFile(file);
+        executor.submit(pngWorker);
     }
 
 }

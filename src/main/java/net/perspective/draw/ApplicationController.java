@@ -9,6 +9,7 @@ package net.perspective.draw;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,6 +36,8 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private Button menubutton;
+    @FXML
+    private Button snapshotbutton;
     @FXML
     private GridPane appmenu;
 
@@ -133,7 +136,9 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
+        //snapshotbutton.setDisable(true);
         share.snapshotPNG();
+        //snapshotbutton.setDisable(false);
     }
     
     @Override

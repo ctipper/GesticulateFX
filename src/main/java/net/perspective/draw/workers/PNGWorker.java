@@ -11,25 +11,26 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import javax.swing.SwingWorker;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.util.CanvasPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author ctipper
  */
 
-public class PNGWorker extends SwingWorker {
+public class PNGWorker extends Task {
 
     @Inject private CanvasView view;
     protected File file;
     private boolean opacity;
     
-    private static final Logger logger = Logger.getLogger(PNGWorker.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(PNGWorker.class.getName());
 
     /** Creates a new instance of 
      * <code>PNGWorker</code> 
@@ -48,7 +49,7 @@ public class PNGWorker extends SwingWorker {
     }
 
     @Override
-    protected Object doInBackground() throws Exception {
+    protected Object call() throws Exception {
         logger.info("PNG export started...");
         return new Serialiser(this.opacity);
     }
@@ -107,9 +108,9 @@ public class PNGWorker extends SwingWorker {
             try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
                 ImageIO.write(image, "png", bos);
             } catch (IllegalArgumentException e) {
-                logger.warning("Failed to write PNG.");
+                logger.warn("Failed to write PNG.");
             } catch (IOException e) {
-                logger.warning(e.getMessage());
+                logger.warn(e.getMessage());
             }
         }
     }

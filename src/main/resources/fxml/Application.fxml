@@ -113,7 +113,7 @@
                         <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Region prefWidth="10.0" />
-                        <Button id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
+                        <Button fx:id="snapshotbutton" id="buttsnapshot" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
                             <tooltip>
                                 <Tooltip text="Send snapshot to desktop" styleClass="ttip"/>
                             </tooltip>

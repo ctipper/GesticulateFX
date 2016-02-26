@@ -7,8 +7,8 @@
 package net.perspective.draw.workers;
 
 import java.io.*;
+import javafx.concurrent.Task;
 import javax.inject.Inject;
-import javax.swing.SwingWorker;
 import net.perspective.draw.CanvasView;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.CachedImageHandlerBase64Encoder;
@@ -25,7 +25,7 @@ import org.w3c.dom.DOMImplementation;
  * @author ctipper
  */
 
-public class SVGWorker extends SwingWorker {
+public class SVGWorker extends Task {
 
     @Inject private CanvasView view;
     private File file;
@@ -44,7 +44,8 @@ public class SVGWorker extends SwingWorker {
         this.file = file;
     }
 
-    protected Object doInBackground() {
+    @Override
+    protected Object call() throws Exception {
         logger.info("SVG export started...");
         return new Serialiser();
     }
