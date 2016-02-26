@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -90,7 +87,7 @@ public class ShareUtils {
         executor.submit(pngWorker);
     }
 
-    public void snapshotPNG() {
+    public void snapshotPNG(ApplicationController controller) {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
             return;

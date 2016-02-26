@@ -135,6 +135,7 @@ public class Gesticulate extends GuiceApplication {
 
         @Override
         protected void configure() {
+            bind(ApplicationController.class);
             bind(DrawingArea.class);
             bind(CanvasView.class);
             bind(FigureHandler.class);

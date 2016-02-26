@@ -9,8 +9,9 @@ package net.perspective.draw;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.CompletableFuture;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.HandlerType;
 
@@ -29,10 +31,12 @@ import net.perspective.draw.event.HandlerType;
  * @author ctipper
  */
 
+@Singleton
 public class ApplicationController implements Initializable {
     
     @Inject private DrawingArea drawarea;
     @Inject private ShareUtils share;
+    private BooleanProperty snapshotEnabled;
 
     @FXML
     private Button menubutton;
@@ -136,18 +140,31 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
-        //snapshotbutton.setDisable(true);
-        share.snapshotPNG();
-        //snapshotbutton.setDisable(false);
+        snapshotEnabled.setValue(true);
+        share.snapshotPNG(this);
+    }
+    
+    /**
+     * Binds state of snapshot button
+     * 
+     * @return 
+     */
+    public BooleanProperty getSnapshotProperty() {
+        return snapshotEnabled;
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Initialize the sliding application menu
         appmenu.getColumnConstraints().add(new ColumnConstraints(20)); // column 0 is 80 wide
         appmenu.getColumnConstraints().add(new ColumnConstraints(160));
         appmenu.setPadding(new Insets(10, 10, 10, 10));
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-        prepareSlideMenuAnimation();
+        this.prepareSlideMenuAnimation();
+        
+        // bind a property to the snapshot button disable state
+        this.snapshotEnabled = new SimpleBooleanProperty();
+        this.snapshotEnabled.bindBidirectional(snapshotbutton.disableProperty());
     }
     
     private void prepareSlideMenuAnimation() {

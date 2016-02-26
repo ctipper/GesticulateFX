@@ -11,9 +11,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
@@ -27,6 +29,7 @@ import org.slf4j.LoggerFactory;
 public class PNGWorker extends Task {
 
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     protected File file;
     private boolean opacity;
     
@@ -57,6 +60,9 @@ public class PNGWorker extends Task {
     @Override
     public void done() {
         logger.info("PNG export completed.");
+        Platform.runLater(() -> {
+            controller.getSnapshotProperty().setValue(false);
+        });
     }
 
     final class Serialiser {
