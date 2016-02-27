@@ -32,6 +32,7 @@ public class ShareUtils {
     @Inject private Injector injector;
     @Inject private Gesticulate application;
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private final ExecutorService executor;
 
     /** Creates a new instance of <code>ShareUtils</code> */
@@ -90,6 +91,7 @@ public class ShareUtils {
     public void snapshotPNG(ApplicationController controller) {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
+            controller.getSnapshotProperty().setValue(false);
             return;
         }
 

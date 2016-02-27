@@ -156,9 +156,6 @@ public class ApplicationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Initialize the sliding application menu
-        //appmenu.getColumnConstraints().add(new ColumnConstraints(25)); // column 0 is 80 wide
-        //appmenu.getColumnConstraints().add(new ColumnConstraints(160));
-        //appmenu.setPadding(new Insets(10, 10, 10, 10));
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
         
