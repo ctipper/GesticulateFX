@@ -15,7 +15,10 @@
 }
 .menuitem {
     -fx-background-color: white;
-    -fx-padding: 5 22 5 15;
+    -fx-padding: 5 5 5 5;
+}
+.menuicon {
+    -fx-background-color: white;
 }
 .togglebuttons {
     -fx-background-color: white;
@@ -163,6 +166,11 @@
 }
 #buttpngexport {
     -fx-background-image: url('../images/export-options-2.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttquitapp {
+    -fx-background-image: url('../images/power.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }

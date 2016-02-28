@@ -15,11 +15,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,6 +34,7 @@ import net.perspective.draw.event.HandlerType;
 public class ApplicationController implements Initializable {
     
     @Inject private DrawingArea drawarea;
+    @Inject private Gesticulate application;
     @Inject private ShareUtils share;
     private BooleanProperty snapshotEnabled;
 
@@ -112,11 +112,6 @@ public class ApplicationController implements Initializable {
     }
     
     @FXML
-    private void handleMenuAction(ActionEvent e) {
-        // not implemented
-    }
-    
-    @FXML
     private void handleOpacityAction(ActionEvent e) {
         javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) e.getSource();
         if (button.isSelected()) {
@@ -126,24 +121,41 @@ public class ApplicationController implements Initializable {
         }
     }
 
+    /**
+     * Quit app menu item
+     * 
+     * It proved necessary to emit a window close event rather than
+     * invoking Platform.exit() which is too simplistic for fx-guice
+     * @param e 
+     */
+    @FXML
+    private void handleOnQuitAction(ActionEvent e) {
+        application.getStage().fireEvent(
+                new WindowEvent(
+                        application.getStage(),
+                        WindowEvent.WINDOW_CLOSE_REQUEST
+                )
+        );
+    }
+
     @FXML
     private void handleSvgExportAction(ActionEvent e) {
         share.exportSVG();
         menubutton.fire();
     }
-    
+
     @FXML
     private void handlePngExportAction(ActionEvent e) {
         share.exportPNG();
         menubutton.fire();
     }
-    
+
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
         snapshotEnabled.setValue(true);
         share.snapshotPNG(this);
     }
-    
+
     /**
      * Binds state of snapshot button
      * 
@@ -158,7 +170,7 @@ public class ApplicationController implements Initializable {
         // Initialize the sliding application menu
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
-        
+
         // bind a property to the snapshot button disable state
         this.snapshotEnabled = new SimpleBooleanProperty();
         this.snapshotEnabled.bindBidirectional(snapshotbutton.disableProperty());

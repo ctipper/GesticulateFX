@@ -32,7 +32,6 @@ public class ShareUtils {
     @Inject private Injector injector;
     @Inject private Gesticulate application;
     @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
     private final ExecutorService executor;
 
     /** Creates a new instance of <code>ShareUtils</code> */
@@ -48,7 +47,7 @@ public class ShareUtils {
         chooser.setTitle("Export SVG...");
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("SVG", "*.svg"),
-            new FileChooser.ExtensionFilter("All Images", "*.*"));
+            new FileChooser.ExtensionFilter("All Images", "*.*application"));
         File result = chooser.showSaveDialog(application.getStage());
         if (result == null) {
             return;

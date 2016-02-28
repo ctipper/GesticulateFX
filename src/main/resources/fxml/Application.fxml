@@ -35,13 +35,10 @@
                         <Button id="buttopenin" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpenInAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
                         <Button id="buttsaveto" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveToAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
                         <Region prefHeight="5.0" />
-                        <ToggleButton id="buttselect" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="toolToggles" />
-                     </toggleGroup></ToggleButton>
-                        <ToggleButton id="buttrotate" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
+                        <ToggleButton id="buttselect" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+                        <ToggleButton id="buttrotate" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
                         <Region prefHeight="5.0" />
-                        <ToggleButton id="buttslope" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
+                        <ToggleButton id="buttslope" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
                         <ToggleButton id="buttcircle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
                         <ToggleButton id="buttsquare" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
                         <ToggleButton id="butttriangle" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
@@ -67,7 +64,7 @@
             <top>
                 <ToolBar prefHeight="60.0" style="">
                     <items>
-                        <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleMenuAction" styleClass="menubutton" text="" />
+                        <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="" />
                         <Label focusTraversable="false" text="Stroke" />
                         <ComboBox focusTraversable="false" prefWidth="80.0">
                             <items>
@@ -130,16 +127,19 @@
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
             <children>
-                <Button id="buttsvgexport" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="menuitem" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefWidth="140.0" styleClass="menuitem" text="Export SVG..." GridPane.columnIndex="1" GridPane.rowIndex="0" />    
-                <Button id="buttpngexport" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" styleClass="menuitem" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="140.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="1" />    
+                <Button id="buttsvgexport" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefWidth="150.0" styleClass="menuitem" text="Export SVG..." GridPane.columnIndex="1" GridPane.rowIndex="0" />    
+                <Button id="buttpngexport" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="150.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="1" />    
+                <Button id="buttquitapp" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="2" />    
             </children>
             <columnConstraints>
-                <ColumnConstraints prefWidth="40.0" />
+                <ColumnConstraints />
                 <ColumnConstraints prefWidth="150.0" />
             </columnConstraints>
             <rowConstraints>
+                <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
             </rowConstraints>
