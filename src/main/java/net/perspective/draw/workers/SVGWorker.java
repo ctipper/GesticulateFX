@@ -6,10 +6,12 @@
  */
 package net.perspective.draw.workers;
 
+import java.awt.Dimension;
 import java.io.*;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.util.CanvasPoint;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.CachedImageHandlerBase64Encoder;
 import org.apache.batik.svggen.GenericImageHandler;
@@ -63,6 +65,15 @@ public class SVGWorker extends Task {
         }
 
         public void make() {
+            double margin = 3.0;  // half max stroke width
+            
+            // Calculate drawing bounds
+            final CanvasPoint[] bounds = view.getBounds();
+            CanvasPoint start = bounds[0];
+            CanvasPoint end = bounds[1];
+            start.translate(-margin, -margin);
+            end.translate(margin, margin);
+            
             try {
                 // Get a DOMImplementation.
                 DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
@@ -80,6 +91,14 @@ public class SVGWorker extends Task {
 
                 // Create an instance of the SVG Generator.
                 SVGGraphics2D g2 = new SVGGraphics2D(cxt, false);
+
+                // Only stream effective viewBox
+                int width = (int) Math.round(end.x - start.x);
+                int height = (int) Math.round(end.y - start.y);
+                g2.setSVGCanvasSize(new Dimension(width, height));
+                java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
+                transform.translate(-start.x, -start.y);
+                g2.setTransform(transform);
 
                 // Ask to render into the SVG Graphics2D implementation.
                 view.getDrawings().stream().forEach((item) -> {

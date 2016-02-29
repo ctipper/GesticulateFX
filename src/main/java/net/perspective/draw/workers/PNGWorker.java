@@ -77,14 +77,16 @@ public class PNGWorker extends Task {
 
         public void make() {
             double scale = 1.375;
-            double margin = 6.0;  // max stroke width
+            double margin = 3.0;  // half max stroke width
             
             // Calculate draw area
             final CanvasPoint[] bounds = view.getBounds();
-            CanvasPoint start = bounds[0].scale(scale);
-            CanvasPoint end = bounds[1].scale(scale);
+            CanvasPoint start = bounds[0];
+            CanvasPoint end = bounds[1];
             start.translate(-margin, -margin);
             end.translate(margin, margin);
+            start = start.scale(scale);
+            end = end.scale(scale);
             
             // render canvas
             BufferedImage img = new BufferedImage((int) end.x, (int) end.y, BufferedImage.TYPE_INT_ARGB);
