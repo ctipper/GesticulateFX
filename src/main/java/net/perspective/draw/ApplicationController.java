@@ -39,10 +39,6 @@ public class ApplicationController implements Initializable {
     private BooleanProperty snapshotEnabled;
 
     @FXML
-    private Button menubutton;
-    @FXML
-    private Button snapshotbutton;
-    @FXML
     private GridPane appmenu;
 
     @FXML
@@ -190,4 +186,8 @@ public class ApplicationController implements Initializable {
         });
     }
 
+    @FXML
+    private Button menubutton;
+    @FXML
+    private Button snapshotbutton;
 }
