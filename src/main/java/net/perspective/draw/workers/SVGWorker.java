@@ -31,6 +31,7 @@ public class SVGWorker extends Task {
 
     @Inject private CanvasView view;
     private File file;
+    private double margin;
 
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
@@ -40,10 +41,15 @@ public class SVGWorker extends Task {
      */
     @Inject
     public SVGWorker() {
+        this.margin = 0.0;
     }
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public void setMargin(double margin) {
+        this.margin = margin;
     }
 
     @Override
@@ -65,14 +71,10 @@ public class SVGWorker extends Task {
         }
 
         public void make() {
-            double margin = 3.0;  // half max stroke width
-            
             // Calculate drawing bounds
             final CanvasPoint[] bounds = view.getBounds();
-            CanvasPoint start = bounds[0];
-            CanvasPoint end = bounds[1];
-            start.translate(-margin, -margin);
-            end.translate(margin, margin);
+            CanvasPoint start = bounds[0].shifted(-margin, -margin);
+            CanvasPoint end = bounds[1].shifted(margin, margin);
             
             try {
                 // Get a DOMImplementation.
@@ -93,12 +95,10 @@ public class SVGWorker extends Task {
                 SVGGraphics2D g2 = new SVGGraphics2D(cxt, false);
 
                 // Only stream effective viewBox
-                int width = (int) Math.round(end.x - start.x);
-                int height = (int) Math.round(end.y - start.y);
+                int width = (int) Math.ceil(end.x - start.x);
+                int height = (int) Math.ceil(end.y - start.y);
                 g2.setSVGCanvasSize(new Dimension(width, height));
-                java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
-                transform.translate(-start.x, -start.y);
-                g2.setTransform(transform);
+                g2.transform(java.awt.geom.AffineTransform.getTranslateInstance(-start.x, -start.y));
 
                 // Ask to render into the SVG Graphics2D implementation.
                 view.getDrawings().stream().forEach((item) -> {

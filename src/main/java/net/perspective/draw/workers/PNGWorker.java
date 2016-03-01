@@ -32,6 +32,7 @@ public class PNGWorker extends Task {
     @Inject private ApplicationController controller;
     protected File file;
     private boolean opacity;
+    private double margin;
     
     private static final Logger logger = LoggerFactory.getLogger(PNGWorker.class.getName());
 
@@ -41,6 +42,7 @@ public class PNGWorker extends Task {
     @Inject
     public PNGWorker() {
         this.opacity = true;
+        this.margin = 0.0;
     }
 
     public void setFile(File file) {
@@ -49,6 +51,10 @@ public class PNGWorker extends Task {
     
     public void setOpacity(boolean opacity) {
         this.opacity = opacity;
+    }
+    
+    public void setMargin(double margin) {
+        this.margin = margin;
     }
 
     @Override
@@ -77,19 +83,14 @@ public class PNGWorker extends Task {
 
         public void make() {
             double scale = 1.375;
-            double margin = 3.0;  // half max stroke width
             
             // Calculate draw area
             final CanvasPoint[] bounds = view.getBounds();
-            CanvasPoint start = bounds[0];
-            CanvasPoint end = bounds[1];
-            start.translate(-margin, -margin);
-            end.translate(margin, margin);
-            start = start.scale(scale);
-            end = end.scale(scale);
+            CanvasPoint start = bounds[0].shifted(-margin, -margin).grow(scale);
+            CanvasPoint end = bounds[1].shifted(margin, margin).grow(scale);
             
             // render canvas
-            BufferedImage img = new BufferedImage((int) end.x, (int) end.y, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage img = new BufferedImage((int) Math.ceil(end.x), (int) Math.ceil(end.y), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = img.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -101,7 +102,7 @@ public class PNGWorker extends Task {
                 g2.setPaint(Color.WHITE);
                 g2.fillRect(0, 0, img.getWidth(), img.getHeight());
             }
-            // scale and translate
+            // grow and translate
             g2.transform(java.awt.geom.AffineTransform.getTranslateInstance(0, 0));
             g2.transform(java.awt.geom.AffineTransform.getScaleInstance(scale, scale));
             // Render image
@@ -111,7 +112,9 @@ public class PNGWorker extends Task {
             g2.dispose();
             
             // crop image
-            BufferedImage image = img.getSubimage((int) start.x, (int) start.y, (int) (end.x - start.x), (int) (end.y - start.y));
+            int width = (int) Math.ceil(end.x - start.x);
+            int height = (int) Math.ceil(end.y - start.y);
+            BufferedImage image = img.getSubimage((int) Math.floor(start.x), (int) Math.floor(start.y), width, height);
             
             try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
                 ImageIO.write(image, "png", bos);

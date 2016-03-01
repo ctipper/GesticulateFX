@@ -33,10 +33,12 @@ public class ShareUtils {
     @Inject private Gesticulate application;
     @Inject private CanvasView view;
     private final ExecutorService executor;
+    private final double margin;
 
     /** Creates a new instance of <code>ShareUtils</code> */
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
+        this.margin = 3.0;  // half max stroke width
     }
 
     public void exportSVG() {
@@ -57,6 +59,7 @@ public class ShareUtils {
         final File file = FileUtils.cleanseFileName(result, "svg");
         SVGWorker svgWorker = injector.getInstance(SVGWorker.class);
         svgWorker.setFile(file);
+        svgWorker.setMargin(this.margin);
         executor.submit(svgWorker);
     }
 
@@ -84,6 +87,7 @@ public class ShareUtils {
         PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
         pngWorker.setFile(file);
         pngWorker.setOpacity(false);
+        pngWorker.setMargin(this.margin);
         executor.submit(pngWorker);
     }
 
@@ -107,6 +111,7 @@ public class ShareUtils {
         
         PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
         pngWorker.setFile(file);
+        pngWorker.setMargin(this.margin);
         executor.submit(pngWorker);
     }
 
