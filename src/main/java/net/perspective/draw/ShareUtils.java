@@ -42,6 +42,11 @@ public class ShareUtils {
     }
 
     public void exportSVG() {
+        // Detect empty canvas
+        if (view.getDrawings().isEmpty()) {
+            return;
+        }
+        
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
