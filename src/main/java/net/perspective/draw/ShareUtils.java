@@ -54,7 +54,7 @@ public class ShareUtils {
         chooser.setTitle("Export SVG...");
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("SVG", "*.svg"),
-            new FileChooser.ExtensionFilter("All Images", "*.*application"));
+            new FileChooser.ExtensionFilter("All Images", "*.*"));
         File result = chooser.showSaveDialog(application.getStage());
         if (result == null) {
             return;
