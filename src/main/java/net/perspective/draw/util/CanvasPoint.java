@@ -70,6 +70,12 @@ public class CanvasPoint implements Serializable, Cloneable {
         return this;
     }
     
+    public CanvasPoint floor() {
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        return this;
+    }
+    
     public void rotate(double angle) {
         CanvasPoint point = V2.rot(x, y, angle);
         x = point.x;

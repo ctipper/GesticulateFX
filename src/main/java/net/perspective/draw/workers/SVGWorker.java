@@ -73,7 +73,7 @@ public class SVGWorker extends Task {
         public void make() {
             // Calculate drawing bounds
             final CanvasPoint[] bounds = view.getBounds();
-            CanvasPoint start = bounds[0].shifted(-margin, -margin);
+            CanvasPoint start = bounds[0].shifted(-margin, -margin).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin);
             
             try {

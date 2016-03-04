@@ -74,6 +74,7 @@ public class PNGWorker extends Task {
     final class Serialiser {
         
         private final boolean opacity;
+        double scale = 1.375;
 
         Serialiser(boolean opacity) {
             logger.info("PNG export initialised.");
@@ -82,13 +83,11 @@ public class PNGWorker extends Task {
         }
 
         public void make() {
-            double scale = 1.375;
-            
             // Calculate draw area
             final CanvasPoint[] bounds = view.getBounds();
-            CanvasPoint start = bounds[0].shifted(-margin, -margin).grow(scale);
+            CanvasPoint start = bounds[0].shifted(-margin, -margin).grow(scale).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin).grow(scale);
-            
+
             // render canvas
             BufferedImage img = new BufferedImage((int) Math.ceil(end.x), (int) Math.ceil(end.y), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = img.createGraphics();
@@ -110,12 +109,12 @@ public class PNGWorker extends Task {
                 item.draw(g2);
             });
             g2.dispose();
-            
+
             // crop image
             int width = (int) Math.ceil(end.x - start.x);
             int height = (int) Math.ceil(end.y - start.y);
             BufferedImage image = img.getSubimage((int) Math.floor(start.x), (int) Math.floor(start.y), width, height);
-            
+
             try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
                 ImageIO.write(image, "png", bos);
             } catch (IllegalArgumentException e) {
