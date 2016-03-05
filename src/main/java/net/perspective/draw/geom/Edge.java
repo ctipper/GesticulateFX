@@ -99,11 +99,18 @@ public class Edge extends Figure implements Serializable {
 
     @Override
     public CanvasPoint rotationCentre() {
+        CanvasPoint center;
         Path2D.Double pa = (Path2D.Double) this.getPath().clone();
         pa.closePath();
         Area area = new Area(pa);
         Rectangle2D bound = area.getBounds2D();
-        return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+        if (bound.getBounds2D().getWidth() < 4.0
+            && bound.getBounds2D().getHeight() < 4.0) {
+            center = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
+        } else {
+            center = new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+        }
+        return center;
     }
     
     @Override
@@ -125,7 +132,8 @@ public class Edge extends Figure implements Serializable {
             bounds = area;
         } else {
             bounds = super.bounds();
-            if (bounds.getBounds2D().getWidth() == 0) {
+            if (bounds.getBounds2D().getWidth() < 4.0
+                && bounds.getBounds2D().getHeight() < 4.0) {
                 rectangle = new Rectangle2D.Double(-2.0, -2.0, 4.0, 4.0);
                 Area area = new Area(rectangle);
                 AffineTransform transform = new AffineTransform();
