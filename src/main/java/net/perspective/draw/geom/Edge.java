@@ -109,11 +109,12 @@ public class Edge extends Figure implements Serializable {
     @Override
     public Shape bounds() {
         Shape bounds;
+        Rectangle2D rectangle;
 
         if (type.equals(FigureType.LINE)) {
             // need to give line extent
             double length = V2.L2(new CanvasPoint(end.x - start.x, end.y - start.y));
-            Rectangle2D rectangle = new Rectangle2D.Double(-2.0, -2.0, length + 2.0, 4.0);
+            rectangle = new Rectangle2D.Double(-2.0, -2.0, length + 2.0, 4.0);
             double a = Math.atan2(end.y - start.y, end.x - start.x);
 
             Area area = new Area(rectangle);
@@ -124,6 +125,14 @@ public class Edge extends Figure implements Serializable {
             bounds = area;
         } else {
             bounds = super.bounds();
+            if (bounds.getBounds2D().getWidth() == 0) {
+                rectangle = new Rectangle2D.Double(-2.0, -2.0, 4.0, 4.0);
+                Area area = new Area(rectangle);
+                AffineTransform transform = new AffineTransform();
+                transform.setToTranslation(start.x, start.y);
+                area.transform(transform);
+                bounds = area;
+            }
         }
         return bounds;
     }
