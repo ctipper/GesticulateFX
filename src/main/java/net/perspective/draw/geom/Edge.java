@@ -107,6 +107,8 @@ public class Edge extends Figure implements Serializable {
         if (bound.getBounds2D().getWidth() < 4.0
             && bound.getBounds2D().getHeight() < 4.0) {
             center = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
+        } else if (points.size() < 3) {
+            center = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
         } else {
             center = new CanvasPoint(bound.getCenterX(), bound.getCenterY());
         }
@@ -132,6 +134,7 @@ public class Edge extends Figure implements Serializable {
             bounds = area;
         } else {
             bounds = super.bounds();
+            // need to give zero bound shapes extent
             if (bounds.getBounds2D().getWidth() < 4.0
                 && bounds.getBounds2D().getHeight() < 4.0) {
                 rectangle = new Rectangle2D.Double(-2.0, -2.0, 4.0, 4.0);
