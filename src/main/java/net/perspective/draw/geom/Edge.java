@@ -113,7 +113,7 @@ public class Edge extends Figure implements Serializable {
         if (type.equals(FigureType.LINE)) {
             // need to give line extent
             double length = V2.L2(new CanvasPoint(end.x - start.x, end.y - start.y));
-            Rectangle2D rectangle = new Rectangle2D.Double(0, -2.0, length, 4.0);
+            Rectangle2D rectangle = new Rectangle2D.Double(-2.0, -2.0, length + 2.0, 4.0);
             double a = Math.atan2(end.y - start.y, end.x - start.x);
 
             Area area = new Area(rectangle);
