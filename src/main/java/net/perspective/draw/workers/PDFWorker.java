@@ -7,6 +7,7 @@
 package net.perspective.draw.workers;
 
 import java.awt.Dimension;
+import java.awt.color.ColorSpace;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,6 +19,8 @@ import net.perspective.draw.util.CanvasPoint;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
+import org.apache.fop.pdf.PDFAMode;
+import org.apache.fop.pdf.Version;
 import org.apache.fop.svg.PDFDocumentGraphics2D;
 import org.apache.fop.svg.PDFDocumentGraphics2DConfigurator;
 import org.slf4j.Logger;
@@ -74,32 +77,34 @@ public class PDFWorker extends Task {
             CanvasPoint start = bounds[0].shifted(-margin, -margin).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin);
 
-            try {
+            try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
                 //Instantiate the EPSDocumentGraphics2D instance
                 PDFDocumentGraphics2D g2 = new PDFDocumentGraphics2D(false);
+                g2.getPDFDocument().setPDFVersion(Version.V1_6);
+                g2.getPDFDocument().setColorSpace(ColorSpace.CS_sRGB);
                 g2.setGraphicContext(new org.apache.xmlgraphics.java2d.GraphicContext());
 
-                //Configure the G2D with the necessary fonts
-                configure(g2, createAutoFontsConfiguration());
+                //Configure the graphic context (add fonts here)
+                DefaultConfiguration cfg = new DefaultConfiguration("cfg");
+                configure(g2, cfg);
 
                 //Set up the document size
                 int width = (int) Math.ceil(end.x - start.x);
                 int height = (int) Math.ceil(end.y - start.y);
                 Dimension pageSize = new Dimension(width, height); // pixels become point sizes
+
+                g2.setupDocument(bos, pageSize.width, pageSize.height);
                 g2.transform(java.awt.geom.AffineTransform.getTranslateInstance(-start.x, -start.y));
+                g2.setDeviceDPI(72.0f);
 
                 // Ask to render into the PDF Graphics2D implementation.
                 view.getDrawings().stream().forEach((item) -> {
                     item.draw(g2);
                 });
 
-                try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
-                    g2.setupDocument(bos, pageSize.width, pageSize.height);
-                    g2.finish();
-                } catch (IOException e) {
-                    logger.warn(e.getMessage());
-                }
-                
+                g2.finish();
+            } catch (IOException e) {
+                logger.warn(e.getMessage());
             } catch (ConfigurationException e) {
                 logger.error(null, e);
             }
@@ -113,22 +118,6 @@ public class PDFWorker extends Task {
             configurator.configure(g2d, cfg, useComplexScriptFeatures);
         }
 
-        private Configuration createAutoFontsConfiguration() {
-            // Create a default configuration using auto-detection of fonts.
-            // This can be a bit slow but covers most use cases.
-            DefaultConfiguration c = new DefaultConfiguration("cfg");
-            DefaultConfiguration fonts = new DefaultConfiguration("fonts");
-            c.addChild(fonts);
-            DefaultConfiguration autodetect = new DefaultConfiguration("auto-detect");
-            fonts.addChild(autodetect);
-            return c;
-
-            /** 
-             * You can also load the configuration from a file:
-             * DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
-             * return cfgBuilder.buildFromFile(configFile);
-             */
-        }
     }
     
 }
