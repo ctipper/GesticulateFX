@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -97,7 +98,6 @@ public class SVGWorker extends Task {
                 // Only stream effective viewBox
                 int width = (int) Math.ceil(end.x - start.x);
                 int height = (int) Math.ceil(end.y - start.y);
-                g2.setSVGCanvasSize(new Dimension(width, height));
                 g2.transform(java.awt.geom.AffineTransform.getTranslateInstance(-start.x, -start.y));
 
                 // Ask to render into the SVG Graphics2D implementation.
@@ -105,9 +105,21 @@ public class SVGWorker extends Task {
                     item.draw(g2);
                 });
 
+                /**
+                 * Define viewBox manually
+                 * 
+                 * setSVGCanvasSize has limitations in the output
+                 */
+                Element svgRoot = g2.getRoot();
+                svgRoot.setAttributeNS(null, "x", "0px");
+                svgRoot.setAttributeNS(null, "y", "0px");
+                svgRoot.setAttributeNS(null, "width", "100%");
+                String viewBox = "0 0 " + width + " " + height; 
+                svgRoot.setAttributeNS(null, "viewBox", viewBox);
+                
                 boolean useCSS = true; // we want to use CSS style attributes
                 try (Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8")) {
-                    g2.stream(out, useCSS);
+                    g2.stream(svgRoot, out, useCSS, false);
                     g2.dispose();
                 } catch (IOException e) {
                     logger.warn(e.getMessage());
