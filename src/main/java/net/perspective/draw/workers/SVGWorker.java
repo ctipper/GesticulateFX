@@ -6,7 +6,6 @@
  */
 package net.perspective.draw.workers;
 
-import java.awt.Dimension;
 import java.io.*;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
