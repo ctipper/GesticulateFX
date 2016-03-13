@@ -19,7 +19,6 @@ import net.perspective.draw.util.CanvasPoint;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.fop.pdf.PDFAMode;
 import org.apache.fop.pdf.Version;
 import org.apache.fop.svg.PDFDocumentGraphics2D;
 import org.apache.fop.svg.PDFDocumentGraphics2DConfigurator;
@@ -82,6 +81,9 @@ public class PDFWorker extends Task {
                 PDFDocumentGraphics2D g2 = new PDFDocumentGraphics2D(false);
                 g2.getPDFDocument().setPDFVersion(Version.V1_6);
                 g2.getPDFDocument().setColorSpace(ColorSpace.CS_sRGB);
+                if (g2.getPDFDocument().getProfile().isTransparencyAllowed() != null) {
+                    logger.warn("transparency is not enabled");
+                }
                 g2.setGraphicContext(new org.apache.xmlgraphics.java2d.GraphicContext());
 
                 //Configure the graphic context (add fonts here)
