@@ -54,13 +54,18 @@
             <artifactId>batik-codec</artifactId>
             <version>${batik.version}</version>
         </dependency>
-
+-->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>xmlgraphics-commons</artifactId>
             <version>2.1</version>
         </dependency>
--->
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>fop</artifactId>
+            <version>2.1</version>
+        </dependency>
 
         <!-- sl4j logging  -->
 

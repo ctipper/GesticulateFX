@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.SVGWorker;
 
@@ -39,6 +40,33 @@ public class ShareUtils {
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
         this.margin = 3.0;  // half max stroke width
+    }
+
+    public void exportPDF() {
+        // Detect empty canvas
+        if (view.getDrawings().isEmpty()) {
+            return;
+        }
+        
+        FileChooser chooser = new FileChooser();
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        chooser.setInitialDirectory(userDirectory);
+        chooser.setTitle("Export PDF...");
+        chooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+            new FileChooser.ExtensionFilter("All Documents", "*.*"));
+        File result = chooser.showSaveDialog(application.getStage());
+        if (result == null) {
+            return;
+        }
+
+        // wrangle filename with correct extension
+        final File file = FileUtils.cleanseFileName(result, "pdf");
+        PDFWorker pdfWorker = injector.getInstance(PDFWorker.class);
+        pdfWorker.setFile(file);
+        pdfWorker.setMargin(this.margin);
+        executor.submit(pdfWorker);
     }
 
     public void exportSVG() {
