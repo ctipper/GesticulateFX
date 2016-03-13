@@ -135,6 +135,12 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
+    private void handlePdfExportAction(ActionEvent e) {
+        share.exportPDF();
+        menubutton.fire();
+    }
+
+    @FXML
     private void handleSvgExportAction(ActionEvent e) {
         share.exportSVG();
         menubutton.fire();
