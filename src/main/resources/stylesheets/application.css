@@ -164,8 +164,13 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
-#buttpngexport {
+#buttpdfexport {
     -fx-background-image: url('../images/export-options-2.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttpngexport {
+    -fx-background-image: url('../images/export-options-3.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
