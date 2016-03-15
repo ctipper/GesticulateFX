@@ -16,3 +16,4 @@ import java.awt.geom.Path2D;
 public interface PathFactory {
     public Path2D.Double createPath(Figure figure);    
 }
+
