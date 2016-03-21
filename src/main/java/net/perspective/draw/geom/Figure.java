@@ -21,6 +21,7 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
+import net.perspective.draw.util.G2;
 
 /**
  *
@@ -249,15 +250,15 @@ public class Figure implements Serializable {
         at = this.getTransform();
         Path fxpath = drawPath(at);
         fxpath.setStroke(this.getColor());
-        fxpath.setStrokeWidth(this.getLineWidth());
-        fxpath.setStrokeLineJoin(this.getLineJoin());
-        fxpath.setStrokeLineCap(this.getLineCap());
+        fxpath.setStrokeWidth(G2.getLineWidth((BasicStroke) this.getStroke()));
+        fxpath.setStrokeLineJoin(G2.getLineJoin((BasicStroke) this.getStroke()));
+        fxpath.setStrokeLineCap(G2.getLineCap((BasicStroke) this.getStroke()));
         if (this.isClosed()) {
-            Color transcolor = Color.color(this.getFillColor().getRed(), 
+            Color alphafill = Color.color(this.getFillColor().getRed(), 
                 this.getFillColor().getGreen(), 
                 this.getFillColor().getBlue(),
                 ((double) this.transparency) / 100);
-            fxpath.setFill(transcolor);
+            fxpath.setFill(alphafill);
         }
         return fxpath;
     }
@@ -374,48 +375,6 @@ public class Figure implements Serializable {
         g2.setTransform(defaultTransform);
     }
 
-    public double getLineWidth() {
-        return (double) ((BasicStroke) this.getStroke()).getLineWidth();
-    }
-    
-    public StrokeLineJoin getLineJoin() {
-        javafx.scene.shape.StrokeLineJoin jfxjoin;
-        switch (((BasicStroke) this.getStroke()).getLineJoin()) {
-            case BasicStroke.JOIN_MITER:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
-                break;
-            case BasicStroke.JOIN_ROUND:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
-                break;
-            case BasicStroke.JOIN_BEVEL:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.BEVEL;
-                break;
-            default:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
-                break;
-        }
-        return jfxjoin;
-    }
-
-    public StrokeLineCap getLineCap() {
-        javafx.scene.shape.StrokeLineCap jfxcap;
-        switch (((BasicStroke) this.getStroke()).getEndCap()) {
-            case BasicStroke.CAP_BUTT:
-                jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
-                break;
-            case BasicStroke.CAP_ROUND:
-                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
-                break;
-            case BasicStroke.CAP_SQUARE:
-                jfxcap = javafx.scene.shape.StrokeLineCap.SQUARE;
-                break;
-            default:
-                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
-                break;
-        }
-        return jfxcap;
-    }
-
     protected void setClosed(boolean closed) {
         this.closed = closed;
     }
@@ -474,6 +433,11 @@ public class Figure implements Serializable {
         return this.angle;
     }
 
+    /**
+     * Signed area of a region using Gauss' formula (or Shoelace algorithm)
+     * 
+     * @return a signed area for three vertex region
+     */
     public double sgnd_area() {
         CanvasPoint p1 = points.get(0);
         CanvasPoint p2 = points.get(1);
