@@ -7,7 +7,6 @@
 package net.perspective.draw.util;
 
 import java.awt.BasicStroke;
-import java.awt.Stroke;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
