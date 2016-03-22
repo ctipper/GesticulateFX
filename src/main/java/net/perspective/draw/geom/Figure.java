@@ -249,9 +249,9 @@ public class Figure implements Serializable {
         at = this.getTransform();
         Path fxpath = drawPath(at);
         fxpath.setStroke(getColor());
-        fxpath.setStrokeWidth(getLineWidth((BasicStroke) this.getStroke()));
-        fxpath.setStrokeLineJoin(getLineJoin((BasicStroke) this.getStroke()));
-        fxpath.setStrokeLineCap(getLineCap((BasicStroke) this.getStroke()));
+        fxpath.setStrokeWidth(getLineWidth((BasicStroke) getStroke()));
+        fxpath.setStrokeLineJoin(getLineJoin((BasicStroke) getStroke()));
+        fxpath.setStrokeLineCap(getLineCap((BasicStroke) getStroke()));
         if (this.isClosed()) {
             Color alphafill = Color.color(getFillColor().getRed(), 
                 getFillColor().getGreen(), 
