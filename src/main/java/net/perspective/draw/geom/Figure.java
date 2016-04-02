@@ -61,7 +61,7 @@ public class Figure implements Serializable {
     }
     
     /**
-     * Set the untransformed TL coordinate of the item
+     * Set the untransformed TL coordinate of the figure
      * 
      * @param x the x position
      * @param y the y position
@@ -73,7 +73,7 @@ public class Figure implements Serializable {
     /**
      * Return the untransformed TL coordinate of the figure
      * 
-     * @return the item start point
+     * @return the figure start point
      */
     public CanvasPoint getStart() {
         return start;
@@ -268,7 +268,7 @@ public class Figure implements Serializable {
     }
 
     /**
-     * Returns the location of the item centre point
+     * Returns the location of the figure centre point
      * 
      * @return canvas coordinates of axis of rotation
      */
