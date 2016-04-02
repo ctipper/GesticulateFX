@@ -69,7 +69,7 @@ public class V2 {
         }
         return angle;
     }
-    
+
     public static int quadrant(double angle) {
         int offset = -1;
         angle = V2.norm_angle(angle);
@@ -95,4 +95,5 @@ public class V2 {
      */
     private V2() {
     }
+
 }
