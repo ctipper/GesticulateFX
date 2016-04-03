@@ -232,7 +232,7 @@ public class Figure implements Serializable {
 
     /**
      * 
-     * @return The 2-point array of bottom-right corner location (transformed)
+     * @return The 2-tuple of bottom-right corner location (transformed)
      *         second point may be normalized
      */
     public CanvasPoint[] getBottom() {
