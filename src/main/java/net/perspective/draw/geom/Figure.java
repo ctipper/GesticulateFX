@@ -195,9 +195,10 @@ public class Figure implements Serializable {
     }
 
     /**
-     *  
-     * @return The 2-tuple of top-left corner location (transformed)
-     *         second point may be normalized
+     * Returns the 2-tuple of top-left corner location (transformed)
+     * the second point may be normalized
+     * 
+     * @return the 2-tuple of top-left corner location (transformed)
      */
     public CanvasPoint[] getTop() {
         CanvasPoint s[];
@@ -207,9 +208,10 @@ public class Figure implements Serializable {
     }
 
     /**
-     *  
-     * @return The 2-tuple of top-right corner location (transformed)
-     *         second point may be normalized
+     * Returns the 2-tuple of top-right corner location (transformed)
+     * the second point may be normalized
+     * 
+     * @return the 2-tuple of top-right corner location (transformed)
      */
     public CanvasPoint[] getUp() {
         CanvasPoint up[];
@@ -219,9 +221,10 @@ public class Figure implements Serializable {
     }
 
     /**
-     *  
-     * @return The 2-tuple of bottom-left corner location (transformed)
-     *         second point may be normalized
+     * Returns the 2-tuple of bottom-left corner location (transformed)
+     * the second point may be normalized
+     * 
+     * @return the 2-tuple of bottom-left corner location (transformed)
      */
     public CanvasPoint[] getDown() {
         CanvasPoint down[];
@@ -231,9 +234,10 @@ public class Figure implements Serializable {
     }
 
     /**
+     * Returns the 2-tuple of bottom-right corner location (transformed)
+     * second point may be normalized
      * 
-     * @return The 2-tuple of bottom-right corner location (transformed)
-     *         second point may be normalized
+     * @return the 2-tuple of bottom-right corner location (transformed)
      */
     public CanvasPoint[] getBottom() {
         CanvasPoint e[];
@@ -626,7 +630,7 @@ public class Figure implements Serializable {
     }
     
     /**
-     * Return 2-point array of vertex, second point normalized.
+     * Return the 2-tuple of vertex coords, second point normalized.
      * 
      * @return 2-tuple representing vertex coords
      */
@@ -668,7 +672,7 @@ public class Figure implements Serializable {
     }
 
     /**
-     * Return 2-point array of vertices, second point normalized.
+     * Return a List of 2-tuples of vertices, second point normalized.
      * Note that the points may not be cyclical.
      * 
      * @return a List of 2-tuples representing transformed vertices
