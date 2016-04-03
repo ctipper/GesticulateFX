@@ -174,7 +174,7 @@ public class Figure implements Serializable {
     }
 
     /**
-     * Retsurns the figure type
+     * Returns the figure type
      * 
      * @return type
      */
