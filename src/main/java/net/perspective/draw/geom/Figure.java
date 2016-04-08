@@ -21,7 +21,6 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
-import net.perspective.draw.util.G2;
 
 /**
  *
@@ -483,13 +482,13 @@ public class Figure implements Serializable {
         if (this.isClosed()) {
             AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) getTransparency() / 100);
             g2.setComposite(ac);
-            g2.setColor(G2.fxToAwt(this.fillcolor, ((float) getTransparency()) / 100));
+            g2.setColor(fxToAwt(this.fillcolor, ((float) getTransparency()) / 100));
             g2.fill(this.getPath());
             ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 1.0);
             g2.setComposite(ac);
         }
         g2.setStroke(this.getStroke());
-        g2.setColor(G2.fxToAwt(this.color));
+        g2.setColor(fxToAwt(this.color));
         g2.draw(this.getPath());
 
         // reset graphics context
@@ -552,7 +551,7 @@ public class Figure implements Serializable {
 
     @Deprecated
     public void setColor(java.awt.Color color) {
-        this.color = G2.awtToFx(color);
+        this.color = awtToFx(color);
     }
 
     public Color getColor() {
@@ -565,7 +564,7 @@ public class Figure implements Serializable {
 
     @Deprecated
     public void setFillColor(java.awt.Color fillcolor) {
-        this.fillcolor = G2.awtToFx(fillcolor);
+        this.fillcolor = awtToFx(fillcolor);
     }
 
     public Color getFillColor() {
@@ -719,15 +718,46 @@ public class Figure implements Serializable {
         return vertices;
     }
 
+    /**
+     * javafx.scene.paint.Color not serialisable
+     *
+     * @param color java.awt.Color
+     * @return javafx.scene.paint.Color
+     */
+    public static Color awtToFx(java.awt.Color color) {
+        return new Color(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, color.getAlpha() / 255.0);
+    }
+
+    /**
+     * javafx.scene.paint.Color not serialisable
+     *
+     * @param color javafx.scene.paint.Color
+     * @return java.awt.Color
+     */
+    public static java.awt.Color fxToAwt(Color color) {
+        return new java.awt.Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) color.getOpacity());
+    }
+
+    /**
+     * javafx.scene.paint.Color not serialisable
+     *
+     * @param color javafx.scene.paint.Color
+     * @param opacity float
+     * @return java.awt.Color
+     */
+    public static java.awt.Color fxToAwt(Color color, float opacity) {
+        return new java.awt.Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), opacity);
+    }
+
     private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
 
         // deserialise colors from awt.Color
         Class<?> c = (Class<?>) in.readObject();
-        this.color = G2.awtToFx((java.awt.Color) in.readObject());
+        this.color = awtToFx((java.awt.Color) in.readObject());
         c = (Class<?>) in.readObject();
-        this.fillcolor = G2.awtToFx((java.awt.Color) in.readObject());
+        this.fillcolor = awtToFx((java.awt.Color) in.readObject());
         
         // deserialise Stroke
         this.setStroke(readStroke(in));
@@ -739,9 +769,9 @@ public class Figure implements Serializable {
             throws IOException {
         out.defaultWriteObject();
         out.writeObject(java.awt.Color.class);
-        out.writeObject(G2.fxToAwt(this.color));
+        out.writeObject(fxToAwt(this.color));
         out.writeObject(java.awt.Color.class);
-        out.writeObject(G2.fxToAwt(this.fillcolor));
+        out.writeObject(fxToAwt(this.fillcolor));
         writeStroke(this.getStroke(), out);
     }
 
