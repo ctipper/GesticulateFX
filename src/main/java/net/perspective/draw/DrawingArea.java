@@ -35,6 +35,7 @@ public class DrawingArea {
 
     @Inject private Injector injector;
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private SubScene canvas;
     private Group root;
     private Handler handler;
@@ -79,7 +80,7 @@ public class DrawingArea {
         this.stroke = new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
         this.color = Color.web("#4860E0");
         this.fillcolor = Color.web("#4860E0");
-        this.transparency = 100;
+        this.transparency = controller.getWireframe().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
     }

@@ -82,7 +82,7 @@
                         <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
                         <Region prefWidth="5.0" />
                         <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
-                        <ToggleButton id="buttwireframe" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
+                        <ToggleButton id="buttwireframe" fx:id="wireframebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
                             <tooltip>
                                 <Tooltip styleClass="ttip" text="Draw as outline" />
                             </tooltip>
