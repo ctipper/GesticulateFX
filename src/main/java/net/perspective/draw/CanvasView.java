@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 public class CanvasView {
 
     @Inject private DrawingArea drawarea;
-    private final java.util.List<Figure> list;
-    private ObservableList<Figure> drawings;
-    private Figure newitem;
+    private final java.util.List<DrawItem> list;
+    private ObservableList<DrawItem> drawings;
+    private DrawItem newitem;
     private int selection;
     private boolean isDrawing;
     private Node anchors;
@@ -57,7 +57,7 @@ public class CanvasView {
     
     public void setDrawingListener() {
         drawings = FXCollections.observableList(list);
-        drawings.addListener((ListChangeListener.Change<? extends Figure> change) -> {
+        drawings.addListener((ListChangeListener.Change<? extends DrawItem> change) -> {
             while (change.next()) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                 if (change.wasPermutated()) {
@@ -76,7 +76,7 @@ public class CanvasView {
                     if (change.wasRemoved()) {
                         int i = 0;
                         List<Node> deleted = new ArrayList<>();
-                        for (Figure removal : change.getRemoved()) {
+                        for (DrawItem removal : change.getRemoved()) {
                             // remove item
                             deleted.add(nodes.get(change.getFrom() + i));
                             i++;
@@ -89,7 +89,7 @@ public class CanvasView {
                     }
                     if (change.wasAdded()) {
                         int i = 0;
-                        for (Figure additem : change.getAddedSubList()) {
+                        for (DrawItem additem : change.getAddedSubList()) {
                             // add item
                             nodes.add(change.getFrom() + i, additem.draw());
                             i++;
@@ -101,21 +101,21 @@ public class CanvasView {
         });
     }
 
-    public void addItemToCanvas(Figure item) {
+    public void addItemToCanvas(DrawItem item) {
         appendItemToCanvas(item);
     }
     
-    public void appendItemToCanvas(Figure item) {
+    public void appendItemToCanvas(DrawItem item) {
         drawings.add(item);
     }
 
-    public void updateCanvasItem(int index, Figure item) {
+    public void updateCanvasItem(int index, DrawItem item) {
         drawings.set(index, item);
     }
     
     public void updateSelectedItem() {
         if (this.getSelected() != -1) {
-            Figure item = drawings.get(this.getSelected());
+            DrawItem item = drawings.get(this.getSelected());
             item.updateProperties(drawarea);
             this.updateCanvasItem(this.getSelected(), item);
         }
@@ -128,7 +128,7 @@ public class CanvasView {
         }
     }
 
-    public List<Figure> getDrawings() {
+    public List<DrawItem> getDrawings() {
         return list;
     }
 
@@ -186,7 +186,7 @@ public class CanvasView {
         return selection;
     }
 
-    public void setNewItem(Figure item) {
+    public void setNewItem(DrawItem item) {
         if (newitem == null) {
             this.addItemToCanvas(item);
         } else {
@@ -199,7 +199,7 @@ public class CanvasView {
         newitem = null;
     }
 
-    public Figure getNewItem() {
+    public DrawItem getNewItem() {
         return newitem;
     }
     
@@ -210,7 +210,7 @@ public class CanvasView {
         CanvasPoint start = new CanvasPoint();
         CanvasPoint end = new CanvasPoint();
 
-        for (Figure shape : list) {
+        for (DrawItem shape : list) {
             points.add(shape.getTop()[0]);
             points.add(shape.getBottom()[0]);
             points.add(shape.getUp()[0]);

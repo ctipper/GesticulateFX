@@ -10,7 +10,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.ContainsType;
-import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -33,11 +33,11 @@ public class BehaviourContext {
         this.contains = ContainsType.NONE;
     }
     
-    public boolean select(Figure item, int index) {
+    public boolean select(DrawItem item, int index) {
         return strategy.selectItem(this, item, index);
     }
 
-    public void alter(Figure item, double xinc, double yinc) {
+    public void alter(DrawItem item, double xinc, double yinc) {
         strategy.alterItem(this, item, xinc, yinc);
     }
     

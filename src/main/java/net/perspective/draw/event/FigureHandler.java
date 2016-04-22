@@ -33,7 +33,7 @@ public class FigureHandler implements Handler {
             return;
         }
         // add figure to canvas
-        Figure item = view.getNewItem();
+        Figure item = (Figure) view.getNewItem();
         item.setEndPoints();
         item.updateProperties(drawarea);
         view.setNewItem(item);

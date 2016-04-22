@@ -12,6 +12,7 @@ import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
@@ -28,10 +29,10 @@ public class FigureItemBehaviour implements ItemBehaviours {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
 
-    public boolean selectItem(BehaviourContext context, Figure item, int index) {
+    public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;
 
-        FigureType type = item.getType();
+        FigureType type = ((Figure) item).getType();
         if (!type.equals(FigureType.SKETCH)
             && !type.equals(FigureType.POLYGON)
             && !type.equals(FigureType.LINE)) {
@@ -81,11 +82,11 @@ public class FigureItemBehaviour implements ItemBehaviours {
         return found;
     }
     
-    public void alterItem(BehaviourContext context, Figure item, double xinc, double yinc) {
+    public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         ContainsType contains;
         DrawingType drawType;
 
-        FigureType type = item.getType();
+        FigureType type = ((Figure) item).getType();
         CanvasPoint st = item.getStart();
         CanvasPoint en = item.getEnd();
         switch (type) {
@@ -95,15 +96,15 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 if (context.getRegion(st).contains(drawarea.getStartX(), drawarea.getStartY())) {
                     st.translate(xinc, yinc);
                     item.setStart(st.x, st.y);
-                    item.setPoints(DrawingType.LINE);
-                    item.setPath();
+                    ((Figure) item).setPoints(DrawingType.LINE);
+                    ((Figure) item).setPath();
                 } else if (context.getRegion(en).contains(drawarea.getStartX(), drawarea.getStartY())) {
                     en.translate(xinc, yinc);
                     item.setEnd(en.x, en.y);
-                    item.setPoints(DrawingType.LINE);
-                    item.setPath();
+                    ((Figure) item).setPoints(DrawingType.LINE);
+                    ((Figure) item).setPath();
                 } else {
-                    item.moveFigure(xinc, yinc);
+                    item.moveShape(xinc, yinc);
                 }
                 break;
             case SQUARE:
@@ -130,7 +131,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     contains = context.getContainment();
                 }
                 if (context.getSgndArea() < 0) {
-                    context.setSgndArea(item.sgnd_area());
+                    context.setSgndArea(((Figure) item).sgnd_area());
                 }
                 if (context.getQuad() == -1) {
                     int quad = R2.quadrant(item.getTop()[1], item.rotationCentre());
@@ -152,35 +153,35 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         en.translate((-cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints(drawType);
-                        item.setPath();
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
                         break;
                     case BL:
                         st.translate((cos_t + sin_t) * inc.x, (-cos_t + sin_t) * inc.y);
                         en.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints(drawType);
-                        item.setPath();
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
                         break;
                     case BR:
                         st.translate((-cos_t + sin_t) * inc.x, (-cos_t - sin_t) * inc.y);
                         en.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints(drawType);
-                        item.setPath();
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
                         break;
                     case TR:
                         st.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
                         en.translate((cos_t + sin_t) * inc.x, (-cos_t + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
-                        item.setPoints(drawType);
-                        item.setPath();
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
                         break;
                     case SHAPE:
-                        item.moveFigure(xinc, yinc);
+                        item.moveShape(xinc, yinc);
                         break;
                     case NONE:
                     default:
@@ -189,7 +190,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 break;
             default:
                 // All other Figures
-                item.moveFigure(xinc, yinc);
+                item.moveShape(xinc, yinc);
                 break;
         }
     }

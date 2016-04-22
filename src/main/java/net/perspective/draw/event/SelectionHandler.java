@@ -14,6 +14,7 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 
 /**
@@ -36,17 +37,16 @@ public class SelectionHandler implements Handler {
     }
 
     public void downEvent() {
-        List<Figure> drawings = view.getDrawings();
+        List<DrawItem> drawings = view.getDrawings();
         context.setContainment(ContainsType.NONE);
         if (!drawings.isEmpty()) {
             int i = drawings.size() - 1;
             do {
-                Figure figure = drawings.get(i);
-                context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-                boolean found = context.select(figure, i);
-
-                if (found) {
-                    break;
+                DrawItem item = drawings.get(i);
+                if (item instanceof Figure) {
+                    context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                    boolean found = context.select(item, i);
+                    if (found) break;
                 }
                 i--;
             } while (i >= 0);
@@ -61,7 +61,7 @@ public class SelectionHandler implements Handler {
         if (selection != -1) {
             double xinc = drawarea.getTempX() - drawarea.getStartX();
             double yinc = drawarea.getTempY() - drawarea.getStartY();
-            Figure item = view.getDrawings().get(selection);
+            DrawItem item = view.getDrawings().get(selection);
             context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
             context.alter(item, xinc, yinc);
             item.updateProperties(drawarea);

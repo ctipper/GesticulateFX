@@ -1,5 +1,5 @@
 /*
- * FigureTransferable.java
+ * DrawItemTransferable.java
  * 
  * Created on Nov 16, 2013 3:56:35 PM
  * 
@@ -10,7 +10,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.*;
-import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.DrawItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,29 +18,37 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
-public class FigureTransferable implements Transferable {
+public class DrawItemTransferable implements Transferable {
 
     String mimeType = DataFlavor.javaSerializedObjectMimeType
-        + ";class=net.perspective.draw.geom.Figure";
+        + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
     private final ByteArrayOutputStream out;
 
-    private static final Logger logger = LoggerFactory.getLogger(FigureTransferable.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DrawItemTransferable.class.getName());
 
-    public FigureTransferable(Figure fig) {
+    public DrawItemTransferable(DrawItem i) {
         out = new ByteArrayOutputStream();
         try {
             ObjectOutputStream item = new ObjectOutputStream(out);
-            item.writeObject(fig);
+            item.writeObject(i);
         } catch (IOException e) {
             logger.warn("I/O Exception " + e.getMessage());
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException ex) {
+                    logger.error(null, ex);
+                }
+            }
         }
 
         //Try to create a DataFlavor for Figures
         try {
             dataFlavor = new DataFlavor(mimeType);
         } catch (ClassNotFoundException e) {
-            logger.warn("mimeType failed in FigureTransferable");
+            logger.warn("mimeType failed in DrawItemTransferable");
         }
     }
 
@@ -52,12 +60,18 @@ public class FigureTransferable implements Transferable {
         ByteArrayInputStream bin = new ByteArrayInputStream(out.toByteArray());
         try {
             ObjectInputStream in = new ObjectInputStream(bin);
-            Figure item = (Figure) in.readObject();
+            DrawItem item = (DrawItem) in.readObject();
             return item;
         } catch (IOException e) {
             logger.warn("I/O Exception");
         } catch (ClassNotFoundException e) {
             logger.warn("ClassNotFound");
+        } finally {
+            try {
+                bin.close();
+            } catch (IOException ex) {
+                logger.error(null, ex);
+            }
         }
         return null;
     }

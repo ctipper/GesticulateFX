@@ -10,6 +10,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class CanvasTransferHandler {
 
     DrawingArea canvas;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
-        + ";class=net.perspective.draw.geom.Figure";
+        + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
     private double shift;
 
@@ -43,18 +44,18 @@ public class CanvasTransferHandler {
     }
 
     public boolean importData(Transferable t) {
-        Figure item;
+        DrawItem item;
 
         if (hasDrawItemFlavor(t.getTransferDataFlavors())) {
             try {
                 if (t.getTransferData(dataFlavor) instanceof Figure) {
                     item = (Figure) t.getTransferData(dataFlavor);
                     // add item to Canvas
-                    item.moveFigure(shift, shift);
+                    item.moveShape(shift, shift);
                     canvas.getView().appendItemToCanvas(item);
                 }
                 shift = shift + 20.0;
-                logger.debug("Figure added to canvas");
+                logger.debug("Item added to canvas");
                 return true;
             } catch (UnsupportedFlavorException e) {
                 logger.warn("importData: unsupported data flavor");
@@ -71,9 +72,9 @@ public class CanvasTransferHandler {
         if (selected == -1) {
             return null;
         }
-        Figure data = canvas.getView().getDrawings().get(selected);
-        logger.trace("Created Transferable");
-        return new FigureTransferable(data);
+        DrawItem data = canvas.getView().getDrawings().get(selected);
+        logger.trace("Item createTransferable");
+        return new DrawItemTransferable(data);
     }
 
     protected void exportDone(Transferable data, int action) {

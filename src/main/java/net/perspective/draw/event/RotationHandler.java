@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.util.CanvasPoint;
@@ -33,11 +34,14 @@ public class RotationHandler implements Handler {
 
     public void downEvent() {
         view.setSelected(-1);
-        List<Figure> drawings = view.getDrawings();
-        for (Figure figure : drawings) {
-            if (!(figure.getType().equals(FigureType.LINE))) {
-                if (figure.contains(drawarea.getStartX(), drawarea.getStartY())) {
-                    view.setSelected(drawings.indexOf(figure));
+        List<DrawItem> drawings = view.getDrawings();
+        for (DrawItem item : drawings) {
+            if (item instanceof Figure) {
+                FigureType type = ((Figure) item).getType();
+                if (!(type.equals(FigureType.LINE))) {
+                    if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+                        view.setSelected(drawings.indexOf(item));
+                    }
                 }
             }
         }
@@ -48,15 +52,17 @@ public class RotationHandler implements Handler {
 
         int selection = view.getSelected();
         if (selection != -1) {
-            Figure item = view.getDrawings().get(selection);
+            DrawItem item = view.getDrawings().get(selection);
             double angle = item.getAngle();
             CanvasPoint centre = item.rotationCentre();
             A = B = new CanvasPoint(1, 1);
 
-            FigureType type = item.getType();
-            if (!type.equals(FigureType.LINE)) {
-                A = new CanvasPoint(drawarea.getStartX() - centre.x, drawarea.getStartY() - centre.y);
-                B = new CanvasPoint(drawarea.getTempX() - centre.x, drawarea.getTempY() - centre.y);
+            if (item instanceof Figure) {
+                FigureType type = ((Figure) item).getType();
+                if (!type.equals(FigureType.LINE)) {
+                    A = new CanvasPoint(drawarea.getStartX() - centre.x, drawarea.getStartY() - centre.y);
+                    B = new CanvasPoint(drawarea.getTempX() - centre.x, drawarea.getTempY() - centre.y);
+                }
             }
 
             double h1 = V2.L2(A);

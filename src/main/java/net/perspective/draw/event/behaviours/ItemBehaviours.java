@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.event.behaviours;
 
-import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.DrawItem;
 
 /**
  *
@@ -15,7 +15,7 @@ import net.perspective.draw.geom.Figure;
 
 public interface ItemBehaviours {
 
-    boolean selectItem(BehaviourContext context, Figure item, int index);
+    boolean selectItem(BehaviourContext context, DrawItem item, int index);
     
-    void alterItem(BehaviourContext context, Figure item, double xinc, double yinc);
+    void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc);
 }

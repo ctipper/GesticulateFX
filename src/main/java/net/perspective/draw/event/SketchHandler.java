@@ -35,7 +35,7 @@ public class SketchHandler implements Handler  {
             return;
         }
         // add figure to canvas
-        Figure item = view.getNewItem();
+        Figure item = (Figure) view.getNewItem();
         item.setEndPoints();
         item.updateProperties(drawarea);
         view.setNewItem(item);
@@ -60,7 +60,7 @@ public class SketchHandler implements Handler  {
 
     public void dragEvent() {
         // Create Figure
-        Figure item = view.getNewItem();
+        Figure item = (Figure) view.getNewItem();
         // continue sketch
         item.addPoint(drawarea.getTempX(), drawarea.getTempY());
         item.setEndPoints();

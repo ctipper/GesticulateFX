@@ -27,7 +27,7 @@ import net.perspective.draw.util.CanvasPoint;
  * @author ctipper
  */
 
-public class Figure implements Serializable {
+public class Figure implements DrawItem, Serializable {
 
     protected List<CanvasPoint> points;
     protected FigureType type;
@@ -346,7 +346,7 @@ public class Figure implements Serializable {
      * @param xinc x increment
      * @param yinc y increment
      */
-    public void moveFigure(double xinc, double yinc) {
+    public void moveShape(double xinc, double yinc) {
         points.stream().forEach((p) -> {
             p.translate(xinc, yinc);
         });
@@ -613,6 +613,25 @@ public class Figure implements Serializable {
      */
     public double getAngle() {
         return this.angle;
+    }
+
+    /**
+     * Sets the shape to be perpendicular to baseline
+     * 
+     * @param b A boolean property
+     * @deprecated 
+     */
+    public void setVertical(boolean isVertical) {
+        // do nothing
+    }
+
+    /**
+     * 
+     * @return a boolean property
+     * @deprecated 
+     */
+    public boolean isVertical() {
+        return false;
     }
 
     /**
