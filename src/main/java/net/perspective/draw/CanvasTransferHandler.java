@@ -21,10 +21,10 @@ import org.slf4j.LoggerFactory;
  */
 public class CanvasTransferHandler {
 
-    DrawingArea canvas;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
+    private DrawingArea drawarea;
     private double shift;
 
     public static int COPY = 1;
@@ -33,7 +33,7 @@ public class CanvasTransferHandler {
     private static final Logger logger = LoggerFactory.getLogger(CanvasTransferHandler.class.getName());
 
     public CanvasTransferHandler(DrawingArea c) {
-        canvas = c;
+        drawarea = c;
         //Try to create a DataFlavor for drawItems.
         try {
             dataFlavor = new DataFlavor(mimeType);
@@ -52,7 +52,7 @@ public class CanvasTransferHandler {
                     item = (Figure) t.getTransferData(dataFlavor);
                     // add item to Canvas
                     item.moveShape(shift, shift);
-                    canvas.getView().appendItemToCanvas(item);
+                    drawarea.getView().appendItemToCanvas(item);
                 }
                 shift = shift + 20.0;
                 logger.debug("Item added to canvas");
@@ -68,19 +68,19 @@ public class CanvasTransferHandler {
     }
 
     protected Transferable createTransferable() {
-        int selected = canvas.getView().getSelected();
+        int selected = drawarea.getView().getSelected();
         if (selected == -1) {
             return null;
         }
-        DrawItem data = canvas.getView().getDrawings().get(selected);
+        DrawItem data = drawarea.getView().getDrawings().get(selected);
         logger.trace("Item createTransferable");
         return new DrawItemTransferable(data);
     }
 
     protected void exportDone(Transferable data, int action) {
         if (action == MOVE) {
-            canvas.getView().deleteSelectedItem();
-            logger.debug("Deleted selected item");
+            drawarea.getView().deleteSelectedItem();
+            logger.debug("Removed selected item");
             shift = 0;
         } else {
             shift = 20.0;

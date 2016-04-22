@@ -27,11 +27,11 @@ public class DrawItemTransferable implements Transferable {
 
     private static final Logger logger = LoggerFactory.getLogger(DrawItemTransferable.class.getName());
 
-    public DrawItemTransferable(DrawItem i) {
+    public DrawItemTransferable(DrawItem item) {
         out = new ByteArrayOutputStream();
         try {
-            ObjectOutputStream item = new ObjectOutputStream(out);
-            item.writeObject(i);
+            ObjectOutputStream i = new ObjectOutputStream(out);
+            i.writeObject(item);
         } catch (IOException e) {
             logger.warn("I/O Exception " + e.getMessage());
         } finally {

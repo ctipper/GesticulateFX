@@ -35,15 +35,19 @@ public class RotationHandler implements Handler {
     public void downEvent() {
         view.setSelected(-1);
         List<DrawItem> drawings = view.getDrawings();
-        for (DrawItem item : drawings) {
-            if (item instanceof Figure) {
-                FigureType type = ((Figure) item).getType();
-                if (!(type.equals(FigureType.LINE))) {
-                    if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
-                        view.setSelected(drawings.indexOf(item));
+        if (!drawings.isEmpty()) {
+            int i = drawings.size() - 1;
+            do {
+                DrawItem item = drawings.get(i);
+                if (item instanceof Figure) {
+                    if (!(((Figure) item).getType().equals(FigureType.LINE))) {
+                        if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+                            view.setSelected(drawings.indexOf(item));
+                        }
                     }
                 }
-            }
+                i--;
+            } while (i >= 0);
         }
     }
 
@@ -58,8 +62,7 @@ public class RotationHandler implements Handler {
             A = B = new CanvasPoint(1, 1);
 
             if (item instanceof Figure) {
-                FigureType type = ((Figure) item).getType();
-                if (!type.equals(FigureType.LINE)) {
+                if (!((Figure) item).getType().equals(FigureType.LINE)) {
                     A = new CanvasPoint(drawarea.getStartX() - centre.x, drawarea.getStartY() - centre.y);
                     B = new CanvasPoint(drawarea.getTempX() - centre.x, drawarea.getTempY() - centre.y);
                 }

@@ -107,7 +107,7 @@ public interface DrawItem {
     /**
      * Sets the shape to be perpendicular to baseline
      * 
-     * @param b A boolean property
+     * @param isVertical a boolean property
      * @deprecated 
      */
     void setVertical(boolean isVertical);
@@ -152,7 +152,7 @@ public interface DrawItem {
      * 
      * @return an FX Path
      */
-    public Path draw();
+    Path draw();
 
     /**
      * Render the item anchors to indicate selection

@@ -618,7 +618,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Sets the shape to be perpendicular to baseline
      * 
-     * @param b A boolean property
+     * @param isVertical a boolean property
      * @deprecated 
      */
     public void setVertical(boolean isVertical) {

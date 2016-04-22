@@ -27,8 +27,7 @@ public class FigurePathFactory implements PathFactory {
         
         path = new Path2D.Double();
         java.util.List<CanvasPoint> points = figure.getPoints();
-        FigureType type = figure.getType();
-        switch (type) {
+        switch (figure.getType()) {
             case LINE:
                 if (points.size() > 1) {
                     path.moveTo(points.get(0).x, points.get(0).y);
@@ -67,7 +66,7 @@ public class FigurePathFactory implements PathFactory {
                         w = p1.x - x;
                         h = p1.y - y;
                     }
-                    if (type.equals(FigureType.CIRCLE)) {
+                    if (figure.getType().equals(FigureType.CIRCLE)) {
                         path = new Path2D.Double(new Ellipse2D.Double(x, y, w, h));
                     } else {
                         path = new Path2D.Double(new RoundRectangle2D.Double(x, y, w, h, 5, 5));

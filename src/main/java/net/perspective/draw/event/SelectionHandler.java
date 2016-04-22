@@ -38,9 +38,9 @@ public class SelectionHandler implements Handler {
 
     public void downEvent() {
         List<DrawItem> drawings = view.getDrawings();
-        context.setContainment(ContainsType.NONE);
         if (!drawings.isEmpty()) {
             int i = drawings.size() - 1;
+            context.setContainment(ContainsType.NONE);
             do {
                 DrawItem item = drawings.get(i);
                 if (item instanceof Figure) {
@@ -50,9 +50,9 @@ public class SelectionHandler implements Handler {
                 }
                 i--;
             } while (i >= 0);
-        }
-        if (context.getContainment().equals(ContainsType.NONE)) {
-            view.setSelected(-1);
+            if (context.getContainment().equals(ContainsType.NONE)) {
+                view.setSelected(-1);
+            }
         }
     }
 
