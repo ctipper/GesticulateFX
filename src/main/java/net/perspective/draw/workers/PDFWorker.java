@@ -38,7 +38,6 @@ public class PDFWorker extends Task {
 
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
-    /** Creates a new instance of <code>PDFWorker</code> */
     @Inject
     public PDFWorker() {
         this.margin = 0.0;

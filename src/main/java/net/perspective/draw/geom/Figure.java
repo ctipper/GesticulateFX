@@ -59,7 +59,13 @@ public class Figure implements DrawItem, Serializable {
         this.path = new Path2D.Double();
     }
     
-    /**
+     public void setFactory() {
+        // This should method should almost never be called. Needed by XML Reader.
+        this.pathfactory = new FigurePathFactory();
+        this.pointfactory = new FigurePointFactory();
+    }
+
+   /**
      * Set the untransformed TL coordinate of the figure
      * 
      * @param x the x position
