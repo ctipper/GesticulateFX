@@ -95,6 +95,7 @@ public class ReadInFunnel extends Task {
             }
         }
 
+        @SuppressWarnings("unchecked")
         public void make() throws IOException {
             try (ZipFile zf = new ZipFile(file)) {
                 ZipEntry ze = zf.getEntry("content/canvas.xml");

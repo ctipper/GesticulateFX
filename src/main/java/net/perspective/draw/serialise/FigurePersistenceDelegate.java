@@ -18,6 +18,7 @@ import net.perspective.draw.geom.Figure;
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
         Figure f = (Figure) oldInstance;
         return new Expression(oldInstance, f.getClass(), "new", new Object[]{
