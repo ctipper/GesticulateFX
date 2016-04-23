@@ -554,6 +554,11 @@ public class Figure implements DrawItem, Serializable {
         this.color = awtToFx(color);
     }
 
+    @Deprecated
+    public java.awt.Color getAwtColor() {
+        return fxToAwt(this.color);
+    }
+
     public Color getColor() {
         return this.color;
     }
@@ -565,6 +570,11 @@ public class Figure implements DrawItem, Serializable {
     @Deprecated
     public void setFillColor(java.awt.Color fillcolor) {
         this.fillcolor = awtToFx(fillcolor);
+    }
+
+    @Deprecated
+    public java.awt.Color getAwtFillColor() {
+        return fxToAwt(this.fillcolor);
     }
 
     public Color getFillColor() {
