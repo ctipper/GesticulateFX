@@ -62,8 +62,10 @@ public class SelectionHandler implements Handler {
             double xinc = drawarea.getTempX() - drawarea.getStartX();
             double yinc = drawarea.getTempY() - drawarea.getStartY();
             DrawItem item = view.getDrawings().get(selection);
-            context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-            context.alter(item, xinc, yinc);
+            if (item instanceof Figure) {
+                context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                context.alter(item, xinc, yinc);
+            }
             item.updateProperties(drawarea);
             view.updateCanvasItem(selection, item);
             view.moveSelection(selection);
