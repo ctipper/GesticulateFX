@@ -48,7 +48,7 @@ public class DrawingArea {
     private double tempX, tempY;
     
     private Transferable clipboard;
-    private CanvasTransferHandler transferhandler;
+    @Inject private CanvasTransferHandler transferhandler;
 
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
@@ -66,7 +66,6 @@ public class DrawingArea {
         root = new Group();
         canvas = new SubScene(root, width, height);
         canvas.setFill(Color.WHITE);
-        transferhandler = new CanvasTransferHandler(this);
         contextmenu = new ContextMenu();
         contextlistener = null;
         view.setDrawingListener();

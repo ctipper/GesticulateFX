@@ -10,6 +10,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import javax.inject.Inject;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class CanvasTransferHandler {
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
-    private DrawingArea drawarea;
+    @Inject private DrawingArea drawarea;
     private double shift;
 
     public static int COPY = 1;
@@ -32,8 +33,7 @@ public class CanvasTransferHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasTransferHandler.class.getName());
 
-    public CanvasTransferHandler(DrawingArea c) {
-        drawarea = c;
+    public CanvasTransferHandler() {
         //Try to create a DataFlavor for drawItems.
         try {
             dataFlavor = new DataFlavor(mimeType);
