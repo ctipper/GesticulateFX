@@ -8,6 +8,7 @@ package net.perspective.draw.geom;
 
 import java.awt.Shape;
 import java.awt.geom.*;
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
 import net.perspective.draw.enums.DrawingType;
@@ -27,6 +28,7 @@ public class Edge extends Figure implements Serializable {
         super();
     }
     
+    @ConstructorProperties({"type"})
     public Edge(FigureType type) {
         super(type);
     }

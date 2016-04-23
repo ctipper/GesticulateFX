@@ -18,7 +18,9 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +32,13 @@ import org.slf4j.LoggerFactory;
 
 public class ReadInFunnel extends Task {
 
+    @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     private File file;
     private List<DrawItem> drawings;
     private boolean success = false;
 
-    private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ReadInFunnel.class.getName());
 
     @Inject
     public ReadInFunnel() {
@@ -57,12 +60,12 @@ public class ReadInFunnel extends Task {
         logger.info("Open completed.");
         Platform.runLater(() -> {
             if (success) {
-                view.clearView();
+                drawarea.prepareDrawing();
                 try {
                     for (DrawItem drawing : drawings) {
                         drawing = checkDrawings(drawing);
                         view.setNewItem(drawing);
-                        view.appendItemToCanvas(view.getNewItem());
+                        view.resetNewItem();
                     }
                 } catch (ClassCastException e) {
                     logger.warn(e.getMessage());
@@ -76,6 +79,10 @@ public class ReadInFunnel extends Task {
             ((Figure) drawing).setFactory();
             ((Figure) drawing).setEndPoints();
             ((Figure) drawing).setPath();
+        } else if (drawing instanceof Edge) {
+            ((Edge) drawing).setFactory();
+            ((Edge) drawing).setEndPoints();
+            ((Edge) drawing).setPath();
         }
         return drawing;
     }

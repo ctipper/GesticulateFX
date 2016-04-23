@@ -10,6 +10,7 @@ import java.beans.DefaultPersistenceDelegate;
 import java.beans.Encoder;
 import java.beans.Expression;
 import java.beans.Statement;
+import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 
 /**
@@ -20,10 +21,18 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
-        Figure figure = (Figure) oldInstance;
-        return new Expression(figure, figure.getClass(), "new", new Object[]{
+        
+        if (oldInstance instanceof Edge) {
+            Edge edge = (Edge) oldInstance;
+            return new Expression(edge, edge.getClass(), "new", new Object[]{
+                edge.getType()
+            });
+        } else {
+            Figure figure = (Figure) oldInstance;
+            return new Expression(figure, figure.getClass(), "new", new Object[]{
                 figure.getType()
-                });
+            });
+        }
     }
 
     @Override
