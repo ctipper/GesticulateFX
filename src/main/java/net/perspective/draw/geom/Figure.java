@@ -11,6 +11,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.beans.ConstructorProperties;
+import java.beans.Transient;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +106,10 @@ public class Figure implements DrawItem, Serializable {
         return end;
     }
 
+    public void setPoints(List<CanvasPoint> points) {
+        this.points = points;
+    }
+
     /**
      * Initialise points List
      * 
@@ -157,6 +162,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Set the path from a List of points
      */
+    @Transient
     public void setPath() {
         this.path = pathfactory.createPath(this);
         this.setClosed(true);
@@ -167,6 +173,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return path
      */
+    @Transient
     public Path2D.Double getPath() {
         return this.path;
     }
@@ -557,6 +564,7 @@ public class Figure implements DrawItem, Serializable {
         this.color = color;
     }
 
+    @Transient
     public Color getColor() {
         return this.color;
     }
@@ -575,6 +583,7 @@ public class Figure implements DrawItem, Serializable {
         this.fillcolor = fillcolor;
     }
 
+    @Transient
     public Color getFillColor() {
         return this.fillcolor;
     }

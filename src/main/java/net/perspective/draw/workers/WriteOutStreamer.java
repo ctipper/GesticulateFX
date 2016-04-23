@@ -14,6 +14,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -82,30 +83,23 @@ public class WriteOutStreamer extends Task {
         }
 
         public void make() throws IOException {
-            setBeanInfo();
             FileOutputStream fos = new FileOutputStream(file);
             zos = new ZipOutputStream(new BufferedOutputStream(fos));
 
+            /**
+             * Create an empty pictures descriptor
+             */
+            
             ZipEntry entry = new ZipEntry("content/pictures.xml");
+            List<Integer> pictures = new ArrayList<>();
             zos.putNextEntry(entry);
-
-            /**
-             * Currently no images being stored
-             */
- 
-            /** 
-             * List<ImageItem> pictures = view.getImageItems();
-             */
-
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
-            /**
-             * encoder.writeObject(pictures);
-             */
+            encoder.writeObject(pictures);
             encoder.finished();
             zos.closeEntry();
 
             /**
-             * Write out images
+             * Don't write out images
              */
 
             entry = new ZipEntry("content/canvas.xml");
@@ -126,26 +120,6 @@ public class WriteOutStreamer extends Task {
             encoder.writeObject(drawings);
             encoder.finished();
             zos.closeEntry();
-        }
-
-        public void setBeanInfo() {
-            try {
-                figureInfo = Introspector.getBeanInfo(net.perspective.draw.geom.Figure.class);
-            } catch (IntrospectionException e) {
-            }
-            for (PropertyDescriptor pd : figureInfo.getPropertyDescriptors()) {
-                switch (pd.getName()) {
-                    case "path":
-                        pd.setValue("transient", Boolean.TRUE);
-                        break;
-                    case "color":
-                        pd.setValue("transient", Boolean.TRUE);
-                        break;
-                    case "fillcolor":
-                        pd.setValue("transient", Boolean.TRUE);
-                        break;
-                }
-            }
         }
     }
 

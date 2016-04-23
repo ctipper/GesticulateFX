@@ -31,7 +31,7 @@ public class CanvasView {
     private ObservableList<DrawItem> drawings;
     private DrawItem newitem;
     private int selection;
-    private boolean isDrawing;
+    private boolean isDrawing = false;
     private Node anchors;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
@@ -39,11 +39,11 @@ public class CanvasView {
     /**
      * Creates a new instance of <code>CanvasView</code>
      */
+    @Inject
     public CanvasView() {
-        newitem = null;
-        list = new ArrayList<>();
-        selection = -1;
-        isDrawing = false;
+        this.list = new ArrayList<>();
+        this.newitem = null;
+        this.selection = -1;
     }
 
     public void clearView() {
