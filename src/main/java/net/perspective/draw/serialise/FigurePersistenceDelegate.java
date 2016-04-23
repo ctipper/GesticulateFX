@@ -9,6 +9,7 @@ package net.perspective.draw.serialise;
 import java.beans.DefaultPersistenceDelegate;
 import java.beans.Encoder;
 import java.beans.Expression;
+import java.beans.Statement;
 import net.perspective.draw.geom.Figure;
 
 /**
@@ -18,19 +19,28 @@ import net.perspective.draw.geom.Figure;
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
-    @SuppressWarnings("deprecation")
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
-        Figure f = (Figure) oldInstance;
-        return new Expression(oldInstance, f.getClass(), "new", new Object[]{
-                f.getType(),
-                f.getStart(),
-                f.getEnd(),
-                f.getPoints(),
-                f.getAngle(),
-                f.getTransparency(),
-                f.getStroke(),
-                f.getAwtColor(),
-                f.getAwtFillColor()
-            });
+        Figure figure = (Figure) oldInstance;
+        return new Expression(figure, figure.getClass(), "new", new Object[]{
+                figure.getType()
+                });
     }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    protected void initialize(Class type, Object oldInstance,
+                              Object newInstance, Encoder out) {
+        super.initialize(type, oldInstance,  newInstance, out);
+        
+        Figure figure = (Figure) oldInstance;
+        out.writeStatement(
+                new Statement(figure,
+                        "setColor",
+                        new Object[]{figure.getAwtColor()}));
+        out.writeStatement(
+                new Statement(figure,
+                        "setFillColor",
+                        new Object[]{figure.getAwtFillColor()}));
+    }
+
 }

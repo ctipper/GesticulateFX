@@ -7,6 +7,7 @@
 
 package net.perspective.draw;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
@@ -42,22 +43,22 @@ public class ApplicationController implements Initializable {
     private BooleanProperty snapshotEnabled;
     private When wireframeSelected;
 
-    @FXML
-    private GridPane appmenu;
+    @FXML private GridPane appmenu;
 
-    @FXML
+    @FXML 
     private void handleWipeAction(ActionEvent e) {
         drawarea.prepareDrawing();
     }
     
     @FXML
-    private void handleOpenInAction(ActionEvent e) {
-        // not implemented
+    private void handleReadInAction(ActionEvent e) {
+        File file = share.chooseCanvas();
+        share.readCanvas(file);
     }
     
     @FXML
     private void handleSaveToAction(ActionEvent e) {
-        // not implemented
+        share.exportCanvas();
     }
     
     @FXML

@@ -23,6 +23,7 @@ import net.perspective.draw.CanvasView;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
+import net.perspective.draw.serialise.FigureTypePersistenceDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,6 +115,8 @@ public class WriteOutStreamer extends Task {
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
             encoder.setPersistenceDelegate(java.awt.BasicStroke.class,
                 new BasicStrokePersistenceDelegate());
+            encoder.setPersistenceDelegate(net.perspective.draw.geom.FigureType.class,
+                new FigureTypePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.Figure.class,
                 new FigurePersistenceDelegate());
             encoder.setExceptionListener((Exception ex) -> {
@@ -131,8 +134,16 @@ public class WriteOutStreamer extends Task {
             } catch (IntrospectionException e) {
             }
             for (PropertyDescriptor pd : figureInfo.getPropertyDescriptors()) {
-                if (pd.getName().equals("path")) {
+                switch (pd.getName()) {
+                    case "path":
                         pd.setValue("transient", Boolean.TRUE);
+                        break;
+                    case "color":
+                        pd.setValue("transient", Boolean.TRUE);
+                        break;
+                    case "fillcolor":
+                        pd.setValue("transient", Boolean.TRUE);
+                        break;
                 }
             }
         }

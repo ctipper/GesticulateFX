@@ -25,7 +25,9 @@ import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
+import net.perspective.draw.workers.ReadInFunnel;
 import net.perspective.draw.workers.SVGWorker;
+import net.perspective.draw.workers.WriteOutStreamer;
 
 /**
  *
@@ -146,6 +148,8 @@ public class Gesticulate extends GuiceApplication {
             bind(SketchHandler.class);
             bind(BehaviourContext.class);
             bind(ShareUtils.class);
+            bind(ReadInFunnel.class);
+            bind(WriteOutStreamer.class);
             bind(PDFWorker.class);
             bind(SVGWorker.class);
             bind(PNGWorker.class);

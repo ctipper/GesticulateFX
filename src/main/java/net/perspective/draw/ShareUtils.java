@@ -20,7 +20,9 @@ import javax.inject.Singleton;
 import net.perspective.draw.util.FileUtils;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
+import net.perspective.draw.workers.ReadInFunnel;
 import net.perspective.draw.workers.SVGWorker;
+import net.perspective.draw.workers.WriteOutStreamer;
 
 /**
  *
@@ -36,10 +38,66 @@ public class ShareUtils {
     private final ExecutorService executor;
     private final double margin;
 
-    /** Creates a new instance of <code>ShareUtils</code> */
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
         this.margin = 3.0;  // half max stroke width
+    }
+
+    public File chooseCanvas() {
+        FileChooser chooser = new FileChooser();
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        chooser.setInitialDirectory(userDirectory);
+        chooser.setTitle("Open...");
+        chooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("GST", "*.gst"),
+            new FileChooser.ExtensionFilter("All Documents", "*.*"));
+        File result = chooser.showOpenDialog(application.getStage());
+        if (result == null) {
+            return null;
+        }
+        return result;
+    }
+
+    public void exportCanvas() {
+        // Detect empty canvas
+        if (view.getDrawings().isEmpty()) {
+            return;
+        }
+        
+        FileChooser chooser = new FileChooser();
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        chooser.setInitialDirectory(userDirectory);
+        chooser.setTitle("Save As...");
+        chooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("GST", "*.gst"),
+            new FileChooser.ExtensionFilter("All Documents", "*.*"));
+        File result = chooser.showSaveDialog(application.getStage());
+        if (result == null) {
+            return;
+        }
+
+        // wrangle filename with correct extension
+        final File file = FileUtils.cleanseFileName(result, "gst");
+        this.writeCanvas(file);
+    }
+
+    public void loadCanvas(String path) {
+        final File file = new File(path);
+        this.readCanvas(file);
+    }
+
+    public void readCanvas(File file) {
+        ReadInFunnel reader = injector.getInstance(ReadInFunnel.class);
+        reader.setFile(file);
+        executor.submit(reader);
+    }
+
+    public void writeCanvas(File file) {
+        WriteOutStreamer streamer = injector.getInstance(WriteOutStreamer.class);
+        streamer.setFile(file);
+        executor.submit(streamer);
     }
 
     public void exportPDF() {

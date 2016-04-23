@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
+import java.beans.ConstructorProperties;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class Figure implements DrawItem, Serializable {
         this.closed = false;
     }
 
+    @ConstructorProperties({"type"})
     public Figure(FigureType type) {
         this();
         this.type = type;
@@ -555,6 +557,10 @@ public class Figure implements DrawItem, Serializable {
         this.color = color;
     }
 
+    public Color getColor() {
+        return this.color;
+    }
+
     @Deprecated
     public void setColor(java.awt.Color color) {
         this.color = awtToFx(color);
@@ -565,12 +571,12 @@ public class Figure implements DrawItem, Serializable {
         return fxToAwt(this.color);
     }
 
-    public Color getColor() {
-        return this.color;
-    }
-
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
+    }
+
+    public Color getFillColor() {
+        return this.fillcolor;
     }
 
     @Deprecated
@@ -581,10 +587,6 @@ public class Figure implements DrawItem, Serializable {
     @Deprecated
     public java.awt.Color getAwtFillColor() {
         return fxToAwt(this.fillcolor);
-    }
-
-    public Color getFillColor() {
-        return this.fillcolor;
     }
 
     public void setStroke(Stroke stroke) {
