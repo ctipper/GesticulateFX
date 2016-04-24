@@ -59,7 +59,7 @@ public class ReadInFunnel extends Task {
     public void done() {
         logger.info("Open completed.");
         Platform.runLater(() -> {
-            if (success) {
+            // if (success) {
                 drawarea.prepareDrawing();
                 try {
                     for (DrawItem drawing : drawings) {
@@ -70,7 +70,7 @@ public class ReadInFunnel extends Task {
                 } catch (ClassCastException e) {
                     logger.warn(e.getMessage());
                 }
-            }
+            // }
         });
     }
 
