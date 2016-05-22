@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * @author ctipper
  */
 
-public class PDFWorker extends Task {
+public class PDFWorker extends Task<Object> {
 
     @Inject private CanvasView view;
     private File file;

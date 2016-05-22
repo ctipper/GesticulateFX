@@ -82,6 +82,7 @@ public class FileUtils {
         Formatter formatter = new Formatter(name);
         formatter.format("%04d", index);
         name.append(".png");
+        formatter.close();
         return name.insert(0, "Image").toString();
     }
 

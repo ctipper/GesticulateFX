@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * @author ctipper
  */
 
-public class ReadInFunnel extends Task {
+public class ReadInFunnel extends Task<Object> {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;

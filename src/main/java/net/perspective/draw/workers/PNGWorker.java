@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * @author ctipper
  */
 
-public class PNGWorker extends Task {
+public class PNGWorker extends Task<Object> {
 
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;

@@ -20,7 +20,7 @@ public class FigureTypePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
-        Enum t = (FigureType) oldInstance;
+        Enum<?> t = (FigureType) oldInstance;
         return new Expression(oldInstance, t.getDeclaringClass(), "valueOf", new Object[] {
             t.name()
         });

@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
  * @author ctipper
  */
 
-public class SVGWorker extends Task {
+public class SVGWorker extends Task<Object> {
 
     @Inject private CanvasView view;
     private File file;

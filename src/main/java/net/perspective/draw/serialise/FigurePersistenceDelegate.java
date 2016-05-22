@@ -37,7 +37,7 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
     @SuppressWarnings("deprecation")
-    protected void initialize(Class type, Object oldInstance,
+    protected void initialize(Class<?> type, Object oldInstance,
                               Object newInstance, Encoder out) {
         super.initialize(type, oldInstance,  newInstance, out);
         

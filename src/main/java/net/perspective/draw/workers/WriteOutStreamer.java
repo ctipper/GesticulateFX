@@ -6,34 +6,27 @@
  */
 package net.perspective.draw.workers;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import javafx.concurrent.Task;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javafx.concurrent.Task;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
 import net.perspective.draw.serialise.FigureTypePersistenceDelegate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author ctipper
  */
 
-public class WriteOutStreamer extends Task {
+public class WriteOutStreamer extends Task<Object> {
 
     @Inject private CanvasView view;
     private File file;
@@ -63,7 +56,6 @@ public class WriteOutStreamer extends Task {
 
         net.perspective.draw.serialise.XMLEncoder encoder;
         ZipOutputStream zos = null;
-        BeanInfo figureInfo;
         
         Serialiser() {
             logger.info("Serialisation initialised.");
