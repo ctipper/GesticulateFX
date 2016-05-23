@@ -35,7 +35,6 @@ public class SVGWorker extends Task<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
-    /** Creates a new instance of * <code>SVGWorker</code> */
     @Inject
     public SVGWorker() {
         this.margin = 0.0;

@@ -116,7 +116,7 @@ public class Gesticulate extends GuiceApplication {
 
     private void initialiseToolbar(Scene scene) {
         // Toolbar state
-        Object button = scene.lookup("#buttsketch");
+        Object button = scene.lookup("#buttselect");
         if (button instanceof ToggleButton) {
             ((ToggleButton) button).setSelected(true);
         }

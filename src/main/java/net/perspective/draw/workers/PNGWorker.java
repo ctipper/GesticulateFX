@@ -36,9 +36,6 @@ public class PNGWorker extends Task<Object> {
     
     private static final Logger logger = LoggerFactory.getLogger(PNGWorker.class.getName());
 
-    /** Creates a new instance of 
-     * <code>PNGWorker</code> 
-     */
     @Inject
     public PNGWorker() {
         this.opacity = true;

@@ -20,11 +20,11 @@ import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.perspective.draw.enums.DrawingType;
-import net.perspective.draw.event.*;
-
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.enums.HandlerType;
+import net.perspective.draw.event.*;
 
 /**
  *
@@ -71,7 +71,7 @@ public class DrawingArea {
         view.setDrawingListener();
         this.prepareDrawing();
         this.setDrawType(DrawingType.SKETCH);
-        this.changeHandlers(HandlerType.SKETCH);
+        this.changeHandlers(HandlerType.SELECTION);
         this.initializeHandlers();
     }
 
@@ -146,7 +146,6 @@ public class DrawingArea {
             touchMoved(event);
         });
         addContextMenu();
-        this.changeHandlers(HandlerType.SKETCH);
     }
 
     public void mouseUp(MouseEvent event) {

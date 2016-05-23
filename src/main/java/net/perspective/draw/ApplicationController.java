@@ -27,7 +27,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
-import net.perspective.draw.event.HandlerType;
+import net.perspective.draw.enums.HandlerType;
 
 /**
  *

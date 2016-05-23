@@ -4,7 +4,7 @@
  * Created on Oct 19, 2013 8:19:55 PM
  * 
  */
-package net.perspective.draw.event;
+package net.perspective.draw.enums;
 
 /**
  *

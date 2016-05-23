@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import javax.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import javafx.concurrent.Task;
+import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
 import net.perspective.draw.serialise.FigureTypePersistenceDelegate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
