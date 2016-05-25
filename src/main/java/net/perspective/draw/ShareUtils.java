@@ -35,12 +35,21 @@ public class ShareUtils {
     @Inject private Injector injector;
     @Inject private Gesticulate application;
     @Inject private CanvasView view;
+    private File canvasfile;
     private final ExecutorService executor;
     private final double margin;
 
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
         this.margin = 3.0;  // half max stroke width
+    }
+
+    public void resetCanvasFile() {
+        this.canvasfile = null;
+    }
+
+    public File getCanvasFile() {
+        return canvasfile;
     }
 
     public File chooseCanvas() {
@@ -91,12 +100,14 @@ public class ShareUtils {
     public void readCanvas(File file) {
         ReadInFunnel reader = injector.getInstance(ReadInFunnel.class);
         reader.setFile(file);
+        this.canvasfile = file;
         executor.submit(reader);
     }
 
     public void writeCanvas(File file) {
         WriteOutStreamer streamer = injector.getInstance(WriteOutStreamer.class);
         streamer.setFile(file);
+        this.canvasfile = file;
         executor.submit(streamer);
     }
 

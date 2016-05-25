@@ -36,7 +36,7 @@ import net.perspective.draw.enums.HandlerType;
 
 @Singleton
 public class ApplicationController implements Initializable {
-    
+
     @Inject private DrawingArea drawarea;
     @Inject private Gesticulate application;
     @Inject private ShareUtils share;
@@ -47,42 +47,54 @@ public class ApplicationController implements Initializable {
 
     @FXML 
     private void handleWipeAction(ActionEvent e) {
+        share.resetCanvasFile();
         drawarea.prepareDrawing();
     }
-    
+
     @FXML
     private void handleReadInAction(ActionEvent e) {
         File file = share.chooseCanvas();
         share.readCanvas(file);
     }
-    
+
+    @FXML
+    private void handleSaveAsAction(ActionEvent e) {
+        share.exportCanvas();
+        menubutton.fire();
+     }
+
     @FXML
     private void handleSaveToAction(ActionEvent e) {
-        share.exportCanvas();
+        File file = share.getCanvasFile();
+        if (file != null) {
+            share.writeCanvas(file);
+        } else {
+            share.exportCanvas();
+        }
     }
-    
+
     @FXML
     private void handleSelectionAction(ActionEvent e) {
         drawarea.changeHandlers(HandlerType.SELECTION);
     }
-    
+
     @FXML
     private void handleRotationAction(ActionEvent e) {
         drawarea.changeHandlers(HandlerType.ROTATION);
     }
-    
+
     @FXML
     private void handleLineAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.LINE);
         drawarea.changeHandlers(HandlerType.FIGURE);
     }
-    
+
     @FXML
     private void handleCircleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.ELLIPSE);
         drawarea.changeHandlers(HandlerType.FIGURE);
     }
-    
+
     @FXML
     private void handleSquareAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.RECTANGLE);
@@ -106,12 +118,12 @@ public class ApplicationController implements Initializable {
         drawarea.setDrawType(DrawingType.SKETCH);
         drawarea.changeHandlers(HandlerType.SKETCH);
     }
-    
+
     @FXML
     private void handleTextAction(ActionEvent e) {
         // not implemented
     }
-    
+
     @FXML
     private void handleOpacityAction(ActionEvent e) {
         drawarea.setTransparency(wireframeSelected.then(0).otherwise(100).intValue());
@@ -166,7 +178,7 @@ public class ApplicationController implements Initializable {
     public BooleanProperty getSnapshotProperty() {
         return snapshotEnabled;
     }
-    
+
     public When getWireframe() {
         return wireframeSelected;
     }
@@ -184,7 +196,7 @@ public class ApplicationController implements Initializable {
         // bind a property to the wireframe button selected state
         this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
     }
-    
+
     private void prepareSlideMenuAnimation() {
         TranslateTransition openNav = new TranslateTransition(new Duration(350), appmenu);
         openNav.setToX(0);
@@ -205,4 +217,5 @@ public class ApplicationController implements Initializable {
     private Button snapshotbutton;
     @FXML
     private ToggleButton wireframebutton;
+
 }

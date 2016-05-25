@@ -127,20 +127,23 @@
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
             <children>
-                <Button id="buttpdfexport" fx:id="pdfbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefWidth="150.0" styleClass="menuitem" text="Export PDF..." GridPane.columnIndex="1" GridPane.rowIndex="0" />    
-                <Button id="buttsvgexport" fx:id="svgbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefWidth="150.0" styleClass="menuitem" text="Export SVG..." GridPane.columnIndex="1" GridPane.rowIndex="1" />    
-                <Button id="buttpngexport" fx:id="pngbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="150.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="2" />    
-                <Button id="buttquitapp" fx:id="quitbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="3" />    
+                <Button id="buttsaveas" fx:id="saveasbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveAsAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveAsAction" prefWidth="150.0" styleClass="menuitem" text="Save As..." GridPane.columnIndex="1" GridPane.rowIndex="0" />    
+                <Button id="buttpdfexport" fx:id="pdfbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefWidth="150.0" styleClass="menuitem" text="Export PDF..." GridPane.columnIndex="1" GridPane.rowIndex="1" />    
+                <Button id="buttsvgexport" fx:id="svgbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefWidth="150.0" styleClass="menuitem" text="Export SVG..." GridPane.columnIndex="1" GridPane.rowIndex="2" />    
+                <Button id="buttpngexport" fx:id="pngbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="150.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="3" />    
+                <Button id="buttquitapp" fx:id="quitbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="4" />    
             </children>
             <columnConstraints>
                 <ColumnConstraints />
                 <ColumnConstraints prefWidth="150.0" />
             </columnConstraints>
             <rowConstraints>
+                <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
