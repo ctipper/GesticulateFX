@@ -9,10 +9,13 @@ package net.perspective.draw.workers;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
@@ -29,6 +32,7 @@ import org.slf4j.LoggerFactory;
 public class WriteOutStreamer extends Task<Object> {
 
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private File file;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
@@ -50,6 +54,18 @@ public class WriteOutStreamer extends Task<Object> {
     @Override
     public void done() {
         logger.info("Save completed.");
+        CompletableFuture.runAsync(() -> {
+            try {
+                // introduce a minimum visible interval
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+            }
+        }).thenRun(() -> {
+            Platform.runLater(() -> {
+                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+                controller.getProgressProperty().unbind();
+            });
+        });
     }
 
     final class Serialiser {
@@ -82,6 +98,7 @@ public class WriteOutStreamer extends Task<Object> {
              * Create an empty pictures descriptor
              */
             
+            updateProgress(0L, 2L);
             ZipEntry entry = new ZipEntry("content/pictures.xml");
             List<Integer> pictures = new ArrayList<>();
             zos.putNextEntry(entry);
@@ -89,6 +106,7 @@ public class WriteOutStreamer extends Task<Object> {
             encoder.writeObject(pictures);
             encoder.finished();
             zos.closeEntry();
+            updateProgress(1L, 2L);
 
             /**
              * Don't write out images
@@ -112,6 +130,7 @@ public class WriteOutStreamer extends Task<Object> {
             encoder.writeObject(drawings);
             encoder.finished();
             zos.closeEntry();
+            updateProgress(2L, 2L);
         }
     }
 

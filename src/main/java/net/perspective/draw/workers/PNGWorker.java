@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.imageio.ImageIO;
@@ -65,6 +66,17 @@ public class PNGWorker extends Task<Object> {
         logger.info("PNG export completed.");
         Platform.runLater(() -> {
             controller.getSnapshotProperty().setValue(false);
+        });
+        CompletableFuture.runAsync(() -> {
+            try {
+                // introduce a minimum visible interval
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+            }
+        }).thenRun(() -> {
+            Platform.runLater(() -> {
+                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+            });
         });
     }
 

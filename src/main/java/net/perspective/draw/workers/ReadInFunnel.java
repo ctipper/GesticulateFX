@@ -12,11 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.DrawItem;
@@ -34,6 +36,7 @@ public class ReadInFunnel extends Task<Object> {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private File file;
     private List<DrawItem> drawings;
     private boolean success = false;
@@ -72,6 +75,18 @@ public class ReadInFunnel extends Task<Object> {
                 }
             // }
         });
+        CompletableFuture.runAsync(() -> {
+            try {
+                // introduce a minimum visible interval
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+            }
+        }).thenRun(() -> {
+            Platform.runLater(() -> {
+                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+                controller.getProgressProperty().unbind();
+            });
+        });
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
@@ -105,6 +120,7 @@ public class ReadInFunnel extends Task<Object> {
         @SuppressWarnings("unchecked")
         public void make() throws IOException {
             try (ZipFile zf = new ZipFile(file)) {
+                updateProgress(0L, 2L);
                 ZipEntry ze = zf.getEntry("content/canvas.xml");
                 decoder = new XMLDecoder(new BufferedInputStream(zf.getInputStream(ze)));
                 decoder.setExceptionListener((Exception ex) -> {
@@ -112,6 +128,7 @@ public class ReadInFunnel extends Task<Object> {
                     success = false;
                 });
                 drawings = (ArrayList<DrawItem>) decoder.readObject();
+                updateProgress(2L, 2L);
             }
         }
     }

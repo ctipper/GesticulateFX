@@ -7,8 +7,11 @@
 package net.perspective.draw.workers;
 
 import java.io.*;
+import java.util.concurrent.CompletableFuture;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.util.CanvasPoint;
 import org.apache.batik.dom.GenericDOMImplementation;
@@ -30,6 +33,7 @@ import org.w3c.dom.Element;
 public class SVGWorker extends Task<Object> {
 
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private File file;
     private double margin;
 
@@ -57,6 +61,17 @@ public class SVGWorker extends Task<Object> {
     @Override
     public void done() {
         logger.info("SVG export completed.");
+        CompletableFuture.runAsync(() -> {
+            try {
+                // introduce a minimum visible interval
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+            }
+        }).thenRun(() -> {
+            Platform.runLater(() -> {
+                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+            });
+        });
     }
 
     final class Serialiser {

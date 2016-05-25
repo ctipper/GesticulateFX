@@ -14,11 +14,14 @@ import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -41,6 +44,7 @@ public class ApplicationController implements Initializable {
     @Inject private Gesticulate application;
     @Inject private ShareUtils share;
     private BooleanProperty snapshotEnabled;
+    private BooleanProperty progressBarEnabled;
     private When wireframeSelected;
 
     @FXML private GridPane appmenu;
@@ -167,7 +171,7 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
         snapshotEnabled.setValue(true);
-        share.snapshotPNG(this);
+        share.snapshotPNG();
     }
 
     /**
@@ -179,8 +183,20 @@ public class ApplicationController implements Initializable {
         return snapshotEnabled;
     }
 
+    public BooleanProperty getProgressEnabledProperty() {
+        return progressBarEnabled;
+    }
+
     public When getWireframe() {
         return wireframeSelected;
+    }
+    
+    public DoubleProperty getProgressProperty() {
+        return progressbar.progressProperty();
+    }
+    
+    public void setProgressIndeterminate() {
+        progressbar.setProgress(-1);
     }
 
     @Override
@@ -195,6 +211,10 @@ public class ApplicationController implements Initializable {
         
         // bind a property to the wireframe button selected state
         this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
+        
+        // bind a property to the progress bar visible property
+        this.progressBarEnabled = new SimpleBooleanProperty();
+        this.progressBarEnabled.bindBidirectional(progressbar.visibleProperty());
     }
 
     private void prepareSlideMenuAnimation() {
@@ -217,5 +237,9 @@ public class ApplicationController implements Initializable {
     private Button snapshotbutton;
     @FXML
     private ToggleButton wireframebutton;
+    @FXML
+    private Label statusbar;
+    @FXML
+    private ProgressBar progressbar;
 
 }

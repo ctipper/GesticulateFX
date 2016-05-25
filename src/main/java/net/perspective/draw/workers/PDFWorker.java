@@ -12,8 +12,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.util.CanvasPoint;
 import org.apache.avalon.framework.configuration.Configuration;
@@ -33,6 +36,7 @@ import org.slf4j.LoggerFactory;
 public class PDFWorker extends Task<Object> {
 
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private File file;
     private double margin;
 
@@ -60,6 +64,17 @@ public class PDFWorker extends Task<Object> {
     @Override
     public void done() {
         logger.info("PDF export completed.");
+        CompletableFuture.runAsync(() -> {
+            try {
+                // introduce a minimum visible interval
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+            }
+        }).thenRun(() -> {
+            Platform.runLater(() -> {
+                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+            });
+        });
     }
 
     final class Serialiser {
@@ -81,7 +96,7 @@ public class PDFWorker extends Task<Object> {
                 g2.getPDFDocument().setPDFVersion(Version.V1_6);
                 g2.getPDFDocument().setColorSpace(ColorSpace.CS_sRGB);
                 if (g2.getPDFDocument().getProfile().isTransparencyAllowed() != null) {
-                    logger.warn("transparency is not enabled");
+                    logger.warn("Transparency is not enabled");
                 }
                 g2.setGraphicContext(new org.apache.xmlgraphics.java2d.GraphicContext());
 
