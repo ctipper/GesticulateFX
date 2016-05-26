@@ -79,7 +79,7 @@ public class DrawingArea {
         this.stroke = new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
         this.color = Color.web("#4860E0");
         this.fillcolor = Color.web("#4860E0");
-        this.transparency = controller.getWireframe().then(0).otherwise(100).intValue();
+        this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
     }

@@ -75,7 +75,8 @@ public class PNGWorker extends Task<Object> {
             }
         }).thenRun(() -> {
             Platform.runLater(() -> {
-                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
+                controller.setStatusMessage("Exported to PNG");
             });
         });
     }

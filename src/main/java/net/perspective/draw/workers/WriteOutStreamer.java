@@ -62,8 +62,9 @@ public class WriteOutStreamer extends Task<Object> {
             }
         }).thenRun(() -> {
             Platform.runLater(() -> {
-                controller.getProgressEnabledProperty().setValue(Boolean.FALSE);
+                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();
+                controller.setStatusMessage("Saved document");
             });
         });
     }

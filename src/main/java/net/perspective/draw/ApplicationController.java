@@ -44,7 +44,7 @@ public class ApplicationController implements Initializable {
     @Inject private Gesticulate application;
     @Inject private ShareUtils share;
     private BooleanProperty snapshotEnabled;
-    private BooleanProperty progressBarEnabled;
+    private BooleanProperty progressBarVisible;
     private When wireframeSelected;
 
     @FXML private GridPane appmenu;
@@ -183,20 +183,49 @@ public class ApplicationController implements Initializable {
         return snapshotEnabled;
     }
 
-    public BooleanProperty getProgressEnabledProperty() {
-        return progressBarEnabled;
-    }
-
-    public When getWireframe() {
+    /**
+     * Binds wire-frame button set or unset o figure transparency
+     * 
+     * @return 
+     */
+    public When getWireframeWhen() {
         return wireframeSelected;
     }
     
+    /**
+     * Binds state of progress bar visible
+     * 
+     * @return 
+     */
+    public BooleanProperty getProgressVisibleProperty() {
+        return progressBarVisible;
+    }
+
+    /**
+     * Binds to progress state of a task
+     * 
+     * @return 
+     */
     public DoubleProperty getProgressProperty() {
         return progressbar.progressProperty();
     }
     
+    /**
+     * Set progress bar indeterminate
+     * 
+     * @return 
+     */
     public void setProgressIndeterminate() {
         progressbar.setProgress(-1);
+    }
+
+    /**
+     * Set status text to message
+     * 
+     * @param message 
+     */
+    public void setStatusMessage(String message) {
+        statusbar.setText(message);
     }
 
     @Override
@@ -213,8 +242,8 @@ public class ApplicationController implements Initializable {
         this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
         
         // bind a property to the progress bar visible property
-        this.progressBarEnabled = new SimpleBooleanProperty();
-        this.progressBarEnabled.bindBidirectional(progressbar.visibleProperty());
+        this.progressBarVisible = new SimpleBooleanProperty();
+        this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
     }
 
     private void prepareSlideMenuAnimation() {

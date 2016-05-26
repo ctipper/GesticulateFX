@@ -102,7 +102,7 @@ public class ShareUtils {
         ReadInFunnel reader = injector.getInstance(ReadInFunnel.class);
         reader.setFile(file);
         this.canvasfile = file;
-        controller.getProgressEnabledProperty().setValue(Boolean.TRUE);
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.getProgressProperty().bind(reader.progressProperty());
         executor.submit(reader);
     }
@@ -111,7 +111,7 @@ public class ShareUtils {
         WriteOutStreamer streamer = injector.getInstance(WriteOutStreamer.class);
         streamer.setFile(file);
         this.canvasfile = file;
-        controller.getProgressEnabledProperty().setValue(Boolean.TRUE);
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.getProgressProperty().bind(streamer.progressProperty());
         executor.submit(streamer);
     }
@@ -140,7 +140,7 @@ public class ShareUtils {
         PDFWorker pdfWorker = injector.getInstance(PDFWorker.class);
         pdfWorker.setFile(file);
         pdfWorker.setMargin(this.margin);
-        controller.getProgressEnabledProperty().setValue(Boolean.TRUE);
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(pdfWorker);
     }
@@ -169,7 +169,7 @@ public class ShareUtils {
         SVGWorker svgWorker = injector.getInstance(SVGWorker.class);
         svgWorker.setFile(file);
         svgWorker.setMargin(this.margin);
-        controller.getProgressEnabledProperty().setValue(Boolean.TRUE);
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(svgWorker);
     }
@@ -199,7 +199,7 @@ public class ShareUtils {
         pngWorker.setFile(file);
         pngWorker.setOpacity(false);
         pngWorker.setMargin(this.margin);
-        controller.getProgressEnabledProperty().setValue(Boolean.TRUE);
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(pngWorker);
     }
@@ -225,7 +225,7 @@ public class ShareUtils {
         PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
         pngWorker.setFile(file);
         pngWorker.setMargin(this.margin);
-        controller.getProgressEnabledProperty().setValue(Boolean.TRUE);
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(pngWorker);
     }
