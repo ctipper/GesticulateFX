@@ -179,7 +179,7 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Binds state of snapshot button
+     * Snapshot button enabled property
      * 
      * @return 
      */
@@ -188,7 +188,7 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Binds wire-frame button set or unset o figure transparency
+     * Binary choice from wireframe button state
      * 
      * @return 
      */
@@ -197,7 +197,7 @@ public class ApplicationController implements Initializable {
     }
     
     /**
-     * Binds state of progress bar visible
+     * Progress bar visible property
      * 
      * @return 
      */
@@ -206,7 +206,7 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Binds to progress state of a task
+     * Progress bar progress property
      * 
      * @return 
      */
