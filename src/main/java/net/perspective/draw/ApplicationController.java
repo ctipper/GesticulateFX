@@ -10,6 +10,9 @@ package net.perspective.draw;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
@@ -46,6 +49,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private When wireframeSelected;
+    private SequentialTransition statusTransition;
 
     @FXML private GridPane appmenu;
 
@@ -225,7 +229,9 @@ public class ApplicationController implements Initializable {
      * @param message 
      */
     public void setStatusMessage(String message) {
+        statusTransition.stop();
         statusbar.setText(message);
+        statusTransition.play();
     }
 
     @Override
@@ -244,6 +250,9 @@ public class ApplicationController implements Initializable {
         // bind a property to the progress bar visible property
         this.progressBarVisible = new SimpleBooleanProperty();
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
+        
+        // set up the status message fade transition
+        this.setupStatusTransition();
     }
 
     private void prepareSlideMenuAnimation() {
@@ -258,6 +267,17 @@ public class ApplicationController implements Initializable {
                 closeNav.play();
             }
         });
+    }
+
+    private void setupStatusTransition() {
+        FadeTransition ft = new FadeTransition(Duration.millis(2000), statusbar);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        ft.setCycleCount(1);
+        statusTransition = new SequentialTransition(
+                new PauseTransition(Duration.millis(3000)),
+                ft
+        );
     }
 
     @FXML
