@@ -18,6 +18,7 @@ import javafx.concurrent.Task;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.ShareUtils;
 import net.perspective.draw.util.CanvasPoint;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -37,6 +38,7 @@ public class PDFWorker extends Task<Object> {
 
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
+    @Inject private ShareUtils share;
     private File file;
     private double margin;
 
@@ -70,7 +72,7 @@ public class PDFWorker extends Task<Object> {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
             }
-        }).thenRun(() -> {
+        }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.setStatusMessage("Exported to PDF");

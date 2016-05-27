@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.ShareUtils;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class PNGWorker extends Task<Object> {
 
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
+    @Inject private ShareUtils share;
     protected File file;
     private boolean opacity;
     private double margin;
@@ -73,7 +75,7 @@ public class PNGWorker extends Task<Object> {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
             }
-        }).thenRun(() -> {
+        }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.setStatusMessage("Exported to PNG");

@@ -37,8 +37,8 @@ public class ShareUtils {
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
     private File canvasfile;
-    private final ExecutorService executor;
     private final double margin;
+    public final ExecutorService executor;
 
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();

@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
@@ -37,6 +38,7 @@ public class ReadInFunnel extends Task<Object> {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
+    @Inject private ShareUtils share;
     private File file;
     private List<DrawItem> drawings;
     private boolean success = false;
@@ -81,7 +83,7 @@ public class ReadInFunnel extends Task<Object> {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
             }
-        }).thenRun(() -> {
+        }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();

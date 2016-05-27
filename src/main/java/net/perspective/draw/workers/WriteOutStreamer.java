@@ -17,6 +17,7 @@ import javafx.concurrent.Task;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
@@ -33,6 +34,7 @@ public class WriteOutStreamer extends Task<Object> {
 
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
+    @Inject private ShareUtils share;
     private File file;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
@@ -60,7 +62,7 @@ public class WriteOutStreamer extends Task<Object> {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
             }
-        }).thenRun(() -> {
+        }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();
