@@ -19,7 +19,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.20</slf4j.version>
-        <log4j.version>2.5</log4j.version>
+        <log4j.version>2.6</log4j.version>
         <fx-guice.version>8.0.0</fx-guice.version>
         <batik.version>1.8</batik.version>
     </properties>
@@ -48,13 +48,12 @@
             <version>${batik.version}</version>
         </dependency>
 
-<!--
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-codec</artifactId>
             <version>${batik.version}</version>
         </dependency>
--->
+
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
