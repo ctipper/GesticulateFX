@@ -107,6 +107,28 @@
 
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-script</artifactId>
+                <version>${batik.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mozilla</groupId>
+                        <artifactId>rhino</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.python</groupId>
+                        <artifactId>jython</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
     <build>
 
         <finalName>${project.artifactId}-${project.version}</finalName>
