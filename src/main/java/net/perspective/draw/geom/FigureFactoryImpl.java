@@ -6,11 +6,12 @@
  */
 package net.perspective.draw.geom;
 
+import net.perspective.draw.enums.DrawingType;
+
 /**
  *
  * @author ctipper
  */
-import net.perspective.draw.enums.DrawingType;
 
 public class FigureFactoryImpl implements FigureFactory {
 

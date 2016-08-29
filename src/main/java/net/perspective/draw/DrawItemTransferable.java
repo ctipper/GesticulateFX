@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
+
 public class DrawItemTransferable implements Transferable {
 
     String mimeType = DataFlavor.javaSerializedObjectMimeType

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
+
 public class CanvasTransferHandler {
 
     String mimeType = DataFlavor.javaSerializedObjectMimeType

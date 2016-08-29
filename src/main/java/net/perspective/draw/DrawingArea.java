@@ -30,6 +30,7 @@ import net.perspective.draw.event.*;
  *
  * @author ctipper
  */
+
 @Singleton
 public class DrawingArea {
 

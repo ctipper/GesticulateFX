@@ -17,6 +17,7 @@ import net.perspective.draw.geom.Figure;
  *
  * @author ctipper
  */
+
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override

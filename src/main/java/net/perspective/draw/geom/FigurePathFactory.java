@@ -16,6 +16,7 @@ import org.jhotdraw.geom.Bezier;
  *
  * @author ctipper
  */
+
 public class FigurePathFactory implements PathFactory {
 
     Path2D.Double path;

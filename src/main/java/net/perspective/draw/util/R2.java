@@ -6,11 +6,12 @@
  */
 package net.perspective.draw.util;
 
+import net.perspective.draw.enums.ContainsType;
+
 /**
  *
  * @author ctipper
  */
-import net.perspective.draw.enums.ContainsType;
 
 public class R2 {
 

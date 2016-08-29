@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ctipper
  */
+
 @Singleton
 public class CanvasView {
 
