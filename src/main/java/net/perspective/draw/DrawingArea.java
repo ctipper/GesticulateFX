@@ -71,9 +71,9 @@ public class DrawingArea {
         contextlistener = null;
         view.setDrawingListener();
         this.prepareDrawing();
+        this.initializeHandlers();
         this.setDrawType(DrawingType.SKETCH);
         this.changeHandlers(HandlerType.SELECTION);
-        this.initializeHandlers();
     }
 
     public void prepareDrawing() {
