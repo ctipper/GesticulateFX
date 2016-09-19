@@ -6,6 +6,7 @@
  */
 package net.perspective.draw;
 
+import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
@@ -35,6 +36,7 @@ import net.perspective.draw.event.*;
 @Singleton
 public class DrawingArea {
 
+    @Inject private Injector injector;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
     @Inject private DrawAreaListener listener;
@@ -71,7 +73,8 @@ public class DrawingArea {
         this.prepareDrawing();
         this.setDrawType(DrawingType.SKETCH);
         listener.initializeHandlers(canvas);
-        listener.changeHandlers(HandlerType.SELECTION);
+        this.addContextMenu();
+        this.changeHandlers(HandlerType.SELECTION);
     }
 
     public void prepareDrawing() {
@@ -85,6 +88,30 @@ public class DrawingArea {
 
     public void clear() {
         ((Group) canvas.getRoot()).getChildren().clear();
+    }
+
+    public void changeHandlers(HandlerType h) {
+        this.resetContextHandlers();
+        switch (h) {
+            case SELECTION:
+                listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                this.setContextHandlers();
+                break;
+            case FIGURE:
+                listener.setEventHandler(injector.getInstance(FigureHandler.class));
+                break;
+            case ROTATION:
+                listener.setEventHandler(injector.getInstance(RotationHandler.class));
+                this.setContextHandlers();
+                break;
+            case SKETCH:
+                listener.setEventHandler(injector.getInstance(SketchHandler.class));
+                break;
+            default:
+                break;
+        }
+        view.setSelected(-1);
+        view.setDrawing(false);
     }
 
     public void resetContextHandlers() {
