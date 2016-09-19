@@ -12,6 +12,7 @@ import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
@@ -26,8 +27,8 @@ import net.perspective.draw.util.V2;
 
 public class FigureItemBehaviour implements ItemBehaviours {
     
-    @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
 
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;
@@ -39,7 +40,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
             for (CanvasPoint[] vertex : vertices) {
-                if (context.getRegion(vertex[0]).contains(drawarea.getStartX(), drawarea.getStartY())) {
+                if (context.getRegion(vertex[0]).contains(listener.getStartX(), listener.getStartY())) {
                     int quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
                         case 0:
@@ -68,12 +69,12 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 }
             }
             
-            if (!found && item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+            if (!found && item.contains(listener.getStartX(), listener.getStartY())) {
                 view.setSelected(index);
                 context.setContainment(ContainsType.SHAPE);
                 found = true;
             }
-        } else if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+        } else if (item.contains(listener.getStartX(), listener.getStartY())) {
             // All other figures
             view.setSelected(index);
             context.setContainment(ContainsType.SHAPE);
@@ -93,12 +94,12 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case LINE:
                 // item is Line
                 // allows alternate drag of end-points
-                if (context.getRegion(st).contains(drawarea.getStartX(), drawarea.getStartY())) {
+                if (context.getRegion(st).contains(listener.getStartX(), listener.getStartY())) {
                     st.translate(xinc, yinc);
                     item.setStart(st.x, st.y);
                     ((Figure) item).setPoints(DrawingType.LINE);
                     ((Figure) item).setPath();
-                } else if (context.getRegion(en).contains(drawarea.getStartX(), drawarea.getStartY())) {
+                } else if (context.getRegion(en).contains(listener.getStartX(), listener.getStartY())) {
                     en.translate(xinc, yinc);
                     item.setEnd(en.x, en.y);
                     ((Figure) item).setPoints(DrawingType.LINE);

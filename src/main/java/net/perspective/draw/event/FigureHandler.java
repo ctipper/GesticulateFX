@@ -21,6 +21,7 @@ public class FigureHandler implements Handler {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
     private final FigureFactory figurefactory;
 
     public FigureHandler() {
@@ -51,8 +52,8 @@ public class FigureHandler implements Handler {
         item.setColor(Color.web("lightgray"));
         item.setFillColor(Color.web("white"));
         // Initialise figure
-        item.setStart(drawarea.getStartX(), drawarea.getStartY());
-        item.setEnd(drawarea.getTempX(), drawarea.getTempY());
+        item.setStart(listener.getStartX(), listener.getStartY());
+        item.setEnd(listener.getTempX(), listener.getTempY());
         item.setPoints(drawarea.getDrawType());
         item.setPath();
         view.setNewItem(item);

@@ -27,6 +27,7 @@ public class SelectionHandler implements Handler {
     @Inject Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
     @Inject private BehaviourContext context;
     
     public void upEvent() {
@@ -59,8 +60,8 @@ public class SelectionHandler implements Handler {
     public void dragEvent() {
         int selection = view.getSelected();
         if (selection != -1) {
-            double xinc = drawarea.getTempX() - drawarea.getStartX();
-            double yinc = drawarea.getTempY() - drawarea.getStartY();
+            double xinc = listener.getTempX() - listener.getStartX();
+            double yinc = listener.getTempY() - listener.getStartY();
             DrawItem item = view.getDrawings().get(selection);
             if (item instanceof Figure) {
                 context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
@@ -69,8 +70,8 @@ public class SelectionHandler implements Handler {
             item.updateProperties(drawarea);
             view.updateCanvasItem(selection, item);
             view.moveSelection(selection);
-            drawarea.setStartX(drawarea.getTempX());
-            drawarea.setStartY(drawarea.getTempY());
+            listener.setStartX(listener.getTempX());
+            listener.setStartY(listener.getTempY());
         }
     }
 }

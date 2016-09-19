@@ -25,6 +25,7 @@ public class RotationHandler implements Handler {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
 
     public void upEvent() {
         if (view.getSelected() != -1) {
@@ -41,7 +42,7 @@ public class RotationHandler implements Handler {
                 DrawItem item = drawings.get(i);
                 if (item instanceof Figure) {
                     if (!(((Figure) item).getType().equals(FigureType.LINE))) {
-                        if (item.contains(drawarea.getStartX(), drawarea.getStartY())) {
+                        if (item.contains(listener.getStartX(), listener.getStartY())) {
                             view.setSelected(drawings.indexOf(item));
                         }
                     }
@@ -63,8 +64,8 @@ public class RotationHandler implements Handler {
 
             if (item instanceof Figure) {
                 if (!((Figure) item).getType().equals(FigureType.LINE)) {
-                    A = new CanvasPoint(drawarea.getStartX() - centre.x, drawarea.getStartY() - centre.y);
-                    B = new CanvasPoint(drawarea.getTempX() - centre.x, drawarea.getTempY() - centre.y);
+                    A = new CanvasPoint(listener.getStartX() - centre.x, listener.getStartY() - centre.y);
+                    B = new CanvasPoint(listener.getTempX() - centre.x, listener.getTempY() - centre.y);
                 }
             }
 
@@ -90,8 +91,8 @@ public class RotationHandler implements Handler {
             item.updateProperties(drawarea);
             view.updateCanvasItem(selection, item);
             view.moveSelection(selection);
-            drawarea.setStartX(drawarea.getTempX());
-            drawarea.setStartY(drawarea.getTempY());
+            listener.setStartX(listener.getTempX());
+            listener.setStartY(listener.getTempY());
         }
     }
 }

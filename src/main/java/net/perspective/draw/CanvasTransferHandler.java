@@ -34,6 +34,7 @@ public class CanvasTransferHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasTransferHandler.class.getName());
 
+    @Inject
     public CanvasTransferHandler() {
         //Try to create a DataFlavor for drawItems.
         try {

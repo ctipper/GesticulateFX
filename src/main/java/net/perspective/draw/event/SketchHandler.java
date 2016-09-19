@@ -23,6 +23,7 @@ public class SketchHandler implements Handler  {
 
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
     private final FigureFactory figurefactory;
 
     public SketchHandler() {
@@ -51,7 +52,7 @@ public class SketchHandler implements Handler  {
         item.setFillColor(Color.web("white"));
         // Initialise sketch
         item.setPoints(drawarea.getDrawType());
-        item.addPoint(drawarea.getStartX(), drawarea.getStartY());
+        item.addPoint(listener.getStartX(), listener.getStartY());
         item.setEndPoints();
     	item.setPath();
         view.setNewItem(item);
@@ -62,7 +63,7 @@ public class SketchHandler implements Handler  {
         // Create Figure
         Figure item = (Figure) view.getNewItem();
         // continue sketch
-        item.addPoint(drawarea.getTempX(), drawarea.getTempY());
+        item.addPoint(listener.getTempX(), listener.getTempY());
         item.setEndPoints();
         item.setPath();
         view.setNewItem(item);

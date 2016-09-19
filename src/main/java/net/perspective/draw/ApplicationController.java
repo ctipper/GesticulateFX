@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
+import net.perspective.draw.event.DrawAreaListener;
 
 /**
  *
@@ -46,6 +47,7 @@ public class ApplicationController implements Initializable {
     @Inject private DrawingArea drawarea;
     @Inject private Gesticulate application;
     @Inject private ShareUtils share;
+    @Inject private DrawAreaListener listener;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private When wireframeSelected;
@@ -83,48 +85,48 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleSelectionAction(ActionEvent e) {
-        drawarea.changeHandlers(HandlerType.SELECTION);
+        listener.changeHandlers(HandlerType.SELECTION);
     }
 
     @FXML
     private void handleRotationAction(ActionEvent e) {
-        drawarea.changeHandlers(HandlerType.ROTATION);
+        listener.changeHandlers(HandlerType.ROTATION);
     }
 
     @FXML
     private void handleLineAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.LINE);
-        drawarea.changeHandlers(HandlerType.FIGURE);
+        listener.changeHandlers(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleCircleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.ELLIPSE);
-        drawarea.changeHandlers(HandlerType.FIGURE);
+        listener.changeHandlers(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleSquareAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.RECTANGLE);
-        drawarea.changeHandlers(HandlerType.FIGURE);
+        listener.changeHandlers(HandlerType.FIGURE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.ISOSCELES);
-        drawarea.changeHandlers(HandlerType.FIGURE);
+        listener.changeHandlers(HandlerType.FIGURE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.POLYGON);
-        drawarea.changeHandlers(HandlerType.SKETCH);
+        listener.changeHandlers(HandlerType.SKETCH);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.SKETCH);
-        drawarea.changeHandlers(HandlerType.SKETCH);
+        listener.changeHandlers(HandlerType.SKETCH);
     }
 
     @FXML

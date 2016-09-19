@@ -6,7 +6,6 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
@@ -20,8 +19,10 @@ import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
+
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.*;
@@ -34,20 +35,17 @@ import net.perspective.draw.event.*;
 @Singleton
 public class DrawingArea {
 
-    @Inject private Injector injector;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
+    @Inject private DrawAreaListener listener;
     private SubScene canvas;
     private Group root;
-    private Handler handler;
 
     private DrawingType drawtype;
     private Stroke stroke;
     private Color color, fillcolor;
     private int transparency;
-    private double startX, startY;
-    private double tempX, tempY;
-    
+
     private Transferable clipboard;
     @Inject private CanvasTransferHandler transferhandler;
 
@@ -71,9 +69,9 @@ public class DrawingArea {
         contextlistener = null;
         view.setDrawingListener();
         this.prepareDrawing();
-        this.initializeHandlers();
         this.setDrawType(DrawingType.SKETCH);
-        this.changeHandlers(HandlerType.SELECTION);
+        listener.initializeHandlers(canvas);
+        listener.changeHandlers(HandlerType.SELECTION);
     }
 
     public void prepareDrawing() {
@@ -84,103 +82,23 @@ public class DrawingArea {
         view.clearView();
         this.clear();
     }
-    
+
     public void clear() {
         ((Group) canvas.getRoot()).getChildren().clear();
     }
 
-    public void changeHandlers(HandlerType h) {
-        this.resetContextHandlers();
-        switch (h) {
-            case SELECTION:
-                this.handler = injector.getInstance(SelectionHandler.class);
-                this.setContextHandlers();
-                break;
-            case FIGURE:
-                this.handler = injector.getInstance(FigureHandler.class);
-                break;
-            case ROTATION:
-                this.handler = injector.getInstance(RotationHandler.class);
-                this.setContextHandlers();
-                break;
-            case SKETCH:
-                this.handler = injector.getInstance(SketchHandler.class);
-                break;
-            default:
-                break;
-        }
-        view.setSelected(-1);
-        view.setDrawing(false);
-    }
-
-    void resetContextHandlers() {
+    public void resetContextHandlers() {
         canvas.setOnContextMenuRequested(null);
         canvas.setOnTouchStationary(null);
         canvas.setOnMousePressed(null);
         canvas.setOnTouchPressed(null);
     }
-    
-    void setContextHandlers() {
+
+    public void setContextHandlers() {
         canvas.setOnContextMenuRequested(contextlistener);
         canvas.setOnTouchStationary(popuplistener);
         canvas.setOnMousePressed(arealistener);
         canvas.setOnTouchPressed(arealistener);
-    }
-
-    void initializeHandlers() {
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent event) -> {
-            mouseUp(event);
-        });
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
-            mouseDown(event);
-        });
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
-            mouseMoved(event);
-        });
-        canvas.addEventHandler(TouchEvent.TOUCH_RELEASED, (TouchEvent event) -> {
-            touchEnd(event);
-        });
-        canvas.addEventHandler(TouchEvent.TOUCH_PRESSED, (TouchEvent event) -> {
-            touchStart(event);
-        });
-        canvas.addEventHandler(TouchEvent.TOUCH_MOVED, (TouchEvent event) -> {
-            touchMoved(event);
-        });
-        addContextMenu();
-    }
-
-    public void mouseUp(MouseEvent event) {
-        handler.upEvent();
-    }
-
-    public void mouseDown(MouseEvent event) {
-        startX = event.getX();
-        startY = event.getY();
-        handler.downEvent();
-    }
-
-    public void mouseMoved(MouseEvent event) {
-        tempX = event.getX();
-        tempY = event.getY();
-        handler.dragEvent();
-    }
-
-    public void touchEnd(TouchEvent event) {
-        handler.upEvent();
-    }
-    
-    public void touchStart(TouchEvent event) {
-        TouchPoint touch = event.getTouchPoints().get(0);
-        startX = touch.getX();
-        startY = touch.getY();
-        handler.downEvent();
-    }
-
-    public void touchMoved(TouchEvent event) {
-        TouchPoint touch = event.getTouchPoints().get(0);
-        tempX = touch.getX();
-        tempY = touch.getY();
-        handler.dragEvent();
     }
 
     public void addContextMenu() {
@@ -225,7 +143,7 @@ public class DrawingArea {
     public SubScene getScene() {
         return canvas;
     }
-    
+
     public Group getCanvas() {
         return root;
     }
@@ -242,42 +160,10 @@ public class DrawingArea {
         return drawtype;
     }
 
-    public void setStartX(double x) {
-        this.startX = x;
-    }
-
-    public double getStartX() {
-        return startX;
-    }
-
-    public void setStartY(double y) {
-        this.startY = y;
-    }
-
-    public double getStartY() {
-        return startY;
-    }
-
-    public void setTempX(double x) {
-        this.tempX = x;
-    }
-
-    public double getTempX() {
-        return tempX;
-    }
-
-    public void setTempY(double y) {
-        this.tempY = y;
-    }
-
-    public double getTempY() {
-        return tempY;
-    }
-    
     public void setStroke(Stroke stroke) {
         this.stroke = stroke;
         view.updateSelectedItem();
-}
+    }
 
     public Stroke getStroke() {
         return this.stroke;
@@ -300,7 +186,7 @@ public class DrawingArea {
     public Color getFillColor() {
         return this.fillcolor;
     }
-    
+
     public void setTransparency(int transparency) {
         this.transparency = transparency;
         view.updateSelectedItem();
