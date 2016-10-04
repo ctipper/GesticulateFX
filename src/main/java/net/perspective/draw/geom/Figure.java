@@ -75,8 +75,8 @@ public class Figure implements DrawItem, Serializable {
      * <p>This should method should almost never be called; it is needed by XML Reader.
      */
     public void setFactory() {
-        this.pathfactory = new FigurePathFactory();
         this.pointfactory = new FigurePointFactory();
+        this.pathfactory = new FigurePathFactory();
     }
 
     /**
@@ -875,8 +875,8 @@ public class Figure implements DrawItem, Serializable {
         
         // deserialise Stroke
         this.setStroke(readStroke(in));
-        this.pathfactory = new FigurePathFactory();
         this.pointfactory = new FigurePointFactory();
+        this.pathfactory = new FigurePathFactory();
     }
 
     private void writeObject(ObjectOutputStream out)
