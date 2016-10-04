@@ -22,7 +22,7 @@ import net.perspective.draw.util.CanvasPoint;
 @Singleton
 public class BehaviourContext {
 
-    ItemBehaviours strategy;
+    private ItemBehaviours strategy;
     private ContainsType containment, contains;
     private int quad;
     private double sgnd_area;
@@ -138,8 +138,8 @@ public class BehaviourContext {
      * @param sgnd_area  a signed area
      * @see net.perspective.draw.geom.Figure#sgnd_area() 
      */
-    public void setSgndArea(double sgndarea) {
-        this.sgnd_area = sgndarea;
+    public void setSgndArea(double sgnd_area) {
+        this.sgnd_area = sgnd_area;
     }
 
     /**

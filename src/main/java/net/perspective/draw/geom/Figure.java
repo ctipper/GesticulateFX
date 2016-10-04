@@ -26,7 +26,7 @@ import net.perspective.draw.util.CanvasPoint;
 
 /**
  * A stroked vector shape defined by a list of points and a property
- *
+ * 
  * @author ctipper
  */
 
@@ -46,7 +46,7 @@ public class Figure implements DrawItem, Serializable {
     
     private static final long serialVersionUID = 1L;
 
-    /** Create a new instance of <code>Figure</code> */
+    /** Creates a new instance of <code>Figure</code> */
     public Figure() {
         this.type = FigureType.NONE;
         this.transparency = 0;
@@ -55,8 +55,8 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
-     * Create a new instance of <code>Figure</code>
-     *
+     * Creates a new instance of <code>Figure</code>
+     * 
      * @param type the FigureType
      */
     @ConstructorProperties({"type"})
@@ -68,20 +68,20 @@ public class Figure implements DrawItem, Serializable {
         this.pointfactory = new FigurePointFactory();
         this.path = new Path2D.Double();
     }
-    
+
     /**
      * Set the path and point factories used after de-serialisation
-     *
+     * 
      * <p>This should method should almost never be called; it is needed by XML Reader.
      */
     public void setFactory() {
-        this.pointfactory = new FigurePointFactory();
         this.pathfactory = new FigurePathFactory();
+        this.pointfactory = new FigurePointFactory();
     }
 
     /**
      * Set the untransformed TL coordinate of the figure
-     *
+     * 
      * @param x the x position
      * @param y the y position
      */
@@ -284,7 +284,7 @@ public class Figure implements DrawItem, Serializable {
 
     protected CanvasPoint getTransform(CanvasPoint point) {
         CanvasPoint centre = this.rotationCentre();
-        
+
         point.translate(-centre.x, -centre.y);
         if (this.getAngle() != 0) {
             // rotate point about centroid
@@ -814,6 +814,7 @@ public class Figure implements DrawItem, Serializable {
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });
                 break;
             default:
+                // combine real and virtual vertices
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
                 break;
@@ -874,8 +875,8 @@ public class Figure implements DrawItem, Serializable {
         
         // deserialise Stroke
         this.setStroke(readStroke(in));
-        this.pointfactory = new FigurePointFactory();
         this.pathfactory = new FigurePathFactory();
+        this.pointfactory = new FigurePointFactory();
     }
 
     private void writeObject(ObjectOutputStream out)
