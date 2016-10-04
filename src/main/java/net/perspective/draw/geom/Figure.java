@@ -25,6 +25,7 @@ import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
+ * A stroked vector shape defined by a list of points and a property
  *
  * @author ctipper
  */
@@ -32,8 +33,8 @@ import net.perspective.draw.util.CanvasPoint;
 public class Figure implements DrawItem, Serializable {
 
     protected List<CanvasPoint> points;
-    protected FigureType type;
     protected CanvasPoint start, end;       // start, end are _untransformed_ canvas coordinates of TL/BR corners
+    protected FigureType type;
     protected transient Path2D.Double path;
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
@@ -45,6 +46,7 @@ public class Figure implements DrawItem, Serializable {
     
     private static final long serialVersionUID = 1L;
 
+    /** Create a new instance of <code>Figure</code> */
     public Figure() {
         this.type = FigureType.NONE;
         this.transparency = 0;
@@ -52,6 +54,11 @@ public class Figure implements DrawItem, Serializable {
         this.closed = false;
     }
 
+    /**
+     * Create a new instance of <code>Figure</code>
+     *
+     * @param type the FigureType
+     */
     @ConstructorProperties({"type"})
     public Figure(FigureType type) {
         this();
@@ -62,20 +69,27 @@ public class Figure implements DrawItem, Serializable {
         this.path = new Path2D.Double();
     }
     
-     public void setFactory() {
-        // This should method should almost never be called. Needed by XML Reader.
-        this.pathfactory = new FigurePathFactory();
+    /**
+     * Set the path and point factories used after de-serialisation
+     *
+     * <p>This should method should almost never be called; it is needed by XML Reader.
+     */
+    public void setFactory() {
         this.pointfactory = new FigurePointFactory();
+        this.pathfactory = new FigurePathFactory();
     }
 
-   /**
+    /**
      * Set the untransformed TL coordinate of the figure
-     * 
+     *
      * @param x the x position
      * @param y the y position
      */
     public void setStart(double x, double y) {
-        this.start = new CanvasPoint(x,y);
+        if (start == null) {
+            start = new CanvasPoint();
+        }
+        start.setLocation(x, y);
     }
 
     /**
@@ -94,7 +108,10 @@ public class Figure implements DrawItem, Serializable {
      * @param y the height
      */
     public void setEnd(double x, double y) {
-        this.end = new CanvasPoint(x,y);
+        if (end == null) {
+            end = new CanvasPoint();
+        }
+        end.setLocation(x, y);
     }
 
     /** 
@@ -106,6 +123,11 @@ public class Figure implements DrawItem, Serializable {
         return end;
     }
 
+    /**
+     * Set a list of points
+     * 
+     * @param points
+     */
     public void setPoints(List<CanvasPoint> points) {
         this.points = points;
     }
@@ -210,7 +232,7 @@ public class Figure implements DrawItem, Serializable {
 
     /**
      * Returns the 2-tuple of top-left corner location (transformed)
-     * the second point may be normalized
+     * the second point may be normalised
      * 
      * @return the 2-tuple of top-left corner location (transformed)
      */
@@ -223,7 +245,7 @@ public class Figure implements DrawItem, Serializable {
 
     /**
      * Returns the 2-tuple of top-right corner location (transformed)
-     * the second point may be normalized
+     * the second point may be normalised
      * 
      * @return the 2-tuple of top-right corner location (transformed)
      */
@@ -236,7 +258,7 @@ public class Figure implements DrawItem, Serializable {
 
     /**
      * Returns the 2-tuple of bottom-left corner location (transformed)
-     * the second point may be normalized
+     * the second point may be normalised
      * 
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
@@ -249,7 +271,7 @@ public class Figure implements DrawItem, Serializable {
 
     /**
      * Returns the 2-tuple of bottom-right corner location (transformed)
-     * second point may be normalized
+     * the second point may be normalised
      * 
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
@@ -265,7 +287,7 @@ public class Figure implements DrawItem, Serializable {
         
         point.translate(-centre.x, -centre.y);
         if (this.getAngle() != 0) {
-            // rotate shape about centroid
+            // rotate point about centroid
             point.rotate(this.getAngle());
         }
         point.translate(centre.x, centre.y);
@@ -321,6 +343,11 @@ public class Figure implements DrawItem, Serializable {
         return p;
     }
 
+    /**
+     * Return the 2D bounding box
+     * 
+     * @return 2D bounding box for figure
+     */
     protected Rectangle2D getBounds2D() {
         java.awt.Shape area = this.bounds();
         Rectangle2D bound = area.getBounds2D();
@@ -343,8 +370,8 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Detect if a point lies within the bounds, a convenience method
      * 
-     * @param x canvas coordinate
-     * @param y canvas coordinate
+     * @param x  canvas coordinate
+     * @param y  canvas coordinate
      * @return a boolean property
      */
     public boolean contains(double x, double y) {
@@ -358,8 +385,8 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Translate the figure
      * 
-     * @param xinc x increment
-     * @param yinc y increment
+     * @param xinc  x increment
+     * @param yinc  y increment
      */
     public void moveShape(double xinc, double yinc) {
         points.stream().forEach((p) -> {
@@ -494,17 +521,17 @@ public class Figure implements DrawItem, Serializable {
         transform = this.getTransform();
         g2.transform(transform);
 
-        if (this.isClosed()) {
+        if (isClosed()) {
             AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) getTransparency() / 100);
             g2.setComposite(ac);
-            g2.setColor(fxToAwt(this.fillcolor, ((float) getTransparency()) / 100));
-            g2.fill(this.getPath());
+            g2.setColor(fxToAwt(getFillColor(), ((float) getTransparency()) / 100));
+            g2.fill(getPath());
             ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 1.0);
             g2.setComposite(ac);
         }
-        g2.setStroke(this.getStroke());
-        g2.setColor(fxToAwt(this.color));
-        g2.draw(this.getPath());
+        g2.setStroke(getStroke());
+        g2.setColor(fxToAwt(getColor()));
+        g2.draw(getPath());
 
         // reset graphics context
         g2.setTransform(defaultTransform);
@@ -557,16 +584,26 @@ public class Figure implements DrawItem, Serializable {
     }
 
     protected boolean isClosed() {
-        return this.closed;
+        return closed;
     }
 
+    /**
+     * Set stroke colour
+     * 
+     * @param color
+     */
     public void setColor(Color color) {
         this.color = color;
     }
 
+    /**
+     * Return stroke colour
+     * 
+     * @return color
+     */
     @Transient
     public Color getColor() {
-        return this.color;
+        return color;
     }
 
     @Deprecated
@@ -576,16 +613,26 @@ public class Figure implements DrawItem, Serializable {
 
     @Deprecated
     public java.awt.Color getAwtColor() {
-        return fxToAwt(this.color);
+        return fxToAwt(color);
     }
 
+    /**
+     * Set the fill colour
+     * 
+     * @param fillcolor
+     */
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
     }
 
+    /**
+     * Return the fill colour
+     * 
+     * @return
+     */
     @Transient
     public Color getFillColor() {
-        return this.fillcolor;
+        return fillcolor;
     }
 
     @Deprecated
@@ -595,15 +642,25 @@ public class Figure implements DrawItem, Serializable {
 
     @Deprecated
     public java.awt.Color getAwtFillColor() {
-        return fxToAwt(this.fillcolor);
+        return fxToAwt(fillcolor);
     }
 
+    /**
+     * Set the type of stroke
+     * 
+     * @param stroke
+     */
     public void setStroke(Stroke stroke) {
         this.stroke = stroke;
     }
 
+    /**
+     * Return the type of stroke
+     * 
+     * @return a stroke
+     */
     public Stroke getStroke() {
-        return this.stroke;
+        return stroke;
     }
 
     /**
@@ -621,13 +678,13 @@ public class Figure implements DrawItem, Serializable {
      * @return transparency 0 (clear) - 100 (opaque)
      */
     public int getTransparency() {
-        return this.transparency;
+        return transparency;
     }
 
     /**
      * Sets the rotation angle
      * 
-     * @param a The angle in radians
+     * @param a  The angle in radians
      */
     public void setAngle(double angle) {
         this.angle = angle;
@@ -639,7 +696,7 @@ public class Figure implements DrawItem, Serializable {
      * @return angle
      */
     public double getAngle() {
-        return this.angle;
+        return angle;
     }
 
     /**
@@ -675,7 +732,7 @@ public class Figure implements DrawItem, Serializable {
     }
     
     /**
-     * Return the 2-tuple of vertex coords, second point normalized.
+     * Return the 2-tuple of vertex coords, second point normalised.
      * 
      * @return 2-tuple representing vertex coords
      */
@@ -717,7 +774,7 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
-     * Return a List of 2-tuples of vertices, second point normalized.
+     * Return a List of 2-tuples of vertices, second point normalised.
      * Note that the points may not be cyclical.
      * 
      * @return a List of 2-tuples representing transformed vertices
@@ -730,10 +787,12 @@ public class Figure implements DrawItem, Serializable {
             case SQUARE:
             case CIRCLE:
             case TRIANGLE:
+                // determine average dimension
                 double width = Math.abs(start.x - end.x);
                 double height = Math.abs(start.y - end.y);
                 double side = 0.25 * (width + height); // half average side
                 CanvasPoint cxy = this.rotationCentre();
+                // determine virtual vertices
                 if (start.x < end.x) {
                     sx = cxy.x - side;
                     ex = cxy.x + side;
@@ -748,6 +807,7 @@ public class Figure implements DrawItem, Serializable {
                     sy = cxy.y + side;
                     ey = cxy.y - side;
                 }
+                // combine real and virtual vertices
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(sx, sy) });
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });
@@ -758,6 +818,7 @@ public class Figure implements DrawItem, Serializable {
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
                 break;
         }
+        // transform real and virtual vertices
         vert.stream().map((p) -> new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) }).forEach((point) -> {
             vertices.add(point);
         });
@@ -765,31 +826,37 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
-     * javafx.scene.paint.Color not serialisable
+     * Transform and awt Color to a javafx Color
+     * 
+     * <p>javafx.scene.paint.Color not serialisable
      *
-     * @param color java.awt.Color
-     * @return javafx.scene.paint.Color
+     * @param color  a {@link java.awt.Color}
+     * @return {@link javafx.scene.paint.Color}
      */
     public static Color awtToFx(java.awt.Color color) {
         return new Color(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, color.getAlpha() / 255.0);
     }
 
     /**
-     * javafx.scene.paint.Color not serialisable
+     * Transform a javafx Color to an awt Color
+     * 
+     * <p>javafx.scene.paint.Color not serialisable
      *
-     * @param color javafx.scene.paint.Color
-     * @return java.awt.Color
+     * @param color  a {@link javafx.scene.paint.Color}
+     * @return {@link java.awt.Color}
      */
     public static java.awt.Color fxToAwt(Color color) {
         return new java.awt.Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) color.getOpacity());
     }
 
     /**
-     * javafx.scene.paint.Color not serialisable
+     * Transform a javafx Color to an awt Color with an alpha channel
+     * 
+     * <p>javafx.scene.paint.Color not serialisable
      *
-     * @param color javafx.scene.paint.Color
+     * @param color  a {@link javafx.scene.paint.Color}
      * @param opacity float
-     * @return java.awt.Color
+     * @return {@link java.awt.Color}
      */
     public static java.awt.Color fxToAwt(Color color, float opacity) {
         return new java.awt.Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), opacity);

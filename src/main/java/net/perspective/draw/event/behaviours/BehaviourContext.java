@@ -14,6 +14,7 @@ import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
+ * A context for the orchestration of mouse and touch behaviours
  *
  * @author ctipper
  */
@@ -26,41 +27,86 @@ public class BehaviourContext {
     private int quad;
     private double sgnd_area;
 
+    /** Creates a new instance of <code>BehaviourContext</code> */
     public BehaviourContext() {
         this.quad = -1;
         this.sgnd_area = -1d;
         this.containment = ContainsType.NONE;
         this.contains = ContainsType.NONE;
     }
-    
+
+    /**
+     * Set the strategy for this context
+     * 
+     * @param strategy  a behaviour strategy
+     */
+    public void setBehaviour(ItemBehaviours strategy) {
+        this.strategy = strategy;
+    }
+
+    /**
+     * Activate the strategy's select behaviour
+     * 
+     * @param item  a {@link net.perspective.draw.geom.DrawItem}
+     * @param index  the index of the item in list of drawings
+     * @return item is selected
+     */
     public boolean select(DrawItem item, int index) {
         return strategy.selectItem(this, item, index);
     }
 
+    /**
+     * Activate the strategy's alter behaviour
+     * 
+     * @param item  a {@link net.perspective.draw.geom.DrawItem}
+     * @param xinc  an x increment
+     * @param yinc  a y increment
+     */
     public void alter(DrawItem item, double xinc, double yinc) {
         strategy.alterItem(this, item, xinc, yinc);
     }
-    
-    public void setBehaviour(ItemBehaviours s) {
-        this.strategy = s;
-    }
 
+    /**
+     * Set a property that specifies the type of selection
+     * 
+     * @param containment  the containment type
+     */
     public void setContainment(ContainsType containment) {
         this.containment = containment;
     }
 
+    /**
+     * Return a property that specifies the type of containment
+     * 
+     * @return containment
+     */
     public ContainsType getContainment() {
         return containment;
     }
 
-    public void setContains(ContainsType containment) {
-        this.contains = containment;
+    /**
+     * Set a property that specifies the type of selection
+     * 
+     * <p>This property is usually calculated on the basis of the containment property
+     * 
+     * @param contains  the contain type
+     */
+    public void setContains(ContainsType contains) {
+        this.contains = contains;
     }
 
+    /**
+     * Return a property that specifies the type of selection
+     * 
+     * @return contains
+     */
     public ContainsType getContains() {
         return contains;
     }
-    
+
+    /**
+     * Reset this context
+     */
     public void resetContainment() {
         containment = ContainsType.NONE;
         contains = ContainsType.NONE;
@@ -68,25 +114,53 @@ public class BehaviourContext {
         sgnd_area = -1d;
     }
 
+    /**
+     * Set the quadrant for purposes of shape selection
+     * 
+     * @param quad a quadrant id
+     */
     public void setQuad(int quad) {
         this.quad = quad;
     }
 
+    /**
+     * Return the quadrant id of the selection
+     * 
+     * @return quad
+     */
     public int getQuad() {
         return quad;
     }
 
+    /**
+     * Set the signed area of the selected figure
+     *
+     * @param sgnd_area  a signed area
+     * @see net.perspective.draw.geom.Figure#sgnd_area() 
+     */
     public void setSgndArea(double sgndarea) {
         this.sgnd_area = sgndarea;
     }
 
+    /**
+     * Return the signed area of the selected figure
+     * 
+     * @return sgnd_area
+     */
     public double getSgndArea() {
         return sgnd_area;
     }
 
+    /**
+     * Get an area centred on the specified point
+     * 
+     * @param p  a {@link net.perspective.draw.util.CanvasPoint}
+     * @return area
+     */
     public Area getRegion(CanvasPoint p) {
         Rectangle2D rect;
         rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
         return new Area(rect);
     }
+
 }

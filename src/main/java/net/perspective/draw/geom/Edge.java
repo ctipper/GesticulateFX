@@ -24,15 +24,26 @@ public class Edge extends Figure implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** Creates a new instance of <code>Edge</code> */
     public Edge() {
         super();
     }
     
+    /**
+     * Creates a new instance of <code>Edge</code>
+     * 
+     * @param type the FigureType
+     */
     @ConstructorProperties({"type"})
     public Edge(FigureType type) {
         super(type);
     }
     
+    /**
+     * Initialise points List
+     * 
+     * @param drawtype
+     */
     @Override
     public void setPoints(DrawingType drawtype) {
         if (this.type.equals(FigureType.LINE)) {
@@ -42,12 +53,18 @@ public class Edge extends Figure implements Serializable {
         }
     }
 
+    /**
+     * Initialise end points
+     */
     @Override
     public void setEndPoints() {
         start = points.get(0);
         end = points.get(points.size() - 1);
     }
 
+    /**
+     * Set the path from a List of points
+     */
     @Override
     public void setPath() {
         this.path = pathfactory.createPath(this);
@@ -62,6 +79,12 @@ public class Edge extends Figure implements Serializable {
         }
     }
 
+    /**
+     * Returns the 2-tuple of top-left corner location (transformed)
+     * the second point may be normalised
+     * 
+     * @return the 2-tuple of top-left corner location (transformed)
+     */
     @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s[];
@@ -71,6 +94,12 @@ public class Edge extends Figure implements Serializable {
         return s;
     }
 
+    /**
+     * Returns the 2-tuple of top-right corner location (transformed)
+     * the second point may be normalised
+     * 
+     * @return the 2-tuple of top-right corner location (transformed)
+     */
     @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up[];
@@ -80,6 +109,12 @@ public class Edge extends Figure implements Serializable {
         return up;
     }
 
+    /**
+     * Returns the 2-tuple of bottom-left corner location (transformed)
+     * the second point may be normalised
+     * 
+     * @return the 2-tuple of bottom-left corner location (transformed)
+     */
     @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down[];
@@ -89,6 +124,12 @@ public class Edge extends Figure implements Serializable {
         return down;
     }
 
+    /**
+     * Returns the 2-tuple of bottom-right corner location (transformed)
+     * second point may be normalised
+     * 
+     * @return the 2-tuple of bottom-right corner location (transformed)
+     */
     @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e[];
@@ -99,6 +140,11 @@ public class Edge extends Figure implements Serializable {
         return e;
     }
 
+    /**
+     * Returns the location of the figure centre point
+     * 
+     * @return canvas coordinates of axis of rotation
+     */
     @Override
     public CanvasPoint rotationCentre() {
         CanvasPoint center;
@@ -117,13 +163,18 @@ public class Edge extends Figure implements Serializable {
         return center;
     }
     
+    /**
+     * Returns an area that specifies the transformed boundary
+     * 
+     * @return a transformed shape
+     */
     @Override
     public Shape bounds() {
         Shape bounds;
         Rectangle2D rectangle;
 
         if (type.equals(FigureType.LINE)) {
-            // need to give line extent
+            // to give line extent
             double length = V2.L2(new CanvasPoint(end.x - start.x, end.y - start.y));
             rectangle = new Rectangle2D.Double(-2.0, -2.0, length + 2.0, 4.0);
             double a = Math.atan2(end.y - start.y, end.x - start.x);
@@ -136,7 +187,7 @@ public class Edge extends Figure implements Serializable {
             bounds = area;
         } else {
             bounds = super.bounds();
-            // need to give zero bound shapes extent
+            // to give zero bound shapes extent
             if (bounds.getBounds2D().getWidth() < 4.0
                 && bounds.getBounds2D().getHeight() < 4.0) {
                 rectangle = new Rectangle2D.Double(-2.0, -2.0, 4.0, 4.0);
