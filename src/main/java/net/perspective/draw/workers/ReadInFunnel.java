@@ -97,10 +97,6 @@ public class ReadInFunnel extends Task<Object> {
             ((Figure) drawing).setFactory();
             ((Figure) drawing).setEndPoints();
             ((Figure) drawing).setPath();
-        } else if (drawing instanceof Edge) {
-            ((Edge) drawing).setFactory();
-            ((Edge) drawing).setEndPoints();
-            ((Edge) drawing).setPath();
         }
         return drawing;
     }

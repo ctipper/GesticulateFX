@@ -50,8 +50,8 @@ public class CanvasTransferHandler {
 
         if (hasDrawItemFlavor(t.getTransferDataFlavors())) {
             try {
-                if (t.getTransferData(dataFlavor) instanceof Figure) {
-                    item = (Figure) t.getTransferData(dataFlavor);
+                if (t.getTransferData(dataFlavor) instanceof DrawItem) {
+                    item = (DrawItem) t.getTransferData(dataFlavor);
                     // add item to Canvas
                     item.moveShape(shift, shift);
                     drawarea.getView().appendItemToCanvas(item);

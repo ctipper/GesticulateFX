@@ -538,7 +538,7 @@ public class Figure implements DrawItem, Serializable {
     }
 
     public double getLineWidth(BasicStroke stroke) {
-        return (double) (stroke.getLineWidth());
+        return stroke.getLineWidth();
     }
     
     public StrokeLineJoin getLineJoin(BasicStroke stroke) {
