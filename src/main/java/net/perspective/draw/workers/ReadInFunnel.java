@@ -10,7 +10,6 @@ import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
@@ -23,7 +22,6 @@ import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
-import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +124,7 @@ public class ReadInFunnel extends Task<Object> {
                     logger.warn(ex.getMessage());
                     success = false;
                 });
-                drawings = (ArrayList<DrawItem>) decoder.readObject();
+                drawings = (List<DrawItem>) decoder.readObject();
                 updateProgress(2L, 2L);
             }
         }

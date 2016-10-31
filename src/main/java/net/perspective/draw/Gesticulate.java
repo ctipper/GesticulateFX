@@ -18,6 +18,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.*;
 import javax.inject.Inject;
@@ -119,7 +120,7 @@ public class Gesticulate extends GuiceApplication {
         // Toolbar state
         Object button = scene.lookup("#buttselect");
         if (button instanceof ToggleButton) {
-            ((ToggleButton) button).setSelected(true);
+            ((Toggle) button).setSelected(true);
         }
     }
     

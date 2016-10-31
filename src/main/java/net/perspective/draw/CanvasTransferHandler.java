@@ -12,7 +12,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import javax.inject.Inject;
 import net.perspective.draw.geom.DrawItem;
-import net.perspective.draw.geom.Figure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
