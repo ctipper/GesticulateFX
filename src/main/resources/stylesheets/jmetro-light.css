@@ -316,7 +316,7 @@
     -fx-padding: 4.5 4.5 4.5 4.5;
     -fx-background-color: transparent;
     -fx-shape: null;
-    -fx-effect: dropshadow(gaussian, #989898, 16, 0.0, 4, 4);;
+    -fx-effect: dropshadow(gaussian, #989898, 16, 0.0, 4, 4);
 }
 
 
