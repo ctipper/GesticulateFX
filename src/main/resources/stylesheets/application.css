@@ -58,12 +58,6 @@
     -fx-background-color: #4860e0;
     -fx-text-fill: white;
 }
-.ttip {
-    -fx-background-radius: 2 2 2 2;
-    -fx-text-fill: saddlebrown;
-    -fx-background-color: linear-gradient(springgreen, lightgreen);
-    -fx-opacity: .8;
-}
 #buttnewcanvas {
     -fx-background-image: url('../images/new-canvas.png');
     -fx-background-repeat: no-repeat;

@@ -100,7 +100,7 @@
                         <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <ToggleButton id="buttwireframe" fx:id="wireframebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
                             <tooltip>
-                                <Tooltip styleClass="ttip" text="Draw as outline" />
+                                <Tooltip text="Draw as outline" />
                             </tooltip>
                         </ToggleButton>
                         <Region prefWidth="30.0" />
@@ -131,7 +131,7 @@
                         <Region prefWidth="10.0" />
                         <Button id="buttsnapshot" fx:id="snapshotbutton" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
                             <tooltip>
-                                <Tooltip styleClass="ttip" text="Send snapshot to desktop" />
+                                <Tooltip text="Send snapshot to desktop" />
                             </tooltip>
                         </Button>
                     </items>

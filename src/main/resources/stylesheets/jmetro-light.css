@@ -301,22 +301,23 @@
  *                                                                             *
  ******************************************************************************/
 
-/*.tooltip {
-    -fx-background-color: white;
+.tooltip {
+    -fx-background-color: black;
+    -fx-text-fill: white;
     -fx-background-insets: 0;
-    -fx-background-radius: 0 0 0 0;
-    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;  4 8 4 8 
-    -fx-effect: dropshadow( one-pass-box , #808080 , 5, 0.0 , 0 , 0 );
+    -fx-background-radius: 0;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /*  4 8 4 8 */
+    -fx-effect: dropshadow(gaussian, #989898, 16, 0.0, 4, 4);
     -fx-font-family: "Segoe UI Semilight", "Segoe UI Light", "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-text-fill: #949494;
+    -fx-opacity: .8;
 }
 
 .page-corner {
     -fx-padding: 4.5 4.5 4.5 4.5;
     -fx-background-color: transparent;
     -fx-shape: null;
-    -fx-effect: null;
-}*/
+    -fx-effect: dropshadow(gaussian, #989898, 16, 0.0, 4, 4);;
+}
 
 
 /*******************************************************************************
