@@ -301,7 +301,8 @@
  *                                                                             *
  ******************************************************************************/
 
-.tooltip {
+/** FIXME - ought to be a class selector but not due to Windows hover bug */
+tooltip {
     -fx-background-color: black;
     -fx-text-fill: white;
     -fx-background-insets: 0;
