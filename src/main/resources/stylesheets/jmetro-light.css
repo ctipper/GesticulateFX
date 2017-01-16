@@ -301,7 +301,7 @@
  *                                                                             *
  ******************************************************************************/
 
-.tool-tip {
+.tooltip {
     -fx-background-color: black;
     -fx-text-fill: white;
     -fx-background-insets: 0;

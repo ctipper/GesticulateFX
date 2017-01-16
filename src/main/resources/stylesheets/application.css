@@ -23,7 +23,7 @@
 .togglebuttons {
     -fx-background-color: white;
 }
-.togglebuttons:selected, .togglebuttons:hover:selected {
+.togglebuttons:selected, .togglebuttons:selected:hover {
     -fx-background-color: 
         linear-gradient(to top, rgb(195.0, 195.0, 195.0), rgb(125.0, 125.0, 125.0));
 }
