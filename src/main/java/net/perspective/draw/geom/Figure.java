@@ -517,10 +517,10 @@ public class Figure implements DrawItem, Serializable {
     protected javafx.scene.shape.Shape edgeAnchor(double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         javafx.scene.shape.Rectangle anchor = new javafx.scene.shape.Rectangle();
-        anchor.setX(u.x - 5.0);
-        anchor.setY(u.y - 5.0);
-        anchor.setWidth(10.0);
-        anchor.setHeight(10.0);
+        anchor.setX(u.x - 4.0);
+        anchor.setY(u.y - 4.0);
+        anchor.setWidth(8.0);
+        anchor.setHeight(8.0);
         anchor.setFill(Color.web("white"));
         anchor.setStroke(Color.web("black"));
         anchor.setStrokeWidth(1.0);
