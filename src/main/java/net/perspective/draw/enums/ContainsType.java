@@ -12,5 +12,5 @@ package net.perspective.draw.enums;
  */
 
 public enum ContainsType {
-    SHAPE, TL, BL, BR, TR, NONE;
+    SHAPE, TL, BL, BR, TR, TT, LL, BB, RR, NONE;
 }

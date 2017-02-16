@@ -31,16 +31,18 @@ public class FigureItemBehaviour implements ItemBehaviours {
 
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;
+        int quad;
 
         FigureType type = ((Figure) item).getType();
-        if (!type.equals(FigureType.SKETCH)
-            && !type.equals(FigureType.POLYGON)
-            && !type.equals(FigureType.LINE)) {
+        if (!type.equals(FigureType.SKETCH) && !type.equals(FigureType.POLYGON) && !type.equals(FigureType.LINE)) {
             List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
+            /**
+             * Select vertices
+             */
             for (CanvasPoint[] vertex : vertices) {
                 if (context.getRegion(vertex[0]).contains(listener.getStartX(), listener.getStartY())) {
-                    int quad = R2.quadrant(vertex[1], centre);
+                    quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
                         case 0:
                             view.setSelected(index);
@@ -67,7 +69,42 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     }
                 }
             }
-            
+            /**
+             * Select edges
+             */
+            if (!found) {
+                List<CanvasPoint[]> edges = ((Figure) item).getEdges();
+                for (CanvasPoint[] edge : edges) {
+                    if (context.getRegion(edge[0]).contains(listener.startX, listener.startY)) {
+                        quad = R2.quarter(edge[1], centre);
+                        switch (quad) {
+                            case 0:
+                                view.setSelected(index);
+                                context.setContainment(ContainsType.TT);
+                                found = true;
+                                break;
+                            case 1:
+                                view.setSelected(index);
+                                context.setContainment(ContainsType.LL);
+                                found = true;
+                                break;
+                            case 2:
+                                view.setSelected(index);
+                                context.setContainment(ContainsType.BB);
+                                found = true;
+                                break;
+                            case 3:
+                                view.setSelected(index);
+                                context.setContainment(ContainsType.RR);
+                                found = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        context.setEdgeDetected(found);
+                    }
+                }
+            }
             if (!found && item.contains(listener.getStartX(), listener.getStartY())) {
                 view.setSelected(index);
                 context.setContainment(ContainsType.SHAPE);
@@ -121,15 +158,24 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         drawType = DrawingType.ISOSCELES;
                         break;
                 }
+                /**
+                 * Permute containment selectors
+                 */
                 if (!context.getContainment().equals(ContainsType.SHAPE)
                     && !context.getContainment().equals(ContainsType.NONE)) {
-                    if (context.getContains().equals(ContainsType.NONE)) {
+                    if (context.getContains().equals(ContainsType.NONE) && !context.isEdgeDetected()) {
                         context.setContains(R2.permute(context.getContainment(), R2.quadrant(st, item.rotationCentre())));
+                    }
+                    if (context.getContains().equals(ContainsType.NONE) && context.isEdgeDetected()) {
+                        context.setContains(R2.mutate(context.getContainment(), R2.quadrant(st, item.rotationCentre())));
                     }
                     contains = context.getContains();
                 } else {
                     contains = context.getContainment();
                 }
+                /**
+                 * Adjust for quadrant of TL vertex
+                 */
                 if (context.getSgndArea() < 0) {
                     context.setSgndArea(((Figure) item).sgnd_area());
                 }
@@ -175,6 +221,38 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     case TR:
                         st.translate((-cos_t - sin_t) * inc.x, (cos_t - sin_t) * inc.y);
                         en.translate((cos_t + sin_t) * inc.x, (-cos_t + sin_t) * inc.y);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
+                        break;
+                    case TT:
+                        st.translate((0 - sin_t) * inc.x, (cos_t + 0) * inc.y);
+                        en.translate((-0 + sin_t) * inc.x, (-cos_t - 0) * inc.y);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
+                        break;
+                    case LL:
+                        st.translate((cos_t + 0) * inc.x, (-0 + sin_t) * inc.y);
+                        en.translate((-cos_t - 0) * inc.x, (0 - sin_t) * inc.y);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
+                        break;
+                    case BB:
+                        st.translate((-0 + sin_t) * inc.x, (-cos_t - 0) * inc.y);
+                        en.translate((0 - sin_t) * inc.x, (cos_t + 0) * inc.y);
+                        item.setStart(st.x, st.y);
+                        item.setEnd(en.x, en.y);
+                        ((Figure) item).setPoints(drawType);
+                        ((Figure) item).setPath();
+                        break;
+                    case RR:
+                        st.translate((-cos_t - 0) * inc.x, (0 - sin_t) * inc.y);
+                        en.translate((cos_t + 0) * inc.x, (-0 + sin_t) * inc.y);
                         item.setStart(st.x, st.y);
                         item.setEnd(en.x, en.y);
                         ((Figure) item).setPoints(drawType);

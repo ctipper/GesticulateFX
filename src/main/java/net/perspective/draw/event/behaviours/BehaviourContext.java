@@ -24,6 +24,7 @@ public class BehaviourContext {
 
     private ItemBehaviours strategy;
     private ContainsType containment, contains;
+    private boolean edgeDetected;
     private int quad;
     private double sgnd_area;
 
@@ -33,6 +34,7 @@ public class BehaviourContext {
         this.sgnd_area = -1d;
         this.containment = ContainsType.NONE;
         this.contains = ContainsType.NONE;
+        this.edgeDetected = false;
     }
 
     /**
@@ -112,6 +114,27 @@ public class BehaviourContext {
         contains = ContainsType.NONE;
         quad = -1;
         sgnd_area = -1d;
+        this.setEdgeDetected(false);
+    }
+
+    /**
+     * Set true if an edge has been selected
+     * 
+     * Used by containment to select transformation
+     * 
+     * @param edgeDetected the edgeDetected to set
+     */
+    protected void setEdgeDetected(boolean edgeDetected) {
+        this.edgeDetected = edgeDetected;
+    }
+
+    /**
+     * Has an edge been selected
+     * 
+     * @return the edgeDetected
+     */
+    protected boolean isEdgeDetected() {
+        return edgeDetected;
     }
 
     /**
@@ -134,7 +157,7 @@ public class BehaviourContext {
 
     /**
      * Set the signed area of the selected figure
-     *
+     * 
      * @param sgnd_area  a signed area
      * @see net.perspective.draw.geom.Figure#sgnd_area() 
      */

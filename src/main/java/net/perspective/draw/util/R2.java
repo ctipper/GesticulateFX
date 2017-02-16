@@ -8,12 +8,20 @@ package net.perspective.draw.util;
 
 import net.perspective.draw.enums.ContainsType;
 
+import static net.perspective.draw.util.R2.*;
+
 /**
  *
  * @author ctipper
  */
 
 public class R2 {
+
+    /**
+     * vertex transformers
+     */
+
+    static ContainsType[] flip0Array = { ContainsType.TL, ContainsType.BR, ContainsType.BL, ContainsType.TR };
 
     static ContainsType[] flip1Array = { ContainsType.TR, ContainsType.BL, ContainsType.BR, ContainsType.TL };
 
@@ -23,6 +31,24 @@ public class R2 {
 
     static ContainsType[] flip4Array = { ContainsType.BL, ContainsType.BR, ContainsType.TL, ContainsType.TR };
 
+    /**
+     * edge transformers
+     */
+
+    static ContainsType[] swap0Array = { ContainsType.TT, ContainsType.LL, ContainsType.BB, ContainsType.RR};
+
+    static ContainsType[] swap1Array = { ContainsType.TT, ContainsType.RR, ContainsType.BB, ContainsType.LL };
+
+    static ContainsType[] swap2Array = { ContainsType.LL, ContainsType.BB, ContainsType.RR, ContainsType.TT };
+
+    static ContainsType[] swap3Array = { ContainsType.TT, ContainsType.RR, ContainsType.BB, ContainsType.LL};
+
+    static ContainsType[] swap4Array = { ContainsType.LL, ContainsType.BB, ContainsType.RR, ContainsType.TT };
+
+    /**
+     * orientation transforms
+     */
+
     static double[] flip1 = { 0, 1 };
 
     static double[] flip2 = { 1, 0 };
@@ -31,24 +57,50 @@ public class R2 {
 
     static double[] flip4 = { -1, 0 };
 
+    /**
+     * Determine vertex quadrant
+     *
+     * @param vertex
+     * @param centre
+     * @return an integer index, see {@link net.perspective.draw.util.V2}
+     */
     public static int quadrant(CanvasPoint vertex, CanvasPoint centre) {
         double theta = V2.declination(vertex.x - centre.x, vertex.y - centre.y);
         return V2.quadrant(theta);
     }
 
+    /**
+     * Determine edge quarter
+     *
+     * @param edge
+     * @param centre
+     * @return an integer index, see {@link net.perspective.draw.util.V2}
+     */
+    public static int quarter(CanvasPoint edge, CanvasPoint centre) {
+        double theta = V2.declination(edge.x - centre.x, edge.y - centre.y);
+        return V2.side(theta);
+    }
+
+    /**
+     * Permute vertex labels
+     *
+     * @param contains
+     * @param quad
+     * @return contains type
+     */
     public static ContainsType permute(ContainsType contains, int quad) {
         switch (quad) {
             case 0:
-                contains = R2.flip1(contains, quad);
+                contains = flip1(contains, quad);
                 break;
             case 1:
-                contains = R2.flip2(contains, quad);
+                contains = flip2(contains, quad);
                 break;
             case 2:
-                contains = R2.flip3(contains, quad);
+                contains = flip3(contains, quad);
                 break;
             case 3:
-                contains = R2.flip4(contains, quad);
+                contains = flip4(contains, quad);
                 break;
             default:
                 contains = ContainsType.NONE;
@@ -56,7 +108,41 @@ public class R2 {
         }
         return contains;
     }
-    
+
+    /**
+     * Mutate edge labels
+     *
+     * @param contains
+     * @param quad
+     * @return contains type
+     */
+    public static ContainsType mutate(ContainsType contains, int quad) {
+        switch (quad) {
+            case 0:
+                contains = swap1(contains, quad);
+                break;
+            case 1:
+                contains = swap2(contains, quad);
+                break;
+            case 2:
+                contains = swap3(contains, quad);
+                break;
+            case 3:
+                contains = swap4(contains, quad);
+                break;
+            default:
+                contains = ContainsType.NONE;
+                break;
+        }
+        return contains;
+    }
+
+    /**
+     * Retrieve TL coordinate transforms
+     *
+     * @param quad
+     * @return a numeric pair
+     */
     public static double[] flip(int quad) {
         double[] flip;
         switch (quad) {
@@ -77,13 +163,13 @@ public class R2 {
                 break;
         }
         return flip;
-    } 
+    }
 
     private static ContainsType flip1(ContainsType type, int quad) {
         int index = 0;
 
         for (int i = 0; i < 4; i++) {
-            if (type.equals(flip3Array[i])) {
+            if (type.equals(flip0Array[i])) {
                 index = i;
             }
         }
@@ -95,7 +181,7 @@ public class R2 {
         int index = 0;
 
         for (int i = 0; i < 4; i++) {
-            if (type.equals(flip3Array[i])) {
+            if (type.equals(flip0Array[i])) {
                 index = i;
             }
         }
@@ -107,7 +193,7 @@ public class R2 {
         int index = 0;
 
         for (int i = 0; i < 4; i++) {
-            if (type.equals(flip3Array[i])) {
+            if (type.equals(flip0Array[i])) {
                 index = i;
             }
         }
@@ -119,7 +205,7 @@ public class R2 {
         int index = 0;
 
         for (int i = 0; i < 4; i++) {
-            if (type.equals(flip3Array[i])) {
+            if (type.equals(flip0Array[i])) {
                 index = i;
             }
         }
@@ -127,9 +213,58 @@ public class R2 {
         return flip4Array[((index - quad) + 4) % 4];
     }
 
+    private static ContainsType swap1(ContainsType type, int quad) {
+        int index = 0;
+
+        for (int i = 0; i < 4; i++) {
+            if (type.equals(swap0Array[i])) {
+                index = i;
+            }
+        }
+
+        return swap1Array[((index - quad) + 4) % 4];
+    }
+
+    private static ContainsType swap2(ContainsType type, int quad) {
+        int index = 0;
+
+        for (int i = 0; i < 4; i++) {
+            if (type.equals(swap0Array[i])) {
+                index = i;
+            }
+        }
+
+        return swap2Array[((index - quad) + 4) % 4];
+    }
+
+    private static ContainsType swap3(ContainsType type, int quad) {
+        int index = 0;
+
+        for (int i = 0; i < 4; i++) {
+            if (type.equals(swap0Array[i])) {
+                index = i;
+            }
+        }
+
+        return swap3Array[((index - quad) + 4) % 4];
+    }
+
+    private static ContainsType swap4(ContainsType type, int quad) {
+        int index = 0;
+
+        for (int i = 0; i < 4; i++) {
+            if (type.equals(swap0Array[i])) {
+                index = i;
+            }
+        }
+
+        return swap4Array[((index - quad) + 4) % 4];
+    }
+
     /**
      * Prevent instance creation
      */
     private R2() {
     }
+
 }

@@ -827,6 +827,61 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
+     * Return a List of 2-tuples of edge centers, second point normalised.
+     * Note that the points may not be cyclical.
+     * 
+     * @return a List of 2-tuples representing transformed vertices
+     */
+    public List<CanvasPoint[]> getEdges() {
+        double sx, sy, ex, ey;
+        List<CanvasPoint[]> vert = new ArrayList<>();
+        List<CanvasPoint[]> vertices = new ArrayList<>();
+        switch (this.getType()) {
+            case SQUARE:
+            case CIRCLE:
+            case TRIANGLE:
+                // determine average dimension
+                double width = Math.abs(start.x - end.x);
+                double height = Math.abs(start.y - end.y);
+                // determine offsets
+                double side = 0.25 * (width + height); // half average side
+                CanvasPoint cxy = this.rotationCentre();
+                // determine virtual vertices
+                if (start.x < end.x) {
+                    sx = cxy.x - side;
+                    ex = cxy.x + side;
+                } else {
+                    sx = cxy.x + side;
+                    ex = cxy.x - side;
+                }
+                if (start.y < end.y) {
+                    sy = cxy.y - side;
+                    ey = cxy.y + side;
+                } else {
+                    sy = cxy.y + side;
+                    ey = cxy.y - side;
+                }
+                // combine real and virtual edges
+                vert.add(new CanvasPoint[] { new CanvasPoint(cxy.x, start.y), new CanvasPoint(cxy.x, sy) }); // TT
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, cxy.y), new CanvasPoint(sx, cxy.y) }); // LL
+                vert.add(new CanvasPoint[] { new CanvasPoint(cxy.x, end.y), new CanvasPoint(cxy.x, ey) });   // BB
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, cxy.y), new CanvasPoint(ex, cxy.y) });   // RR
+                break;
+            default:
+                // combine real and virtual vertices
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
+                break;
+        }
+        // transform real and virtual vertices
+        for (CanvasPoint[] p : vert) {
+            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
+            vertices.add(point);
+        }
+        return vertices;
+    }
+
+    /**
      * Transform and awt Color to a javafx Color
      * 
      * <p>javafx.scene.paint.Color not serialisable
