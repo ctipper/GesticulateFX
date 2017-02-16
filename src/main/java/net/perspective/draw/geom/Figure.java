@@ -19,6 +19,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.transform.Rotate;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
@@ -487,10 +488,15 @@ public class Figure implements DrawItem, Serializable {
             case NONE:
                 break;
             default:
+                CanvasPoint center = this.rotationCentre();
                 anchors.getChildren().add(this.anchor(start.x, start.y));
                 anchors.getChildren().add(this.anchor(end.x, start.y));
                 anchors.getChildren().add(this.anchor(start.x, end.y));
                 anchors.getChildren().add(this.anchor(end.x, end.y));
+                anchors.getChildren().add(this.edgeAnchor(center.x, start.y));
+                anchors.getChildren().add(this.edgeAnchor(start.x, center.y));
+                anchors.getChildren().add(this.edgeAnchor(center.x, end.y));
+                anchors.getChildren().add(this.edgeAnchor(end.x, center.y));
                 break;
         }
         return anchors;
@@ -508,6 +514,20 @@ public class Figure implements DrawItem, Serializable {
         return anchor;
     }
     
+    protected javafx.scene.shape.Shape edgeAnchor(double x, double y) {
+        CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
+        javafx.scene.shape.Rectangle anchor = new javafx.scene.shape.Rectangle();
+        anchor.setX(u.x - 5.0);
+        anchor.setY(u.y - 5.0);
+        anchor.setWidth(10.0);
+        anchor.setHeight(10.0);
+        anchor.setFill(Color.web("white"));
+        anchor.setStroke(Color.web("black"));
+        anchor.setStrokeWidth(1.0);
+        anchor.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, u.x, u.y));
+        return anchor;
+    }
+
     /**
      * Draw to a Java2d canvas for export
      * 
