@@ -752,9 +752,9 @@ public class Figure implements DrawItem, Serializable {
     }
     
     /**
-     * Return the 2-tuple of vertex coords, second point normalised.
+     * Return the 2-tuple of vertices, second point normalised.
      * 
-     * @return 2-tuple representing vertex coords
+     * @return 2-tuple representing vertex points
      */
     private CanvasPoint[] getVertex(ContainsType contains) {
         CanvasPoint p[];
@@ -828,10 +828,10 @@ public class Figure implements DrawItem, Serializable {
                     ey = cxy.y - side;
                 }
                 // combine real and virtual vertices
-                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(sx, sy) });
-                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });
-                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });
-                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(sx, sy) }); // TL
+                vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });   // BL
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });     // BR
+                vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });   // TR
                 break;
             default:
                 // combine real and virtual vertices
@@ -847,7 +847,7 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
-     * Return a List of 2-tuples of edge centers, second point normalised.
+     * Return a List of 2-tuples of edge mid-points, second point normalised.
      * Note that the points may not be cyclical.
      * 
      * @return a List of 2-tuples representing transformed vertices
