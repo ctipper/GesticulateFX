@@ -75,7 +75,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             if (!found) {
                 List<CanvasPoint[]> edges = ((Figure) item).getEdges();
                 for (CanvasPoint[] edge : edges) {
-                    if (context.getRegion(edge[0]).contains(listener.startX, listener.startY)) {
+                    if (context.getRegion(edge[0]).contains(listener.getStartX(), listener.getStartY())) {
                         quad = R2.quarter(edge[1], centre);
                         switch (quad) {
                             case 0:

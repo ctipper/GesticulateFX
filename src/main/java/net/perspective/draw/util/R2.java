@@ -8,8 +8,6 @@ package net.perspective.draw.util;
 
 import net.perspective.draw.enums.ContainsType;
 
-import static net.perspective.draw.util.R2.*;
-
 /**
  *
  * @author ctipper

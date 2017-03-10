@@ -20,8 +20,8 @@ import javax.inject.Singleton;
 public class DrawAreaListener {
 
     private Handler handler;
-    public double startX, startY;   // Hold co-ordinates of user's last mousePressed event.
-    public double tempX, tempY;     // Hold co-ordinates of current mouseDragged event.
+    private double startX, startY;   // Hold co-ordinates of user's last mousePressed event.
+    private double tempX, tempY;     // Hold co-ordinates of current mouseDragged event.
     private boolean leftbutton, rightbutton;
     private boolean doubleclick;
 

@@ -477,6 +477,7 @@ public class Figure implements DrawItem, Serializable {
      */
     public Node drawAnchors() {
         Group anchors = new Group();
+        anchors.setMouseTransparent(true);
         switch (this.type) {
             case LINE:
             case SKETCH:

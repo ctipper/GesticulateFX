@@ -24,11 +24,16 @@ import net.perspective.draw.geom.Figure;
 
 public class SelectionHandler implements Handler {
 
-    @Inject Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
-    @Inject private BehaviourContext context;
+    @Inject
+    Injector injector;
+    @Inject
+    private DrawingArea drawarea;
+    @Inject
+    private CanvasView view;
+    @Inject
+    private DrawAreaListener listener;
+    @Inject
+    private BehaviourContext context;
     
     public void upEvent() {
         if ((view.getSelected() != -1)) {

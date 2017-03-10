@@ -6,6 +6,8 @@
  */
 package net.perspective.draw.event;
 
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
@@ -20,12 +22,14 @@ import net.perspective.draw.util.V2;
  *
  * @author ctipper
  */
-
 public class RotationHandler implements Handler {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
+    @Inject
+    private DrawingArea drawarea;
+    @Inject
+    private CanvasView view;
+    @Inject
+    private DrawAreaListener listener;
 
     public void upEvent() {
         if (view.getSelected() != -1) {
@@ -40,11 +44,22 @@ public class RotationHandler implements Handler {
             int i = drawings.size() - 1;
             do {
                 DrawItem item = drawings.get(i);
-                if (item instanceof Figure) {
-                    if (!(((Figure) item).getType().equals(FigureType.LINE))) {
-                        if (item.contains(listener.getStartX(), listener.getStartY())) {
-                            view.setSelected(drawings.indexOf(item));
-                        }
+                if ((item instanceof Figure) && !(((Figure) item).getType().equals(FigureType.LINE))) {
+                    if (getRegion(item.getTop()[0]).contains(listener.getStartX(), listener.getStartY())) {
+                        view.setSelected(i);
+                        break;
+                    } else if (getRegion(item.getDown()[0]).contains(listener.getStartX(), listener.getStartY())) {
+                        view.setSelected(i);
+                        break;
+                    } else if (getRegion(item.getBottom()[0]).contains(listener.getStartX(), listener.getStartY())) {
+                        view.setSelected(i);
+                        break;
+                    } else if (getRegion(item.getUp()[0]).contains(listener.getStartX(), listener.getStartY())) {
+                        view.setSelected(i);
+                        break;
+                    } else if (item.contains(listener.getStartX(), listener.getStartY())) {
+                        view.setSelected(i);
+                        break;
                     }
                 }
                 i--;
@@ -95,4 +110,17 @@ public class RotationHandler implements Handler {
             listener.setStartY(listener.getTempY());
         }
     }
+
+    /**
+     * Get an area centred on the specified point
+     *
+     * @param p a {@link net.perspective.draw.util.CanvasPoint}
+     * @return area
+     */
+    protected Area getRegion(CanvasPoint p) {
+        Rectangle2D rect;
+        rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
+        return new Area(rect);
+    }
+
 }
