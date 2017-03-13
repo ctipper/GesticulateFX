@@ -10,12 +10,13 @@
 .menubutton {
     -fx-background-color: #ddf2ff;
 }
-.menubutton:hover {
+.menubutton:hover, menuitem:hover, menuicon:hover {
     -fx-background-color: #d0e4f0;
 }
 .menuitem {
     -fx-background-color: white;
-    -fx-padding: 5 5 5 5;
+    -fx-padding: 8 5 8 5;
+    -fx-font-family: "San Francisco", "Segoe UI", Tahoma, sans-serif;
 }
 .menuicon {
     -fx-background-color: white;
