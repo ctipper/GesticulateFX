@@ -27,6 +27,7 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.*;
+import net.perspective.draw.geom.DrawItem;
 
 /**
  *
@@ -47,7 +48,8 @@ public class DrawingArea {
     private Stroke stroke;
     private Color color, fillcolor;
     private int transparency;
-
+    private DrawItem marquee;
+    private boolean multiSelectEnabled;
     private Transferable clipboard;
     @Inject private CanvasTransferHandler transferhandler;
 
@@ -221,6 +223,14 @@ public class DrawingArea {
 
     public int getTransparency() {
         return this.transparency;
+    }
+
+    public void setMultiSelectEnabled(boolean multiSelectEnabled) {
+        this.multiSelectEnabled = multiSelectEnabled;
+    }
+
+    public boolean isMultiSelectEnabled() {
+        return multiSelectEnabled;
     }
 
 }

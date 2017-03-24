@@ -10,6 +10,7 @@ import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,10 +31,9 @@ public class CanvasView {
     private final java.util.List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private DrawItem newitem;
-    private int selection;
-    private final Set<Integer> selectionIndex;
     private boolean isDrawing = false;
-    private Node anchors;
+    private final Set<Integer> selectionIndex;
+    private Group drawingAnchors;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
     
@@ -44,8 +44,8 @@ public class CanvasView {
     public CanvasView() {
         this.list = new ArrayList<>();
         this.newitem = null;
-        this.selection = -1;
         this.selectionIndex = new LinkedHashSet<>();
+        this.drawingAnchors = new Group();
     }
 
     public void clearView() {
@@ -142,35 +142,78 @@ public class CanvasView {
         return isDrawing;
     }
 
-    public void setSelected(int select) {
-        if (selection == -1 && select != -1) {
+/*
+    public void setSelected(int selection) {
+        if (selected == -1 && selection != -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(select).drawAnchors();
+            anchors = drawings.get(selection).drawAnchors();
             nodes.add(anchors);
         }
-        if (selection != -1 && select == -1) {
+        if (selected != -1 && selection == -1) {
             if (anchors != null) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                 nodes.remove(anchors);
                 anchors = null;
             }
         }
-        if (selection != select && select != -1) {
+        if (selected != selection && selection != -1) {
             if (anchors != null) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                 nodes.remove(anchors);
                 anchors = null;
             }
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(select).drawAnchors();
+            anchors = drawings.get(selection).drawAnchors();
             nodes.add(anchors);
         }
-        if (select == -1) {
+        if (selection == -1) {
             anchors = null;
         }
-        selection = select;
+        selected = selection;
+    }
+*/
+
+    public void setSelected(int selection) {
+        if (selection == -1) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawingAnchors);
+            selectionIndex.clear();
+            drawingAnchors.getChildren().clear();
+        } else {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawingAnchors);
+            if (!drawarea.isMultiSelectEnabled()) {
+                selectionIndex.clear();
+                drawingAnchors.getChildren().clear();
+            }
+            selectionIndex.add(selection);
+            drawingAnchors = getAnchors();
+            nodes.add(drawingAnchors);
+        }
     }
 
+    public void moveSelection(int selection) {
+        if (!drawingAnchors.getChildren().isEmpty()) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawingAnchors);
+            drawingAnchors.getChildren().clear();
+        }
+        if (selection != -1) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            drawingAnchors = getAnchors();
+            nodes.add(drawingAnchors);
+        }
+    }
+
+    private Group getAnchors() {
+        Group anchorGroup = new Group();
+        for (Integer item : selectionIndex) {
+            anchorGroup.getChildren().add(drawings.get(item).drawAnchors());
+        }
+        return anchorGroup;
+    }
+
+/*
     public void moveSelection(int select) {
         if (anchors != null) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
@@ -183,9 +226,43 @@ public class CanvasView {
             nodes.add(anchors);
         }   
     }
+*/
     
     public int getSelected() {
-        return selection;
+        int i;
+        if (!selectionIndex.isEmpty()) {
+            Integer[] a = selectionIndex.toArray(new Integer[selectionIndex.size()]);
+            // find first value
+            i = a[0];
+        } else {
+            i = -1;
+        }
+        return i;
+    }
+
+    public int getBottomSelected() {
+        int i;
+        if (!selectionIndex.isEmpty()) {
+            Integer[] a = selectionIndex.toArray(new Integer[selectionIndex.size()]);
+            // find minimum value
+            i = a[0];
+            for (Integer as : a) {
+                if (as < i) {
+                    i = as;
+                }
+            }
+        } else {
+            i = -1;
+        }
+        return i;
+    }
+
+    public Set<Integer> getMultiSelection() {
+        return selectionIndex;
+    }
+
+    public boolean isMultiSelected() {
+        return selectionIndex.size() > 1;
     }
 
     public void setNewItem(DrawItem item) {
