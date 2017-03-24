@@ -11,7 +11,6 @@ package net.perspective.draw.geom;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import javafx.scene.Node;
-import javafx.scene.shape.Path;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 
@@ -110,6 +109,7 @@ public interface DrawItem {
      * @param isVertical a boolean property
      * @deprecated 
      */
+    @SuppressWarnings("deprecation")
     void setVertical(boolean isVertical);
 
     /**
@@ -117,6 +117,7 @@ public interface DrawItem {
      * @return a boolean property
      * @deprecated 
      */
+    @SuppressWarnings("deprecation")
     boolean isVertical();
 
     /**
@@ -150,9 +151,9 @@ public interface DrawItem {
     /**
      * Render a shadowed version of the item without transforming
      * 
-     * @return an FX Path
+     * @return an FX Node
      */
-    Path draw();
+    Node draw();
 
     /**
      * Render the item anchors to indicate selection

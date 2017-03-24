@@ -402,7 +402,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return an FX Path
      */
-    public Path draw() {
+    public Node draw() {
         java.awt.geom.AffineTransform at;
         
         at = this.getTransform();

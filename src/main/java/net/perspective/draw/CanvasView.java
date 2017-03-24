@@ -6,8 +6,7 @@
  */
 package net.perspective.draw;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -32,6 +31,7 @@ public class CanvasView {
     private ObservableList<DrawItem> drawings;
     private DrawItem newitem;
     private int selection;
+    private final Set<Integer> selectionIndex;
     private boolean isDrawing = false;
     private Node anchors;
 
@@ -45,6 +45,7 @@ public class CanvasView {
         this.list = new ArrayList<>();
         this.newitem = null;
         this.selection = -1;
+        this.selectionIndex = new LinkedHashSet<>();
     }
 
     public void clearView() {
