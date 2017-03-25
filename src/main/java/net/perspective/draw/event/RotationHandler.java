@@ -12,9 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
-import net.perspective.draw.geom.DrawItem;
-import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigureType;
+import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
 
@@ -44,7 +42,8 @@ public class RotationHandler implements Handler {
             int i = drawings.size() - 1;
             do {
                 DrawItem item = drawings.get(i);
-                if ((item instanceof Figure) && !(((Figure) item).getType().equals(FigureType.LINE))) {
+                if ((item instanceof Figure) && !(((Figure) item).getType().equals(FigureType.LINE))
+                    || (item instanceof Grouped)) {
                     if (getRegion(item.getTop()[0]).contains(listener.getStartX(), listener.getStartY())) {
                         view.setSelected(i);
                         break;
@@ -76,6 +75,11 @@ public class RotationHandler implements Handler {
             double angle = item.getAngle();
             CanvasPoint centre = item.rotationCentre();
             A = B = new CanvasPoint(1, 1);
+
+            if (item instanceof Grouped) {
+                A = new CanvasPoint(listener.getStartX() - centre.x, listener.getStartY() - centre.y);
+                B = new CanvasPoint(listener.getTempX() - centre.x, listener.getTempY() - centre.y);
+            }
 
             if (item instanceof Figure) {
                 if (!((Figure) item).getType().equals(FigureType.LINE)) {
