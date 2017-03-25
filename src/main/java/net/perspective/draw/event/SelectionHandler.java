@@ -70,7 +70,12 @@ public class SelectionHandler implements Handler {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                     boolean found = context.select(item, i);
                     if (found) break;
-                }
+                } else if (item.contains(listener.getStartX(), listener.getStartY())) {
+                        // Rest of Shapes
+                        view.setSelected(i);
+                        context.setContainment(ContainsType.SHAPE);
+                        break;
+                    }
                 i--;
             } while (i >= 0);
             if (context.getContainment().equals(ContainsType.NONE)) {
@@ -80,18 +85,22 @@ public class SelectionHandler implements Handler {
     }
 
     public void dragEvent() {
-        int selection = view.getSelected();
-        if (selection != -1) {
+        if (view.getSelected() != -1) {
             double xinc = listener.getTempX() - listener.getStartX();
             double yinc = listener.getTempY() - listener.getStartY();
-            DrawItem item = view.getDrawings().get(selection);
-            if (item instanceof Figure) {
-                context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-                context.alter(item, xinc, yinc);
+            for (Integer selection : view.getMultiSelection()) {
+                DrawItem item = view.getDrawings().get(selection);
+                if (item instanceof Figure) {
+                    context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                    context.alter(item, xinc, yinc);
+                } else {
+                    // Rest of shapes
+                    item.moveShape(xinc, yinc);
+                }
+                item.updateProperties(drawarea);
+                view.updateCanvasItem(selection, item);
+                view.moveSelection(selection);
             }
-            item.updateProperties(drawarea);
-            view.updateCanvasItem(selection, item);
-            view.moveSelection(selection);
             listener.setStartX(listener.getTempX());
             listener.setStartY(listener.getTempY());
         } else {
