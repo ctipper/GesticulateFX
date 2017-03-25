@@ -225,6 +225,14 @@ public class DrawingArea {
         return this.transparency;
     }
 
+    public void setMarquee(DrawItem marquee) {
+        this.marquee = marquee;
+    }
+
+    public DrawItem getMarquee() {
+        return marquee;
+    }
+
     public void setMultiSelectEnabled(boolean multiSelectEnabled) {
         this.multiSelectEnabled = multiSelectEnabled;
     }

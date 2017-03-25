@@ -6,6 +6,8 @@
  */
 package net.perspective.draw;
 
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -31,9 +33,11 @@ public class CanvasView {
     private final java.util.List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private DrawItem newitem;
-    private boolean isDrawing = false;
     private final Set<Integer> selectionIndex;
     private Group drawingAnchors;
+    private Node drawMarquee;
+    private boolean isDrawing;
+    private boolean isMarquee;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
     
@@ -132,14 +136,6 @@ public class CanvasView {
 
     public List<DrawItem> getDrawings() {
         return list;
-    }
-
-    public void setDrawing(boolean isDrawing) {
-        this.isDrawing = isDrawing;
-    }
-
-    public boolean isDrawing() {
-        return isDrawing;
     }
 
 /*
@@ -265,6 +261,17 @@ public class CanvasView {
         return selectionIndex.size() > 1;
     }
 
+    public void selectShapes(DrawItem item) {
+        Shape b = item.bounds();
+        Rectangle2D boundary = b.getBounds2D();
+        for (DrawItem drawing : drawings) {
+            Rectangle2D d = drawing.bounds().getBounds2D();
+            if (boundary.contains(d)) {
+                this.setSelected(drawings.indexOf(drawing));
+            }
+        }
+    }
+
     public void setNewItem(DrawItem item) {
         if (newitem == null) {
             this.addItemToCanvas(item);
@@ -281,7 +288,37 @@ public class CanvasView {
     public DrawItem getNewItem() {
         return newitem;
     }
-    
+
+    public void setDrawing(boolean isDrawing) {
+        this.isDrawing = isDrawing;
+    }
+
+    public boolean isDrawing() {
+        return isDrawing;
+    }
+
+    public void setMarquee(boolean isMarquee) {
+        this.isMarquee = isMarquee;
+        if (isMarquee()) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawMarquee);
+            drawMarquee = drawarea.getMarquee().draw();
+            nodes.add(drawMarquee);
+        } else {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawMarquee);
+        }
+    }
+
+    public boolean isMarquee() {
+        return isMarquee;
+    }
+
+    /**
+     * Helper method used by export routines
+     * 
+     * @return 
+     */
     public CanvasPoint[] getBounds() {
         CanvasPoint topleft, bottomright;
         
