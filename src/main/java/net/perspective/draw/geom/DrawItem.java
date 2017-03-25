@@ -109,7 +109,6 @@ public interface DrawItem {
      * @param isVertical a boolean property
      * @deprecated 
      */
-    @SuppressWarnings("deprecation")
     void setVertical(boolean isVertical);
 
     /**
@@ -117,7 +116,6 @@ public interface DrawItem {
      * @return a boolean property
      * @deprecated 
      */
-    @SuppressWarnings("deprecation")
     boolean isVertical();
 
     /**

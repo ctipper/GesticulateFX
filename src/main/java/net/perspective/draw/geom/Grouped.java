@@ -434,6 +434,7 @@ public class Grouped implements DrawItem, Serializable {
      * Sets the shape to be perpendicular to baseline
      * 
      * @param isVertical  A boolean property
+     * @deprecated 
      */
     public void setVertical(boolean isVertical) {
         this.isVertical = isVertical;
@@ -442,6 +443,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * 
      * @return a boolean property
+     * @deprecated 
      */
     public boolean isVertical() {
         return this.isVertical;

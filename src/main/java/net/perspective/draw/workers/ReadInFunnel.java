@@ -23,6 +23,7 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.Grouped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +97,17 @@ public class ReadInFunnel extends Task<Object> {
             ((Figure) drawing).setEndPoints();
             ((Figure) drawing).setPath();
         }
+
+        if (drawing instanceof Grouped) {
+            DrawItem item = new Grouped();
+            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
+                ((Grouped) item).addShape(checkDrawings(shape));
+            }
+            item.setAngle(drawing.getAngle());
+            ((Grouped) item).setTransparency(((Grouped) drawing).getTransparency());
+            drawing = item;
+        }
+
         return drawing;
     }
 
