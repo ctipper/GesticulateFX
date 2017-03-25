@@ -138,37 +138,6 @@ public class CanvasView {
         return list;
     }
 
-/*
-    public void setSelected(int selection) {
-        if (selected == -1 && selection != -1) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(selection).drawAnchors();
-            nodes.add(anchors);
-        }
-        if (selected != -1 && selection == -1) {
-            if (anchors != null) {
-                ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-                nodes.remove(anchors);
-                anchors = null;
-            }
-        }
-        if (selected != selection && selection != -1) {
-            if (anchors != null) {
-                ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-                nodes.remove(anchors);
-                anchors = null;
-            }
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(selection).drawAnchors();
-            nodes.add(anchors);
-        }
-        if (selection == -1) {
-            anchors = null;
-        }
-        selected = selection;
-    }
-*/
-
     public void setSelected(int selection) {
         if (selection == -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
@@ -209,21 +178,6 @@ public class CanvasView {
         return anchorGroup;
     }
 
-/*
-    public void moveSelection(int select) {
-        if (anchors != null) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            nodes.remove(anchors);
-            anchors = null;
-        }        
-        if (select != -1) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            anchors = drawings.get(select).drawAnchors();
-            nodes.add(anchors);
-        }   
-    }
-*/
-    
     public int getSelected() {
         int i;
         if (!selectionIndex.isEmpty()) {

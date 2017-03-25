@@ -53,7 +53,7 @@ public class SelectionHandler implements Handler {
             view.selectShapes(drawarea.getMarquee());
             drawarea.setMultiSelectEnabled(false);
         }
-        if ((view.getSelected() != -1)) {
+        if (view.getSelected() != -1 && !listener.getRightClick()) {
             view.updateSelectedItem();
             context.resetContainment();
         }
@@ -61,7 +61,7 @@ public class SelectionHandler implements Handler {
 
     public void downEvent() {
         List<DrawItem> drawings = view.getDrawings();
-        if (!drawings.isEmpty()) {
+        if (!drawings.isEmpty() && !listener.getRightClick()) {
             int i = drawings.size() - 1;
             context.setContainment(ContainsType.NONE);
             do {
