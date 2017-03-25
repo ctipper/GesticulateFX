@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,6 +132,61 @@ public class CanvasView {
         if (this.getSelected() != -1) {
             drawings.remove(this.getSelected());
             setSelected(-1);
+        }
+    }
+
+    public void groupSelection() {
+        if (this.isMultiSelected()) {
+            Grouped groupedItem = new Grouped();
+            List<DrawItem> removals = new ArrayList<>();
+            List<Integer> selection =  new ArrayList<>();
+            Integer selected = this.getBottomSelected();
+
+            // create a Grouped item and queue items for removal
+            for (Integer index : this.getMultiSelection()) {
+                groupedItem.addShape(drawings.get(index));
+                selection.add(index);
+            }
+            // reverse sort removals
+            Collections.reverse(selection);
+            for (Integer index : selection) {
+                removals.add(drawings.get(index));
+            }
+
+            this.setSelected(-1);
+
+            // eliminate shape to replace from list
+            removals.remove(drawings.get(selected));
+
+            // replace selected
+            drawings.set(selected, groupedItem);
+
+            for (DrawItem item : removals) {
+                // delete drawings
+                drawings.remove(item);
+            }
+        }
+    }
+
+    public void ungroupSelection() {
+        if (this.getSelected() != -1 && !this.isMultiSelected()) {
+            int selected = this.getBottomSelected();
+            DrawItem item = drawings.get(selected);
+            if (item instanceof Grouped) {
+                boolean added = false;
+                for (DrawItem shape : ((Grouped) item).getShapes()) {
+                    if (!added) {
+                        // replace selected
+                        drawings.set(selected, shape);
+                        added = true;
+                    } else {
+                        // add drawings
+                        drawings.add(selected, shape);
+                    }
+                    selected++;
+                }
+                this.setSelected(-1);
+            }
         }
     }
 

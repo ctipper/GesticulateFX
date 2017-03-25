@@ -34,7 +34,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
-import net.perspective.draw.event.DrawAreaListener;
 
 /**
  *
@@ -47,7 +46,6 @@ public class ApplicationController implements Initializable {
     @Inject private DrawingArea drawarea;
     @Inject private Gesticulate application;
     @Inject private ShareUtils share;
-    @Inject private DrawAreaListener listener;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private When wireframeSelected;

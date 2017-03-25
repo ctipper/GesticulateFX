@@ -16,18 +16,18 @@ import javafx.scene.Group;
 import javafx.scene.SubScene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import static net.perspective.draw.CanvasTransferHandler.COPY;
-import static net.perspective.draw.CanvasTransferHandler.MOVE;
-
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.DrawItem;
+
+import static net.perspective.draw.CanvasTransferHandler.COPY;
+import static net.perspective.draw.CanvasTransferHandler.MOVE;
 
 /**
  *
@@ -154,6 +154,20 @@ public class DrawingArea {
             }
         });
         contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
+        SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
+        MenuItem menuGroup = new MenuItem("Group Selection");
+        menuGroup.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                view.groupSelection();
+            }
+        });
+        MenuItem menuUnGroup = new MenuItem("Ungroup Selection");
+        menuUnGroup.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                view.ungroupSelection();
+            }
+        });
+        contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
 
         contextlistener = (ContextMenuEvent event) -> {
             contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
