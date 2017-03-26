@@ -30,7 +30,8 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class CanvasView {
 
-    @Inject private DrawingArea drawarea;
+    @Inject
+    private DrawingArea drawarea;
     private final java.util.List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private DrawItem newitem;
@@ -41,7 +42,7 @@ public class CanvasView {
     private boolean isMarquee;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
-    
+
     /**
      * Creates a new instance of <code>CanvasView</code>
      */
@@ -57,11 +58,11 @@ public class CanvasView {
         this.deleteContents();
         this.setSelected(-1);
     }
-    
+
     public void deleteContents() {
         drawings.clear();
     }
-    
+
     public void setDrawingListener() {
         drawings = FXCollections.observableList(list);
         drawings.addListener((ListChangeListener.Change<? extends DrawItem> change) -> {
@@ -111,7 +112,7 @@ public class CanvasView {
     public void addItemToCanvas(DrawItem item) {
         appendItemToCanvas(item);
     }
-    
+
     public void appendItemToCanvas(DrawItem item) {
         drawings.add(item);
     }
@@ -119,7 +120,7 @@ public class CanvasView {
     public void updateCanvasItem(int index, DrawItem item) {
         drawings.set(index, item);
     }
-    
+
     public void updateSelectedItem() {
         if (this.getSelected() != -1) {
             DrawItem item = drawings.get(this.getSelected());
@@ -127,7 +128,7 @@ public class CanvasView {
             this.updateCanvasItem(this.getSelected(), item);
         }
     }
-    
+
     public void deleteSelectedItem() {
         if (this.getSelected() != -1) {
             drawings.remove(this.getSelected());
@@ -290,7 +291,7 @@ public class CanvasView {
         }
         newitem = item;
     }
-    
+
     public void resetNewItem() {
         newitem = null;
     }
@@ -331,7 +332,7 @@ public class CanvasView {
      */
     public CanvasPoint[] getBounds() {
         CanvasPoint topleft, bottomright;
-        
+
         List<CanvasPoint> points = new ArrayList<>();
         CanvasPoint start = new CanvasPoint();
         CanvasPoint end = new CanvasPoint();
@@ -345,7 +346,7 @@ public class CanvasView {
         try {
             topleft = (CanvasPoint) points.get(0).clone();
             bottomright = (CanvasPoint) points.get(1).clone();
-            
+
             for (CanvasPoint point : points) {
                 topleft.x = Math.min(point.x, topleft.x);
                 topleft.y = Math.min(point.y, topleft.y);

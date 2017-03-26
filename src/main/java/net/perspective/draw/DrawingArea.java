@@ -37,10 +37,16 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 @Singleton
 public class DrawingArea {
 
-    @Inject private Injector injector;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private DrawAreaListener listener;
+    @Inject
+    private Injector injector;
+    @Inject
+    private CanvasView view;
+    @Inject
+    private ApplicationController controller;
+    @Inject
+    private DrawAreaListener listener;
+    @Inject
+    private CanvasTransferHandler transferhandler;
     private SubScene canvas;
     private Group root;
 
@@ -51,7 +57,6 @@ public class DrawingArea {
     private DrawItem marquee;
     private boolean multiSelectEnabled;
     private Transferable clipboard;
-    @Inject private CanvasTransferHandler transferhandler;
 
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
@@ -168,7 +173,6 @@ public class DrawingArea {
             }
         });
         contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
-
         contextlistener = (ContextMenuEvent event) -> {
             contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
         };

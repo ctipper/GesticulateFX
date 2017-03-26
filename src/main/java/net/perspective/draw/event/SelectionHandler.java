@@ -61,7 +61,7 @@ public class SelectionHandler implements Handler {
 
     public void downEvent() {
         List<DrawItem> drawings = view.getDrawings();
-        if (!drawings.isEmpty() && !listener.getRightClick()) {
+        if (!drawings.isEmpty() && !view.isMultiSelected()) {
             int i = drawings.size() - 1;
             context.setContainment(ContainsType.NONE);
             do {
