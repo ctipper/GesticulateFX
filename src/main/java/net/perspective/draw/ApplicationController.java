@@ -36,7 +36,7 @@ import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -195,7 +195,7 @@ public class ApplicationController implements Initializable {
     public When getWireframeWhen() {
         return wireframeSelected;
     }
-    
+
     /**
      * Progress bar visible property
      * 
@@ -213,7 +213,7 @@ public class ApplicationController implements Initializable {
     public DoubleProperty getProgressProperty() {
         return progressbar.progressProperty();
     }
-    
+
     /**
      * Set progress bar indeterminate
      * 
@@ -243,14 +243,14 @@ public class ApplicationController implements Initializable {
         // bind a property to the snapshot button disable state
         this.snapshotEnabled = new SimpleBooleanProperty();
         this.snapshotEnabled.bindBidirectional(snapshotbutton.disableProperty());
-        
+
         // bind a property to the wireframe button selected state
         this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
-        
+
         // bind a property to the progress bar visible property
         this.progressBarVisible = new SimpleBooleanProperty();
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
-        
+
         // set up the status message fade transition
         this.setupStatusTransition();
     }

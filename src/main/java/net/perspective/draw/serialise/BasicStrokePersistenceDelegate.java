@@ -1,8 +1,8 @@
 /**
  * BasicStrokePersistenceDelegate.java
- *
+ * 
  * Created on Apr 26, 2011, 9:46:14 PM
- *
+ * 
  */
 package net.perspective.draw.serialise;
 
@@ -12,7 +12,7 @@ import java.beans.Encoder;
 import java.beans.Expression;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -30,4 +30,5 @@ public class BasicStrokePersistenceDelegate extends DefaultPersistenceDelegate {
                     stroke.getDashPhase()
                 });
     }
+
 }

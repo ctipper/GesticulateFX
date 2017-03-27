@@ -13,7 +13,7 @@ import net.perspective.draw.util.CanvasPoint;
 import org.jhotdraw.geom.Bezier;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -25,7 +25,7 @@ public class FigurePathFactory implements PathFactory {
         CanvasPoint p0, p1, p2, p3;
         double x, y, w, h;
         CanvasPoint[] cPoints;
-        
+
         path = new Path2D.Double();
         java.util.List<CanvasPoint> points = figure.getPoints();
         switch (figure.getType()) {
@@ -102,4 +102,5 @@ public class FigurePathFactory implements PathFactory {
         }
         return path;
     }
+
 }

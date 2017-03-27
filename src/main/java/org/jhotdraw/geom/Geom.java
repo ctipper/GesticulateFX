@@ -1,6 +1,6 @@
 /*
  * @(#)Geom.java
- *
+ * 
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
@@ -14,7 +14,7 @@ import static java.lang.Math.*;
 
 /**
  * Some geometric utilities.
- *
+ * 
  * @version $Id: Geom.java 785 2013-12-01 19:16:30Z rawcoder $
  */
 public class Geom {
@@ -154,14 +154,7 @@ public class Geom {
      * indicating, for each side of Rectangle r1, whether or not the
      * Rectangle r2 is on the same side of the edge as the rest
      * of this Rectangle.
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
+     * 
      * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT, OUT_BOTTOM,
      * OUT_TOP.
      */
@@ -188,14 +181,7 @@ public class Geom {
      * indicating, for each side of Rectangle r1, whether or not the
      * Rectangle r2 is on the same side of the edge as the rest
      * of this Rectangle.
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
+     * 
      * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT, OUT_BOTTOM,
      * OUT_TOP.
      */
@@ -288,23 +274,24 @@ public class Geom {
 
         /*
         if (isClosed() && size() > 1) {
-        Node first = get(0);
-        Node last = get(size() - 1);
-        Point2D.Double chop = Geom.intersect(
-        first.x[0], first.y[0],
-        last.x[0], last.y[0],
-        p.x, p.y,
-        ctr.x, ctr.y
-        );
-        if (chop != null) {
-        double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
-        if (cl < len) {
-        len = cl;
-        cx = chop.x;
-        cy = chop.y;
+            Node first = get(0);
+            Node last = get(size() - 1);
+            Point2D.Double chop = Geom.intersect(
+                first.x[0], first.y[0],
+                last.x[0], last.y[0],
+                p.x, p.y,
+                ctr.x, ctr.y
+            );
+            if (chop != null) {
+                double cl = Geom.length2(chop.x, chop.y, p.x, p.y);
+                if (cl < len) {
+                    len = cl;
+                    cx = chop.x;
+                    cy = chop.y;
+                }
+            }
         }
-        }
-        }*/
+        */
 
 
         // if none found, pick closest vertex
@@ -349,7 +336,7 @@ public class Geom {
     }
 
     /**
-     * Constains a value to the given range.
+     * Constrains a value to the given range.
      * @return the constrained value
      */
     public static int range(int min, int max, int value) {
@@ -363,7 +350,7 @@ public class Geom {
     }
 
     /**
-     * Constains a value to the given range.
+     * Constrains a value to the given range.
      * @return the constrained value
      */
     public static double range(double min, double max, double value) {
@@ -820,7 +807,7 @@ public class Geom {
      * This method is similar to Rectangle2D.contains, but also returns true,
      * when rectangle1 contains rectangle2 and either or both of them
      * are empty.
-     *
+     * 
      * @param r1 Rectangle 1.
      * @param r2 Rectangle 2.
      * @return true if r1 contains r2.
@@ -838,7 +825,7 @@ public class Geom {
      * This method is similar to Rectangle2D.contains, but also returns true,
      * when rectangle1 contains rectangle2 and either or both of them
      * are empty.
-     *
+     * 
      * @param r1 Rectangle 1.
      * @param r2 Rectangle 2.
      * @return true if r1 contains r2.
@@ -849,4 +836,5 @@ public class Geom {
                 && (r2.getX() + max(0, r2.getWidth())) <= r1.getX() + max(0, r1.getWidth())
                 && (r2.getY() + max(0, r2.getHeight())) <= r1.getY() + max(0, r1.getHeight());
     }
+
 }

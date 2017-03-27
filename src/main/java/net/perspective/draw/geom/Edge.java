@@ -16,7 +16,7 @@ import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -28,7 +28,7 @@ public class Edge extends Figure implements Serializable {
     public Edge() {
         super();
     }
-    
+
     /**
      * Creates a new instance of <code>Edge</code>
      * 
@@ -38,7 +38,7 @@ public class Edge extends Figure implements Serializable {
     public Edge(FigureType type) {
         super(type);
     }
-    
+
     /**
      * Initialise points List
      * 
@@ -162,7 +162,7 @@ public class Edge extends Figure implements Serializable {
         }
         return center;
     }
-    
+
     /**
      * Returns an area that specifies the transformed boundary
      * 

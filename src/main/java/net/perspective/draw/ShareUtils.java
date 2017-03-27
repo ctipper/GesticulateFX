@@ -25,7 +25,7 @@ import net.perspective.draw.workers.SVGWorker;
 import net.perspective.draw.workers.WriteOutStreamer;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -74,7 +74,7 @@ public class ShareUtils {
         if (view.getDrawings().isEmpty()) {
             return;
         }
-        
+
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
@@ -121,7 +121,7 @@ public class ShareUtils {
         if (view.getDrawings().isEmpty()) {
             return;
         }
-        
+
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
@@ -150,7 +150,7 @@ public class ShareUtils {
         if (view.getDrawings().isEmpty()) {
             return;
         }
-        
+
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
@@ -179,7 +179,7 @@ public class ShareUtils {
         if (view.getDrawings().isEmpty()) {
             return;
         }
-        
+
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);
@@ -217,11 +217,11 @@ public class ShareUtils {
         TimeZone tz = TimeZone.getDefault();
         df.setTimeZone(tz);
         String now = df.format(d);
-        
+
         // Name file and add timestamp, save to Desktop
         String path = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
         File file = new File(path);
-        
+
         PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
         pngWorker.setFile(file);
         pngWorker.setMargin(this.margin);

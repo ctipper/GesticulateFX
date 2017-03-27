@@ -1,8 +1,8 @@
 /**
  * FigurePersistenceDelegate.java
- *
+ * 
  * Created on 23-Apr-2016 12:06:14
- *
+ * 
  */
 package net.perspective.draw.serialise;
 
@@ -14,7 +14,7 @@ import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -22,7 +22,7 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
-        
+
         if (oldInstance instanceof Edge) {
             Edge edge = (Edge) oldInstance;
             return new Expression(edge, edge.getClass(), "new", new Object[]{
@@ -41,7 +41,7 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
     protected void initialize(Class<?> type, Object oldInstance,
                               Object newInstance, Encoder out) {
         super.initialize(type, oldInstance,  newInstance, out);
-        
+
         Figure figure = (Figure) oldInstance;
         out.writeStatement(
                 new Statement(figure,

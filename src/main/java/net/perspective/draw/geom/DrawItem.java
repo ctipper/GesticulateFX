@@ -15,7 +15,7 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -28,7 +28,7 @@ public interface DrawItem {
      * @param y the y position
      */
     public void setStart(double x, double y);
-    
+
     /**
      * Return the untransformed TL coordinate of the item
      * 
@@ -119,30 +119,30 @@ public interface DrawItem {
     boolean isVertical();
 
     /**
-     *  
+     * 
      * @return The 2-tuple of top-left corner location (transformed)
-     *         second point may be normalized
+     *         second point may be normalised
      */
     CanvasPoint[] getTop();
 
     /**
-     *  
+     * 
      * @return The 2-tuple of top-right corner location (transformed)
-     *         second point may be normalized
+     *         second point may be normalised
      */
     CanvasPoint[] getUp();
 
     /**
-     *  
+     * 
      * @return The 2-tuple of bottom-left corner location (transformed)
-     *         second point may be normalized
+     *         second point may be normalised
      */
     CanvasPoint[] getDown();
 
     /**
      * 
      * @return The 2-tuple of bottom-right corner location (transformed)
-     *         second point may be normalized
+     *         second point may be normalised
      */
     CanvasPoint[] getBottom();
 

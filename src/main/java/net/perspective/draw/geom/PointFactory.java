@@ -11,7 +11,8 @@ import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
- *
+ * Defines interface that produces a list of points describing a geometric figure.
+ * 
  * @author ctipper
  */
 

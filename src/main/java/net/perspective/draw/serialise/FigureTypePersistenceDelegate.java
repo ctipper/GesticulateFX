@@ -11,7 +11,7 @@ import java.beans.Encoder;
 import java.beans.Expression;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -24,4 +24,5 @@ public class FigureTypePersistenceDelegate extends DefaultPersistenceDelegate {
             t.name()
         });
     }
+
 }

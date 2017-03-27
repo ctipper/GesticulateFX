@@ -1,6 +1,6 @@
 /*
  * @(#)BezierPath.java
- *
+ * 
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
@@ -21,7 +21,7 @@ import net.perspective.draw.util.CanvasPoint;
  * C0, C1, C2. A mask defines which control points are in use. At a node, 
  * the path passes through C0. C1 controls the curve going towards C0. C2
  * controls the curve going away from C0.
- *
+ * 
  * @author Werner Randelshofer
  * @version $Id: BezierPath.java 788 2014-03-22 07:56:28Z rawcoder $
  */
@@ -267,7 +267,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * This is a convenience method for adding a node with three control points
      * C0, C1 and C2, and a mask.
-     *
+     * 
      * @param ctrlMask An or-combination of C0_MASK,C1_MASK and C2_MASK.
      * @param c0 The coordinates of the C0 control point.
      * @param c1 The coordinates of the C1 control point.
@@ -291,7 +291,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Convenience method for changing a single control point of a node.
-     *
+     * 
      * @param nodeIndex The index of the node.
      * @param ctrlIndex Either C0_MASK, C1_MASK or C2_MASK.
      * @param p The control point. The coordinates will be cloned.
@@ -304,7 +304,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Convenience method for getting a single control point of a node.
-     *
+     * 
      * @param nodeIndex The index of the node.
      * @param ctrlIndex Either C0_MASK, C1_MASK or C2_MASK.
      * @return Returns a clone of the control point.
@@ -421,7 +421,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Returns true, if the outline of this bezier path contains the specified
      * point.
-     *
+     * 
      * @param p The point to be tested.
      * @param tolerance The tolerance for the test.
      */
@@ -739,7 +739,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * Returns a relative point on the path.
      * Where 0 is the start point of the path and 1 is the end point of the
      * path.
-     *
+     * 
      * @param relative a value between 0 and 1.
      */
     public CanvasPoint getPointOnPath(double relative, double flatness) {
@@ -791,7 +791,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Returns the length of the path.
-     *
+     * 
      * @param flatness the flatness used to approximate the length.
      */
     public double getLengthOfPath(double flatness) {
@@ -812,9 +812,9 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     /**
      * Returns the relative position of the specified point on the path.
-     *
+     * 
      * @param flatness the flatness used to approximate the length.
-     *
+     * 
      * @return relative position on path, this is a number between 0 and 1.
      * Returns -1, if the point is not on the path.
      */
@@ -1059,21 +1059,21 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * <p>
      * The implementation of this method has been derived from
      * Apache Batik class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc
-     *
+     * 
      * @param rx the x radius of the ellipse
      * @param ry the y radius of the ellipse
-     *
+     * 
      * @param xAxisRotation the angle from the x-axis of the current
      * coordinate system to the x-axis of the ellipse in degrees.
-     *
+     * 
      * @param largeArcFlag the large arc flag. If true the arc
      * spanning less than or equal to 180 degrees is chosen, otherwise
      * the arc spanning greater than 180 degrees is chosen
-     *
+     * 
      * @param sweepFlag the sweep flag. If true the line joining
      * center to arc sweeps through decreasing angles otherwise it
      * sweeps through increasing angles
-     *
+     * 
      * @param x the absolute x coordinate of the final point of the arc.
      * @param y the absolute y coordinate of the final point of the arc.
      */
@@ -1251,4 +1251,5 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     public int getWindingRule() {
         return windingRule;
     }
+
 }

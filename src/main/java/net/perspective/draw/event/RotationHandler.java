@@ -17,7 +17,7 @@ import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
 
 /**
- *
+ * 
  * @author ctipper
  */
 public class RotationHandler implements Handler {
@@ -117,7 +117,7 @@ public class RotationHandler implements Handler {
 
     /**
      * Get an area centred on the specified point
-     *
+     * 
      * @param p a {@link net.perspective.draw.util.CanvasPoint}
      * @return area
      */

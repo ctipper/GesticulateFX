@@ -22,7 +22,7 @@ import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -40,7 +40,7 @@ public class SelectionHandler implements Handler {
     private BehaviourContext context;
     @Inject
     private FigureFactory figurefactory;
-    
+
     // Following fields apply to marquee
     private static final BasicStroke marqueeStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     private static final Color marqueeColor = Color.rgb(204, 102, 255);         // Light blue
@@ -119,4 +119,5 @@ public class SelectionHandler implements Handler {
             view.setMarquee(true);
         }
     }
+
 }

@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -75,7 +75,7 @@ public class WriteOutStreamer extends Task<Object> {
 
         net.perspective.draw.serialise.XMLEncoder encoder;
         ZipOutputStream zos = null;
-        
+
         Serialiser() {
             logger.info("Serialisation initialised.");
             try {
@@ -100,7 +100,7 @@ public class WriteOutStreamer extends Task<Object> {
             /**
              * Create an empty pictures descriptor
              */
-            
+
             updateProgress(0L, 2L);
             ZipEntry entry = new ZipEntry("content/pictures.xml");
             List<Integer> pictures = new ArrayList<>();
@@ -129,7 +129,7 @@ public class WriteOutStreamer extends Task<Object> {
             encoder.setExceptionListener((Exception ex) -> {
                 logger.warn(ex.getMessage());
             });
-            
+
             encoder.writeObject(drawings);
             encoder.finished();
             zos.closeEntry();

@@ -22,7 +22,7 @@ public class FileUtils {
     public final static String tiff = "tiff";
     public final static String tif = "tif";
     public final static String png = "png";
-    
+
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class.getName());
 
     private FileUtils() {
@@ -44,7 +44,7 @@ public class FileUtils {
 
     /*
      * Ensure file has given file-extension
-     *
+     * 
      * @author ctipper
      */
     public static File cleanseFileName(File file, String extension) {
@@ -74,7 +74,7 @@ public class FileUtils {
 
     /*
      * Returns a uniform image name with png extension
-     *
+     * 
      * @author ctipper
      */
     public static String getImageName(int index) {
@@ -98,4 +98,5 @@ public class FileUtils {
             return null;
         }
     }
+
 }

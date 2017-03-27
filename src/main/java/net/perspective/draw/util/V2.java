@@ -9,7 +9,7 @@
 package net.perspective.draw.util;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -17,7 +17,7 @@ public class V2 {
 
     /**
      * Rotate coordinate by angle theta
-     *
+     * 
      * @param x
      * @param y
      * @param theta
@@ -37,7 +37,7 @@ public class V2 {
 
     /**
      * Compute dot product of a and b
-     *
+     * 
      * @param a
      * @param b
      * @return dot product
@@ -48,7 +48,7 @@ public class V2 {
 
     /**
      * Compute the L2, or euclidean, norm of p.
-     *
+     * 
      * @param p
      * @return norm of p
      */
@@ -58,7 +58,7 @@ public class V2 {
 
     /**
      * Compute the L2, or euclidean, norm of (x, y).
-     *
+     * 
      * @param x
      * @param y
      * @return norm of (x, y)
@@ -69,7 +69,7 @@ public class V2 {
 
     /**
      * Rotate p by 90 degrees
-     *
+     * 
      * @param p
      * @return a point
      */
@@ -79,7 +79,7 @@ public class V2 {
 
     /**
      * Compute angle of arc defined by (x, y)
-     *
+     * 
      * @param x
      * @param y
      * @return an angle defined in radians
@@ -98,7 +98,7 @@ public class V2 {
 
     /**
      * Normalise angle defined in radians
-     *
+     * 
      * @param angle
      * @return norm of angle defined in radians
      */

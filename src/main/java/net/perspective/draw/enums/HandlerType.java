@@ -7,7 +7,7 @@
 package net.perspective.draw.enums;
 
 /**
- *
+ * 
  * @author ctipper
  */
 

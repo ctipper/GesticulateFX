@@ -1,6 +1,6 @@
 /*
  * @(#)Bezier.java
- *
+ * 
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
@@ -21,7 +21,7 @@ import net.perspective.draw.util.CanvasPoint;
  * of Master of Science, University of Washington.
  * <p>
  * http://autotrace.sourceforge.net/Interactive_Curve_Design.ps.gz
- *
+ * 
  * @author Werner Randelshofer
  * @version $Id: Bezier.java 789 2014-03-22 13:14:07Z rawcoder $
  */
@@ -72,7 +72,7 @@ public class Bezier {
         // Split into segments at corners
         ArrayList<ArrayList<CanvasPoint>> segments;
         segments = splitAtCorners(digitizedPoints, 77 / 180d * Math.PI, error * error);
-        
+
         // Clean up the data in the segments
         for (int i = 0, n = segments.size(); i < n; i++) {
             ArrayList<CanvasPoint> seg = segments.get(i);
@@ -349,7 +349,7 @@ public class Bezier {
      * Fit one or multiple subsequent cubic bezier curves to a (sub)set of 
      * digitized points. The digitized points represent a smooth curve without
      * corners.
-     *
+     * 
      * @param d  Array of digitized points. Must not contain subsequent 
      * coincident points.
      * @param first Indice of first point in d.
@@ -474,7 +474,7 @@ public class Bezier {
 
     /**
      * Approximate unit tangents at "left" endpoint of digitized curve.
-     *
+     * 
      * @param d Digitized points.
      * @param end Index to "left" end of region.
      */
@@ -487,7 +487,7 @@ public class Bezier {
 
     /**
      * Approximate unit tangents at "right" endpoint of digitized curve.
-     *
+     * 
      * @param d Digitized points.
      * @param end Index to "right" end of region.
      */
@@ -500,7 +500,7 @@ public class Bezier {
 
     /**
      * Approximate unit tangents at "center" of digitized curve.
-     *
+     * 
      * @param d Digitized points.
      * @param center Index to "center" end of region.
      */
@@ -519,7 +519,7 @@ public class Bezier {
     /**
      * Assign parameter values to digitized points
      * using relative distances between points.
-     *
+     * 
      * @param d Digitized points.
      * @param first Indice of first point of region in d.
      * @param last Indice of last point of region in d.
@@ -546,7 +546,7 @@ public class Bezier {
     /**
      * Given set of points and their parameterization, try to find
      * a better parameterization.
-     *
+     * 
      * @param d  Array of digitized points.
      * @param first Indice of first point of region in d.
      * @param last Indice of last point of region in d.
@@ -567,7 +567,7 @@ public class Bezier {
 
     /**
      * Use Newton-Raphson iteration to find better root.
-     *
+     * 
      * @param Q  Current fitted bezier curve.
      * @param P  Digitized point.
      * @param u  Parameter value vor P.
@@ -613,7 +613,7 @@ public class Bezier {
     /**
      * Find the maximum squared distance of digitized points
      * to fitted curve.
-     *
+     * 
      * @param d Digitized points.
      * @param first Indice of first point of region in d.
      * @param last Indice of last point of region in d.
@@ -645,7 +645,7 @@ public class Bezier {
 
     /**
      * Use least-squares method to find Bezier control points for region.
-     *
+     * 
      * @param d  Array of digitized points.
      * @param first Indice of first point in d.
      * @param last Indice of last point in d.
@@ -675,7 +675,7 @@ public class Bezier {
 
     /**
      * Evaluate a Bezier curve at a particular parameter value.
-     *
+     * 
      * @param degree  The degree of the bezier curve.
      * @param V  Array of control points.
      * @param t  Parametric value to find point for.
@@ -855,4 +855,5 @@ public class Bezier {
     private static double b3(double u) {
         return (u * u * u);
     }
+
 }

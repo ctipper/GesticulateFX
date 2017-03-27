@@ -12,16 +12,13 @@ import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
- *
+ * Produces a list of points describing a geometric figure.
+ * 
  * @author ctipper
  */
 
 public class FigurePointFactory implements PointFactory {
 
-    /** Creates a new instance of <code>FigurePointFactory</code> */
-    public FigurePointFactory() {
-    }
-    
     public List<CanvasPoint> createPoints(DrawingType description, double... coords) {
         List<CanvasPoint> points;
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 0.0;
@@ -106,4 +103,5 @@ public class FigurePointFactory implements PointFactory {
         }
         return points;
     }
+
 }

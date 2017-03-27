@@ -1,6 +1,6 @@
 /*
  * @(#)DoubleStroke.java
- *
+ * 
  * Copyright (c) 1996-2010 The authors and contributors of JHotDraw.
  * You may not use, copy or modify this file, except in compliance with the 
  * accompanying license terms.
@@ -16,7 +16,7 @@ import java.io.*;
  * The inner width of a DoubleStroke defines the distance between the two
  * outlines being drawn. The outline width of a DoubleStroke defines the
  * thickness of the outline.
- *
+ * 
  * @author Werner Randelshofer
  * @version $Id: DoubleStroke.java 785 2013-12-01 19:16:30Z rawcoder $
  */
@@ -283,39 +283,39 @@ public class DoubleStroke implements Stroke, Serializable {
     public void setInnerWidth(float i) {
         innerWidth = i;
     }
-    
+
     public double getInnerWidth() {
         return innerWidth;
     }
-    
+
     public void setOutlineWidth(float o) {
         outlineWidth = o;
     }
-    
+
     public double getOutlineWidth() {
         return outlineWidth;
     }
-    
+
     public void setMiterLimit(double m) {
         miterLimit = m;
     }
-    
+
     public double getMiterLimit() {
         return miterLimit;
     }
-    
+
     public void setDashes(float[] d) {
         dashes = d;
     }
-    
+
     public float[] getDashes() {
         return dashes;
     }
-    
+
     public void setDashPhase(float p) {
        dashPhase = p;
     }
-    
+
     public float getDashPhase() {
         return dashPhase;
     }
@@ -376,4 +376,5 @@ public class DoubleStroke implements Stroke, Serializable {
             stream.writeBoolean(true);
         }
     }
+
 }

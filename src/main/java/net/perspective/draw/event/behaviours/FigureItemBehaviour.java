@@ -20,12 +20,12 @@ import net.perspective.draw.util.R2;
 import net.perspective.draw.util.V2;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
 public class FigureItemBehaviour implements ItemBehaviours {
-    
+
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
@@ -118,7 +118,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
         }
         return found;
     }
-    
+
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         ContainsType contains;
         DrawingType drawType;
@@ -272,4 +272,5 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 break;
         }
     }
+
 }

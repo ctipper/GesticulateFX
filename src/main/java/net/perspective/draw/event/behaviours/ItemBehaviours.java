@@ -9,13 +9,13 @@ package net.perspective.draw.event.behaviours;
 import net.perspective.draw.geom.DrawItem;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
 public interface ItemBehaviours {
 
     boolean selectItem(BehaviourContext context, DrawItem item, int index);
-    
+
     void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc);
 }

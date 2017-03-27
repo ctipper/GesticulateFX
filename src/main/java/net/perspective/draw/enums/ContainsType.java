@@ -7,10 +7,10 @@
 package net.perspective.draw.enums;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
 public enum ContainsType {
-    SHAPE, TL, BL, BR, TR, TT, LL, BB, RR, NONE;
+    SHAPE, TL, BL, BR, TR, TT, LL, BB, RR, NONE
 }

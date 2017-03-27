@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -27,7 +27,7 @@ public class XMLEncoder extends java.beans.XMLEncoder {
      * Alternative to close() which closes the XML node and also the
      * OutputStream. Sometimes we need to close the XML without closing the
      * OutputStream. For example, entries in a ZipOutputStream.
-     *
+     * 
      * @throws IOException
      */
     public void finished() throws IOException {
@@ -35,4 +35,5 @@ public class XMLEncoder extends java.beans.XMLEncoder {
         // borrowed from XMLEncoder's close()
         os.write("</java> \n".getBytes());
     }
+
 }

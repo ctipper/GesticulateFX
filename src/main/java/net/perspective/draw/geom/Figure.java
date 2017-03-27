@@ -44,7 +44,7 @@ public class Figure implements DrawItem, Serializable {
     private int transparency;
     private double angle;
     private boolean closed;                 // closed indicates to draw() whether figure should be filled
-    
+
     private static final long serialVersionUID = 1L;
 
     /** Creates a new instance of <code>Figure</code> */
@@ -141,7 +141,7 @@ public class Figure implements DrawItem, Serializable {
     public void setPoints(DrawingType drawtype) {
         this.points = pointfactory.createPoints(drawtype, start.x, start.y, end.x, end.y);
     }
-    
+
     /**
      * Returns points list
      * 
@@ -171,7 +171,7 @@ public class Figure implements DrawItem, Serializable {
                 break;
         }
     }
-    
+
     /**
      * Add a point to the List of points
      * 
@@ -181,7 +181,7 @@ public class Figure implements DrawItem, Serializable {
     public void addPoint(double x, double y) {
         this.points.add(new CanvasPoint(x, y));
     }
-    
+
     /**
      * Set the path from a List of points
      */
@@ -297,7 +297,7 @@ public class Figure implements DrawItem, Serializable {
 
     protected java.awt.geom.AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
-        
+
         java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
         transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
@@ -404,7 +404,7 @@ public class Figure implements DrawItem, Serializable {
      */
     public Node draw() {
         java.awt.geom.AffineTransform at;
-        
+
         at = this.getTransform();
         Path fxpath = drawPath(at);
         fxpath.setStroke(getColor());
@@ -420,7 +420,7 @@ public class Figure implements DrawItem, Serializable {
         }
         return fxpath;
     }
-    
+
     protected Path drawPath(java.awt.geom.AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
         Path fxpath = new Path();
@@ -437,7 +437,7 @@ public class Figure implements DrawItem, Serializable {
             case PathIterator.SEG_LINETO:
                 LineTo lineTo = new LineTo();
                 lineTo.setX(coords[0]);
-                lineTo.setY(coords[1]);                
+                lineTo.setY(coords[1]);
                 fxpath.getElements().add(lineTo);
                 break;
             case PathIterator.SEG_QUADTO:
@@ -445,7 +445,7 @@ public class Figure implements DrawItem, Serializable {
                 quadCurveTo.setX(coords[2]);
                 quadCurveTo.setY(coords[3]);
                 quadCurveTo.setControlX(coords[0]);
-                quadCurveTo.setControlY(coords[1]);                
+                quadCurveTo.setControlY(coords[1]);
                 fxpath.getElements().add(quadCurveTo);
                 break;
             case PathIterator.SEG_CUBICTO:
@@ -469,7 +469,7 @@ public class Figure implements DrawItem, Serializable {
         }
         return fxpath;
     }
-    
+
     /**
      * Render the figure anchors to indicate selection
      * 
@@ -502,7 +502,7 @@ public class Figure implements DrawItem, Serializable {
         }
         return anchors;
     }
-    
+
     protected javafx.scene.shape.Shape anchor(double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
@@ -514,7 +514,7 @@ public class Figure implements DrawItem, Serializable {
         anchor.setStrokeWidth(1.0);
         return anchor;
     }
-    
+
     protected javafx.scene.shape.Shape edgeAnchor(double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         javafx.scene.shape.Rectangle anchor = new javafx.scene.shape.Rectangle();
@@ -536,7 +536,7 @@ public class Figure implements DrawItem, Serializable {
      */
     public void draw(Graphics2D g2) {
         java.awt.geom.AffineTransform defaultTransform, transform;
-        
+
         defaultTransform = g2.getTransform();
 
         transform = this.getTransform();
@@ -561,7 +561,7 @@ public class Figure implements DrawItem, Serializable {
     public double getLineWidth(BasicStroke stroke) {
         return stroke.getLineWidth();
     }
-    
+
     public StrokeLineJoin getLineJoin(BasicStroke stroke) {
         javafx.scene.shape.StrokeLineJoin jfxjoin;
         switch (stroke.getLineJoin()) {
@@ -751,7 +751,7 @@ public class Figure implements DrawItem, Serializable {
         double _area = (p1.x * p2.y - p2.x * p1.y) + (p2.x * p3.y - p3.x * p2.y) + (p3.x * p1.y - p1.x * p3.y);
         return Math.signum(_area);
     }
-    
+
     /**
      * Return the 2-tuple of vertices, second point normalised.
      * 
@@ -841,9 +841,9 @@ public class Figure implements DrawItem, Serializable {
                 break;
         }
         // transform real and virtual vertices
-        vert.stream().map((p) -> new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) }).forEach((point) -> {
-            vertices.add(point);
-        });
+        for (CanvasPoint[] p : vert) {
+            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };            vertices.add(point);
+        }
         return vertices;
     }
 
@@ -906,7 +906,7 @@ public class Figure implements DrawItem, Serializable {
      * Transform and awt Color to a javafx Color
      * 
      * <p>javafx.scene.paint.Color not serialisable
-     *
+     * 
      * @param color  a {@link java.awt.Color}
      * @return {@link javafx.scene.paint.Color}
      */
@@ -918,7 +918,7 @@ public class Figure implements DrawItem, Serializable {
      * Transform a javafx Color to an awt Color
      * 
      * <p>javafx.scene.paint.Color not serialisable
-     *
+     * 
      * @param color  a {@link javafx.scene.paint.Color}
      * @return {@link java.awt.Color}
      */
@@ -930,7 +930,7 @@ public class Figure implements DrawItem, Serializable {
      * Transform a javafx Color to an awt Color with an alpha channel
      * 
      * <p>javafx.scene.paint.Color not serialisable
-     *
+     * 
      * @param color  a {@link javafx.scene.paint.Color}
      * @param opacity float
      * @return {@link java.awt.Color}
@@ -948,7 +948,7 @@ public class Figure implements DrawItem, Serializable {
         this.color = awtToFx((java.awt.Color) in.readObject());
         c = (Class<?>) in.readObject();
         this.fillcolor = awtToFx((java.awt.Color) in.readObject());
-        
+
         // deserialise Stroke
         this.setStroke(readStroke(in));
         this.pointfactory = new FigurePointFactory();

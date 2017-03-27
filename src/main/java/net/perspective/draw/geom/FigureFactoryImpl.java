@@ -9,7 +9,7 @@ package net.perspective.draw.geom;
 import net.perspective.draw.enums.DrawingType;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -47,4 +47,5 @@ public class FigureFactoryImpl implements FigureFactory {
         return item;
 
     }
+
 }

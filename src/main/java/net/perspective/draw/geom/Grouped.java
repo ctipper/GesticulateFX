@@ -106,7 +106,7 @@ public class Grouped implements DrawItem, Serializable {
         try {
             topleft = (CanvasPoint) points.get(0).clone();
             bottomright = (CanvasPoint) points.get(1).clone();
-            
+
             for (CanvasPoint point : points) {
                 topleft.x = Math.min(point.x, topleft.x);
                 topleft.y = Math.min(point.y, topleft.y);
@@ -135,7 +135,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     *
+     * 
      * @param start
      * @deprecated
      */
@@ -168,7 +168,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     *
+     * 
      * @param end
      * @deprecated
      */
@@ -257,7 +257,7 @@ public class Grouped implements DrawItem, Serializable {
 
     private AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
-        
+
         AffineTransform transform = new AffineTransform();
         transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
@@ -327,7 +327,7 @@ public class Grouped implements DrawItem, Serializable {
         group.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, c.x, c.y));
         return group;
     }
-    
+
     /**
      * Render the figure anchors to indicate selection
      * 
@@ -342,7 +342,7 @@ public class Grouped implements DrawItem, Serializable {
         anchors.getChildren().add(this.anchor(end.x, end.y));
         return anchors;
     }
-    
+
     protected javafx.scene.shape.Shape anchor(double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
@@ -354,7 +354,7 @@ public class Grouped implements DrawItem, Serializable {
         anchor.setStrokeWidth(1.0);
         return anchor;
     }
-    
+
     /**
      * Render the group to the Java2d canvas for export
      * 

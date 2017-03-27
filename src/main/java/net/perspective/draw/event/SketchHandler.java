@@ -15,7 +15,7 @@ import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -71,4 +71,5 @@ public class SketchHandler implements Handler  {
         item.setPath();
         view.setNewItem(item);
     }
+
 }

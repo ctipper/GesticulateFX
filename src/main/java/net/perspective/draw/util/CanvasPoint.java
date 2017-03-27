@@ -1,15 +1,15 @@
 /**
  * CanvasPoint.java
- *
+ * 
  * Created on May 26, 2010, 3:16:19 PM
- *
+ * 
  */
 package net.perspective.draw.util;
 
 import java.io.Serializable;
 
 /**
- *
+ * 
  * @author ctipper
  */
 

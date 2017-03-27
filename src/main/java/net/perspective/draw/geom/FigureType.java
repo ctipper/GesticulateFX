@@ -7,7 +7,7 @@
 package net.perspective.draw.geom;
 
 /**
- *
+ * 
  * @author ctipper
  */
 

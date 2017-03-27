@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -36,7 +36,7 @@ public class PNGWorker extends Task<Object> {
     protected File file;
     private boolean opacity;
     private double margin;
-    
+
     private static final Logger logger = LoggerFactory.getLogger(PNGWorker.class.getName());
 
     @Inject
@@ -48,11 +48,11 @@ public class PNGWorker extends Task<Object> {
     public void setFile(File file) {
         this.file = file;
     }
-    
+
     public void setOpacity(boolean opacity) {
         this.opacity = opacity;
     }
-    
+
     public void setMargin(double margin) {
         this.margin = margin;
     }
@@ -84,7 +84,7 @@ public class PNGWorker extends Task<Object> {
     }
 
     final class Serialiser {
-        
+
         private final boolean opacity;
         double scale = 1.375;
 

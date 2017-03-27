@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -128,7 +128,7 @@ public class PDFWorker extends Task<Object> {
                 logger.error(null, e);
             }
         }
-        
+
         private void configure(PDFDocumentGraphics2D g2d, Configuration cfg)
                 throws ConfigurationException {
 
@@ -136,7 +136,6 @@ public class PDFWorker extends Task<Object> {
             boolean useComplexScriptFeatures = false;
             configurator.configure(g2d, cfg, useComplexScriptFeatures);
         }
-
     }
-    
+
 }

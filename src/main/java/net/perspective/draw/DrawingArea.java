@@ -30,7 +30,7 @@ import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 
 /**
- *
+ * 
  * @author ctipper
  */
 

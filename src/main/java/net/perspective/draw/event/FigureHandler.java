@@ -13,7 +13,7 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.geom.*;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -62,4 +62,5 @@ public class FigureHandler implements Handler {
         view.setNewItem(item);
         view.setDrawing(true);
     }
+
 }

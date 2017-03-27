@@ -15,7 +15,7 @@ import net.perspective.draw.util.CanvasPoint;
 
 /**
  * A context for the orchestration of mouse and touch behaviours
- *
+ * 
  * @author ctipper
  */
 

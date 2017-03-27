@@ -27,7 +27,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Element;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -89,7 +89,7 @@ public class SVGWorker extends Task<Object> {
             final CanvasPoint[] bounds = view.getBounds();
             CanvasPoint start = bounds[0].shifted(-margin, -margin).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin);
-            
+
             try {
                 // Get a DOMImplementation.
                 DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
@@ -129,7 +129,7 @@ public class SVGWorker extends Task<Object> {
                 svgRoot.setAttributeNS(null, "width", "100%");
                 String viewBox = "0 0 " + width + " " + height; 
                 svgRoot.setAttributeNS(null, "viewBox", viewBox);
-                
+
                 boolean useCSS = true; // we want to use CSS style attributes
                 try (Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8")) {
                     g2.stream(svgRoot, out, useCSS, false);
@@ -142,4 +142,5 @@ public class SVGWorker extends Task<Object> {
             }
         }
     }
+
 }

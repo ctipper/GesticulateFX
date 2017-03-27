@@ -9,7 +9,7 @@ package net.perspective.draw.util;
 import net.perspective.draw.enums.ContainsType;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -57,7 +57,7 @@ public class R2 {
 
     /**
      * Determine vertex quadrant
-     *
+     * 
      * @param vertex
      * @param centre
      * @return an integer index, see {@link net.perspective.draw.util.V2}
@@ -69,7 +69,7 @@ public class R2 {
 
     /**
      * Determine edge quarter
-     *
+     * 
      * @param edge
      * @param centre
      * @return an integer index, see {@link net.perspective.draw.util.V2}
@@ -81,7 +81,7 @@ public class R2 {
 
     /**
      * Permute vertex labels
-     *
+     * 
      * @param contains
      * @param quad
      * @return contains type
@@ -109,7 +109,7 @@ public class R2 {
 
     /**
      * Mutate edge labels
-     *
+     * 
      * @param contains
      * @param quad
      * @return contains type
@@ -137,7 +137,7 @@ public class R2 {
 
     /**
      * Retrieve TL coordinate transforms
-     *
+     * 
      * @param quad
      * @return a numeric pair
      */

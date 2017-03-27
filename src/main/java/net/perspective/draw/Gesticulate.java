@@ -33,7 +33,7 @@ import net.perspective.draw.workers.SVGWorker;
 import net.perspective.draw.workers.WriteOutStreamer;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
@@ -42,7 +42,7 @@ public class Gesticulate extends GuiceApplication {
     @Inject private GuiceFXMLLoader fxmlLoader;
     @Inject private DrawingArea drawarea;
     private Stage stage;
-    
+
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
     private final Rectangle2D screenSize = screen.getVisualBounds();
@@ -50,21 +50,21 @@ public class Gesticulate extends GuiceApplication {
     private final int sceneHeight = (int) (screenSize.getMaxY() * .8);
     private final int frameLeft = (int) (screenSize.getMaxX() - sceneWidth) / 3;
     private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
-    
+
     @Override
     public void init(final List<Module> modules) throws Exception {
         modules.add(new FxmlModule());
     }
 
     /**
-     *
+     * 
      * @param primaryStage
      * @throws Exception
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {
         Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
-        
+
         final Parent root = result.getRoot();
 
         // Put the loaded user interface onto the primary stage.
@@ -76,7 +76,7 @@ public class Gesticulate extends GuiceApplication {
             Platform.exit();
             System.exit(0);
         });
-        
+
         // Size the primary stage
         this.sizeStage(primaryStage);
 
@@ -88,16 +88,16 @@ public class Gesticulate extends GuiceApplication {
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
         pane.setFitToWidth(true);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        
+
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());
         this.initialiseToolbar(scene);
-        
+
         // Install the canvas
         pane.setContent(drawarea.getScene());
         this.setOnResize(pane);
     }
-    
+
     public void setOnResize(ScrollPane pane) {
         pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
             drawarea.getScene().setHeight((double) new_val);
@@ -106,14 +106,14 @@ public class Gesticulate extends GuiceApplication {
             drawarea.getScene().setWidth((double) new_val);
         });
     }
-    
+
     public void sizeStage(Stage stage) {
         stage.setX(frameLeft);
         stage.setY(frameTop);
         stage.setWidth(sceneWidth);
         stage.setHeight(sceneHeight);
     }
-    
+
     public Stage getStage() {
         return this.stage;
     }
@@ -125,13 +125,13 @@ public class Gesticulate extends GuiceApplication {
             ((Toggle) button).setSelected(true);
         }
     }
-    
+
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
      * launched through deployment artifacts, e.g., in IDEs with limited FX
      * support.
-     *
+     * 
      * @param args the command line arguments
      */
     public static void main(String[] args) {
