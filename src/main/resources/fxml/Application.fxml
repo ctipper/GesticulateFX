@@ -34,7 +34,7 @@
                 </HBox>
             </bottom>
             <center>
-                <ScrollPane id="scroll" content="$null" fitToWidth="true" hbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" />
+                <ScrollPane id="scroll" content="$null" fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" />
             </center>
             <left>
                 <VBox prefHeight="-1.0" prefWidth="50.0" style="-fx-background-color: white; -fx-border-color: rgb(243.0, 243.0, 243.0);">

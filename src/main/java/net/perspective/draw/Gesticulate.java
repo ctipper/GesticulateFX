@@ -86,8 +86,6 @@ public class Gesticulate extends GuiceApplication {
 
         // Initialise the scroll area
         final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
-        pane.setFitToWidth(true);
-        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());
