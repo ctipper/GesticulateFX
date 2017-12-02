@@ -15,13 +15,13 @@
 
 .header{
     -fx-font-size: 42pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "San Francisco", "Segoe UI Light", "Segoe UI", Tahoma, sans-serif;
     -fx-text-fill: black;
 }
 
 .item-title{
     -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: "San Francisco", "Segoe UI Semibold", "Segoe UI", Tahoma, sans-serif;
     -fx-text-fill: black;
     -fx-opacity: 0.6;
      
@@ -40,7 +40,7 @@
 
     -fx-background-color: #cccccc;
   
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-family: "San Francisco", "Segoe UI", Tahoma, sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: black;
 }
@@ -94,7 +94,7 @@
 
     -fx-background-color: #cccccc;
   
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-family: "San Francisco", "Segoe UI", Tahoma, sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: black;
 }
