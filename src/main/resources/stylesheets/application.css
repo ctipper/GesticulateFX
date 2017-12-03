@@ -16,7 +16,7 @@
 .menuitem {
     -fx-background-color: white;
     -fx-padding: 8 5 8 5;
-    -fx-font-family: "San Francisco", "Segoe UI", Tahoma, sans-serif;
+    -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
 }
 .menuicon {
     -fx-background-color: white;
