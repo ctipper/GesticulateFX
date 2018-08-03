@@ -155,6 +155,9 @@
 
                     <mainClass>net.perspective.draw.Gesticulate</mainClass>
                     <jfxMainAppJarName>${project.name}.jar</jfxMainAppJarName>
+                    <manifestAttributes>
+                        <Add-Opens>java.base/java.lang</Add-Opens>
+                    </manifestAttributes>
 
                     <!-- only required if signing the jar file -->
                     <keyStoreAlias>example-user</keyStoreAlias>
