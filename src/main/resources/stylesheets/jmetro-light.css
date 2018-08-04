@@ -34,7 +34,7 @@
  ******************************************************************************/
 
 .button {
-    -fx-padding: 5 18 5 18;
+    -fx-padding: 5 22 5 22;
     -fx-border-style: none;
     -fx-background-radius: 0;
 
@@ -88,7 +88,7 @@
  ******************************************************************************/
 
 .toggle-button {
-    -fx-padding: 5 18 5 18;
+    -fx-padding: 5 22 5 22;
     -fx-border-style: none; 
     -fx-background-radius: 0;
 

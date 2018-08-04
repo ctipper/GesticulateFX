@@ -58,6 +58,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty progressBarVisible;
     private When wireframeSelected;
     private SequentialTransition statusTransition;
+    private ReadOnlyStringWrapper strokeTypeProperty;
     private ReadOnlyStringWrapper strokeStyleProperty;
 
     @FXML private GridPane appmenu;
@@ -215,6 +216,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Stroke type property
+     * 
+     * @return 
+     */
+    public ReadOnlyStringWrapper getStrokeTypeProperty() {
+        return strokeTypeProperty;
+    }
+
+    /**
      * Stroke style property
      * 
      * @return 
@@ -252,6 +262,35 @@ public class ApplicationController implements Initializable {
         statusTransition.play();
     }
 
+    private Callback<ListView<String>, ListCell<String>> getCellFactory() {
+        return new Callback<ListView<String>, ListCell<String>>() {
+
+            @Override
+            public ListCell<String> call(ListView<String> p) {
+                return new ListCell<String>() {
+
+                    private final ImageView cellImage;
+
+                    {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        cellImage = new ImageView(new Image("images/stroke1.png"));
+                    }
+
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(new ImageView(new Image("images/" + item + ".png")));
+                        }
+                    }
+                };
+            }
+        };
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Initialize the sliding application menu
@@ -269,34 +308,16 @@ public class ApplicationController implements Initializable {
         this.progressBarVisible = new SimpleBooleanProperty();
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
 
-        // instantiate a cellfactory for the stroke combobox
-        Callback<ListView<String>, ListCell<String>> cellFactory = new Callback<ListView<String>, ListCell<String>>() {
-
-            @Override
-            public ListCell<String> call(ListView<String> p) {
-                return new ListCell<String>() {
-
-                    private final ImageView cellImage;
-                    {
-                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        cellImage = new ImageView(new Image("images/style1.png"));
-                    }
-
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(new ImageView(new Image("images/" + item + ".png")));
-                        }
-                    }
-                };
-            }
-        };
-        stylecombobox.setButtonCell(cellFactory.call(null));
-        stylecombobox.setCellFactory(cellFactory);
+        // instantiate a cellfactory for the stroke and style comboboxes
+        Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory();
+        strokecombobox.setButtonCell(strokeCellFactory.call(null));
+        strokecombobox.setCellFactory(strokeCellFactory);
+        strokecombobox.getSelectionModel().select(3);
+        this.strokeTypeProperty = new ReadOnlyStringWrapper();
+        this.strokeTypeProperty.bindBidirectional(strokecombobox.valueProperty());
+        Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory();
+        stylecombobox.setButtonCell(styleCellFactory.call(null));
+        stylecombobox.setCellFactory(styleCellFactory);
         stylecombobox.getSelectionModel().selectFirst();
         this.strokeStyleProperty = new ReadOnlyStringWrapper();
         this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
@@ -340,6 +361,8 @@ public class ApplicationController implements Initializable {
     private Label statusbar;
     @FXML
     private ProgressBar progressbar;
+    @FXML
+    private ComboBox<String> strokecombobox;
     @FXML
     private ComboBox<String> stylecombobox;
 

@@ -81,7 +81,25 @@
                 <ToolBar prefHeight="60.0" style="">
                     <items>
                         <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="" />
+                        <Region prefWidth="5.0" />
                         <Label focusTraversable="false" text="Stroke" />
+                        <ComboBox id="combostroketype" fx:id="strokecombobox" focusTraversable="false" prefWidth="130.0">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="stroke1" />
+                                    <String fx:value="stroke2" />
+                                    <String fx:value="stroke3" />
+                                    <String fx:value="stroke4" />
+                                    <String fx:value="stroke5" />
+                                    <String fx:value="stroke6" />
+                                    <String fx:value="stroke7" />
+                                    <String fx:value="stroke8" />
+                                    <String fx:value="stroke9" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Region prefWidth="5.0" />
+                        <Label focusTraversable="false" text="Style" />
                         <ComboBox id="combostrokestyle" fx:id="stylecombobox" focusTraversable="false" prefWidth="130.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -93,7 +111,7 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <Region prefWidth="5.0" />
+                        <Region prefWidth="10.0" />
                         <Label focusTraversable="false" text="Fill" />
                         <Button id="fillcolor" focusTraversable="false" mnemonicParsing="false" prefWidth="45.0" style="-fx-background-color: rgb(153, 204, 255);" text="" />
                         <Label focusTraversable="false" text="Color" />
@@ -105,7 +123,8 @@
                                 <Tooltip text="Draw as outline" />
                             </tooltip>
                         </ToggleButton>
-                        <Region prefWidth="30.0" />
+                        <!--
+                        <Region prefWidth="5.0" />
                         <Label focusTraversable="false" text="Font" />
                         <ComboBox focusTraversable="false" prefWidth="100.0">
                             <items>
@@ -126,11 +145,12 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <Region prefWidth="5.0" />
+                        -->
+                        <Region prefWidth="20.0" />
                         <Button id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Button id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <Button id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
-                        <Region prefWidth="10.0" />
+                        <Region prefWidth="40.0" />
                         <Button id="buttsnapshot" fx:id="snapshotbutton" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
                             <tooltip>
                                 <Tooltip text="Send snapshot to desktop" />
