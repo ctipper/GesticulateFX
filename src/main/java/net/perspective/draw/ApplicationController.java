@@ -312,9 +312,10 @@ public class ApplicationController implements Initializable {
         Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory();
         strokecombobox.setButtonCell(strokeCellFactory.call(null));
         strokecombobox.setCellFactory(strokeCellFactory);
-        strokecombobox.getSelectionModel().select(3);
+        strokecombobox.getSelectionModel().select(2);
         this.strokeTypeProperty = new ReadOnlyStringWrapper();
         this.strokeTypeProperty.bindBidirectional(strokecombobox.valueProperty());
+        // setup stroke style combo box
         Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory();
         stylecombobox.setButtonCell(styleCellFactory.call(null));
         stylecombobox.setCellFactory(styleCellFactory);

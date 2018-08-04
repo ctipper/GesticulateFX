@@ -10,6 +10,9 @@ import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
+import java.util.Arrays;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -63,6 +66,10 @@ public class DrawingArea {
     private EventHandler<TouchEvent> popuplistener;
     private EventHandler<InputEvent> arealistener;
 
+    java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
+            "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
+    java.util.List<Float> strokeTypes = Arrays.asList(1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 8.0f, 10.0f);
+
     /**
      * Creates a new instance of <code>DrawingArea</code>
      */
@@ -82,10 +89,20 @@ public class DrawingArea {
         listener.initializeHandlers(canvas);
         this.addContextMenu();
         this.changeHandlers(HandlerType.SELECTION);
+        controller.getStrokeTypeProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Integer strokeId = strokeStrings.indexOf(newValue);
+                if (strokeId != -1) {
+                    setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+                }
+            }
+        });
     }
 
     public void prepareDrawing() {
-        this.stroke = new BasicStroke(6.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+        this.stroke = new BasicStroke(strokeTypes.get(2), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
         this.color = Color.web("#4860E0");
         this.fillcolor = Color.web("#4860E0");
         this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
