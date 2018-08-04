@@ -82,12 +82,14 @@
                     <items>
                         <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="" />
                         <Label focusTraversable="false" text="Stroke" />
-                        <ComboBox focusTraversable="false" prefWidth="80.0">
+                        <ComboBox id="combostroke" fx:id="strokecombobox" focusTraversable="false" prefWidth="130.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Item 1" />
-                                    <String fx:value="Item 2" />
-                                    <String fx:value="Item 3" />
+                                    <String fx:value="style1" />
+                                    <String fx:value="style6" />
+                                    <String fx:value="style7" />
+                                    <String fx:value="style8" />
+                                    <String fx:value="style9" />
                                 </FXCollections>
                             </items>
                         </ComboBox>
@@ -105,7 +107,7 @@
                         </ToggleButton>
                         <Region prefWidth="30.0" />
                         <Label focusTraversable="false" text="Font" />
-                        <ComboBox focusTraversable="false" prefWidth="80.0">
+                        <ComboBox focusTraversable="false" prefWidth="100.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Item 1" />

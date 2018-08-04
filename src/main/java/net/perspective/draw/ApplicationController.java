@@ -23,12 +23,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -147,10 +154,10 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleOnQuitAction(ActionEvent e) {
         application.getStage().fireEvent(
-                new WindowEvent(
-                        application.getStage(),
-                        WindowEvent.WINDOW_CLOSE_REQUEST
-                )
+            new WindowEvent(
+                application.getStage(),
+                WindowEvent.WINDOW_CLOSE_REQUEST
+            )
         );
     }
 
@@ -251,6 +258,36 @@ public class ApplicationController implements Initializable {
         this.progressBarVisible = new SimpleBooleanProperty();
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
 
+        // instantiate a cellfactory for the stroke combobox
+        Callback<ListView<String>, ListCell<String>> cellFactory = new Callback<ListView<String>, ListCell<String>>() {
+
+            @Override
+            public ListCell<String> call(ListView<String> p) {
+                return new ListCell<String>() {
+
+                    private final ImageView cellImage;
+                    {
+                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                        cellImage = new ImageView(new Image("images/style1.png"));
+                    }
+
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(new ImageView(new Image("images/" + item + ".png")));
+                        }
+                    }
+                };
+            }
+        };
+        strokecombobox.setButtonCell(cellFactory.call(null));
+        strokecombobox.setCellFactory(cellFactory);
+        strokecombobox.getSelectionModel().selectFirst();
+
         // set up the status message fade transition
         this.setupStatusTransition();
     }
@@ -275,8 +312,8 @@ public class ApplicationController implements Initializable {
         ft.setToValue(0.0);
         ft.setCycleCount(1);
         statusTransition = new SequentialTransition(
-                new PauseTransition(Duration.millis(3000)),
-                ft
+            new PauseTransition(Duration.millis(3000)),
+            ft
         );
     }
 
@@ -290,5 +327,7 @@ public class ApplicationController implements Initializable {
     private Label statusbar;
     @FXML
     private ProgressBar progressbar;
+    @FXML
+    private ComboBox<String> strokecombobox;
 
 }
