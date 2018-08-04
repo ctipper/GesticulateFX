@@ -18,6 +18,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,6 +58,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty progressBarVisible;
     private When wireframeSelected;
     private SequentialTransition statusTransition;
+    private ReadOnlyStringWrapper strokeStyleProperty;
 
     @FXML private GridPane appmenu;
 
@@ -213,6 +215,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Stroke style property
+     * 
+     * @return 
+     */
+    public ReadOnlyStringWrapper getStrokeStyleProperty() {
+        return strokeStyleProperty;
+    }
+
+    /**
      * Progress bar progress property
      * 
      * @return 
@@ -284,10 +295,12 @@ public class ApplicationController implements Initializable {
                 };
             }
         };
-        strokecombobox.setButtonCell(cellFactory.call(null));
-        strokecombobox.setCellFactory(cellFactory);
-        strokecombobox.getSelectionModel().selectFirst();
-
+        stylecombobox.setButtonCell(cellFactory.call(null));
+        stylecombobox.setCellFactory(cellFactory);
+        stylecombobox.getSelectionModel().selectFirst();
+        this.strokeStyleProperty = new ReadOnlyStringWrapper();
+        this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
+        
         // set up the status message fade transition
         this.setupStatusTransition();
     }
@@ -328,6 +341,6 @@ public class ApplicationController implements Initializable {
     @FXML
     private ProgressBar progressbar;
     @FXML
-    private ComboBox<String> strokecombobox;
+    private ComboBox<String> stylecombobox;
 
 }

@@ -82,7 +82,7 @@
                     <items>
                         <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="" />
                         <Label focusTraversable="false" text="Stroke" />
-                        <ComboBox id="combostroke" fx:id="strokecombobox" focusTraversable="false" prefWidth="130.0">
+                        <ComboBox id="combostrokestyle" fx:id="stylecombobox" focusTraversable="false" prefWidth="130.0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="style1" />
