@@ -16,8 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.perspective.draw.geom.DrawItem;
-import net.perspective.draw.geom.Grouped;
+import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,6 +124,24 @@ public class CanvasView {
         if (this.getSelected() != -1) {
             DrawItem item = drawings.get(this.getSelected());
             item.updateProperties(drawarea);
+
+            if ((item instanceof Figure) && !(item instanceof ArrowLine)) {
+                FigureType type = ((Figure) item).getType();
+                if (drawarea.getArrow() != ArrowType.NONE) {
+                    if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
+                        item = new ArrowLine((Figure) item);
+                        item.updateProperties(drawarea);
+                    }
+                }
+            } else if (item instanceof ArrowLine) {
+                if (drawarea.getArrow() == ArrowType.NONE) {
+                    item = ((ArrowLine) item).getLine();
+                    item.updateProperties(drawarea);
+                } else {
+                    item.updateProperties(drawarea);
+                }
+            }
+
             this.updateCanvasItem(this.getSelected(), item);
         }
     }

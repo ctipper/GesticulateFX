@@ -28,6 +28,7 @@ import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.*;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.ArrowType;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
@@ -57,6 +58,7 @@ public class DrawingArea {
     private Stroke stroke;
     private Color color, fillcolor;
     private int transparency;
+    private ArrowType arrowtype;
     private DrawItem marquee;
     private boolean multiSelectEnabled;
     private Transferable clipboard;
@@ -69,6 +71,8 @@ public class DrawingArea {
     java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
     java.util.List<Float> strokeTypes = Arrays.asList(1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 8.0f, 10.0f);
+    java.util.List<String> styleStrings = Arrays.asList("style1", "style2", "style3", "style4", "style5", "style6", "style7",
+            "style8", "style9", "style10", "style11", "style12", "style13");
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
@@ -86,6 +90,7 @@ public class DrawingArea {
         view.setDrawingListener();
         this.prepareDrawing();
         this.setDrawType(DrawingType.SKETCH);
+        this.arrowtype = ArrowType.NONE;
         listener.initializeHandlers(canvas);
         this.addContextMenu();
         this.changeHandlers(HandlerType.SELECTION);
@@ -95,14 +100,37 @@ public class DrawingArea {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Integer strokeId = strokeStrings.indexOf(newValue);
                 if (strokeId != -1) {
-                    setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+                    setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                }
+            }
+        });
+        controller.getStrokeStyleProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Integer styleId = styleStrings.indexOf(newValue);
+                if (styleId != -1) {
+                    switch (styleId) {
+                        case 0: // Plain stroke
+                            resetArrow();
+                            break;
+                        case 5: // Arrow at start
+                            setArrow(ArrowType.END);
+                            break;
+                        case 7: // Arrow at both ends
+                            setArrow(ArrowType.BOTH);
+                            break;
+                        default:
+                            resetArrow();
+                            break;
+                    }
                 }
             }
         });
     }
 
     public void prepareDrawing() {
-        this.stroke = new BasicStroke(strokeTypes.get(2), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+        this.stroke = new BasicStroke(strokeTypes.get(2), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         this.color = Color.web("#4860E0");
         this.fillcolor = Color.web("#4860E0");
         this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
@@ -258,6 +286,20 @@ public class DrawingArea {
 
     public int getTransparency() {
         return this.transparency;
+    }
+
+    public void setArrow(ArrowType arrowtype) {
+        this.arrowtype = arrowtype;
+        view.updateSelectedItem();
+    }
+
+    public ArrowType getArrow() {
+        return arrowtype;
+    }
+
+    public void resetArrow() {
+        arrowtype = ArrowType.NONE;
+        view.updateSelectedItem();
     }
 
     public void setMarquee(DrawItem marquee) {

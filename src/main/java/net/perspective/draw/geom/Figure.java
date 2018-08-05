@@ -406,7 +406,7 @@ public class Figure implements DrawItem, Serializable {
         java.awt.geom.AffineTransform at;
 
         at = this.getTransform();
-        Path fxpath = drawPath(at);
+        Path fxpath = drawPath(this.getPath(), at);
         fxpath.setStroke(getColor());
         fxpath.setStrokeWidth(getLineWidth((BasicStroke) getStroke()));
         fxpath.setStrokeLineJoin(getLineJoin((BasicStroke) getStroke()));
@@ -421,11 +421,11 @@ public class Figure implements DrawItem, Serializable {
         return fxpath;
     }
 
-    protected Path drawPath(java.awt.geom.AffineTransform at) {
+    protected Path drawPath(Path2D.Double path, java.awt.geom.AffineTransform at) {
         double[] coords = {0, 0, 0, 0, 0, 0};
         Path fxpath = new Path();
 
-        PathIterator iterator = this.getPath().getPathIterator(at);
+        PathIterator iterator = path.getPathIterator(at);
         while (!iterator.isDone()) {
             switch (iterator.currentSegment(coords)) {
             case PathIterator.SEG_MOVETO:

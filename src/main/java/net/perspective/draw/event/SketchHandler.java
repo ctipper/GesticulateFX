@@ -10,9 +10,7 @@ import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
-import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
+import net.perspective.draw.geom.*;
 
 /**
  * 
@@ -65,7 +63,16 @@ public class SketchHandler implements Handler  {
     public void dragEvent() {
         // Create Figure
         Figure item = (Figure) view.getNewItem();
-        // continue sketch
+        if (!(item instanceof ArrowLine) && (drawarea.getArrow().equals(ArrowType.END) || drawarea.getArrow().equals(ArrowType.BOTH))) {
+            // Create arrow line
+            if (!((Figure) item).getType().equals(FigureType.POLYGON)) {
+                ArrowLine arrow = new ArrowLine((Figure) item);
+                arrow.setArrowStroke(drawarea.getStroke());
+                arrow.setArrowType(drawarea.getArrow());
+                arrow.setEndPoints();
+                item = arrow;
+            }
+        }        // continue sketch
         item.addPoint(listener.getTempX(), listener.getTempY());
         item.setEndPoints();
         item.setPath();

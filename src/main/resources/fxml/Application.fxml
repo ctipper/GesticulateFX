@@ -105,9 +105,7 @@
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="style1" />
                                     <String fx:value="style6" />
-                                    <String fx:value="style7" />
                                     <String fx:value="style8" />
-                                    <String fx:value="style9" />
                                 </FXCollections>
                             </items>
                         </ComboBox>

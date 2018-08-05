@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.geom.*;
 
 /**
@@ -48,8 +49,9 @@ public class FigureHandler implements Handler {
     }
 
     public void dragEvent() {
+        DrawingType drawType = drawarea.getDrawType();
         // Create figure
-        Figure item = figurefactory.createFigure(drawarea.getDrawType());
+        Figure item = figurefactory.createFigure(drawType);
         // Initialise stroke and fill
         item.setStroke(drawarea.getStroke());
         item.setColor(Color.web("lightgray"));
@@ -59,6 +61,16 @@ public class FigureHandler implements Handler {
         item.setEnd(listener.getTempX(), listener.getTempY());
         item.setPoints(drawarea.getDrawType());
         item.setPath();
+        if (drawType == DrawingType.LINE) {
+            // Create arrow line
+            if (drawarea.getArrow().equals(ArrowType.END) || drawarea.getArrow().equals(ArrowType.BOTH)) {
+                ArrowLine arrow = new ArrowLine(item);
+                arrow.setArrowStroke(drawarea.getStroke());
+                arrow.setArrowType(drawarea.getArrow());
+                arrow.setEndPoints();
+                item = arrow;
+            }
+        }
         view.setNewItem(item);
         view.setDrawing(true);
     }
