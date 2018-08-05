@@ -634,7 +634,7 @@ public class Figure implements DrawItem, Serializable {
 
     @Deprecated
     public java.awt.Color getAwtColor() {
-        return fxToAwt(color);
+        return fxToAwt(getColor());
     }
 
     /**
@@ -663,7 +663,7 @@ public class Figure implements DrawItem, Serializable {
 
     @Deprecated
     public java.awt.Color getAwtFillColor() {
-        return fxToAwt(fillcolor);
+        return fxToAwt(getFillColor());
     }
 
     /**

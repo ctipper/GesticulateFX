@@ -71,8 +71,6 @@ public class DrawingArea {
     java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
     java.util.List<Float> strokeTypes = Arrays.asList(1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 8.0f, 10.0f);
-    java.util.List<String> styleStrings = Arrays.asList("style1", "style2", "style3", "style4", "style5", "style6", "style7",
-            "style8", "style9", "style10", "style11", "style12", "style13");
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
@@ -108,22 +106,19 @@ public class DrawingArea {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Integer styleId = styleStrings.indexOf(newValue);
-                if (styleId != -1) {
-                    switch (styleId) {
-                        case 0: // Plain stroke
-                            resetArrow();
-                            break;
-                        case 5: // Arrow at start
-                            setArrow(ArrowType.END);
-                            break;
-                        case 7: // Arrow at both ends
-                            setArrow(ArrowType.BOTH);
-                            break;
-                        default:
-                            resetArrow();
-                            break;
-                    }
+                switch (newValue) {
+                    case "style1": // Plain stroke
+                        resetArrow();
+                        break;
+                    case "style6": // Arrow at start
+                        setArrow(ArrowType.END);
+                        break;
+                    case "style8": // Arrow at both ends
+                        setArrow(ArrowType.BOTH);
+                        break;
+                    default:
+                        resetArrow();
+                        break;
                 }
             }
         });
