@@ -158,6 +158,7 @@ public class ArrowLine extends Figure {
     @Override
     public void updateProperties(DrawingArea drawarea) {
         this.setColor(drawarea.getColor());
+        this.setFillColor(Color.SILVER);
         this.setArrowStroke(drawarea.getStroke());
         this.setArrowType(drawarea.getArrow());
         line.updateProperties(drawarea);

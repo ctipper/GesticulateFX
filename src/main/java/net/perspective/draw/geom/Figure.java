@@ -959,9 +959,9 @@ public class Figure implements DrawItem, Serializable {
             throws IOException {
         out.defaultWriteObject();
         out.writeObject(java.awt.Color.class);
-        out.writeObject(fxToAwt(this.color));
+        out.writeObject(fxToAwt(getColor()));
         out.writeObject(java.awt.Color.class);
-        out.writeObject(fxToAwt(this.fillcolor));
+        out.writeObject(fxToAwt(getFillColor()));
         writeStroke(this.getStroke(), out);
     }
 
