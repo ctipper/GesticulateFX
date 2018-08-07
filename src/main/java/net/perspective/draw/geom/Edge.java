@@ -9,7 +9,6 @@ package net.perspective.draw.geom;
 import java.awt.Shape;
 import java.awt.geom.*;
 import java.beans.ConstructorProperties;
-import java.io.Serializable;
 import java.util.ArrayList;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
@@ -20,7 +19,7 @@ import net.perspective.draw.util.V2;
  * @author ctipper
  */
 
-public class Edge extends Figure implements Serializable {
+public class Edge extends Figure {
 
     private static final long serialVersionUID = 1L;
 
@@ -169,14 +168,14 @@ public class Edge extends Figure implements Serializable {
      * @return a transformed shape
      */
     @Override
-    public Shape bounds() {
+    public java.awt.Shape bounds() {
         Shape bounds;
         Rectangle2D rectangle;
 
         if (type.equals(FigureType.LINE)) {
             // to give line extent
             double length = V2.L2(new CanvasPoint(end.x - start.x, end.y - start.y));
-            rectangle = new Rectangle2D.Double(-2.0, -2.0, length + 2.0, 4.0);
+            rectangle = new Rectangle2D.Double(-2.0, -2.0, length + 4.0, 4.0);
             double a = Math.atan2(end.y - start.y, end.x - start.x);
 
             Area area = new Area(rectangle);
