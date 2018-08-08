@@ -125,7 +125,8 @@ public class DrawingArea {
     }
 
     public void prepareDrawing() {
-        this.stroke = new BasicStroke(strokeTypes.get(2), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        Integer strokeId = strokeStrings.indexOf(controller.getStrokeTypeProperty().getValue());
+        this.stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         this.color = Color.web("#4860E0");
         this.fillcolor = Color.web("#4860E0");
         this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
