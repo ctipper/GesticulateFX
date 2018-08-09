@@ -12,8 +12,6 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
@@ -21,6 +19,8 @@ import javafx.scene.transform.Rotate;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 import org.jhotdraw.geom.DoubleStroke;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A structure for managing groups of shapes
@@ -35,6 +35,8 @@ public class Grouped implements DrawItem, Serializable {
     private boolean isVertical;
     private double angle;
     private CanvasPoint start, end;
+
+    private static final Logger logger = LoggerFactory.getLogger(Grouped.class.getName());
 
     private static final long serialVersionUID = 1L;
 
@@ -117,7 +119,7 @@ public class Grouped implements DrawItem, Serializable {
             this.start = new CanvasPoint(topleft.x, topleft.y);
             this.end = new CanvasPoint(bottomright.x, bottomright.y);
         } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Grouped.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(null, ex);
         }
     }
 
