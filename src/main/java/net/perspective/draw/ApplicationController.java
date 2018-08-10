@@ -24,6 +24,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -35,6 +36,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -323,6 +325,13 @@ public class ApplicationController implements Initializable {
         this.strokeStyleProperty = new ReadOnlyStringWrapper();
         this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
         
+        colorpicker.getStyleClass().add("button");
+        colorpicker.setValue(Color.BLACK);
+        colorpicker.setStyle("-fx-background-color: black;");
+        fillcolorpicker.getStyleClass().add("button");
+        fillcolorpicker.setValue(Color.rgb(153, 204, 255));
+        fillcolorpicker.setStyle("-fx-background-color: rgb(153, 204, 255);");
+
         // set up the status message fade transition
         this.setupStatusTransition();
     }
@@ -352,6 +361,10 @@ public class ApplicationController implements Initializable {
         );
     }
 
+    @FXML
+    private ColorPicker colorpicker;
+    @FXML
+    private ColorPicker fillcolorpicker;
     @FXML
     private Button menubutton;
     @FXML

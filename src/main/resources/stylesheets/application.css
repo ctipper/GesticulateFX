@@ -59,6 +59,9 @@
     -fx-background-color: #4860e0;
     -fx-text-fill: white;
 }
+.color-picker > .color-picker-label > .picker-color > .picker-color-rect {
+    -fx-stroke: none;
+}
 #buttnewcanvas {
     -fx-background-image: url('../images/new-canvas.png');
     -fx-background-repeat: no-repeat;

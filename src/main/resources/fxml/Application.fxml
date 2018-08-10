@@ -111,9 +111,9 @@
                         </ComboBox>
                         <Region prefWidth="10.0" />
                         <Label focusTraversable="false" text="Fill" />
-                        <Button id="fillcolor" focusTraversable="false" mnemonicParsing="false" prefWidth="45.0" style="-fx-background-color: rgb(153, 204, 255);" text="" />
+                        <ColorPicker id="pickfillcolor" fx:id="fillcolorpicker" focusTraversable="false" prefWidth="45.0" />
                         <Label focusTraversable="false" text="Color" />
-                        <Button id="color" focusTraversable="false" mnemonicParsing="false" opacity="1.0" prefWidth="45.0" style="-fx-background-color: black;" text="" />
+                        <ColorPicker id="pickcolor" fx:id="colorpicker" focusTraversable="false" opacity="1.0" prefWidth="45.0" />
                         <Region prefWidth="5.0" />
                         <Button id="buttvertical" focusTraversable="false" mnemonicParsing="false" styleClass="formatbutton" text="" />
                         <ToggleButton id="buttwireframe" fx:id="wireframebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
