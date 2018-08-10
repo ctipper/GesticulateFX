@@ -122,13 +122,29 @@ public class DrawingArea {
                 }
             }
         });
+        controller.getColorProperty().addListener(new ChangeListener<Color>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
+                setColor(newValue);
+            }
+        });
+        controller.getFillColorProperty().addListener(new ChangeListener<Color>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
+                setFillColor(newValue);
+            }
+        });
     }
 
     public void prepareDrawing() {
         Integer strokeId = strokeStrings.indexOf(controller.getStrokeTypeProperty().getValue());
         this.stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-        this.color = Color.web("#4860E0");
-        this.fillcolor = Color.web("#4860E0");
+        //this.color = Color.web("#4860E0");
+        //this.fillcolor = Color.web("#4860E0");
+        this.color = controller.getColorProperty().getValue();
+        this.fillcolor = controller.getFillColorProperty().getValue();
         this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();

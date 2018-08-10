@@ -18,9 +18,12 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -62,6 +65,8 @@ public class ApplicationController implements Initializable {
     private SequentialTransition statusTransition;
     private ReadOnlyStringWrapper strokeTypeProperty;
     private ReadOnlyStringWrapper strokeStyleProperty;
+    private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
+    private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
 
     @FXML private GridPane appmenu;
 
@@ -236,6 +241,24 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Stroke color property
+     * 
+     * @return 
+     */
+    public ReadOnlyObjectWrapper<Color> getColorProperty() {
+        return colorProperty;
+    }
+
+    /**
+     * Fill color property
+     * 
+     * @return 
+     */
+    public ReadOnlyObjectWrapper<Color> getFillColorProperty() {
+        return fillColorProperty;
+    }
+
+    /**
      * Progress bar progress property
      * 
      * @return 
@@ -325,12 +348,38 @@ public class ApplicationController implements Initializable {
         this.strokeStyleProperty = new ReadOnlyStringWrapper();
         this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
         
+        // setup stroke color picker
         colorpicker.getStyleClass().add("button");
         colorpicker.setValue(Color.BLACK);
         colorpicker.setStyle("-fx-background-color: black;");
+        pickerColorProperty = new SimpleObjectProperty<>();
+        pickerColorProperty.setValue(Color.BLACK);
+        colorpicker.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                Color c = colorpicker.getValue();
+                pickerColorProperty.setValue(c);
+            }
+        });
+        this.colorProperty = new ReadOnlyObjectWrapper<>();
+        this.colorProperty.bindBidirectional(pickerColorProperty);
+        // setup fill color picker
         fillcolorpicker.getStyleClass().add("button");
         fillcolorpicker.setValue(Color.rgb(153, 204, 255));
         fillcolorpicker.setStyle("-fx-background-color: rgb(153, 204, 255);");
+        pickerFillColorProperty = new SimpleObjectProperty<>();
+        pickerFillColorProperty.setValue(Color.rgb(153, 204, 255));
+        fillcolorpicker.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                Color c = fillcolorpicker.getValue();
+                pickerFillColorProperty.setValue(c);
+            }
+        });
+        this.fillColorProperty = new ReadOnlyObjectWrapper<>();
+        this.fillColorProperty.bindBidirectional(pickerFillColorProperty);
 
         // set up the status message fade transition
         this.setupStatusTransition();
