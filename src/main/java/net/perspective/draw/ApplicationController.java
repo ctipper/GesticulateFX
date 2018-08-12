@@ -337,7 +337,7 @@ public class ApplicationController implements Initializable {
         Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory();
         strokecombobox.setButtonCell(strokeCellFactory.call(null));
         strokecombobox.setCellFactory(strokeCellFactory);
-        strokecombobox.getSelectionModel().select(2);
+        strokecombobox.getSelectionModel().select("stroke7");
         this.strokeTypeProperty = new ReadOnlyStringWrapper();
         this.strokeTypeProperty.bindBidirectional(strokecombobox.valueProperty());
         // setup stroke style combo box
@@ -349,7 +349,7 @@ public class ApplicationController implements Initializable {
         this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
         
         // setup stroke color picker
-        Color color = Color.BLACK;
+        Color color = Color.web("#4860E0");
         colorpicker.getStyleClass().add("button");
         colorpicker.setValue(color);
         colorpicker.setStyle(backgroundStyle(color));
@@ -368,7 +368,7 @@ public class ApplicationController implements Initializable {
         this.colorProperty = new ReadOnlyObjectWrapper<>();
         this.colorProperty.bindBidirectional(pickerColorProperty);
         // setup fill color picker
-        Color fillColor = Color.rgb(153, 204, 255);
+        Color fillColor = Color.web("#4860E0");
         fillcolorpicker.getStyleClass().add("button");
         fillcolorpicker.setValue(fillColor);
         fillcolorpicker.setStyle(backgroundStyle(fillColor));

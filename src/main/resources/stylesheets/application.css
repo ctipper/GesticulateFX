@@ -59,6 +59,10 @@
     -fx-background-color: #4860e0;
     -fx-text-fill: white;
 }
+.color-picker:focused, .color-picker:selected {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
 }
