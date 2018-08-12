@@ -352,7 +352,8 @@ public class ApplicationController implements Initializable {
         Color color = Color.BLACK;
         colorpicker.getStyleClass().add("button");
         colorpicker.setValue(color);
-        colorpicker.setStyle(backgroundStyle("Color.BLACK"));
+        colorpicker.setStyle(backgroundStyle(color));
+        colorpicker.getCustomColors().add(color);
         pickerColorProperty = new SimpleObjectProperty<>();
         pickerColorProperty.setValue(color);
         colorpicker.setOnAction(new EventHandler<ActionEvent>() {
@@ -360,6 +361,7 @@ public class ApplicationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 Color c = colorpicker.getValue();
+                colorpicker.setStyle(backgroundStyle(c));
                 pickerColorProperty.setValue(c);
             }
         });
@@ -369,7 +371,8 @@ public class ApplicationController implements Initializable {
         Color fillColor = Color.rgb(153, 204, 255);
         fillcolorpicker.getStyleClass().add("button");
         fillcolorpicker.setValue(fillColor);
-        fillcolorpicker.setStyle(backgroundStyle("Color.rgb(153, 204, 255)"));
+        fillcolorpicker.setStyle(backgroundStyle(fillColor));
+        fillcolorpicker.getCustomColors().add(fillColor);
         pickerFillColorProperty = new SimpleObjectProperty<>();
         pickerFillColorProperty.setValue(fillColor);
         fillcolorpicker.setOnAction(new EventHandler<ActionEvent>() {
@@ -377,6 +380,7 @@ public class ApplicationController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 Color c = fillcolorpicker.getValue();
+                fillcolorpicker.setStyle(backgroundStyle(c));
                 pickerFillColorProperty.setValue(c);
             }
         });
@@ -412,8 +416,16 @@ public class ApplicationController implements Initializable {
         );
     }
 
-    private String backgroundStyle(String color) {
-        return "-fx-background-color: " + color.substring(color.indexOf(".") + 1).toLowerCase();
+    private String backgroundStyle(Color c) {
+        return "-fx-background-color: " + toRGBCode(c) + ";";
+    }
+
+    // https://stackoverflow.com/a/18803814
+    private String toRGBCode(Color color) {
+        return String.format( "#%02X%02X%02X",
+            (int)( color.getRed() * 255 ),
+            (int)( color.getGreen() * 255 ),
+            (int)( color.getBlue() * 255 ) );
     }
 
     @FXML
