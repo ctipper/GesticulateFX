@@ -349,11 +349,12 @@ public class ApplicationController implements Initializable {
         this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
         
         // setup stroke color picker
+        Color color = Color.BLACK;
         colorpicker.getStyleClass().add("button");
-        colorpicker.setValue(Color.BLACK);
-        colorpicker.setStyle("-fx-background-color: black;");
+        colorpicker.setValue(color);
+        colorpicker.setStyle(backgroundStyle("Color.BLACK"));
         pickerColorProperty = new SimpleObjectProperty<>();
-        pickerColorProperty.setValue(Color.BLACK);
+        pickerColorProperty.setValue(color);
         colorpicker.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -365,11 +366,12 @@ public class ApplicationController implements Initializable {
         this.colorProperty = new ReadOnlyObjectWrapper<>();
         this.colorProperty.bindBidirectional(pickerColorProperty);
         // setup fill color picker
+        Color fillColor = Color.rgb(153, 204, 255);
         fillcolorpicker.getStyleClass().add("button");
-        fillcolorpicker.setValue(Color.rgb(153, 204, 255));
-        fillcolorpicker.setStyle("-fx-background-color: rgb(153, 204, 255);");
+        fillcolorpicker.setValue(fillColor);
+        fillcolorpicker.setStyle(backgroundStyle("Color.rgb(153, 204, 255)"));
         pickerFillColorProperty = new SimpleObjectProperty<>();
-        pickerFillColorProperty.setValue(Color.rgb(153, 204, 255));
+        pickerFillColorProperty.setValue(fillColor);
         fillcolorpicker.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -408,6 +410,10 @@ public class ApplicationController implements Initializable {
             new PauseTransition(Duration.millis(3000)),
             ft
         );
+    }
+
+    private String backgroundStyle(String color) {
+        return "-fx-background-color: " + color.substring(color.indexOf(".") + 1).toLowerCase();
     }
 
     @FXML
