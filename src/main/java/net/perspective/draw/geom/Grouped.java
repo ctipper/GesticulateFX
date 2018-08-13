@@ -249,7 +249,7 @@ public class Grouped implements DrawItem, Serializable {
             // rotate shape about centroid
             point.rotate(this.getAngle());
         }
-        if (isVertical) {
+        if (this.isVertical()) {
             // 90 degree positive rotation
             point.rotate(-Math.PI / 2);
         }
@@ -438,6 +438,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param isVertical  A boolean property
      * @deprecated 
      */
+    @Deprecated
     public void setVertical(boolean isVertical) {
         this.isVertical = isVertical;
     }
@@ -447,6 +448,7 @@ public class Grouped implements DrawItem, Serializable {
      * @return a boolean property
      * @deprecated 
      */
+    @Deprecated
     public boolean isVertical() {
         return this.isVertical;
     }

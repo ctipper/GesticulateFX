@@ -42,6 +42,7 @@ public class Figure implements DrawItem, Serializable {
     protected transient Stroke stroke;
     private transient Color color, fillcolor;
     private int transparency;
+    private boolean isVertical;
     private double angle;
     private boolean closed;                 // closed indicates to draw() whether figure should be filled
 
@@ -291,6 +292,10 @@ public class Figure implements DrawItem, Serializable {
             // rotate point about centroid
             point.rotate(this.getAngle());
         }
+        if (this.isVertical()) {
+            // 90 degree positive rotation
+            point.rotate(-Math.PI / 2);
+        }
         point.translate(centre.x, centre.y);
         return point;
     }
@@ -303,6 +308,10 @@ public class Figure implements DrawItem, Serializable {
         if (this.getAngle() != 0) {
             // rotate figure about centroid
             transform.rotate(this.getAngle());
+        }
+        if (this.isVertical()) {
+            // 90 degree positive rotation
+            transform.rotate(-Math.PI / 2);
         }
         transform.translate(-centre.x, -centre.y);
         return transform;
@@ -726,8 +735,9 @@ public class Figure implements DrawItem, Serializable {
      * @param isVertical a boolean property
      * @deprecated 
      */
+    @Deprecated
     public void setVertical(boolean isVertical) {
-        // do nothing
+        this.isVertical = isVertical;
     }
 
     /**
@@ -735,8 +745,9 @@ public class Figure implements DrawItem, Serializable {
      * @return a boolean property
      * @deprecated 
      */
+    @Deprecated
     public boolean isVertical() {
-        return false;
+        return isVertical;
     }
 
     /**

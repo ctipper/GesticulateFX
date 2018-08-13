@@ -436,6 +436,19 @@ public class ArrowLine extends Figure {
     }
 
     @Override
+    @Deprecated
+    public void setVertical(boolean isVertical) {
+        line.setVertical(isVertical);
+    }
+
+    @Override
+    @Deprecated
+    @Transient
+    public boolean isVertical() {
+        return line.isVertical();
+    }
+
+    @Override
     public void setAngle(double angle) {
         line.setAngle(angle);
     }
