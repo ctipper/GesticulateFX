@@ -190,7 +190,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 double[] flip = R2.flip(context.getQuad());
                 double cos_t = flip[0];
                 double sin_t = flip[1];
-                double t = item.getAngle();
+                double t = item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0);
                 double delta = V2.norm_angle(4 * t + 2 * Math.PI) / 2;
                 CanvasPoint inc = V2.rot(xinc, yinc, t - delta);
                 switch (contains) {
