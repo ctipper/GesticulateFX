@@ -228,6 +228,36 @@ public class DrawingArea {
             }
         });
         contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
+        SeparatorMenuItem sendSeparator = new SeparatorMenuItem();
+        MenuItem menuSBItem = new MenuItem("Send Backwards");
+        menuSBItem.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                view.sendBackwards();
+                view.setSelected(-1);
+            }
+        });
+        MenuItem menuBFItem = new MenuItem("Bring Forwards");
+        menuBFItem.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                view.bringForwards();
+                view.setSelected(-1);
+            }
+        });
+        MenuItem menuSTBItem = new MenuItem("Send to Back");
+        menuSTBItem.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                view.sendToBack();
+                view.setSelected(-1);
+            }
+        });
+        MenuItem menuBTFItem = new MenuItem("Bring to Front");
+        menuBTFItem.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                view.bringToFront();
+                view.setSelected(-1);
+            }
+        });
+        contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
         contextlistener = (ContextMenuEvent event) -> {
             contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
         };

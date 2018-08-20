@@ -153,6 +153,58 @@ public class CanvasView {
         }
     }
 
+    public void sendBackwards() {
+        if (this.getSelected() != -1) {
+            DrawItem item = drawings.get(this.getSelected());
+            if (this.getSelected() > 0) {
+                int selection = this.getSelected();
+                if (selection < 2) {
+                    drawings.add(0, item);
+                } else {
+                    drawings.add(selection - 1, item);
+                }
+                drawings.remove(selection + 1);
+            }
+        }
+    }
+
+    public void sendToBack() {
+        if (this.getSelected() != -1) {
+            DrawItem item = drawings.get(this.getSelected());
+            if (this.getSelected() != 0) {
+                int selection = this.getSelected();
+                drawings.add(0, item);
+                drawings.remove(selection + 1);
+            }
+        }
+    }
+
+    public void bringForwards() {
+        if (this.getSelected() != -1) {
+            DrawItem item = drawings.get(this.getSelected());
+            if (this.getSelected() < (drawings.size() - 1)) {
+                int selection = this.getSelected();
+                if (selection >= (drawings.size() - 2)) {
+                    drawings.add(item);
+                } else {
+                    drawings.add(selection + 2, item);
+                }
+                drawings.remove(selection);
+            }
+        }
+    }
+
+    public void bringToFront() {
+        if (this.getSelected() != -1) {
+            DrawItem item = drawings.get(this.getSelected());
+            if (this.getSelected() != drawings.size() - 1) {
+                int selection = this.getSelected();
+                drawings.add(item);
+                drawings.remove(selection);
+            }
+        }
+    }
+
     public void groupSelection() {
         if (this.isMultiSelected()) {
             Grouped groupedItem = new Grouped();
