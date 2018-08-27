@@ -19,6 +19,7 @@ import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.serialise.ArrowLinePersistenceDelegate;
 import net.perspective.draw.serialise.ArrowTypePersistenceDelegate;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
@@ -129,6 +130,8 @@ public class WriteOutStreamer extends Task<Object> {
                 new FigureTypePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.Figure.class,
                 new FigurePersistenceDelegate());
+            encoder.setPersistenceDelegate(net.perspective.draw.geom.ArrowLine.class,
+                new ArrowLinePersistenceDelegate());
             encoder.setExceptionListener((Exception ex) -> {
                 logger.warn(ex.getMessage());
             });

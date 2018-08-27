@@ -136,6 +136,7 @@ public class ArrowLine extends Figure {
     }
 
     public void setArrowStroke(Stroke stroke) {
+        stroke = new BasicStroke(((BasicStroke) stroke).getLineWidth(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         this.stroke = stroke;
     }
 
