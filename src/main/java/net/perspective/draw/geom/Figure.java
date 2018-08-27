@@ -420,6 +420,9 @@ public class Figure implements DrawItem, Serializable {
         fxpath.setStrokeWidth(getLineWidth((BasicStroke) getStroke()));
         fxpath.setStrokeLineJoin(getLineJoin((BasicStroke) getStroke()));
         fxpath.setStrokeLineCap(getLineCap((BasicStroke) getStroke()));
+        fxpath.getStrokeDashArray().addAll(getDashes(((BasicStroke) getStroke()).getDashArray()));
+        double dashOffset = Float.valueOf(((BasicStroke) getStroke()).getDashPhase()).doubleValue();
+        fxpath.setStrokeDashOffset(dashOffset);
         if (this.isClosed()) {
             Color alphafill = Color.color(getFillColor().getRed(), 
                 getFillColor().getGreen(), 
@@ -428,6 +431,17 @@ public class Figure implements DrawItem, Serializable {
             fxpath.setFill(alphafill);
         }
         return fxpath;
+    }
+
+    private List<Double> getDashes(float[] items) {
+        List<Double> dashes = new ArrayList<>();
+        if (items == null) {
+            return dashes;
+        }
+        for (int i=0; i < items.length; i++) {
+            dashes.add(Float.valueOf(items[i]).doubleValue());
+        }
+        return dashes;
     }
 
     protected Path drawPath(Path2D.Double path, java.awt.geom.AffineTransform at) {

@@ -221,8 +221,8 @@ public class ArrowLine extends Figure {
         Path fxpath = drawPath(e, at);
         fxpath.setStroke(getColor());
         fxpath.setStrokeWidth(getLineWidth((BasicStroke) getStroke()));
-        fxpath.setStrokeLineJoin(getLineJoin((BasicStroke) getStroke()));
-        fxpath.setStrokeLineCap(getLineCap((BasicStroke) getStroke()));
+        fxpath.setStrokeLineJoin(javafx.scene.shape.StrokeLineJoin.ROUND);
+        fxpath.setStrokeLineCap(javafx.scene.shape.StrokeLineCap.ROUND);
         fxpath.setFill(getColor());
         group.getChildren().add(fxpath);
         if (getArrowType() == ArrowType.BOTH) {
@@ -230,8 +230,8 @@ public class ArrowLine extends Figure {
             Path fxpath_2 = drawPath(s, at);
             fxpath_2.setStroke(getColor());
             fxpath_2.setStrokeWidth(getLineWidth((BasicStroke) getStroke()));
-            fxpath_2.setStrokeLineJoin(getLineJoin((BasicStroke) getStroke()));
-            fxpath_2.setStrokeLineCap(getLineCap((BasicStroke) getStroke()));
+            fxpath_2.setStrokeLineJoin(javafx.scene.shape.StrokeLineJoin.ROUND);
+            fxpath_2.setStrokeLineCap(javafx.scene.shape.StrokeLineCap.ROUND);
             fxpath_2.setFill(getColor());
             group.getChildren().add(fxpath_2);
         }
