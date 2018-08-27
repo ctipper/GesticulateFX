@@ -71,6 +71,27 @@ public class DrawingArea {
     java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
     java.util.List<Float> strokeTypes = Arrays.asList(1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 8.0f, 10.0f);
+    java.util.List<java.util.List<Float>> dashes1 = Arrays.asList(
+            Arrays.asList(1.5f, 1.5f), Arrays.asList(1.5f, 1.5f), Arrays.asList(2.0f, 2.0f),
+            Arrays.asList(3.0f, 3.0f), Arrays.asList(4.0f, 4.0f), Arrays.asList(5.0f, 5.0f),
+            Arrays.asList(6.0f, 6.0f), Arrays.asList(8.0f, 8.0f), Arrays.asList(10.0f, 10.0f));
+    java.util.List<java.util.List<Float>> dashes2 = Arrays.asList(
+            Arrays.asList(2.0f, 2.0f), Arrays.asList(3.0f, 3.0f), Arrays.asList(4.0f, 4.0f),
+            Arrays.asList(5.0f, 5.0f), Arrays.asList(6.0f, 6.0f), Arrays.asList(8.0f, 8.0f),
+            Arrays.asList(10.0f, 10.0f), Arrays.asList(12.0f, 12.0f), Arrays.asList(14.0f, 14.0f));
+    java.util.List<java.util.List<Float>> dashes3 = Arrays.asList(
+            Arrays.asList(4.0f, 4.0f), Arrays.asList(6.0f, 6.0f), Arrays.asList(8.0f, 8.0f),
+            Arrays.asList(10.0f, 10.0f), Arrays.asList(12.0f, 12.0f), Arrays.asList(14.0f, 14.0f),
+            Arrays.asList(16.0f, 16.0f), Arrays.asList(18.0f, 18.0f), Arrays.asList(20.0f, 20.0f));
+    java.util.List<java.util.List<Float>> dashes4 = Arrays.asList(Arrays.asList(3.0f, 2.0f, 2.0f, 2.0f),
+            Arrays.asList(5.0f, 3.0f, 3.0f, 3.0f),
+            Arrays.asList(8.0f, 4.0f, 4.0f, 4.0f),
+            Arrays.asList(10.0f, 5.0f, 5.0f, 5.0f),
+            Arrays.asList(12.0f, 6.0f, 6.0f, 6.0f),
+            Arrays.asList(16.0f, 8.0f, 8.0f, 8.0f),
+            Arrays.asList(18.0f, 10.0f, 10.0f, 10.0f),
+            Arrays.asList(24.0f, 12.0f, 12.0f, 12.0f),
+            Arrays.asList(28.0f, 14.0f, 14.0f, 14.0f));
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
