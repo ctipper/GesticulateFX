@@ -8,7 +8,6 @@ package net.perspective.draw;
 
 import com.google.inject.Injector;
 import java.awt.BasicStroke;
-import java.awt.Stroke;
 import java.awt.datatransfer.Transferable;
 import java.util.Arrays;
 import javafx.beans.value.ChangeListener;
@@ -55,7 +54,7 @@ public class DrawingArea {
     private Group root;
 
     private DrawingType drawtype;
-    private Stroke stroke;
+    private java.awt.Stroke stroke;
     private Color color, fillcolor;
     private int transparency;
     private ArrowType arrowtype;
@@ -118,29 +117,17 @@ public class DrawingArea {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Integer strokeId = strokeStrings.indexOf(newValue);
-                if (strokeId != -1) {
-                    setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-                }
+                String strokeStyle = controller.getStrokeStyleProperty().getValue();
+                setStrokeType(strokeId, strokeStyle);
             }
         });
         controller.getStrokeStyleProperty().addListener(new ChangeListener<String>() {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                switch (newValue) {
-                    case "style1": // Plain stroke
-                        resetArrow();
-                        break;
-                    case "style6": // Arrow at start
-                        setArrow(ArrowType.END);
-                        break;
-                    case "style8": // Arrow at both ends
-                        setArrow(ArrowType.BOTH);
-                        break;
-                    default:
-                        resetArrow();
-                        break;
-                }
+                String strokeType = controller.getStrokeTypeProperty().getValue();
+                Integer strokeId = strokeStrings.indexOf(strokeType);
+                setStrokeType(strokeId, newValue);
             }
         });
         controller.getColorProperty().addListener(new ChangeListener<Color>() {
@@ -293,6 +280,61 @@ public class DrawingArea {
         };
     }
 
+    private void setStrokeType(Integer strokeId, String strokeStyle) {
+        switch (strokeStyle) {
+            case "style1": // Plain stroke
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                resetArrow();
+                break;
+            case "style2":
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f));
+                resetArrow();
+                break;
+            case "style3":
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes2.get(strokeId)), 0.0f));
+                resetArrow();
+                break;
+            case "style4":
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes3.get(strokeId)), 0.0f));
+                resetArrow();
+                break;
+            case "style5":
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes4.get(strokeId)), 0.0f));
+                resetArrow();
+                break;
+            case "style6": // Arrow at start
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                setArrow(ArrowType.END);
+                break;
+            case "style7": // Arrow at start
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f));
+                setArrow(ArrowType.END);
+                break;
+            case "style8": // Arrow at both ends
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                setArrow(ArrowType.BOTH);
+                break;
+            case "style9": // Arrow at both ends
+                setStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f));
+                setArrow(ArrowType.BOTH);
+                break;
+            default:
+                resetArrow();
+        }
+    }
+
+    private float[] getDashes(java.util.List<Float> items) {
+        float[] value;
+        value = new float[4];
+
+        int i = 0;
+        for (Float item : items) {
+            value[i] = item;
+            i++;
+        }
+        return value;
+    }
+
     public SubScene getScene() {
         return canvas;
     }
@@ -313,12 +355,12 @@ public class DrawingArea {
         return drawtype;
     }
 
-    public void setStroke(Stroke stroke) {
+    public void setStroke(java.awt.Stroke stroke) {
         this.stroke = stroke;
         view.updateSelectedItem();
     }
 
-    public Stroke getStroke() {
+    public java.awt.Stroke getStroke() {
         return this.stroke;
     }
 
