@@ -136,7 +136,6 @@ public class ArrowLine extends Figure {
     }
 
     public void setArrowStroke(Stroke stroke) {
-        stroke = new BasicStroke(((BasicStroke) stroke).getLineWidth(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         this.stroke = stroke;
     }
 
@@ -160,7 +159,7 @@ public class ArrowLine extends Figure {
     public void updateProperties(DrawingArea drawarea) {
         this.setColor(drawarea.getColor());
         this.setFillColor(Color.SILVER);
-        this.setArrowStroke(drawarea.getStroke());
+        this.setArrowStroke(drawarea.getPlainStroke());
         this.setArrowType(drawarea.getArrow());
         line.updateProperties(drawarea);
     }

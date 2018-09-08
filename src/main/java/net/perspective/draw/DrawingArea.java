@@ -54,7 +54,7 @@ public class DrawingArea {
     private Group root;
 
     private DrawingType drawtype;
-    private java.awt.Stroke stroke;
+    private java.awt.Stroke stroke, plainstroke;
     private Color color, fillcolor;
     private int transparency;
     private ArrowType arrowtype;
@@ -322,6 +322,7 @@ public class DrawingArea {
             default:
                 resetArrow();
         }
+        setPlainStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     }
 
     private float[] getDashes(java.util.List<Float> items) {
@@ -363,6 +364,15 @@ public class DrawingArea {
 
     public java.awt.Stroke getStroke() {
         return this.stroke;
+    }
+
+    public void setPlainStroke(java.awt.Stroke stroke) {
+        this.plainstroke = stroke;
+        view.updateSelectedItem();
+    }
+
+    public java.awt.Stroke getPlainStroke() {
+        return plainstroke;
     }
 
     public void setColor(Color color) {
