@@ -69,6 +69,9 @@ public class Gesticulate extends GuiceApplication {
 
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("/stylesheets/jmetro-light.css");
+        scene.getStylesheets().add("/stylesheets/application.css");
+
         primaryStage.setTitle("Gesticulate");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);

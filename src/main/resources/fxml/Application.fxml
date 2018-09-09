@@ -195,8 +195,10 @@
             </rowConstraints>
         </GridPane>
     </children>
+    <!--
     <stylesheets>
         <URL value="@../stylesheets/jmetro-light.css" />
         <URL value="@../stylesheets/application.css" />
     </stylesheets>
+    -->
 </AnchorPane>
