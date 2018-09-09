@@ -10,9 +10,6 @@
 .menubutton {
     -fx-background-color: #ddf2ff;
 }
-.menubutton:hover, menuitem:hover, menuicon:hover {
-    -fx-background-color: #d0e4f0;
-}
 .menuitem {
     -fx-background-color: white;
     -fx-padding: 8 5 8 5;
@@ -20,6 +17,9 @@
 }
 .menuicon {
     -fx-background-color: white;
+}
+.menubutton:hover, menuitem:hover, menuicon:hover {
+    -fx-background-color: #d0e4f0;
 }
 .togglebuttons {
     -fx-background-color: white;
@@ -31,11 +31,11 @@
 .tool-bar {
     -fx-background-color: #ddf2ff;
 }
-#statusbar {
 /*
+#statusbar {
     -fx-background-color: rgb(185.0, 185.0, 185.0);
-*/
 }
+*/
 .combo-box-base {
     -fx-background-color: white;
     -fx-padding: 0.0835em; /* 2 */
@@ -59,7 +59,7 @@
     -fx-background-color: #4860e0;
     -fx-text-fill: white;
 }
-.color-picker:focused, .color-picker:selected {
+.color-picker, .color-picker:focused, .color-picker:selected {
     -fx-border-width: 0;
     -fx-border-color: transparent;
 }

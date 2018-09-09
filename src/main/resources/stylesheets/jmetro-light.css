@@ -45,9 +45,7 @@
     -fx-font-family: "San Francisco", "Segoe UI Semibold", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-text-fill: black;
     -fx-opacity: 0.6;
-     
 }
-
 
 /*******************************************************************************
  *                                                                             *
@@ -82,7 +80,7 @@
     -fx-border-color: black;
     -fx-border-width: 1;
     -fx-border-style: segments(1, 1);
-    -fx-background-insets: 0 0 0 0, 0, 1, 2;   
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .button:disabled, .button:default:disabled
@@ -111,7 +109,7 @@
 
 .toggle-button {
     -fx-padding: 5 22 5 22;
-    -fx-border-style: none; 
+    -fx-border-style: none;
     -fx-background-radius: 0;
 
     -fx-background-color: #cccccc;
@@ -125,7 +123,7 @@
     -fx-border-color: black;
     -fx-border-width: 1;
     -fx-border-style: segments(1, 1);
-    -fx-background-insets: 0 0 0 0, 0, 1, 2;   
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .toggle-button:hover {
@@ -220,7 +218,6 @@
 {
   -fx-background-color: white;
 }
-
 
 /*******************************************************************************
  *                                                                             *
@@ -345,7 +342,6 @@
     -fx-effect: dropshadow(gaussian, #989898, 16, 0.0, 4, 4);
 }
 
-
 /*******************************************************************************
  *                                                                             *
  * PopupMenu                                                                   *
@@ -434,7 +430,7 @@
 }
 
 .scroll-bar .increment-button, .scroll-bar .decrement-button {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color:  #f0f0f0;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
     
@@ -656,10 +652,3 @@
 .list-spinner:disabled {
     -fx-opacity: .4;
 }
-
-
-
-
-
-
-
