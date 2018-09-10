@@ -66,6 +66,10 @@
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
 }
+.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
+    -fx-background-color: #fcfcfc;
+    -fx-border-color: #f3f3f3;
+}
 #buttnewcanvas {
     -fx-background-image: url('../images/new-canvas.png');
     -fx-background-repeat: no-repeat;
