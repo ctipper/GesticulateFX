@@ -1,3 +1,16 @@
+#toolpanel {
+    -fx-background-color: white; 
+    -fx-border-color: #f3f3f3;
+}
+#appmenu {
+    -fx-background-color: white;
+}
+#scrollarea {
+    -fx-background-color: #f3f3f3;
+}
+#statusbar {
+    -fx-background-color: #f3f3f3;
+}
 .toolbutton {
     -fx-background-color: #eeeeee;
 }
@@ -31,11 +44,6 @@
 .tool-bar {
     -fx-background-color: #ddf2ff;
 }
-/*
-#statusbar {
-    -fx-background-color: rgb(185.0, 185.0, 185.0);
-}
-*/
 .combo-box-base {
     -fx-background-color: white;
     -fx-padding: 0.0835em; /* 2 */

@@ -34,13 +34,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -318,15 +316,6 @@ public class ApplicationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // set tool button panel styles
-        this.toolbuttons.setStyle("-fx-background-color: white; -fx-border-color: #f3f3f3;");
-
-        // set app menu styles
-        this.appmenu.setStyle("-fx-background-color: white;");
-
-        // set canvas styles
-        this.scrollpane.setStyle("-fx-background-color: #f3f3f3;");
-
         // Initialize the sliding application menu
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
@@ -439,10 +428,6 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private GridPane appmenu;
-    @FXML
-    private VBox toolbuttons;
-    @FXML
-    private ScrollPane scrollpane;
     @FXML
     private ColorPicker colorpicker;
     @FXML

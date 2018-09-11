@@ -88,7 +88,7 @@ public class Gesticulate extends GuiceApplication {
         this.stage = primaryStage;
 
         // Initialise the scroll area
-        final ScrollPane pane = (ScrollPane) scene.lookup("#scroll");
+        final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
 
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());

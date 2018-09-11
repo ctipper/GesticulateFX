@@ -34,10 +34,10 @@
                 </HBox>
             </bottom>
             <center>
-                <ScrollPane id="scroll" fx:id="scrollpane" content="$null" fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" />
+                <ScrollPane id="scrollarea" fx:id="scrollpane" content="$null" fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="NEVER" prefHeight="-1.0" prefWidth="-1.0" />
             </center>
             <left>
-                <VBox fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0">
+                <VBox id="toolpanel" fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0">
                     <fx:define>
                         <ToggleGroup fx:id="toolToggles" />
                     </fx:define>
@@ -166,7 +166,7 @@
                 </ToolBar>
             </top>
         </BorderPane>
-        <GridPane fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="60.0">
+        <GridPane id="appmenu" fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="60.0">
             <padding>
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
