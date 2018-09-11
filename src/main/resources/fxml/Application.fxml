@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" fx:controller="net.perspective.draw.ApplicationController">
     <children>
@@ -47,19 +48,61 @@
                             <VBox.margin>
                                 <Insets bottom="3.0" left="4.0" right="4.0" top="3.0" fx:id="x1" />
                             </VBox.margin>
+                            <graphic>
+                                <SVGPath content="M0.000000 26.000000L0.000000 0.097198L13.947662 0.097198L18.928970 5.078506L18.928970 26.000000Z M13.947662 0.097198L13.947662 5.078506L18.928970 5.078506" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
                         </Button>
-                        <Button id="buttopenin" fx:id="openinbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleReadInAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
-                        <Button id="buttsaveto" fx:id="savetobutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveToAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1" />
+                        <Button id="buttopenin" fx:id="openinbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleReadInAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M0.000000 16.000000L19.427109 16.000000L23.412155 5.539246L3.985046 5.539246Z M0.000000 16.000000L0.000000 2.052338L1.494400 0.557938L5.479446 0.557938L6.973846 2.052338L19.427109 2.052338L19.427109 5.539246" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </Button>
+                        <Button id="buttsaveto" fx:id="savetobutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveToAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M3.237854 20.000000C1.449646 20.000000,0.000000 18.550354,0.000000 16.762146C0.000000 14.973938,1.449646 13.524292,3.237854 13.524292L19.427124 13.524292C21.215332 13.524292,22.664978 14.973938,22.664978 16.762146C22.664978 18.550354,21.215332 20.000000,19.427124 20.000000Z M0.110321 15.924133L3.237854 3.810730C3.690643 2.120880,4.808670 0.572876,6.475708 0.572876L16.189270 0.572876C17.856308 0.572876,18.974335 2.120880,19.427124 3.810730L22.554657 15.924133 M19.427124 16.762146l0 0" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </Button>
                         <Region prefHeight="5.0" />
                         <ToggleButton id="buttselect" fx:id="selectbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
-                        <ToggleButton id="buttrotate" fx:id="rotatebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
+                        <ToggleButton id="buttrotate" fx:id="rotatebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <Group>
+                                    <SVGPath content="M21.629684 21.629684C23.929916 19.348648,25.217789 16.239441,25.204208 13.000000C25.185959 8.644104,22.866867 4.621231,19.102112 2.430817C17.250137 1.353287,15.142548 0.798416,13.000000 0.795792C8.613281 0.790421,4.496872 3.043732,2.430817 6.897888C-1.933624 15.039612,3.776276 24.929062,13.000000 25.204208C14.427063 25.246780,15.847687 24.996307,17.174149 24.468262 M21.629684 21.629684L20.633423 17.644638 M21.629684 21.629684L25.614731 20.633423" styleClass="svgPath"  fill="TRANSPARENT"/>
+                                    <SVGPath content="M10.011215 13.000000L15.988785 13.000000 M13.000000 15.988785L13.000000 10.011215" styleClass="svgThinPath" fill="TRANSPARENT" />
+                                </Group>
+                            </graphic>
+                        </ToggleButton>
                         <Region prefHeight="5.0" />
-                        <ToggleButton id="buttslope" fx:id="slopebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
-                        <ToggleButton id="buttcircle" fx:id="circlebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
-                        <ToggleButton id="buttsquare" fx:id="squarebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
-                        <ToggleButton id="butttriangle" fx:id="trianglebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
-                        <ToggleButton id="buttpolygon" fx:id="polygonbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
-                        <ToggleButton id="buttsketch" fx:id="sketchbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSketchAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
+                        <ToggleButton id="buttslope" fx:id="slopebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M0.000000 17.000000L22.415894 0.561676" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton id="buttcircle" fx:id="circlebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M21.211685 11.000000C21.211685 8.291565,20.135605 5.694397,18.220596 3.779404C16.305603 1.864395,13.708435 0.788315,11.000000 0.788315C8.291565 0.788315,5.694397 1.864395,3.779404 3.779404C1.864395 5.694397,0.788315 8.291565,0.788315 11.000000C0.788315 13.708435,1.864395 16.305603,3.779404 18.220596C5.694397 20.135605,8.291565 21.211685,11.000000 21.211685C13.708435 21.211685,16.305603 20.135605,18.220596 18.220596C20.135605 16.305603,21.211685 13.708435,21.211685 11.000000Z" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton id="buttsquare" fx:id="squarebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M0.788300 21.211700L21.211700 21.211700L21.211700 0.788300L0.788300 0.788300Z" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton id="butttriangle" fx:id="trianglebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M0.000000 22.000000L21.917755 22.000000L10.958878 0.082245Z" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton id="buttpolygon" fx:id="polygonbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M18.730026 5.361984L13.638016 0.269974C4.441025 0.341461,-2.007233 9.368988,0.907990 18.092010C1.734192 20.564240,3.469177 22.750504,6.000000 23.184021C7.693268 23.474060,11.145432 21.827255,13.638016 20.638016C15.358093 19.817337,18.366989 18.381744,18.730026 18.092010C22.815308 14.831955,22.815308 8.622040,18.730026 5.361984Z" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </ToggleButton>
+                        <ToggleButton id="buttsketch" fx:id="sketchbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSketchAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M9.683105 12.160538C9.387039 11.739883,8.870743 11.533356,8.366211 11.633789C7.209183 11.864105,6.822739 13.242813,7.049316 14.530975C7.212357 15.457993,7.598648 16.360352,8.366211 16.901367C11.324356 18.986465,15.644501 15.517441,14.160538 10.975342C13.918884 10.235748,13.520340 9.555481,12.975342 9.000000C9.410904 5.367126,3.067444 7.514481,1.781738 12.950684C0.468903 18.501633,5.099258 23.668060,11.000000 23.485840C17.038956 23.299332,21.461807 17.802231,21.008408 11.633789C20.603149 6.120422,16.446732 1.645233,11.000000 0.571884C7.478043 -0.122177,3.828094 0.742279,0.991592 2.942276" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </ToggleButton>
                         <ToggleButton id="butttext" fx:id="textbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTextAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
                         <CheckBox alignment="BOTTOM_CENTER" focusTraversable="false" mnemonicParsing="false" text="">
                             <VBox.margin>
@@ -80,7 +123,11 @@
             <top>
                 <ToolBar prefHeight="60.0" style="">
                     <items>
-                        <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="" />
+                        <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="">
+                            <graphic>
+                                <SVGPath content="M1.992523 17.007477L17.932587 17.007477L17.932587 15.014954L1.992523 15.014954Z M1.992523 17.007477L17.932587 17.007477L17.932587 15.014954L1.992523 15.014954Z M1.992523 10.365738L17.932587 10.365738L17.932587 8.373215L1.992523 8.373215Z M1.992523 10.365738L17.932587 10.365738L17.932587 8.373215L1.992523 8.373215Z M1.992523 3.723999L17.932587 3.723999L17.932587 1.731476L1.992523 1.731476Z M1.992523 3.723999L17.932587 3.723999L17.932587 1.731476L1.992523 1.731476Z" styleClass="svgPath" fill="TRANSPARENT" />
+                            </graphic>
+                        </Button>
                         <Region prefWidth="5.0" />
                         <Label focusTraversable="false" text="Stroke" />
                         <ComboBox id="combostroketype" fx:id="strokecombobox" focusTraversable="false" prefWidth="130.0">

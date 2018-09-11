@@ -21,6 +21,7 @@
     -fx-background-color: white;
 }
 .menubutton {
+    -fx-padding: 5 11 5 11;
     -fx-background-color: #ddf2ff;
 }
 .menuitem {
@@ -78,20 +79,37 @@
     -fx-background-color: #fcfcfc;
     -fx-border-color: #f3f3f3;
 }
+.svgPath {
+    -fx-stroke: black;
+    -fx-stroke-width: 1.75;
+}
+.svgThinPath {
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+}
 #buttnewcanvas {
+    /*
     -fx-background-image: url('../images/new-canvas.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttopenin {
+    /*
     -fx-background-image: url('../images/open-in.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttsaveto {
+    /*
     -fx-background-image: url('../images/save-to.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttselect {
     -fx-background-image: url('../images/select.png');
@@ -99,39 +117,60 @@
     -fx-background-position: center;
 }
 #buttrotate {
+    /*
     -fx-background-image: url('../images/rotate.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttslope {
+    /*
     -fx-background-image: url('../images/slope.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttcircle {
+    /*
     -fx-background-image: url('../images/circle.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttsquare {
+    /*
     -fx-background-image: url('../images/square.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #butttriangle {
+    /*
     -fx-background-image: url('../images/triangle.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttpolygon {
+    /*
     -fx-background-image: url('../images/polygon.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #buttsketch {
+    /*
     -fx-background-image: url('../images/sketch.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #butttext {
     -fx-background-image: url('../images/text.png');
@@ -139,9 +178,12 @@
     -fx-background-position: center;
 }
 #butthamburger {
+    /*
     -fx-background-image: url('../images/menu.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5 11 5 11;
 }
 #buttbold {
     -fx-background-image: url('../images/bold.png');
