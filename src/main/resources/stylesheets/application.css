@@ -87,6 +87,9 @@
     -fx-stroke: black;
     -fx-stroke-width: 1;
 }
+.svgFill {
+    -fx-fill: black;
+}
 #buttnewcanvas {
     /*
     -fx-background-image: url('../images/new-canvas.png');
@@ -185,19 +188,28 @@
     -fx-background-position: center;
 }
 #buttbold {
+    /*
     -fx-background-image: url('../images/bold.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5 18 5 18;
 }
 #buttitalic {
+    /*
     -fx-background-image: url('../images/italic.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5 20 5 20;
 }
 #buttunderlined {
+    /*
     -fx-background-image: url('../images/underlined.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5 16 5 16;
 }
 #buttvertical {
     -fx-background-image: url('../images/perpendicular.png');
@@ -210,7 +222,7 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 15 5 15;
+    -fx-padding: 5 16 5 16;
 }
 #buttsnapshot {
     -fx-background-image: url('../images/snapshot.png');
