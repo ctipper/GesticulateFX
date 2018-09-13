@@ -183,7 +183,6 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 11 5 11;
 }
 #buttbold {
     -fx-background-image: url('../images/bold.png');
@@ -206,9 +205,12 @@
     -fx-background-position: center;
 }
 #buttwireframe {
+    /*
     -fx-background-image: url('../images/wireframe.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5 15 5 15;
 }
 #buttsnapshot {
     -fx-background-image: url('../images/snapshot.png');

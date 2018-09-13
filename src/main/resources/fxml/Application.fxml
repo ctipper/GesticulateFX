@@ -175,6 +175,9 @@
                             <tooltip>
                                 <Tooltip text="Draw as outline" />
                             </tooltip>
+                            <graphic>
+                                <SVGPath content="M2.000000 11.000000L12.958878 11.000000L12.958878 0.041122L2.000000 0.041122Z" styleClass="svgThinPath" fill="TRANSPARENT"/>
+                            </graphic>
                         </ToggleButton>
                         <!--
                         <Region prefWidth="5.0" />
