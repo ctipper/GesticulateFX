@@ -225,9 +225,12 @@
     -fx-padding: 5 16 5 16;
 }
 #buttsnapshot {
+    /*
     -fx-background-image: url('../images/snapshot.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5 11 5 11;
 }
 #buttsaveas {
     -fx-background-image: url('../images/save-as.png');
