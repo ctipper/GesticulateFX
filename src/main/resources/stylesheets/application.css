@@ -259,7 +259,9 @@
     -fx-background-position: center;
 }
 #buttquitapp {
+    /*
     -fx-background-image: url('../images/power.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }

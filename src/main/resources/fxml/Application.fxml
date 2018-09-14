@@ -243,7 +243,15 @@
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
             <children>
-                <Button id="buttsaveas" fx:id="saveasbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveAsAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
+                <Button id="buttsaveas" fx:id="saveasbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveAsAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0">
+                    <graphic>
+                        <Group>
+                            <SVGPath content="M4.494400 13.000000C3.669067 13.000000,3.000000 12.330933,3.000000 11.505600C3.000000 10.680267,3.669067 10.011215,4.494400 10.011215L11.966354 10.011215C12.791687 10.011215,13.460754 10.680267,13.460754 11.505600C13.460754 12.330933,12.791687 13.000000,11.966354 13.000000Z" styleClass="svgThinPath" fill="TRANSPARENT"/>
+                            <SVGPath content="M3.050919 11.118820L4.494400 5.528046C4.703384 4.748108,5.219391 4.033646,5.988800 4.033646L10.471954 4.033646C11.241364 4.033646,11.757370 4.748108,11.966354 5.528046L13.409836 11.118820" styleClass="svgThinPath" fill="TRANSPARENT"/>
+                            <SVGPath content="M8.230377 0.048584C3.553497 0.048584,-0.237854 3.839935,-0.237854 8.516815C-0.237854 13.193695,3.553497 16.985046,8.230377 16.985046C12.907257 16.985046,16.698608 13.193695,16.698608 8.516815C16.698608 3.839935,12.907257 0.048584,8.230377 0.048584Z" styleClass="svgPath" fill="TRANSPARENT"/>
+                        </Group>
+                    </graphic>
+                </Button>
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveAsAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Save As..." GridPane.columnIndex="1" GridPane.rowIndex="0" />    
                 <Button id="buttpdfexport" fx:id="pdfbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <graphic>
@@ -272,7 +280,14 @@
                     </graphic>
                 </Button>
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="3" />    
-                <Button id="buttquitapp" fx:id="quitbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                <Button id="buttquitapp" fx:id="quitbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                    <graphic>
+                        <Group>
+                            <SVGPath content="M4.264008 3.529068C1.952179 4.863815,0.528030 7.330521,0.528030 10.000000C0.528030 14.126648,3.873352 17.471970,8.000000 17.471970C12.126648 17.471970,15.471970 14.126648,15.471970 10.000000C15.471970 7.330521,14.047821 4.863815,11.735992 3.529068" styleClass="svgPath" fill="TRANSPARENT" />
+                            <SVGPath content="M8.000000 8.132004L8.000000 0.660034" styleClass="svgPath" fill="TRANSPARENT" />
+                        </Group>
+                    </graphic>
+                </Button>
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="4" />    
             </children>
             <columnConstraints>
