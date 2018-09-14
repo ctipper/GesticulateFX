@@ -63,7 +63,11 @@
                             </graphic>
                         </Button>
                         <Region prefHeight="5.0" />
-                        <ToggleButton id="buttselect" fx:id="selectbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1" />
+                        <ToggleButton id="buttselect" fx:id="selectbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M3.6728664049999997 0.6236943L3.6728664049999997 12.36993695 4.43515941 12.33528245 6.5141404099999995 9.840506099999999 9.667261649999999 15.453753949999998 11.0532487 15.419107949999999 11.15719775 13.582674449999999 9.078216750000001 10.394904149999999 9.00891625 9.459362699999998 9.42471245 9.147515549999998 12.369935250000001 9.182161549999998 12.369935250000001 8.142671219999999 4.7470048600000005 0.6583397304999986Z" fillRule="EVEN_ODD" styleClass="svgFill"/>
+                            </graphic>
+                        </ToggleButton>
                         <ToggleButton id="buttrotate" fx:id="rotatebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
                             <graphic>
                                 <Group>

@@ -13,16 +13,22 @@
 }
 .toolbutton {
     -fx-background-color: #eeeeee;
+    -fx-min-width: 44;
+    -fx-min-height: 32;
+    -fx-padding: 5 11 5 11;
 }
 .toolbutton:selected, .toolbutton:selected:hover {
     -fx-background-color: #c8c8c8;
 }
 .formatbutton {
     -fx-background-color: white;
+    -fx-min-width: 45;
+    -fx-min-height: 25;
+    -fx-padding: 5 11 5 11;
 }
 .menubutton {
-    -fx-padding: 5 11 5 11;
     -fx-background-color: #ddf2ff;
+    -fx-padding: 5 11 5 11;
 }
 .menuitem {
     -fx-background-color: white;
@@ -31,12 +37,16 @@
 }
 .menuicon {
     -fx-background-color: white;
+    -fx-padding: 5 11 5 11;
 }
 .menubutton:hover, menuitem:hover, menuicon:hover {
     -fx-background-color: #d0e4f0;
 }
 .togglebuttons {
     -fx-background-color: white;
+    -fx-min-width: 45;
+    -fx-min-height: 25;
+    -fx-padding: 5 11 5 11;
 }
 .togglebuttons:selected, .togglebuttons:selected:hover {
     -fx-background-color: 
@@ -115,7 +125,9 @@
     -fx-padding: 5;
 }
 #buttselect {
+    /*
     -fx-background-image: url('../images/select.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
@@ -193,7 +205,6 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 18 5 18;
 }
 #buttitalic {
     /*
@@ -201,7 +212,6 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 20 5 20;
 }
 #buttunderlined {
     /*
@@ -209,7 +219,6 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 16 5 16;
 }
 #buttvertical {
     -fx-background-image: url('../images/perpendicular.png');
@@ -222,7 +231,6 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 16 5 16;
 }
 #buttsnapshot {
     /*
@@ -230,10 +238,11 @@
     */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-padding: 5 11 5 11;
 }
 #buttsaveas {
+    /*
     -fx-background-image: url('../images/save-as.png');
+    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
