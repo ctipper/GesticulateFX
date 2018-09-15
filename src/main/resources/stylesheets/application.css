@@ -1,15 +1,18 @@
 #toolpanel {
-    -fx-background-color: white; 
+    -fx-background-color: #fefefe;
     -fx-border-color: #f3f3f3;
 }
 #appmenu {
-    -fx-background-color: white;
+    -fx-background-color: #fefefe;
 }
 #scrollarea {
     -fx-background-color: #f3f3f3;
 }
 #statusbar {
     -fx-background-color: #f3f3f3;
+}
+.tool-bar {
+    -fx-background-color: #ddf2ff;
 }
 .toolbutton {
     -fx-background-color: #eeeeee;
@@ -31,12 +34,12 @@
     -fx-padding: 5 11 5 11;
 }
 .menuitem {
-    -fx-background-color: white;
+    -fx-background-color: #fefefe;
     -fx-padding: 8 5 8 5;
     -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
 }
 .menuicon {
-    -fx-background-color: white;
+    -fx-background-color: #fefefe;
     -fx-padding: 5 11 5 11;
 }
 .menubutton:hover, menuitem:hover, menuicon:hover {
@@ -51,9 +54,6 @@
 .togglebuttons:selected, .togglebuttons:selected:hover {
     -fx-background-color: 
         linear-gradient(to top, rgb(195.0, 195.0, 195.0), rgb(125.0, 125.0, 125.0));
-}
-.tool-bar {
-    -fx-background-color: #ddf2ff;
 }
 .combo-box-base {
     -fx-background-color: white;
@@ -85,9 +85,41 @@
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
 }
-.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
-    -fx-background-color: #fcfcfc;
-    -fx-border-color: #f3f3f3;
+.combo-box-popup .list-view, .color-palette , .custom-color-dialog {
+    -fx-background-color:
+        linear-gradient(to bottom,
+            derive(#f3f3f3,-17%),
+            derive(#f3f3f3,-30%)
+        ),
+        #fefefe;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+.custom-color-dialog .controls-pane .customcolor-controls-background {
+    -fx-background-color: white;
+}
+.progress-bar {
+    -fx-background-insets: 0, 1;
+    -fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+}
+.progress-bar > .bar {
+    -fx-background-color:
+        -fx-box-border,
+        linear-gradient(to bottom, derive(#0096c9,95%), derive(#0096c9,10%)),
+        linear-gradient(to bottom, derive(#0096c9,38%), #0096c9);
+    -fx-background-radius: 0;
+    -fx-background-insets: 1;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: linear-gradient(to left, transparent, #0096c9);
+}
+.progress-bar > .track {
+    -fx-background-color: #fefefe;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
 }
 .svgPath {
     -fx-stroke: black;
