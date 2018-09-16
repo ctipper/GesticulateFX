@@ -366,6 +366,9 @@ public class ApplicationController implements Initializable {
         this.checkTheme.selectedProperty().bindBidirectional(toggleTheme.selectedProperty());
         this.themeProperty = new ReadOnlyBooleanWrapper();
         this.themeProperty.bindBidirectional(this.checkTheme.selectedProperty());
+        /**
+         * Property change handler to set/reset night mode on demand
+         */
         this.themeProperty.addListener(new ChangeListener<Boolean>() {
 
             @Override
@@ -380,6 +383,19 @@ public class ApplicationController implements Initializable {
                     themeAccentColor.setValue("black");
                 }
                 drawarea.setTheme();
+                // reset combo boxes
+                String stroke = strokecombobox.getSelectionModel().getSelectedItem();
+                Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(newValue);
+                strokecombobox.setButtonCell(strokeCellFactory.call(null));
+                strokecombobox.setCellFactory(strokeCellFactory);
+                strokecombobox.getSelectionModel().select(stroke);
+                String style = stylecombobox.getSelectionModel().getSelectedItem();
+                Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory(newValue);
+                stylecombobox.setButtonCell(styleCellFactory.call(null));
+                stylecombobox.setCellFactory(styleCellFactory);
+                stylecombobox.getSelectionModel().select(style);
+                // reset application stylesheets
+                application.resetStylesheets(newValue);
                 menubutton.fire();
             }
         });

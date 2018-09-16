@@ -1,0 +1,333 @@
+/**
+ * Night theme application styles
+ */
+
+.label {
+    -fx-text-fill: #c0c481;
+}
+#toolpanel {
+    -fx-background-color: #1d1d1d; 
+    -fx-border-color: #3a3a3a;
+}
+#appmenu {
+    -fx-background-color: #1d1d1d;
+}
+#scrollarea {
+    -fx-background-color: #3a3a3a;
+}
+#statusbar {
+    -fx-background-color: #1d1d1d;
+}
+.toolbutton {
+    -fx-background-color: #212121;
+    -fx-min-width: 44;
+    -fx-min-height: 32;
+    -fx-padding: 5 11 5 11;
+}
+.toolbutton:selected, .toolbutton:selected:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-border-color: #3a3a3a;
+}
+.formatbutton {
+    -fx-background-color: #212121;
+    -fx-min-width: 45;
+    -fx-min-height: 25;
+    -fx-padding: 5 11 5 11;
+}
+.menubutton {
+    -fx-background-color: #1d1d1d;
+    -fx-border-color: #1d1d1d;
+    -fx-padding: 5 11 5 11;
+}
+.menuitem {
+    -fx-background-color: #1d1d1d;
+    -fx-padding: 8 5 8 5;
+    -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-border-color: #1d1d1d;
+}
+.menuicon {
+    -fx-background-color: #1d1d1d;
+    -fx-border-color: #1d1d1d;
+    -fx-padding: 5 11 5 11;
+}
+.menubutton:hover, menuitem:hover, menuicon:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-border-color: #3a3a3a;
+}
+.togglebuttons {
+    -fx-background-color: #212121;
+    -fx-min-width: 45;
+    -fx-min-height: 25;
+    -fx-padding: 5 11 5 11;
+ }
+.togglebuttons:selected, .togglebuttons:selected:hover {
+    -fx-background-color: 
+        linear-gradient(to top, #3a3a3a, #212121);
+}
+.tool-bar {
+    -fx-background-color: #1d1d1d;
+}
+.combo-box-base {
+    -fx-padding: 0.0835em; /* 2 */
+    -fx-height: 1.35em;
+}
+
+/**
+ * Night theme control styles
+ */
+.combo-box-base:hover {
+    -fx-background-color: #212121;
+}
+.combo-box-base .arrow-button {
+    -fx-background-color: #3a3a3a;
+}
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #1d1d1d;
+}
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #c0c481;
+}
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #c0c481;
+}
+.combo-box-popup .list-view .list-cell:filled:selected:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #c0c481;
+}
+.color-picker, .color-picker:focused, .color-picker:selected {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
+.color-picker > .color-picker-label > .picker-color > .picker-color-rect {
+    -fx-stroke: none;
+}
+.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
+    -fx-background-color:
+        linear-gradient(to bottom,
+            derive(#1d1d1d,-17%),
+            derive(#1d1d1d,-30%)
+        ),
+        #3a3a3a;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+.custom-color-dialog .controls-pane .customcolor-controls-background {
+    -fx-background-color: #1d1d1d;
+}
+.progress-bar {
+    -fx-background-insets: 0, 1;
+    -fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+}
+.progress-bar > .bar {
+    -fx-background-color:
+        -fx-box-border,
+        linear-gradient(to bottom, derive(#c0c481,95%), derive(#c0c481,10%)),
+        linear-gradient(to bottom, derive(#c0c481,38%), #c0c481);
+    -fx-background-radius: 0;
+    -fx-background-insets: 1;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: linear-gradient(to left, transparent, #c0c481);
+}
+.progress-bar > .track {
+    -fx-background-color: #3a3a3a;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+.toggle-button:selected {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #c0c481;
+    -fx-border-width: 0;
+}
+
+/**
+ * Night theme svg styles
+ */
+ 
+.svgPath {
+    -fx-stroke: #c0c481;
+    -fx-stroke-width: 1.75;
+}
+.svgThinPath {
+    -fx-stroke: #c0c481;
+    -fx-stroke-width: 1;
+}
+.svgFill {
+    -fx-fill: #c0c481;
+}
+
+/**
+ * Tool button styles
+ */
+
+#buttnewcanvas {
+    /*
+    -fx-background-image: url('../images/new-canvas.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttopenin {
+    /*
+    -fx-background-image: url('../images/open-in.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsaveto {
+    /*
+    -fx-background-image: url('../images/save-to.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttselect {
+    /*
+    -fx-background-image: url('../images/select.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttrotate {
+    /*
+    -fx-background-image: url('../images/rotate.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttslope {
+    /*
+    -fx-background-image: url('../images/slope.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttcircle {
+    /*
+    -fx-background-image: url('../images/circle.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsquare {
+    /*
+    -fx-background-image: url('../images/square.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#butttriangle {
+    /*
+    -fx-background-image: url('../images/triangle.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttpolygon {
+    /*
+    -fx-background-image: url('../images/polygon.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsketch {
+    /*
+    -fx-background-image: url('../images/sketch.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#butttext {
+    /*
+    -fx-background-image: url('../images/text.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#butthamburger {
+    /*
+    -fx-background-image: url('../images/menu.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttbold {
+    /*
+    -fx-background-image: url('../images/bold.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttitalic {
+    /*
+    -fx-background-image: url('../images/italic.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttunderlined {
+    /*
+    -fx-background-image: url('../images/underlined.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttvertical {
+    -fx-background-image: url('../images/perpendicular.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttwireframe {
+    /*
+    -fx-background-image: url('../images/wireframe.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsnapshot {
+    /*
+    -fx-background-image: url('../images/snapshot.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsaveas {
+    /*
+    -fx-background-image: url('../images/save-as.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttsvgexport {
+    /*
+    -fx-background-image: url('../images/export-options-1.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttpdfexport {
+    /*
+    -fx-background-image: url('../images/export-options-2.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttpngexport {
+    /*
+    -fx-background-image: url('../images/export-options-3.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#buttquitapp {
+    /*
+    -fx-background-image: url('../images/power.png');
+    */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}

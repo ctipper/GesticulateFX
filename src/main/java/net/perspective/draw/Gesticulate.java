@@ -127,6 +127,18 @@ public class Gesticulate extends GuiceApplication {
         }
     }
 
+    public void resetStylesheets(Boolean mode) {
+        if (mode) {
+            stage.getScene().getStylesheets().clear();
+            stage.getScene().getStylesheets().add("/stylesheets/jmetro-dark.css");
+            stage.getScene().getStylesheets().add("/stylesheets/application-dark.css");
+        } else {
+            stage.getScene().getStylesheets().clear();
+            stage.getScene().getStylesheets().add("/stylesheets/jmetro-light.css");
+            stage.getScene().getStylesheets().add("/stylesheets/application.css");
+        }
+    }
+
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
