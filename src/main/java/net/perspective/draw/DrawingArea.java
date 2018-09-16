@@ -102,7 +102,7 @@ public class DrawingArea {
     void init(double width, double height) {
         root = new Group();
         canvas = new SubScene(root, width, height);
-        canvas.setFill(Color.web(controller.getThemeFillColor()));
+        canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
         contextmenu = new ContextMenu();
         contextlistener = null;
         view.setDrawingListener();
@@ -155,6 +155,23 @@ public class DrawingArea {
         this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
+    }
+
+    public void setTheme(){
+        canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
+        view.setSelected(-1);
+    }
+
+    public String getThemeFillColor() {
+        return controller.getThemeFillColor();
+    }
+
+    public String getThemeBackgroundColor() {
+        return controller.getThemeBackgroundColor();
+    }
+
+    public String getThemeAccentColor() {
+        return controller.getThemeAccentColor();
     }
 
     public void clear() {

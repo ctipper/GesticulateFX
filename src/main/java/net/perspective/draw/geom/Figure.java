@@ -6,7 +6,10 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
@@ -498,7 +501,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return an FX Shape node
      */
-    public Node drawAnchors() {
+    public Node drawAnchors(DrawingArea drawarea) {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         switch (this.type) {
@@ -506,47 +509,47 @@ public class Figure implements DrawItem, Serializable {
             case SKETCH:
             case POLYGON:
                 // end points marked
-                anchors.getChildren().add(this.anchor(start.x, start.y));
-                anchors.getChildren().add(this.anchor(end.x, end.y));
+                anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
+                anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
                 break;
             case NONE:
                 break;
             default:
                 CanvasPoint center = this.rotationCentre();
-                anchors.getChildren().add(this.anchor(start.x, start.y));
-                anchors.getChildren().add(this.anchor(end.x, start.y));
-                anchors.getChildren().add(this.anchor(start.x, end.y));
-                anchors.getChildren().add(this.anchor(end.x, end.y));
-                anchors.getChildren().add(this.edgeAnchor(center.x, start.y));
-                anchors.getChildren().add(this.edgeAnchor(start.x, center.y));
-                anchors.getChildren().add(this.edgeAnchor(center.x, end.y));
-                anchors.getChildren().add(this.edgeAnchor(end.x, center.y));
+                anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
+                anchors.getChildren().add(this.anchor(drawarea, end.x, start.y));
+                anchors.getChildren().add(this.anchor(drawarea, start.x, end.y));
+                anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
+                anchors.getChildren().add(this.edgeAnchor(drawarea, center.x, start.y));
+                anchors.getChildren().add(this.edgeAnchor(drawarea, start.x, center.y));
+                anchors.getChildren().add(this.edgeAnchor(drawarea, center.x, end.y));
+                anchors.getChildren().add(this.edgeAnchor(drawarea, end.x, center.y));
                 break;
         }
         return anchors;
     }
 
-    protected javafx.scene.shape.Shape anchor(double x, double y) {
+    protected javafx.scene.shape.Shape anchor(DrawingArea drawarea, double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
         anchor.setCenterX(u.x);
         anchor.setCenterY(u.y);
         anchor.setRadius(5.0);
-        anchor.setFill(Color.web("white"));
-        anchor.setStroke(Color.web("black"));
+        anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         return anchor;
     }
 
-    protected javafx.scene.shape.Shape edgeAnchor(double x, double y) {
+    protected javafx.scene.shape.Shape edgeAnchor(DrawingArea drawarea, double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         javafx.scene.shape.Rectangle anchor = new javafx.scene.shape.Rectangle();
         anchor.setX(u.x - 4.0);
         anchor.setY(u.y - 4.0);
         anchor.setWidth(8.0);
         anchor.setHeight(8.0);
-        anchor.setFill(Color.web("white"));
-        anchor.setStroke(Color.web("black"));
+        anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         anchor.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, u.x, u.y));
         return anchor;

@@ -268,8 +268,8 @@ public class ArrowLine extends Figure {
     }
 
     @Override
-    public Node drawAnchors() {
-        Node anchors = line.drawAnchors();
+    public Node drawAnchors(DrawingArea drawarea) {
+        Node anchors = line.drawAnchors(drawarea);
         return anchors;
     }
 

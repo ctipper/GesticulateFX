@@ -160,7 +160,7 @@ public interface DrawItem {
      * 
      * @return an FX Node
      */
-    Node drawAnchors();
+    Node drawAnchors(DrawingArea drawarea);
 
     /**
      * Render the item to the g2d canvas

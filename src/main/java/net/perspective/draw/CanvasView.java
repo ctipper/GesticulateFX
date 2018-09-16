@@ -299,7 +299,7 @@ public class CanvasView {
     private Group getAnchors() {
         Group anchorGroup = new Group();
         for (Integer item : selectionIndex) {
-            anchorGroup.getChildren().add(drawings.get(item).drawAnchors());
+            anchorGroup.getChildren().add(drawings.get(item).drawAnchors(drawarea));
         }
         return anchorGroup;
     }

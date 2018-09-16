@@ -54,8 +54,8 @@ public class FigureHandler implements Handler {
         Figure item = figurefactory.createFigure(drawType);
         // Initialise stroke and fill
         item.setStroke(drawarea.getPlainStroke());
-        item.setColor(Color.web("lightgray"));
-        item.setFillColor(Color.web("white"));
+        item.setColor(Color.web(drawarea.getThemeFillColor()));
+        item.setFillColor(Color.web(drawarea.getThemeBackgroundColor()));
         // Initialise figure
         item.setStart(listener.getStartX(), listener.getStartY());
         item.setEnd(listener.getTempX(), listener.getTempY());

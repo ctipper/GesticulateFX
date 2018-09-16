@@ -73,7 +73,7 @@ public class ApplicationController implements Initializable {
     private ReadOnlyStringWrapper strokeStyleProperty;
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
-    private SimpleStringProperty themeBorderColor, themeFillColor;
+    private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
 
     @FXML 
     private void handleWipeAction(ActionEvent e) {
@@ -315,11 +315,20 @@ public class ApplicationController implements Initializable {
      * 
      * @return borderColor
      */
-    public String getThemeBorderColor() {
-        return themeBorderColor.getValue();
+    public String getThemeBackgroundColor() {
+        return themeBackgroundColor.getValue();
     }
 
-    private Callback<ListView<String>, ListCell<String>> getCellFactory() {
+    /**
+     * Get theme fill colour
+     * 
+     * @return fillColor
+     */
+    public String getThemeAccentColor() {
+        return themeAccentColor.getValue();
+    }
+
+    private Callback<ListView<String>, ListCell<String>> getCellFactory(Boolean alternate) {
         return new Callback<ListView<String>, ListCell<String>>() {
 
             @Override
@@ -340,7 +349,7 @@ public class ApplicationController implements Initializable {
                         if (item == null || empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(new ImageView(new Image("images/" + item + ".png")));
+                            setGraphic(new ImageView(new Image("images/" + item + (alternate ? "-alt" : "" ) + ".png")));
                         }
                     }
                 };
@@ -351,8 +360,9 @@ public class ApplicationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // set the theme to light
-        this.themeFillColor = new SimpleStringProperty("white");
-        this.themeBorderColor = new SimpleStringProperty("black");
+        this.themeFillColor = new SimpleStringProperty("lightgray");
+        this.themeBackgroundColor = new SimpleStringProperty("white");
+        this.themeAccentColor = new SimpleStringProperty("black");
         this.checkTheme.selectedProperty().bindBidirectional(toggleTheme.selectedProperty());
         this.themeProperty = new ReadOnlyBooleanWrapper();
         this.themeProperty.bindBidirectional(this.checkTheme.selectedProperty());
@@ -361,12 +371,16 @@ public class ApplicationController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
-                    themeFillColor.setValue("#3a3a3a");
-                    themeBorderColor.setValue("#1d1d1d");
+                    themeFillColor.setValue("#1d1d1d");
+                    themeBackgroundColor.setValue("#3a3a3a");
+                    themeAccentColor.setValue("#c0c481");
                 } else {
-                    themeFillColor.setValue("white");
-                    themeBorderColor.setValue("black");
+                    themeFillColor.setValue("lightgray");
+                    themeBackgroundColor.setValue("white");
+                    themeAccentColor.setValue("black");
                 }
+                drawarea.setTheme();
+                menubutton.fire();
             }
         });
         
@@ -386,14 +400,14 @@ public class ApplicationController implements Initializable {
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
 
         // instantiate a cellfactory for the stroke and style comboboxes
-        Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory();
+        Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(false);
         strokecombobox.setButtonCell(strokeCellFactory.call(null));
         strokecombobox.setCellFactory(strokeCellFactory);
         strokecombobox.getSelectionModel().select("stroke7");
         this.strokeTypeProperty = new ReadOnlyStringWrapper();
         this.strokeTypeProperty.bindBidirectional(strokecombobox.valueProperty());
         // setup stroke style combo box
-        Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory();
+        Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory(false);
         stylecombobox.setButtonCell(styleCellFactory.call(null));
         stylecombobox.setCellFactory(styleCellFactory);
         stylecombobox.getSelectionModel().selectFirst();

@@ -6,19 +6,20 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.Graphics2D;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
-import org.jhotdraw.geom.DoubleStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -257,10 +258,10 @@ public class Grouped implements DrawItem, Serializable {
         return point;
     }
 
-    private AffineTransform getTransform() {
+    private java.awt.geom.AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
 
-        AffineTransform transform = new AffineTransform();
+        java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
         transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
             // rotate Group about centroid
@@ -288,10 +289,10 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return a transformed shape
      */
-    public Shape bounds() {
+    public java.awt.Shape bounds() {
         Rectangle2D rect = new Rectangle2D.Double(start.x, start.y, end.x - start.x, end.y - start.y);
         Area bounds = new Area(rect);
-        AffineTransform transform = this.getTransform();
+        java.awt.geom.AffineTransform transform = this.getTransform();
         bounds.transform(transform);
         return bounds;
     }
@@ -335,24 +336,24 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return an FX Shape node
      */
-    public Node drawAnchors() {
+    public Node drawAnchors(DrawingArea drawarea) {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
-        anchors.getChildren().add(this.anchor(start.x, start.y));
-        anchors.getChildren().add(this.anchor(end.x, start.y));
-        anchors.getChildren().add(this.anchor(start.x, end.y));
-        anchors.getChildren().add(this.anchor(end.x, end.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
+        anchors.getChildren().add(this.anchor(drawarea, end.x, start.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x, end.y));
+        anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
         return anchors;
     }
 
-    protected javafx.scene.shape.Shape anchor(double x, double y) {
+    protected javafx.scene.shape.Shape anchor(DrawingArea drawarea, double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
         anchor.setCenterX(u.x);
         anchor.setCenterY(u.y);
         anchor.setRadius(5.0);
-        anchor.setFill(javafx.scene.paint.Color.web("white"));
-        anchor.setStroke(javafx.scene.paint.Color.web("black"));
+        anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         return anchor;
     }
@@ -364,7 +365,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param canvas  the {@link net.perspective.draw.DrawingCanvas}
      */
     public void draw(Graphics2D g2) {
-        AffineTransform defaultTransform;
+        java.awt.geom.AffineTransform defaultTransform;
 
         defaultTransform = g2.getTransform();
         g2.transform(this.getTransform());
@@ -375,43 +376,6 @@ public class Grouped implements DrawItem, Serializable {
 
         // reset graphics context
         g2.setTransform(defaultTransform);
-    }
-
-    /**
-     * Render the group anchors to indicate selection
-     * 
-     * @param g2  the graphics context
-     */
-    public void drawAnchors(Graphics2D g2) {
-        AffineTransform defaultTransform, transform;
-        float[] dashes = {1.0f, 2.0f};
-
-        defaultTransform = g2.getTransform();
-
-        transform = this.getTransform();
-        transform.translate(start.x, start.y);
-        g2.transform(transform);
-
-        // construct outline
-        g2.setStroke(new DoubleStroke(3.0f, 1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 10f, dashes, 0f));
-        g2.setColor(Color.lightGray);
-        g2.draw(new RoundRectangle2D.Double(0, 0, end.x - start.x, end.y - start.y, 5.0, 5.0));
-        // anchors marked
-        g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        this.anchor(g2, 0, 0);
-        this.anchor(g2, 0, end.y - start.y);
-        this.anchor(g2, end.x - start.x, end.y - start.y);
-        this.anchor(g2, end.x - start.x, 0);
-
-        // reset graphics context
-        g2.setTransform(defaultTransform);
-    }
-
-    private void anchor(Graphics2D g2, double x, double y) {
-        g2.setColor(Color.white);
-        g2.fill(new Ellipse2D.Double(x - 4.0, y - 4.0, 8.0, 8.0));
-        g2.setColor(Color.black);
-        g2.draw(new Ellipse2D.Double(x - 4.0, y - 4.0, 8.0, 8.0));
     }
 
     /**
