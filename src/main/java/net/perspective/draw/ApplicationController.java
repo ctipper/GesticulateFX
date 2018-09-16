@@ -18,15 +18,20 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
@@ -61,12 +66,14 @@ public class ApplicationController implements Initializable {
     @Inject private ShareUtils share;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
+    private ReadOnlyBooleanWrapper themeProperty;
     private When wireframeSelected;
     private SequentialTransition statusTransition;
     private ReadOnlyStringWrapper strokeTypeProperty;
     private ReadOnlyStringWrapper strokeStyleProperty;
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
+    private SimpleStringProperty themeBorderColor, themeFillColor;
 
     @FXML 
     private void handleWipeAction(ActionEvent e) {
@@ -285,6 +292,33 @@ public class ApplicationController implements Initializable {
         statusTransition.play();
     }
 
+    /**
+     * Get the theme
+     * 
+     * @return themeProperty
+     */
+    public BooleanProperty getThemeProperty() {
+        return this.themeProperty;
+    }
+
+    /**
+     * Get theme fill colour
+     * 
+     * @return fillColor
+     */
+    public String getThemeFillColor() {
+        return themeFillColor.getValue();
+    }
+
+    /**
+     * Get them border colour
+     * 
+     * @return borderColor
+     */
+    public String getThemeBorderColor() {
+        return themeBorderColor.getValue();
+    }
+
     private Callback<ListView<String>, ListCell<String>> getCellFactory() {
         return new Callback<ListView<String>, ListCell<String>>() {
 
@@ -316,6 +350,26 @@ public class ApplicationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // set the theme to light
+        this.themeFillColor = new SimpleStringProperty("white");
+        this.themeBorderColor = new SimpleStringProperty("black");
+        this.checkTheme.selectedProperty().bindBidirectional(toggleTheme.selectedProperty());
+        this.themeProperty = new ReadOnlyBooleanWrapper();
+        this.themeProperty.bindBidirectional(this.checkTheme.selectedProperty());
+        this.themeProperty.addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    themeFillColor.setValue("#3a3a3a");
+                    themeBorderColor.setValue("#1d1d1d");
+                } else {
+                    themeFillColor.setValue("white");
+                    themeBorderColor.setValue("black");
+                }
+            }
+        });
+        
         // Initialize the sliding application menu
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
@@ -428,6 +482,10 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private GridPane appmenu;
+    @FXML
+    private CheckBox checkTheme;
+    @FXML
+    private ToggleButton toggleTheme;
     @FXML
     private ColorPicker colorpicker;
     @FXML

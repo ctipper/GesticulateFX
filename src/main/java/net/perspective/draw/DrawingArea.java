@@ -102,7 +102,7 @@ public class DrawingArea {
     void init(double width, double height) {
         root = new Group();
         canvas = new SubScene(root, width, height);
-        canvas.setFill(Color.WHITE);
+        canvas.setFill(Color.web(controller.getThemeFillColor()));
         contextmenu = new ContextMenu();
         contextlistener = null;
         view.setDrawingListener();
