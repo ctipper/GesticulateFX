@@ -67,34 +67,69 @@
 .tool-bar {
     -fx-background-color: #1d1d1d;
 }
+/**
+ * Night theme accent styles
+ */
+.button, .button:default {
+    -fx-text-fill: #c0c481;
+}
+.button:pressed, .button:default:hover:pressed {
+  -fx-text-fill: #c0c481;
+}
+.toggle-button {
+    -fx-text-fill: #c0c481;
+}
+.toggle-button:selected:hover .toggle-button:hover, .toggle-button:selected {
+    -fx-text-fill: #c0c481;
+}
+.check-box:selected .mark {
+    -fx-background-color: #c0c481;
+}
+.menu-item .label, .menu-item:pressed .label {
+    -fx-text-fill: #c0c481;
+}
 .combo-box-base {
     -fx-padding: 0.0835em; /* 2 */
     -fx-height: 1.35em;
 }
-
-/**
- * Night theme control styles
- */
+.combo-box-base .list-cell {
+    -fx-text-fill: #c0c481;
+}
 .combo-box-base:hover {
     -fx-background-color: #212121;
+}
+.combo-box-base .arrow {
+    -fx-background-color: transparent, #c0c481;
 }
 .combo-box-base .arrow-button {
     -fx-background-color: #3a3a3a;
 }
 .combo-box-popup .list-view .list-cell {
-    -fx-background-color: #1d1d1d;
+    -fx-text-fill: #c0c481;
 }
 .combo-box-popup .list-view .list-cell:hover {
-    -fx-background-color: #3a3a3a;
     -fx-text-fill: #c0c481;
 }
 .combo-box-popup .list-view .list-cell:filled:selected {
-    -fx-background-color: #3a3a3a;
     -fx-text-fill: #c0c481;
 }
 .combo-box-popup .list-view .list-cell:filled:selected:hover {
-    -fx-background-color: #3a3a3a;
     -fx-text-fill: #c0c481;
+}
+.combo-box-popup .list-view .list-cell:filled:pressed, .combo-box-popup .list-view .list-cell:filled:selected:pressed
+{
+    -fx-text-fill: #c0c481;
+}
+.color-picker > .color-picker-label > .picker-color > .picker-color-rect {
+    -fx-stroke: none;
+}
+.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
+    -fx-background-color: #1d1d1d;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+.custom-color-dialog .controls-pane .customcolor-controls-background {
+    -fx-background-color: #1d1d1d;
 }
 .color-picker, .color-picker:focused, .color-picker:selected {
     -fx-border-width: 0;
@@ -102,19 +137,6 @@
 }
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
-}
-.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
-    -fx-background-color:
-        linear-gradient(to bottom,
-            derive(#1d1d1d,-17%),
-            derive(#1d1d1d,-30%)
-        ),
-        #3a3a3a;
-    -fx-background-insets: 0, 1;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
-}
-.custom-color-dialog .controls-pane .customcolor-controls-background {
-    -fx-background-color: #1d1d1d;
 }
 .progress-bar {
     -fx-background-insets: 0, 1;
@@ -140,7 +162,6 @@
     -fx-background-radius: 0;
 }
 .toggle-button:selected {
-    -fx-background-color: #3a3a3a;
     -fx-text-fill: #c0c481;
     -fx-border-width: 0;
 }
@@ -158,6 +179,11 @@
     -fx-stroke-width: 1;
 }
 .svgFill {
+    -fx-fill: #c0c481;
+}
+.svgFillPath {
+    -fx-stroke: #c0c481;
+    -fx-stroke-width: 1.75;
     -fx-fill: #c0c481;
 }
 

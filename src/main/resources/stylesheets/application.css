@@ -149,6 +149,11 @@
 .svgFill {
     -fx-fill: black;
 }
+.svgFillPath {
+    -fx-stroke: black;
+    -fx-stroke-width: 1.75;
+    -fx-fill: black;
+}
 
 /**
  * Tool button styles
