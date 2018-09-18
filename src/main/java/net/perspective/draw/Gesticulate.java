@@ -11,7 +11,16 @@ import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
@@ -33,6 +42,8 @@ import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.ReadInFunnel;
 import net.perspective.draw.workers.SVGWorker;
 import net.perspective.draw.workers.WriteOutStreamer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -46,6 +57,7 @@ public class Gesticulate extends GuiceApplication {
     private ApplicationController controller;
     @Inject private DrawingArea drawarea;
     private Stage stage;
+    private Properties userPrefs;
 
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
@@ -54,6 +66,8 @@ public class Gesticulate extends GuiceApplication {
     private final int sceneHeight = (int) (screenSize.getMaxY() * .8);
     private final int frameLeft = (int) (screenSize.getMaxX() - sceneWidth) / 3;
     private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
+
+    private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
     @Override
     public void init(final List<Module> modules) throws Exception {
@@ -73,7 +87,9 @@ public class Gesticulate extends GuiceApplication {
 
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
-        if (controller.getThemeProperty().getValue()) {
+        // retrieve user preferences
+        this.userPrefs = getUserPreferences();
+        if (Boolean.parseBoolean(userPrefs.getProperty("nightMode"))) {
             scene.getStylesheets().clear();
             scene.getStylesheets().add("/stylesheets/jmetro-dark.css");
             scene.getStylesheets().add("/stylesheets/application-dark.css");
@@ -150,6 +166,11 @@ public class Gesticulate extends GuiceApplication {
         }
     }
 
+    @Override
+    public void stop() {
+        setUserPreferences(userPrefs);
+    }
+
     /**
      * Configuration data directory
      *
@@ -158,6 +179,60 @@ public class Gesticulate extends GuiceApplication {
     public String configDir() {
         AppDirs appDirs = AppDirsFactory.getInstance();
         return appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true) + System.getProperty("file.separator");
+    }
+
+    public void setUserPreferences(Properties prefs) {
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        Path paramPath = Paths.get(appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
+        if (Files.exists(paramPath, NOFOLLOW_LINKS)) {
+            setUserProperties(prefs);
+        } else {
+            // create preferences storage
+            Paths.get(configDir()).toFile().mkdirs();
+            setUserProperties(prefs);
+        }
+    }
+
+    public Properties getUserPreferences() {
+        Properties prefs = new Properties();
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        Path paramPath = Paths.get(appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
+        if (Files.exists(paramPath, NOFOLLOW_LINKS)) {
+            prefs = getUserProperties();
+        } else {
+            // create preferences
+            prefs.setProperty("nightMode", "false");
+        }
+        return prefs;
+    }
+
+    private void setUserProperties(Properties prefs) {
+        FileWriter out = null;
+        try {
+            out = new FileWriter(configDir() + "userprefs.properties");
+            prefs.store(out, "---User Preferences---");
+        } catch (IOException ex) {
+            logger.error(null, ex);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                logger.error(null, ex);
+            }
+        }
+    }
+
+    private Properties getUserProperties() {
+        Properties props = new Properties();
+        try {
+            FileReader fin = new FileReader(configDir() + "userprefs.properties");
+            props.load(fin);
+        } catch (FileNotFoundException e) {
+            logger.debug("userprefs.properties not found.");
+        } catch (IOException e) {
+            logger.warn("userprefs.properties not correct.");
+        }
+        return props;
     }
 
     /**
