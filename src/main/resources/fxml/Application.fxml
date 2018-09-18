@@ -299,12 +299,12 @@
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <HBox focusTraversable="false" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                 <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                <CheckBox fx:id="checkTheme" focusTraversable="false" mnemonicParsing="false" text="" prefHeight="20.0" GridPane.valignment="TOP" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="6">
+                <CheckBox fx:id="checkTheme" focusTraversable="false" mnemonicParsing="false" text="" onAction="#handleModeChange" prefHeight="20.0" GridPane.valignment="TOP" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="6">
                     <padding>
                         <Insets bottom="0.0" left="5.0" right="0.0" top="-4.0" />
                     </padding>
                 </CheckBox>
-                <ToggleButton fx:id="toggleTheme" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="NightMode" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <ToggleButton fx:id="toggleTheme" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleModeChange" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="NightMode" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             </children>
             <columnConstraints>
                 <ColumnConstraints />

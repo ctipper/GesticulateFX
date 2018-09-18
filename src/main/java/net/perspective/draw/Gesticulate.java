@@ -87,24 +87,12 @@ public class Gesticulate extends GuiceApplication {
 
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
-        // retrieve user preferences
-        this.userPrefs = getUserPreferences();
-        if (Boolean.parseBoolean(userPrefs.getProperty("nightMode"))) {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add("/stylesheets/jmetro-dark.css");
-            scene.getStylesheets().add("/stylesheets/application-dark.css");
-        } else {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add("/stylesheets/jmetro-light.css");
-            scene.getStylesheets().add("/stylesheets/application.css");
-        }
 
         primaryStage.setTitle("Gesticulate");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest((WindowEvent e) -> {
-            Platform.exit();
-            System.exit(0);
+            stop();
         });
 
         // Size the primary stage
@@ -117,9 +105,20 @@ public class Gesticulate extends GuiceApplication {
         // Initialise the scroll area
         final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
 
+        // retrieve user preferences
+        this.userPrefs = getUserPreferences();
+
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());
         this.initialiseToolbar(scene);
+
+        // set the theme from user preferences
+        if (Boolean.parseBoolean(userPrefs.getProperty("nightMode"))) {
+            controller.getThemeProperty().setValue(true); // non default value triggers event
+        } else {
+            controller.setAppStyles(false);
+            resetStylesheets(false);
+        }
 
         // Install the canvas
         pane.setContent(drawarea.getScene());
@@ -168,7 +167,11 @@ public class Gesticulate extends GuiceApplication {
 
     @Override
     public void stop() {
+        userPrefs.setProperty("nightMode", controller.getThemeProperty().getValue().toString());
         setUserPreferences(userPrefs);
+        logger.trace("set user preferences");
+        Platform.exit();
+        System.exit(0);
     }
 
     /**

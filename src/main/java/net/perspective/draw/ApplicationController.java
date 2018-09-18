@@ -18,7 +18,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -157,6 +156,11 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleOpacityAction(ActionEvent e) {
         drawarea.setTransparency(wireframeSelected.then(0).otherwise(100).intValue());
+    }
+
+    @FXML
+    private void handleModeChange(ActionEvent e) {
+        menubutton.fire();
     }
 
     /**
@@ -390,7 +394,7 @@ public class ApplicationController implements Initializable {
         this.themeBackgroundColor = new SimpleStringProperty("white");
         this.themeAccentColor = new SimpleStringProperty("black");
         this.checkTheme.selectedProperty().bindBidirectional(toggleTheme.selectedProperty());
-        this.themeProperty = new ReadOnlyBooleanWrapper();
+        this.themeProperty = new SimpleBooleanProperty();
         this.themeProperty.bindBidirectional(this.checkTheme.selectedProperty());
         /**
          * Property change handler to set/reset night mode on demand
@@ -402,7 +406,6 @@ public class ApplicationController implements Initializable {
                 setAppStyles(newValue);
                 // reset application stylesheets
                 application.resetStylesheets(newValue);
-                menubutton.fire();
             }
         });
         
