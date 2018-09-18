@@ -72,6 +72,14 @@
             <version>2.2</version>
         </dependency>
 
+        <!-- appdirs -->
+
+        <dependency>
+            <groupId>net.harawata</groupId>
+            <artifactId>appdirs</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
         <!-- sl4j logging  -->
 
         <dependency>

@@ -357,6 +357,30 @@ public class ApplicationController implements Initializable {
         };
     }
 
+    public void setAppStyles(Boolean isNightMode) {
+        if (isNightMode) {
+            themeFillColor.setValue("#1d1d1d");
+            themeBackgroundColor.setValue("#3a3a3a");
+            themeAccentColor.setValue("#c0c481");
+        } else {
+            themeFillColor.setValue("lightgray");
+            themeBackgroundColor.setValue("white");
+            themeAccentColor.setValue("black");
+        }
+        drawarea.setTheme();
+        // reset combo boxes
+        String stroke = strokecombobox.getSelectionModel().getSelectedItem();
+        Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(isNightMode);
+        strokecombobox.setButtonCell(strokeCellFactory.call(null));
+        strokecombobox.setCellFactory(strokeCellFactory);
+        strokecombobox.getSelectionModel().select(stroke);
+        String style = stylecombobox.getSelectionModel().getSelectedItem();
+        Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory(isNightMode);
+        stylecombobox.setButtonCell(styleCellFactory.call(null));
+        stylecombobox.setCellFactory(styleCellFactory);
+        stylecombobox.getSelectionModel().select(style);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // set the theme to light
@@ -373,27 +397,7 @@ public class ApplicationController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    themeFillColor.setValue("#1d1d1d");
-                    themeBackgroundColor.setValue("#3a3a3a");
-                    themeAccentColor.setValue("#c0c481");
-                } else {
-                    themeFillColor.setValue("lightgray");
-                    themeBackgroundColor.setValue("white");
-                    themeAccentColor.setValue("black");
-                }
-                drawarea.setTheme();
-                // reset combo boxes
-                String stroke = strokecombobox.getSelectionModel().getSelectedItem();
-                Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(newValue);
-                strokecombobox.setButtonCell(strokeCellFactory.call(null));
-                strokecombobox.setCellFactory(strokeCellFactory);
-                strokecombobox.getSelectionModel().select(stroke);
-                String style = stylecombobox.getSelectionModel().getSelectedItem();
-                Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory(newValue);
-                stylecombobox.setButtonCell(styleCellFactory.call(null));
-                stylecombobox.setCellFactory(styleCellFactory);
-                stylecombobox.getSelectionModel().select(style);
+                setAppStyles(newValue);
                 // reset application stylesheets
                 application.resetStylesheets(newValue);
                 menubutton.fire();
