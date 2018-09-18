@@ -66,7 +66,7 @@ public class ApplicationController implements Initializable {
     @Inject private ShareUtils share;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
-    private ReadOnlyBooleanWrapper themeProperty;
+    private BooleanProperty themeProperty;
     private When wireframeSelected;
     private SequentialTransition statusTransition;
     private ReadOnlyStringWrapper strokeTypeProperty;
@@ -358,6 +358,7 @@ public class ApplicationController implements Initializable {
     }
 
     public void setAppStyles(Boolean isNightMode) {
+        // set theme colours
         if (isNightMode) {
             themeFillColor.setValue("#1d1d1d");
             themeBackgroundColor.setValue("#3a3a3a");
@@ -367,6 +368,7 @@ public class ApplicationController implements Initializable {
             themeBackgroundColor.setValue("white");
             themeAccentColor.setValue("black");
         }
+        // alter draw area colour settings
         drawarea.setTheme();
         // reset combo boxes
         String stroke = strokecombobox.getSelectionModel().getSelectedItem();

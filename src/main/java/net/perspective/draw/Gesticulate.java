@@ -22,6 +22,8 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.stage.*;
 import javax.inject.Inject;
+import net.harawata.appdirs.AppDirs;
+import net.harawata.appdirs.AppDirsFactory;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.geom.FigureFactory;
@@ -40,6 +42,8 @@ import net.perspective.draw.workers.WriteOutStreamer;
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
+    @Inject
+    private ApplicationController controller;
     @Inject private DrawingArea drawarea;
     private Stage stage;
 
@@ -69,8 +73,15 @@ public class Gesticulate extends GuiceApplication {
 
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("/stylesheets/jmetro-light.css");
-        scene.getStylesheets().add("/stylesheets/application.css");
+        if (controller.getThemeProperty().getValue()) {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add("/stylesheets/jmetro-dark.css");
+            scene.getStylesheets().add("/stylesheets/application-dark.css");
+        } else {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add("/stylesheets/jmetro-light.css");
+            scene.getStylesheets().add("/stylesheets/application.css");
+        }
 
         primaryStage.setTitle("Gesticulate");
         primaryStage.setResizable(true);
@@ -137,6 +148,16 @@ public class Gesticulate extends GuiceApplication {
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-light.css");
             stage.getScene().getStylesheets().add("/stylesheets/application.css");
         }
+    }
+
+    /**
+     * Configuration data directory
+     *
+     * @return directory
+     */
+    public String configDir() {
+        AppDirs appDirs = AppDirsFactory.getInstance();
+        return appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true) + System.getProperty("file.separator");
     }
 
     /**
