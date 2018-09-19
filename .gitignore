@@ -4,3 +4,5 @@ target
 .settings/
 nbactions.xml
 nb-configuration.xml
+setpath
+setpath-win

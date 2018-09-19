@@ -26,7 +26,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -333,30 +332,24 @@ public class ApplicationController implements Initializable {
     }
 
     private Callback<ListView<String>, ListCell<String>> getCellFactory(Boolean alternate) {
-        return new Callback<ListView<String>, ListCell<String>>() {
+        return (ListView<String> p) -> new ListCell<String>() {
+
+            private final ImageView cellImage;
+
+            {
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                cellImage = new ImageView(new Image("images/stroke1.png"));
+            }
 
             @Override
-            public ListCell<String> call(ListView<String> p) {
-                return new ListCell<String>() {
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
 
-                    private final ImageView cellImage;
-
-                    {
-                        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                        cellImage = new ImageView(new Image("images/stroke1.png"));
-                    }
-
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(new ImageView(new Image("images/" + item + (alternate ? "-alt" : "" ) + ".png")));
-                        }
-                    }
-                };
+                if (item == null || empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(new ImageView(new Image("images/" + item + (alternate ? "-alt" : "" ) + ".png")));
+                }
             }
         };
     }
@@ -399,16 +392,12 @@ public class ApplicationController implements Initializable {
         /**
          * Property change handler to set/reset night mode on demand
          */
-        this.themeProperty.addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                setAppStyles(newValue);
-                // reset application stylesheets
-                application.resetStylesheets(newValue);
-            }
+        this.themeProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            setAppStyles(newValue);
+            // reset application stylesheets
+            application.resetStylesheets(newValue);
         });
-        
+
         // Initialize the sliding application menu
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
@@ -447,14 +436,10 @@ public class ApplicationController implements Initializable {
         colorpicker.getCustomColors().add(color);
         pickerColorProperty = new SimpleObjectProperty<>();
         pickerColorProperty.setValue(color);
-        colorpicker.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                Color c = colorpicker.getValue();
-                colorpicker.setStyle(backgroundStyle(c));
-                pickerColorProperty.setValue(c);
-            }
+        colorpicker.setOnAction((ActionEvent event) -> {
+            Color c = colorpicker.getValue();
+            colorpicker.setStyle(backgroundStyle(c));
+            pickerColorProperty.setValue(c);
         });
         this.colorProperty = new ReadOnlyObjectWrapper<>();
         this.colorProperty.bindBidirectional(pickerColorProperty);
@@ -466,14 +451,10 @@ public class ApplicationController implements Initializable {
         fillcolorpicker.getCustomColors().add(fillColor);
         pickerFillColorProperty = new SimpleObjectProperty<>();
         pickerFillColorProperty.setValue(fillColor);
-        fillcolorpicker.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                Color c = fillcolorpicker.getValue();
-                fillcolorpicker.setStyle(backgroundStyle(c));
-                pickerFillColorProperty.setValue(c);
-            }
+        fillcolorpicker.setOnAction((ActionEvent event) -> {
+            Color c = fillcolorpicker.getValue();
+            fillcolorpicker.setStyle(backgroundStyle(c));
+            pickerFillColorProperty.setValue(c);
         });
         this.fillColorProperty = new ReadOnlyObjectWrapper<>();
         this.fillColorProperty.bindBidirectional(pickerFillColorProperty);
@@ -486,7 +467,7 @@ public class ApplicationController implements Initializable {
         TranslateTransition openNav = new TranslateTransition(new Duration(350), appmenu);
         openNav.setToX(0);
         TranslateTransition closeNav = new TranslateTransition(new Duration(350), appmenu);
-        menubutton.setOnAction((ActionEvent evt) -> {
+        menubutton.setOnAction(event -> {
             if (appmenu.getTranslateX() != 0) {
                 openNav.play();
             } else {

@@ -112,37 +112,21 @@ public class DrawingArea {
         listener.initializeHandlers(canvas);
         this.addContextMenu();
         this.changeHandlers(HandlerType.SELECTION);
-        controller.getStrokeTypeProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Integer strokeId = strokeStrings.indexOf(newValue);
-                String strokeStyle = controller.getStrokeStyleProperty().getValue();
-                setStrokeType(strokeId, strokeStyle);
-            }
+        controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            Integer strokeId = strokeStrings.indexOf(newValue);
+            String strokeStyle = controller.getStrokeStyleProperty().getValue();
+            setStrokeType(strokeId, strokeStyle);
         });
-        controller.getStrokeStyleProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                String strokeType = controller.getStrokeTypeProperty().getValue();
-                Integer strokeId = strokeStrings.indexOf(strokeType);
-                setStrokeType(strokeId, newValue);
-            }
+        controller.getStrokeStyleProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            String strokeType = controller.getStrokeTypeProperty().getValue();
+            Integer strokeId = strokeStrings.indexOf(strokeType);
+            setStrokeType(strokeId, newValue);
         });
-        controller.getColorProperty().addListener(new ChangeListener<Color>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-                setColor(newValue);
-            }
+        controller.getColorProperty().addListener((ObservableValue<? extends Color> observable, Color oldValue, Color newValue) -> {
+            setColor(newValue);
         });
-        controller.getFillColorProperty().addListener(new ChangeListener<Color>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-                setFillColor(newValue);
-            }
+        controller.getFillColorProperty().addListener((ObservableValue<? extends Color> observable, Color oldValue, Color newValue) -> {
+            setFillColor(newValue);
         });
     }
 

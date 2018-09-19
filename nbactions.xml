@@ -6,7 +6,7 @@
                 <packaging>jar</packaging>
             </packagings>
             <goals>
-                <goal>jfx:run</goal>
+                <goal>exec:java</goal>
             </goals>
         </action>
         <action>
@@ -39,17 +39,23 @@
             </properties>
         </action>
         <action>
-            <actionName>CUSTOM-Build Executable JAR</actionName>
-            <displayName>Build Executable JAR</displayName>
+            <actionName>rebuild</actionName>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
             <goals>
-                <goal>jfx:jar</goal>
+                <goal>clean</goal>
+                <goal>compile</goal>
             </goals>
         </action>
         <action>
-            <actionName>CUSTOM-Build Native Bundle</actionName>
-            <displayName>Build Native Bundle</displayName>
+            <actionName>CUSTOM-Build executable JAR</actionName>
+            <displayName>Build executable JAR</displayName>
             <goals>
-                <goal>jfx:native</goal>
+                <goal>clean</goal>
+                <goal>package</goal>
             </goals>
         </action>
+        
+        
     </actions>

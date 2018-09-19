@@ -144,6 +144,7 @@
     -fx-indeterminate-bar-escape: true;
     -fx-indeterminate-bar-flip: true;
     -fx-indeterminate-bar-animation-time: 2;
+    -fx-pref-height: 20;
 }
 .progress-bar > .bar {
     -fx-background-color:
