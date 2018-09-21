@@ -18,9 +18,8 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.20</slf4j.version>
-        <log4j.version>2.6</log4j.version>
-        <fx-guice.version>8.0.0</fx-guice.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <log4j.version>2.11.1</log4j.version>
         <batik.version>1.9</batik.version>
     </properties>
 
@@ -31,19 +30,25 @@
         <dependency>
             <groupId>com.cathive.fx</groupId>
             <artifactId>fx-guice</artifactId>
-            <version>${fx-guice.version}</version>
+            <version>8.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>4.2.0</version>
+            <version>4.2.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.4-jre</version>
+            <version>25.1-jre</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.10.3</version>
         </dependency>
 
         <!-- Apache Batik -->
