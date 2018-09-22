@@ -29,11 +29,11 @@
     -fx-border-width: 1;
     -fx-padding: 4;
 }
-#buttontab {
+#buttontab, #buttontab:selected {
     -fx-background-color: #1d1d1d;
     -fx-border-color: #3a3a3a;
     -fx-border-width: 1;
-    -fx-padding: 4 0 4 0;
+    -fx-padding: 2 0 2 0;
 }
 #buttontab:hover {
     -fx-background-color: #3a3a3a;

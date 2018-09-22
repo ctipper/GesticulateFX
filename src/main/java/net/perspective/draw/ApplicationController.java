@@ -40,7 +40,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
@@ -545,8 +544,6 @@ public class ApplicationController implements Initializable {
     @FXML
     private TilePane linepanel;
     @FXML
-    private HBox tabnode;
-    @FXML
-    private Button tabbutton;
+    private ToggleButton tabbutton;
 
 }
