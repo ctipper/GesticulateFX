@@ -163,19 +163,16 @@
             </top>
         </BorderPane>
         <TilePane id="buttpanel" fx:id="linepanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="293.0" AnchorPane.topAnchor="60.0">
-            <fx:define>
-                <ToggleGroup fx:id="buttonToggles" />
-            </fx:define>
-            <ToggleButton id="buttlineh" fx:id="horizbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$buttonToggles">
+            <Button id="buttlineh" fx:id="horizbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="">
                 <graphic>
                     <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
                 </graphic>
-            </ToggleButton>
-            <ToggleButton id="buttlinev" fx:id="vertbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$buttonToggles">
+            </Button>
+            <Button id="buttlinev" fx:id="vertbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="">
                 <graphic>
                     <SVGPath content="M11.207947 23.000000L11.207947 0.584106" fill="TRANSPARENT" styleClass="svgPath" />
                 </graphic>
-            </ToggleButton>
+            </Button>
         </TilePane>
         <VBox id="toolpanel" fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0" AnchorPane.bottomAnchor="21" AnchorPane.topAnchor="60.0">
             <fx:define>
