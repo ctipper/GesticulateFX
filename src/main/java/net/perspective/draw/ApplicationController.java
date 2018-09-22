@@ -40,7 +40,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -460,18 +462,35 @@ public class ApplicationController implements Initializable {
 
         // set up the status message fade transition
         this.setupStatusTransition();
+        // animate line button panel
+        this.prepareSlideTabButtonsAnimation();
     }
 
     private void prepareSlideMenuAnimation() {
         TranslateTransition openNav = new TranslateTransition(new Duration(350), appmenu);
         openNav.setToX(0);
         TranslateTransition closeNav = new TranslateTransition(new Duration(350), appmenu);
-        menubutton.setOnAction(event -> {
+        menubutton.setOnAction((ActionEvent event) -> {
             if (appmenu.getTranslateX() != 0) {
                 openNav.play();
             } else {
                 closeNav.setToX(-(appmenu.getWidth()));
                 closeNav.play();
+            }
+        });
+    }
+
+    private void prepareSlideTabButtonsAnimation() {
+        TranslateTransition openTab = new TranslateTransition(new Duration(200), linepanel);
+        double panelWidth = linepanel.getPrefTileWidth() + 2 * linepanel.getHgap() + 1;
+        openTab.setToX(panelWidth);
+        TranslateTransition closeTab = new TranslateTransition(new Duration(200), linepanel);
+        tabbutton.setOnAction((ActionEvent event) -> {
+            if (linepanel.getTranslateX() < panelWidth) {
+                openTab.play();
+            } else {
+                closeTab.setToX(-panelWidth);
+                closeTab.play();
             }
         });
     }
@@ -523,5 +542,11 @@ public class ApplicationController implements Initializable {
     private ComboBox<String> strokecombobox;
     @FXML
     private ComboBox<String> stylecombobox;
+    @FXML
+    private TilePane linepanel;
+    @FXML
+    private HBox tabnode;
+    @FXML
+    private Button tabbutton;
 
 }
