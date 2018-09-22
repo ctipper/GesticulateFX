@@ -9,6 +9,10 @@
     -fx-background-color: #1d1d1d; 
     -fx-border-color: #3a3a3a;
 }
+#toolbackground {
+    -fx-background-color: #1d1d1d; 
+    -fx-border-color: #1d1d1d;
+}
 #appmenu {
     -fx-background-color: #1d1d1d;
 }
