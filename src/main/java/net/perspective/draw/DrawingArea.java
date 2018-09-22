@@ -10,7 +10,6 @@ import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.datatransfer.Transferable;
 import java.util.Arrays;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

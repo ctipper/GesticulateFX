@@ -82,6 +82,11 @@
                                 <SVGPath content="M0.000000 17.000000L22.415894 0.561676" styleClass="svgPath" fill="TRANSPARENT" />
                             </graphic>
                         </ToggleButton>
+                        <ToggleButton id="buttline" fx:id="linebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                            <graphic>
+                                <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
+                            </graphic>
+                        </ToggleButton>
                         <ToggleButton id="buttcircle" fx:id="circlebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
                             <graphic>
                                 <SVGPath content="M21.211685 11.000000C21.211685 8.291565,20.135605 5.694397,18.220596 3.779404C16.305603 1.864395,13.708435 0.788315,11.000000 0.788315C8.291565 0.788315,5.694397 1.864395,3.779404 3.779404C1.864395 5.694397,0.788315 8.291565,0.788315 11.000000C0.788315 13.708435,1.864395 16.305603,3.779404 18.220596C5.694397 20.135605,8.291565 21.211685,11.000000 21.211685C13.708435 21.211685,16.305603 20.135605,18.220596 18.220596C20.135605 16.305603,21.211685 13.708435,21.211685 11.000000Z" styleClass="svgPath" fill="TRANSPARENT" />
@@ -246,6 +251,18 @@
                 </ToolBar>
             </top>
         </BorderPane>
+        <TilePane id="buttpanel" fx:id="linepanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="50.0" translateY="353.0">
+            <ToggleButton id="buttlineh" fx:id="horizbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                <graphic>
+                    <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
+                </graphic>
+            </ToggleButton>
+            <ToggleButton id="buttlinev" fx:id="vertbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                <graphic>
+                    <SVGPath content="M11.207947 23.000000L11.207947 0.584106" fill="TRANSPARENT" styleClass="svgPath" />
+                </graphic>
+            </ToggleButton>
+        </TilePane>
         <GridPane id="appmenu" fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="60.0">
             <padding>
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />

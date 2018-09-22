@@ -18,6 +18,13 @@
 #statusbar {
     -fx-background-color: #1d1d1d;
 }
+#buttpanel {
+    -fx-background-color: #1d1d1d;
+    -fx-border-color: #212121;
+    -fx-border-style: solid;
+    -fx-border-width: 1;
+    -fx-padding: 4;
+}
 .toolbutton {
     -fx-background-color: #212121;
     -fx-min-width: 44;
