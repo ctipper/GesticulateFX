@@ -29,6 +29,16 @@
     -fx-border-width: 1;
     -fx-padding: 4;
 }
+#tabnode {
+    -fx-background-color: #1d1d1d;
+    -fx-border-color: #3a3a3a;
+    -fx-border-width: 1;
+    -fx-padding: 4 0 4 0;
+}
+#tabnode:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-border-color: #1d1d1d;
+}
 .toolbutton {
     -fx-background-color: #212121;
     -fx-min-width: 44;
