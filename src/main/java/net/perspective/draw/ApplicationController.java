@@ -43,6 +43,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -72,6 +73,9 @@ public class ApplicationController implements Initializable {
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
     private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
+
+    private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
+    private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
 
     @FXML 
     private void handleWipeAction(ActionEvent e) {
@@ -201,6 +205,29 @@ public class ApplicationController implements Initializable {
     private void handlePngSnapshotAction(ActionEvent e) {
         snapshotEnabled.setValue(true);
         share.snapshotPNG();
+    }
+
+    @FXML
+    private void handleHorizontalAction(ActionEvent e) {
+        setLineButtonGraphic(false);
+        tabbutton.fire();
+    }
+
+    @FXML
+    private void handleVerticalAction(ActionEvent e) {
+        setLineButtonGraphic(true);
+        tabbutton.fire();
+    }
+
+    private void setLineButtonGraphic(Boolean vertical) {
+        SVGPath path = new SVGPath();
+        if (vertical) {
+            path.setContent(SVG_VERTICAL);
+        } else {
+            path.setContent(SVG_HORIZONTAL);
+        }
+        path.getStyleClass().add("svgPath");
+        linebutton.setGraphic(path);
     }
 
     /**
@@ -543,6 +570,8 @@ public class ApplicationController implements Initializable {
     private ComboBox<String> strokecombobox;
     @FXML
     private ComboBox<String> stylecombobox;
+    @FXML
+    private ToggleButton linebutton;
     @FXML
     private TilePane linepanel;
     @FXML
