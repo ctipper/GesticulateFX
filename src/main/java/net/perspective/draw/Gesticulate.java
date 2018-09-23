@@ -27,8 +27,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
 import javafx.stage.*;
 import javax.inject.Inject;
 import net.harawata.appdirs.AppDirs;
@@ -110,7 +108,6 @@ public class Gesticulate extends GuiceApplication {
 
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());
-        this.initialiseToolbar(scene);
 
         // set the theme from user preferences
         if (Boolean.parseBoolean(userPrefs.getProperty("nightMode"))) {
@@ -143,14 +140,6 @@ public class Gesticulate extends GuiceApplication {
 
     public Stage getStage() {
         return this.stage;
-    }
-
-    private void initialiseToolbar(Scene scene) {
-        // Toolbar state
-        Object button = scene.lookup("#buttselect");
-        if (button instanceof ToggleButton) {
-            ((Toggle) button).setSelected(true);
-        }
     }
 
     public void resetStylesheets(Boolean mode) {

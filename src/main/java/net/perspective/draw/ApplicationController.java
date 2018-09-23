@@ -36,7 +36,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -465,6 +467,14 @@ public class ApplicationController implements Initializable {
         this.progressBarVisible = new SimpleBooleanProperty();
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
 
+        // selection mode by default
+        this.selectbutton.setSelected(true);
+        // correct toggle group select exactly once, see https://stackoverflow.com/a/50667161
+        this.toolToggles.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+            if (newValue == null)
+                oldValue.setSelected(true);
+        });
+
         // instantiate a cellfactory for the stroke and style comboboxes
         Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(false);
         strokecombobox.setButtonCell(strokeCellFactory.call(null));
@@ -517,6 +527,7 @@ public class ApplicationController implements Initializable {
         this.prepareSlideTabButtonsAnimation();
         // attach affordance button
         this.affordtab.setOnAction((ActionEvent event) -> tabbutton.fire());
+        // special line button handler
         this.lineType = new SimpleBooleanProperty();
         this.lineType.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (linebutton.isSelected()) {
@@ -580,6 +591,10 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private GridPane appmenu;
+    @FXML
+    private ToggleButton selectbutton;
+    @FXML
+    private ToggleGroup toolToggles;
     @FXML
     private CheckBox checkTheme;
     @FXML
