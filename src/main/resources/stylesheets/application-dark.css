@@ -39,6 +39,12 @@
     -fx-background-color: #3a3a3a;
     -fx-border-color: #1d1d1d;
 }
+#buttonafford {
+    -fx-background-color: transparent;
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
 .toolbutton {
     -fx-background-color: #212121;
     -fx-min-width: 44;

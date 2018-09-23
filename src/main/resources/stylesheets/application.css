@@ -36,6 +36,12 @@
     -fx-background-color: #f3f3f3;
     -fx-border-color: #fefefe;
 }
+#buttonafford {
+    -fx-background-color: transparent;
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
 .tool-bar {
     -fx-background-color: #ddf2ff;
 }

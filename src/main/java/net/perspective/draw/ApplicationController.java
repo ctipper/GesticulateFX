@@ -463,6 +463,8 @@ public class ApplicationController implements Initializable {
         this.setupStatusTransition();
         // animate line button panel
         this.prepareSlideTabButtonsAnimation();
+        // attach affordance button
+        this.affordtab.setOnAction((ActionEvent event) -> tabbutton.fire());
     }
 
     private void prepareSlideMenuAnimation() {
@@ -545,5 +547,7 @@ public class ApplicationController implements Initializable {
     private TilePane linepanel;
     @FXML
     private ToggleButton tabbutton;
+    @FXML
+    private Button affordtab;
 
 }
