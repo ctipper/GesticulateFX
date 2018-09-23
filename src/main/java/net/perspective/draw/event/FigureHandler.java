@@ -59,9 +59,9 @@ public class FigureHandler implements Handler {
         // Initialise figure
         item.setStart(listener.getStartX(), listener.getStartY());
         item.setEnd(listener.getTempX(), listener.getTempY());
-        item.setPoints(drawarea.getDrawType());
+        item.setPoints(drawType);
         item.setPath();
-        if (drawType == DrawingType.LINE) {
+        if (drawType == DrawingType.LINE || drawType == DrawingType.HORIZONTAL || drawType == DrawingType.VERTICAL) {
             // Create arrow line
             if (drawarea.getArrow().equals(ArrowType.END) || drawarea.getArrow().equals(ArrowType.BOTH)) {
                 ArrowLine arrow = new ArrowLine(item);

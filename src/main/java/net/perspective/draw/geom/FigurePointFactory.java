@@ -41,6 +41,16 @@ public class FigurePointFactory implements PointFactory {
                 points.add(new CanvasPoint(startX, startY));
                 points.add(new CanvasPoint(endX, endY));
                 break;
+            case HORIZONTAL:
+                points = new ArrayList<>();
+                points.add(new CanvasPoint(startX, startY));
+                points.add(new CanvasPoint(endX, startY));
+                break;
+            case VERTICAL:
+                points = new ArrayList<>();
+                points.add(new CanvasPoint(startX, startY));
+                points.add(new CanvasPoint(startX, endY));
+                break;
             case CIRCLE:
             case SQUARE:
                 points = new ArrayList<>();

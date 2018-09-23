@@ -20,6 +20,8 @@ public class FigureFactoryImpl implements FigureFactory {
 
         switch (drawType) {
             case LINE:
+            case HORIZONTAL:
+            case VERTICAL:
                 item = new Edge(FigureType.LINE);
                 break;
             case CIRCLE:

@@ -73,6 +73,7 @@ public class ApplicationController implements Initializable {
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
     private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
+    private BooleanProperty lineType;
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
@@ -118,6 +119,12 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleLineAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.LINE);
+        drawarea.changeHandlers(HandlerType.FIGURE);
+    }
+
+    @FXML
+    private void handleLineTypeAction(ActionEvent e) {
+        this.setDrawAreaLineType();
         drawarea.changeHandlers(HandlerType.FIGURE);
     }
 
@@ -210,12 +217,14 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleHorizontalAction(ActionEvent e) {
         setLineButtonGraphic(false);
+        setLineTypeProperty(false);
         tabbutton.fire();
     }
 
     @FXML
     private void handleVerticalAction(ActionEvent e) {
         setLineButtonGraphic(true);
+        setLineTypeProperty(true);
         tabbutton.fire();
     }
 
@@ -228,6 +237,22 @@ public class ApplicationController implements Initializable {
         }
         path.getStyleClass().add("svgPath");
         linebutton.setGraphic(path);
+    }
+
+    private void setDrawAreaLineType() {
+        if (lineType.getValue()) {
+            drawarea.setDrawType(DrawingType.VERTICAL);
+        } else {
+            drawarea.setDrawType(DrawingType.HORIZONTAL);
+        }
+    }
+
+    public void setLineTypeProperty(Boolean type) {
+        lineType.setValue(type);
+    }
+
+    public BooleanProperty getLineTypeProperty() {
+        return lineType;
     }
 
     /**
@@ -492,6 +517,13 @@ public class ApplicationController implements Initializable {
         this.prepareSlideTabButtonsAnimation();
         // attach affordance button
         this.affordtab.setOnAction((ActionEvent event) -> tabbutton.fire());
+        this.lineType = new SimpleBooleanProperty();
+        this.lineType.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (linebutton.isSelected()) {
+                setDrawAreaLineType();
+                drawarea.changeHandlers(HandlerType.FIGURE);
+            }
+        });
     }
 
     private void prepareSlideMenuAnimation() {

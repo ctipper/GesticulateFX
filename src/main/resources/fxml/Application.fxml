@@ -218,7 +218,7 @@
                         <SVGPath content="M0.000000 17.000000L22.415894 0.561676" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
-                <ToggleButton id="buttline" fx:id="linebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                <ToggleButton id="buttline" fx:id="linebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineTypeAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
                     <graphic>
                         <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
                     </graphic>
