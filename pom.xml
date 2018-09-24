@@ -167,12 +167,20 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>java</goal>
+                            <goal>exec</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>net.perspective.draw.Gesticulate</mainClass>
+                    <executable>java</executable>
+                    <longClasspath>true</longClasspath>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <!-- automatically creates the classpath using all project dependencies,
+                        also adding the project build directory -->
+                        <classpath/>
+                        <argument>net.perspective.draw.Gesticulate</argument>
+                    </arguments>
                 </configuration>
             </plugin>
 
