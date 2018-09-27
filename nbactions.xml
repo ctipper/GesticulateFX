@@ -8,6 +8,9 @@
             <goals>
                 <goal>exec:exec</goal>
             </goals>
+            <properties>
+                <Env.JAVAFX_HOME>${Env.HOME}/Applications/javafx-sdk</Env.JAVAFX_HOME>
+            </properties>
         </action>
         <action>
             <actionName>debug</actionName>
