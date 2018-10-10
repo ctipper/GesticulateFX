@@ -303,22 +303,16 @@ public class Figure implements DrawItem, Serializable {
         return point;
     }
 
+    /**
+     * rotate Figure about centroid with optional 90 deg correction
+     */
     protected java.awt.geom.AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
-
         java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
-        transform.setToTranslation(centre.x, centre.y);
-        if (this.getAngle() != 0) {
-            // rotate figure about centroid
-            transform.rotate(this.getAngle());
-        }
-        if (this.isVertical()) {
-            // 90 degree positive rotation
-            transform.rotate(-Math.PI / 2);
-        }
-        transform.translate(-centre.x, -centre.y);
+        transform.setToRotation(this.getAngle() + (this.isVertical() ? -Math.PI / 2 : 0), centre.x, centre.y);
         return transform;
     }
+
 
     /**
      * Returns the location of the figure centre point

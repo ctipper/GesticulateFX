@@ -44,7 +44,10 @@ public class R2 {
     static ContainsType[] swap4Array = { ContainsType.LL, ContainsType.BB, ContainsType.RR, ContainsType.TT };
 
     /**
-     * orientation transforms
+     * orientation increments the constants are
+     * aligned with { cos_t, sin_t }
+     * 
+     * @see net.perspective.draw.event.behaviour.FigureItemBehaviour.java#alterItem()
      */
 
     static double[] flip1 = { 0, 1 };
