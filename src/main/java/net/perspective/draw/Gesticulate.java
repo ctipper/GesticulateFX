@@ -51,9 +51,9 @@ import org.slf4j.LoggerFactory;
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
-    @Inject
-    private ApplicationController controller;
+    @Inject private ApplicationController controller;
     @Inject private DrawingArea drawarea;
+    @Inject private ShareUtils share;
     private Stage stage;
     private Properties userPrefs;
 
@@ -120,6 +120,14 @@ public class Gesticulate extends GuiceApplication {
         // Install the canvas
         pane.setContent(drawarea.getScene());
         this.setOnResize(pane);
+
+        // open canvas from file if requested
+        final Parameters parameters = getParameters();
+        final List<String> args = parameters.getRaw();
+        final String file = !args.isEmpty() ? args.get(0) : "";
+        if (file.length() != 0) {
+            share.loadCanvas(file);
+        }
     }
 
     public void setOnResize(ScrollPane pane) {
