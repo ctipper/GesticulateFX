@@ -173,14 +173,7 @@
                 </executions>
                 <configuration>
                     <executable>java</executable>
-                    <longClasspath>true</longClasspath>
-                    <arguments>
-                        <argument>-classpath</argument>
-                        <!-- automatically creates the classpath using all project dependencies,
-                        also adding the project build directory -->
-                        <classpath/>
-                        <argument>net.perspective.draw.Gesticulate</argument>
-                    </arguments>
+                    <commandlineArgs>-cp %classpath net.perspective.draw.Gesticulate</commandlineArgs>
                 </configuration>
             </plugin>
 
