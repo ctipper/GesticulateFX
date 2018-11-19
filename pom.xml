@@ -187,7 +187,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <executable>java</executable>
+                    <executable>${env.JAVA_HOME}/bin/java</executable>
                     <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml net.perspective.draw.Gesticulate</commandlineArgs>
                 </configuration>
             </plugin>
