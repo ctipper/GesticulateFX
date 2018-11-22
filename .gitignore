@@ -6,5 +6,5 @@ nbactions.xml
 nb-configuration.xml
 setpath
 setpath-win
-runtime
-runtime-win
+gesticulate-fx.sh
+gesticulate-fx-win.sh
