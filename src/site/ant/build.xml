@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="gesticulate-fx" default="default" basedir=".">
+   <description>Builds, tests, and runs the project gesticulate-fx.</description>
+
+   <property environment="env" />
+
+   <target name="-init-project">
+      <property file="project/project.properties"/>
+   </target>
+
+   <target name="jlink" depends="-init-project">
+
+      <!-- remove existing runtime -->
+      <delete dir="target/jfx/${runtime.dir}" />
+
+      <exec executable="${runtime.path}/bin/jlink" os="Mac OS X" failonerror="true" newenvironment="true">
+         <env key="JAVA_HOME" value="${runtime.path}"/>
+         <arg value="--no-header-files"/>
+         <arg value="--no-man-pages" />
+         <arg value="--strip-debug" />
+         <arg value="--module-path" />
+         <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
+         <arg value="--add-modules" />
+         <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
+         <arg value="--output" />
+         <arg value="target/jfx/${runtime.dir}" />
+      </exec>
+
+      <exec executable="${runtime.windows.path}/bin/jlink" osfamily="windows" failonerror="true" newenvironment="true">
+         <env key="JAVA_HOME" value="${runtime.windows.path}"/>
+         <arg value="--no-header-files"/>
+         <arg value="--no-man-pages" />
+         <arg value="--strip-debug" />
+         <arg value="--module-path" />
+         <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
+         <arg value="--add-modules" />
+         <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
+         <arg value="--output" />
+         <arg value="target/jfx/${runtime.dir}" />
+      </exec>
+
+   </target>
+
+</project>
