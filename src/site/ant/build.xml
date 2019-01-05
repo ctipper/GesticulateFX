@@ -32,7 +32,7 @@
          <arg value="--no-man-pages" />
          <arg value="--strip-debug" />
          <arg value="--module-path" />
-         <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
+         <arg value="${env.JAVA_HOME}/jmods;${javafx.path}/jmods" />
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
@@ -94,6 +94,37 @@
          <arg value="../deploy/macosx/${bundle.icon}"/>
          <arg value="--file-associations" />
          <arg value="../deploy/macosx/bundle.properties" />
+         <arg value="--singleton"/>
+         <arg value="--force"/>
+      </exec>
+
+      <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="Windows" failonerror="false" newenvironment="true">
+         <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
+         <arg value="create-image" />
+         <arg value="--input" />
+         <arg value="../../../target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="--output"/>
+         <arg value="../../../target/jfx/${bundle.dir}"/>
+         <arg value="--runtime-image"/>
+         <arg value="../../../target/jfx/${runtime.dir}"/>
+         <arg value="--name"/>
+         <arg value="GesticulateFX"/>
+         <arg value="--class"/>
+         <arg value="net.perspective.draw.Gesticulate"/>
+         <arg value="--main-jar"/>
+         <arg value="${jlink.launcher.name}-${version.public}.jar"/>
+         <arg value="--jvm-args" />
+         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
+         <arg value="--copyright" />
+         <arg value="Copyright © 2018 Christopher Tipper" />
+         <arg value="--vendor" />
+         <arg value="https://www.e-conomist.me.uk/" />
+         <arg value="--app-version" />
+         <arg value="${version.internal}" />
+         <arg value="--icon"/>
+         <arg value="../deploy/windows/${bundle.windows.icon}"/>
+         <arg value="--file-associations" />
+         <arg value="../deploy/windows/bundle.properties" />
          <arg value="--singleton"/>
          <arg value="--force"/>
       </exec>
