@@ -116,7 +116,7 @@
          <arg value="--jvm-args" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
-         <arg value="Copyright © 2018 Christopher Tipper" />
+         <arg value="Copyright © 2019 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
          <arg value="--app-version" />
@@ -127,6 +127,20 @@
          <arg value="src/site/deploy/windows/bundle.properties" />
          <arg value="--singleton"/>
          <arg value="--force"/>
+      </exec>
+   </target>
+
+   <target name="installer" depends="bundle" description="Build PLatform Installers">
+
+      <property name="isx.path" value="C:/Program Files (x86)/Inno Setup 5"/>
+
+      <echo message="Calling ISCC"/>
+
+      <exec executable="${isx.path}/ISCC.exe" osfamily="Windows" 
+            dir="src/site/innosetup" 
+            logError="true"
+            output="target/jfx/bundle/gesticulate-fx.log">
+         <arg value="gesticulate-fx.iss"/>
       </exec>
    </target>
 
