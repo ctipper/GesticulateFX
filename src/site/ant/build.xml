@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="gesticulate-fx" default="default" basedir=".">
+<project name="gesticulate-fx" default="default" basedir="../../..">
    <description>Builds, tests, and runs the project gesticulate-fx.</description>
 
    <property environment="env" />
 
    <target name="-init-project">
-      <property file="project/project.properties"/>
+      <property file="src/site/ant/project/project.properties"/>
    </target>
 
    <target name="jlink" depends="-init-project">
 
       <!-- remove existing runtime -->
-      <delete dir="../../../target/jfx/${runtime.dir}" />
+      <delete dir="target/jfx/${runtime.dir}" />
 
       <exec executable="${runtime.path}/bin/jlink" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.path}"/>
@@ -23,7 +23,7 @@
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="../../../target/jfx/${runtime.dir}" />
+         <arg value="target/jfx/${runtime.dir}" />
       </exec>
 
       <exec executable="${runtime.windows.path}/bin/jlink" osfamily="windows" failonerror="true" newenvironment="true">
@@ -36,30 +36,30 @@
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="../../../target/jfx/${runtime.dir}" />
+         <arg value="target/jfx/${runtime.dir}" />
       </exec>
 
    </target>
 
    <target name="bundle" depends="jlink" description="Build Mac Bundle">
 
-      <mkdir dir="../../../target/jfx/${bundle.dir}/${dist.dir}" />
-      <mkdir dir="../../../target/jfx/${bundle.dir}/${dist.dir}/lib" />
+      <mkdir dir="target/jfx/${bundle.dir}/${dist.dir}" />
+      <mkdir dir="target/jfx/${bundle.dir}/${dist.dir}/lib" />
 
       <!-- remove existing libraries -->
       <delete>
-         <fileset file="../../../target/jfx/${bundle.dir}/${dist.dir}/*"/>
-         <fileset file="../../../target/jfx/${bundle.dir}/${dist.dir}/lib/*" />
+         <fileset file="target/jfx/${bundle.dir}/${dist.dir}/*"/>
+         <fileset file="target/jfx/${bundle.dir}/${dist.dir}/lib/*" />
       </delete>
 
-      <copy todir="../../../target/jfx/${bundle.dir}/${dist.dir}">
-         <fileset dir="../../../target/jfx/app">
+      <copy todir="target/jfx/${bundle.dir}/${dist.dir}">
+         <fileset dir="target/jfx/app">
             <include name="${jlink.launcher.name}-${version.public}.jar"/>
          </fileset>
       </copy>
 
-      <copy todir="../../../target/jfx/${bundle.dir}/${dist.dir}/lib">
-         <fileset dir="../../../target/jfx/app/lib">
+      <copy todir="target/jfx/${bundle.dir}/${dist.dir}/lib">
+         <fileset dir="target/jfx/app/lib">
             <include name="**/*.jar"/>
             <exclude name="**/javafx-*.jar"/>
          </fileset>
@@ -69,11 +69,11 @@
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="create-image"/>
          <arg value="--input"/>
-         <arg value="../../../target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
-         <arg value="../../../target/jfx/${bundle.dir}"/>
+         <arg value="target/jfx/${bundle.dir}"/>
          <arg value="--runtime-image"/>
-         <arg value="../../../target/jfx/${runtime.dir}"/>
+         <arg value="target/jfx/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="GesticulateFX"/>
          <arg value="--class"/>
@@ -91,9 +91,9 @@
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
-         <arg value="../deploy/macosx/${bundle.icon}"/>
+         <arg value="src/site/deploy/macosx/${bundle.icon}"/>
          <arg value="--file-associations" />
-         <arg value="../deploy/macosx/bundle.properties" />
+         <arg value="src/site/deploy/macosx/bundle.properties" />
          <arg value="--singleton"/>
          <arg value="--force"/>
       </exec>
@@ -102,11 +102,11 @@
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
          <arg value="create-image" />
          <arg value="--input" />
-         <arg value="../../../target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
-         <arg value="../../../target/jfx/${bundle.dir}"/>
+         <arg value="target/jfx/${bundle.dir}"/>
          <arg value="--runtime-image"/>
-         <arg value="../../../target/jfx/${runtime.dir}"/>
+         <arg value="target/jfx/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="GesticulateFX"/>
          <arg value="--class"/>
@@ -122,9 +122,9 @@
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
-         <arg value="../deploy/windows/${bundle.windows.icon}"/>
+         <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
          <arg value="--file-associations" />
-         <arg value="../deploy/windows/bundle.properties" />
+         <arg value="src/site/deploy/windows/bundle.properties" />
          <arg value="--singleton"/>
          <arg value="--force"/>
       </exec>
