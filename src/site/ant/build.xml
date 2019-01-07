@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="gesticulate-fx" default="default" basedir="../../..">
+<project name="gesticulate-fx" default="default" basedir="../../.." xmlns:if="ant:if" xmlns:unless="ant:unless">
    <description>Builds, tests, and runs the project gesticulate-fx.</description>
 
    <property environment="env" />
+
+   <condition property="onwindows">
+      <os family="windows"/>
+   </condition>
 
    <target name="-init-project">
       <property file="src/site/ant/project/project.properties"/>
@@ -134,7 +138,40 @@
 
       <property name="isx.path" value="C:/Program Files (x86)/Inno Setup 5"/>
 
-      <echo message="Calling ISCC"/>
+      <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
+         <env key="JAVA_HOME" value="${jpackage.path}"/>
+         <arg value="create-installer"/>
+         <arg value="--input"/>
+         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="--output"/>
+         <arg value="target/jfx"/>
+         <arg value="--runtime-image"/>
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
+         <arg value="--name"/>
+         <arg value="GesticulateFX"/>
+         <arg value="--class"/>
+         <arg value="net.perspective.draw.Gesticulate"/>
+         <arg value="--main-jar"/>
+         <arg value="${jlink.launcher.name}-${version.public}.jar"/>
+         <arg value="--jvm-args" />
+         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
+         <arg value="--copyright" />
+         <arg value="Copyright © 2019 Christopher Tipper" />
+         <arg value="--category" />
+         <arg value="public.app-category.graphics-design" />
+         <arg value="--mac-bundle-identifier" />
+         <arg value="net.perspective.draw.GesticulateFX" />
+         <arg value="--app-version" />
+         <arg value="${version.internal}" />
+         <arg value="--icon"/>
+         <arg value="src/site/deploy/macosx/${bundle.icon}"/>
+         <arg value="--file-associations" />
+         <arg value="src/site/deploy/macosx/bundle.properties" />
+         <arg value="--singleton"/>
+         <arg value="--force"/>
+      </exec>
+
+      <echo if:set="onwindows" message="Calling ISCC"/>
 
       <exec executable="${isx.path}/ISCC.exe" osfamily="Windows" 
             dir="src/site/innosetup" 
