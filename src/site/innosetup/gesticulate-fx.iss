@@ -28,12 +28,12 @@ AppSupportURL={#AppURL}
 AppUpdatesURL={#AppURL}
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
-OutputDir=../../../target/jfx/bundle  
+OutputDir=../../../target/jfx
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
 ArchitecturesInstallIn64BitMode=x64
-;SignTool=JSign --name $qGesticulate$q --url $qhttp://www.e-conomist.fsnet.co.uk$q $f
+;SignTool=JSign --name $qGesticulate$q --url $qhttps://www.e-conomist.me.uk/$q $f
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -43,7 +43,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "../deploy/windows/document.ico"; DestDir: {app}/icons;
-Source: "../../../target/jfx/bundle/GesticulateFX/*"; DestDir: {app}; Flags: recursesubdirs
+Source: "../../../target/jfx/GesticulateFX/*"; DestDir: {app}; Flags: recursesubdirs
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"

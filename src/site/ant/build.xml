@@ -11,7 +11,7 @@
    <target name="jlink" depends="-init-project">
 
       <!-- remove existing runtime -->
-      <delete dir="target/jfx/${runtime.dir}" />
+      <delete dir="target/jfx/${bundle.dir}/${runtime.dir}" />
 
       <exec executable="${runtime.path}/bin/jlink" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.path}"/>
@@ -23,7 +23,7 @@
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="target/jfx/${runtime.dir}" />
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
 
       <exec executable="${runtime.windows.path}/bin/jlink" osfamily="windows" failonerror="true" newenvironment="true">
@@ -36,7 +36,7 @@
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="target/jfx/${runtime.dir}" />
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
 
    </target>
@@ -71,9 +71,9 @@
          <arg value="--input"/>
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
-         <arg value="target/jfx/${bundle.dir}"/>
+         <arg value="target/jfx"/>
          <arg value="--runtime-image"/>
-         <arg value="target/jfx/${runtime.dir}"/>
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="GesticulateFX"/>
          <arg value="--class"/>
@@ -104,9 +104,9 @@
          <arg value="--input" />
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
-         <arg value="target/jfx/${bundle.dir}"/>
+         <arg value="target/jfx"/>
          <arg value="--runtime-image"/>
-         <arg value="target/jfx/${runtime.dir}"/>
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="GesticulateFX"/>
          <arg value="--class"/>
