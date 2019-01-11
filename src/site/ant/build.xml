@@ -177,6 +177,7 @@
             dir="src/site/innosetup" 
             logError="true"
             output="target/jfx/bundle/gesticulate-fx.log">
+         <arg value="/DMyAppVersion=${version.internal}"/>
          <arg value="gesticulate-fx.iss"/>
       </exec>
    </target>
