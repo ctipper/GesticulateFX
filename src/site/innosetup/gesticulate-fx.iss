@@ -47,8 +47,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "../deploy/windows/document.ico"; DestDir: {app}/icons;
-Source: "../../../target/jfx/GesticulateFX/*"; DestDir: {app}; Flags: recursesubdirs
+Source: "..\deploy\windows\document.ico"; DestDir: {app}/icons;
+Source: "..\..\..\target\jfx\GesticulateFX\*"; DestDir: {app}; Flags: recursesubdirs
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"
@@ -59,7 +59,8 @@ Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desk
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent 64bit; Check: IsWin64
 
 [Registry]
-Root: HKCR; SubKey: ".gst"; ValueType: string; ValueData: "GesticulateFile"; Flags: UninsDeleteValue; 
-Root: HKCR; SubKey: "GesticulateFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey; 
-Root: HKCR; SubKey: "GesticulateFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico"; 
-Root: HKCR; SubKey: "GesticulateFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1"""
+Root: "HKCR"; Subkey: ".gst"; ValueType: string; ValueData: "GesticulateFile";
+Root: "HKCR"; Subkey: "GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey
+Root: "HKCR"; Subkey: "GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
+Root: "HKCR"; Subkey: "GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
+Root: "HKCR"; Subkey: "GesticulateFXFile\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
