@@ -13,7 +13,7 @@
 #ifdef MyAppVersion
 #define FileVerStr StripBuild(MyAppVersion)
 #define AppVerStr MyAppVersion
-#endif
+#endif   
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -60,7 +60,8 @@ Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(
 
 [Registry]
 Root: "HKCR"; Subkey: ".gst"; ValueType: string; ValueData: "GesticulateFile";
-Root: "HKCR"; Subkey: "GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey
+Root: "HKCR"; Subkey: "GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey;
 Root: "HKCR"; Subkey: "GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
 Root: "HKCR"; Subkey: "GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
 Root: "HKCR"; Subkey: "GesticulateFXFile\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
+Root: "HKCR"; Subkey: "GesticulateFXFile\SupportedTypes"; ValueType: string; ValueData: ".gst";
