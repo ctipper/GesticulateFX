@@ -64,5 +64,8 @@ Root: HKLM; Subkey: "Software\Classes\.gst\OpenWithProgids"; ValueType: string; 
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
-Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
-Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\SupportedTypes"; ValueType: string; ValueData: ".gst";
+Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}"; ValueType: string; ValueData: ""; Flags: UninsDeleteKey
+Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
+Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
+Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
+Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\SupportedTypes"; ValueType: string; ValueData: ".gst";
