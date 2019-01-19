@@ -59,9 +59,10 @@ Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desk
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent 64bit; Check: IsWin64
 
 [Registry]
-Root: "HKCR"; Subkey: ".gst"; ValueType: string; ValueData: "GesticulateFile";
-Root: "HKCR"; Subkey: "GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey;
-Root: "HKCR"; Subkey: "GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
-Root: "HKCR"; Subkey: "GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
-Root: "HKCR"; Subkey: "GesticulateFXFile\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
-Root: "HKCR"; Subkey: "GesticulateFXFile\SupportedTypes"; ValueType: string; ValueData: ".gst";
+Root: HKLM; Subkey: "Software\Classes\.gst"; ValueType: string; ValueData: "GesticulateFile";
+Root: HKLM; Subkey: "Software\Classes\.gst\OpenWithProgids"; ValueType: string; ValueName: "GesticulateFXFile"; ValueData: ""; Flags: UninsDeleteValue
+Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey
+Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
+Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
+Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
+Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\SupportedTypes"; ValueType: string; ValueData: ".gst";
