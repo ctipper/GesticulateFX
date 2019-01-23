@@ -98,7 +98,6 @@
          <arg value="src/site/deploy/macosx/${bundle.icon}"/>
          <arg value="--file-associations" />
          <arg value="src/site/deploy/macosx/bundle.properties" />
-         <arg value="--singleton"/>
          <arg value="--force"/>
       </exec>
 
@@ -129,7 +128,6 @@
          <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
          <arg value="--file-associations" />
          <arg value="src/site/deploy/windows/bundle.properties" />
-         <arg value="--singleton"/>
          <arg value="--force"/>
       </exec>
    </target>
@@ -141,6 +139,7 @@
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="create-installer"/>
+         <arg value="dmg"/>
          <arg value="--input"/>
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
@@ -167,7 +166,6 @@
          <arg value="src/site/deploy/macosx/${bundle.icon}"/>
          <arg value="--file-associations" />
          <arg value="src/site/deploy/macosx/bundle.properties" />
-         <arg value="--singleton"/>
          <arg value="--force"/>
       </exec>
 
