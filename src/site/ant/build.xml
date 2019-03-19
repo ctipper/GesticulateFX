@@ -6,6 +6,10 @@
 
    <property name="app.name" value="GesticulateFX"/>
 
+   <condition property="onmacos">
+      <os family="mac"/>
+   </condition>
+
    <condition property="onwindows">
       <os family="windows"/>
    </condition>
@@ -58,6 +62,22 @@
          <fileset file="target/jfx/${bundle.dir}/${dist.dir}/lib/*" />
       </delete>
 
+      <echo if:set="onmacos" message="Delete bundles"/>
+
+      <delete dir="target/jfx/${app.name}.app" if:set="onmacos"/>
+
+      <delete if:set="onmacos">
+         <fileset file="target/jfx/*.dmg"/>
+      </delete>
+
+      <echo if:set="onwindows" message="Delete builds"/>
+
+      <delete dir="target/jfx/${app.name}" if:set="onwindows"/>
+
+      <delete if:set="onwindows">
+         <fileset file="target/jfx/${app.name}_Setup_*.exe"/>
+      </delete>
+
       <copy todir="target/jfx/${bundle.dir}/${dist.dir}">
          <fileset dir="target/jfx/app">
             <include name="${jlink.launcher.name}-${version.public}.jar"/>
@@ -90,17 +110,20 @@
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
          <arg value="Copyright © 2019 Christopher Tipper" />
-         <arg value="--category" />
+         <!--
+         <arg value="category" />
          <arg value="public.app-category.graphics-design" />
-         <arg value="--mac-bundle-identifier" />
+         <arg value="mac-bundle-identifier" />
          <arg value="net.perspective.draw.GesticulateFX" />
+         -->
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
          <arg value="src/site/deploy/macosx/${bundle.icon}"/>
-         <arg value="--file-associations" />
+         <!--
+         <arg value="file-associations" />
          <arg value="src/site/deploy/macosx/bundle.properties" />
-         <arg value="--overwrite"/>
+         -->
       </exec>
 
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="Windows" failonerror="false" newenvironment="true">
@@ -128,9 +151,6 @@
          <arg value="${version.internal}" />
          <arg value="--icon"/>
          <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
-         <arg value="--file-associations" />
-         <arg value="src/site/deploy/windows/bundle.properties" />
-         <arg value="--overwrite"/>
       </exec>
    </target>
 
@@ -141,18 +161,16 @@
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="create-installer"/>
-         <arg value="--runtime-installer"/>
          <arg value="--installer-type"/>
          <arg value="dmg"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--output"/>
          <arg value="target/jfx"/>
-         <arg value="--runtime-image"/>
+         <arg value="--app-image"/>
          <arg value="target/jfx/${app.name}.app"/>
          <arg value="--install-dir"/>
          <arg value="/Applications"/>
-         <arg value="--overwrite"/>
       </exec>
 
       <echo if:set="onwindows" message="Calling ISCC"/>
