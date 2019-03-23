@@ -78,6 +78,8 @@
          <fileset file="target/jfx/${app.name}_Setup_*.exe"/>
       </delete>
 
+      <delete dir="target/jfx/temp" if:set="onwindows"/>
+
       <copy todir="target/jfx/${bundle.dir}/${dist.dir}">
          <fileset dir="target/jfx/app">
             <include name="${jlink.launcher.name}-${version.public}.jar"/>
@@ -151,6 +153,8 @@
          <arg value="${version.internal}" />
          <arg value="--icon"/>
          <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
+         <arg value="--temp-root" />
+         <arg value="target/jfx/temp" />
       </exec>
    </target>
 
