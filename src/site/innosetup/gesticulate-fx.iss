@@ -59,7 +59,7 @@ Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desk
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent 64bit; Check: IsWin64
 
 [Registry]
-Root: HKLM; Subkey: "Software\Classes\.gst"; ValueType: string; ValueData: "GesticulateFile";
+Root: HKLM; Subkey: "Software\Classes\.gst"; ValueType: string; ValueData: "GesticulateFile"; Flags: UninsDeleteKeyIfEmpty
 Root: HKLM; Subkey: "Software\Classes\.gst\OpenWithProgids"; ValueType: string; ValueName: "GesticulateFXFile"; ValueData: ""; Flags: UninsDeleteValue
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";

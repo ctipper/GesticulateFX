@@ -149,8 +149,10 @@
          <arg value="Copyright © 2019 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
-         <arg value="--app-version" />
+         <!--
+         <arg value="app-version" />
          <arg value="${version.internal}" />
+         -->
          <arg value="--icon"/>
          <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
          <arg value="--temp-root" />
