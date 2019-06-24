@@ -95,7 +95,6 @@
 
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
-         <arg value="create-image"/>
          <arg value="--input"/>
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
@@ -108,29 +107,26 @@
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
          <arg value="${jlink.launcher.name}-${version.public}.jar"/>
-         <arg value="--jvm-args" />
+         <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
          <arg value="Copyright © 2019 Christopher Tipper" />
          <!--
          <arg value="category" />
          <arg value="public.app-category.graphics-design" />
-         <arg value="mac-bundle-identifier" />
-         <arg value="net.perspective.draw.GesticulateFX" />
          -->
+         <arg value="--mac-bundle-identifier" />
+         <arg value="net.perspective.draw.GesticulateFX" />
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
          <arg value="src/site/deploy/macosx/${bundle.icon}"/>
-         <!--
-         <arg value="file-associations" />
+         <arg value="--file-associations" />
          <arg value="src/site/deploy/macosx/bundle.properties" />
-         -->
       </exec>
 
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="Windows" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
-         <arg value="create-image" />
          <arg value="--input" />
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
          <arg value="--output"/>
@@ -143,7 +139,7 @@
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
          <arg value="${jlink.launcher.name}-${version.public}.jar"/>
-         <arg value="--jvm-args" />
+         <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
          <arg value="Copyright © 2019 Christopher Tipper" />
@@ -166,9 +162,10 @@
 
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
-         <arg value="create-installer"/>
-         <arg value="--installer-type"/>
+         <arg value="--package-type"/>
          <arg value="dmg"/>
+         <arg value="--identifier"/>
+         <arg value="${app.name}.app"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--output"/>
