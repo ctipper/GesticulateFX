@@ -51,21 +51,21 @@ Source: "..\deploy\windows\document.ico"; DestDir: {app}/icons;
 Source: "..\..\..\target\jfx\GesticulateFX\*"; DestDir: {app}; Flags: recursesubdirs
 
 [Icons]
-Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"
+Name: "{group}\{#AppName}"; Filename: "{app}\bin\{#AppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#AppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
+Name: "{commondesktop}\{#AppName}"; Filename: "{app}\bin\{#AppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent 64bit; Check: IsWin64
+Filename: "{app}\bin\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent 64bit; Check: IsWin64
 
 [Registry]
 Root: HKLM; Subkey: "Software\Classes\.gst"; ValueType: string; ValueData: "GesticulateFile"; Flags: UninsDeleteKeyIfEmpty
 Root: HKLM; Subkey: "Software\Classes\.gst\OpenWithProgids"; ValueType: string; ValueName: "GesticulateFXFile"; ValueData: ""; Flags: UninsDeleteValue
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile"; ValueType: string; ValueData: "Gesticulate Canvas"; Flags: UninsDeleteKey
 Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
-Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
+Root: HKLM; Subkey: "Software\Classes\GesticulateFXFile\shell\open\command"; ValueType: string; ValueData: """{app}\bin\GESTICULATEFX.EXE"" ""%1""";
 Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}"; ValueType: string; ValueData: ""; Flags: UninsDeleteKey
 Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\DefaultIcon"; ValueType: string; ValueData: "{app}\icons\document.ico";
-Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\shell\open\command"; ValueType: string; ValueData: """{app}\GESTICULATEFX.EXE"" ""%1""";
+Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\shell\open\command"; ValueType: string; ValueData: """{app}\bin\GESTICULATEFX.EXE"" ""%1""";
 Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
 Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\SupportedTypes"; ValueType: string; ValueData: ".gst";
