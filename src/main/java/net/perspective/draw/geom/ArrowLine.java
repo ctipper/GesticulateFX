@@ -424,6 +424,45 @@ public class ArrowLine extends Figure {
         return line.getColor();
     }
 
+    @Deprecated
+    public void setColor(java.awt.Color color) {
+        line.setColor(awtToFx(color));
+    }
+
+    @Deprecated
+    public java.awt.Color getAwtColor() {
+        return fxToAwt(line.getColor());
+    }
+
+    /**
+     * Set the fill colour
+     * 
+     * @param fillcolor
+     */
+    public void setFillColor(Color fillcolor) {
+        line.setFillColor(fillcolor);
+    }
+
+    /**
+     * Return the fill colour
+     * 
+     * @return
+     */
+    @Transient
+    public Color getFillColor() {
+        return line.getFillColor();
+    }
+
+    @Deprecated
+    public void setFillColor(java.awt.Color fillcolor) {
+        line.setFillColor(awtToFx(fillcolor));
+    }
+
+    @Deprecated
+    public java.awt.Color getAwtFillColor() {
+        return fxToAwt(line.getFillColor());
+    }
+
     @Override
     public void setTransparency(int transparency) {
         line.setTransparency(transparency);

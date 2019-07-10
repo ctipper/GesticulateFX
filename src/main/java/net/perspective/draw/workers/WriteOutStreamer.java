@@ -126,12 +126,12 @@ public class WriteOutStreamer extends Task<Object> {
                 new BasicStrokePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.ArrowType.class,
                 new ArrowTypePersistenceDelegate());
+            encoder.setPersistenceDelegate(net.perspective.draw.geom.ArrowLine.class,
+                new ArrowLinePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.FigureType.class,
                 new FigureTypePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.Figure.class,
                 new FigurePersistenceDelegate());
-            encoder.setPersistenceDelegate(net.perspective.draw.geom.ArrowLine.class,
-                new ArrowLinePersistenceDelegate());
             encoder.setExceptionListener((Exception ex) -> {
                 logger.warn(ex.getMessage());
             });

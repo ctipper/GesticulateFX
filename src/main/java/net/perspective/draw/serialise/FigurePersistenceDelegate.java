@@ -10,7 +10,6 @@ import java.beans.DefaultPersistenceDelegate;
 import java.beans.Encoder;
 import java.beans.Expression;
 import java.beans.Statement;
-import net.perspective.draw.geom.ArrowLine;
 import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 
@@ -24,13 +23,7 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
     @Override
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
 
-        if (oldInstance instanceof ArrowLine) {
-            ArrowLine line = (ArrowLine) oldInstance;
-            return new Expression(line, line.getClass(), "new", new Object[]{
-                line.getLine(),
-                line.getArrowType()
-            });
-        } else if (oldInstance instanceof Edge) {
+        if (oldInstance instanceof Edge) {
             Edge edge = (Edge) oldInstance;
             return new Expression(edge, edge.getClass(), "new", new Object[]{
                 edge.getType()

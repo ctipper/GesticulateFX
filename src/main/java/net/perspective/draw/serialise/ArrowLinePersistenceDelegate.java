@@ -34,11 +34,15 @@ public class ArrowLinePersistenceDelegate extends DefaultPersistenceDelegate {
             Object newInstance, Encoder out) {
         super.initialize(type, oldInstance, newInstance, out);
 
-        ArrowLine figure = (ArrowLine) oldInstance;
+        ArrowLine line = (ArrowLine) oldInstance;
         out.writeStatement(
-                new Statement(figure,
+                new Statement(line,
                         "setColor",
-                        new Object[]{figure.getAwtColor()}));
-    }
+                        new Object[]{line.getAwtColor()}));
+        out.writeStatement(
+                new Statement(line,
+                        "setFillColor",
+                        new Object[]{line.getAwtFillColor()}));
+}
 
 }
