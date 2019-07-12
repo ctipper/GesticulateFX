@@ -68,12 +68,11 @@ public class Edge extends Figure {
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
-            case SKETCH:
-            case LINE:
-                this.setClosed(false);
+            case POLYGON:
+                this.setClosed(true);
                 break;
             default:
-                this.setClosed(true);
+                this.setClosed(false);
                 break;
         }
     }

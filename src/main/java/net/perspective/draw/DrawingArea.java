@@ -25,8 +25,8 @@ import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.*;
-import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.ArrowType;
+import net.perspective.draw.geom.DrawItem;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;

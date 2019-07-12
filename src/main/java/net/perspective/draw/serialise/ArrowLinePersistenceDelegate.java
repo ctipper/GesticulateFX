@@ -43,6 +43,6 @@ public class ArrowLinePersistenceDelegate extends DefaultPersistenceDelegate {
                 new Statement(line,
                         "setFillColor",
                         new Object[]{line.getAwtFillColor()}));
-}
+    }
 
 }

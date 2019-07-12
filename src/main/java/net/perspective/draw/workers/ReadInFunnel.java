@@ -10,6 +10,7 @@ import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
@@ -21,9 +22,12 @@ import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.ShareUtils;
+import net.perspective.draw.geom.ArrowLine;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.Grouped;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,10 +96,44 @@ public class ReadInFunnel extends Task<Object> {
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
-        if (drawing instanceof Figure) {
-            ((Figure) drawing).setFactory();
-            ((Figure) drawing).setEndPoints();
-            ((Figure) drawing).setPath();
+
+        if (drawing instanceof ArrowLine) {
+            DrawItem item = new Edge();
+            try {
+                BeanUtils.copyProperties(item, ((ArrowLine) drawing).getLine());
+                ((ArrowLine) drawing).setLine((Edge) item);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                logger.trace(e.getMessage());
+            }
+            ((ArrowLine) drawing).setFactory();
+            ((ArrowLine) drawing).setEndPoints();
+            ((ArrowLine) drawing).setPath();
+        } else if (drawing instanceof Edge) {
+            ((Edge) drawing).setFactory();
+            ((Edge) drawing).setEndPoints();
+            ((Edge) drawing).setPath();
+        } else if (drawing instanceof Figure) {
+            switch (((Figure) drawing).getType()) {
+                case LINE:
+                case SKETCH:
+                case POLYGON:
+                    DrawItem item = new Edge();
+                    try {
+                        BeanUtils.copyProperties(item, drawing);
+                        drawing = item;
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        logger.trace(e.getMessage());
+                    }
+                    ((Edge) drawing).setFactory();
+                    ((Edge) drawing).setEndPoints();
+                    ((Edge) drawing).setPath();
+                    break;
+                default:
+                    ((Figure) drawing).setFactory();
+                    ((Figure) drawing).setEndPoints();
+                    ((Figure) drawing).setPath();
+                    break;
+            }
         }
 
         if (drawing instanceof Grouped) {
