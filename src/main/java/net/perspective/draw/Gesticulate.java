@@ -255,6 +255,7 @@ public class Gesticulate extends GuiceApplication {
             bind(DrawingArea.class);
             bind(CanvasView.class);
             bind(CanvasTransferHandler.class);
+            bind(Dropper.class);
             bind(DrawAreaListener.class);
             bind(FigureHandler.class);
             bind(RotationHandler.class);
