@@ -9,14 +9,12 @@ package net.perspective.draw;
 import java.awt.BasicStroke;
 import java.util.Arrays;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  *
  * @author Christopher G D Tipper
  */
 
-@Singleton
 public class Dropper {
 
     java.util.List<Float> strokeTypes = Arrays.asList(1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 8.0f, 10.0f);
