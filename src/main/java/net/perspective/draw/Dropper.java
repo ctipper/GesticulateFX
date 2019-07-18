@@ -9,6 +9,7 @@ package net.perspective.draw;
 import java.awt.BasicStroke;
 import java.util.Arrays;
 import javax.inject.Inject;
+import net.perspective.draw.geom.ArrowType;
 
 /**
  *
@@ -114,6 +115,62 @@ public class Dropper {
         return j;
     }
 
+    public String getStyleSelector(BasicStroke stroke, ArrowType arrow) {
+        String styleId = "style1";
+        int strokeId = this.getStrokeIdBinary(stroke);
+        float[] dash = stroke.getDashArray();
+        if (dash == null)
+            dash = new float[0];
+
+        if (dash.length == 0) {
+            // return style1, style6, style8
+            switch (arrow) {
+                case NONE:
+                    styleId = "style1";
+                    break;
+                case END:
+                    styleId = "style6";
+                    break;
+                case BOTH:
+                    styleId = "style8";
+                    break;
+                default:
+                    styleId = "style1";
+                    break;
+            }
+        }
+        if (compareDashes(dash, getDashes(dashes1.get(strokeId)))) {
+            // return style2, style7, style9
+            switch (arrow) {
+                case NONE:
+                    styleId = "style2";
+                    break;
+                case END:
+                    styleId = "style7";
+                    break;
+                case BOTH:
+                    styleId = "style9";
+                    break;
+                default:
+                    styleId = "style2";
+                    break;
+            }
+        }
+        if (compareDashes(dash, getDashes(dashes2.get(strokeId)))) {
+            // return style3
+            styleId = "style3";
+        }
+        if (compareDashes(dash, getDashes(dashes3.get(strokeId)))) {
+            // return style4
+            styleId = "style4";
+        }
+        if (compareDashes(dash, getDashes(dashes4.get(strokeId)))) {
+            // return style5
+            styleId = "style5";
+        }
+        return styleId;
+    }
+
     private float[] getDashes(java.util.List<Float> items) {
         float[] value;
         value = new float[4];
@@ -126,4 +183,13 @@ public class Dropper {
         return value;
     }
 
+    private boolean compareDashes(float[] a, float[] b) {
+        if (a.length != b.length)
+            return false;
+        for (int i=0; i < a.length; i++) {
+            if (a[i] != b[i])
+                return false;
+        }
+        return true;
+    }
 }
