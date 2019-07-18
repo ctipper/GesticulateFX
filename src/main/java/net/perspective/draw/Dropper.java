@@ -86,6 +86,36 @@ public class Dropper {
         return stroke;
     }
 
+    public int getStrokeIdLinear(BasicStroke stroke) {
+        float width = stroke.getLineWidth();
+        int i = 0;
+        do {
+            if (strokeTypes.get(i) > width)
+                break;
+            i++;
+        } while (i < strokeTypes.size());
+        return i - 1;
+    }
+
+    public int getStrokeIdBinary(BasicStroke stroke) {
+        float width = stroke.getLineWidth();
+        int j = 0;
+        int i = strokeTypes.size();
+        int k = (i + j) / 2;
+        while (true) {
+            if (strokeTypes.get(k) <= width) {
+                j = k;
+            }
+            if (strokeTypes.get(k) > width) {
+                i = k;
+            }
+            if ((i - j) < 2)
+                break;
+            k = (i + j) / 2;
+        }
+        return j;
+    }
+
     private float[] getDashes(java.util.List<Float> items) {
         float[] value;
         value = new float[4];
