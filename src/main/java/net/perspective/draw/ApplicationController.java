@@ -166,6 +166,11 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
+    private void handleDropperAction(ActionEvent e) {
+        // not implemented
+    }
+
+    @FXML
     private void handleOpacityAction(ActionEvent e) {
         drawarea.setTransparency(wireframeSelected.then(0).otherwise(100).intValue());
     }
@@ -607,6 +612,8 @@ public class ApplicationController implements Initializable {
     private Button menubutton;
     @FXML
     private Button snapshotbutton;
+    @FXML
+    private ToggleButton dropperbutton;
     @FXML
     private ToggleButton wireframebutton;
     @FXML
