@@ -320,7 +320,8 @@ public class DrawingArea {
 
     public void setStroke(java.awt.Stroke stroke) {
         this.stroke = stroke;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
 
     public java.awt.Stroke getStroke() {
@@ -329,7 +330,8 @@ public class DrawingArea {
 
     public void setPlainStroke(java.awt.Stroke stroke) {
         this.plainstroke = stroke;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
 
     public java.awt.Stroke getPlainStroke() {
@@ -338,7 +340,8 @@ public class DrawingArea {
 
     public void setColor(Color color) {
         this.color = color;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
 
     public Color getColor() {
@@ -347,7 +350,8 @@ public class DrawingArea {
 
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
 
     public Color getFillColor() {
@@ -356,7 +360,8 @@ public class DrawingArea {
 
     public void setTransparency(int transparency) {
         this.transparency = transparency;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
 
     public int getTransparency() {
@@ -365,16 +370,18 @@ public class DrawingArea {
 
     public void setArrow(ArrowType arrowtype) {
         this.arrowtype = arrowtype;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
-
+    
     public ArrowType getArrow() {
         return arrowtype;
     }
 
     public void resetArrow() {
         arrowtype = ArrowType.NONE;
-        view.updateSelectedItem();
+        if (controller.getDropperDisabled())
+            view.updateSelectedItem();
     }
 
     public void setMarquee(DrawItem marquee) {

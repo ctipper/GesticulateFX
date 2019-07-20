@@ -143,6 +143,15 @@ public class ArrowLine extends Figure {
         return stroke;
     }
 
+    public void setStroke(Stroke stroke) {
+        line.setStroke(stroke);
+    }
+
+    @Transient
+    public Stroke getStroke() {
+        return line.getStroke();
+    }
+
     @Override
     @Transient
     public void setPath() {

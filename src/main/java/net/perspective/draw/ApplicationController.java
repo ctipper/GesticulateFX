@@ -291,6 +291,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Get dropper button disabled
+     * 
+     * @return !dropper armed
+     */
+    public Boolean getDropperDisabled() {
+        return !dropperEnabled.getValue();
+    }
+
+    /**
      * Progress bar visible property
      * 
      * @return 
@@ -400,6 +409,46 @@ public class ApplicationController implements Initializable {
         return themeAccentColor.getValue();
     }
 
+    /**
+     * Get stroke via combo box
+     * 
+     * @return stroke combo box
+     */
+    public void setStrokeCombo(int strokeId) {
+        strokecombobox.getSelectionModel().select(strokeId);;
+    }
+
+    /**
+     * Set style via combo box
+     * 
+     * @return style combo box
+     */
+    public void setStyleCombo(String styleId) {
+        stylecombobox.getSelectionModel().select(styleId);
+    }
+
+    /**
+     * Set canvas colour
+     * 
+     * @param color 
+     */
+    public void setColor(Color color) {
+        colorpicker.setValue(color);
+        colorpicker.setStyle(backgroundStyle(color));
+        pickerColorProperty.setValue(color);
+    }
+
+    /**
+     * Set canvas fill colour
+     * 
+     * @param fillcolor 
+     */
+    public void setFillColor(Color fillcolor) {
+        fillcolorpicker.setValue(fillcolor);
+        fillcolorpicker.setStyle(backgroundStyle(fillcolor));
+        pickerFillColorProperty.setValue(fillcolor);
+    }
+
     private Callback<ListView<String>, ListCell<String>> getCellFactory(Boolean alternate) {
         return (ListView<String> p) -> new ListCell<String>() {
 
@@ -479,7 +528,6 @@ public class ApplicationController implements Initializable {
         this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
 
         // bind a property to the dropper button selected state
-        this.dropperbutton.selectedProperty().setValue(Boolean.FALSE);
         this.dropperEnabled = new SimpleBooleanProperty();
         this.dropperEnabled.bindBidirectional(dropperbutton.selectedProperty());
 
@@ -602,7 +650,7 @@ public class ApplicationController implements Initializable {
     }
 
     // https://stackoverflow.com/a/18803814
-    private String toRGBCode(Color color) {
+    public String toRGBCode(Color color) {
         return String.format( "#%02X%02X%02X",
             (int)( color.getRed() * 255 ),
             (int)( color.getGreen() * 255 ),

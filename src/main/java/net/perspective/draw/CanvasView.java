@@ -6,6 +6,7 @@
  */
 package net.perspective.draw;
 
+import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
@@ -14,6 +15,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.*;
@@ -31,6 +33,10 @@ public class CanvasView {
 
     @Inject
     private DrawingArea drawarea;
+    @Inject
+    private ApplicationController controller;
+    @Inject
+    private Dropper dropper;
     private final java.util.List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private DrawItem newitem;
@@ -121,7 +127,7 @@ public class CanvasView {
     }
 
     public void updateSelectedItem() {
-        if (this.getSelected() != -1) {
+        if (this.getSelected() != -1 && controller.getDropperDisabled()) {
             DrawItem item = drawings.get(this.getSelected());
             item.updateProperties(drawarea);
 
@@ -143,6 +149,40 @@ public class CanvasView {
             }
 
             this.updateCanvasItem(this.getSelected(), item);
+        }
+        if (this.getSelected() != -1 && !controller.getDropperDisabled()) {
+            DrawItem item = drawings.get(this.getSelected());
+            if (item instanceof Figure && !(item instanceof ArrowLine)) {
+                // get stroke
+                int strokeId = dropper.getStrokeIdBinary((BasicStroke) ((Figure) item).getStroke());
+                String styleId = dropper.getStyleSelector((BasicStroke) ((Figure) item).getStroke(), ArrowType.NONE);
+                logger.trace("strokeId " + strokeId + " styleId " + styleId);
+                // get color
+                Color color = ((Figure) item).getColor();
+                Color fillcolor = ((Figure) item).getFillColor();
+                logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
+                // update tool bar controls
+                drawarea.setArrow(ArrowType.NONE);
+                controller.setStrokeCombo(strokeId);
+                controller.setStyleCombo(styleId);
+                controller.setColor(color);
+                controller.setFillColor(fillcolor);
+            } else if (item instanceof ArrowLine) {
+                // get stroke
+                int strokeId = dropper.getStrokeIdBinary((BasicStroke) ((ArrowLine) item).getStroke());
+                String styleId = dropper.getStyleSelector((BasicStroke) ((ArrowLine) item).getStroke(), ((ArrowLine) item).getArrowType());
+                logger.trace("strokeId: " + strokeId + " styleId: " + styleId);
+                // get color
+                Color color = ((Figure) item).getColor();
+                Color fillcolor = ((Figure) item).getFillColor();
+                logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
+                // update tool bar controls
+                drawarea.setArrow(((ArrowLine) item).getArrowType());
+                controller.setStrokeCombo(strokeId);
+                controller.setStyleCombo(styleId);
+                controller.setColor(color);
+                controller.setFillColor(fillcolor);
+            }
         }
     }
 
