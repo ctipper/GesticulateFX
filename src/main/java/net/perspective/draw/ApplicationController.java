@@ -76,6 +76,7 @@ public class ApplicationController implements Initializable {
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
     private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
     private BooleanProperty lineType;
+    private BooleanProperty dropperEnabled;
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
@@ -281,6 +282,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Dropper button enabled property
+     * 
+     * @return 
+     */
+    public BooleanProperty getDropperEnabledProperty() {
+        return dropperEnabled;
+    }
+
+    /**
      * Progress bar visible property
      * 
      * @return 
@@ -467,6 +477,11 @@ public class ApplicationController implements Initializable {
 
         // bind a property to the wireframe button selected state
         this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
+
+        // bind a property to the dropper button selected state
+        this.dropperbutton.selectedProperty().setValue(Boolean.FALSE);
+        this.dropperEnabled = new SimpleBooleanProperty();
+        this.dropperEnabled.bindBidirectional(dropperbutton.selectedProperty());
 
         // bind a property to the progress bar visible property
         this.progressBarVisible = new SimpleBooleanProperty();

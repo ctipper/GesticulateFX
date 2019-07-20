@@ -63,6 +63,7 @@ public class DrawingArea {
     private boolean multiSelectEnabled;
     private Transferable clipboard;
 
+    private HandlerType handlertype, oldhandlertype;
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
@@ -91,6 +92,7 @@ public class DrawingArea {
         this.arrowtype = ArrowType.NONE;
         listener.initializeHandlers(canvas);
         this.addContextMenu();
+        this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             Integer strokeId = strokeStrings.indexOf(newValue);
@@ -107,6 +109,13 @@ public class DrawingArea {
         });
         controller.getFillColorProperty().addListener((ObservableValue<? extends Color> observable, Color oldValue, Color newValue) -> {
             setFillColor(newValue);
+        });
+        controller.getDropperEnabledProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (oldValue && !newValue) {
+                changeHandlers(oldhandlertype);
+            } else if (!oldValue && newValue) {
+                changeHandlers(HandlerType.SELECTION);
+            }
         });
     }
 
@@ -142,9 +151,11 @@ public class DrawingArea {
         ((Group) canvas.getRoot()).getChildren().clear();
     }
 
-    public void changeHandlers(HandlerType h) {
+    public void changeHandlers(HandlerType handler) {
+        this.oldhandlertype = this.handlertype;
+        this.handlertype = handler;
         this.resetContextHandlers();
-        switch (h) {
+        switch (handler) {
             case SELECTION:
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
                 this.setContextHandlers();
@@ -164,6 +175,10 @@ public class DrawingArea {
         }
         view.setSelected(-1);
         view.setDrawing(false);
+    }
+
+    public HandlerType getHandlerType() {
+        return handlertype;
     }
 
     public void resetContextHandlers() {
