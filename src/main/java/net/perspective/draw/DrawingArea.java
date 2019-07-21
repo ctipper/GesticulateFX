@@ -112,7 +112,11 @@ public class DrawingArea {
         });
         controller.getDropperEnabledProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (oldValue && !newValue) {
-                changeHandlers(oldhandlertype);
+                if (oldhandlertype.equals(HandlerType.SELECTION)) {
+                    changeHandlers(handlertype);
+                } else {
+                    changeHandlers(oldhandlertype);
+                }
             } else if (!oldValue && newValue) {
                 changeHandlers(HandlerType.SELECTION);
             }
