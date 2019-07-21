@@ -13,6 +13,7 @@ import java.util.Arrays;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.SubScene;
 import javafx.scene.control.ContextMenu;
@@ -117,8 +118,10 @@ public class DrawingArea {
                 } else {
                     changeHandlers(oldhandlertype);
                 }
+                canvas.setCursor(Cursor.DEFAULT);
             } else if (!oldValue && newValue) {
                 changeHandlers(HandlerType.SELECTION);
+                canvas.setCursor(Cursor.OPEN_HAND);
             }
         });
     }
