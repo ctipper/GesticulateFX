@@ -322,7 +322,30 @@ public class DrawingArea {
     }
 
     public DrawingType getDrawType() {
-        return drawtype;
+        DrawingType type = this.drawtype;
+        if (controller.getOneToOneEnabled()) {
+            switch (drawtype) {
+                case CIRCLE:
+                    break;
+                case ELLIPSE:
+                    type = DrawingType.CIRCLE;
+                    break;
+                case SQUARE:
+                    break;
+                case RECTANGLE:
+                    type = DrawingType.SQUARE;
+                    break;
+                case TRIANGLE:
+                    break;
+                case ISOSCELES:
+                    type = DrawingType.TRIANGLE;
+                    break;
+                default:
+                    break;
+
+            }
+        }
+        return type;
     }
 
     public void setStroke(java.awt.Stroke stroke) {

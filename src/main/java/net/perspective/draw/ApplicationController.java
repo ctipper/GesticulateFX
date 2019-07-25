@@ -77,6 +77,7 @@ public class ApplicationController implements Initializable {
     private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
     private BooleanProperty lineType;
     private BooleanProperty dropperEnabled;
+    private BooleanProperty oneToOneEnabled;
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
@@ -297,6 +298,15 @@ public class ApplicationController implements Initializable {
      */
     public Boolean getDropperDisabled() {
         return !dropperEnabled.getValue();
+    }
+
+    /**
+     * Get 1:1 button selected
+     * 
+     * @return oneToOne selected
+     */
+    public Boolean getOneToOneEnabled() {
+        return oneToOneEnabled.getValue();
     }
 
     /**
@@ -531,6 +541,10 @@ public class ApplicationController implements Initializable {
         this.dropperEnabled = new SimpleBooleanProperty();
         this.dropperEnabled.bindBidirectional(dropperbutton.selectedProperty());
 
+        // bind a property to the one-to-one button selected state
+        this.oneToOneEnabled = new SimpleBooleanProperty();
+        this.oneToOneEnabled.bindBidirectional(onetoonebutton.selectedProperty());
+
         // bind a property to the progress bar visible property
         this.progressBarVisible = new SimpleBooleanProperty();
         this.progressBarVisible.bindBidirectional(progressbar.visibleProperty());
@@ -677,6 +691,8 @@ public class ApplicationController implements Initializable {
     private Button snapshotbutton;
     @FXML
     private ToggleButton dropperbutton;
+    @FXML
+    private ToggleButton onetoonebutton;
     @FXML
     private ToggleButton wireframebutton;
     @FXML
