@@ -48,6 +48,13 @@ public class Dropper {
     public Dropper() {
     }
 
+    /**
+     * Select stroke using stroke ID and style
+     * 
+     * @param strokeId
+     * @param strokeStyle
+     * @return a stroke
+     */
     protected BasicStroke selectStroke(Integer strokeId, String strokeStyle) {
         BasicStroke stroke;
         switch (strokeStyle) {
@@ -85,6 +92,12 @@ public class Dropper {
         return stroke;
     }
 
+    /**
+     * Get stroke Id from strokeType array
+     * 
+     * @param stroke
+     * @return 
+     */
     public int getStrokeIdLinear(BasicStroke stroke) {
         float width = stroke.getLineWidth();
         int i = 0;
@@ -96,6 +109,12 @@ public class Dropper {
         return i - 1;
     }
 
+    /**
+     * Get stroke Id from strokeType array
+     * 
+     * @param stroke
+     * @return 
+     */
     public int getStrokeIdBinary(BasicStroke stroke) {
         float width = stroke.getLineWidth();
         int j = 0;
@@ -115,6 +134,13 @@ public class Dropper {
         return j;
     }
 
+    /**
+     * Get stroke style selector
+     * 
+     * @param stroke the sample stroke
+     * @param arrow  arrow type
+     * @return style Id
+     */
     public String getStyleSelector(BasicStroke stroke, ArrowType arrow) {
         String styleId = "style1";
         int strokeId = this.getStrokeIdBinary(stroke);

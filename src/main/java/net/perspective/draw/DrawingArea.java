@@ -96,11 +96,17 @@ public class DrawingArea {
         this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            /**
+             * Set stroke type
+             */
             Integer strokeId = strokeStrings.indexOf(newValue);
             String strokeStyle = controller.getStrokeStyleProperty().getValue();
             setStrokeType(strokeId, strokeStyle);
         });
         controller.getStrokeStyleProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            /**
+             * Set stroke style
+             */
             String strokeType = controller.getStrokeTypeProperty().getValue();
             Integer strokeId = strokeStrings.indexOf(strokeType);
             setStrokeType(strokeId, newValue);
@@ -112,6 +118,9 @@ public class DrawingArea {
             setFillColor(newValue);
         });
         controller.getDropperEnabledProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            /**
+             * Activate dropper tool
+             */
             if (oldValue && !newValue) {
                 if (oldhandlertype.equals(HandlerType.SELECTION)) {
                     changeHandlers(handlertype);
@@ -160,6 +169,11 @@ public class DrawingArea {
         ((Group) canvas.getRoot()).getChildren().clear();
     }
 
+    /**
+     * Set mouse and touch handlers
+     * 
+     * @param handler 
+     */
     public void changeHandlers(HandlerType handler) {
         this.oldhandlertype = this.handlertype;
         this.handlertype = handler;
@@ -323,6 +337,11 @@ public class DrawingArea {
         drawtype = s;
     }
 
+    /**
+     * Get draw type
+     * 
+     * @return DrawingType
+     */
     public DrawingType getDrawType() {
         DrawingType type = this.drawtype;
         if (controller.getOneToOneEnabled()) {
