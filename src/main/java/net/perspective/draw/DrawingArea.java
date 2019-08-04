@@ -119,9 +119,11 @@ public class DrawingArea {
                     changeHandlers(oldhandlertype);
                 }
                 canvas.setCursor(Cursor.DEFAULT);
+                controller.setStatusMessage("Dropper tool off.");
             } else if (!oldValue && newValue) {
                 changeHandlers(HandlerType.SELECTION);
                 canvas.setCursor(Cursor.OPEN_HAND);
+                controller.setStatusMessage("Dropper tool selected.");
             }
         });
     }
@@ -132,7 +134,7 @@ public class DrawingArea {
         setStrokeType(strokeId, strokeStyle);
         this.color = controller.getColorProperty().getValue();
         this.fillcolor = controller.getFillColorProperty().getValue();
-        this.transparency = controller.getWireframeWhen().then(0).otherwise(100).intValue();
+        this.transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
     }

@@ -68,7 +68,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private BooleanProperty themeProperty;
-    private When wireframeSelected;
+    private When outlineSelected;
     private SequentialTransition statusTransition;
     private ReadOnlyStringWrapper strokeTypeProperty;
     private ReadOnlyStringWrapper strokeStyleProperty;
@@ -174,7 +174,7 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleOpacityAction(ActionEvent e) {
-        drawarea.setTransparency(wireframeSelected.then(0).otherwise(100).intValue());
+        drawarea.setTransparency(outlineSelected.then(0).otherwise(100).intValue());
     }
 
     @FXML
@@ -274,12 +274,12 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Binary choice from wireframe button state
+     * Binary choice from outline button state
      * 
      * @return 
      */
-    public When getWireframeWhen() {
-        return wireframeSelected;
+    public When getOutlineWhen() {
+        return outlineSelected;
     }
 
     /**
@@ -534,8 +534,8 @@ public class ApplicationController implements Initializable {
         this.snapshotEnabled = new SimpleBooleanProperty();
         this.snapshotEnabled.bindBidirectional(snapshotbutton.disableProperty());
 
-        // bind a property to the wireframe button selected state
-        this.wireframeSelected = Bindings.when(wireframebutton.selectedProperty());
+        // bind a property to the outline button selected state
+        this.outlineSelected = Bindings.when(outlinebutton.selectedProperty());
 
         // bind a property to the dropper button selected state
         this.dropperEnabled = new SimpleBooleanProperty();
@@ -694,7 +694,7 @@ public class ApplicationController implements Initializable {
     @FXML
     private ToggleButton onetoonebutton;
     @FXML
-    private ToggleButton wireframebutton;
+    private ToggleButton outlinebutton;
     @FXML
     private Label statusbar;
     @FXML

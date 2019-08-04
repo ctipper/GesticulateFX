@@ -133,7 +133,7 @@
                                 </Group>
                             </graphic>
                         </ToggleButton>
-                        <ToggleButton id="buttwireframe" fx:id="wireframebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
+                        <ToggleButton id="buttoutline" fx:id="outlinebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
                             <tooltip>
                                 <Tooltip text="Draw as outline" />
                             </tooltip>
