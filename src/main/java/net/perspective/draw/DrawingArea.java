@@ -128,11 +128,11 @@ public class DrawingArea {
                     changeHandlers(oldhandlertype);
                 }
                 canvas.setCursor(Cursor.DEFAULT);
-                controller.setStatusMessage("Dropper tool off.");
+                controller.setStatusMessage("Dropper tool off");
             } else if (!oldValue && newValue) {
                 changeHandlers(HandlerType.SELECTION);
                 canvas.setCursor(Cursor.OPEN_HAND);
-                controller.setStatusMessage("Dropper tool selected.");
+                controller.setStatusMessage("Dropper tool selected");
             }
         });
     }

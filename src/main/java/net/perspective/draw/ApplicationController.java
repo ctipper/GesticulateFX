@@ -27,6 +27,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
@@ -42,9 +44,12 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -81,6 +86,8 @@ public class ApplicationController implements Initializable {
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
+    private final String SVG_INFO_A = "M9.853952797256 11.684608723148C9.505249291706 12.312275033138 8.97521996327 13.051526464904 8.654412738164 13.051526464904 8.389398073946 13.051526464904 8.403346214168 12.758615520242 8.500983195722 12.39596387447L9.937641638588 7.081722449888 9.853952797256 6.998033608556001 6.645880546196 7.402529674994001 6.53429542442 7.86281830232 7.343287557296 7.946507143652C7.6222503617360005 7.974403424096 7.678042922624 8.155729246982 7.5804059410699995 8.532329032976001L6.506399143976 12.507548996246C6.213488199314 13.58155579334 6.548243564642 14.167377682664 7.482768959516 14.167377682664 8.83573856105 14.167377682664 9.686575114592 13.09337088557 10.272397003916 11.921727106921999M9.268130907932001 6.202989615902C9.979486059254 6.202989615902 10.467670967023999 5.742700988576001 10.467670967023999 4.975553276366 10.467670967023999 4.292094405488001 9.965537919032 3.957339040160001 9.351819749264 3.957339040160001 8.528879476166 3.957339040160001 8.13833154995 4.58500535015 8.13833154995 5.184775379696001 8.13833154995 5.8124416896860005 8.598620177276 6.202989615902 9.268130907932001 6.202989615902";
+    private final String SVG_INFO_B = "M8.360382 0.503647C3.683502 0.503647-0.107849 4.294998-0.107849 8.971878-0.107849 13.648758 3.683502 17.440109 8.360382 17.440109 13.037262 17.440109 16.828613 13.648758 16.828613 8.971878 16.828613 4.294998 13.037262 0.503647 8.360382 0.503647Z";
 
     @FXML 
     private void handleWipeAction(ActionEvent e) {
@@ -235,6 +242,11 @@ public class ApplicationController implements Initializable {
         setLineButtonGraphic(true);
         setLineTypeProperty(true);
         tabbutton.fire();
+    }
+
+    @FXML
+    private void handleAboutBoxAction(ActionEvent e) {
+        menubutton.fire();
     }
 
     private void setLineButtonGraphic(Boolean vertical) {
@@ -617,6 +629,7 @@ public class ApplicationController implements Initializable {
                 drawarea.changeHandlers(HandlerType.FIGURE);
             }
         });
+        this.prepareAboutBoxMenu();
     }
 
     private void prepareSlideMenuAnimation() {
@@ -657,6 +670,58 @@ public class ApplicationController implements Initializable {
             new PauseTransition(Duration.millis(3000)),
             ft
         );
+    }
+
+    private void prepareAboutBoxMenu() {
+        RowConstraints con;
+        int lastrow = 9;    // first empty row
+        int hboxes = 13;    // empty row count
+        for (int i=0; i<hboxes; i++) {
+            appmenu.getRowConstraints().add(getRow());
+            appmenu.addRow(lastrow+i, new HBox(), new HBox());
+        }
+        // glyph
+        Group icon = getAboutGlyph();
+        Button about = new Button();
+        about.setAlignment(Pos.CENTER);
+        about.setFocusTraversable(false);
+        about.setMnemonicParsing(false);
+        about.getStyleClass().add("menuicon");
+        about.setPrefHeight(20.0d);
+        about.setGraphic(icon);
+        about.setOnAction(this::handleAboutBoxAction);
+        // menu
+        Button aboutmenu = new Button();
+        aboutmenu.setAlignment(Pos.CENTER_LEFT);
+        aboutmenu.setFocusTraversable(false);
+        aboutmenu.setMnemonicParsing(false);
+        aboutmenu.getStyleClass().add("menuitem");
+        aboutmenu.setPrefWidth(150.0d);
+        aboutmenu.setPrefHeight(20.0d);
+        aboutmenu.setText("About...");
+        aboutmenu.setOnAction(this::handleAboutBoxAction);
+        appmenu.getRowConstraints().add(getRow());
+        appmenu.addRow(lastrow + hboxes + 1, about, aboutmenu);
+    }
+
+    private RowConstraints getRow() {
+        RowConstraints con = new RowConstraints();
+        con.setPrefHeight(35.0d);
+        return con;        
+    }
+
+    private Group getAboutGlyph() {
+        SVGPath path_a = new SVGPath();
+        path_a.setContent(SVG_INFO_A);
+        path_a.setFillRule(FillRule.EVEN_ODD);
+        path_a.getStyleClass().add("svgFill");
+        SVGPath path_b = new SVGPath();
+        path_b.setContent(SVG_INFO_B);
+        path_b.getStyleClass().add("svgPath");
+        path_b.setFill(Color.TRANSPARENT);
+        Group glyph = new Group();
+        glyph.getChildren().addAll(path_a, path_b);
+        return glyph;
     }
 
     private String backgroundStyle(Color c) {

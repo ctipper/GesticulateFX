@@ -383,6 +383,7 @@
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
+                <RowConstraints prefHeight="35.0" />
             </rowConstraints>
         </GridPane>
     </children>
