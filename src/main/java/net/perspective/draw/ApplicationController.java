@@ -27,7 +27,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -684,13 +686,27 @@ public class ApplicationController implements Initializable {
     private void prepareAboutBoxMenu() {
         RowConstraints con;
         int lastrow = 9;    // first empty row
-        int hboxes = 13;    // empty row count
+        int hboxes = 11;    // empty row count
         for (int i=0; i<hboxes; i++) {
             appmenu.getRowConstraints().add(getRow());
             appmenu.addRow(lastrow+i, new HBox(), new HBox());
         }
-        // glyph
-        Group icon = getAboutGlyph();
+        /**
+         * branding text and app icon
+         */
+        final ImageView image = new ImageView("images/gesticulate-48.png");
+        image.setFitWidth(26);
+        image.setFitHeight(26);
+        Label appname = new Label("Gesticulate FX");
+        appname.setStyle("-fx-font-size: 18px;");
+        appmenu.getRowConstraints().add(getRow());
+        appmenu.addRow(lastrow + hboxes + 1, image, appname);
+        GridPane.setConstraints(image, 0, lastrow + hboxes + 1, 1, 1, HPos.CENTER, VPos.CENTER);
+        GridPane.setConstraints(appname, 1, lastrow + hboxes + 1, 1, 1, HPos.LEFT, VPos.BASELINE);
+        /**
+         * information glyph
+         */
+        Group icon = getInfoGlyph();
         Button about = new Button();
         about.setAlignment(Pos.CENTER);
         about.setFocusTraversable(false);
@@ -699,7 +715,9 @@ public class ApplicationController implements Initializable {
         about.setPrefHeight(20.0);
         about.setGraphic(icon);
         about.setOnAction(this::handleAboutBoxAction);
-        // menu
+        /**
+         * menu item
+         */
         Button aboutmenu = new Button();
         aboutmenu.setAlignment(Pos.CENTER_LEFT);
         aboutmenu.setFocusTraversable(false);
@@ -710,7 +728,7 @@ public class ApplicationController implements Initializable {
         aboutmenu.setText("About...");
         aboutmenu.setOnAction(this::handleAboutBoxAction);
         appmenu.getRowConstraints().add(getRow());
-        appmenu.addRow(lastrow + hboxes + 1, about, aboutmenu);
+        appmenu.addRow(lastrow + hboxes + 2, about, aboutmenu);
     }
 
     private RowConstraints getRow() {
@@ -719,7 +737,7 @@ public class ApplicationController implements Initializable {
         return con;        
     }
 
-    private Group getAboutGlyph() {
+    private Group getInfoGlyph() {
         SVGPath path_a = new SVGPath();
         path_a.setContent(SVG_INFO_A);
         path_a.setFillRule(FillRule.EVEN_ODD);
