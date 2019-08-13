@@ -45,6 +45,24 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+.dialog-pane {
+    -fx-background-color: #1d1d1d;
+}
+.dialog-pane > .button-bar > .container{
+    -fx-background-color: #1d1d1d;
+}
+.dialog-pane > .content.label {
+    -fx-font-size: 14px;
+    -fx-fill: #c0c481;
+}
+.dialog-pane:header .header-panel {
+    -fx-background-color: #1d1d1d;
+}
+.dialog-pane:header .header-panel .label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-fill: #c0c481;
+}
 .toolbutton {
     -fx-background-color: #212121;
     -fx-min-width: 44;

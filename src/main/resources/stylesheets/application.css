@@ -42,6 +42,22 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+.dialog-pane {
+    -fx-background-color: #fefefe;
+}
+.dialog-pane > .button-bar > .container{
+    -fx-background-color: #fefefe;
+}
+.dialog-pane > .content.label {
+    -fx-font-size: 14px;
+}
+.dialog-pane:header .header-panel {
+    -fx-background-color: #fefefe;
+}
+.dialog-pane:header .header-panel .label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
 .tool-bar {
     -fx-background-color: #ddf2ff;
 }

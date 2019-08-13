@@ -34,6 +34,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -51,6 +52,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.SVGPath;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -83,6 +85,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty lineType;
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
+    private Dialog aboutBox;
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
@@ -247,6 +250,12 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleAboutBoxAction(ActionEvent e) {
         menubutton.fire();
+        if (aboutBox == null) {
+            aboutBox = new AboutBox();
+            Stage stage = application.getStage();
+            aboutBox.initOwner(stage);
+        }
+        aboutBox.showAndWait();
     }
 
     private void setLineButtonGraphic(Boolean vertical) {
@@ -437,7 +446,7 @@ public class ApplicationController implements Initializable {
      * @return stroke combo box
      */
     public void setStrokeCombo(int strokeId) {
-        strokecombobox.getSelectionModel().select(strokeId);;
+        strokecombobox.getSelectionModel().select(strokeId);
     }
 
     /**
@@ -687,7 +696,7 @@ public class ApplicationController implements Initializable {
         about.setFocusTraversable(false);
         about.setMnemonicParsing(false);
         about.getStyleClass().add("menuicon");
-        about.setPrefHeight(20.0d);
+        about.setPrefHeight(20.0);
         about.setGraphic(icon);
         about.setOnAction(this::handleAboutBoxAction);
         // menu
@@ -696,8 +705,8 @@ public class ApplicationController implements Initializable {
         aboutmenu.setFocusTraversable(false);
         aboutmenu.setMnemonicParsing(false);
         aboutmenu.getStyleClass().add("menuitem");
-        aboutmenu.setPrefWidth(150.0d);
-        aboutmenu.setPrefHeight(20.0d);
+        aboutmenu.setPrefWidth(150.0);
+        aboutmenu.setPrefHeight(20.0);
         aboutmenu.setText("About...");
         aboutmenu.setOnAction(this::handleAboutBoxAction);
         appmenu.getRowConstraints().add(getRow());
@@ -706,7 +715,7 @@ public class ApplicationController implements Initializable {
 
     private RowConstraints getRow() {
         RowConstraints con = new RowConstraints();
-        con.setPrefHeight(35.0d);
+        con.setPrefHeight(35.0);
         return con;        
     }
 
