@@ -8,6 +8,7 @@ package net.perspective.draw;
 
 import java.awt.BasicStroke;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 import javax.inject.Inject;
 import net.perspective.draw.geom.ArrowType;
 
@@ -94,9 +95,10 @@ public class Dropper {
 
     /**
      * Get stroke Id from strokeType array
+     * Uses linear search
      * 
      * @param stroke
-     * @return 
+     * @return stroke Id
      */
     public int getStrokeIdLinear(BasicStroke stroke) {
         float width = stroke.getLineWidth();
@@ -111,9 +113,10 @@ public class Dropper {
 
     /**
      * Get stroke Id from strokeType array
+     * Uses binary search
      * 
      * @param stroke
-     * @return 
+     * @return stroke Id
      */
     public int getStrokeIdBinary(BasicStroke stroke) {
         float width = stroke.getLineWidth();
@@ -132,6 +135,20 @@ public class Dropper {
             k = (i + j) / 2;
         }
         return j;
+    }
+
+    /**
+     * Get stroke Id from strokeType array
+     * Uses functional stream with filter
+     * 
+     * @param stroke
+     * @return stroke Id
+     */
+    public int getStrokeIdFunctionalStream(BasicStroke stroke) {
+        return IntStream.range(0, strokeTypes.size())
+                .filter(i -> strokeTypes.get(i) <= stroke.getLineWidth())
+                .max()
+                .getAsInt();
     }
 
     /**

@@ -114,18 +114,47 @@ public class CanvasView {
         });
     }
 
+    /**
+     * Add item to canvas
+     * 
+     * @param item
+     */
     public void addItemToCanvas(DrawItem item) {
         appendItemToCanvas(item);
     }
 
+    /**
+     * Add item to canvas but do not update properties
+     * 
+     * @param item
+     */
     public void appendItemToCanvas(DrawItem item) {
         drawings.add(item);
     }
 
+    /**
+     * Update the canvas item item at given index
+     * 
+     * @param index
+     * @param item
+     */
     public void updateCanvasItem(int index, DrawItem item) {
         drawings.set(index, item);
     }
 
+    /**
+     * Delete the selected item
+     */
+    public void deleteSelectedItem() {
+        if (this.getSelected() != -1) {
+            drawings.remove(this.getSelected());
+            setSelected(-1);
+        }
+    }
+
+    /**
+     * Update the properties of the selected item
+     */
     public void updateSelectedItem() {
         if (this.getSelected() != -1 && controller.getDropperDisabled()) {
             DrawItem item = drawings.get(this.getSelected());
@@ -153,43 +182,48 @@ public class CanvasView {
         if (this.getSelected() != -1 && !controller.getDropperDisabled()) {
             DrawItem item = drawings.get(this.getSelected());
             if (item instanceof Figure && !(item instanceof ArrowLine)) {
-                // get stroke
+                /**
+                 * get stroke
+                 */
                 int strokeId = dropper.getStrokeIdBinary((BasicStroke) ((Figure) item).getStroke());
                 String styleId = dropper.getStyleSelector((BasicStroke) ((Figure) item).getStroke(), ArrowType.NONE);
                 logger.trace("strokeId " + strokeId + " styleId " + styleId);
-                // get color
+                /**
+                 * get colours
+                 */
                 Color color = ((Figure) item).getColor();
                 Color fillcolor = ((Figure) item).getFillColor();
                 logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
-                // update tool bar controls
+                /**
+                 * update tool bar controls
+                 */
                 drawarea.setArrow(ArrowType.NONE);
                 controller.setStrokeCombo(strokeId);
                 controller.setStyleCombo(styleId);
                 controller.setColor(color);
                 controller.setFillColor(fillcolor);
             } else if (item instanceof ArrowLine) {
-                // get stroke
+                /**
+                 * get stroke
+                 */
                 int strokeId = dropper.getStrokeIdBinary((BasicStroke) ((ArrowLine) item).getStroke());
                 String styleId = dropper.getStyleSelector((BasicStroke) ((ArrowLine) item).getStroke(), ((ArrowLine) item).getArrowType());
                 logger.trace("strokeId: " + strokeId + " styleId: " + styleId);
-                // get color
+                /**
+                 * get colours
+                 */
                 Color color = ((Figure) item).getColor();
                 Color fillcolor = ((Figure) item).getFillColor();
                 logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
-                // update tool bar controls
+                /**
+                 * update tool bar controls
+                 */
                 drawarea.setArrow(((ArrowLine) item).getArrowType());
                 controller.setStrokeCombo(strokeId);
                 controller.setStyleCombo(styleId);
                 controller.setColor(color);
                 controller.setFillColor(fillcolor);
             }
-        }
-    }
-
-    public void deleteSelectedItem() {
-        if (this.getSelected() != -1) {
-            drawings.remove(this.getSelected());
-            setSelected(-1);
         }
     }
 
