@@ -44,12 +44,13 @@ public class ReadInFunnel extends Task<Object> {
     @Inject private ShareUtils share;
     private File file;
     private List<DrawItem> drawings;
-    private boolean success = false;
+    private boolean success;
 
     private static final Logger logger = LoggerFactory.getLogger(ReadInFunnel.class.getName());
 
     @Inject
     public ReadInFunnel() {
+        success = false;
     }
 
     public void setFile(File file) {
@@ -67,7 +68,7 @@ public class ReadInFunnel extends Task<Object> {
     public void done() {
         logger.info("Open completed.");
         Platform.runLater(() -> {
-            // if (success) {
+            if (success) {
                 drawarea.prepareDrawing();
                 try {
                     for (DrawItem drawing : drawings) {
@@ -78,19 +79,23 @@ public class ReadInFunnel extends Task<Object> {
                 } catch (ClassCastException e) {
                     logger.warn(e.getMessage());
                 }
-            // }
+            }
         });
         CompletableFuture.runAsync(() -> {
             try {
                 // introduce a minimum visible interval
-                Thread.sleep(300);
+                if (success) {
+                    Thread.sleep(300);
+                }
             } catch (InterruptedException e) {
             }
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();
-                controller.setStatusMessage("Opened document");
+                if (success) {
+                    controller.setStatusMessage("Opened document");
+                }
             });
         });
     }
