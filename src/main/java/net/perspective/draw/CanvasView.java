@@ -68,6 +68,9 @@ public class CanvasView {
         drawings.clear();
     }
 
+    /**
+     * Listener operates on drawing list to handle updates
+     */
     public void setDrawingListener() {
         drawings = FXCollections.observableList(list);
         drawings.addListener((ListChangeListener.Change<? extends DrawItem> change) -> {
@@ -119,21 +122,12 @@ public class CanvasView {
      * 
      * @param item
      */
-    public void addItemToCanvas(DrawItem item) {
-        appendItemToCanvas(item);
-    }
-
-    /**
-     * Add item to canvas but do not update properties
-     * 
-     * @param item
-     */
     public void appendItemToCanvas(DrawItem item) {
         drawings.add(item);
     }
 
     /**
-     * Update the canvas item item at given index
+     * Update the canvas item at given index
      * 
      * @param index
      * @param item
@@ -153,7 +147,38 @@ public class CanvasView {
     }
 
     /**
-     * Update the properties of the selected item
+     * Insert or update new item
+     * 
+     * @param item
+     */
+    public void setNewItem(DrawItem item) {
+        if (newitem == null) {
+            this.appendItemToCanvas(item);
+        } else {
+            this.updateCanvasItem(drawings.size() - 1, item);
+        }
+        newitem = item;
+    }
+
+    /**
+     * Reset new item to null
+     */
+    public void resetNewItem() {
+        newitem = null;
+    }
+
+    /**
+     * Get the new item
+     * 
+     * @return a DrawItem
+     */
+    public DrawItem getNewItem() {
+        return newitem;
+    }
+
+    /**
+     * Update the properties of the selected item or select properties
+     * of the selected item if dropper is enabled
      */
     public void updateSelectedItem() {
         if (this.getSelected() != -1 && controller.getDropperDisabled()) {
@@ -424,23 +449,6 @@ public class CanvasView {
                 this.setSelected(drawings.indexOf(drawing));
             }
         }
-    }
-
-    public void setNewItem(DrawItem item) {
-        if (newitem == null) {
-            this.addItemToCanvas(item);
-        } else {
-            this.updateCanvasItem(drawings.size() - 1, item);
-        }
-        newitem = item;
-    }
-
-    public void resetNewItem() {
-        newitem = null;
-    }
-
-    public DrawItem getNewItem() {
-        return newitem;
     }
 
     public void setDrawing(boolean isDrawing) {

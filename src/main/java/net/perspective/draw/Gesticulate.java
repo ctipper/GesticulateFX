@@ -207,29 +207,20 @@ public class Gesticulate extends GuiceApplication {
     }
 
     private void setUserProperties(Properties prefs) {
-        FileWriter out = null;
-        try {
-            out = new FileWriter(configDir() + "userprefs.properties");
+        try (FileWriter out = new FileWriter(configDir() + "userprefs.properties")) {
             prefs.store(out, "---User Preferences---");
         } catch (IOException ex) {
             logger.error(null, ex);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException ex) {
-                logger.error(null, ex);
-            }
         }
     }
 
     private Properties getUserProperties() {
         Properties props = new Properties();
-        try {
-            FileReader fin = new FileReader(configDir() + "userprefs.properties");
+        try (FileReader fin = new FileReader(configDir() + "userprefs.properties")) {
             props.load(fin);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ex) {
             logger.debug("userprefs.properties not found.");
-        } catch (IOException e) {
+        } catch (IOException ex) {
             logger.warn("userprefs.properties not correct.");
         }
         return props;
