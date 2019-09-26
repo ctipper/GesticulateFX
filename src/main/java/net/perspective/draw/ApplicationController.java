@@ -32,6 +32,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -87,7 +88,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty lineType;
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
-    private Dialog aboutBox;
+    private Dialog<ButtonType> aboutBox;
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
