@@ -179,6 +179,7 @@
 .color-picker, .color-picker:focused, .color-picker:selected {
     -fx-border-width: 0;
     -fx-border-color: transparent;
+    -fx-background-radius: 3pt;
 }
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
