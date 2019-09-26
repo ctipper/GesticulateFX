@@ -58,6 +58,9 @@
     -fx-border-style: none;
     -fx-background-radius: 0;
 
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
+
     -fx-background-color: #cccccc;
   
     -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
@@ -67,12 +70,16 @@
 
 .button:hover{
     -fx-background-color: #d8d8d8;
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
 }
 
 .button:pressed, .button:default:hover:pressed
 {
-  -fx-background-color: #cccccc;
-  -fx-text-fill: white;
+    -fx-text-fill: white;
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
 }
 
 .button:focused
@@ -86,14 +93,14 @@
 .button:disabled, .button:default:disabled
 {
     -fx-opacity: 0.4;
-    -fx-background-color: #cccccc;
     -fx-text-fill: #212121;
+    -fx-background-color: #cccccc;
 }
 
 .button:default
 {
-    -fx-background-color: #008287;
     -fx-text-fill: #ffffff;
+    -fx-background-color: #008287;
 }
 
 .button:default:hover{
@@ -112,6 +119,9 @@
     -fx-border-style: none;
     -fx-background-radius: 0;
 
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
+
     -fx-background-color: #cccccc;
   
     -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
@@ -127,18 +137,24 @@
 }
 
 .toggle-button:hover {
-    -fx-background-color: #d8d8d8;
     -fx-text-fill: black;
+    -fx-background-color: #d8d8d8;
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
 }
 
 .toggle-button:selected {
-    -fx-background-color: black;
     -fx-text-fill: white;
+    -fx-background-color: black;
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
 }
 
 .toggle-button:selected:hover {
-    -fx-background-color: #666;
     -fx-text-fill: white;
+    -fx-background-color: #666;
+    -fx-background-radius: 3pt;
+    -fx-border-radius: 3pt;
 }
 
 .toggle-button:disabled {
