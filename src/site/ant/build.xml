@@ -95,9 +95,11 @@
 
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
+         <arg value="--package-type"/>
+         <arg value="app-image"/>
          <arg value="--input"/>
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
-         <arg value="--output"/>
+         <arg value="--dest"/>
          <arg value="target/jfx"/>
          <arg value="--runtime-image"/>
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
@@ -115,7 +117,7 @@
          <arg value="category" />
          <arg value="public.app-category.graphics-design" />
          -->
-         <arg value="--mac-bundle-identifier" />
+         <arg value="--mac-package-identifier" />
          <arg value="net.perspective.draw.GesticulateFX" />
          <arg value="--app-version" />
          <arg value="${version.internal}" />
@@ -127,9 +129,11 @@
 
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="Windows" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
+         <arg value="--package-type"/>
+         <arg value="app-image"/>
          <arg value="--input" />
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
-         <arg value="--output"/>
+         <arg value="--dest"/>
          <arg value="target/jfx"/>
          <arg value="--runtime-image"/>
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
@@ -145,13 +149,11 @@
          <arg value="Copyright © 2019 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
-         <!--
-         <arg value="app-version" />
+         <arg value="--app-version" />
          <arg value="${version.internal}" />
-         -->
          <arg value="--icon"/>
          <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
-         <arg value="--temp-root" />
+         <arg value="--temp" />
          <arg value="target/jfx/temp" />
       </exec>
    </target>
@@ -164,11 +166,13 @@
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="--package-type"/>
          <arg value="dmg"/>
-         <arg value="--identifier"/>
+         <!--
+         <arg value="identifier"/>
          <arg value="${app.name}.app"/>
+         -->
          <arg value="--name"/>
          <arg value="${app.name}"/>
-         <arg value="--output"/>
+         <arg value="--dest"/>
          <arg value="target/jfx"/>
          <arg value="--app-image"/>
          <arg value="target/jfx/${app.name}.app"/>
