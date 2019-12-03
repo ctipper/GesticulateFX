@@ -95,7 +95,7 @@
 
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
-         <arg value="--package-type"/>
+         <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input"/>
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
@@ -129,7 +129,7 @@
 
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="Windows" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
-         <arg value="--package-type"/>
+         <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input" />
          <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
@@ -164,7 +164,7 @@
 
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
-         <arg value="--package-type"/>
+         <arg value="--type"/>
          <arg value="dmg"/>
          <!--
          <arg value="identifier"/>
