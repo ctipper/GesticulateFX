@@ -83,10 +83,6 @@
                     <groupId>xml-apis</groupId>
                     <artifactId>xml-apis</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>xml-apis</groupId>
-                    <artifactId>xml-apis-ext</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -94,12 +90,6 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-codec</artifactId>
             <version>${batik.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>xml-apis</groupId>
-                    <artifactId>xml-apis-ext</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -112,8 +102,12 @@
                     <artifactId>xml-apis</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>xml-apis</groupId>
-                    <artifactId>xml-apis-ext</artifactId>
+                    <groupId>javax.media</groupId>
+                    <artifactId>jai-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.media</groupId>
+                    <artifactId>jai-codec</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
