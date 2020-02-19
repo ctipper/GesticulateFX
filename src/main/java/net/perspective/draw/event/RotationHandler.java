@@ -30,7 +30,6 @@ public class RotationHandler implements Handler {
     private CanvasView view;
     @Inject
     private DrawAreaListener listener;
-    private CanvasPoint st, en;
 
     public void upEvent() {
         if (view.getSelected() != -1) {
@@ -66,8 +65,6 @@ public class RotationHandler implements Handler {
                 }
                 if ((item instanceof Figure) && ((Figure) item).getType().equals(FigureType.LINE)) {
                     if (item.contains(listener.getStartX(), listener.getStartY())) {
-                        st = ((Figure) item).getStart();
-                        en = ((Figure) item).getEnd();
                         view.setSelected(i);
                     }
                 }
@@ -118,8 +115,8 @@ public class RotationHandler implements Handler {
              * manipulate lines directly
              */
             if ((item instanceof Figure) && (((Figure) item).getType().equals(FigureType.LINE))) {
-                CanvasPoint s = this.rotate((Figure) item, st, theta);
-                CanvasPoint e = this.rotate((Figure) item, en, theta);
+                CanvasPoint s = this.rotate((Figure) item, item.getStart(), theta);
+                CanvasPoint e = this.rotate((Figure) item, item.getEnd(), theta);
                 item.setStart(s.x, s.y);
                 item.setEnd(e.x, e.y);
                 ((Figure) item).setPoints(DrawingType.LINE);
