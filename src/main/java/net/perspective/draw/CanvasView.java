@@ -181,75 +181,68 @@ public class CanvasView {
      * of the selected item if dropper is enabled
      */
     public void updateSelectedItem() {
-        if (this.getSelected() != -1 && controller.getDropperDisabled()) {
-            DrawItem item = drawings.get(this.getSelected());
-            item.updateProperties(drawarea);
+        if (this.getSelected() != -1) {
+            if (controller.getDropperDisabled()) {
+                DrawItem item = drawings.get(this.getSelected());
+                item.updateProperties(drawarea);
 
-            if ((item instanceof Figure) && !(item instanceof ArrowLine)) {
-                FigureType type = ((Figure) item).getType();
-                if (drawarea.getArrow() != ArrowType.NONE) {
-                    if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
-                        item = new ArrowLine((Figure) item);
+                if ((item instanceof Figure) && !(item instanceof ArrowLine)) {
+                    FigureType type = ((Figure) item).getType();
+                    if (drawarea.getArrow() != ArrowType.NONE) {
+                        if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
+                            item = new ArrowLine((Figure) item);
+                            item.updateProperties(drawarea);
+                        }
+                    }
+                } else if (item instanceof ArrowLine) {
+                    if (drawarea.getArrow() == ArrowType.NONE) {
+                        item = ((ArrowLine) item).getLine();
+                        item.updateProperties(drawarea);
+                    } else {
                         item.updateProperties(drawarea);
                     }
                 }
-            } else if (item instanceof ArrowLine) {
-                if (drawarea.getArrow() == ArrowType.NONE) {
-                    item = ((ArrowLine) item).getLine();
-                    item.updateProperties(drawarea);
-                } else {
-                    item.updateProperties(drawarea);
+
+                this.updateCanvasItem(this.getSelected(), item);
+            } else { // dropper enabled
+                DrawItem item = drawings.get(this.getSelected());
+                if (item instanceof Figure) {
+                    this.dropperTool((Figure) item);
                 }
             }
+        }
+    }
 
-            this.updateCanvasItem(this.getSelected(), item);
+    private void dropperTool(Figure item) {
+        String styleId;
+        /**
+         * get stroke
+         */
+        int strokeId = dropper.getStrokeIdBinary((BasicStroke) item.getStroke());
+        if (item instanceof ArrowLine) {
+            styleId = dropper.getStyleSelector((BasicStroke) item.getStroke(), ((ArrowLine) item).getArrowType());
+        } else {
+            styleId = dropper.getStyleSelector((BasicStroke) item.getStroke(), ArrowType.NONE);
         }
-        if (this.getSelected() != -1 && !controller.getDropperDisabled()) {
-            DrawItem item = drawings.get(this.getSelected());
-            if (item instanceof Figure && !(item instanceof ArrowLine)) {
-                /**
-                 * get stroke
-                 */
-                int strokeId = dropper.getStrokeIdBinary((BasicStroke) ((Figure) item).getStroke());
-                String styleId = dropper.getStyleSelector((BasicStroke) ((Figure) item).getStroke(), ArrowType.NONE);
-                logger.trace("strokeId " + strokeId + " styleId " + styleId);
-                /**
-                 * get colours
-                 */
-                Color color = ((Figure) item).getColor();
-                Color fillcolor = ((Figure) item).getFillColor();
-                logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
-                /**
-                 * update tool bar controls
-                 */
-                drawarea.setArrow(ArrowType.NONE);
-                controller.setStrokeCombo(strokeId);
-                controller.setStyleCombo(styleId);
-                controller.setColor(color);
-                controller.setFillColor(fillcolor);
-            } else if (item instanceof ArrowLine) {
-                /**
-                 * get stroke
-                 */
-                int strokeId = dropper.getStrokeIdBinary((BasicStroke) ((ArrowLine) item).getStroke());
-                String styleId = dropper.getStyleSelector((BasicStroke) ((ArrowLine) item).getStroke(), ((ArrowLine) item).getArrowType());
-                logger.trace("strokeId: " + strokeId + " styleId: " + styleId);
-                /**
-                 * get colours
-                 */
-                Color color = ((Figure) item).getColor();
-                Color fillcolor = ((Figure) item).getFillColor();
-                logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
-                /**
-                 * update tool bar controls
-                 */
-                drawarea.setArrow(((ArrowLine) item).getArrowType());
-                controller.setStrokeCombo(strokeId);
-                controller.setStyleCombo(styleId);
-                controller.setColor(color);
-                controller.setFillColor(fillcolor);
-            }
+        logger.trace("strokeId " + strokeId + " styleId " + styleId);
+        /**
+         * get colours
+         */
+        Color color = item.getColor();
+        Color fillcolor = item.getFillColor();
+        logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
+        /**
+         * update tool bar controls
+         */
+        if (item instanceof ArrowLine) {
+            drawarea.setArrow(((ArrowLine) item).getArrowType());
+        } else {
+            drawarea.setArrow(ArrowType.NONE);
         }
+        controller.setStrokeCombo(strokeId);
+        controller.setStyleCombo(styleId);
+        controller.setColor(color);
+        controller.setFillColor(fillcolor);
     }
 
     public void sendBackwards() {
