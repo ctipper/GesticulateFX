@@ -246,6 +246,9 @@ public class ApplicationController implements Initializable {
     private void handleHorizontalAction(ActionEvent e) {
         setLineButtonGraphic(false);
         setLineTypeProperty(false);
+        linebutton.setSelected(true);
+        setDrawAreaLineType();
+        drawarea.changeHandlers(HandlerType.FIGURE);
         tabbutton.fire();
     }
 
@@ -253,6 +256,9 @@ public class ApplicationController implements Initializable {
     private void handleVerticalAction(ActionEvent e) {
         setLineButtonGraphic(true);
         setLineTypeProperty(true);
+        linebutton.setSelected(true);
+        setDrawAreaLineType();
+        drawarea.changeHandlers(HandlerType.FIGURE);
         tabbutton.fire();
     }
 
