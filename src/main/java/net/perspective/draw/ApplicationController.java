@@ -164,6 +164,12 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
+    private void handleHexagonAction(ActionEvent e) {
+        drawarea.setDrawType(DrawingType.HEXAGON);
+        drawarea.changeHandlers(HandlerType.FIGURE);
+    }
+
+    @FXML
     private void handlePolygonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.POLYGON);
         drawarea.changeHandlers(HandlerType.SKETCH);

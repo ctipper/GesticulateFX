@@ -276,6 +276,11 @@
                         <SVGPath content="M0.000000 22.000000L21.917755 22.000000L10.958878 0.082245Z" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
+                <ToggleButton id="butthexagon" fx:id="hexagonbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleHexagonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <graphic>
+                        <SVGPath content="M6.104309 21.211700L17.895691 21.211700L23.791382 11.000000L17.895691 0.788300L6.104309 0.788300L0.208618 11.000000Z" styleClass="svgPath" fill="TRANSPARENT" />
+                    </graphic>
+                </ToggleButton>
                 <ToggleButton id="buttpolygon" fx:id="polygonbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
                     <graphic>
                         <SVGPath content="M18.730026 5.361984L13.638016 0.269974C4.441025 0.341461,-2.007233 9.368988,0.907990 18.092010C1.734192 20.564240,3.469177 22.750504,6.000000 23.184021C7.693268 23.474060,11.145432 21.827255,13.638016 20.638016C15.358093 19.817337,18.366989 18.381744,18.730026 18.092010C22.815308 14.831955,22.815308 8.622040,18.730026 5.361984Z" styleClass="svgPath" fill="TRANSPARENT" />
