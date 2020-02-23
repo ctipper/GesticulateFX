@@ -147,12 +147,16 @@ public class FigureItemBehaviour implements ItemBehaviours {
             case SQUARE:
             case CIRCLE:
             case TRIANGLE:
+            case HEXAGON:
                 switch (type) {
                     case SQUARE:
                         drawType = DrawingType.RECTANGLE;
                         break;
                     case CIRCLE:
                         drawType = DrawingType.ELLIPSE;
+                        break;
+                    case HEXAGON:
+                        drawType = DrawingType.HEXAGON;
                         break;
                     default:
                         drawType = DrawingType.ISOSCELES;

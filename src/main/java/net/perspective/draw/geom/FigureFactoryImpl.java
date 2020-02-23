@@ -36,6 +36,10 @@ public class FigureFactoryImpl implements FigureFactory {
             case ISOSCELES:
                 item = new Figure(FigureType.TRIANGLE);
                 break;
+            case HEXAGON:
+            case ISOHEX:
+                item = new Figure(FigureType.HEXAGON);
+                break;
             case POLYGON:
                 item = new Edge(FigureType.POLYGON);
                 break;

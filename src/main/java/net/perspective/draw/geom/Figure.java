@@ -169,6 +169,10 @@ public class Figure implements DrawItem, Serializable {
                 start = new CanvasPoint(points.get(1).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
                 break;
+            case HEXAGON:
+                start = new CanvasPoint(points.get(1).x, points.get(0).y);
+                end = new CanvasPoint(points.get(4).x, points.get(3).y);
+                break;
             default:
                 start = points.get(0);
                 end = points.get(points.size() - 1);
@@ -791,6 +795,7 @@ public class Figure implements DrawItem, Serializable {
             case CIRCLE:
             case SQUARE:
             case TRIANGLE:
+            case HEXAGON:
                 switch (contains) {
                     case TL:
                         p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
@@ -830,6 +835,7 @@ public class Figure implements DrawItem, Serializable {
             case SQUARE:
             case CIRCLE:
             case TRIANGLE:
+            case HEXAGON:
                 // determine average dimension
                 double width = Math.abs(start.x - end.x);
                 double height = Math.abs(start.y - end.y);
@@ -883,6 +889,7 @@ public class Figure implements DrawItem, Serializable {
             case SQUARE:
             case CIRCLE:
             case TRIANGLE:
+            case HEXAGON:
                 // determine average dimension
                 double width = Math.abs(start.x - end.x);
                 double height = Math.abs(start.y - end.y);

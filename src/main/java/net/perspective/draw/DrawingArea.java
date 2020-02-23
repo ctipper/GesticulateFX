@@ -361,6 +361,11 @@ public class DrawingArea {
                 case ISOSCELES:
                     type = DrawingType.TRIANGLE;
                     break;
+                case HEXAGON:
+                    type = DrawingType.ISOHEX;
+                    break;
+                case ISOHEX:
+                    break;
                 default:
                     break;
 

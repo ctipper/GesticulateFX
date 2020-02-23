@@ -22,7 +22,7 @@ public class FigurePointFactory implements PointFactory {
     public List<CanvasPoint> createPoints(DrawingType description, double... coords) {
         List<CanvasPoint> points;
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 0.0;
-        CanvasPoint p0, p1, p2, p3;
+        CanvasPoint p0, p1, p2, p3, p4, p5;
         double x, y, width, height, maxLength;
 
         if (coords.length > 0) {
@@ -102,6 +102,43 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p0);
                 points.add(p1);
                 points.add(p2);
+                break;
+            case HEXAGON:
+                points = new ArrayList<>();
+                width = endX - startX;
+                height = endY - startY;
+                p0 = new CanvasPoint(startX + width / 4, startY);
+                p1 = new CanvasPoint(startX, startY + height / 2);
+                p2 = new CanvasPoint(startX + width / 4, endY);
+                p3 = new CanvasPoint(startX + 3 * width / 4, endY);
+                p4 = new CanvasPoint(endX, startY + height / 2);
+                p5 = new CanvasPoint(startX + 3 * width / 4, startY);
+                points.add(p0);
+                points.add(p1);
+                points.add(p2);
+                points.add(p3);
+                points.add(p4);
+                points.add(p5);
+                break;
+            case ISOHEX:
+                points = new ArrayList<>();
+                width = endX - startX;
+                height = endY - startY;
+                maxLength = Math.max(Math.abs(width), Math.abs(height));
+                double w = maxLength * Math.signum(width);
+                double h = maxLength * Math.sin(Math.PI / 3) * Math.signum(height);
+                p0 = new CanvasPoint(startX + w / 4, startY);
+                p1 = new CanvasPoint(startX, startY + h / 2);
+                p2 = new CanvasPoint(startX + w / 4, startY + h);
+                p3 = new CanvasPoint(startX + 3 * w / 4, startY + h);
+                p4 = new CanvasPoint(startX + w, startY + h / 2);
+                p5 = new CanvasPoint(startX + 3 * w / 4, startY);
+                points.add(p0);
+                points.add(p1);
+                points.add(p2);
+                points.add(p3);
+                points.add(p4);
+                points.add(p5);
                 break;
             case SKETCH:
             case POLYGON:
