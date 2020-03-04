@@ -273,6 +273,11 @@ public class ApplicationController implements Initializable {
         aboutBox.showAndWait();
     }
 
+    /**
+     * Set the button graphic for line button
+     * 
+     * @param vertical
+     */
     private void setLineButtonGraphic(Boolean vertical) {
         SVGPath path = new SVGPath();
         if (vertical) {
@@ -284,6 +289,9 @@ public class ApplicationController implements Initializable {
         linebutton.setGraphic(path);
     }
 
+    /**
+     * Set the line type horizontal or vertical
+     */
     private void setDrawAreaLineType() {
         if (lineType.getValue()) {
             drawarea.setDrawType(DrawingType.VERTICAL);
@@ -292,10 +300,22 @@ public class ApplicationController implements Initializable {
         }
     }
 
+    /**
+     * Set the line type
+     * Choice is horizontal or vertical
+     * 
+     * @param type
+     */
     public void setLineTypeProperty(Boolean type) {
         lineType.setValue(type);
     }
 
+    /**
+     * Get the line type
+     * Choice is horizontal or vertical
+     * 
+     * @return
+     */
     public BooleanProperty getLineTypeProperty() {
         return lineType;
     }
@@ -495,6 +515,12 @@ public class ApplicationController implements Initializable {
         pickerFillColorProperty.setValue(fillcolor);
     }
 
+    /**
+     * Cell factory for alternate colour stroke combo items
+     * 
+     * @param alternate
+     * @return
+     */
     private Callback<ListView<String>, ListCell<String>> getCellFactory(Boolean alternate) {
         return (ListView<String> p) -> new ListCell<String>() {
 
@@ -518,6 +544,11 @@ public class ApplicationController implements Initializable {
         };
     }
 
+    /**
+     * Set the theme
+     * 
+     * @param isNightMode
+     */
     public void setAppStyles(Boolean isNightMode) {
         // set theme colours
         if (isNightMode) {
@@ -544,6 +575,12 @@ public class ApplicationController implements Initializable {
         stylecombobox.getSelectionModel().select(style);
     }
 
+    /**
+     * Initialise the controller
+     * 
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // set the theme to light
@@ -656,6 +693,9 @@ public class ApplicationController implements Initializable {
         this.prepareAboutBoxMenu();
     }
 
+    /**
+     * Set the slide menu transition
+     */
     private void prepareSlideMenuAnimation() {
         TranslateTransition openNav = new TranslateTransition(new Duration(350), appmenu);
         openNav.setToX(0);
@@ -670,6 +710,9 @@ public class ApplicationController implements Initializable {
         });
     }
 
+    /**
+     * Set the button panel slider transition
+     */
     private void prepareSlideTabButtonsAnimation() {
         TranslateTransition openTab = new TranslateTransition(new Duration(200), linepanel);
         double panelWidth = linepanel.getPrefTileWidth() + 2 * linepanel.getHgap() + 1;
@@ -685,6 +728,9 @@ public class ApplicationController implements Initializable {
         });
     }
 
+    /**
+     * Set the status text transition
+     */
     private void setupStatusTransition() {
         FadeTransition ft = new FadeTransition(Duration.millis(2000), statusbar);
         ft.setFromValue(1.0);
@@ -696,6 +742,9 @@ public class ApplicationController implements Initializable {
         );
     }
 
+    /**
+     * Add the about box to slider menu and configure
+     */
     private void prepareAboutBoxMenu() {
         RowConstraints con;
         int lastrow = 9;    // first empty row
@@ -744,12 +793,22 @@ public class ApplicationController implements Initializable {
         appmenu.addRow(lastrow + hboxes + 2, about, aboutmenu);
     }
 
+    /**
+     * Get one row constraints row
+     * 
+     * @return
+     */
     private RowConstraints getRow() {
         RowConstraints con = new RowConstraints();
         con.setPrefHeight(35.0);
         return con;        
     }
 
+    /**
+     * Define the about menu info icon
+     * 
+     * @return
+     */
     private Group getInfoGlyph() {
         SVGPath path_a = new SVGPath();
         path_a.setContent(SVG_INFO_A);
@@ -764,11 +823,24 @@ public class ApplicationController implements Initializable {
         return glyph;
     }
 
+    /**
+     * Provide a web colour for picker background CSS
+     * 
+     * @param c
+     * @return
+     */
     private String backgroundStyle(Color c) {
         return "-fx-background-color: " + toRGBCode(c) + ";";
     }
 
     // https://stackoverflow.com/a/18803814
+
+    /**
+     * Convert colour to web colour
+     * 
+     * @param color
+     * @return  web color
+     */
     public String toRGBCode(Color color) {
         return String.format( "#%02X%02X%02X",
             (int)( color.getRed() * 255 ),

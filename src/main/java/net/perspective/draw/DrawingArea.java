@@ -137,6 +137,9 @@ public class DrawingArea {
         });
     }
 
+    /**
+     * Clear the document and prepare the View
+     */
     public void prepareDrawing() {
         Integer strokeId = strokeStrings.indexOf(controller.getStrokeTypeProperty().getValue());
         String strokeStyle = controller.getStrokeStyleProperty().getValue();
@@ -148,23 +151,43 @@ public class DrawingArea {
         this.clear();
     }
 
+    /**
+     * Set the canvas colour
+     */
     public void setTheme(){
         canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
         view.setSelected(-1);
     }
 
+    /**
+     * Get the theme fill colour
+     * 
+     * @return
+     */
     public String getThemeFillColor() {
         return controller.getThemeFillColor();
     }
 
+    /**
+     * Get the theme background colour
+     * 
+     * @return
+     */
     public String getThemeBackgroundColor() {
         return controller.getThemeBackgroundColor();
     }
 
+    /**
+     * Get the theme accent colour
+     * @return
+     */
     public String getThemeAccentColor() {
         return controller.getThemeAccentColor();
     }
 
+    /**
+     * Clear the canvas
+     */
     public void clear() {
         ((Group) canvas.getRoot()).getChildren().clear();
     }
@@ -172,7 +195,7 @@ public class DrawingArea {
     /**
      * Set mouse and touch handlers
      * 
-     * @param handler 
+     * @param handler  HandlerType
      */
     public void changeHandlers(HandlerType handler) {
         this.oldhandlertype = this.handlertype;
@@ -200,10 +223,18 @@ public class DrawingArea {
         view.setDrawing(false);
     }
 
+    /**
+     * Return the mouse handler type
+     * 
+     * @return  HandlerType
+     */
     public HandlerType getHandlerType() {
         return handlertype;
     }
 
+    /**
+     * Reset the listeners
+     */
     public void resetContextHandlers() {
         canvas.setOnContextMenuRequested(null);
         canvas.setOnTouchStationary(null);
@@ -211,6 +242,9 @@ public class DrawingArea {
         canvas.setOnTouchPressed(null);
     }
 
+    /**
+     * Set the listeners
+     */
     public void setContextHandlers() {
         canvas.setOnContextMenuRequested(contextlistener);
         canvas.setOnTouchStationary(popuplistener);
@@ -218,6 +252,9 @@ public class DrawingArea {
         canvas.setOnTouchPressed(arealistener);
     }
 
+    /**
+     * Set up the context menu
+     */
     public void addContextMenu() {
         MenuItem menuCut = new MenuItem("Cut");
         menuCut.setOnAction((ActionEvent e) -> {
@@ -321,26 +358,47 @@ public class DrawingArea {
         setPlainStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     }
 
+    /**
+     * Get the scene
+     * 
+     * @return
+     */
     public SubScene getScene() {
         return canvas;
     }
 
+    /**
+     * Get the canvas root
+     * 
+     * @return
+     */
     public Group getCanvas() {
         return root;
     }
 
+    /**
+     * Get the View
+     * 
+     * @return
+     */
     public CanvasView getView() {
         return view;
     }
 
-    public void setDrawType(DrawingType s) {
-        drawtype = s;
+    /**
+     * Set the drawing mode
+     * 
+     * @param type  DrawType
+     */
+    public void setDrawType(DrawingType type) {
+        drawtype = type;
     }
 
     /**
-     * Get draw type
+     * Return the canvas drawing type and also allows a 
+     * correction if proportional drawing is enabled
      * 
-     * @return DrawingType
+     * @return 
      */
     public DrawingType getDrawType() {
         DrawingType type = this.drawtype;
@@ -374,84 +432,168 @@ public class DrawingArea {
         return type;
     }
 
+    /**
+     * Set the stroke type
+     * 
+     * @param stroke
+     */
     public void setStroke(java.awt.Stroke stroke) {
         this.stroke = stroke;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
 
+    /**
+     * Get the stroke type
+     * 
+     * @return
+     */
     public java.awt.Stroke getStroke() {
         return this.stroke;
     }
 
+    /**
+     * Set the basic stroke type
+     * This is used when drawing, usually un-tinted
+     * 
+     * @param stroke
+     */
     public void setPlainStroke(java.awt.Stroke stroke) {
         this.plainstroke = stroke;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
 
+    /**
+     * Get the basic stroke type
+     * 
+     * @return
+     */
     public java.awt.Stroke getPlainStroke() {
         return plainstroke;
     }
 
+    /**
+     * Set the stroke colour
+     * 
+     * @param color
+     */
     public void setColor(Color color) {
         this.color = color;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
 
+    /**
+     * Get the stroke colour
+     * 
+     * @return
+     */
     public Color getColor() {
         return this.color;
     }
 
+    /**
+     * Set the fill colour
+     * 
+     * @param fillcolor
+     */
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
 
+    /**
+     * Get the fill colour
+     * 
+     * @return
+     */
     public Color getFillColor() {
         return this.fillcolor;
     }
 
+    /**
+     * Set transparency 0-100
+     * 
+     * @param transparency
+     */
     public void setTransparency(int transparency) {
         this.transparency = transparency;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
 
+    /**
+     * Get the transparency
+     * 
+     * @return
+     */
     public int getTransparency() {
         return this.transparency;
     }
 
+    /**
+     * Set the arrow type
+     * 
+     * @param arrowtype
+     */
     public void setArrow(ArrowType arrowtype) {
         this.arrowtype = arrowtype;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
     
+    /**
+     * Get the arrow type
+     * 
+     * @return
+     */
     public ArrowType getArrow() {
         return arrowtype;
     }
 
+    /**
+     * Set arrow to NONE
+     */
     public void resetArrow() {
         arrowtype = ArrowType.NONE;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
     }
 
+    /**
+     * Define the drawing loup
+     * 
+     * @param marquee
+     */
     public void setMarquee(DrawItem marquee) {
         this.marquee = marquee;
     }
 
+    /**
+     * Get the drawing loup
+     * 
+     * @return
+     */
     public DrawItem getMarquee() {
         return marquee;
     }
 
+    /**
+     * Set multiple selection mode
+     * 
+     * @param multiSelectEnabled
+     */
     public void setMultiSelectEnabled(boolean multiSelectEnabled) {
         this.multiSelectEnabled = multiSelectEnabled;
     }
 
+    /**
+     * Get multiple selection mode
+     * 
+     * @return
+     */
     public boolean isMultiSelectEnabled() {
         return multiSelectEnabled;
     }

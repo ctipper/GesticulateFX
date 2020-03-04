@@ -59,11 +59,17 @@ public class CanvasView {
         this.drawingAnchors = new Group();
     }
 
+    /**
+     * Clear the drawings
+     */
     public void clearView() {
         this.deleteContents();
         this.setSelected(-1);
     }
 
+    /**
+     * Remove contents of drawing list
+     */
     public void deleteContents() {
         drawings.clear();
     }
@@ -207,13 +213,13 @@ public class CanvasView {
             } else { // dropper enabled
                 DrawItem item = drawings.get(this.getSelected());
                 if (item instanceof Figure) {
-                    this.dropperTool((Figure) item);
+                    this.figureDropper((Figure) item);
                 }
             }
         }
     }
 
-    private void dropperTool(Figure item) {
+    private void figureDropper(Figure item) {
         String styleId;
         /**
          * get stroke
@@ -232,7 +238,7 @@ public class CanvasView {
         Color fillcolor = item.getFillColor();
         logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
         /**
-         * update tool bar controls
+         * arrow type
          */
         if (item instanceof ArrowLine) {
             drawarea.setArrow(((ArrowLine) item).getArrowType());
@@ -245,6 +251,9 @@ public class CanvasView {
         controller.setFillColor(fillcolor);
     }
 
+    /**
+     * Send DrawItem backwards in drawing list
+     */
     public void sendBackwards() {
         if (this.getSelected() != -1) {
             DrawItem item = drawings.get(this.getSelected());
@@ -260,6 +269,9 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Send DrawItem to back of drawing list
+     */
     public void sendToBack() {
         if (this.getSelected() != -1) {
             DrawItem item = drawings.get(this.getSelected());
@@ -271,6 +283,9 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Bring DrawItem forwards in drawing list
+     */
     public void bringForwards() {
         if (this.getSelected() != -1) {
             DrawItem item = drawings.get(this.getSelected());
@@ -286,6 +301,9 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Bring DrawItem to front of drawing list
+     */
     public void bringToFront() {
         if (this.getSelected() != -1) {
             DrawItem item = drawings.get(this.getSelected());
@@ -297,6 +315,9 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Group selected DrawItems
+     */
     public void groupSelection() {
         if (this.isMultiSelected()) {
             Grouped groupedItem = new Grouped();
@@ -330,6 +351,9 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Explode selected DrawItem group
+     */
     public void ungroupSelection() {
         if (this.getSelected() != -1 && !this.isMultiSelected()) {
             int selected = this.getBottomSelected();
@@ -352,10 +376,20 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Get the list of draw items
+     * 
+     * @return
+     */
     public List<DrawItem> getDrawings() {
         return list;
     }
 
+    /**
+     * Return the first selected item
+     * 
+     * @param selection
+     */
     public void setSelected(int selection) {
         if (selection == -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
@@ -375,6 +409,11 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Move the selection and update drawing anchors
+     * 
+     * @param selection 
+     */
     public void moveSelection(int selection) {
         if (!drawingAnchors.getChildren().isEmpty()) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
@@ -388,6 +427,11 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Define the drawing anchors
+     * 
+     * @return  anchor group
+     */
     private Group getAnchors() {
         Group anchorGroup = new Group();
         for (Integer item : selectionIndex) {
@@ -396,6 +440,11 @@ public class CanvasView {
         return anchorGroup;
     }
 
+    /**
+     * Return the first selected item
+     * 
+     * @return index
+     */
     public int getSelected() {
         int i;
         if (!selectionIndex.isEmpty()) {
@@ -408,6 +457,12 @@ public class CanvasView {
         return i;
     }
 
+    /**
+     * Return the selection with the lowest index in the 
+     * drawing list
+     * 
+     * @return index
+     */
     public int getBottomSelected() {
         int i;
         if (!selectionIndex.isEmpty()) {
@@ -425,14 +480,29 @@ public class CanvasView {
         return i;
     }
 
+    /**
+     * Get the selection
+     * 
+     * @return
+     */
     public Set<Integer> getMultiSelection() {
         return selectionIndex;
     }
 
+    /**
+     * Are multiple items selected
+     * 
+     * @return
+     */
     public boolean isMultiSelected() {
         return selectionIndex.size() > 1;
     }
 
+    /**
+     * Select the DrawItems within given rectangular bounds
+     * 
+     * @param item 
+     */
     public void selectShapes(DrawItem item) {
         Shape b = item.bounds();
         Rectangle2D boundary = b.getBounds2D();
@@ -444,14 +514,29 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Set drawing mode
+     * 
+     * @param isDrawing
+     */
     public void setDrawing(boolean isDrawing) {
         this.isDrawing = isDrawing;
     }
 
+    /**
+     * Is drawing mode
+     * 
+     * @return
+     */
     public boolean isDrawing() {
         return isDrawing;
     }
 
+    /**
+     * Activate the marquee selection
+     * 
+     * @param isMarquee 
+     */
     public void setMarquee(boolean isMarquee) {
         this.isMarquee = isMarquee;
         if (isMarquee()) {
@@ -465,6 +550,11 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Marquee is drawing
+     * 
+     * @return 
+     */
     public boolean isMarquee() {
         return isMarquee;
     }
