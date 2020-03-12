@@ -14,7 +14,7 @@ import net.perspective.draw.geom.ArrowType;
 
 /**
  *
- * @author Christopher G D Tipper
+ * @author ctipper
  */
 
 public class Dropper {
@@ -214,6 +214,13 @@ public class Dropper {
         return styleId;
     }
 
+    /**
+     * Convert List to float array 
+     * see {@link java.awt.BasicStroke#getDashArray()}
+     * 
+     * @param items
+     * @return 
+     */
     private float[] getDashes(java.util.List<Float> items) {
         float[] value;
         value = new float[4];
@@ -226,6 +233,13 @@ public class Dropper {
         return value;
     }
 
+    /**
+     * Compare two sets of dash arrays
+     * 
+     * @param a  float array
+     * @param b  float array
+     * @return 
+     */
     private boolean compareDashes(float[] a, float[] b) {
         if (a.length != b.length)
             return false;

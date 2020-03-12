@@ -833,13 +833,13 @@ public class ApplicationController implements Initializable {
         return "-fx-background-color: " + toRGBCode(c) + ";";
     }
 
-    // https://stackoverflow.com/a/18803814
-
     /**
-     * Convert colour to web colour
+     * Convert {@link javafx.scene.paint.Color} colour to web colour
+     * 
+     * @see <a href="https://stackoverflow.com/a/18803814">https://stackoverflow.com/a/18803814</a>
      * 
      * @param color
-     * @return  web color
+     * @return  web colour
      */
     public String toRGBCode(Color color) {
         return String.format( "#%02X%02X%02X",

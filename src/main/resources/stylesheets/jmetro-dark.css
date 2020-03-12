@@ -58,8 +58,8 @@
     -fx-border-color: #3a3a3a;
     -fx-border-style: none;
 
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 
     -fx-background-color: #212121;
   
@@ -71,16 +71,16 @@
 .button:hover{
     -fx-background-color: #3a3a3a;
     -fx-border-color: #3a3a3a;
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 }
 
 .button:pressed, .button:default:hover:pressed
 {
     -fx-text-fill: #d8d8d8;
     -fx-background-color: #212121;
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 }
 
 .button:focused
@@ -119,8 +119,8 @@
     -fx-border-style: none;
     -fx-border-color: #3a3a3a;
 
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 
     -fx-background-color: #212121;
   
@@ -139,22 +139,22 @@
 .toggle-button:hover {
     -fx-text-fill: #d8d8d8;
     -fx-background-color: #3a3a3a;
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 }
 
 .toggle-button:selected {
     -fx-text-fill: #d8d8d8;
     -fx-background-color: #3a3a3a;
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 }
 
 .toggle-button:selected:hover {
     -fx-text-fill: #d8d8d8;
     -fx-background-color: #3a3a3a;
-    -fx-background-radius: 3pt;
-    -fx-border-radius: 3pt;
+    -fx-background-radius: 2pt;
+    -fx-border-radius: 2pt;
 }
 .toggle-button:disabled {
     -fx-opacity: -fx-disabled-opacity;
