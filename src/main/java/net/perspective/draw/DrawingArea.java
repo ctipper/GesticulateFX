@@ -179,6 +179,7 @@ public class DrawingArea {
 
     /**
      * Get the theme accent colour
+     * 
      * @return
      */
     public String getThemeAccentColor() {

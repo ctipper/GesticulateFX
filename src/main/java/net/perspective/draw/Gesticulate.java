@@ -110,7 +110,7 @@ public class Gesticulate extends GuiceApplication {
         drawarea.init(pane.getWidth(), pane.getHeight());
 
         // set the theme from user preferences
-        if (Boolean.parseBoolean(userPrefs.getProperty("nightMode"))) {
+        if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
             controller.getThemeProperty().setValue(true); // non default value triggers event
         } else {
             controller.setAppStyles(false);
@@ -164,7 +164,7 @@ public class Gesticulate extends GuiceApplication {
 
     @Override
     public void stop() {
-        userPrefs.setProperty("nightMode", controller.getThemeProperty().getValue().toString());
+        userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
         setUserPreferences(userPrefs);
         logger.trace("set user preferences");
         Platform.exit();

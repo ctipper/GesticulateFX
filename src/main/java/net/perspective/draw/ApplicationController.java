@@ -547,11 +547,11 @@ public class ApplicationController implements Initializable {
     /**
      * Set the theme
      * 
-     * @param isNightMode
+     * @param isDarkMode
      */
-    public void setAppStyles(Boolean isNightMode) {
+    public void setAppStyles(Boolean isDarkMode) {
         // set theme colours
-        if (isNightMode) {
+        if (isDarkMode) {
             themeFillColor.setValue("#1d1d1d");
             themeBackgroundColor.setValue("#3a3a3a");
             themeAccentColor.setValue("#c0c481");
@@ -564,12 +564,12 @@ public class ApplicationController implements Initializable {
         drawarea.setTheme();
         // reset combo boxes
         String stroke = strokecombobox.getSelectionModel().getSelectedItem();
-        Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(isNightMode);
+        Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(isDarkMode);
         strokecombobox.setButtonCell(strokeCellFactory.call(null));
         strokecombobox.setCellFactory(strokeCellFactory);
         strokecombobox.getSelectionModel().select(stroke);
         String style = stylecombobox.getSelectionModel().getSelectedItem();
-        Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory(isNightMode);
+        Callback<ListView<String>, ListCell<String>> styleCellFactory = getCellFactory(isDarkMode);
         stylecombobox.setButtonCell(styleCellFactory.call(null));
         stylecombobox.setCellFactory(styleCellFactory);
         stylecombobox.getSelectionModel().select(style);
