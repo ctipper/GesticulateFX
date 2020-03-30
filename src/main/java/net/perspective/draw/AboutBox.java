@@ -70,7 +70,7 @@ public class AboutBox extends Dialog<ButtonType> {
             aboutLabel[3], aboutLabel[4], aboutLabel[5]);
         pane.setAlignment(Pos.CENTER);
         this.getDialogPane().setContent(pane);
-        this.getDialogPane().setPrefWidth(270);
+        this.getDialogPane().setPrefWidth(300);
         this.setResizable(false);
     }
 }
