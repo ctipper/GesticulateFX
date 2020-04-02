@@ -201,7 +201,7 @@ public class Gesticulate extends GuiceApplication {
             prefs = getUserProperties();
         } else {
             // create preferences
-            prefs.setProperty("nightMode", "false");
+            prefs.setProperty("darkTheme", "false");
         }
         return prefs;
     }
