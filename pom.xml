@@ -40,6 +40,12 @@
             <version>${javafx.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>13</version>
+        </dependency>
+
         <!-- Guice -->
 
         <dependency>
@@ -214,7 +220,7 @@
                 </executions>
                 <configuration>
                     <executable>${env.JAVA_HOME}/bin/java</executable>
-                    <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml net.perspective.draw.Gesticulate</commandlineArgs>
+                    <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing net.perspective.draw.Gesticulate</commandlineArgs>
                 </configuration>
             </plugin>
 

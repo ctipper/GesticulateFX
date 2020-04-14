@@ -11,6 +11,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +19,7 @@ import javafx.stage.FileChooser;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.ReadInFunnel;
@@ -36,6 +38,8 @@ public class ShareUtils {
     @Inject private Gesticulate application;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
+    private ImageLoadWorker imageLoader;
+    private List<File> imageFiles;
     private File canvasfile;
     private final double margin;
     public final ExecutorService executor;
@@ -53,7 +57,62 @@ public class ShareUtils {
         return canvasfile;
     }
 
-    public File chooseCanvas() {
+    /**
+     * Set image file array
+     * 
+     * @param imageFiles the imageFiles to set
+     */
+    public void setImageFiles(List<File> imageFiles) {
+        this.imageFiles = imageFiles;
+    }
+
+    /**
+     * Get image file array
+     * 
+     * @return the imageFiles
+     */
+    public List<File> getImageFiles() {
+        return imageFiles;
+    }
+
+    /**
+     * Open file chooser for images
+     * 
+     * @return
+     */
+    public List<File> chooseImages() {
+        FileChooser chooser = new FileChooser();
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        chooser.setInitialDirectory(userDirectory);
+        chooser.setTitle("Choose Pictures...");
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("All Documents", "*.*"));
+        List<File> result = chooser.showOpenMultipleDialog​(application.getStage());
+        if (result == null) {
+            return null;
+        }
+        return result;
+    }
+
+    /**
+     * Load images
+     */
+    public void readPictures() {
+        this.setImageFiles(this.chooseImages());
+        if (this.getImageFiles() != null) {
+            imageLoader = new ImageLoadWorker();
+            controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+            controller.setProgressIndeterminate();
+            executor.submit(imageLoader);
+        }
+        controller.setSelectionMode();
+    }
+
+public File chooseCanvas() {
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);

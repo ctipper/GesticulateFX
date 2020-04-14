@@ -516,6 +516,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Set selection mode
+     */
+    public void setSelectionMode() {
+        // selection mode by default
+        this.selectbutton.setSelected(true);
+        drawarea.changeHandlers(HandlerType.SELECTION);
+    }
+
+    /**
      * Cell factory for alternate colour stroke combo items
      * 
      * @param alternate

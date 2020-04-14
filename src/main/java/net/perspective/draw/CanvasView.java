@@ -15,6 +15,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -37,8 +38,9 @@ public class CanvasView {
     private ApplicationController controller;
     @Inject
     private Dropper dropper;
-    private final java.util.List<DrawItem> list;
+    private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
+    private final List<ImageItem> images;
     private DrawItem newitem;
     private final Set<Integer> selectionIndex;
     private Group drawingAnchors;
@@ -54,6 +56,7 @@ public class CanvasView {
     @Inject
     public CanvasView() {
         this.list = new ArrayList<>();
+        this.images = new ArrayList<>();
         this.newitem = null;
         this.selectionIndex = new LinkedHashSet<>();
         this.drawingAnchors = new Group();
@@ -383,6 +386,76 @@ public class CanvasView {
      */
     public List<DrawItem> getDrawings() {
         return list;
+    }
+
+    /**
+     * Get the list of image items
+     * 
+     * @return
+     */
+    public List<ImageItem> getImageItems() {
+        return images;
+    }
+
+    /**
+     * Get the number of images
+     * 
+     * @return
+     */
+    public int getImageItemsSize() {
+        return images.size();
+    }
+
+    /**
+     * Add image to drawing and return image count
+     * 
+     * @param imageItem
+     * @return
+     */
+    public int setImageItem(ImageItem imageItem) {
+        images.add(imageItem);
+        return images.size() - 1;
+    }
+
+    /**
+     * Set image at index
+     * 
+     * @param i image index
+     * @param imageItem
+     */
+    public void setImageItem(int i, ImageItem imageItem) {
+        images.set(i, imageItem);
+    }
+
+    /**
+     * Add image to drawing
+     * 
+     * @param imageItem
+     */
+    public void addImageItem(ImageItem imageItem) {
+        images.add(imageItem);
+    }
+
+    /**
+     * Get image item at index
+     * 
+     * @param index
+     * @return
+     */
+    public ImageItem getImageItem(int index) {
+        return images.get(index);
+    }
+
+    /**
+     * Replace image at index
+     * 
+     * @param index
+     * @param image
+     */
+    public void replaceImage(int index, Image image) {
+        ImageItem item = images.get(index);
+        item.setImage(image);
+        images.set(index, item);
     }
 
     /**
