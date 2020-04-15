@@ -194,6 +194,7 @@ public class ReadInFunnel extends Task<Object> {
         public void make() throws IOException {
             try (ZipFile zf = new ZipFile(file)) {
                 updateProgress(0L, 3L);
+
                 ZipEntry ze = zf.getEntry("content/pictures.xml");
                 decoder = new XMLDecoder(new BufferedInputStream(zf.getInputStream(ze)));
                 decoder.setExceptionListener((Exception ex) -> {

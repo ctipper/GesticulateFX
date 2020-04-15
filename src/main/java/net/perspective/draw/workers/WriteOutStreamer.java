@@ -6,17 +6,20 @@
  */
 package net.perspective.draw.workers;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.ImageItem;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.ArrowLinePersistenceDelegate;
@@ -24,6 +27,8 @@ import net.perspective.draw.serialise.ArrowTypePersistenceDelegate;
 import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
 import net.perspective.draw.serialise.FigureTypePersistenceDelegate;
+import net.perspective.draw.serialise.InstantPersistenceDelegate;
+import net.perspective.draw.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,25 +103,42 @@ public class WriteOutStreamer extends Task<Object> {
         public void make() throws IOException {
             FileOutputStream fos = new FileOutputStream(file);
             zos = new ZipOutputStream(new BufferedOutputStream(fos));
+            updateProgress(0L, 3L);
 
             /**
-             * Create an empty pictures descriptor
+             * Create pictures descriptor
              */
-
-            updateProgress(0L, 2L);
             ZipEntry entry = new ZipEntry("content/pictures.xml");
-            List<Integer> pictures = new ArrayList<>();
             zos.putNextEntry(entry);
+
+            List<ImageItem> pictures = view.getImageItems();
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
+            encoder.setPersistenceDelegate(java.time.Instant.class,
+                new InstantPersistenceDelegate());
             encoder.writeObject(pictures);
             encoder.finished();
             zos.closeEntry();
-            updateProgress(1L, 2L);
+            updateProgress(1L, 3L);
 
             /**
-             * Don't write out images
+             * write out images
              */
+            for (int index = 0; index < pictures.size(); index++) {
+                BufferedImage img = SwingFXUtils.fromFXImage(pictures.get(index).getImage(), null); // retrieve image
+                entry = new ZipEntry("images/" + FileUtils.getImageName(index));
+                zos.putNextEntry(entry);
+                try {
+                    ImageIO.write(img, "png", zos);
+                } catch (IllegalArgumentException e) {
+                    logger.info("Image file blank.");
+                }
+                zos.closeEntry();
+            }
+            updateProgress(2L, 3L);
 
+            /**
+             * write out drawings
+             */
             entry = new ZipEntry("content/canvas.xml");
             zos.putNextEntry(entry);
 
@@ -139,7 +161,7 @@ public class WriteOutStreamer extends Task<Object> {
             encoder.writeObject(drawings);
             encoder.finished();
             zos.closeEntry();
-            updateProgress(2L, 2L);
+            updateProgress(3L, 3L);
         }
     }
 
