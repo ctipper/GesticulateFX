@@ -79,10 +79,10 @@ public class FileUtils {
      */
     public static String getImageName(int index) {
         StringBuilder name = new StringBuilder();
-        Formatter formatter = new Formatter(name);
-        formatter.format("%04d", index);
-        name.append(".png");
-        formatter.close();
+        try (Formatter formatter = new Formatter(name)) {
+            formatter.format("%04d", index);
+            name.append(".png");
+        }
         return name.insert(0, "Image").toString();
     }
 

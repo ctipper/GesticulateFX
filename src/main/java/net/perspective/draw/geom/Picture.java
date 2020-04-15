@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.embed.swing.SwingFXUtils;
 import javax.inject.Inject;
+import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.util.CanvasPoint;
@@ -40,6 +41,7 @@ import org.slf4j.LoggerFactory;
 public class Picture implements DrawItem, Serializable {
 
     @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
     protected int index;
     protected CanvasPoint start, end;   // start is _untransformed_ coord of TL, end is offset
     protected double scale;
@@ -330,16 +332,16 @@ public class Picture implements DrawItem, Serializable {
      */
     @Override
     public Node draw() {
-        java.awt.geom.AffineTransform at;
-
         ImageView iv = new ImageView();
-        Image image = drawarea.getView().getImageItem(index).getImage();
+        Image image = view.getImageItem(index).getImage();
         iv.setImage(image);
         iv.setFitWidth(image.getWidth() * scale);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
-        iv.setRotate(this.getAngle());
+        iv.setRotate(180 * this.getAngle() / Math.PI);
+        iv.setX(start.x);
+        iv.setY(start.y);
         return iv;
     }
 
@@ -352,11 +354,10 @@ public class Picture implements DrawItem, Serializable {
     public Node drawAnchors(DrawingArea drawarea) {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
-        CanvasPoint center = this.rotationCentre();
         anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
-        anchors.getChildren().add(this.anchor(drawarea, end.x, start.y));
-        anchors.getChildren().add(this.anchor(drawarea, start.x, end.y));
-        anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x + scale * end.x, start.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x, start.y + scale * end.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x + scale * end.x, start.y + scale * end.y));
         return anchors;
     }
 
@@ -388,7 +389,7 @@ public class Picture implements DrawItem, Serializable {
 
         try {
             // Retrieve image
-            Image image = drawarea.getView().getImageItem(index).getImage();
+            Image image = view.getImageItem(index).getImage();
             BufferedImage img = SwingFXUtils.fromFXImage(image, null);
             if (img == null) {
                 throw new NullPointerException();

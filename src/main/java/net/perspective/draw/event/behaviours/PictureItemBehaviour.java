@@ -105,11 +105,11 @@ public class PictureItemBehaviour implements ItemBehaviours {
         e = new CanvasPoint(st.x + en.x * scale, st.y + en.y * scale);
 
         // retrieve increment correctors
-        double[] flip = R2.flip(context.getQuad());
-        double cos_t = flip[0];
-        double sin_t = flip[1];
-        double csx_t = flip[2];
-        double csy_t = flip[3];
+        int[] flip = R2.flip(context.getQuad());
+        int cos_t = flip[0];
+        int sin_t = flip[1];
+        int csx_t = flip[2];
+        int csy_t = flip[3];
 
         // correct increment for angle of rotation
         @SuppressWarnings("deprecation")

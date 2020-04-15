@@ -17,9 +17,11 @@ import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
+import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
+import net.perspective.draw.geom.Picture;
 
 /**
  * 
@@ -28,18 +30,12 @@ import net.perspective.draw.geom.FigureFactory;
 
 public class SelectionHandler implements Handler {
 
-    @Inject
-    Injector injector;
-    @Inject
-    private DrawingArea drawarea;
-    @Inject
-    private CanvasView view;
-    @Inject
-    private DrawAreaListener listener;
-    @Inject
-    private BehaviourContext context;
-    @Inject
-    private FigureFactory figurefactory;
+    @Inject Injector injector;
+    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
+    @Inject private BehaviourContext context;
+    @Inject private FigureFactory figurefactory;
 
     // Following fields apply to marquee
     private static final BasicStroke marqueeStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -69,13 +65,21 @@ public class SelectionHandler implements Handler {
                 if (item instanceof Figure) {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                     boolean found = context.select(item, i);
-                    if (found) break;
-                } else if (item.contains(listener.getStartX(), listener.getStartY())) {
-                        // Rest of Shapes
-                        view.setSelected(i);
-                        context.setContainment(ContainsType.SHAPE);
+                    if (found) {
                         break;
                     }
+                } else if (item instanceof Picture) {
+                    context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
+                    boolean found = context.select(item, i);
+                    if (found) {
+                        break;
+                    }
+                } else if (item.contains(listener.getStartX(), listener.getStartY())) {
+                    // Rest of Shapes
+                    view.setSelected(i);
+                    context.setContainment(ContainsType.SHAPE);
+                    break;
+                }
                 i--;
             } while (i >= 0);
             if (context.getContainment().equals(ContainsType.NONE) && (!view.isMultiSelected() || !drawarea.isMultiSelectEnabled())) {
@@ -92,6 +96,9 @@ public class SelectionHandler implements Handler {
                 DrawItem item = view.getDrawings().get(selection);
                 if (item instanceof Figure) {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                    context.alter(item, xinc, yinc);
+                } else if (item instanceof Picture) {
+                    context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
                     context.alter(item, xinc, yinc);
                 } else {
                     // Rest of shapes

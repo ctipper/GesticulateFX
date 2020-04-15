@@ -45,7 +45,8 @@ public class RotationHandler implements Handler {
             do {
                 DrawItem item = drawings.get(i);
                 if ((item instanceof Figure) && !(((Figure) item).getType().equals(FigureType.LINE))
-                    || (item instanceof Grouped)) {
+                        || (item instanceof Grouped)
+                        || (item instanceof Picture)) {
                     if (getRegion(item.getTop()[0]).contains(listener.getStartX(), listener.getStartY())) {
                         view.setSelected(i);
                         break;
@@ -84,7 +85,8 @@ public class RotationHandler implements Handler {
             A = B = new CanvasPoint(1, 1);
 
             if ((item instanceof Figure)
-                    || (item instanceof Grouped)) {
+                    || (item instanceof Grouped)
+                    || (item instanceof Picture)) {
                 A = new CanvasPoint(listener.getStartX() - centre.x, listener.getStartY() - centre.y);
                 B = new CanvasPoint(listener.getTempX() - centre.x, listener.getTempY() - centre.y);
             }
@@ -100,7 +102,8 @@ public class RotationHandler implements Handler {
             double theta = Math.atan2(sin_t, cos_t);
 
             if (((item instanceof Figure) && (!((Figure) item).getType().equals(FigureType.LINE)))
-                    || (item instanceof Grouped)) {
+                    || (item instanceof Grouped)
+                    || (item instanceof Picture)) {
                 item.setAngle(angle + theta);
                 // normalise angle
                 angle = item.getAngle();

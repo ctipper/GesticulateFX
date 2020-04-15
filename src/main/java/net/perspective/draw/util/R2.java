@@ -45,18 +45,19 @@ public class R2 {
 
     /**
      * orientation increments the constants are
-     * aligned with { cos_t, sin_t }
+     * aligned with { cos_t, sin_t, csx_t, csy_t }
      * 
      * @see net.perspective.draw.event.behaviour.FigureItemBehaviour.java#alterItem()
+     * also @see net.perspective.draw.event.behaviour.PictureItemBehaviour.java#alterItem()
      */
 
-    static double[] flip1 = { 0, 1 };
+    static int[] flip1 = {  0,  1,  1, -1 };
 
-    static double[] flip2 = { 1, 0 };
+    static int[] flip2 = {  1,  0,  1,  1 };
 
-    static double[] flip3 = { 0, -1 };
+    static int[] flip3 = {  0, -1, -1,  1 };
 
-    static double[] flip4 = { -1, 0 };
+    static int[] flip4 = { -1,  0, -1, -1 };
 
     /**
      * Determine vertex quadrant
@@ -144,8 +145,8 @@ public class R2 {
      * @param quad
      * @return a numeric pair
      */
-    public static double[] flip(int quad) {
-        double[] flip;
+    public static int[] flip(int quad) {
+        int[] flip;
         switch (quad) {
             case 0:
                 flip = flip1;
