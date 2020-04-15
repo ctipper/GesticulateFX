@@ -77,6 +77,7 @@ public class ReadInFunnel extends Task<Object> {
         logger.info("Open completed.");
         Platform.runLater(() -> {
             if (success) {
+                drawarea.prepareDrawing();
                 for (ImageItem picture : pictures) {
                     int index = view.setImageItem(picture);
                 }

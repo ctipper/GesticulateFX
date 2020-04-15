@@ -40,18 +40,12 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 @Singleton
 public class DrawingArea {
 
-    @Inject
-    private Injector injector;
-    @Inject
-    private CanvasView view;
-    @Inject
-    private ApplicationController controller;
-    @Inject
-    private DrawAreaListener listener;
-    @Inject
-    private CanvasTransferHandler transferhandler;
-    @Inject
-    private Dropper dropper;
+    @Inject private Injector injector;
+    @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
+    @Inject private DrawAreaListener listener;
+    @Inject private CanvasTransferHandler transferhandler;
+    @Inject private Dropper dropper;
     private SubScene canvas;
     private Group root;
 

@@ -335,13 +335,13 @@ public class Picture implements DrawItem, Serializable {
         ImageView iv = new ImageView();
         Image image = view.getImageItem(index).getImage();
         iv.setImage(image);
-        iv.setFitWidth(image.getWidth() * scale);
+        iv.setFitWidth(image.getWidth() * Math.abs(scale));
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
         iv.setRotate(180 * this.getAngle() / Math.PI);
-        iv.setX(start.x);
-        iv.setY(start.y);
+        iv.setX(start.x + (scale >= 0 ? 0 : end.x * scale ));
+        iv.setY(start.y + (scale >= 0 ? 0 : end.y * scale ));
         return iv;
     }
 
