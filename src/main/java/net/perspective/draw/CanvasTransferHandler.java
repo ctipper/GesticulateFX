@@ -6,12 +6,17 @@
  */
 package net.perspective.draw;
 
+import com.google.inject.Injector;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import javax.inject.Inject;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Grouped;
+import net.perspective.draw.geom.Picture;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 public class CanvasTransferHandler {
 
+    @Inject private Injector injector;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
@@ -53,6 +59,7 @@ public class CanvasTransferHandler {
                     item = (DrawItem) t.getTransferData(dataFlavor);
                     // add item to Canvas
                     item.moveShape(shift, shift);
+                    item = checkDrawings(item);
                     drawarea.getView().appendItemToCanvas(item);
                 }
                 shift = shift + 20.0;
@@ -101,6 +108,28 @@ public class CanvasTransferHandler {
             }
         }
         return false;
+    }
+
+    private DrawItem checkDrawings(DrawItem drawing) {
+        if (drawing instanceof Grouped) {
+            DrawItem item = new Grouped();
+            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
+                ((Grouped) item).addShape(checkDrawings(shape));
+            }
+            drawing = item;
+        }
+
+        if (drawing instanceof Picture) {
+            DrawItem item = injector.getInstance(Picture.class);
+            try {
+                BeanUtils.copyProperties(item, drawing);
+                drawing = item;
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                logger.trace(ex.getMessage());
+            }
+        }
+        
+        return drawing;
     }
 
 }
