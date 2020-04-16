@@ -38,6 +38,7 @@ import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.ReadInFunnel;
@@ -263,6 +264,7 @@ public class Gesticulate extends GuiceApplication {
             bind(ShareUtils.class);
             bind(ReadInFunnel.class);
             bind(WriteOutStreamer.class);
+            bind(ImageLoadWorker.class);
             bind(PDFWorker.class);
             bind(SVGWorker.class);
             bind(PNGWorker.class);

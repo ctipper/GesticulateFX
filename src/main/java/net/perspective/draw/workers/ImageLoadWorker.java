@@ -6,10 +6,12 @@
  */
 package net.perspective.draw.workers;
 
+import com.google.inject.Injector;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -29,29 +31,30 @@ import org.slf4j.LoggerFactory;
 public class ImageLoadWorker extends Task<Object> {
 
     private List<Image> images;
+    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
     @Inject private ShareUtils share;
-    private final List<File> imageFiles;
+    private List<File> imageFiles;
     private double shift;
     private boolean success;
-    private final double pageWidth;      // canvas width pixels
-    private final double pageHeight;     // canvas height pixels
+    private double pageWidth;      // canvas width pixels
+    private double pageHeight;     // canvas height pixels
 
     private static final Logger logger = LoggerFactory.getLogger(ImageLoadWorker.class.getName());
 
     @Inject
     public ImageLoadWorker() {
-        this.imageFiles = share.getImageFiles();
         this.shift = 20.0;
         success = false;
-        pageWidth = drawarea.getScene().getWidth();
-        pageHeight = drawarea.getScene().getHeight();
     }
 
     @Override
     protected Object call() throws Exception {
+        pageWidth = drawarea.getScene().getWidth();
+        pageHeight = drawarea.getScene().getHeight();
+        this.imageFiles = share.getImageFiles();
         return new ImageLoader();
     }
 
@@ -61,14 +64,15 @@ public class ImageLoadWorker extends Task<Object> {
         Platform.runLater(() -> {
             if (!images.isEmpty()) {
                 for (Image image : images) {
-                    Picture picture = new Picture(shift, shift);
+                    Picture picture = injector.getInstance(Picture.class);
+                    picture.setStart(shift, shift);
                     ImageItem item = new ImageItem(image);
                     item.setFormat(FileUtils.getExtension(imageFiles.get(images.indexOf(image))));
                     int index = view.setImageItem(item);
                     double width = (double) image.getWidth();
                     double height = (double) image.getHeight();
                     double scale = getScale(width, height);
-                    logger.trace("Image relative scale: {0}", scale);
+                    logger.trace("Image relative scale: {}", scale);
                     picture.setImage(index, width, height);
                     picture.setScale(scale);
                     view.setNewItem(picture);
@@ -76,6 +80,7 @@ public class ImageLoadWorker extends Task<Object> {
                     shift = shift + 10.0;
                 }
             }
+            share.setImageFiles(null);
         });
         CompletableFuture.runAsync(() -> {
             try {

@@ -31,7 +31,7 @@
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,javafx-swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -44,7 +44,7 @@
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods;${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,javafx-swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>

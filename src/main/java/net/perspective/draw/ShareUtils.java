@@ -87,11 +87,9 @@ public class ShareUtils {
         chooser.setInitialDirectory(userDirectory);
         chooser.setTitle("Choose Pictures...");
         chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
                 new FileChooser.ExtensionFilter("All Documents", "*.*"));
-        List<File> result = chooser.showOpenMultipleDialog​(application.getStage());
+        List<File> result = chooser.showOpenMultipleDialog(application.getStage());
         if (result == null) {
             return null;
         }
@@ -102,9 +100,8 @@ public class ShareUtils {
      * Load images
      */
     public void readPictures() {
-        this.setImageFiles(this.chooseImages());
         if (this.getImageFiles() != null) {
-            imageLoader = new ImageLoadWorker();
+            imageLoader = injector.getInstance(ImageLoadWorker.class);
             controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
             controller.setProgressIndeterminate();
             executor.submit(imageLoader);
