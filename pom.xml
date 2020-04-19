@@ -16,9 +16,9 @@
     </organization>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>14</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>13.0.2</javafx.version>
+        <javafx.version>14.0.1</javafx.version>
         <slf4j.version>1.7.30</slf4j.version>
         <log4j.version>2.13.1</log4j.version>
         <batik.version>1.12</batik.version>
