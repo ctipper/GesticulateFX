@@ -13,7 +13,11 @@ import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.DrawingType;
-import net.perspective.draw.geom.*;
+import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigureType;
+import net.perspective.draw.geom.Grouped;
+import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
 

@@ -6,7 +6,10 @@
  */
 package net.perspective.draw;
 
-import javafx.geometry.*;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -16,7 +19,7 @@ import javafx.scene.layout.GridPane;
 
 /**
  *
- * @author Christopher G D Tipper
+ * @author ctipper
  */
 
 public class AboutBox extends Dialog<ButtonType> {

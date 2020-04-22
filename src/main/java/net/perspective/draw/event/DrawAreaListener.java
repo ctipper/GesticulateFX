@@ -7,7 +7,10 @@
 package net.perspective.draw.event;
 
 import javafx.scene.SubScene;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

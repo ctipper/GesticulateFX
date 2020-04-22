@@ -11,7 +11,11 @@ import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.DrawingType;
-import net.perspective.draw.geom.*;
+import net.perspective.draw.geom.ArrowLine;
+import net.perspective.draw.geom.ArrowType;
+import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigureFactory;
+import net.perspective.draw.geom.FigureFactoryImpl;
 
 /**
  * 

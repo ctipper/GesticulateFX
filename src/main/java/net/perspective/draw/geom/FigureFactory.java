@@ -16,4 +16,5 @@ import net.perspective.draw.enums.DrawingType;
 public interface FigureFactory {
 
     Figure createFigure(DrawingType drawType);
+
 }

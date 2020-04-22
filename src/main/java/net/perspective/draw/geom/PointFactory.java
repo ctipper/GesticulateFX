@@ -19,4 +19,5 @@ import net.perspective.draw.util.CanvasPoint;
 public interface PointFactory {
 
     public List<CanvasPoint> createPoints(DrawingType description, double... coords);
+
 }

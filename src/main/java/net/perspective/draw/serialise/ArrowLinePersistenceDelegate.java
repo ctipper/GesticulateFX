@@ -14,8 +14,9 @@ import net.perspective.draw.geom.ArrowLine;
 
 /**
  *
- * @author Christopher G D Tipper
+ * @author ctipper
  */
+
 public class ArrowLinePersistenceDelegate extends DefaultPersistenceDelegate {
 
     @Override
