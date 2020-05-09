@@ -58,6 +58,15 @@ public class BehaviourContext {
     }
 
     /**
+     * Activate the strategy's hover behaviour
+     * 
+     * @param item  a {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void hover(DrawItem item) {
+        strategy.hoverItem(this, item);
+    }
+
+    /**
      * Activate the strategy's alter behaviour
      * 
      * @param item  a {@link net.perspective.draw.geom.DrawItem}

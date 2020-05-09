@@ -44,11 +44,14 @@ public class DrawAreaListener {
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             mouseDown(event);
         });
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
-            mouseDragged(event);
+        canvas.addEventHandler(MouseEvent.MOUSE_MOVED, (MouseEvent event) -> {
+            mouseHover(event);
         });
         canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             mouseClicked(event);
+        });
+        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, (MouseEvent event) -> {
+            mouseDragged(event);
         });
         canvas.addEventHandler(TouchEvent.TOUCH_RELEASED, (TouchEvent event) -> {
             touchEnd(event);
@@ -83,6 +86,12 @@ public class DrawAreaListener {
         this.rightbutton = MouseButton.SECONDARY == me.getButton();
         this.doubleclick = me.getClickCount() > 1 && MouseButton.PRIMARY == me.getButton();
         // click handler here
+    }
+
+    protected void mouseHover(MouseEvent me) {
+        tempX = me.getX();
+        tempY = me.getY();
+        handler.hoverEvent();
     }
 
     protected void mouseDragged(MouseEvent me) {

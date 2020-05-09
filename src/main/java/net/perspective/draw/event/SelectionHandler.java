@@ -9,18 +9,22 @@ package net.perspective.draw.event;
 import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.util.List;
+import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
+import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
+import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 
 /**
@@ -33,6 +37,7 @@ public class SelectionHandler implements Handler {
     @Inject Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     @Inject private DrawAreaListener listener;
     @Inject private BehaviourContext context;
     @Inject private FigureFactory figurefactory;
@@ -42,6 +47,7 @@ public class SelectionHandler implements Handler {
     private static final Color marqueeColor = Color.rgb(204, 102, 255);         // Light blue
     private static final Color fillColor = Color.rgb(48, 96, 255);              // Dark blue
 
+    @Override
     public void upEvent() {
         if (view.isMarquee()) {
             view.setMarquee(false);
@@ -55,6 +61,7 @@ public class SelectionHandler implements Handler {
         }
     }
 
+    @Override
     public void downEvent() {
         List<DrawItem> drawings = view.getDrawings();
         if (!drawings.isEmpty() && !listener.getRightClick()) {
@@ -88,6 +95,30 @@ public class SelectionHandler implements Handler {
         }
     }
 
+    @Override
+    public void hoverEvent() {
+        if (view.getSelected() != -1) {
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            if (item instanceof Figure) {
+                context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
+                context.hover(item);
+            } else if (item instanceof Picture) {
+                context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
+                context.hover(item);
+            } else if (item instanceof Grouped) {
+                context.setBehaviour(injector.getInstance(GroupedItemBehaviour.class));
+                context.hover(item);
+            }
+        } else {
+            if (controller.getDropperDisabled()) {
+                drawarea.getScene().setCursor(Cursor.DEFAULT);
+            } else {
+                drawarea.getScene().setCursor(Cursor.HAND);
+            }
+        }
+    }
+
+    @Override
     public void dragEvent() {
         if (view.getSelected() != -1) {
             double xinc = listener.getTempX() - listener.getStartX();

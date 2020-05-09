@@ -9,11 +9,14 @@ package net.perspective.draw.event;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.geom.ArrowLine;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
@@ -35,12 +38,14 @@ public class RotationHandler implements Handler {
     @Inject
     private DrawAreaListener listener;
 
+    @Override
     public void upEvent() {
         if (view.getSelected() != -1) {
             view.updateSelectedItem();
         }
     }
 
+    @Override
     public void downEvent() {
         view.setSelected(-1);
         List<DrawItem> drawings = view.getDrawings();
@@ -78,6 +83,35 @@ public class RotationHandler implements Handler {
         }
     }
 
+    @Override
+    public void hoverEvent() {
+        if (view.getSelected() != -1) {
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            if (!(item instanceof Edge) && !(item instanceof ArrowLine)) {
+                if (getRegion(item.getTop()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (getRegion(item.getDown()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (getRegion(item.getBottom()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (getRegion(item.getUp()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (item.contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                } else {
+                    drawarea.getScene().setCursor(Cursor.DEFAULT);
+                }
+            } else if (item.contains(listener.getTempX(), listener.getTempY())) {
+                drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+            } else {
+                drawarea.getScene().setCursor(Cursor.DEFAULT);
+            }
+        } else {
+            drawarea.getScene().setCursor(Cursor.DEFAULT);
+        }
+    }
+
+    @Override
     public void dragEvent() {
         CanvasPoint A, B;
 

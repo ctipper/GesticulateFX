@@ -36,6 +36,7 @@ public class SketchHandler implements Handler  {
         this.figurefactory = new FigureFactoryImpl();
     }
 
+    @Override
     public void upEvent() {
         view.setDrawing(false);
         if (view.getNewItem() == null || drawarea.getDrawType() == null) {
@@ -49,6 +50,7 @@ public class SketchHandler implements Handler  {
         view.resetNewItem();
     }
 
+    @Override
     public void downEvent() {
         // Create figure
         Figure item = figurefactory.createFigure(drawarea.getDrawType());
@@ -65,6 +67,11 @@ public class SketchHandler implements Handler  {
         view.setDrawing(true);
     }
 
+    @Override
+    public void hoverEvent() {
+    }
+
+    @Override
     public void dragEvent() {
         // Create Figure
         Figure item = (Figure) view.getNewItem();

@@ -63,12 +63,14 @@
 }
 .toolbutton {
     -fx-background-color: #eeeeee;
+    -fx-border-color: #eeeeee;
     -fx-min-width: 44;
     -fx-min-height: 32;
     -fx-padding: 5 11 5 11;
 }
 .toolbutton:selected, .toolbutton:selected:hover {
     -fx-background-color: #c8c8c8;
+    -fx-border-color: #c8c8c8;
 }
 .formatbutton {
     -fx-background-color: white;

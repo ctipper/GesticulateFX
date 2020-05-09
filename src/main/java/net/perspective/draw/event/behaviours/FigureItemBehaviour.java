@@ -7,8 +7,10 @@
 package net.perspective.draw.event.behaviours;
 
 import java.util.List;
+import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.DrawAreaListener;
@@ -26,9 +28,11 @@ import net.perspective.draw.util.V2;
 
 public class FigureItemBehaviour implements ItemBehaviours {
 
+    @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
+    @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;
         int quad;
@@ -119,6 +123,61 @@ public class FigureItemBehaviour implements ItemBehaviours {
         return found;
     }
 
+    @Override
+    public void hoverItem(BehaviourContext context, DrawItem item) {
+        switch (((Figure) item).getType()) {
+            case LINE:
+                CanvasPoint st = item.getStart();
+                CanvasPoint en = item.getEnd();
+                if (context.getRegion(st).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(en).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (item.contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                } else {
+                    drawarea.getScene().setCursor(Cursor.DEFAULT);
+                }
+                break;
+            case SQUARE:
+            case CIRCLE:
+            case TRIANGLE:
+            case HEXAGON:
+                List<CanvasPoint[]> edges = ((Figure) item).getEdges();
+                if (context.getRegion(item.getTop()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(item.getDown()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(item.getBottom()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(item.getUp()[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(edges.get(0)[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(edges.get(1)[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(edges.get(2)[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (context.getRegion(edges.get(3)[0]).contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+                } else if (item.contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                } else {
+                    drawarea.getScene().setCursor(Cursor.DEFAULT);
+                }
+                break;
+            default:
+                // All other Figures
+                if (item.contains(listener.getTempX(), listener.getTempY())) {
+                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                } else {
+                    drawarea.getScene().setCursor(Cursor.DEFAULT);
+                }
+                break;
+        }
+    }
+
+    @Override
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         ContainsType contains;
         DrawingType drawType;

@@ -7,8 +7,10 @@
 package net.perspective.draw.event.behaviours;
 
 import java.util.List;
+import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.geom.DrawItem;
@@ -24,9 +26,11 @@ import net.perspective.draw.util.V2;
 
 public class PictureItemBehaviour implements ItemBehaviours {
 
+    @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
+    @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;
         int quad;
@@ -73,6 +77,24 @@ public class PictureItemBehaviour implements ItemBehaviours {
         return found;
     }
 
+    @Override
+    public void hoverItem(BehaviourContext context, DrawItem item) {
+        if (context.getRegion(item.getTop()[0]).contains(listener.getTempX(), listener.getTempY())) {
+            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+        } else if (context.getRegion(item.getDown()[0]).contains(listener.getTempX(), listener.getTempY())) {
+            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+        } else if (context.getRegion(item.getBottom()[0]).contains(listener.getTempX(), listener.getTempY())) {
+            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+        } else if (context.getRegion(item.getUp()[0]).contains(listener.getTempX(), listener.getTempY())) {
+            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
+        } else if (item.contains(listener.getTempX(), listener.getTempY())) {
+            drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+        } else {
+            drawarea.getScene().setCursor(Cursor.DEFAULT);
+        }
+    }
+
+    @Override
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         ContainsType contains;
         CanvasPoint s, e, end;

@@ -17,5 +17,7 @@ public interface Handler {
 
     void downEvent();
 
+    void hoverEvent();
+
     void dragEvent();
 }

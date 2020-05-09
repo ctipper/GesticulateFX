@@ -17,6 +17,8 @@ public interface ItemBehaviours {
 
     boolean selectItem(BehaviourContext context, DrawItem item, int index);
 
+    void hoverItem(BehaviourContext context, DrawItem item);
+
     void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc);
 
 }

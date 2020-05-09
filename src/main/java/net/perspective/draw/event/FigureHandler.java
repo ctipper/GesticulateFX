@@ -36,6 +36,7 @@ public class FigureHandler implements Handler {
         this.figurefactory = new FigureFactoryImpl();
     }
 
+    @Override
     public void upEvent() {
         view.setDrawing(false);
         if (view.getNewItem() == null || drawarea.getDrawType() == null) {
@@ -49,9 +50,15 @@ public class FigureHandler implements Handler {
         view.resetNewItem();
     }
 
+    @Override
     public void downEvent() {
     }
 
+    @Override
+    public void hoverEvent() {
+    }
+
+    @Override
     public void dragEvent() {
         DrawingType drawType = drawarea.getDrawType();
         // Create figure

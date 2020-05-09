@@ -16,7 +16,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,6 +34,7 @@ import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
+import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Picture;
@@ -46,6 +46,8 @@ import net.perspective.draw.workers.SVGWorker;
 import net.perspective.draw.workers.WriteOutStreamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 /**
  * 
@@ -259,6 +261,7 @@ public class Gesticulate extends GuiceApplication {
             bind(BehaviourContext.class);
             bind(FigureItemBehaviour.class);
             bind(PictureItemBehaviour.class);
+            bind(GroupedItemBehaviour.class);
             bind(FigureFactory.class).to(FigureFactoryImpl.class);
             bind(Picture.class);
             bind(ShareUtils.class);
