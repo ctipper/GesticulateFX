@@ -873,7 +873,8 @@ public class Figure implements DrawItem, Serializable {
         }
         // transform real and virtual vertices
         for (CanvasPoint[] p : vert) {
-            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };            vertices.add(point);
+            CanvasPoint[] point = new CanvasPoint[] { this.getTransform(p[0]), this.getTransform(p[1]) };
+            vertices.add(point);
         }
         return vertices;
     }

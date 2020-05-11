@@ -131,6 +131,9 @@ public class SelectionHandler implements Handler {
                 } else if (item instanceof Picture) {
                     context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
                     context.alter(item, xinc, yinc);
+                } else if (item instanceof Grouped) {
+                    context.setBehaviour(injector.getInstance(GroupedItemBehaviour.class));
+                    context.alter(item, xinc, yinc);
                 } else {
                     // Rest of shapes
                     item.moveShape(xinc, yinc);

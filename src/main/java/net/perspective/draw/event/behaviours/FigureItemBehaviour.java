@@ -134,7 +134,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else if (context.getRegion(en).contains(listener.getTempX(), listener.getTempY())) {
                     drawarea.getScene().setCursor(Cursor.CROSSHAIR);
                 } else if (item.contains(listener.getTempX(), listener.getTempY())) {
-                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                    drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }
@@ -161,7 +161,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else if (context.getRegion(edges.get(3)[0]).contains(listener.getTempX(), listener.getTempY())) {
                     drawarea.getScene().setCursor(Cursor.CROSSHAIR);
                 } else if (item.contains(listener.getTempX(), listener.getTempY())) {
-                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                    drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }
@@ -169,7 +169,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             default:
                 // All other Figures
                 if (item.contains(listener.getTempX(), listener.getTempY())) {
-                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+                    drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }
@@ -200,6 +200,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     ((Figure) item).setPoints(DrawingType.LINE);
                     ((Figure) item).setPath();
                 } else {
+                    drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
                     item.moveShape(xinc, yinc);
                 }
                 break;
@@ -221,6 +222,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         drawType = DrawingType.ISOSCELES;
                         break;
                 }
+
                 /**
                  * Permute containment selectors
                  */
@@ -236,6 +238,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else {
                     contains = context.getContainment();
                 }
+
                 /**
                  * Adjust for quadrant of TL vertex
                  */
@@ -250,13 +253,18 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         context.setQuad(quad);
                     }
                 }
+
+                // retrieve increment correctors
                 int[] flip = R2.flip(context.getQuad());
                 int cos_t = flip[0];
                 int sin_t = flip[1];
+
+                // correct increment for angle of rotation
                 @SuppressWarnings("deprecation")
                 double t = item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0);
                 double delta = V2.norm_angle(4 * t + 2 * Math.PI) / 2;
                 CanvasPoint inc = V2.rot(xinc, yinc, t - delta);
+
                 switch (contains) {
                     case TL:
                         st.translate((cos_t - sin_t) * inc.x, (cos_t + sin_t) * inc.y);
@@ -323,6 +331,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         ((Figure) item).setPath();
                         break;
                     case SHAPE:
+                        drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
                         item.moveShape(xinc, yinc);
                         break;
                     case NONE:
@@ -332,6 +341,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 break;
             default:
                 // All other Figures
+                drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
                 item.moveShape(xinc, yinc);
                 break;
         }

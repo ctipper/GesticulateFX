@@ -88,7 +88,7 @@ public class PictureItemBehaviour implements ItemBehaviours {
         } else if (context.getRegion(item.getUp()[0]).contains(listener.getTempX(), listener.getTempY())) {
             drawarea.getScene().setCursor(Cursor.CROSSHAIR);
         } else if (item.contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().setCursor(Cursor.OPEN_HAND);
+            drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
         } else {
             drawarea.getScene().setCursor(Cursor.DEFAULT);
         }
@@ -104,6 +104,9 @@ public class PictureItemBehaviour implements ItemBehaviours {
         CanvasPoint en = item.getEnd();
         double scale = ((Picture) item).getScale();
 
+        /**
+         * Permute containment selectors
+         */
         if (!context.getContainment().equals(ContainsType.SHAPE)
             && !context.getContainment().equals(ContainsType.NONE)) {
             if (context.getContains().equals(ContainsType.NONE)) {
@@ -209,6 +212,7 @@ public class PictureItemBehaviour implements ItemBehaviours {
                 ((Picture) item).setScale(V2.L2(end) * sgn / V2.L2(en));
                 break;
             case SHAPE:
+                drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
                 item.moveShape(xinc, yinc);
                 break;
             case NONE:
