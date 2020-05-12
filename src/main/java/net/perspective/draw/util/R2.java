@@ -84,6 +84,18 @@ public class R2 {
     }
 
     /**
+     * Determine vertex octant
+     * 
+     * @param vertex
+     * @param centre
+     * @return an integer index, see {@link net.perspective.draw.util.V2}
+     */
+    public static int octant(CanvasPoint vertex, CanvasPoint centre) {
+        double theta = V2.declination(vertex.x - centre.x, vertex.y - centre.y);
+        return V2.octet(theta);
+    }
+
+    /**
      * Permute vertex labels
      * 
      * @param contains

@@ -117,9 +117,9 @@ public class V2 {
 
     /**
      * Determine quadrant of an arc defined by angle
-     * 2 | 1
+     * 1 | 0
      * -----
-     * 3 | 4
+     * 2 | 3
      * @param angle
      * @return integer index
      */
@@ -144,29 +144,72 @@ public class V2 {
 
     /**
      * Determine quarter of an arc defined by angle
-     *  \2/
-     * 3 - 1
-     *  /4\
+     *  \1/
+     * 2 - 0
+     *  /3\
      * @param angle
      * @return integer index
      */
     public static int side(double angle) {
         int offset = -1;
         angle = V2.norm_angle(angle);
-        if ((angle >= Math.PI / 4) && (angle < 3 * Math.PI / 4)) {
+        if ((angle >= Math.PI/4) && (angle < 3 * Math.PI/4)) {
             offset = 0;
         }
-        if ((angle >= 3 * Math.PI / 4) && (angle < Math.PI)) {
+        if ((angle >= 3 * Math.PI/4) && (angle < Math.PI)) {
             offset = 1;
         }
-        if ((angle >= -Math.PI) && (angle < -3 * Math.PI / 4)) {
+        if ((angle >= -Math.PI) && (angle < -3 * Math.PI/4)) {
             offset = 1;
         }
-        if ((angle >= -3 * Math.PI / 4) && (angle < -Math.PI / 4)) {
+        if ((angle >= -3 * Math.PI/4) && (angle < -Math.PI/4)) {
             offset = 2;
         }
-        if ((angle >= -Math.PI / 4) && (angle < Math.PI / 4)) {
+        if ((angle >= -Math.PI/4) && (angle < Math.PI/4)) {
             offset = 3;
+        }
+        return offset;
+    }
+
+    /**
+     * Determine octant of an arc defined by angle
+     * 3  2  1
+     *   \ /
+     * 4  -  0
+     *   / \
+     * 5  6  7
+     * @param angle
+     * @return integer index
+     */
+    public static int octet(double angle) {
+        int offset = -1;
+        angle = V2.norm_angle(angle);
+        if ((angle >= -Math.PI/8) && (angle < Math.PI/8)) {
+            offset = 0;
+        }
+        if ((angle >= Math.PI/8) && (angle < 3 * Math.PI/8)) {
+            offset = 1;
+        }
+        if ((angle >= 3 * Math.PI/8) && (angle < 5 * Math.PI/8)) {
+            offset = 2;
+        }
+        if ((angle >= 5 * Math.PI/8) && (angle < 7 * Math.PI/8)) {
+            offset = 3;
+        }
+        if ((angle >= 7 * Math.PI/8) && (angle < Math.PI)) {
+            offset = 4;
+        }
+        if ((angle >= -Math.PI) && (angle < -7 * Math.PI/8)) {
+            offset = 4;
+        }
+        if ((angle >= -7 * Math.PI/8) && (angle < -5 * Math.PI/8)) {
+            offset = 5;
+        }
+        if ((angle >= -5 * Math.PI/8) && (angle < -3 * Math.PI/8)) {
+            offset = 6;
+        }
+        if ((angle >= -3 * Math.PI/8) && (angle < -Math.PI/8)) {
+            offset = 7;
         }
         return offset;
     }

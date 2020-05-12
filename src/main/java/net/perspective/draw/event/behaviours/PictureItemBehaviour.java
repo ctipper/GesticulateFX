@@ -79,18 +79,15 @@ public class PictureItemBehaviour implements ItemBehaviours {
 
     @Override
     public void hoverItem(BehaviourContext context, DrawItem item) {
-        if (context.getRegion(item.getTop()[0]).contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
-        } else if (context.getRegion(item.getDown()[0]).contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
-        } else if (context.getRegion(item.getBottom()[0]).contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
-        } else if (context.getRegion(item.getUp()[0]).contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().setCursor(Cursor.CROSSHAIR);
-        } else if (item.contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
-        } else {
-            drawarea.getScene().setCursor(Cursor.DEFAULT);
+        List<CanvasPoint[]> vertices = ((Picture) item).getVertices();
+        CanvasPoint centre = item.rotationCentre();
+        boolean found = this.switchVertices(context, vertices, centre);
+        if (!found) {
+            if (item.contains(listener.getTempX(), listener.getTempY())) {
+                drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
+            } else {
+                drawarea.getScene().setCursor(Cursor.DEFAULT);
+            }
         }
     }
 
@@ -220,5 +217,54 @@ public class PictureItemBehaviour implements ItemBehaviours {
                 break;
         }
     }
+
+    private boolean switchVertices(BehaviourContext context, List<CanvasPoint[]> vertices, CanvasPoint centre) {
+        boolean found = false;
+        int octa;
+        for (CanvasPoint[] vertex : vertices) {
+            if (context.getRegion(vertex[0]).contains(listener.getTempX(), listener.getTempY())) {
+                octa = R2.octant(vertex[1], centre);
+                switch (octa) {
+                    case 0:
+                        drawarea.getScene().setCursor(Cursor.E_RESIZE);
+                        found = true;
+                        break;
+                    case 1:
+                        drawarea.getScene().setCursor(Cursor.NE_RESIZE);
+                        found = true;
+                        break;
+                    case 2:
+                        drawarea.getScene().setCursor(Cursor.N_RESIZE);
+                        found = true;
+                        break;
+                    case 3:
+                        drawarea.getScene().setCursor(Cursor.NW_RESIZE);
+                        found = true;
+                        break;
+                    case 4:
+                        drawarea.getScene().setCursor(Cursor.W_RESIZE);
+                        found = true;
+                        break;
+                    case 5:
+                        drawarea.getScene().setCursor(Cursor.SW_RESIZE);
+                        found = true;
+                        break;
+                    case 6:
+                        drawarea.getScene().setCursor(Cursor.S_RESIZE);
+                        found = true;
+                        break;
+                    case 7:
+                        drawarea.getScene().setCursor(Cursor.SE_RESIZE);
+                        found = true;
+                        break;
+                }
+            }
+            if (found) {
+                break;
+            }
+        }
+        return found;
+    }
+
 
 }
