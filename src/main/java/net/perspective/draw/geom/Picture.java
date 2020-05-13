@@ -342,6 +342,7 @@ public class Picture implements DrawItem, Serializable {
         iv.setRotate(180 * this.getAngle() / Math.PI);
         iv.setX(start.x + (scale >= 0 ? 0 : end.x * scale ));
         iv.setY(start.y + (scale >= 0 ? 0 : end.y * scale ));
+        iv.setCursor(javafx.scene.Cursor.OPEN_HAND);
         return iv;
     }
 

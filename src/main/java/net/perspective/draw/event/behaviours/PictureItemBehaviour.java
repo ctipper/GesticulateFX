@@ -84,7 +84,7 @@ public class PictureItemBehaviour implements ItemBehaviours {
         boolean found = this.switchVertices(context, vertices, centre);
         if (!found) {
             if (item.contains(listener.getTempX(), listener.getTempY())) {
-                drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
+                drawarea.getScene().setCursor(Cursor.OPEN_HAND);
             } else {
                 drawarea.getScene().setCursor(Cursor.DEFAULT);
             }

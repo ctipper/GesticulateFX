@@ -134,7 +134,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else if (context.getRegion(en).contains(listener.getTempX(), listener.getTempY())) {
                     drawarea.getScene().setCursor(Cursor.CROSSHAIR);
                 } else if (item.contains(listener.getTempX(), listener.getTempY())) {
-                    drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
+                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }
@@ -150,7 +150,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 found = found | this.switchVertices(context, edges, centre);
                 if (!found) {
                     if (item.contains(listener.getTempX(), listener.getTempY())) {
-                        drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
+                        drawarea.getScene().setCursor(Cursor.OPEN_HAND);
                     } else {
                         drawarea.getScene().setCursor(Cursor.DEFAULT);
                     }
@@ -159,7 +159,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
             default:
                 // All other Figures
                 if (item.contains(listener.getTempX(), listener.getTempY())) {
-                    drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
+                    drawarea.getScene().setCursor(Cursor.OPEN_HAND);
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }

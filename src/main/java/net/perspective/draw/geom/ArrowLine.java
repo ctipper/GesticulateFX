@@ -239,6 +239,7 @@ public class ArrowLine extends Figure {
             fxpath_2.setFill(getColor());
             group.getChildren().add(fxpath_2);
         }
+        group.setCursor(javafx.scene.Cursor.OPEN_HAND);
         return group;
     }
 

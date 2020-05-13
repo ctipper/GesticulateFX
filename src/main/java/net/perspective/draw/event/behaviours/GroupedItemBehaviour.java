@@ -33,7 +33,7 @@ public class GroupedItemBehaviour implements ItemBehaviours {
 
     public void hoverItem(BehaviourContext context, DrawItem item) {
         if (item.contains(listener.getTempX(), listener.getTempY())) {
-            drawarea.getScene().getRoot().setCursor(Cursor.OPEN_HAND);
+            drawarea.getScene().setCursor(Cursor.OPEN_HAND);
         } else {
             drawarea.getScene().setCursor(Cursor.DEFAULT);
         }

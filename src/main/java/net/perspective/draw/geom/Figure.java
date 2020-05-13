@@ -21,6 +21,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -434,6 +435,7 @@ public class Figure implements DrawItem, Serializable {
                 ((double) getTransparency()) / 100);
             fxpath.setFill(alphafill);
         }
+        fxpath.setCursor(Cursor.OPEN_HAND);
         return fxpath;
     }
 
