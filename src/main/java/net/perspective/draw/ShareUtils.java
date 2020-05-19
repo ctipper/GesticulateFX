@@ -109,7 +109,7 @@ public class ShareUtils {
         controller.setSelectionMode();
     }
 
-public File chooseCanvas() {
+    public File chooseCanvas() {
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
         File userDirectory = new File(userDirectoryString);

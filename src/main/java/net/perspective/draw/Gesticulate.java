@@ -11,6 +11,8 @@ import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import java.awt.Desktop;
+import java.awt.desktop.OpenFilesEvent;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -71,6 +73,8 @@ public class Gesticulate extends GuiceApplication {
     private final int frameLeft = (int) (screenSize.getMaxX() - sceneWidth) / 3;
     private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
 
+    private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
     @Override
@@ -92,7 +96,7 @@ public class Gesticulate extends GuiceApplication {
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
 
-        primaryStage.setTitle("Gesticulate");
+        primaryStage.setTitle("GesticulateFX");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest((WindowEvent e) -> {
@@ -133,6 +137,12 @@ public class Gesticulate extends GuiceApplication {
         final String file = !args.isEmpty() ? args.get(0) : "";
         if (file.length() != 0) {
             share.loadCanvas(file);
+        }
+        if (MAC_OS_X) {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.setOpenFileHandler((OpenFilesEvent e) -> {
+                share.readCanvas(e.getFiles().get(0));
+            });
         }
     }
 
