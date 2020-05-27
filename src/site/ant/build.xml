@@ -28,6 +28,7 @@
          <arg value="--no-header-files"/>
          <arg value="--no-man-pages" />
          <arg value="--strip-debug" />
+         <arg value="--strip-native-commands" />
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
          <arg value="--add-modules" />
@@ -41,6 +42,7 @@
          <arg value="--no-header-files"/>
          <arg value="--no-man-pages" />
          <arg value="--strip-debug" />
+         <arg value="--strip-native-commands" />
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods;${javafx.path}/jmods" />
          <arg value="--add-modules" />
