@@ -26,7 +26,7 @@
  */
 
 .root{
-    -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-font-size: 14px;
 }
 
@@ -36,13 +36,13 @@
 
 .header{
     -fx-font-size: 42pt;
-    -fx-font-family: "San Francisco", "Segoe UI Light", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Light", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-text-fill: black;
 }
 
 .item-title{
     -fx-font-size: 11pt;
-    -fx-font-family: "San Francisco", "Segoe UI Semibold", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Semibold", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-text-fill: black;
     -fx-opacity: 0.6;
 }
@@ -63,7 +63,7 @@
 
     -fx-background-color: #cccccc;
   
-    -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: black;
 }
@@ -124,7 +124,7 @@
 
     -fx-background-color: #cccccc;
   
-    -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: black;
 }
@@ -347,7 +347,7 @@
     -fx-background-insets: 0;
     -fx-background-radius: 2;
     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /*  4 8 4 8 */
-    -fx-font-family: "San Francisco", "Segoe UI Semilight", "Segoe UI Light", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Semilight", "Segoe UI Light", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-opacity: .8;
 }
 
@@ -391,7 +391,7 @@
 .menu-item .label {
     -fx-padding: 0em 0.5em 0em 0em;
     -fx-text-fill: #212121;
-    -fx-font-family: "San Francisco", "Segoe UI Regular", Tahoma, sans-serif;
+    -fx-font-family: "SF Pro Text Medium", "Segoe UI Regular", Tahoma, sans-serif;
     -fx-font-size: 11pt;
 }
 
