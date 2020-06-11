@@ -45,6 +45,14 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
         Figure figure = (Figure) oldInstance;
         out.writeStatement(
                 new Statement(figure,
+                        "setStart",
+                        new Object[]{figure.getStart().getX(), figure.getStart().getY()}));
+        out.writeStatement(
+                new Statement(figure,
+                        "setEnd",
+                        new Object[]{figure.getEnd().getX(), figure.getEnd().getY()}));
+        out.writeStatement(
+                new Statement(figure,
                         "setColor",
                         new Object[]{figure.getAwtColor()}));
         out.writeStatement(
