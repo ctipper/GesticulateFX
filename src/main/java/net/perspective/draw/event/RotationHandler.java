@@ -13,7 +13,6 @@ import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
-import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.geom.ArrowLine;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Edge;
@@ -31,12 +30,9 @@ import net.perspective.draw.util.V2;
 
 public class RotationHandler implements Handler {
 
-    @Inject
-    private DrawingArea drawarea;
-    @Inject
-    private CanvasView view;
-    @Inject
-    private DrawAreaListener listener;
+    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
+    @Inject private DrawAreaListener listener;
 
     @Override
     public void upEvent() {
@@ -115,10 +111,9 @@ public class RotationHandler implements Handler {
     public void dragEvent() {
         CanvasPoint A, B;
 
-        int selection = view.getSelected();
-        if (selection != -1) {
+        if (view.getSelected() != -1) {
+            int selection = view.getSelected();
             DrawItem item = view.getDrawings().get(selection);
-            double angle = item.getAngle();
             CanvasPoint centre = item.rotationCentre();
             A = B = new CanvasPoint(1, 1);
 
@@ -139,30 +134,7 @@ public class RotationHandler implements Handler {
 
             double theta = Math.atan2(sin_t, cos_t);
 
-            if (((item instanceof Figure) && (!((Figure) item).getType().equals(FigureType.LINE)))
-                    || (item instanceof Grouped)
-                    || (item instanceof Picture)) {
-                item.setAngle(angle + theta);
-                // normalise angle
-                angle = item.getAngle();
-                if (angle > Math.PI) {
-                    item.setAngle(angle - 2 * Math.PI);
-                }
-                if (angle < -Math.PI) {
-                    item.setAngle(angle + 2 * Math.PI);
-                }
-            }
-            /**
-             * manipulate lines directly
-             */
-            if ((item instanceof Figure) && (((Figure) item).getType().equals(FigureType.LINE))) {
-                CanvasPoint s = this.rotate((Figure) item, item.getStart(), theta);
-                CanvasPoint e = this.rotate((Figure) item, item.getEnd(), theta);
-                item.setStart(s.x, s.y);
-                item.setEnd(e.x, e.y);
-                ((Figure) item).setPoints(DrawingType.LINE);
-                ((Figure) item).setPath();
-            }
+            drawarea.rotateTo(item, theta);
 
             item.updateProperties(drawarea);
             view.updateCanvasItem(selection, item);
@@ -182,26 +154,6 @@ public class RotationHandler implements Handler {
         Rectangle2D rect;
         rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
         return new Area(rect);
-    }
-
-    /**
-     * Rotate a point around figure axis by an angle
-     * 
-     * @param figure
-     * @param p
-     * @param angle
-     * @return 
-     */
-    protected CanvasPoint rotate(Figure figure, CanvasPoint p, double angle) {
-        CanvasPoint centre = figure.rotationCentre();
-        CanvasPoint point = new CanvasPoint(p.x, p.y);
-        point.translate(-centre.x, -centre.y);
-        if (angle != 0) {
-            // rotate point about centroid
-            point.rotate(angle);
-        }
-        point.translate(centre.x, centre.y);
-        return point;
     }
 
 }

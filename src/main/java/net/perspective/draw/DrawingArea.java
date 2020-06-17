@@ -28,9 +28,18 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
-import net.perspective.draw.event.*;
+import net.perspective.draw.event.DrawAreaListener;
+import net.perspective.draw.event.FigureHandler;
+import net.perspective.draw.event.RotationHandler;
+import net.perspective.draw.event.SelectionHandler;
+import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.geom.ArrowType;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigureType;
+import net.perspective.draw.geom.Grouped;
+import net.perspective.draw.geom.Picture;
+import net.perspective.draw.util.CanvasPoint;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
@@ -181,6 +190,24 @@ public class DrawingArea {
      */
     public String getThemeAccentColor() {
         return controller.getThemeAccentColor();
+    }
+
+    /**
+     * Get the scene
+     * 
+     * @return
+     */
+    public SubScene getScene() {
+        return canvas;
+    }
+
+    /**
+     * Get the canvas root
+     * 
+     * @return
+     */
+    public Group getCanvas() {
+        return root;
     }
 
     /**
@@ -357,30 +384,54 @@ public class DrawingArea {
     }
 
     /**
-     * Get the scene
-     * 
-     * @return
+     * Rotate given item by angle theta increment
+     *
+     * @param item DrawItem
+     * @param theta angle increment
      */
-    public SubScene getScene() {
-        return canvas;
+    public void rotateTo(DrawItem item, double theta) {
+        if (((item instanceof Figure) && (!((Figure) item).getType().equals(FigureType.LINE)))
+                || (item instanceof Grouped)
+                || (item instanceof Picture)) {
+            double angle = item.getAngle();
+            double zeta = angle + theta;
+            // normalise angle
+            if (zeta > Math.PI) {
+                item.setAngle(zeta - 2 * Math.PI);
+            } else if (zeta < -Math.PI) {
+                item.setAngle(zeta + 2 * Math.PI);
+            } else {
+                item.setAngle(zeta);
+            }
+        } else if (item instanceof Figure && ((Figure) item).getType().equals(FigureType.LINE)) {
+            // manipulate lines directly
+            CanvasPoint s = this.rotatePoint((Figure) item, item.getStart(), theta);
+            CanvasPoint e = this.rotatePoint((Figure) item, item.getEnd(), theta);
+            item.setStart(s.x, s.y);
+            item.setEnd(e.x, e.y);
+            ((Figure) item).setPoints(DrawingType.LINE);
+            ((Figure) item).setPath();
+        }
     }
 
     /**
-     * Get the canvas root
-     * 
+     * Rotate a point around figure axis by an angle
+     *
+     * @param figure
+     * @param p
+     * @param angle
      * @return
      */
-    public Group getCanvas() {
-        return root;
-    }
-
-    /**
-     * Get the View
-     * 
-     * @return
-     */
-    public CanvasView getView() {
-        return view;
+    protected CanvasPoint rotatePoint(Figure figure, CanvasPoint p, double angle) {
+        CanvasPoint centre = figure.rotationCentre();
+        CanvasPoint point = new CanvasPoint(p.x, p.y);
+        point.translate(-centre.x, -centre.y);
+        if (angle != 0) {
+            // rotate point about centroid
+            point.rotate(angle);
+        }
+        point.translate(centre.x, centre.y);
+        return point;
     }
 
     /**

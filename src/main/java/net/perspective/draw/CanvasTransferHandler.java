@@ -31,7 +31,7 @@ public class CanvasTransferHandler {
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
-    @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
     private double shift;
 
     public static int COPY = 1;
@@ -60,7 +60,7 @@ public class CanvasTransferHandler {
                     // add item to Canvas
                     item.moveShape(shift, shift);
                     item = checkDrawings(item);
-                    drawarea.getView().appendItemToCanvas(item);
+                    view.appendItemToCanvas(item);
                 }
                 shift = shift + 20.0;
                 logger.debug("Item added to canvas");
@@ -76,18 +76,18 @@ public class CanvasTransferHandler {
     }
 
     protected Transferable createTransferable() {
-        int selected = drawarea.getView().getSelected();
+        int selected = view.getSelected();
         if (selected == -1) {
             return null;
         }
-        DrawItem data = drawarea.getView().getDrawings().get(selected);
+        DrawItem data = view.getDrawings().get(selected);
         logger.trace("Item createTransferable");
         return new DrawItemTransferable(data);
     }
 
     protected void exportDone(Transferable data, int action) {
         if (action == MOVE) {
-            drawarea.getView().deleteSelectedItem();
+            view.deleteSelectedItem();
             logger.debug("Removed selected item");
             shift = 0;
         } else {
