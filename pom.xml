@@ -22,6 +22,7 @@
         <slf4j.version>1.7.30</slf4j.version>
         <log4j.version>2.13.1</log4j.version>
         <batik.version>1.12</batik.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -299,6 +300,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
+                    <skipTests>${skipTests}</skipTests>
                     <argLine>-XX:+ShowCodeDetailsInExceptionMessages</argLine>
                 </configuration>
             </plugin>
