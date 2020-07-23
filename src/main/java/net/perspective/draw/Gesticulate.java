@@ -194,12 +194,12 @@ public class Gesticulate extends GuiceApplication {
      */
     public String configDir() {
         AppDirs appDirs = AppDirsFactory.getInstance();
-        return appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true) + System.getProperty("file.separator");
+        return appDirs.getUserConfigDir("GesticulateFX", null, "ctipper", true) + System.getProperty("file.separator");
     }
 
     public void setUserPreferences(Properties prefs) {
         AppDirs appDirs = AppDirsFactory.getInstance();
-        Path paramPath = Paths.get(appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
+        Path paramPath = Paths.get(appDirs.getUserConfigDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
         if (Files.exists(paramPath, NOFOLLOW_LINKS)) {
             setUserProperties(prefs);
         } else {
@@ -212,7 +212,7 @@ public class Gesticulate extends GuiceApplication {
     public Properties getUserPreferences() {
         Properties prefs = new Properties();
         AppDirs appDirs = AppDirsFactory.getInstance();
-        Path paramPath = Paths.get(appDirs.getUserDataDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
+        Path paramPath = Paths.get(appDirs.getUserConfigDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
         if (Files.exists(paramPath, NOFOLLOW_LINKS)) {
             prefs = getUserProperties();
         } else {
