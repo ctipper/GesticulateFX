@@ -8,7 +8,7 @@
     <name>gesticulate-fx</name>
 
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <organization>
         <!-- Used as the 'Vendor' for JNLP generation -->
@@ -16,11 +16,11 @@
     </organization>
 
     <properties>
-        <java.version>14</java.version>
+        <java.version>15</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>14.0.2.1</javafx.version>
+        <javafx.version>15</javafx.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <log4j.version>2.13.1</log4j.version>
+        <log4j.version>2.13.3</log4j.version>
         <batik.version>1.12</batik.version>
         <skipTests>true</skipTests>
     </properties>
