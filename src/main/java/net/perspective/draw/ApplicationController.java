@@ -603,6 +603,7 @@ public class ApplicationController implements Initializable {
         this.themeFillColor = new SimpleStringProperty("lightgray");
         this.themeBackgroundColor = new SimpleStringProperty("white");
         this.themeAccentColor = new SimpleStringProperty("black");
+        this.prepareDarkModeOptions();
         this.checkTheme.selectedProperty().bindBidirectional(toggleTheme.selectedProperty());
         this.themeProperty = new SimpleBooleanProperty();
         this.themeProperty.bindBidirectional(this.checkTheme.selectedProperty());
@@ -759,10 +760,33 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Add dark mode option UI
+     */
+    private void prepareDarkModeOptions() {
+        checkTheme = new CheckBox();
+        checkTheme.setOnAction(this::handleModeChange);
+        checkTheme.setPrefHeight(20.0);
+        checkTheme.setFocusTraversable(false);
+        checkTheme.setMnemonicParsing(false);
+        toggleTheme = new ToggleButton();
+        toggleTheme.setText("Dark Theme");
+        toggleTheme.setOnAction(this::handleModeChange);
+        toggleTheme.setAlignment(Pos.CENTER_LEFT);
+        toggleTheme.getStyleClass().add("menuitem");
+        toggleTheme.setPrefWidth(150.0);
+        toggleTheme.setPrefHeight(20.0);
+        toggleTheme.setFocusTraversable(false);
+        toggleTheme.setMnemonicParsing(false);
+        appmenu.getRowConstraints().add(getRow());
+        appmenu.addRow(7, checkTheme, toggleTheme);
+        GridPane.setConstraints(checkTheme, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+        GridPane.setConstraints(toggleTheme, 1, 7, 1, 1, HPos.LEFT, VPos.BASELINE);
+    }
+
+    /**
      * Add the about box to slider menu and configure
      */
     private void prepareAboutBoxMenu() {
-        RowConstraints con;
         int lastrow = 9;    // first empty row
         int hboxes = 11;    // empty row count
         for (int i=0; i<hboxes; i++) {
@@ -870,9 +894,9 @@ public class ApplicationController implements Initializable {
     private ToggleButton selectbutton;
     @FXML
     private ToggleGroup toolToggles;
-    @FXML
+    // @FXML
     private CheckBox checkTheme;
-    @FXML
+    // @FXML
     private ToggleButton toggleTheme;
     @FXML
     private ColorPicker colorpicker;

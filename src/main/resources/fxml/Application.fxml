@@ -383,8 +383,10 @@
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <HBox focusTraversable="false" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
                 <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <!--
                 <CheckBox fx:id="checkTheme" focusTraversable="false" mnemonicParsing="false" text="" onAction="#handleModeChange" prefHeight="20.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="7" />
                 <ToggleButton fx:id="toggleTheme" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleModeChange" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Dark Theme" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                -->
             </children>
             <columnConstraints>
                 <ColumnConstraints />
@@ -398,7 +400,9 @@
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
+                <!--
                 <RowConstraints prefHeight="35.0" />
+                -->
             </rowConstraints>
         </GridPane>
     </children>
