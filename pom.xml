@@ -18,10 +18,10 @@
     <properties>
         <java.version>15</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>15</javafx.version>
+        <javafx.version>15.0.1</javafx.version>
         <slf4j.version>1.7.30</slf4j.version>
         <log4j.version>2.13.3</log4j.version>
-        <batik.version>1.12</batik.version>
+        <batik.version>1.13</batik.version>
         <skipTests>true</skipTests>
     </properties>
 

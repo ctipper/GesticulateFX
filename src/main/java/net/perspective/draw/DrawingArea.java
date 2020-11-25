@@ -451,6 +451,10 @@ public class DrawingArea {
      */
     public DrawingType getDrawType() {
         DrawingType type = this.drawtype;
+        // certain handlers set null for no draw
+        if (type == null) {
+            return null;
+        }
         if (controller.getOneToOneEnabled()) {
             switch (drawtype) {
                 case CIRCLE:
