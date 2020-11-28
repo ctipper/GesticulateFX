@@ -178,6 +178,15 @@ public class Gesticulate extends GuiceApplication {
         }
     }
 
+    /**
+     * Set the drawarea grid
+     * 
+     * @param gridEnabled 
+     */
+    public void drawGrid(boolean gridEnabled) {
+        drawarea.setGrid(gridEnabled);
+    }
+
     @Override
     public void stop() {
         userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());

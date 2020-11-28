@@ -88,6 +88,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty lineType;
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
+    private BooleanProperty gridProperty;
     private Dialog<ButtonType> aboutBox;
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
@@ -577,6 +578,7 @@ public class ApplicationController implements Initializable {
             themeAccentColor.setValue("black");
         }
         // alter draw area colour settings
+        drawarea.setDarkModeEnabled(isDarkMode);
         drawarea.setTheme();
         // reset combo boxes
         String stroke = strokecombobox.getSelectionModel().getSelectedItem();
@@ -614,6 +616,11 @@ public class ApplicationController implements Initializable {
             setAppStyles(newValue);
             // reset application stylesheets
             application.resetStylesheets(newValue);
+        });
+        this.gridProperty = new SimpleBooleanProperty();
+        this.gridProperty.bindBidirectional(this.checkGrid.selectedProperty());
+        this.gridProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            application.drawGrid(newValue);
         });
 
         // Initialize the sliding application menu
@@ -898,6 +905,8 @@ public class ApplicationController implements Initializable {
     private CheckBox checkTheme;
     // @FXML
     private ToggleButton toggleTheme;
+    @FXML
+    private CheckBox checkGrid;
     @FXML
     private ColorPicker colorpicker;
     @FXML

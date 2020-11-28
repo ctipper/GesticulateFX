@@ -67,6 +67,8 @@ public class DrawingArea {
     private int transparency;
     private ArrowType arrowtype;
     private DrawItem marquee;
+    private boolean gridVisible;
+    private boolean darkModeEnabled;
     private boolean multiSelectEnabled;
     private Transferable clipboard;
 
@@ -101,6 +103,7 @@ public class DrawingArea {
         this.addContextMenu();
         this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
+        this.gridVisible = false;
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type
@@ -613,6 +616,42 @@ public class DrawingArea {
         arrowtype = ArrowType.NONE;
         if (controller.getDropperDisabled())
             view.updateSelectedItem();
+    }
+
+    /**
+     * Show drawing grid
+     * 
+     * @param gridVisible
+     */
+    public void setGrid(boolean gridVisible) {
+        this.gridVisible = gridVisible;
+    }
+
+    /**
+     * Grid is visible
+     * 
+     * @return
+     */
+    public boolean isGridVisible() {
+        return gridVisible;
+    }
+
+    /**
+     * Set dark mode enabled
+     * 
+     * @param darkModeEnabled 
+     */
+    public void setDarkModeEnabled(boolean darkModeEnabled) {
+        this.darkModeEnabled = darkModeEnabled;
+    }
+
+    /**
+     * Is dark mode enabled
+     * 
+     * @return 
+     */
+    public boolean isDarkModeEnabled() {
+        return darkModeEnabled;
     }
 
     /**
