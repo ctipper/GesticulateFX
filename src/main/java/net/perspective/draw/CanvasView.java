@@ -614,7 +614,7 @@ public class CanvasView {
      */
     public void setMarquee(boolean isMarquee) {
         this.isMarquee = isMarquee;
-        if (isMarquee()) {
+        if (isMarquee) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawMarquee);
             drawMarquee = drawarea.getMarquee().draw();

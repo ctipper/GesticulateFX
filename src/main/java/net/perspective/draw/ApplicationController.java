@@ -580,6 +580,7 @@ public class ApplicationController implements Initializable {
         // alter draw area colour settings
         drawarea.setDarkModeEnabled(isDarkMode);
         drawarea.setTheme();
+        drawarea.redrawGrid();
         // reset combo boxes
         String stroke = strokecombobox.getSelectionModel().getSelectedItem();
         Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(isDarkMode);

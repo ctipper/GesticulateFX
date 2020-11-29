@@ -50,6 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import net.perspective.draw.util.G2;
 
 /**
  * 
@@ -149,9 +150,11 @@ public class Gesticulate extends GuiceApplication {
     public void setOnResize(ScrollPane pane) {
         pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
             drawarea.getScene().setHeight((double) new_val);
+            drawarea.redrawGrid();
         });
         pane.widthProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
             drawarea.getScene().setWidth((double) new_val);
+            drawarea.redrawGrid();
         });
     }
 
@@ -179,12 +182,13 @@ public class Gesticulate extends GuiceApplication {
     }
 
     /**
-     * Set the drawarea grid
+     * Set the canvas grid
      * 
      * @param gridEnabled 
      */
     public void drawGrid(boolean gridEnabled) {
         drawarea.setGrid(gridEnabled);
+        drawarea.redrawGrid();
     }
 
     @Override
@@ -290,6 +294,7 @@ public class Gesticulate extends GuiceApplication {
             bind(PDFWorker.class);
             bind(SVGWorker.class);
             bind(PNGWorker.class);
+            bind(G2.class);
         }
     }
 

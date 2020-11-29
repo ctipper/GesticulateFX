@@ -9,12 +9,16 @@ package net.perspective.draw;
 import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.datatransfer.Transferable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -40,6 +44,7 @@ import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.CanvasPoint;
+import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
@@ -58,6 +63,7 @@ public class DrawingArea {
     @Inject private DrawAreaListener listener;
     @Inject private CanvasTransferHandler transferhandler;
     @Inject private Dropper dropper;
+    @Inject private G2 g2;
     private SubScene canvas;
     private Group root;
 
@@ -218,6 +224,7 @@ public class DrawingArea {
      */
     public void clear() {
         ((Group) canvas.getRoot()).getChildren().clear();
+        redrawGrid();
     }
 
     /**
@@ -634,6 +641,28 @@ public class DrawingArea {
      */
     public boolean isGridVisible() {
         return gridVisible;
+    }
+
+    /**
+     * Draw the grid
+     */
+    public void redrawGrid() {
+        ObservableList<Node> nodes = getCanvas().getChildren();
+        List<Node> removal = new ArrayList<>();
+        for (Node node : nodes) {
+            String prop = node.idProperty().get();
+            if (prop != null && prop.startsWith("grid")) {
+                removal.add(node);
+            }
+        }
+        for (Node node : removal) {
+            nodes.remove(node);
+        }
+        if (isGridVisible()) {
+            CanvasPoint bounds = new CanvasPoint(getScene().getWidth(), getScene().getHeight());
+            Node gridrea = g2.drawGridLayout(isDarkModeEnabled(), bounds);
+            nodes.add(0, gridrea);
+        }
     }
 
     /**
