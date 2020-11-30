@@ -87,16 +87,17 @@ public class CanvasView {
         drawings.addListener((ListChangeListener.Change<? extends DrawItem> change) -> {
             while (change.next()) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+                int g = (drawarea.isGridVisible() ? 1 : 0);
                 if (change.wasPermutated()) {
                     for (int i = change.getFrom(); i < change.getTo(); ++i) {
                         // permutate
-                        nodes.set(change.getPermutation(i), drawings.get(i).draw());
+                        nodes.set(change.getPermutation(i) + g, drawings.get(i).draw());
                         logger.trace("node " + change.getPermutation(i) + " updated from " + i);
                     }
                 } else if (change.wasUpdated()) {
                     for (int i = change.getFrom(); i < change.getTo(); ++i) {
                         // update item
-                        nodes.set(i, drawings.get(i).draw());
+                        nodes.set(i + g, drawings.get(i).draw());
                         logger.trace("node " + i + " updated");
                     }
                 } else {
@@ -105,7 +106,7 @@ public class CanvasView {
                         List<Node> deleted = new ArrayList<>();
                         for (DrawItem removal : change.getRemoved()) {
                             // remove item
-                            deleted.add(nodes.get(change.getFrom() + i));
+                            deleted.add(nodes.get(change.getFrom() + i + g));
                             i++;
                             logger.trace("node " + (change.getFrom() + i) + " removed.");
                         }
@@ -118,7 +119,7 @@ public class CanvasView {
                         int i = 0;
                         for (DrawItem additem : change.getAddedSubList()) {
                             // add item
-                            nodes.add(change.getFrom() + i, additem.draw());
+                            nodes.add(change.getFrom() + i + g, additem.draw());
                             i++;
                             logger.trace("node added");
                         }

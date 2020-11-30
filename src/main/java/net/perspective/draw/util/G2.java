@@ -38,20 +38,20 @@ public class G2 {
             /**
              * The colour for minor grid cells.
              */
-            minorColor = Color.web("#414141");
+            minorColor = Color.web("#434343");
             /**
              * The colour for major grid cells.
              */
-            majorColor = Color.web("#494949");
+            majorColor = Color.web("#4a4a4a");
         } else {
             /**
              * The colour for minor grid cells.
              */
-            minorColor = Color.web("#ebebeb");
+            minorColor = Color.web("#f3f3f3");
             /**
              * The colour for major grid cells.
              */
-            majorColor = Color.web("#cacaca");
+            majorColor = Color.web("#d2d2d2");
         }
         /**
          * The spacing factor for a major grid cell.
