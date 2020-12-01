@@ -396,6 +396,33 @@ public class DrawingArea {
     }
 
     /**
+     * Move shape and steer to grid increments
+     * 
+     * @param item
+     * @param xinc
+     * @param yinc
+     */
+    public void moveToWithIncrements(DrawItem item, double xinc, double yinc) {
+        /**
+         * x adjustment
+         */
+        double x = item.getTop()[0].getX();
+        // actual incremental offset
+        double inc_xa = Math.round(xinc / 10) * 10.0;
+        // corrected incremental offset
+        double inc_xc = x - (int) (x / 10) * 10.0;
+        /**
+         * y adjustment
+         */
+        double y = item.getTop()[0].getY();
+        // actual incremental offset
+        double inc_ya = Math.round(yinc / 10) * 10.0;
+        // corrected incremental offset
+        double inc_yc = y - (int) (y / 10) * 10.0;
+        item.moveShape(inc_xa - inc_xc, inc_ya - inc_yc);
+    }
+
+    /**
      * Rotate a given item by a forced increment
      * 
      * @param item   DrawItem

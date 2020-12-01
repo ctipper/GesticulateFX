@@ -171,17 +171,21 @@ public class DrawAreaListener {
     }
 
     /**
-     * @return the snapEnabled
-     */
-    public boolean isSnapEnabled() {
-        return snapEnabled;
-    }
-
-    /**
-     * @param snapEnabled the snapEnabled to set
+     * Snap to guides is enabled
+     * 
+     * @param snapEnabled 
      */
     public void setSnapEnabled(boolean snapEnabled) {
         this.snapEnabled = snapEnabled;
+    }
+
+    /**
+     * Get snap to guides is enabled
+     * 
+     * @return 
+     */
+    public boolean isSnapEnabled() {
+        return snapEnabled;
     }
 
 }

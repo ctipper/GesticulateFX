@@ -191,11 +191,23 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     ((Figure) item).setPath();
                 } else {
                     drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
-                    item.moveShape(xinc, yinc);
+                    if (listener.isSnapEnabled()) {
+                        xinc = context.getOmega().getX() - item.getStart().getX();
+                        yinc = context.getOmega().getY() - item.getStart().getY();
+                        drawarea.moveToWithIncrements(item, xinc, yinc);
+                    } else {
+                        item.moveShape(xinc, yinc);
+                    }
                 }
             } else {
                 drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
-                item.moveShape(xinc, yinc);
+                if (listener.isSnapEnabled()) {
+                    xinc = context.getOmega().getX() - item.getStart().getX();
+                    yinc = context.getOmega().getY() - item.getStart().getY();
+                    drawarea.moveToWithIncrements(item, xinc, yinc);
+                } else {
+                    item.moveShape(xinc, yinc);
+                }
             }
         } else {
 
@@ -211,11 +223,14 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         case CIRCLE:
                             drawType = DrawingType.ELLIPSE;
                             break;
+                        case TRIANGLE:
+                            drawType = DrawingType.ISOSCELES;
+                            break;
                         case HEXAGON:
                             drawType = DrawingType.HEXAGON;
                             break;
                         default:
-                            drawType = DrawingType.ISOSCELES;
+                            drawType = DrawingType.RECTANGLE;
                             break;
                     }
 
@@ -328,7 +343,13 @@ public class FigureItemBehaviour implements ItemBehaviours {
                             break;
                         case SHAPE:
                             drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
-                            item.moveShape(xinc, yinc);
+                            if (listener.isSnapEnabled()) {
+                                xinc = context.getOmega().getX() - item.getStart().getX();
+                                yinc = context.getOmega().getY() - item.getStart().getY();
+                                drawarea.moveToWithIncrements(item, xinc, yinc);
+                            } else {
+                                item.moveShape(xinc, yinc);
+                            }
                             break;
                         case NONE:
                         default:
@@ -338,7 +359,13 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 default:
                     // All other Figures
                     drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
-                    item.moveShape(xinc, yinc);
+                    if (listener.isSnapEnabled()) {
+                        xinc = context.getOmega().getX() - item.getStart().getX();
+                        yinc = context.getOmega().getY() - item.getStart().getY();
+                        drawarea.moveToWithIncrements(item, xinc, yinc);
+                    } else {
+                        item.moveShape(xinc, yinc);
+                    }
                     break;
             }
         }

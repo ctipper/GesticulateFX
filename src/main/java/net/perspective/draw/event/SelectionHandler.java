@@ -26,6 +26,7 @@ import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.util.CanvasPoint;
 
 /**
  * 
@@ -92,6 +93,10 @@ public class SelectionHandler implements Handler {
             if (context.getContainment().equals(ContainsType.NONE) && (!view.isMultiSelected() || !drawarea.isMultiSelectEnabled())) {
                 view.setSelected(-1);
             }
+            if (view.getSelected() != -1 && listener.isSnapEnabled()) {
+                CanvasPoint start = drawings.get(view.getSelected()).getStart();
+                context.setOmega(start.getX(), start.getY());
+            }
         }
     }
 
@@ -123,8 +128,13 @@ public class SelectionHandler implements Handler {
         if (view.getSelected() != -1) {
             double xinc = listener.getTempX() - listener.getStartX();
             double yinc = listener.getTempY() - listener.getStartY();
+
             for (Integer selection : view.getMultiSelection()) {
                 DrawItem item = view.getDrawings().get(selection);
+
+                if (listener.isSnapEnabled()) {
+                    context.setOmega(context.getOmega().getX() + xinc, context.getOmega().getY() + yinc);
+                }
                 if (item instanceof Figure) {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                     context.alter(item, xinc, yinc);
@@ -136,7 +146,13 @@ public class SelectionHandler implements Handler {
                     context.alter(item, xinc, yinc);
                 } else {
                     // Rest of shapes
-                    item.moveShape(xinc, yinc);
+                if (listener.isSnapEnabled()) {
+                        xinc = context.getOmega().getX() - item.getStart().getX();
+                        yinc = context.getOmega().getY() - item.getStart().getY();
+                        drawarea.moveToWithIncrements(item, xinc, yinc);
+                    } else {
+                        item.moveShape(xinc, yinc);
+                    }
                 }
                 item.updateProperties(drawarea);
                 view.updateCanvasItem(selection, item);

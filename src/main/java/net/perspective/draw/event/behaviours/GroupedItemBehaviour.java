@@ -41,7 +41,13 @@ public class GroupedItemBehaviour implements ItemBehaviours {
 
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
-        item.moveShape(xinc, yinc);
+        if (listener.isSnapEnabled()) {
+            xinc = context.getOmega().getX() - item.getStart().getX();
+            yinc = context.getOmega().getY() - item.getStart().getY();
+            drawarea.moveToWithIncrements(item, xinc, yinc);
+        } else {
+            item.moveShape(xinc, yinc);
+        }
     }
 
 }

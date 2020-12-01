@@ -98,7 +98,13 @@ public class PictureItemBehaviour implements ItemBehaviours {
         double sgn;
 
         if (context.getContainment().equals(ContainsType.SHAPE)) {
-            item.moveShape(xinc, yinc);
+            if (listener.isSnapEnabled()) {
+                xinc = context.getOmega().getX() - item.getStart().getX();
+                yinc = context.getOmega().getY() - item.getStart().getY();
+                drawarea.moveToWithIncrements(item, xinc, yinc);
+            } else {
+                item.moveShape(xinc, yinc);
+            }
         } else {
 
             CanvasPoint st = item.getStart();
@@ -214,7 +220,13 @@ public class PictureItemBehaviour implements ItemBehaviours {
                     break;
                 case SHAPE:
                     drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
-                    item.moveShape(xinc, yinc);
+                    if (listener.isSnapEnabled()) {
+                        xinc = context.getOmega().getX() - item.getStart().getX();
+                        yinc = context.getOmega().getY() - item.getStart().getY();
+                        drawarea.moveToWithIncrements(item, xinc, yinc);
+                    } else {
+                        item.moveShape(xinc, yinc);
+                    }
                     break;
                 case NONE:
                 default:

@@ -27,11 +27,13 @@ public class BehaviourContext {
     private boolean edgeDetected;
     private int quad;
     private double sgnd_area;
+    private CanvasPoint omega;
 
     /** Creates a new instance of <code>BehaviourContext</code> */
     public BehaviourContext() {
         this.quad = -1;
         this.sgnd_area = -1d;
+        this.omega = new CanvasPoint(0, 0);
         this.containment = ContainsType.NONE;
         this.contains = ContainsType.NONE;
         this.edgeDetected = false;
@@ -124,6 +126,7 @@ public class BehaviourContext {
         quad = -1;
         sgnd_area = -1d;
         this.setEdgeDetected(false);
+        this.setOmega(0, 0);
     }
 
     /**
@@ -193,6 +196,25 @@ public class BehaviourContext {
         Rectangle2D rect;
         rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
         return new Area(rect);
+    }
+
+    /**
+     * Get the mouse drag origin
+     * 
+     * @param x
+     * @param y 
+     */
+    public void setOmega(double x, double y) {
+        this.omega = new CanvasPoint(x, y);
+    }
+
+    /**
+     * Set the mouse drag origin
+     * 
+     * @return 
+     */
+    public CanvasPoint getOmega() {
+        return omega;
     }
 
 }
