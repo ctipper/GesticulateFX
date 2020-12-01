@@ -188,6 +188,7 @@ public class Gesticulate extends GuiceApplication {
      */
     public void drawGrid(boolean gridEnabled) {
         drawarea.setGrid(gridEnabled);
+        drawarea.setSnapTo(gridEnabled);
         drawarea.redrawGrid();
     }
 

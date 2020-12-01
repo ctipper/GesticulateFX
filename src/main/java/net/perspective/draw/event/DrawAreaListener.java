@@ -27,6 +27,7 @@ public class DrawAreaListener {
     private double tempX, tempY;     // Hold co-ordinates of current mouseDragged event.
     private boolean leftbutton, rightbutton;
     private boolean doubleclick;
+    private boolean snapEnabled;
 
     /** Creates a new instance of <code>DrawAreaMouseListener</code> */
     @Inject
@@ -167,6 +168,20 @@ public class DrawAreaListener {
 
     public boolean doubleClicked() {
         return this.doubleclick;
+    }
+
+    /**
+     * @return the snapEnabled
+     */
+    public boolean isSnapEnabled() {
+        return snapEnabled;
+    }
+
+    /**
+     * @param snapEnabled the snapEnabled to set
+     */
+    public void setSnapEnabled(boolean snapEnabled) {
+        this.snapEnabled = snapEnabled;
     }
 
 }

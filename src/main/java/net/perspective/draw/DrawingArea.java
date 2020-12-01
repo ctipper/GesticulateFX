@@ -88,6 +88,8 @@ public class DrawingArea {
     java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
 
+    final static double pib12 = Math.PI / 12;
+
     /**
      * Creates a new instance of <code>DrawingArea</code>
      */
@@ -394,6 +396,21 @@ public class DrawingArea {
     }
 
     /**
+     * Rotate a given item by a forced increment
+     * 
+     * @param item   DrawItem
+     * @param theta  angle increment
+     */
+    public void rotateWithIncrements(DrawItem item, double theta) {
+        double angle = item.getAngle();
+        // actual incremental offset
+        double inc_th = Math.round(theta / pib12) * pib12;
+        // corrected incremental offset
+        double zeta = angle - Math.round(angle / pib12) * pib12;
+        this.rotateTo(item, inc_th - zeta);
+    }
+    
+    /**
      * Rotate given item by angle theta increment
      *
      * @param item DrawItem
@@ -641,6 +658,15 @@ public class DrawingArea {
      */
     public boolean isGridVisible() {
         return gridVisible;
+    }
+
+    /**
+     * Enable snap to guides
+     * 
+     * @param gridVisible 
+     */
+    public void setSnapTo(boolean gridVisible) {
+        listener.setSnapEnabled(gridVisible);
     }
 
     /**

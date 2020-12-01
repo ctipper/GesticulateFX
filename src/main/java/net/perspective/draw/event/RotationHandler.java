@@ -33,6 +33,7 @@ public class RotationHandler implements Handler {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
+    private double omega;
 
     @Override
     public void upEvent() {
@@ -76,6 +77,9 @@ public class RotationHandler implements Handler {
                 }
                 i--;
             } while (i >= 0);
+        }
+        if (view.getSelected() != -1) {
+            omega = view.getDrawings().get(view.getSelected()).getAngle();
         }
     }
 
@@ -134,7 +138,13 @@ public class RotationHandler implements Handler {
 
             double theta = Math.atan2(sin_t, cos_t);
 
-            drawarea.rotateTo(item, theta);
+            if (listener.isSnapEnabled()) {
+                omega = omega + theta;
+                theta = omega - item.getAngle();
+                drawarea.rotateWithIncrements(item, theta);
+            } else {
+                drawarea.rotateTo(item, theta);
+            }
 
             item.updateProperties(drawarea);
             view.updateCanvasItem(selection, item);
