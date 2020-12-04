@@ -199,4 +199,30 @@ public class Edge extends Figure {
         return bounds;
     }
 
+    /**
+     * Return the rotation angle
+     * 
+     * @return angle
+     */
+    public double getAngle() {
+        if (!this.getType().equals(FigureType.LINE)) {
+            return angle;
+        } else {
+            CanvasPoint centre = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
+            CanvasPoint A = new CanvasPoint(1, 0);
+            CanvasPoint B = new CanvasPoint(end.x - centre.x, end.y - centre.y);
+
+            double h1 = V2.L2(A);
+            CanvasPoint q1 = new CanvasPoint(A.x / h1, A.y / h1);
+            double h2 = V2.L2(B);
+            CanvasPoint q2 = new CanvasPoint(B.x / h2, B.y / h2);
+
+            double cos_t = V2.dot(q1, q2);
+            double sin_t = V2.dot(V2.rot90(q1), q2);
+
+            double theta = Math.atan2(sin_t, cos_t);
+
+            return theta;
+        }
+    }
 }

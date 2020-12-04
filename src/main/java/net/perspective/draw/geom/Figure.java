@@ -50,7 +50,7 @@ public class Figure implements DrawItem, Serializable {
     private transient Color color, fillcolor;
     private int transparency;
     private boolean isVertical;
-    private double angle;
+    protected double angle;
     private boolean closed;                 // closed indicates to draw() whether figure should be filled
 
     private static final long serialVersionUID = 1L;
@@ -299,7 +299,7 @@ public class Figure implements DrawItem, Serializable {
         CanvasPoint centre = this.rotationCentre();
 
         point.translate(-centre.x, -centre.y);
-        if (this.getAngle() != 0) {
+        if (this.getAngle() != 0 && !this.getType().equals(FigureType.LINE)) {
             // rotate point about centroid
             point.rotate(this.getAngle());
         }
@@ -317,7 +317,7 @@ public class Figure implements DrawItem, Serializable {
     protected java.awt.geom.AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
         java.awt.geom.AffineTransform transform = new java.awt.geom.AffineTransform();
-        transform.setToRotation(this.getAngle() + (this.isVertical() ? -Math.PI / 2 : 0), centre.x, centre.y);
+        transform.setToRotation((!this.getType().equals(FigureType.LINE) ? this.getAngle() : 0) + (this.isVertical() ? -Math.PI / 2 : 0), centre.x, centre.y);
         return transform;
     }
 
