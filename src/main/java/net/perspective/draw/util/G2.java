@@ -38,11 +38,11 @@ public class G2 {
             /**
              * The colour for minor grid cells.
              */
-            minorColor = Color.web("#434343");
+            minorColor = Color.web("#414141");
             /**
              * The colour for major grid cells.
              */
-            majorColor = Color.web("#4a4a4a");
+            majorColor = Color.web("#484848");
         } else {
             /**
              * The colour for minor grid cells.
