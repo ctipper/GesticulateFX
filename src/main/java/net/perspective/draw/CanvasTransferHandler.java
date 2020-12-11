@@ -58,7 +58,7 @@ public class CanvasTransferHandler {
                 if (t.getTransferData(dataFlavor) instanceof DrawItem) {
                     item = (DrawItem) t.getTransferData(dataFlavor);
                     // add item to Canvas
-                    item.moveShape(shift, shift);
+                    item.moveTo(shift, shift);
                     item = checkDrawings(item);
                     view.appendItemToCanvas(item);
                 }

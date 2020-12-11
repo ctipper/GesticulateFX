@@ -321,7 +321,7 @@ public class Picture implements DrawItem, Serializable {
      * @param xinc  x increment
      * @param yinc  y increment
      */
-    public void moveShape(double xinc, double yinc) {
+    public void moveTo(double xinc, double yinc) {
         start.translate(xinc, yinc);
     }
 

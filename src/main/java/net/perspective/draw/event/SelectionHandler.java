@@ -151,7 +151,7 @@ public class SelectionHandler implements Handler {
                         yinc = context.getOmega().getY() - item.getStart().getY();
                         drawarea.moveToWithIncrements(item, xinc, yinc);
                     } else {
-                        item.moveShape(xinc, yinc);
+                        item.moveTo(xinc, yinc);
                     }
                 }
                 item.updateProperties(drawarea);

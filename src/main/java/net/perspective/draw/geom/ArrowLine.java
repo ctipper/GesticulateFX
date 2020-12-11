@@ -204,8 +204,8 @@ public class ArrowLine extends Figure {
     }
 
     @Override
-    public void moveShape(double xinc, double yinc) {
-        line.moveShape(xinc, yinc);
+    public void moveTo(double xinc, double yinc) {
+        line.moveTo(xinc, yinc);
     }
 
     /**

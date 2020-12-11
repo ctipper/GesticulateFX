@@ -307,9 +307,9 @@ public class Grouped implements DrawItem, Serializable {
      * @param xinc  x increment
      * @param yinc  y increment
      */
-    public void moveShape(double xinc, double yinc) {
+    public void moveTo(double xinc, double yinc) {
         shapes.stream().forEach((shape) -> {
-            shape.moveShape(xinc, yinc);
+            shape.moveTo(xinc, yinc);
         });
         this.setBounds();
     }

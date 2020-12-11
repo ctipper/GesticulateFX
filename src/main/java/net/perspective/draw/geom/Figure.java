@@ -403,7 +403,7 @@ public class Figure implements DrawItem, Serializable {
      * @param xinc  x increment
      * @param yinc  y increment
      */
-    public void moveShape(double xinc, double yinc) {
+    public void moveTo(double xinc, double yinc) {
         points.stream().forEach((p) -> {
             p.translate(xinc, yinc);
         });

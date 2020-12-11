@@ -419,7 +419,7 @@ public class DrawingArea {
         double inc_ya = Math.round(yinc / 10) * 10.0;
         // corrected incremental offset
         double inc_yc = y - Math.round(y / 10) * 10.0;
-        item.moveShape(inc_xa - inc_xc, inc_ya - inc_yc);
+        item.moveTo(inc_xa - inc_xc, inc_ya - inc_yc);
     }
 
     /**

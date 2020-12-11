@@ -87,7 +87,7 @@ public interface DrawItem {
      * @param xinc x increment
      * @param yinc y increment
      */
-    void moveShape(double xinc, double yinc);
+    void moveTo(double xinc, double yinc);
 
     /**
      * Sets the rotation angle

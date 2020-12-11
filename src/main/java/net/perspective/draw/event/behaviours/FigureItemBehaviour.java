@@ -196,7 +196,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         yinc = context.getOmega().getY() - item.getStart().getY();
                         drawarea.moveToWithIncrements(item, xinc, yinc);
                     } else {
-                        item.moveShape(xinc, yinc);
+                        item.moveTo(xinc, yinc);
                     }
                 }
             } else {
@@ -206,7 +206,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     yinc = context.getOmega().getY() - item.getStart().getY();
                     drawarea.moveToWithIncrements(item, xinc, yinc);
                 } else {
-                    item.moveShape(xinc, yinc);
+                    item.moveTo(xinc, yinc);
                 }
             }
         } else {
@@ -348,7 +348,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                                 yinc = context.getOmega().getY() - item.getStart().getY();
                                 drawarea.moveToWithIncrements(item, xinc, yinc);
                             } else {
-                                item.moveShape(xinc, yinc);
+                                item.moveTo(xinc, yinc);
                             }
                             break;
                         case NONE:
@@ -364,7 +364,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         yinc = context.getOmega().getY() - item.getStart().getY();
                         drawarea.moveToWithIncrements(item, xinc, yinc);
                     } else {
-                        item.moveShape(xinc, yinc);
+                        item.moveTo(xinc, yinc);
                     }
                     break;
             }
