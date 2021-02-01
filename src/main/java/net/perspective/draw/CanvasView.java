@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -42,7 +43,7 @@ public class CanvasView {
     private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private final List<ImageItem> images;
-    private DrawItem newitem;
+    private Optional<DrawItem> newitem;
     private final Set<Integer> selectionIndex;
     private Group drawingAnchors;
     private Node drawMarquee;
@@ -58,7 +59,7 @@ public class CanvasView {
     public CanvasView() {
         this.list = new ArrayList<>();
         this.images = new ArrayList<>();
-        this.newitem = null;
+        newitem = Optional.empty();
         this.selectionIndex = new LinkedHashSet<>();
         this.drawingAnchors = new Group();
     }
@@ -164,19 +165,19 @@ public class CanvasView {
      * @param item
      */
     public void setNewItem(DrawItem item) {
-        if (newitem == null) {
+        if (newitem.isEmpty()) {
             this.appendItemToCanvas(item);
         } else {
             this.updateCanvasItem(drawings.size() - 1, item);
         }
-        newitem = item;
+        newitem = Optional.ofNullable(item);
     }
 
     /**
      * Reset new item to null
      */
     public void resetNewItem() {
-        newitem = null;
+        newitem = Optional.empty();
     }
 
     /**
@@ -184,7 +185,7 @@ public class CanvasView {
      * 
      * @return a DrawItem
      */
-    public DrawItem getNewItem() {
+    public Optional<DrawItem> getNewItem() {
         return newitem;
     }
 

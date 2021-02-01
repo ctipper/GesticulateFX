@@ -37,11 +37,11 @@ public class SketchHandler implements Handler  {
     @Override
     public void upEvent() {
         view.setDrawing(false);
-        if (view.getNewItem() == null || drawarea.getDrawType().isEmpty()) {
+        if (view.getNewItem().isEmpty() || drawarea.getDrawType().isEmpty()) {
             return;
         }
         // add figure to canvas
-        Figure item = (Figure) view.getNewItem();
+        Figure item = (Figure) view.getNewItem().get();
         item.setEndPoints();
         item.updateProperties(drawarea);
         view.setNewItem(item);
@@ -72,7 +72,8 @@ public class SketchHandler implements Handler  {
     @Override
     public void dragEvent() {
         // Create Figure
-        Figure item = (Figure) view.getNewItem();
+        Figure item = view.getNewItem().isPresent() ? (Figure) view.getNewItem().get() : null;
+        if (item == null) return;
         if (!(item instanceof ArrowLine) && (drawarea.getArrow().equals(ArrowType.END) || drawarea.getArrow().equals(ArrowType.BOTH))) {
             // Create arrow line
             if (!((Figure) item).getType().equals(FigureType.POLYGON)) {

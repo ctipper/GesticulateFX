@@ -36,11 +36,11 @@ public class FigureHandler implements Handler {
     @Override
     public void upEvent() {
         view.setDrawing(false);
-        if (view.getNewItem() == null || drawarea.getDrawType() == null) {
+        if (view.getNewItem().isEmpty() || drawarea.getDrawType().isEmpty()) {
             return;
         }
         // add figure to canvas
-        Figure item = (Figure) view.getNewItem();
+        Figure item = (Figure) view.getNewItem().get();
         item.setEndPoints();
         item.updateProperties(drawarea);
         view.setNewItem(item);
@@ -57,7 +57,7 @@ public class FigureHandler implements Handler {
 
     @Override
     public void dragEvent() {
-        DrawingType drawType = drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : null;
+        DrawingType drawType = drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : DrawingType.POINT;
         // Create figure
         Figure item = figurefactory.createFigure(drawType);
         // Initialise stroke and fill
