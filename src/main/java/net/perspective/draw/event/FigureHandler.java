@@ -57,7 +57,7 @@ public class FigureHandler implements Handler {
 
     @Override
     public void dragEvent() {
-        DrawingType drawType = drawarea.getDrawType();
+        DrawingType drawType = drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : null;
         // Create figure
         Figure item = figurefactory.createFigure(drawType);
         // Initialise stroke and fill

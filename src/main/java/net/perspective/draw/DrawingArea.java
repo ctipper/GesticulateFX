@@ -12,6 +12,7 @@ import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,7 +68,7 @@ public class DrawingArea {
     private SubScene canvas;
     private Group root;
 
-    private DrawingType drawtype;
+    private Optional<DrawingType> drawtype;
     private java.awt.Stroke stroke, plainstroke;
     private Color color, fillcolor;
     private int transparency;
@@ -494,23 +495,23 @@ public class DrawingArea {
      * @param type  DrawType
      */
     public void setDrawType(DrawingType type) {
-        drawtype = type;
+        this.drawtype = Optional.ofNullable(type);
     }
 
     /**
      * Return the canvas drawing type and also allows a 
-     * correction if proportional drawing is enabled
+     * correction if isometric drawing is enabled
      * 
      * @return 
      */
-    public DrawingType getDrawType() {
-        DrawingType type = this.drawtype;
-        // certain handlers set null for no draw
-        if (type == null) {
-            return null;
+    public Optional<DrawingType> getDrawType() {
+        if (!drawtype.isPresent()) {
+            // certain handlers set null for no draw
+            return Optional.empty();
         }
+        DrawingType type = drawtype.get();
         if (controller.getOneToOneEnabled()) {
-            switch (drawtype) {
+            switch (type) {
                 case CIRCLE:
                     break;
                 case ELLIPSE:
@@ -533,10 +534,9 @@ public class DrawingArea {
                     break;
                 default:
                     break;
-
             }
         }
-        return type;
+        return Optional.of(type);
     }
 
     /**

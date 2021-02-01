@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.geom.ArrowLine;
 import net.perspective.draw.geom.ArrowType;
 import net.perspective.draw.geom.Figure;
@@ -36,7 +37,7 @@ public class SketchHandler implements Handler  {
     @Override
     public void upEvent() {
         view.setDrawing(false);
-        if (view.getNewItem() == null || drawarea.getDrawType() == null) {
+        if (view.getNewItem() == null || drawarea.getDrawType().isEmpty()) {
             return;
         }
         // add figure to canvas
@@ -50,13 +51,13 @@ public class SketchHandler implements Handler  {
     @Override
     public void downEvent() {
         // Create figure
-        Figure item = figurefactory.createFigure(drawarea.getDrawType());
+        Figure item = figurefactory.createFigure(drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : DrawingType.POINT);
         // Initialise stroke and fill
         item.setStroke(drawarea.getPlainStroke());
         item.setColor(Color.web(drawarea.getThemeFillColor()));
         item.setFillColor(Color.web(drawarea.getThemeBackgroundColor()));
         // Initialise sketch
-        item.setPoints(drawarea.getDrawType());
+        item.setPoints(drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : DrawingType.POINT);
         item.addPoint(listener.getStartX(), listener.getStartY());
         item.setEndPoints();
     	item.setPath();
