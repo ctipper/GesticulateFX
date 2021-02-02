@@ -170,7 +170,7 @@ public class CanvasView {
         } else {
             this.updateCanvasItem(drawings.size() - 1, item);
         }
-        newitem = Optional.ofNullable(item);
+        newitem = Optional.of(item);
     }
 
     /**

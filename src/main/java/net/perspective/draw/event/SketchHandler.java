@@ -51,13 +51,13 @@ public class SketchHandler implements Handler  {
     @Override
     public void downEvent() {
         // Create figure
-        Figure item = figurefactory.createFigure(drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : DrawingType.POINT);
+        Figure item = figurefactory.createFigure(drawarea.getDrawType().orElse(DrawingType.POINT));
         // Initialise stroke and fill
         item.setStroke(drawarea.getPlainStroke());
         item.setColor(Color.web(drawarea.getThemeFillColor()));
         item.setFillColor(Color.web(drawarea.getThemeBackgroundColor()));
         // Initialise sketch
-        item.setPoints(drawarea.getDrawType().isPresent() ? drawarea.getDrawType().get() : DrawingType.POINT);
+        item.setPoints(drawarea.getDrawType().orElse(DrawingType.POINT));
         item.addPoint(listener.getStartX(), listener.getStartY());
         item.setEndPoints();
     	item.setPath();
@@ -72,7 +72,7 @@ public class SketchHandler implements Handler  {
     @Override
     public void dragEvent() {
         // Create Figure
-        Figure item = view.getNewItem().isPresent() ? (Figure) view.getNewItem().get() : null;
+        Figure item = (Figure) view.getNewItem().orElse(null);
         if (item == null) return;
         if (!(item instanceof ArrowLine) && (drawarea.getArrow().equals(ArrowType.END) || drawarea.getArrow().equals(ArrowType.BOTH))) {
             // Create arrow line
