@@ -162,7 +162,7 @@
 
    <target name="installer" depends="bundle" description="Build PLatform Installers">
 
-      <property name="isx.path" value="C:/Program Files (x86)/Inno Setup 5"/>
+      <property name="isx.path" value="C:/Program Files (x86)/Inno Setup 6"/>
 
       <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
