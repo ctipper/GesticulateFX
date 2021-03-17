@@ -23,7 +23,7 @@
       <!-- remove existing runtime -->
       <delete dir="target/jfx/${bundle.dir}/${runtime.dir}" />
 
-      <exec executable="${runtime.path}/bin/jlink" os="Mac OS X" failonerror="true" newenvironment="true">
+      <exec executable="${runtime.path}/bin/jlink" osfamily="mac" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.path}"/>
          <arg value="--no-header-files"/>
          <arg value="--no-man-pages" />
@@ -95,7 +95,7 @@
          </fileset>
       </copy>
 
-      <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
+      <exec executable="${jpackage.path}/bin/jpackage" osfamily="mac" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="--type"/>
          <arg value="app-image"/>
@@ -114,7 +114,7 @@
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
-         <arg value="Copyright © 2019 Christopher Tipper" />
+         <arg value="Copyright © 2021 Christopher Tipper" />
          <!--
          <arg value="category" />
          <arg value="public.app-category.graphics-design" />
@@ -148,7 +148,7 @@
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
-         <arg value="Copyright © 2019 Christopher Tipper" />
+         <arg value="Copyright © 2021 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
          <arg value="--app-version" />
@@ -164,7 +164,7 @@
 
       <property name="isx.path" value="C:/Program Files (x86)/Inno Setup 6"/>
 
-      <exec executable="${jpackage.path}/bin/jpackage" os="Mac OS X" failonerror="true" newenvironment="true">
+      <exec executable="${jpackage.path}/bin/jpackage" osfamily="mac" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="--type"/>
          <arg value="dmg"/>
