@@ -207,178 +207,109 @@
  */
 
 #buttnewcanvas {
-    /*
-    -fx-background-image: url('../images/new-canvas.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttopenin {
-    /*
-    -fx-background-image: url('../images/open-in.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttsaveto {
-    /*
-    -fx-background-image: url('../images/save-to.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttselect {
-    /*
-    -fx-background-image: url('../images/select.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttrotate {
-    /*
-    -fx-background-image: url('../images/rotate.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttslope {
-    /*
-    -fx-background-image: url('../images/slope.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttcircle {
-    /*
-    -fx-background-image: url('../images/circle.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttsquare {
-    /*
-    -fx-background-image: url('../images/square.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #butttriangle {
-    /*
-    -fx-background-image: url('../images/triangle.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttpolygon {
-    /*
-    -fx-background-image: url('../images/polygon.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #buttsketch {
-    /*
-    -fx-background-image: url('../images/sketch.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 5;
 }
 #butttext {
-    /*
-    -fx-background-image: url('../images/text.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-padding: 5;
 }
 #butthamburger {
-    /*
-    -fx-background-image: url('../images/menu.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttbold {
-    /*
-    -fx-background-image: url('../images/bold.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttitalic {
-    /*
-    -fx-background-image: url('../images/italic.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttunderlined {
-    /*
-    -fx-background-image: url('../images/underlined.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttvertical {
-    -fx-background-image: url('../images/perpendicular.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttoutline {
-    /*
-    -fx-background-image: url('../images/wireframe.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttsnapshot {
-    /*
-    -fx-background-image: url('../images/snapshot.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttsaveas {
-    /*
-    -fx-background-image: url('../images/save-as.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttsvgexport {
-    /*
-    -fx-background-image: url('../images/export-options-1.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttpdfexport {
-    /*
-    -fx-background-image: url('../images/export-options-2.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttpngexport {
-    /*
-    -fx-background-image: url('../images/export-options-3.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 #buttquitapp {
-    /*
-    -fx-background-image: url('../images/power.png');
-    */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
