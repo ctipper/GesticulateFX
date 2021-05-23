@@ -35,11 +35,12 @@ import net.harawata.appdirs.AppDirsFactory;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
-import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
+import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.util.G2;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
@@ -50,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import net.perspective.draw.util.G2;
 
 /**
  * 
