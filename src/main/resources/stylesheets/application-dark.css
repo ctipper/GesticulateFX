@@ -69,7 +69,7 @@
     -fx-min-height: 32;
     -fx-padding: 5 11 5 11;
 }
-.toolbutton:selected, .toolbutton:selected:hover {
+.toolbutton:hover, .toolbutton:selected, .toolbutton:selected:hover {
     -fx-background-color: #3a3a3a;
     -fx-border-color: #3a3a3a;
 }
@@ -164,6 +164,11 @@
 .combo-box-popup .list-view .list-cell:filled:pressed, .combo-box-popup .list-view .list-cell:filled:selected:pressed
 {
     -fx-text-fill: #c0c481;
+}
+.color-picker, .color-picker:focused, .color-picker:selected {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-background-radius: 2pt;
 }
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
