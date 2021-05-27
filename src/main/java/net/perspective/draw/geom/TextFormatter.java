@@ -69,6 +69,24 @@ public class TextFormatter {
     }
 
     /**
+     * Return formatted text to client
+     * 
+     * @param   item  A Text item
+     * @return  An javafx.scene.text.Text
+     */
+    public javafx.scene.text.Text readFxFormattedText(Text item) {
+        // use raw text from DOM
+        this.readTextItem(item);
+        javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
+        // Parse Text font attributes and apply
+        this.setFxFontAttributes(item, tt);
+        offset = 0;
+        // Set formatting attributes
+//        as = this.setFormattingAttributes(currentdom.getContent(), as);
+        return tt;
+    }
+
+    /**
      * Load Text content into formatter
      * 
      * @param item  A Text item
@@ -110,6 +128,22 @@ public class TextFormatter {
             }
         }
         return cdata;
+    }
+
+    private void setFxFontAttributes(Text item, javafx.scene.text.Text tt) {
+        // Serif is the default
+        String font = item.getFont();
+        switch (font) {
+            case "SansSerif":
+                tt.setFont(new javafx.scene.text.Font("Arial", item.getSize()));
+                break;
+            case "Monospaced":
+                tt.setFont(new javafx.scene.text.Font("Courier New", item.getSize()));
+                break;
+            default:
+                tt.setFont(new javafx.scene.text.Font("Times New Roman", item.getSize()));
+                break;
+        }
     }
 
     private void setFontAttributes(Text item, AttributedString as) {

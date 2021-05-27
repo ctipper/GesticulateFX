@@ -6,9 +6,7 @@
  */
 package net.perspective.draw.geom;
 
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
@@ -214,7 +212,52 @@ public class Text implements DrawItem, Serializable {
      * @param canvas
      */
     public void updateProperties(DrawingArea drawarea) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.setColor(drawarea.getColor());
+        this.setTransparency(drawarea.getTransparency());
+        setFont(drawarea.getFontFamily());
+        // Verify that this is Rich Text
+        Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
+        Matcher matcher = parpattern.matcher(text);
+        if (matcher.find()) {
+            this.setStyle(java.awt.Font.PLAIN);
+        } else {
+            this.setStyle(drawarea.getConvertedFontStyle());
+        }
+        setSize(drawarea.getFontSize());
+        setDimensions();
+    }
+
+    /**
+     * Set the width and height of the item in points
+     * 
+     * @param canvas
+     */
+    public void setDimensions() {
+        javafx.scene.text.Text layout = this.getLayout();
+        end = new CanvasPoint((double) layout.getLayoutBounds().getWidth(),
+            (double) layout.getLayoutBounds().getHeight());
+    }
+
+    /**
+     * Return a layout used to calculate item properties
+     * 
+     * @param canvas
+     * @return a javafx.scene.text.Text
+     */
+    public javafx.scene.text.Text getLayout() {
+        javafx.scene.text.Text tt;
+        // Verify that this is Rich Text
+        Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
+        Matcher matcher = parpattern.matcher(text);
+        if (matcher.find()) {
+            // TODO handle javafx.scene.text.TextFlow
+            TextFormatter formatter = new TextFormatter();
+            tt = formatter.readFxFormattedText(this);
+        } else {
+            TextFormatter formatter = new TextFormatter();
+            tt = formatter.readFxFormattedText(this);
+        }
+        return tt;
     }
 
     /**
@@ -314,7 +357,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return a transformed shape
      */
-    public Shape bounds() {
+    public java.awt.Shape bounds() {
         Rectangle2D rect = new Rectangle2D.Double(0, 0, end.x, end.y);
         Area bounds = new Area(rect);
         AffineTransform transform = this.getTransform();
@@ -403,14 +446,13 @@ public class Text implements DrawItem, Serializable {
             AttributedString as = formatter.readFormattedText(this);
             layout = new TextLayout(as.getIterator(), context);
         } else {
-            Font thisFont = new Font(font, style, size);
+            java.awt.Font thisFont = new java.awt.Font(font, style, size);
             thisFont = thisFont.deriveFont(map);
             FontRenderContext context = g2.getFontRenderContext();
             layout = new TextLayout(text, thisFont, context);
         }
         return layout;
     }
-
 
     /**
      * Set item colour

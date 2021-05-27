@@ -71,6 +71,8 @@ public class DrawingArea {
     private Optional<DrawingType> drawtype;
     private java.awt.Stroke stroke, plainstroke;
     private Color color, fillcolor;
+    private String fontfamily;
+    private int fontstyle, fontsize;
     private int transparency;
     private ArrowType arrowtype;
     private DrawItem marquee;
@@ -90,6 +92,11 @@ public class DrawingArea {
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
 
     final static double pib12 = Math.PI / 12;
+
+    public static final int FONT_PLAIN = 1;
+    public static final int FONT_BOLD = 2;
+    public static final int FONT_ITALIC = 4;
+    public static final int FONT_UNDERLINED = 8;
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
@@ -164,6 +171,8 @@ public class DrawingArea {
         setStrokeType(strokeId, strokeStyle);
         this.color = controller.getColorProperty().getValue();
         this.fillcolor = controller.getFillColorProperty().getValue();
+        fontfamily = "Serif";
+        fontsize = 14;
         this.transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
@@ -638,6 +647,100 @@ public class DrawingArea {
      */
     public int getTransparency() {
         return this.transparency;
+    }
+
+    /**
+     * Set the text font
+     * 
+     * @param fontfamily
+     */
+    public void setFontFamily(String fontfamily) {
+        this.fontfamily = fontfamily;
+//        if (controller.getDropperDisabled()) {
+//            view.updateSelectedItem();
+//        }
+    }
+
+    /**
+     * Get the text font
+     * 
+     * @return
+     */
+    public String getFontFamily() {
+        return fontfamily;
+    }
+
+    /**
+     * Update the font style
+     * 
+     * @param fontstyle
+     */
+    public void updateFontStyle(int fontstyle) {
+        this.fontstyle = fontstyle;
+//        if (controller.getDropperDisabled()) {
+//            view.updateSelectedItem();
+//        }
+    }
+
+    /**
+     * Set the font style
+     * 
+     * @param fontstyle
+     */
+    public void setFontStyle(int fontstyle) {
+        this.fontstyle = fontstyle;
+    }
+
+    /**
+     * Get the font style
+     * 
+     * @return
+     */
+    public int getFontStyle() {
+        return fontstyle;
+    }
+
+    /**
+     * Convert font style from plain textController to rich text textController style
+     * 
+     * @return
+     */
+    public int getConvertedFontStyle() {
+        int style = java.awt.Font.PLAIN;
+        if ((fontstyle & FONT_PLAIN) == FONT_PLAIN) {
+            // No Formatting
+        }
+        if ((fontstyle & FONT_BOLD) == FONT_BOLD) {
+            style = style | java.awt.Font.BOLD;
+        }
+        if ((fontstyle & FONT_ITALIC) == FONT_ITALIC) {
+            style = style | java.awt.Font.ITALIC;
+        }
+        if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
+            // No Formatting
+        }
+        return style;
+    }
+
+    /**
+     * Set the font size
+     * 
+     * @param fontsize
+     */
+    public void setFontSize(int fontsize) {
+        this.fontsize = fontsize;
+//        if (controller.getDropperDisabled()) {
+//            view.updateSelectedItem();
+//        }
+    }
+
+    /**
+     * Get the font size
+     * 
+     * @return
+     */
+    public int getFontSize() {
+        return fontsize;
     }
 
     /**
