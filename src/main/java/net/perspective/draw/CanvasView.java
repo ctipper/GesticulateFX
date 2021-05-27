@@ -592,6 +592,15 @@ public class CanvasView {
     }
 
     /**
+     * Is editing mode
+     * 
+     * @return
+     */
+    public boolean isEditing() {
+        return false;
+    }
+
+    /**
      * Set drawing mode
      * 
      * @param isDrawing

@@ -184,7 +184,7 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleTextAction(ActionEvent e) {
-        // not implemented
+        drawarea.changeHandlers(HandlerType.TEXT);
     }
 
     @FXML

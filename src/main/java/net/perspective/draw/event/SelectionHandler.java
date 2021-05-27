@@ -101,6 +101,10 @@ public class SelectionHandler implements Handler {
     }
 
     @Override
+    public void clickEvent() {
+    }
+
+    @Override
     public void hoverEvent() {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());

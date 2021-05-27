@@ -14,13 +14,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.beans.Transient;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.AttributedString;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
@@ -34,7 +40,7 @@ public class Text implements DrawItem, Serializable {
 
     private String text, font;
     private int style, size;
-    private Color color;
+    private transient Color color;
     private int transparency;
     private boolean isVertical;
     private double angle;
@@ -388,12 +394,37 @@ public class Text implements DrawItem, Serializable {
 
     @Override
     public Node draw() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        javafx.scene.text.Text layout = getLayout();
+        CanvasPoint axis = this.rotationCentre();
+        CanvasPoint offset = new CanvasPoint(0.0, layout.getBaselineOffset());
+        offset = V2.rot(offset.x, offset.y, getAngle());
+        layout.setX(axis.x + offset.x);
+        layout.setY(axis.y + offset.y);
+        layout.setRotate(getAngle());
+        return layout;
     }
 
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CanvasPoint pad = new CanvasPoint(5.0, 5.0);
+        Group anchors = new Group();
+        anchors.setMouseTransparent(true);
+        CanvasPoint u = this.getTransform(new CanvasPoint(getStart().x, getStart().y));
+        Rectangle anchor = new Rectangle();
+        anchor.setX(u.x - pad.x);
+        anchor.setY(u.y - pad.y);
+        Color alphafill = new Color(1.0, 1.0, 1.0, 0.0);
+        anchor.setFill(alphafill);
+        // anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setStroke(Color.web(drawarea.getThemeFillColor()));
+        anchor.setStrokeWidth(1.0);
+        anchor.getStrokeDashArray().addAll(Arrays.asList(1.5, 1.5));
+        anchor.setWidth(getEnd().x + 2 * pad.x);
+        anchor.setHeight(getEnd().y + 2 * pad.y);
+        anchor.setArcWidth(5.0);
+        anchor.setArcHeight(5.0);
+        anchors.getChildren().add(anchor);
+        return anchor;
     }
 
     @Override
@@ -618,6 +649,22 @@ public class Text implements DrawItem, Serializable {
      */
     public static java.awt.Color fxToAwt(javafx.scene.paint.Color color, float opacity) {
         return new java.awt.Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), opacity);
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        // deserialise colors from awt.Color
+        Class<?> c = (Class<?>) in.readObject();
+        this.color = awtToFx((java.awt.Color) in.readObject());
+    }
+
+    private void writeObject(ObjectOutputStream out)
+            throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(java.awt.Color.class);
+        out.writeObject(fxToAwt(getColor()));
     }
 
 }

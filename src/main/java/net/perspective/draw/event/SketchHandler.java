@@ -66,6 +66,10 @@ public class SketchHandler implements Handler  {
     }
 
     @Override
+    public void clickEvent() {
+    }
+
+    @Override
     public void hoverEvent() {
     }
 

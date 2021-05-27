@@ -52,6 +52,10 @@ public class FigureHandler implements Handler {
     }
 
     @Override
+    public void clickEvent() {
+    }
+
+    @Override
     public void hoverEvent() {
     }
 

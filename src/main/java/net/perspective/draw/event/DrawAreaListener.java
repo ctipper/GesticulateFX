@@ -86,7 +86,7 @@ public class DrawAreaListener {
         this.leftbutton = MouseButton.PRIMARY == me.getButton();
         this.rightbutton = MouseButton.SECONDARY == me.getButton();
         this.doubleclick = me.getClickCount() > 1 && MouseButton.PRIMARY == me.getButton();
-        // click handler here
+        handler.clickEvent();
     }
 
     protected void mouseHover(MouseEvent me) {

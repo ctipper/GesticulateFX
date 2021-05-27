@@ -49,6 +49,7 @@ import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import net.perspective.draw.event.TextHandler;
 
 /**
  * 
@@ -262,6 +263,9 @@ public class DrawingArea {
                 break;
             case SKETCH:
                 listener.setEventHandler(injector.getInstance(SketchHandler.class));
+                break;
+            case TEXT:
+                listener.setEventHandler(injector.getInstance(TextHandler.class));
                 break;
             default:
                 break;
