@@ -31,6 +31,7 @@ import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
 import net.perspective.draw.serialise.FigureTypePersistenceDelegate;
 import net.perspective.draw.serialise.InstantPersistenceDelegate;
+import net.perspective.draw.serialise.TextPersistenceDelegate;
 import net.perspective.draw.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,6 +158,8 @@ public class WriteOutStreamer extends Task<Object> {
                 new FigureTypePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.Figure.class,
                 new FigurePersistenceDelegate());
+            encoder.setPersistenceDelegate(net.perspective.draw.geom.Text.class,
+                new TextPersistenceDelegate());
             encoder.setExceptionListener((Exception ex) -> {
                 logger.warn(ex.getMessage());
             });

@@ -27,6 +27,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
@@ -220,7 +221,7 @@ public class Text implements DrawItem, Serializable {
     public void updateProperties(DrawingArea drawarea) {
         this.setColor(drawarea.getColor());
         this.setTransparency(drawarea.getTransparency());
-        setFont(drawarea.getFontFamily());
+        this.setFont(drawarea.getFontFamily());
         // Verify that this is Rich Text
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(text);
@@ -229,8 +230,8 @@ public class Text implements DrawItem, Serializable {
         } else {
             this.setStyle(drawarea.getConvertedFontStyle());
         }
-        setSize(drawarea.getFontSize());
-        setDimensions();
+        this.setSize(drawarea.getFontSize());
+        this.setDimensions();
     }
 
     /**
@@ -395,36 +396,48 @@ public class Text implements DrawItem, Serializable {
     @Override
     public Node draw() {
         javafx.scene.text.Text layout = getLayout();
+        layout.setFill(getColor());
         CanvasPoint axis = this.rotationCentre();
         CanvasPoint offset = new CanvasPoint(0.0, layout.getBaselineOffset());
         offset = V2.rot(offset.x, offset.y, getAngle());
         layout.setX(axis.x + offset.x);
         layout.setY(axis.y + offset.y);
-        layout.setRotate(getAngle());
+        layout.getTransforms().add(new Rotate(getAngle() * 180 / Math.PI, axis.x + offset.x, axis.y + offset.y));
         return layout;
     }
 
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
-        CanvasPoint pad = new CanvasPoint(5.0, 5.0);
+        CanvasPoint pad = new CanvasPoint(7.0, 7.0);
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         CanvasPoint u = this.getTransform(new CanvasPoint(getStart().x, getStart().y));
-        Rectangle anchor = new Rectangle();
-        anchor.setX(u.x - pad.x);
-        anchor.setY(u.y - pad.y);
+        Rectangle anchor_1 = new Rectangle();
+        anchor_1.setX(u.x - pad.x);
+        anchor_1.setY(u.y - pad.y);
         Color alphafill = new Color(1.0, 1.0, 1.0, 0.0);
-        anchor.setFill(alphafill);
-        // anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
-        anchor.setStroke(Color.web(drawarea.getThemeFillColor()));
-        anchor.setStrokeWidth(1.0);
-        anchor.getStrokeDashArray().addAll(Arrays.asList(1.5, 1.5));
-        anchor.setWidth(getEnd().x + 2 * pad.x);
-        anchor.setHeight(getEnd().y + 2 * pad.y);
-        anchor.setArcWidth(5.0);
-        anchor.setArcHeight(5.0);
-        anchors.getChildren().add(anchor);
-        return anchor;
+        anchor_1.setFill(alphafill);
+        anchor_1.setStroke(Color.web(drawarea.getThemeFillColor()));
+        anchor_1.setStrokeWidth(1.0);
+        anchor_1.getStrokeDashArray().addAll(Arrays.asList(1.0, 2.0));
+        anchor_1.setWidth(getEnd().x + 2 * pad.x);
+        anchor_1.setHeight(getEnd().y + 2 * pad.y);
+        anchor_1.setArcWidth(7.0);
+        anchor_1.setArcHeight(7.0);
+        Rectangle anchor_2 = new Rectangle();
+        anchor_2.setX(u.x - pad.x + 3);
+        anchor_2.setY(u.y - pad.y + 3);
+        anchor_2.setFill(alphafill);
+        anchor_2.setStroke(Color.web(drawarea.getThemeFillColor()));
+        anchor_2.setStrokeWidth(1.0);
+        anchor_2.getStrokeDashArray().addAll(Arrays.asList(1.0, 2.0));
+        anchor_2.setWidth(getEnd().x + 2 * pad.x - 6);
+        anchor_2.setHeight(getEnd().y + 2 * pad.y - 6);
+        anchor_2.setArcWidth(7.0);
+        anchor_2.setArcHeight(7.0);
+        anchors.getChildren().addAll(anchor_1, anchor_2);
+        anchors.getTransforms().add(new Rotate(getAngle() * 180 / Math.PI, getStart().x, getStart().y));
+        return anchors;
     }
 
     @Override

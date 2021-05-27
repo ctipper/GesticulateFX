@@ -50,6 +50,7 @@ import net.perspective.draw.util.G2;
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import net.perspective.draw.event.TextHandler;
+import net.perspective.draw.geom.Text;
 
 /**
  * 
@@ -459,6 +460,7 @@ public class DrawingArea {
      */
     public void rotateTo(DrawItem item, double theta) {
         if (((item instanceof Figure) && (!((Figure) item).getType().equals(FigureType.LINE)))
+                || (item instanceof Text)
                 || (item instanceof Grouped)
                 || (item instanceof Picture)) {
             double angle = item.getAngle();

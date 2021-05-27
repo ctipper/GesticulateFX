@@ -20,6 +20,7 @@ import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.Text;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
 
@@ -51,6 +52,7 @@ public class RotationHandler implements Handler {
             do {
                 DrawItem item = drawings.get(i);
                 if ((item instanceof Figure) && !(((Figure) item).getType().equals(FigureType.LINE))
+                        || (item instanceof Text)
                         || (item instanceof Grouped)
                         || (item instanceof Picture)) {
                     if (getRegion(item.getTop()[0]).contains(listener.getStartX(), listener.getStartY())) {
@@ -91,7 +93,7 @@ public class RotationHandler implements Handler {
     public void hoverEvent() {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());
-            if (!(item instanceof Edge) && !(item instanceof ArrowLine)) {
+            if (!(item instanceof Text) && !(item instanceof Edge) && !(item instanceof ArrowLine)) {
                 if (getRegion(item.getTop()[0]).contains(listener.getTempX(), listener.getTempY())) {
                     drawarea.getScene().setCursor(Cursor.CROSSHAIR);
                 } else if (getRegion(item.getDown()[0]).contains(listener.getTempX(), listener.getTempY())) {
@@ -126,6 +128,7 @@ public class RotationHandler implements Handler {
             A = B = new CanvasPoint(1, 1);
 
             if ((item instanceof Figure)
+                    || (item instanceof Text)
                     || (item instanceof Grouped)
                     || (item instanceof Picture)) {
                 A = new CanvasPoint(listener.getStartX() - centre.x, listener.getStartY() - centre.y);
