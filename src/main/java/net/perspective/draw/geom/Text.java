@@ -402,7 +402,7 @@ public class Text implements DrawItem, Serializable {
         offset = V2.rot(offset.x, offset.y, getAngle());
         layout.setX(axis.x + offset.x);
         layout.setY(axis.y + offset.y);
-        layout.getTransforms().add(new Rotate(getAngle() * 180 / Math.PI, axis.x + offset.x, axis.y + offset.y));
+        layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x + offset.x, axis.y + offset.y));
         return layout;
     }
 
@@ -436,7 +436,7 @@ public class Text implements DrawItem, Serializable {
         anchor_2.setArcWidth(7.0);
         anchor_2.setArcHeight(7.0);
         anchors.getChildren().addAll(anchor_1, anchor_2);
-        anchors.getTransforms().add(new Rotate(getAngle() * 180 / Math.PI, getStart().x, getStart().y));
+        anchors.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, getStart().x, getStart().y));
         return anchors;
     }
 
