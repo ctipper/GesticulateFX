@@ -1,12 +1,11 @@
 /**
  * TextFormatter.java
- * 
+ *
  * Created on 26 May 2021 15:38:48
- * 
+ *
  */
 package net.perspective.draw.geom;
 
-import java.awt.Font;
 import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.io.StringReader;
@@ -52,9 +51,28 @@ public class TextFormatter {
 
     /**
      * Return formatted text to client
-     * 
-     * @param   item  A Text item
-     * @return  An AttributedString
+     *
+     * @param item A Text item
+     * @return An javafx.scene.text.Text
+     */
+    public javafx.scene.text.TextFlow readFxFormattedText(Text item) {
+        // TODO handle javafx.scene.text.TextFlow
+        // use raw text from DOM
+        this.readTextItem(item);
+        javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(new javafx.scene.text.Text(text));
+        // Parse Text font attributes and apply
+//        this.setFxFontAttributes(item, tf);
+        offset = 0;
+        // Set formatting attributes
+        // tf = this.setFxStyleFormattingAttributes(currentdom.getContent(), tt);
+        return tf;
+    }
+
+    /**
+     * Return formatted text to client
+     *
+     * @param item A Text item
+     * @return An AttributedString
      */
     public AttributedString readFormattedText(Text item) {
         // use raw text from DOM
@@ -69,27 +87,21 @@ public class TextFormatter {
     }
 
     /**
-     * Return formatted text to client
-     * 
-     * @param   item  A Text item
-     * @return  An javafx.scene.text.Text
+     * Load Text content into formatter
+     *
+     * @param item A Text item
      */
-    public javafx.scene.text.Text readFxFormattedText(Text item) {
-        // use raw text from DOM
+    public javafx.scene.text.Text readFxText(Text item) {
         this.readTextItem(item);
         javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
-        // Parse Text font attributes and apply
-        this.setFxFontAttributes(item, tt);
-        offset = 0;
-        // Set formatting attributes
-//        as = this.setFormattingAttributes(currentdom.getContent(), as);
+        tt = getFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
         return tt;
     }
 
     /**
      * Load Text content into formatter
-     * 
-     * @param item  A Text item
+     *
+     * @param item A Text item
      */
     private void readTextItem(Text item) {
         String content = normalizeText(item.getText());
@@ -130,20 +142,43 @@ public class TextFormatter {
         return cdata;
     }
 
-    private void setFxFontAttributes(Text item, javafx.scene.text.Text tt) {
+    private javafx.scene.text.Text getFxFontAttributes(javafx.scene.text.Text tt, String fontfamily, double size, int fontstyle, javafx.scene.paint.Color color) {
+        javafx.scene.text.Font f;
         // Serif is the default
-        String font = item.getFont();
-        switch (font) {
+        switch (fontfamily) {
             case "SansSerif":
-                tt.setFont(new javafx.scene.text.Font("Arial", item.getSize()));
+                f = javafx.scene.text.Font.font("Arial",
+                        ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
+                                ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
+                        ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
+                                ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
+                        size);
+                tt.setFont(f);
+                tt.setFill(color);
                 break;
             case "Monospaced":
-                tt.setFont(new javafx.scene.text.Font("Courier New", item.getSize()));
+                f = javafx.scene.text.Font.font("monospace",
+                        ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
+                                ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
+                        ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
+                                ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
+                        size);
+                tt.setFont(f);
+                tt.setFill(color);
                 break;
+            case "Serif":
             default:
-                tt.setFont(new javafx.scene.text.Font("Times New Roman", item.getSize()));
+                f = javafx.scene.text.Font.font("Times New Roman",
+                        ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
+                                ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
+                        ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
+                                ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
+                        size);
+                tt.setFont(f);
+                tt.setFill(color);
                 break;
         }
+        return tt;
     }
 
     private void setFontAttributes(Text item, AttributedString as) {
@@ -151,13 +186,13 @@ public class TextFormatter {
         String font = item.getFont();
         switch (font) {
             case "SansSerif":
-                as.addAttribute(TextAttribute.FAMILY, Font.SANS_SERIF);
+                as.addAttribute(TextAttribute.FAMILY, java.awt.Font.SANS_SERIF);
                 break;
             case "Monospaced":
-                as.addAttribute(TextAttribute.FAMILY, Font.MONOSPACED);
+                as.addAttribute(TextAttribute.FAMILY, java.awt.Font.MONOSPACED);
                 break;
             default:
-                as.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+                as.addAttribute(TextAttribute.FAMILY, java.awt.Font.SERIF);
                 break;
         }
         as.addAttribute(TextAttribute.SIZE, item.getSize());

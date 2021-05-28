@@ -240,7 +240,7 @@ public class Text implements DrawItem, Serializable {
      * @param canvas
      */
     public void setDimensions() {
-        javafx.scene.text.Text layout = this.getLayout();
+        javafx.scene.text.TextFlow layout = this.getLayout();
         end = new CanvasPoint((double) layout.getLayoutBounds().getWidth(),
             (double) layout.getLayoutBounds().getHeight());
     }
@@ -251,20 +251,22 @@ public class Text implements DrawItem, Serializable {
      * @param canvas
      * @return a javafx.scene.text.Text
      */
-    public javafx.scene.text.Text getLayout() {
-        javafx.scene.text.Text tt;
+    @Transient
+    public javafx.scene.text.TextFlow getLayout() {
+        javafx.scene.text.TextFlow tf;
         // Verify that this is Rich Text
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(text);
         if (matcher.find()) {
-            // TODO handle javafx.scene.text.TextFlow
             TextFormatter formatter = new TextFormatter();
-            tt = formatter.readFxFormattedText(this);
+            tf = formatter.readFxFormattedText(this);
         } else {
             TextFormatter formatter = new TextFormatter();
-            tt = formatter.readFxFormattedText(this);
+            javafx.scene.text.Text tt = formatter.readFxText(this);
+            tf = new javafx.scene.text.TextFlow(tt);
         }
-        return tt;
+        tf.autosize();
+        return tf;
     }
 
     /**
@@ -395,14 +397,11 @@ public class Text implements DrawItem, Serializable {
 
     @Override
     public Node draw() {
-        javafx.scene.text.Text layout = getLayout();
-        layout.setFill(getColor());
+        javafx.scene.text.TextFlow layout = getLayout();
         CanvasPoint axis = this.rotationCentre();
-        CanvasPoint offset = new CanvasPoint(0.0, layout.getBaselineOffset());
-        offset = V2.rot(offset.x, offset.y, getAngle());
-        layout.setX(axis.x + offset.x);
-        layout.setY(axis.y + offset.y);
-        layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x + offset.x, axis.y + offset.y));
+        layout.setLayoutX(axis.x);
+        layout.setLayoutY(axis.y);
+        layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
         return layout;
     }
 
