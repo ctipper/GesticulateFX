@@ -10,11 +10,13 @@ import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.AttributedString;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.perspective.draw.DrawingArea;
+import org.jdom2.Content;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -35,6 +37,11 @@ public class TextFormatter {
     private int offset;
 
     private static final Logger logger = LoggerFactory.getLogger(TextFormatter.class.getName());
+
+    public static final int FONT_PLAIN = 1;
+    public static final int FONT_BOLD = 2;
+    public static final int FONT_ITALIC = 4;
+    public static final int FONT_UNDERLINED = 8;
 
     /** Creates a new instance of <code>TextFormatter</code> */
     public TextFormatter() {
@@ -57,17 +64,13 @@ public class TextFormatter {
      * @return An javafx.scene.text.Text
      */
     public javafx.scene.text.TextFlow readFxFormattedText(Text item) {
-        // TODO handle javafx.scene.text.TextFlow
         // use raw text from DOM
         this.readTextItem(item);
-        javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
-        tt = getFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
-        javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(tt);
-        // Parse Text font attributes and apply
-//        this.setFxFontAttributes(item, tf);
+        javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow();
         offset = 0;
-        // Set formatting attributes
-        // tf = this.setFxStyleFormattingAttributes(currentdom.getContent(), tt);
+        // Parse Text font attributes and apply
+        List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(currentdom.getContent(), item);
+        tf.getChildren().addAll(textlist);
         return tf;
     }
 
@@ -97,7 +100,7 @@ public class TextFormatter {
     public javafx.scene.text.Text readFxText(Text item) {
         this.readTextItem(item);
         javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
-        tt = getFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
+        tt = setFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
         return tt;
     }
 
@@ -145,7 +148,7 @@ public class TextFormatter {
         return cdata;
     }
 
-    private javafx.scene.text.Text getFxFontAttributes(javafx.scene.text.Text tt, String fontfamily, double size, int fontstyle, javafx.scene.paint.Color color) {
+    private javafx.scene.text.Text setFxFontAttributes(javafx.scene.text.Text tt, String fontfamily, double size, int fontstyle, javafx.scene.paint.Color color) {
         javafx.scene.text.Font f;
         // Serif is the default
         switch (fontfamily) {
@@ -156,7 +159,7 @@ public class TextFormatter {
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
-                if ((fontstyle & DrawingArea.FONT_UNDERLINED) == DrawingArea.FONT_UNDERLINED) {
+                if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
                     tt.setUnderline(true);
                 }
                 tt.setFont(f);
@@ -169,7 +172,7 @@ public class TextFormatter {
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
-                if ((fontstyle & DrawingArea.FONT_UNDERLINED) == DrawingArea.FONT_UNDERLINED) {
+                if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
                     tt.setUnderline(true);
                 }
                 tt.setFont(f);
@@ -183,7 +186,7 @@ public class TextFormatter {
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
-                if ((fontstyle & DrawingArea.FONT_UNDERLINED) == DrawingArea.FONT_UNDERLINED) {
+                if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
                     tt.setUnderline(true);
                 }
                 tt.setFont(f);
@@ -211,7 +214,88 @@ public class TextFormatter {
         as.addAttribute(TextAttribute.KERNING, TextAttribute.KERNING_ON);
     }
 
-    private AttributedString setFormattingAttributes(List fragment, AttributedString as) {
+    private List<javafx.scene.text.Text> setFxFormattingAttributes(List<Content> list, Text item) {
+        javafx.scene.text.Text tt = new javafx.scene.text.Text();
+        List<javafx.scene.text.Text> textlist = new ArrayList<>();
+        int start = 0;
+        int end = getFlattenedText(list).length();
+        int fontstyle = 0;
+        List<Content> newlist = new ArrayList<>();
+        Stack<List<Content>> liststack = new Stack<>();
+        Stack<List<Content>> newstack = new Stack<>();
+        Stack<Integer> indices = new Stack<>();
+        Stack<Element> elstack = new Stack<>();
+        int localoffset = 0;
+        boolean finished = false;
+        int i = 0;
+        Content c = list.get(0);
+        while (!finished) {
+            if (i < list.size()) {
+                c = list.get(i);
+                offset = localoffset;
+                if (c instanceof org.jdom2.Text) {
+                    localoffset += ((org.jdom2.Text) c).getText().length();
+                    if ((offset <= start) && (localoffset >= end)) {
+                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                    } else if ((offset <= start) && (localoffset < end) && (localoffset >= start)) {
+                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                    } else if ((offset <= start) && (localoffset < end) && (localoffset < start)) {
+                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                    } else if ((offset > start) && (localoffset >= end) && (offset >= end)) {
+                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                    } else if ((offset > start) && (localoffset >= end) && (offset < end)) {
+                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                    } else if ((offset > start) && (localoffset < end) && (offset < end)) {
+                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                    }
+                    setFxFontAttributes(tt, item.getFont(), item.getSize(), fontstyle, item.getColor());
+                    textlist.add(tt);
+                    i++;
+                } else if (c instanceof Element) {
+                    Element e = ((Element) c).clone();
+                    if (e.getName().equalsIgnoreCase("b")) {
+                        fontstyle ^= java.awt.Font.BOLD;
+                    } else if (e.getName().equalsIgnoreCase("i")) {
+                        fontstyle ^= java.awt.Font.ITALIC;
+                    } else if (e.getName().equalsIgnoreCase("u")) {
+                        fontstyle ^= FONT_UNDERLINED;
+                    }
+                    newlist.add(e);
+                    elstack.push(e);
+                    i++;
+                }
+            } else {
+                if (!liststack.empty()) {
+                    i = indices.pop();
+                    list = liststack.pop();
+                    Element e = elstack.pop();
+                    if (e.getName().equalsIgnoreCase("b")) {
+                        fontstyle ^= java.awt.Font.BOLD;
+                    } else if (e.getName().equalsIgnoreCase("i")) {
+                        fontstyle ^= java.awt.Font.ITALIC;
+                    } else if (e.getName().equalsIgnoreCase("u")) {
+                        fontstyle ^= FONT_UNDERLINED;
+                    }
+                    e.setContent(newlist);
+                    newlist = newstack.pop();
+                    continue;
+                } else {
+                    finished = true;
+                }
+            }
+            if (c instanceof Element) {
+                indices.push(i);
+                liststack.push(list);
+                newstack.push(newlist);
+                list = ((Element) c).getContent();
+                newlist = new ArrayList<>();
+                i = 0;
+            }
+        }
+        return textlist;
+    }
+
+    private AttributedString setFormattingAttributes(List<Content> fragment, AttributedString as) {
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
             Object element = iterator.next();
