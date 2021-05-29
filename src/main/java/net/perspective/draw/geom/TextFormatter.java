@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.perspective.draw.DrawingArea;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -59,7 +60,9 @@ public class TextFormatter {
         // TODO handle javafx.scene.text.TextFlow
         // use raw text from DOM
         this.readTextItem(item);
-        javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(new javafx.scene.text.Text(text));
+        javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
+        tt = getFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
+        javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(tt);
         // Parse Text font attributes and apply
 //        this.setFxFontAttributes(item, tf);
         offset = 0;
@@ -153,16 +156,22 @@ public class TextFormatter {
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
+                if ((fontstyle & DrawingArea.FONT_UNDERLINED) == DrawingArea.FONT_UNDERLINED) {
+                    tt.setUnderline(true);
+                }
                 tt.setFont(f);
                 tt.setFill(color);
                 break;
             case "Monospaced":
-                f = javafx.scene.text.Font.font("monospace",
+                f = javafx.scene.text.Font.font("Courier New",
                         ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
+                if ((fontstyle & DrawingArea.FONT_UNDERLINED) == DrawingArea.FONT_UNDERLINED) {
+                    tt.setUnderline(true);
+                }
                 tt.setFont(f);
                 tt.setFill(color);
                 break;
@@ -174,6 +183,9 @@ public class TextFormatter {
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
+                if ((fontstyle & DrawingArea.FONT_UNDERLINED) == DrawingArea.FONT_UNDERLINED) {
+                    tt.setUnderline(true);
+                }
                 tt.setFont(f);
                 tt.setFill(color);
                 break;

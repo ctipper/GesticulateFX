@@ -401,13 +401,14 @@ public class Text implements DrawItem, Serializable {
         CanvasPoint axis = this.rotationCentre();
         layout.setLayoutX(axis.x);
         layout.setLayoutY(axis.y);
-        layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
+        layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, 0, 0));
         return layout;
     }
 
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
         CanvasPoint pad = new CanvasPoint(7.0, 7.0);
+        CanvasPoint axis = this.rotationCentre();
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         CanvasPoint u = this.getTransform(new CanvasPoint(getStart().x, getStart().y));
@@ -435,7 +436,7 @@ public class Text implements DrawItem, Serializable {
         anchor_2.setArcWidth(7.0);
         anchor_2.setArcHeight(7.0);
         anchors.getChildren().addAll(anchor_1, anchor_2);
-        anchors.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, getStart().x, getStart().y));
+        anchors.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
         return anchors;
     }
 
