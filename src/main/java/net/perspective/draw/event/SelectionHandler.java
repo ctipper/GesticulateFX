@@ -58,6 +58,7 @@ public class SelectionHandler implements Handler {
         }
         if (view.getSelected() != -1 && !listener.getRightClick()) {
             view.updateSelectedItem();
+            view.moveSelection(view.getSelected());
             context.resetContainment();
         }
     }
