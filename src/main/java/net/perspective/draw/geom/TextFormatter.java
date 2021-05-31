@@ -164,9 +164,10 @@ public class TextFormatter {
                 }
                 tt.setFont(f);
                 tt.setFill(color);
+                tt.setSmooth(true);
                 break;
             case "Monospaced":
-                f = javafx.scene.text.Font.font("Courier New",
+                f = javafx.scene.text.Font.font("Bitstream Vera Sans Mono",
                         ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
@@ -177,6 +178,7 @@ public class TextFormatter {
                 }
                 tt.setFont(f);
                 tt.setFill(color);
+                tt.setSmooth(true);
                 break;
             case "Serif":
             default:
@@ -191,6 +193,7 @@ public class TextFormatter {
                 }
                 tt.setFont(f);
                 tt.setFill(color);
+                tt.setSmooth(true);
                 break;
         }
         return tt;
