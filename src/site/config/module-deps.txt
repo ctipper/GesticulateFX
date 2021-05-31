@@ -1,1 +1,1 @@
-java.base,java.compiler,java.desktop,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,javafx.controls,javafx.fxml,javafx.swing,jdk.unsupported,jdk.xml.dom
+java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom

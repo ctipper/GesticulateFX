@@ -20,8 +20,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>16</javafx.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <log4j.version>2.13.3</log4j.version>
-        <batik.version>1.13</batik.version>
+        <log4j.version>2.14.1</log4j.version>
+        <batik.version>1.14</batik.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
-            <version>1.10.7</version>
+            <version>1.10.9</version>
         </dependency>
 
         <!-- Apache Batik -->
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
-            <version>2.4</version>
+            <version>2.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>xml-apis</groupId>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>net.harawata</groupId>
             <artifactId>appdirs</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
         </dependency>
 
         <!-- jdom -->
@@ -181,21 +181,21 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.0</version>
+            <version>5.7.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.0</version>
+            <version>5.7.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.6.0</version>
+            <version>5.7.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
