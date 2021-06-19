@@ -14,6 +14,10 @@
       <os family="windows"/>
    </condition>
 
+   <condition property="onlinux">
+      <os family="unix"/>
+   </condition>
+
    <target name="-init-project">
       <property file="src/site/ant/project/project.properties"/>
    </target>
@@ -51,9 +55,22 @@
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
 
+      <exec executable="${runtime.windows.path}/bin/jlink" osfamily="unix" failonerror="true" newenvironment="true">
+         <env key="JAVA_HOME" value="${runtime.windows.path}"/>
+         <arg value="--no-header-files"/>
+         <arg value="--no-man-pages" />
+         <arg value="--strip-debug" />
+         <arg value="--strip-native-commands" />
+         <arg value="--module-path" />
+         <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
+         <arg value="--add-modules" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="--output" />
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
+      </exec>
    </target>
 
-   <target name="bundle" depends="jlink" description="Build Mac Bundle">
+   <target name="bundle" depends="jlink" description="Build App Bundle">
 
       <mkdir dir="target/jfx/${bundle.dir}/${dist.dir}" />
       <mkdir dir="target/jfx/${bundle.dir}/${dist.dir}/lib" />
@@ -81,6 +98,16 @@
       </delete>
 
       <delete dir="target/jfx/temp" if:set="onwindows"/>
+
+      <echo if:set="onlinux" message="Delete builds"/>
+
+      <delete dir="target/jfx/${app.name}" if:set="onlinux"/>
+
+      <delete if:set="onlinux">
+         <fileset file="target/jfx/gesticulatefx*.deb"/>
+      </delete>
+
+      <delete dir="target/jfx/temp" if:set="onlinux"/>
 
       <copy todir="target/jfx/${bundle.dir}/${dist.dir}">
          <fileset dir="target/jfx/app">
@@ -129,7 +156,7 @@
          <arg value="src/site/deploy/macosx/bundle.properties" />
       </exec>
 
-      <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="Windows" failonerror="false" newenvironment="true">
+      <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="windows" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
          <arg value="--type"/>
          <arg value="app-image"/>
@@ -158,6 +185,34 @@
          <arg value="--temp" />
          <arg value="target/jfx/temp" />
       </exec>
+
+      <exec executable="${jpackage.windows.path}/bin/jpackage" osfamily="unix" failonerror="false" newenvironment="true">
+         <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
+         <arg value="--type"/>
+         <arg value="app-image"/>
+         <arg value="--input" />
+         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="--dest"/>
+         <arg value="target/jfx"/>
+         <arg value="--runtime-image"/>
+         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
+         <arg value="--name"/>
+         <arg value="${app.name}"/>
+         <arg value="--main-class"/>
+         <arg value="net.perspective.draw.Gesticulate"/>
+         <arg value="--main-jar"/>
+         <arg value="${jlink.launcher.name}-${version.public}.jar"/>
+         <arg value="--java-options" />
+         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
+         <arg value="--copyright" />
+         <arg value="Copyright © 2021 Christopher Tipper" />
+         <arg value="--vendor" />
+         <arg value="https://www.e-conomist.me.uk/" />
+         <arg value="--app-version" />
+         <arg value="${version.internal}" />
+         <arg value="--icon"/>
+         <arg value="src/site/deploy/linux/${bundle.linux.icon}"/>
+      </exec>
    </target>
 
    <target name="installer" depends="bundle" description="Build PLatform Installers">
@@ -180,6 +235,27 @@
          <arg value="target/jfx/${app.name}.app"/>
          <arg value="--install-dir"/>
          <arg value="/Applications"/>
+      </exec>
+
+      <echo if:set="onlinux" message="Creating DEB package"/>
+
+      <exec executable="${jpackage.windows.path}/bin/jpackage" osfamily="unix" failonerror="true" newenvironment="true">
+         <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
+         <arg value="--type"/>
+         <arg value="deb"/>
+         <arg value="--name"/>
+         <arg value="${app.name}"/>
+         <arg value="--dest"/>
+         <arg value="target/jfx"/>
+         <arg value="--app-image"/>
+         <arg value="target/jfx/${app.name}"/>
+         <arg value="--install-dir"/>
+         <arg value="/opt"/>
+         <arg value="--linux-menu-group"/>
+         <arg value="Graphics"/>
+         <arg value="--linux-shortcut"/>
+         <arg value="--file-associations" />
+         <arg value="src/site/deploy/linux/bundle.properties" />
       </exec>
 
       <echo if:set="onwindows" message="Calling ISCC"/>
