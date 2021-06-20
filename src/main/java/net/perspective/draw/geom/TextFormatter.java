@@ -153,7 +153,7 @@ public class TextFormatter {
         // Serif is the default
         switch (fontfamily) {
             case "SansSerif":
-                f = javafx.scene.text.Font.font("Arial",
+                f = javafx.scene.text.Font.font("sans",
                         ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
@@ -167,7 +167,7 @@ public class TextFormatter {
                 tt.setSmooth(true);
                 break;
             case "Monospaced":
-                f = javafx.scene.text.Font.font("Bitstream Vera Sans Mono",
+                f = javafx.scene.text.Font.font("monospace",
                         ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
@@ -182,7 +182,7 @@ public class TextFormatter {
                 break;
             case "Serif":
             default:
-                f = javafx.scene.text.Font.font("Times New Roman",
+                f = javafx.scene.text.Font.font("serif",
                         ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
