@@ -15,7 +15,12 @@
    </condition>
 
    <condition property="onlinux">
-      <os family="unix"/>
+       <and>
+           <os family="unix"/>
+           <not>
+               <os family="mac"/>
+           </not>
+       </and>
    </condition>
 
    <target name="-init-project">
@@ -55,7 +60,7 @@
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
 
-      <exec executable="${runtime.windows.path}/bin/jlink" osfamily="unix" failonerror="true" newenvironment="true">
+      <exec executable="${runtime.windows.path}/bin/jlink" if:set="onlinux" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.windows.path}"/>
          <arg value="--no-header-files"/>
          <arg value="--no-man-pages" />
@@ -186,7 +191,7 @@
          <arg value="target/jfx/temp" />
       </exec>
 
-      <exec executable="${jpackage.windows.path}/bin/jpackage" osfamily="unix" failonerror="false" newenvironment="true">
+      <exec executable="${jpackage.windows.path}/bin/jpackage" if:set="onlinux" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
          <arg value="--type"/>
          <arg value="app-image"/>
@@ -239,7 +244,7 @@
 
       <echo if:set="onlinux" message="Creating DEB package"/>
 
-      <exec executable="${jpackage.windows.path}/bin/jpackage" osfamily="unix" failonerror="true" newenvironment="true">
+      <exec executable="${jpackage.windows.path}/bin/jpackage" if:set="onlinux" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
          <arg value="--type"/>
          <arg value="deb"/>
