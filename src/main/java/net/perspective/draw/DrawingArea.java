@@ -662,9 +662,9 @@ public class DrawingArea {
      */
     public void setFontFamily(String fontfamily) {
         this.fontfamily = fontfamily;
-//        if (controller.getDropperDisabled()) {
-//            view.updateSelectedItem();
-//        }
+        if (controller.getDropperDisabled()) {
+            view.updateSelectedItem();
+        }
     }
 
     /**
@@ -683,9 +683,9 @@ public class DrawingArea {
      */
     public void updateFontStyle(int fontstyle) {
         this.fontstyle = fontstyle;
-//        if (controller.getDropperDisabled()) {
-//            view.updateSelectedItem();
-//        }
+        if (controller.getDropperDisabled()) {
+            view.updateSelectedItem();
+        }
     }
 
     /**
@@ -735,9 +735,9 @@ public class DrawingArea {
      */
     public void setFontSize(int fontsize) {
         this.fontsize = fontsize;
-//        if (controller.getDropperDisabled()) {
-//            view.updateSelectedItem();
-//        }
+        if (controller.getDropperDisabled()) {
+            view.updateSelectedItem();
+        }
     }
 
     /**

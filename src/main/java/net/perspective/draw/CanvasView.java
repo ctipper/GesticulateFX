@@ -194,34 +194,40 @@ public class CanvasView {
      * of the selected item if dropper is enabled
      */
     public void updateSelectedItem() {
-        if (this.getSelected() != -1) {
-            if (controller.getDropperDisabled()) {
-                DrawItem item = drawings.get(this.getSelected());
-                item.updateProperties(drawarea);
+        if (this.getSelected() != -1 && controller.getDropperDisabled()) {
+            /**
+             * Update item properties
+             */
+            DrawItem item = drawings.get(this.getSelected());
+            item.updateProperties(drawarea);
 
-                if ((item instanceof Figure) && !(item instanceof ArrowLine)) {
-                    FigureType type = ((Figure) item).getType();
-                    if (drawarea.getArrow() != ArrowType.NONE) {
-                        if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
-                            item = new ArrowLine((Figure) item);
-                            item.updateProperties(drawarea);
-                        }
-                    }
-                } else if (item instanceof ArrowLine) {
-                    if (drawarea.getArrow() == ArrowType.NONE) {
-                        item = ((ArrowLine) item).getLine();
-                        item.updateProperties(drawarea);
-                    } else {
+            if ((item instanceof Figure) && !(item instanceof ArrowLine)) {
+                FigureType type = ((Figure) item).getType();
+                if (drawarea.getArrow() != ArrowType.NONE) {
+                    if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
+                        item = new ArrowLine((Figure) item);
                         item.updateProperties(drawarea);
                     }
                 }
-
-                this.updateCanvasItem(this.getSelected(), item);
-            } else { // dropper enabled
-                DrawItem item = drawings.get(this.getSelected());
-                if (item instanceof Figure) {
-                    this.figureDropper((Figure) item);
+            } else if (item instanceof ArrowLine) {
+                if (drawarea.getArrow() == ArrowType.NONE) {
+                    item = ((ArrowLine) item).getLine();
+                    item.updateProperties(drawarea);
+                } else {
+                    item.updateProperties(drawarea);
                 }
+            }
+
+            this.updateCanvasItem(this.getSelected(), item);
+        } else if (this.getSelected() != -1 && !controller.getDropperDisabled()) { // dropper enabled
+            /**
+             * Select item properties and update UI
+             */
+            DrawItem item = drawings.get(this.getSelected());
+            if (item instanceof Figure) {
+                this.figureDropper((Figure) item);
+            } else if (item instanceof Text) {
+                this.textDropper((Text) item);
             }
         }
     }
@@ -237,13 +243,13 @@ public class CanvasView {
         } else {
             styleId = dropper.getStyleSelector((BasicStroke) item.getStroke(), ArrowType.NONE);
         }
-        logger.trace("strokeId " + strokeId + " styleId " + styleId);
+        logger.trace("strokeId: {} styleId: {}", strokeId, styleId);
         /**
          * get colours
          */
         Color color = item.getColor();
         Color fillcolor = item.getFillColor();
-        logger.trace("color: " + controller.toRGBCode(color) + " fillcolor: " + controller.toRGBCode(fillcolor));
+        logger.trace("color: {} fillcolor: {}", controller.toRGBCode(color), controller.toRGBCode(fillcolor));
         /**
          * arrow type
          */
@@ -252,11 +258,37 @@ public class CanvasView {
         } else {
             drawarea.setArrow(ArrowType.NONE);
         }
+        /**
+         * set properties
+         */
         controller.setStrokeCombo(strokeId);
         controller.setStyleCombo(styleId);
         controller.setColor(color);
         controller.setFillColor(fillcolor);
     }
+
+    private void textDropper(Text item) {
+        /**
+         * get font properties
+         */
+        String fontFamily = item.getFont();
+        int fontSize = item.getSize();
+        int fontStyle = item.getStyle();
+        logger.trace("font: {} size: {} style: {}", fontFamily, fontSize, fontStyle);
+        /**
+         * get text colour
+         */
+        Color color = item.getColor();
+        logger.trace("color: {}", controller.toRGBCode(color));
+        /**
+         * set properties
+         */
+        drawarea.setColor(color);
+        drawarea.setFontFamily(fontFamily);
+        drawarea.setFontSize(fontSize);
+        drawarea.updateFontStyle(fontStyle);
+    }
+
 
     /**
      * Send DrawItem backwards in drawing list

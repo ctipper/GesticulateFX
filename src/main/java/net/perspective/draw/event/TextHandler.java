@@ -37,10 +37,6 @@ public class TextHandler implements Handler {
     @Override
     public void clickEvent() {
         if (!view.isEditing()) {
-            // if (view.getTextController().isRichText()) {
-                drawarea.setFontStyle(java.awt.Font.PLAIN);
-            //     canvas.getToolPanel().resetFormattingButtons();
-            // }
             Text item = new Text(listener.getTempX(), listener.getTempY());
             // item = view.getTextController().initializeItem(item);
             item.updateProperties(drawarea);
@@ -49,7 +45,10 @@ public class TextHandler implements Handler {
             int i = view.getDrawings().size() - 1;
             view.setSelected(i);
             // view.setEditing(KeyboardHandlerType.TEXT);
-        }    
+        } else if (view.getSelected() != -1) {
+            view.updateSelectedItem();
+            view.moveSelection(view.getSelected());
+        }
     }
 
     @Override
