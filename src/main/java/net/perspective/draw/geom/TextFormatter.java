@@ -153,7 +153,7 @@ public class TextFormatter {
         // Serif is the default
         switch (fontfamily) {
             case "SansSerif":
-                f = javafx.scene.text.Font.font("sans",
+                f = javafx.scene.text.Font.font("sansserif",
                         ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
                         ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
