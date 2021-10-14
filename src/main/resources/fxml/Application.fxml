@@ -45,7 +45,7 @@
                 </VBox>
             </left>
             <top>
-                <ToolBar prefHeight="60.0" style="">
+                <ToolBar prefHeight="70.0" style="">
                     <items>
                         <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="">
                             <graphic>
@@ -58,7 +58,7 @@
                         -->
                         <ComboBox id="combostroketype" fx:id="strokecombobox" focusTraversable="false" prefWidth="130.0">
                             <tooltip>
-                                <Tooltip text="Select stroke width" />
+                                <Tooltip text="Stroke Width" />
                             </tooltip>
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -80,7 +80,7 @@
                         -->
                         <ComboBox id="combostrokestyle" fx:id="stylecombobox" focusTraversable="false" prefWidth="130.0">
                             <tooltip>
-                                <Tooltip text="Select stroke style" />
+                                <Tooltip text="Stroke Style" />
                             </tooltip>
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -100,13 +100,13 @@
                         <Label focusTraversable="false" text="Fill" />
                         <ColorPicker id="pickfillcolor" fx:id="fillcolorpicker" focusTraversable="false" prefWidth="45.0">
                             <tooltip>
-                                <Tooltip text="Select fill color" />
+                                <Tooltip text="Fill Color" />
                             </tooltip>
                         </ColorPicker>
                         <Label focusTraversable="false" text="Color" />
                         <ColorPicker id="pickcolor" fx:id="colorpicker" focusTraversable="false" opacity="1.0" prefWidth="45.0">
                             <tooltip>
-                                <Tooltip text="Select stroke color" />
+                                <Tooltip text="Stroke Color" />
                             </tooltip>
                         </ColorPicker>
                         <Region prefWidth="10.0" />
@@ -115,7 +115,7 @@
                         -->
                         <ToggleButton id="buttdropper" fx:id="dropperbutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleDropperAction" styleClass="togglebuttons" text="">
                             <tooltip>
-                                <Tooltip text="Copy selected properties" />
+                                <Tooltip text="Copy Format" />
                             </tooltip>
                             <graphic>
                                 <SVGPath scaleX="1.2" scaleY="1.2" content="M11.0159214 2.2396182000000002C10.777721399999999 2.3311782 10.3105614 2.7160182 9.6599214 3.3666582000000003L8.6704014 4.3469382 8.4048414 4.1911782C8.2583214 4.1087382 8.0934414 4.0354182000000005 8.0292414 4.0354182000000005 7.974281400000001 4.0354182000000005 7.653641400000001 4.2919782 7.3328814 4.603498200000001 6.6182814 5.2906182 6.5816814 5.4920982 7.1130414 6.0052182L7.4795214 6.362458200000001 5.4731214 8.3873382C3.4849614 10.3937382 3.4667214 10.4120982 3.0085614 11.3648982 2.7520014 11.8962582 2.4404814 12.4826982 2.3305614 12.665938200000001L2.1198414 13.0048182 2.3122014 13.2522582C2.4130014 13.3896582 2.6144814 13.5912582 2.7520014 13.6920582L2.9994414000000003 13.8844182 3.3384414 13.6736982C3.5216814000000003 13.5637782 4.1081214 13.252138200000001 4.6394814 12.995698200000001 5.5922814 12.5285382 5.6197614 12.5101782 7.617041400000001 10.531138200000001L9.6326814 8.533858200000001 10.0175214 8.9003382C10.2282414 9.0928182 10.4939214 9.2576982 10.5947214 9.2576982 10.8146814 9.2576982 11.8406814 8.323138199999999 11.9323614 8.0483382 11.969081399999999 7.9292982 11.914121399999999 7.764298200000001 11.8042014 7.6085382L11.620961399999999 7.361098200000001 12.5646414 6.4174182C13.7008014 5.2904982 13.948001399999999 4.8324582000000005 13.8656814 4.0536582 13.7186814 2.6794182 12.2894814 1.7723382 11.0159214 2.2396182ZM8.578961399999999 7.4710182L9.0828414 7.9748982 7.2047214 9.8622582C5.9036814 11.1632982 5.1890814 11.813698200000001 4.8684414 11.9786982 4.6210014 12.106858200000001 4.1263614 12.391018200000001 3.7873614 12.6199782 2.7703614 13.2704982 2.7520014 13.233778200000001 3.4849614 12.061018200000001 3.7690014 11.6120982 3.9980814000000002 11.1815382 3.9980814000000002 11.1082182 3.9980814000000002 10.9799382 7.9010814 6.9670182 8.0292414 6.9670182 8.056721399999999 6.967138199999999 8.3040414 7.1962182 8.578961399999999 7.4710182Z" styleClass="svgFill" fill="TRANSPARENT"/>
@@ -123,7 +123,7 @@
                         </ToggleButton>
                         <ToggleButton id="buttonetoone" fx:id="onetoonebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleDropperAction" styleClass="togglebuttons" text="">
                             <tooltip>
-                                <Tooltip text="Draw equilateral shapes" />
+                                <Tooltip text="Draw Isometric" />
                             </tooltip>
                             <graphic>
                                 <Group scaleX="1.35" scaleY="1.35">
@@ -135,58 +135,89 @@
                         </ToggleButton>
                         <ToggleButton id="buttoutline" fx:id="outlinebutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleOpacityAction" styleClass="togglebuttons" text="">
                             <tooltip>
-                                <Tooltip text="Draw as outline" />
+                                <Tooltip text="Draw Outline" />
                             </tooltip>
                             <graphic>
                                 <SVGPath content="M2.000000 11.000000L12.958878 11.000000L12.958878 0.041122L2.000000 0.041122Z" styleClass="svgThinPath" fill="TRANSPARENT"/>
                             </graphic>
                         </ToggleButton>
-                        <!--
                         <Region prefWidth="5.0" />
-                        <Label focusTraversable="false" text="Font" />
-                        <ComboBox focusTraversable="false" prefWidth="100.0">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Item 1" />
-                                    <String fx:value="Item 2" />
-                                    <String fx:value="Item 3" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
-                        <Label focusTraversable="false" text="Size" />
-                        <ComboBox focusTraversable="false" prefWidth="80.0">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Item 1" />
-                                    <String fx:value="Item 2" />
-                                    <String fx:value="Item 3" />
-                                </FXCollections>
-                            </items>
-                        </ComboBox>
-                        -->
-                        <Region prefWidth="35.0" />
-                        <ToggleButton id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
-                            <graphic>
-                                <SVGPath scaleX="1.35" scaleY="1.35" content="M6.6875 4.203125L6.609375 4.125 4.171875 4.453125 4.171875 4.890625 4.59375 4.953125C4.78125 4.984375 4.890625 5.09375 4.890625 5.578125L4.890625 12.921875 5.265625 13.140625 5.90625 12.734375C6.34375 12.96875 6.921875 13.140625 7.6875 13.140625 9.40625 13.140625 10.828125 12.5625 10.828125 9.875 10.828125 7.921875 9.78125 7 8.59375 7 7.84375 7 7.25 7.390625 6.6875 7.828125ZM6.6875 9.265625C6.6875 9.015625 6.703125 8.765625 6.765625 8.59375 6.921875 8.1875 7.1875 7.921875 7.734375 7.921875 8.3125 7.921875 8.921875 8.21875 8.921875 10.171875 8.921875 11.671875 8.609375 12.59375 7.71875 12.59375 7.125 12.59375 6.828125 12.265625 6.734375 11.828125 6.703125 11.65625 6.6875 11.390625 6.6875 11.15625ZM6.6875 9.265625" styleClass="svgFill"/>
-                            </graphic>
-                        </ToggleButton>
-                        <ToggleButton id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
-                            <graphic>
-                                <SVGPath scaleX="1.5" scaleY="1.5" content="M5.578125 6.328125L5.5 6.625 6.1875 6.6875C6.515625 6.703125 6.546875 6.8125 6.4375 7.234375L5.4375 10.96875C5.25 11.65625 5.40625 12.140625 6.0625 12.140625 6.921875 12.140625 7.578125 11.328125 8 10.421875L7.703125 10.25C7.484375 10.671875 6.96875 11.515625 6.625 11.515625 6.390625 11.515625 6.40625 11.25 6.515625 10.859375L7.8125 6.0625 7.75 6ZM7.6875 3.453125C7.171875 3.453125 6.921875 3.859375 6.921875 4.25 6.921875 4.6875 7.21875 4.90625 7.578125 4.90625 8.046875 4.90625 8.34375 4.59375 8.34375 4.109375 8.34375 3.640625 8.03125 3.453125 7.6875 3.453125ZM7.6875 3.453125" styleClass="svgFill" />
-                            </graphic>
-                        </ToggleButton>
-                        <ToggleButton id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
-                            <graphic>
-                                <Group scaleX="1.35" scaleY="1.35">
-                                    <SVGPath content="M11.0625 10L11.0625 9.65625C10.234375 9.59375 10.171875 9.5625 10.171875 8.953125L10.171875 4.078125 10.078125 4 8.203125 4.296875 8.203125 4.59375 8.65625 4.65625C8.96875 4.703125 9.046875 4.765625 9.046875 5.1875L9.046875 7.890625C9.046875 8.21875 9.015625 8.484375 8.953125 8.59375 8.671875 9.15625 8.09375 9.5 7.484375 9.5 6.78125 9.5 6.265625 9.0625 6.265625 8.140625L6.265625 4.078125 6.1875 4 4.3125 4.296875 4.3125 4.59375 4.765625 4.65625C5.078125 4.703125 5.140625 4.765625 5.140625 5.1875L5.140625 8.34375C5.140625 9.71875 5.953125 10.140625 6.84375 10.140625 7.859375 10.140625 8.6875 9.453125 9.03125 9.28125L9.15625 10ZM11.0625 10" styleClass="svgFill"/>
-                                    <SVGPath content="M3.660156 13.15625L11.847656 13.15625" style="-fx-stroke-width: 1.44;" styleClass="svgPath" fill="TRANSPARENT"/>
-                                </Group>
-                            </graphic>
-                        </ToggleButton>
-                        <Region prefWidth="40.0" />
+                        <VBox prefHeight="70.0" prefWidth="215.0">
+                            <children>
+                                <HBox prefHeight="40.0">
+                                    <children>
+                                        <Region prefWidth="5.0" />
+                                        <ComboBox id="fontsetting" fx:id="fontcombobox" focusTraversable="false" prefWidth="130.0">
+                                            <tooltip>
+                                                <Tooltip text="Font" />
+                                            </tooltip>
+                                            <items>
+                                                <FXCollections
+                                                    fx:factory="observableArrayList">
+                                                    <String fx:value="Serif" />
+                                                    <String fx:value="SansSerif" />
+                                                    <String fx:value="Monospaced" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+                                        <Region prefWidth="10.0" />
+                                        <ComboBox id="fontsize" fx:id="fontsizecombobox" focusTraversable="false" prefWidth="70.0">
+                                            <tooltip>
+                                                <Tooltip text="Font Size" />
+                                            </tooltip>
+                                            <items>
+                                                <FXCollections
+                                                    fx:factory="observableArrayList">
+                                                    <String fx:value="10" />
+                                                    <String fx:value="12" />
+                                                    <String fx:value="14" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+                                        <Region prefWidth="5.0" />
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="30.0">
+                                    <children>
+                                        <Region prefWidth="5.0" />
+                                        <ToggleButton id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
+                                            <tooltip>
+                                                <Tooltip text="Bold" />
+                                            </tooltip>
+                                            <graphic>
+                                                <SVGPath scaleX="1.35" scaleY="1.35" content="M6.6875 4.203125L6.609375 4.125 4.171875 4.453125 4.171875 4.890625 4.59375 4.953125C4.78125 4.984375 4.890625 5.09375 4.890625 5.578125L4.890625 12.921875 5.265625 13.140625 5.90625 12.734375C6.34375 12.96875 6.921875 13.140625 7.6875 13.140625 9.40625 13.140625 10.828125 12.5625 10.828125 9.875 10.828125 7.921875 9.78125 7 8.59375 7 7.84375 7 7.25 7.390625 6.6875 7.828125ZM6.6875 9.265625C6.6875 9.015625 6.703125 8.765625 6.765625 8.59375 6.921875 8.1875 7.1875 7.921875 7.734375 7.921875 8.3125 7.921875 8.921875 8.21875 8.921875 10.171875 8.921875 11.671875 8.609375 12.59375 7.71875 12.59375 7.125 12.59375 6.828125 12.265625 6.734375 11.828125 6.703125 11.65625 6.6875 11.390625 6.6875 11.15625ZM6.6875 9.265625" styleClass="svgFill" />
+                                            </graphic>
+                                        </ToggleButton>
+                                        <Region prefWidth="5.0" />
+                                        <ToggleButton id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
+                                            <tooltip>
+                                                <Tooltip text="Italic" />
+                                            </tooltip>
+                                            <graphic>
+                                                <SVGPath scaleX="1.5" scaleY="1.5" content="M5.578125 6.328125L5.5 6.625 6.1875 6.6875C6.515625 6.703125 6.546875 6.8125 6.4375 7.234375L5.4375 10.96875C5.25 11.65625 5.40625 12.140625 6.0625 12.140625 6.921875 12.140625 7.578125 11.328125 8 10.421875L7.703125 10.25C7.484375 10.671875 6.96875 11.515625 6.625 11.515625 6.390625 11.515625 6.40625 11.25 6.515625 10.859375L7.8125 6.0625 7.75 6ZM7.6875 3.453125C7.171875 3.453125 6.921875 3.859375 6.921875 4.25 6.921875 4.6875 7.21875 4.90625 7.578125 4.90625 8.046875 4.90625 8.34375 4.59375 8.34375 4.109375 8.34375 3.640625 8.03125 3.453125 7.6875 3.453125ZM7.6875 3.453125" styleClass="svgFill" />
+                                            </graphic>
+                                        </ToggleButton>
+                                        <Region prefWidth="5.0" />
+                                        <ToggleButton id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
+                                            <tooltip>
+                                                <Tooltip text="Underlined" />
+                                            </tooltip>
+                                            <graphic>
+                                                <Group scaleX="1.35" scaleY="1.35">
+                                                    <SVGPath content="M11.0625 10L11.0625 9.65625C10.234375 9.59375 10.171875 9.5625 10.171875 8.953125L10.171875 4.078125 10.078125 4 8.203125 4.296875 8.203125 4.59375 8.65625 4.65625C8.96875 4.703125 9.046875 4.765625 9.046875 5.1875L9.046875 7.890625C9.046875 8.21875 9.015625 8.484375 8.953125 8.59375 8.671875 9.15625 8.09375 9.5 7.484375 9.5 6.78125 9.5 6.265625 9.0625 6.265625 8.140625L6.265625 4.078125 6.1875 4 4.3125 4.296875 4.3125 4.59375 4.765625 4.65625C5.078125 4.703125 5.140625 4.765625 5.140625 5.1875L5.140625 8.34375C5.140625 9.71875 5.953125 10.140625 6.84375 10.140625 7.859375 10.140625 8.6875 9.453125 9.03125 9.28125L9.15625 10ZM11.0625 10" styleClass="svgFill" />
+                                                    <SVGPath content="M3.660156 13.15625L11.847656 13.15625" style="-fx-stroke-width: 1.44;" styleClass="svgPath" fill="TRANSPARENT" />
+                                                </Group>
+                                            </graphic>
+                                        </ToggleButton>
+                                        <Region prefWidth="5.0" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                        <Region prefWidth="20.0" />
                         <Button id="buttsnapshot" fx:id="snapshotbutton" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
                             <tooltip>
-                                <Tooltip text="Send snapshot to desktop" />
+                                <Tooltip text="Snapshot to Desktop" />
                             </tooltip>
                             <graphic>
                                 <Group scaleX="1.25" scaleY="1.25">
@@ -200,7 +231,7 @@
                 </ToolBar>
             </top>
         </BorderPane>
-        <TilePane id="buttpanel" fx:id="linepanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="293.0" AnchorPane.topAnchor="60.0">
+        <TilePane id="buttpanel" fx:id="linepanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="293.0" AnchorPane.topAnchor="82.0">
             <Button id="buttlineh" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" onAction="#handleHorizontalAction">
                 <graphic>
                     <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
@@ -212,7 +243,7 @@
                 </graphic>
             </Button>
         </TilePane>
-        <VBox id="toolpanel" fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0" AnchorPane.bottomAnchor="21" AnchorPane.topAnchor="60.0">
+        <VBox id="toolpanel" fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0" AnchorPane.bottomAnchor="21" AnchorPane.topAnchor="82.0">
             <fx:define>
                 <ToggleGroup fx:id="toolToggles" />
             </fx:define>
@@ -311,7 +342,7 @@
                 </Label>
             </children>
         </VBox>
-        <HBox translateX="45.0" translateY="292.0" AnchorPane.topAnchor="60.0">
+        <HBox translateX="45.0" translateY="292.0" AnchorPane.topAnchor="83.0">
             <Button id="buttonafford" fx:id="affordtab" prefWidth="4" prefHeight="52" contentDisplay="GRAPHIC_ONLY" text="" />
             <ToggleButton id="buttontab" fx:id="tabbutton" prefWidth="4" prefHeight="52" text="" contentDisplay="GRAPHIC_ONLY">
                 <graphic>
@@ -319,7 +350,7 @@
                 </graphic>
             </ToggleButton>
         </HBox>
-        <GridPane id="appmenu" fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="60.0">
+        <GridPane id="appmenu" fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="83.0">
             <padding>
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>

@@ -9,6 +9,7 @@ package net.perspective.draw;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
@@ -90,6 +91,8 @@ public class ApplicationController implements Initializable {
     private BooleanProperty oneToOneEnabled;
     private BooleanProperty gridProperty;
     private Dialog<ButtonType> aboutBox;
+    java.util.List<String> fontFamily = Arrays.asList("Serif", "SansSerif", "Monospaced");
+    java.util.List<String> fontSize = Arrays.asList("8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72");
 
     private final String SVG_HORIZONTAL = "M0.000000 11.792053L22.415894 11.792053";
     private final String SVG_VERTICAL = "M11.207947 23.000000L11.207947 0.584106";
@@ -701,6 +704,14 @@ public class ApplicationController implements Initializable {
         this.fillColorProperty = new ReadOnlyObjectWrapper<>();
         this.fillColorProperty.bindBidirectional(pickerFillColorProperty);
 
+        // setup font style combo boxes
+        fontcombobox.getItems().clear();
+        fontcombobox.getItems().addAll(fontFamily);
+        fontcombobox.getSelectionModel().select("Serif");
+        fontsizecombobox.getItems().clear();
+        fontsizecombobox.getItems().addAll(fontSize);
+        fontsizecombobox.getSelectionModel().select("12");
+
         // set up the status message fade transition
         this.setupStatusTransition();
         // animate line button panel
@@ -930,6 +941,10 @@ public class ApplicationController implements Initializable {
     private ComboBox<String> strokecombobox;
     @FXML
     private ComboBox<String> stylecombobox;
+    @FXML
+    private ComboBox<String> fontcombobox;
+    @FXML
+    private ComboBox<String> fontsizecombobox;
     @FXML
     private ToggleButton linebutton;
     @FXML
