@@ -83,6 +83,8 @@ public class ApplicationController implements Initializable {
     private SequentialTransition statusTransition;
     private ReadOnlyStringWrapper strokeTypeProperty;
     private ReadOnlyStringWrapper strokeStyleProperty;
+    private ReadOnlyStringWrapper fontFamilyProperty, fontSizeProperty;
+    private SimpleStringProperty comboFontProperty, comboFontSizeProperty;
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
     private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
@@ -422,6 +424,42 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Get stroke via combo box
+     * 
+     * @return stroke combo box
+     */
+    public void setFontFamily(String fontFamily) {
+        fontcombobox.getSelectionModel().select(fontFamily);
+    }
+
+    /**
+     * Set style via combo box
+     * 
+     * @return style combo box
+     */
+    public void setFontSize(int fontSize) {
+        fontsizecombobox.getSelectionModel().select(String.valueOf(fontSize));
+    }
+
+    /**
+     * Font property
+     * 
+     * @return 
+     */
+    public SimpleStringProperty getFontFamilyProperty() {
+        return fontFamilyProperty;
+    }
+
+    /**
+     * Font size property
+     * 
+     * @return 
+     */
+    public SimpleStringProperty getFontSizeProperty() {
+        return fontSizeProperty;
+    }
+
+    /**
      * Progress bar progress property
      * 
      * @return 
@@ -708,9 +746,25 @@ public class ApplicationController implements Initializable {
         fontcombobox.getItems().clear();
         fontcombobox.getItems().addAll(fontFamily);
         fontcombobox.getSelectionModel().select("Serif");
+        comboFontProperty = new SimpleStringProperty();
+        comboFontProperty.setValue("Serif");
+        fontcombobox.setOnAction((ActionEvent event) -> {
+            String s = fontcombobox.getValue();
+            comboFontProperty.setValue(s);
+        });
+        this.fontFamilyProperty = new ReadOnlyStringWrapper();
+        this.fontFamilyProperty.bindBidirectional(comboFontProperty);
         fontsizecombobox.getItems().clear();
         fontsizecombobox.getItems().addAll(fontSize);
         fontsizecombobox.getSelectionModel().select("12");
+        comboFontSizeProperty = new SimpleStringProperty();
+        comboFontSizeProperty.setValue("12");
+        fontsizecombobox.setOnAction((ActionEvent event) -> {
+            String s = fontsizecombobox.getValue();
+            comboFontSizeProperty.setValue(s);
+        });
+        this.fontSizeProperty = new ReadOnlyStringWrapper();
+        this.fontSizeProperty.bindBidirectional(comboFontSizeProperty);
 
         // set up the status message fade transition
         this.setupStatusTransition();

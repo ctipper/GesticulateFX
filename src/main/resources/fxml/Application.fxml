@@ -161,7 +161,7 @@
                                             </items>
                                         </ComboBox>
                                         <Region prefWidth="10.0" />
-                                        <ComboBox id="fontsize" fx:id="fontsizecombobox" focusTraversable="false" prefWidth="70.0">
+                                        <ComboBox id="fontsize" fx:id="fontsizecombobox" focusTraversable="false" prefWidth="75.0">
                                             <tooltip>
                                                 <Tooltip text="Font Size" />
                                             </tooltip>

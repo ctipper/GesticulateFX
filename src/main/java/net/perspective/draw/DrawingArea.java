@@ -162,6 +162,14 @@ public class DrawingArea {
                 controller.setStatusMessage("Dropper tool selected");
             }
         });
+        controller.getFontFamilyProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            this.setFontFamily(newValue);
+            view.moveSelection(view.getSelected());
+        });
+        controller.getFontSizeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            this.setFontSize(Integer.valueOf(newValue));
+            view.moveSelection(view.getSelected());
+        });
     }
 
     /**

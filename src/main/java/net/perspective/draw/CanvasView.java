@@ -283,9 +283,9 @@ public class CanvasView {
         /**
          * set properties
          */
-        drawarea.setColor(color);
-        drawarea.setFontFamily(fontFamily);
-        drawarea.setFontSize(fontSize);
+        controller.setColor(color);
+        controller.setFontFamily(fontFamily);
+        controller.setFontSize(fontSize);
         drawarea.updateFontStyle(fontStyle);
     }
 
