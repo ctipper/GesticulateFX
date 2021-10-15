@@ -180,6 +180,18 @@
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 }
+.scroll-bar .thumb:hover {
+    -fx-background-color: #cdcdcd;
+}
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #cdcdcd;
+}
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color:  #dadada;
+}
+.scroll-bar .increment-button:hover, .scroll-bar .decrement-button:hover  {
+    -fx-background-color:  #dadada;
+}
 
 /**
  * Light theme svg styles

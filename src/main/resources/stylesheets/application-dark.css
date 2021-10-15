@@ -217,6 +217,27 @@
     -fx-text-fill: #c0c481;
     -fx-border-width: 0;
 }
+.scroll-bar .thumb {
+    -fx-background-color: #4a4a4a;
+}
+.scroll-bar .track {
+    -fx-background-color: #3a3a3a;
+ }
+ .scroll-bar:horizontal .increment-arrow {
+     -fx-background-color: #c0c481, #c0c481;
+ }
+ .scroll-bar:vertical .increment-arrow {
+     -fx-background-color: #c0c481, #c0c481;
+ }
+ .scroll-bar:horizontal .decrement-arrow {
+     -fx-background-color: #c0c481, #c0c481;
+ }
+.scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: #c0c481, #c0c481;
+}
+.scroll-bar .increment-button:hover, .scroll-bar .decrement-button:hover  {
+    -fx-background-color: #4a4a4a;
+}
 
 /**
  * Night theme svg styles

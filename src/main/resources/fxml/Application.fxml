@@ -147,7 +147,7 @@
                                 <HBox prefHeight="40.0">
                                     <children>
                                         <Region prefWidth="5.0" />
-                                        <ComboBox id="fontsetting" fx:id="fontcombobox" focusTraversable="false" prefWidth="130.0">
+                                        <ComboBox id="fontsetting" fx:id="fontcombobox" focusTraversable="false" prefWidth="135.0">
                                             <tooltip>
                                                 <Tooltip text="Font" />
                                             </tooltip>
