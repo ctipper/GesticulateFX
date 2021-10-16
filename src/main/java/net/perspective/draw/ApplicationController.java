@@ -92,6 +92,9 @@ public class ApplicationController implements Initializable {
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
     private BooleanProperty gridProperty;
+    private BooleanProperty boldProperty;
+    private BooleanProperty italicProperty;
+    private BooleanProperty underlinedProperty;
     private Dialog<ButtonType> aboutBox;
     java.util.List<String> fontFamily = Arrays.asList("Serif", "SansSerif", "Monospaced");
     java.util.List<String> fontSize = Arrays.asList("8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72");
@@ -460,6 +463,33 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Bold button enabled property
+     * 
+     * @return 
+     */
+    public BooleanProperty getBoldProperty() {
+        return boldProperty;
+    }
+
+    /**
+     * Italic button enabled property
+     * 
+     * @return 
+     */
+    public BooleanProperty getItalicProperty() {
+        return italicProperty;
+    }
+
+    /**
+     * Underline button enabled property
+     * 
+     * @return 
+     */
+    public BooleanProperty getUnderlinedProperty() {
+        return underlinedProperty;
+    }
+
+    /**
      * Progress bar progress property
      * 
      * @return 
@@ -766,6 +796,16 @@ public class ApplicationController implements Initializable {
         this.fontSizeProperty = new ReadOnlyStringWrapper();
         this.fontSizeProperty.bindBidirectional(comboFontSizeProperty);
 
+        // bind a property to the bold button selected state
+        this.boldProperty = new SimpleBooleanProperty();
+        this.boldProperty.bindBidirectional(boldbutton.selectedProperty());
+        // bind a property to the italic button selected state
+        this.italicProperty = new SimpleBooleanProperty();
+        this.italicProperty.bindBidirectional(italicbutton.selectedProperty());
+        // bind a property to the underline button selected state
+        this.underlinedProperty = new SimpleBooleanProperty();
+        this.underlinedProperty.bindBidirectional(underlinebutton.selectedProperty());
+
         // set up the status message fade transition
         this.setupStatusTransition();
         // animate line button panel
@@ -987,6 +1027,12 @@ public class ApplicationController implements Initializable {
     private ToggleButton onetoonebutton;
     @FXML
     private ToggleButton outlinebutton;
+    @FXML
+    private ToggleButton boldbutton;
+    @FXML
+    private ToggleButton italicbutton;
+    @FXML
+    private ToggleButton underlinebutton;
     @FXML
     private Label statusbar;
     @FXML

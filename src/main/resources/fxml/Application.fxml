@@ -180,7 +180,7 @@
                                 <HBox prefHeight="30.0">
                                     <children>
                                         <Region prefWidth="5.0" />
-                                        <ToggleButton id="buttbold" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
+                                        <ToggleButton id="buttbold" fx:id="boldbutton" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
                                             <tooltip>
                                                 <Tooltip text="Bold" />
                                             </tooltip>
@@ -189,7 +189,7 @@
                                             </graphic>
                                         </ToggleButton>
                                         <Region prefWidth="5.0" />
-                                        <ToggleButton id="buttitalic" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
+                                        <ToggleButton id="buttitalic" fx:id="italicbutton" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
                                             <tooltip>
                                                 <Tooltip text="Italic" />
                                             </tooltip>
@@ -198,7 +198,7 @@
                                             </graphic>
                                         </ToggleButton>
                                         <Region prefWidth="5.0" />
-                                        <ToggleButton id="buttunderlined" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
+                                        <ToggleButton id="buttunderlined" fx:id="underlinebutton" focusTraversable="false" mnemonicParsing="false" styleClass="togglebuttons" text="">
                                             <tooltip>
                                                 <Tooltip text="Underlined" />
                                             </tooltip>

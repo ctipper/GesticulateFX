@@ -170,6 +170,30 @@ public class DrawingArea {
             this.setFontSize(Integer.valueOf(newValue));
             view.moveSelection(view.getSelected());
         });
+        controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue) {
+                this.updateFontStyle(this.getFontStyle() | java.awt.Font.BOLD);
+            } else {
+                this.updateFontStyle(this.getFontStyle() ^ java.awt.Font.BOLD);
+            }
+            view.moveSelection(view.getSelected());
+            });
+        controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue) {
+                this.updateFontStyle(this.getFontStyle() | java.awt.Font.ITALIC);
+            } else {
+                this.updateFontStyle(this.getFontStyle() ^ java.awt.Font.ITALIC);
+            }
+            view.moveSelection(view.getSelected());
+        });
+        controller.getUnderlinedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue) {
+                this.updateFontStyle(this.getFontStyle() | FONT_UNDERLINED);
+            } else {
+                this.updateFontStyle(this.getFontStyle() ^ FONT_UNDERLINED);
+            }
+            view.moveSelection(view.getSelected());
+        });
     }
 
     /**
