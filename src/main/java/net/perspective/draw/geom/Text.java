@@ -228,7 +228,7 @@ public class Text implements DrawItem, Serializable {
         if (matcher.find()) {
             this.setStyle(java.awt.Font.PLAIN);
         } else {
-            this.setStyle(drawarea.getFontStyle());
+            this.setStyle(drawarea.getConvertedFontStyle());
         }
         this.setSize(drawarea.getFontSize());
         this.setDimensions();

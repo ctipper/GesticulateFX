@@ -96,8 +96,8 @@ public class DrawingArea {
     final static double pib12 = Math.PI / 12;
 
     public static final int FONT_PLAIN = 1;
-    public static final int FONT_BOLD = 2;
-    public static final int FONT_ITALIC = 4;
+    public static final int FONT_BOLD = java.awt.Font.BOLD;
+    public static final int FONT_ITALIC = java.awt.Font.ITALIC;
     public static final int FONT_UNDERLINED = 8;
 
     /**
@@ -172,9 +172,9 @@ public class DrawingArea {
         });
         controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | java.awt.Font.BOLD);
+                this.updateFontStyle(this.getFontStyle() | FONT_BOLD);
             } else {
-                this.updateFontStyle(this.getFontStyle() ^ java.awt.Font.BOLD);
+                this.updateFontStyle(this.getFontStyle() ^ FONT_BOLD);
             }
             view.moveSelection(view.getSelected());
             });
@@ -749,13 +749,13 @@ public class DrawingArea {
             // No Formatting
         }
         if ((fontstyle & FONT_BOLD) == FONT_BOLD) {
-            style = style | java.awt.Font.BOLD;
+            style = style | FONT_BOLD;
         }
         if ((fontstyle & FONT_ITALIC) == FONT_ITALIC) {
-            style = style | java.awt.Font.ITALIC;
+            style = style | FONT_ITALIC;
         }
         if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
-            // No Formatting
+            style = style | FONT_UNDERLINED;
         }
         return style;
     }

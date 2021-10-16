@@ -39,8 +39,8 @@ public class TextFormatter {
     private static final Logger logger = LoggerFactory.getLogger(TextFormatter.class.getName());
 
     public static final int FONT_PLAIN = 1;
-    public static final int FONT_BOLD = 2;
-    public static final int FONT_ITALIC = 4;
+    public static final int FONT_BOLD = java.awt.Font.BOLD;
+    public static final int FONT_ITALIC = java.awt.Font.ITALIC;
     public static final int FONT_UNDERLINED = 8;
 
     /** Creates a new instance of <code>TextFormatter</code> */
@@ -154,9 +154,9 @@ public class TextFormatter {
         switch (fontfamily) {
             case "SansSerif":
                 f = javafx.scene.text.Font.font("sansserif",
-                        ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
+                        ((fontstyle & FONT_BOLD) == FONT_BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
-                        ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
+                        ((fontstyle & FONT_ITALIC) == FONT_ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
                 if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
@@ -168,9 +168,9 @@ public class TextFormatter {
                 break;
             case "Monospaced":
                 f = javafx.scene.text.Font.font("monospace",
-                        ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
+                        ((fontstyle & FONT_BOLD) == FONT_BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
-                        ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
+                        ((fontstyle & FONT_ITALIC) == FONT_ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
                 if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
@@ -183,9 +183,9 @@ public class TextFormatter {
             case "Serif":
             default:
                 f = javafx.scene.text.Font.font("serif",
-                        ((fontstyle & java.awt.Font.BOLD) == java.awt.Font.BOLD
+                        ((fontstyle & FONT_BOLD) == FONT_BOLD
                                 ? javafx.scene.text.FontWeight.BOLD : javafx.scene.text.FontWeight.NORMAL),
-                        ((fontstyle & java.awt.Font.ITALIC) == java.awt.Font.ITALIC
+                        ((fontstyle & FONT_ITALIC) == FONT_ITALIC
                                 ? javafx.scene.text.FontPosture.ITALIC : javafx.scene.text.FontPosture.REGULAR),
                         size);
                 if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
@@ -257,9 +257,9 @@ public class TextFormatter {
                 } else if (c instanceof Element) {
                     Element e = ((Element) c).clone();
                     if (e.getName().equalsIgnoreCase("b")) {
-                        fontstyle ^= java.awt.Font.BOLD;
+                        fontstyle ^= FONT_BOLD;
                     } else if (e.getName().equalsIgnoreCase("i")) {
-                        fontstyle ^= java.awt.Font.ITALIC;
+                        fontstyle ^= FONT_ITALIC;
                     } else if (e.getName().equalsIgnoreCase("u")) {
                         fontstyle ^= FONT_UNDERLINED;
                     }
@@ -273,9 +273,9 @@ public class TextFormatter {
                     list = liststack.pop();
                     Element e = elstack.pop();
                     if (e.getName().equalsIgnoreCase("b")) {
-                        fontstyle ^= java.awt.Font.BOLD;
+                        fontstyle ^= FONT_BOLD;
                     } else if (e.getName().equalsIgnoreCase("i")) {
-                        fontstyle ^= java.awt.Font.ITALIC;
+                        fontstyle ^= FONT_ITALIC;
                     } else if (e.getName().equalsIgnoreCase("u")) {
                         fontstyle ^= FONT_UNDERLINED;
                     }
