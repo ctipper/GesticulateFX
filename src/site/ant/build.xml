@@ -147,12 +147,10 @@
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
          <arg value="Copyright © 2021 Christopher Tipper" />
-         <!--
-         <arg value="category" />
-         <arg value="public.app-category.graphics-design" />
-         -->
          <arg value="--mac-package-identifier" />
          <arg value="net.perspective.draw.GesticulateFX" />
+         <arg value="--mac-app-category" />
+         <arg value="public.app-category.graphics-design" />
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
@@ -228,18 +226,12 @@
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="--type"/>
          <arg value="dmg"/>
-         <!--
-         <arg value="identifier"/>
-         <arg value="${app.name}.app"/>
-         -->
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--dest"/>
          <arg value="target/jfx"/>
          <arg value="--app-image"/>
          <arg value="target/jfx/${app.name}.app"/>
-         <arg value="--install-dir"/>
-         <arg value="/Applications"/>
       </exec>
 
       <echo if:set="onlinux" message="Creating DEB package"/>
