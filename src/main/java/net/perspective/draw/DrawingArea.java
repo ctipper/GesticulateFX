@@ -180,9 +180,9 @@ public class DrawingArea {
             });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | java.awt.Font.ITALIC);
+                this.updateFontStyle(this.getFontStyle() | FONT_ITALIC);
             } else {
-                this.updateFontStyle(this.getFontStyle() ^ java.awt.Font.ITALIC);
+                this.updateFontStyle(this.getFontStyle() ^ FONT_ITALIC);
             }
             view.moveSelection(view.getSelected());
         });
