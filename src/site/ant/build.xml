@@ -150,7 +150,7 @@
          <arg value="--mac-package-identifier" />
          <arg value="net.perspective.draw.GesticulateFX" />
          <arg value="--mac-app-category" />
-         <arg value="public.app-category.graphics-design" />
+         <arg value="graphics-design" />
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
