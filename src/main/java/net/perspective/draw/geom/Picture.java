@@ -195,10 +195,10 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Update the public properties of the picture 
      * 
-     * @param canvas  the {@link net.perspective.draw.DrawingCanvas}
+     * @param drawarea  the {@link net.perspective.draw.DrawingCanvas}
      */
-    public void updateProperties(DrawingArea canvas) {
-        this.setTransparency(canvas.getTransparency());
+    public void updateProperties(DrawingArea drawarea) {
+        this.setTransparency(drawarea.getTransparency());
     }
 
     /**

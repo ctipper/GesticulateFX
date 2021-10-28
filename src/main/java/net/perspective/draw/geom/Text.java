@@ -178,7 +178,7 @@ public class Text implements DrawItem, Serializable {
     }
 
     /**
-     * Set the style of the text item
+     * Set the thisstyle of the text item
      * 
      * @param style
      */
@@ -187,9 +187,9 @@ public class Text implements DrawItem, Serializable {
     }
 
     /**
-     * Return the style of the text item
+     * Return the thisstyle of the text item
      * 
-     * @return style
+     * @return thisstyle
      */
     public int getStyle() {
         return style;
@@ -228,7 +228,7 @@ public class Text implements DrawItem, Serializable {
         if (matcher.find()) {
             this.setStyle(java.awt.Font.PLAIN);
         } else {
-            this.setStyle(drawarea.getConvertedFontStyle());
+            this.setStyle(drawarea.getFontStyle());
         }
         this.setSize(drawarea.getFontSize());
         this.setDimensions();
@@ -490,12 +490,34 @@ public class Text implements DrawItem, Serializable {
             AttributedString as = formatter.readFormattedText(this);
             layout = new TextLayout(as.getIterator(), context);
         } else {
-            java.awt.Font thisFont = new java.awt.Font(font, style, size);
+            java.awt.Font thisFont = new java.awt.Font(font, getConvertedFontStyle(), size);
             thisFont = thisFont.deriveFont(map);
             FontRenderContext context = g2.getFontRenderContext();
             layout = new TextLayout(text, thisFont, context);
         }
         return layout;
+    }
+
+    /**
+     * Convert font style from rich text to plain text style
+     * 
+     * @return
+     */
+    private int getConvertedFontStyle() {
+        int thisstyle = java.awt.Font.PLAIN;
+        if ((style & TextFormatter.FONT_PLAIN) == TextFormatter.FONT_PLAIN) {
+            // No Formatting
+        }
+        if ((style & TextFormatter.FONT_BOLD) == TextFormatter.FONT_BOLD) {
+            thisstyle = thisstyle | java.awt.Font.BOLD;
+        }
+        if ((style & TextFormatter.FONT_ITALIC) == TextFormatter.FONT_ITALIC) {
+            thisstyle = thisstyle | java.awt.Font.ITALIC;
+        }
+        if ((style & TextFormatter.FONT_UNDERLINED) == TextFormatter.FONT_UNDERLINED) {
+            // No Formatting
+        }
+        return thisstyle;
     }
 
     /**

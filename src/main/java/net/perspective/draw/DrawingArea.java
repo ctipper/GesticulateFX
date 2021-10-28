@@ -51,6 +51,7 @@ import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import net.perspective.draw.event.TextHandler;
 import net.perspective.draw.geom.Text;
+import net.perspective.draw.geom.TextFormatter;
 
 /**
  * 
@@ -94,11 +95,6 @@ public class DrawingArea {
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
 
     final static double pib12 = Math.PI / 12;
-
-    public static final int FONT_PLAIN = 1;
-    public static final int FONT_BOLD = java.awt.Font.BOLD;
-    public static final int FONT_ITALIC = java.awt.Font.ITALIC;
-    public static final int FONT_UNDERLINED = 8;
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
@@ -172,25 +168,25 @@ public class DrawingArea {
         });
         controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | FONT_BOLD);
+                this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_BOLD);
             } else {
-                this.updateFontStyle(this.getFontStyle() ^ FONT_BOLD);
+                this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_BOLD);
             }
             view.moveSelection(view.getSelected());
             });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | FONT_ITALIC);
+                this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_ITALIC);
             } else {
-                this.updateFontStyle(this.getFontStyle() ^ FONT_ITALIC);
+                this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_ITALIC);
             }
             view.moveSelection(view.getSelected());
         });
         controller.getUnderlinedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | FONT_UNDERLINED);
+                this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_UNDERLINED);
             } else {
-                this.updateFontStyle(this.getFontStyle() ^ FONT_UNDERLINED);
+                this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_UNDERLINED);
             }
             view.moveSelection(view.getSelected());
         });
@@ -736,28 +732,6 @@ public class DrawingArea {
      */
     public int getFontStyle() {
         return fontstyle;
-    }
-
-    /**
-     * Convert font style from plain textController to rich text textController style
-     * 
-     * @return
-     */
-    public int getConvertedFontStyle() {
-        int style = java.awt.Font.PLAIN;
-        if ((fontstyle & FONT_PLAIN) == FONT_PLAIN) {
-            // No Formatting
-        }
-        if ((fontstyle & FONT_BOLD) == FONT_BOLD) {
-            style = style | FONT_BOLD;
-        }
-        if ((fontstyle & FONT_ITALIC) == FONT_ITALIC) {
-            style = style | FONT_ITALIC;
-        }
-        if ((fontstyle & FONT_UNDERLINED) == FONT_UNDERLINED) {
-            style = style | FONT_UNDERLINED;
-        }
-        return style;
     }
 
     /**
