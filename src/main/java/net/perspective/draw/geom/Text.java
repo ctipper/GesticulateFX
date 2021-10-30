@@ -20,7 +20,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.AttributedString;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.scene.Group;
@@ -47,7 +47,7 @@ public class Text implements DrawItem, Serializable {
     private double angle;
     private CanvasPoint start, end;
 
-    private static final Hashtable<TextAttribute, Object> map = new Hashtable<>();
+    private static final HashMap<TextAttribute, Object> map = new HashMap<>();
 
     static {
         map.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
@@ -178,7 +178,7 @@ public class Text implements DrawItem, Serializable {
     }
 
     /**
-     * Set the thisstyle of the text item
+     * Set the style of the text item
      * 
      * @param style
      */
@@ -187,9 +187,9 @@ public class Text implements DrawItem, Serializable {
     }
 
     /**
-     * Return the thisstyle of the text item
+     * Return the style of the text item
      * 
-     * @return thisstyle
+     * @return style
      */
     public int getStyle() {
         return style;
@@ -477,7 +477,7 @@ public class Text implements DrawItem, Serializable {
      * Return a layout used to calculate item properties
      * 
      * @param canvas
-     * @return a textlayout
+     * @return a TextLayout
      */
     public TextLayout getLayout(Graphics2D g2) {
         TextLayout layout;
