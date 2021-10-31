@@ -505,9 +505,6 @@ public class Text implements DrawItem, Serializable {
      */
     private int getConvertedFontStyle() {
         int thisstyle = java.awt.Font.PLAIN;
-        if ((style & TextFormatter.FONT_PLAIN) == TextFormatter.FONT_PLAIN) {
-            // No Formatting
-        }
         if ((style & TextFormatter.FONT_BOLD) == TextFormatter.FONT_BOLD) {
             thisstyle = thisstyle | java.awt.Font.BOLD;
         }

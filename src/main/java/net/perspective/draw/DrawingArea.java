@@ -199,11 +199,12 @@ public class DrawingArea {
         Integer strokeId = strokeStrings.indexOf(controller.getStrokeTypeProperty().getValue());
         String strokeStyle = controller.getStrokeStyleProperty().getValue();
         setStrokeType(strokeId, strokeStyle);
-        this.color = controller.getColorProperty().getValue();
-        this.fillcolor = controller.getFillColorProperty().getValue();
+        color = controller.getColorProperty().getValue();
+        fillcolor = controller.getFillColorProperty().getValue();
         fontfamily = "Serif";
         fontsize = 14;
-        this.transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
+        fontstyle = java.awt.Font.PLAIN;
+        transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
     }
