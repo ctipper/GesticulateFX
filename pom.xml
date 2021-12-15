@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>17.0.0.1</javafx.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <log4j.version>2.14.1</log4j.version>
+        <log4j.version>2.16.0</log4j.version>
         <batik.version>1.14</batik.version>
         <skipTests>true</skipTests>
     </properties>
