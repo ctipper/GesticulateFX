@@ -11,6 +11,7 @@ import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.jthemedetecor.OsThemeDetector;
 import java.awt.Desktop;
 import java.awt.desktop.OpenFilesEvent;
 import java.io.FileNotFoundException;
@@ -120,12 +121,28 @@ public class Gesticulate extends GuiceApplication {
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());
 
-        // set the theme from user preferences
-        if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
-            controller.getThemeProperty().setValue(true); // non default value triggers event
+        // set the theme from user preferences on non-macOS
+        if (MAC_OS_X) {
+            final OsThemeDetector detector = OsThemeDetector.getDetector();
+            final boolean isDark = detector.isDark();
+            if (isDark) {
+                controller.getThemeProperty().setValue(isDark); // non default value triggers event
+            } else {
+                controller.setAppStyles(false);
+                resetStylesheets(false);
+            }
+            detector.registerListener(darkTheme -> {
+                Platform.runLater(() -> {
+                    controller.getThemeProperty().setValue(darkTheme);
+                });
+            });
         } else {
-            controller.setAppStyles(false);
-            resetStylesheets(false);
+            if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
+                controller.getThemeProperty().setValue(true); // non default value triggers event
+            } else {
+                controller.setAppStyles(false);
+                resetStylesheets(false);
+            }
         }
 
         // Install the canvas
@@ -194,9 +211,11 @@ public class Gesticulate extends GuiceApplication {
 
     @Override
     public void stop() {
-        userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
-        setUserPreferences(userPrefs);
-        logger.trace("set user preferences");
+        if (!MAC_OS_X) {
+            userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
+            setUserPreferences(userPrefs);
+            logger.trace("set user preferences");
+        }
         Platform.exit();
         System.exit(0);
     }
