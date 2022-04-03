@@ -52,7 +52,7 @@ public class AboutBox extends Dialog<ButtonType> {
             aboutLabel[2] = new Label("JRE " + System.getProperty("java.runtime.version"));
         }
         aboutLabel[3] = new Label("JFX " + System.getProperty("javafx.version"));
-        aboutLabel[4] = new Label("Copyright © 2021 Christopher Tipper");
+        aboutLabel[4] = new Label("Copyright © 2022 Christopher Tipper");
         aboutLabel[5] = new Label("All rights reserved.");
         aboutLabel[0].setStyle("-fx-font-size: 16px;");
         aboutLabel[1].setStyle("-fx-font-size: 13px;");
