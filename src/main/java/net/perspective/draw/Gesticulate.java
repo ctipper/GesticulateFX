@@ -123,19 +123,7 @@ public class Gesticulate extends GuiceApplication {
 
         // set the theme from user preferences
         if (userPrefs.getProperty("systemTheme").equals("System")) {
-            final OsThemeDetector detector = OsThemeDetector.getDetector();
-            final boolean isDark = detector.isDark();
-            if (isDark) {
-                controller.getThemeProperty().setValue(isDark); // non default value triggers event
-            } else {
-                controller.setAppStyles(false);
-                resetStylesheets(false);
-            }
-            detector.registerListener(darkTheme -> {
-                Platform.runLater(() -> {
-                    controller.getThemeProperty().setValue(darkTheme);
-                });
-            });
+            setSystemTheme();
             controller.setThemeType("System");
         } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
             controller.getThemeProperty().setValue(true); // non default value triggers event
@@ -187,6 +175,22 @@ public class Gesticulate extends GuiceApplication {
         return this.stage;
     }
 
+    public void setSystemTheme() {
+        final OsThemeDetector detector = OsThemeDetector.getDetector();
+        final boolean isDark = detector.isDark();
+        if (isDark) {
+            controller.getThemeProperty().setValue(isDark); // non default value triggers event
+        } else {
+            controller.setAppStyles(false);
+            resetStylesheets(false);
+        }
+        detector.registerListener(darkTheme -> {
+            Platform.runLater(() -> {
+                controller.getThemeProperty().setValue(darkTheme);
+            });
+        });
+    }
+
     public void resetStylesheets(Boolean mode) {
         if (mode) {
             stage.getScene().getStylesheets().clear();
@@ -212,12 +216,10 @@ public class Gesticulate extends GuiceApplication {
 
     @Override
     public void stop() {
-//        if (!MAC_OS_X) {
-            userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
-            userPrefs.setProperty("systemTheme", controller.getThemeTypeProperty().getValue());
-            setUserPreferences(userPrefs);
-            logger.trace("set user preferences");
-//        }
+        userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
+        userPrefs.setProperty("systemTheme", controller.getComboThemeProperty().getValue());
+        setUserPreferences(userPrefs);
+        logger.trace("set user preferences");
         Platform.exit();
         System.exit(0);
     }

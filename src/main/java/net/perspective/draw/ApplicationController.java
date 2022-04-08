@@ -544,7 +544,7 @@ public class ApplicationController implements Initializable {
      * 
      * @return themeProperty
      */
-    public SimpleStringProperty getThemeTypeProperty() {        
+    public SimpleStringProperty getComboThemeProperty() {        
         return this.comboThemeProperty;
     }
 
@@ -706,7 +706,11 @@ public class ApplicationController implements Initializable {
         comboTheme.setOnAction((ActionEvent event) -> {
             String s = comboTheme.getValue();
             comboThemeProperty.setValue(s);
-            themeProperty.setValue(s.equals("Dark"));
+            if (s.equals("System")) {
+                application.setSystemTheme();
+            } else {
+                themeProperty.setValue(s.equals("Dark"));
+            }
         });
         /**
          * Property change handler to set/reset night mode on demand
@@ -906,7 +910,7 @@ public class ApplicationController implements Initializable {
         Label emptyNode = new Label("");
         comboTheme = new ComboBox<>();
         comboTheme.setPrefHeight(20.0);
-        comboTheme.setPrefWidth(150.0);
+        comboTheme.setPrefWidth(120.0);
         comboTheme.setFocusTraversable(false);
         comboTheme.getItems().addAll("Light", "Dark", "System");
         comboTheme.getSelectionModel().select("Light");
