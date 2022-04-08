@@ -79,6 +79,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private BooleanProperty themeProperty;
+    private SimpleStringProperty comboThemeProperty;
     private When outlineSelected;
     private SequentialTransition statusTransition;
     private ReadOnlyStringWrapper strokeTypeProperty;
@@ -525,8 +526,26 @@ public class ApplicationController implements Initializable {
      * 
      * @return themeProperty
      */
-    public BooleanProperty getThemeProperty() {
+    public BooleanProperty getThemeProperty() {        
         return this.themeProperty;
+    }
+
+    /**
+     * Set theme via combo box
+     * 
+     * @return stroke combo box
+     */
+    public void setThemeType(String themeType) {
+        comboTheme.getSelectionModel().select(themeType);
+    }
+
+    /**
+     * Get the theme
+     * 
+     * @return themeProperty
+     */
+    public SimpleStringProperty getThemeTypeProperty() {        
+        return this.comboThemeProperty;
     }
 
     /**
@@ -680,9 +699,15 @@ public class ApplicationController implements Initializable {
         this.themeBackgroundColor = new SimpleStringProperty("white");
         this.themeAccentColor = new SimpleStringProperty("black");
         this.prepareDarkModeOptions();
-        this.checkTheme.selectedProperty().bindBidirectional(toggleTheme.selectedProperty());
         this.themeProperty = new SimpleBooleanProperty();
-        this.themeProperty.bindBidirectional(this.checkTheme.selectedProperty());
+        this.themeProperty.setValue(false);
+        this.comboThemeProperty = new SimpleStringProperty();
+        this.comboThemeProperty.setValue("Light");
+        comboTheme.setOnAction((ActionEvent event) -> {
+            String s = comboTheme.getValue();
+            comboThemeProperty.setValue(s);
+            themeProperty.setValue(s.equals("Dark"));
+        });
         /**
          * Property change handler to set/reset night mode on demand
          */
@@ -878,40 +903,25 @@ public class ApplicationController implements Initializable {
      * Add dark mode option UI
      */
     private void prepareDarkModeOptions() {
-        checkTheme = new CheckBox();
-        toggleTheme = new ToggleButton();
-        if (!MAC_OS_X) {
-            checkTheme.setOnAction(this::handleModeChange);
-            checkTheme.setPrefHeight(20.0);
-            checkTheme.setFocusTraversable(false);
-            checkTheme.setMnemonicParsing(false);
-            toggleTheme.setText("Dark Theme");
-            toggleTheme.setOnAction(this::handleModeChange);
-            toggleTheme.setAlignment(Pos.CENTER_LEFT);
-            toggleTheme.getStyleClass().add("menuitem");
-            toggleTheme.setPrefWidth(150.0);
-            toggleTheme.setPrefHeight(20.0);
-            toggleTheme.setFocusTraversable(false);
-            toggleTheme.setMnemonicParsing(false);
-            appmenu.getRowConstraints().add(getRow());
-            appmenu.addRow(7, checkTheme, toggleTheme);
-            GridPane.setConstraints(checkTheme, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-            GridPane.setConstraints(toggleTheme, 1, 7, 1, 1, HPos.LEFT, VPos.BASELINE);
-        }
+        Label emptyNode = new Label("");
+        comboTheme = new ComboBox<>();
+        comboTheme.setPrefHeight(20.0);
+        comboTheme.setPrefWidth(150.0);
+        comboTheme.setFocusTraversable(false);
+        comboTheme.getItems().addAll("Light", "Dark", "System");
+        comboTheme.getSelectionModel().select("Light");
+        appmenu.getRowConstraints().add(getRow());
+        appmenu.addRow(7, emptyNode, comboTheme);
+        GridPane.setConstraints(emptyNode, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
+        GridPane.setConstraints(comboTheme, 1, 7, 1, 1, HPos.LEFT, VPos.BASELINE);
     }
 
     /**
      * Add the about box to slider menu and configure
      */
     private void prepareAboutBoxMenu() {
-        int lastrow, hboxes;
-        if (MAC_OS_X) {
-            lastrow = 8;    // first empty row
-            hboxes = 12;    // empty row count
-        } else {
-            lastrow = 9;    // first empty row
-            hboxes = 11;    // empty row count
-        }
+        int lastrow = 9;    // first empty row
+        int hboxes = 11;    // empty row count
         
         for (int i=0; i<hboxes; i++) {
             appmenu.getRowConstraints().add(getRow());
@@ -1019,9 +1029,7 @@ public class ApplicationController implements Initializable {
     @FXML
     private ToggleGroup toolToggles;
     // @FXML
-    private CheckBox checkTheme;
-    // @FXML
-    private ToggleButton toggleTheme;
+    private ComboBox<String> comboTheme;
     @FXML
     private CheckBox checkGrid;
     @FXML

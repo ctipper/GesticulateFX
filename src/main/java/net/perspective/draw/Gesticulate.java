@@ -121,8 +121,8 @@ public class Gesticulate extends GuiceApplication {
         // Initialize the canvas and apply handlers
         drawarea.init(pane.getWidth(), pane.getHeight());
 
-        // set the theme from user preferences on non-macOS
-        if (MAC_OS_X) {
+        // set the theme from user preferences
+        if (userPrefs.getProperty("systemTheme").equals("System")) {
             final OsThemeDetector detector = OsThemeDetector.getDetector();
             final boolean isDark = detector.isDark();
             if (isDark) {
@@ -136,13 +136,14 @@ public class Gesticulate extends GuiceApplication {
                     controller.getThemeProperty().setValue(darkTheme);
                 });
             });
+            controller.setThemeType("System");
+        } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
+            controller.getThemeProperty().setValue(true); // non default value triggers event
+            controller.setThemeType("Dark");
         } else {
-            if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
-                controller.getThemeProperty().setValue(true); // non default value triggers event
-            } else {
-                controller.setAppStyles(false);
-                resetStylesheets(false);
-            }
+            controller.setAppStyles(false);
+            resetStylesheets(false);
+            controller.setThemeType("Light");
         }
 
         // Install the canvas
@@ -211,11 +212,12 @@ public class Gesticulate extends GuiceApplication {
 
     @Override
     public void stop() {
-        if (!MAC_OS_X) {
+//        if (!MAC_OS_X) {
             userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
+            userPrefs.setProperty("systemTheme", controller.getThemeTypeProperty().getValue());
             setUserPreferences(userPrefs);
             logger.trace("set user preferences");
-        }
+//        }
         Platform.exit();
         System.exit(0);
     }
