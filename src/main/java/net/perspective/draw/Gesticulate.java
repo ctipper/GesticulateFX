@@ -76,6 +76,7 @@ public class Gesticulate extends GuiceApplication {
     private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+    protected static final boolean MM_SYSTEM_THEME = true;
 
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
@@ -122,7 +123,7 @@ public class Gesticulate extends GuiceApplication {
         drawarea.init(pane.getWidth(), pane.getHeight());
 
         // set the theme from user preferences
-        if (userPrefs.getProperty("systemTheme").equals("System")) {
+        if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
             setSystemTheme();
             controller.setThemeType("System");
         } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {

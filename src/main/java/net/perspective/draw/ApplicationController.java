@@ -703,10 +703,10 @@ public class ApplicationController implements Initializable {
         this.themeProperty.setValue(false);
         this.comboThemeProperty = new SimpleStringProperty();
         this.comboThemeProperty.setValue("Light");
-        comboTheme.setOnAction((ActionEvent event) -> {
+        comboTheme.setOnAction((var event) -> {
             String s = comboTheme.getValue();
             comboThemeProperty.setValue(s);
-            if (s.equals("System")) {
+            if (s.equals("System") && Gesticulate.MM_SYSTEM_THEME) {
                 application.setSystemTheme();
             } else {
                 themeProperty.setValue(s.equals("Dark"));
@@ -912,7 +912,11 @@ public class ApplicationController implements Initializable {
         comboTheme.setPrefHeight(20.0);
         comboTheme.setPrefWidth(120.0);
         comboTheme.setFocusTraversable(false);
-        comboTheme.getItems().addAll("Light", "Dark", "System");
+        if (Gesticulate.MM_SYSTEM_THEME) {
+            comboTheme.getItems().addAll("Light", "Dark", "System");
+        } else {
+            comboTheme.getItems().addAll("Light", "Dark");
+        }
         comboTheme.getSelectionModel().select("Light");
         appmenu.getRowConstraints().add(getRow());
         appmenu.addRow(7, emptyNode, comboTheme);
