@@ -55,8 +55,8 @@
 
 .button {
     -fx-padding: 5 22 5 22;
+    -fx-border-color: #d3d3d3;
     -fx-border-style: none;
-    -fx-background-radius: 0;
 
     -fx-background-radius: 2pt;
     -fx-border-radius: 2pt;
@@ -70,6 +70,7 @@
 
 .button:hover{
     -fx-background-color: #d8d8d8;
+    -fx-border-color: #d8d8d8;
     -fx-background-radius: 2pt;
     -fx-border-radius: 2pt;
 }
@@ -116,8 +117,8 @@
 
 .toggle-button {
     -fx-padding: 5 22 5 22;
-    -fx-border-style: none;
-    -fx-background-radius: 0;
+    -fx-border-color: #d3d3d3;
+    -fx-border-style: solid;
 
     -fx-background-radius: 2pt;
     -fx-border-radius: 2pt;
@@ -527,6 +528,8 @@
     -fx-background-color: transparent, #bababa, transparent, white;
     -fx-background-radius: 0, 0, 0, 0;
     -fx-padding: 0.166667em; /* 2 */
+    -fx-border-style: solid;
+    -fx-border-color: #d3d3d3;
 }
 
 .combo-box-base:hover {
