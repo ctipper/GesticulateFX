@@ -186,6 +186,8 @@ public class Gesticulate extends GuiceApplication {
                 share.readCanvas(e.getFiles().get(0));
             });
         }
+        // maps stylesheet
+        stage.getScene().getStylesheets().add("/stylesheets/style.css");
     }
 
     public void setOnResize(ScrollPane pane) {

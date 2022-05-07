@@ -14,8 +14,11 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
@@ -193,10 +196,20 @@ public class StreetMap extends Picture {
         mv.setZoom(5);
         mv.setPrefWidth(end.x);
         mv.setPrefHeight(end.y);
-        mv.setLayoutX(start.x);
-        mv.setLayoutY(start.y);
         mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
-        return mv;
+        final Group copyright = createCopyright();
+        StackPane bp = new StackPane() {
+            @Override
+            protected void layoutChildren() {
+                super.layoutChildren();
+                copyright.setLayoutX(getWidth() - copyright.prefWidth(-1));
+                copyright.setLayoutY(getHeight() - copyright.prefHeight(-1));
+            }
+        };
+        bp.getChildren().addAll(mv, copyright);
+        bp.setLayoutX(start.x);
+        bp.setLayoutY(start.y);
+        return bp;
     }
 
     /**
@@ -271,6 +284,17 @@ public class StreetMap extends Picture {
 
         // reset graphics context
         g2.setTransform(defaultTransform);
+    }
+
+    private Group createCopyright() {
+        final Label copyright = new Label(
+                """
+                Map data \u00a9 OpenStreetMap contributors, CC-BY-SA.
+                Imagery  \u00a9 OpenStreetMap.""");
+        copyright.getStyleClass().add("copyright");
+        copyright.setAlignment(Pos.CENTER);
+        copyright.setMaxWidth(Double.MAX_VALUE);
+        return new Group(copyright);
     }
 
 }
