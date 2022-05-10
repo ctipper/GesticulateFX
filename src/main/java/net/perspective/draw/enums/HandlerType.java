@@ -29,5 +29,5 @@ package net.perspective.draw.enums;
  */
 
 public enum HandlerType {
-    SELECTION, FIGURE, ROTATION, SKETCH, TEXT
+    SELECTION, FIGURE, ROTATION, SKETCH, TEXT, MAP
 }

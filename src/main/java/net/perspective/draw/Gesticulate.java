@@ -56,6 +56,7 @@ import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
+import net.perspective.draw.event.behaviours.MapItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.event.keyboard.DummyKeyHandler;
 import net.perspective.draw.event.keyboard.MoveKeyHandler;
@@ -351,6 +352,7 @@ public class Gesticulate extends GuiceApplication {
             bind(SelectionHandler.class);
             bind(SketchHandler.class);
             bind(TextHandler.class);
+            bind(MapHandler.class);
             bind(KeyListener.class);
             bind(MoveKeyHandler.class);
             bind(DummyKeyHandler.class);
@@ -358,6 +360,7 @@ public class Gesticulate extends GuiceApplication {
             bind(FigureItemBehaviour.class);
             bind(PictureItemBehaviour.class);
             bind(GroupedItemBehaviour.class);
+            bind(MapItemBehaviour.class);
             bind(FigureFactory.class).to(FigureFactoryImpl.class);
             bind(Picture.class);
             bind(StreetMap.class);

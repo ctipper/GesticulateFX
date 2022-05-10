@@ -6,6 +6,7 @@
  */
 package net.perspective.draw.geom;
 
+import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -43,6 +44,7 @@ public class StreetMap extends Picture {
     private double latitude;
     private double longitude;
     private int zoom;
+    private final MapView mv;
 
     private static final long serialVersionUID = 1L;
 
@@ -61,6 +63,7 @@ public class StreetMap extends Picture {
      */
     public StreetMap(double x, double y) {
         super(x, y);
+        mv = new MapView();
     }
 
     /**
@@ -184,6 +187,13 @@ public class StreetMap extends Picture {
         return bounds;
     }
 
+    public void setCenter() {
+        MapPoint mp = mv.getCenter();
+        setLatitude(mp.getLatitude());
+        setLongitude(mp.getLongitude());
+        setZoom((int) Math.round(mv.getZoom()));
+    }
+
     /**
      * Provide ImageVew for FX canvas
      * 
@@ -191,7 +201,6 @@ public class StreetMap extends Picture {
      */
     @Override
     public Node draw() {
-        MapView mv = new MapView();
         mv.setCenter(latitude, longitude);
         mv.setZoom(5);
         mv.setPrefWidth(end.x);

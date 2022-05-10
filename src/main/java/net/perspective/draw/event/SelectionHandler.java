@@ -38,12 +38,14 @@ import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
+import net.perspective.draw.event.behaviours.MapItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -96,14 +98,16 @@ public class SelectionHandler implements Handler {
                 if (item instanceof Figure) {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                     boolean found = context.select(item, i);
-                    if (found) {
-                        break;
-                    }
+                    if (found) break;
                 } else if (item instanceof Picture) {
-                    context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
-                    boolean found = context.select(item, i);
-                    if (found) {
-                        break;
+                    if (item instanceof StreetMap) {
+                        context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+                        boolean found = context.select(item, i);
+                        if (found) break;
+                    } else {
+                        context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
+                        boolean found = context.select(item, i);
+                        if (found) break;
                     }
                 } else if (item.contains(listener.getStartX(), listener.getStartY())) {
                     // Rest of Shapes
@@ -142,6 +146,22 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void clickEvent() {
+        if (listener.doubleClicked()) {
+            List<DrawItem> drawings = view.getDrawings();
+            if (!drawings.isEmpty()) {
+                int i = drawings.size() - 1;
+                do {
+                    DrawItem item = drawings.get(i);
+                    if (item.contains(listener.getTempX(), listener.getTempY())) {
+                        if (item instanceof StreetMap) {
+                            context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+                            context.edit(item, i);
+                            break;
+                        }
+                    }
+                    i--;
+                } while (i >= 0);            }
+        }
     }
 
     @Override
@@ -240,8 +260,13 @@ public class SelectionHandler implements Handler {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                     context.alter(item, xinc, yinc);
                 } else if (item instanceof Picture) {
-                    context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
-                    context.alter(item, xinc, yinc);
+                    if (item instanceof StreetMap) {
+                        context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+                        context.alter(item, xinc, yinc);
+                    } else {
+                        context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
+                        context.alter(item, xinc, yinc);
+                    }
                 } else if (item instanceof Grouped) {
                     context.setBehaviour(injector.getInstance(GroupedItemBehaviour.class));
                     context.alter(item, xinc, yinc);

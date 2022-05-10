@@ -286,6 +286,7 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handleMapInsertAction(ActionEvent e) {
+        drawarea.changeHandlers(HandlerType.MAP);
         StreetMap streetmap = injector.getInstance(StreetMap.class);
         streetmap.setStart(20.0, 20.0);
         streetmap.setEnd(900, 675);

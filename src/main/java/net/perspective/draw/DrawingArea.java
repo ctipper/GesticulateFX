@@ -54,6 +54,7 @@ import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.event.FigureHandler;
 import net.perspective.draw.event.RotationHandler;
+import net.perspective.draw.event.MapHandler;
 import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.event.TextHandler;
@@ -347,6 +348,7 @@ public class DrawingArea {
                 this.setRotationMode(false);
                 view.setSelected(-1);
             }
+            case MAP -> listener.setEventHandler(injector.getInstance(MapHandler.class));
             default -> {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
                 this.setRotationMode(false);
