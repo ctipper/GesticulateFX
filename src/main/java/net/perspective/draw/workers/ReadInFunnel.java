@@ -152,16 +152,6 @@ public class ReadInFunnel extends Task<Object> {
             }
         }
 
-        if (drawing instanceof Grouped) {
-            DrawItem item = new Grouped();
-            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
-                ((Grouped) item).addShape(checkDrawings(shape));
-            }
-            item.setAngle(drawing.getAngle());
-            ((Grouped) item).setTransparency(((Grouped) drawing).getTransparency());
-            drawing = item;
-        }
-
         if (drawing instanceof Picture) {
             DrawItem item = injector.getInstance(Picture.class);
             try {
@@ -170,6 +160,16 @@ public class ReadInFunnel extends Task<Object> {
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
+        }
+
+        if (drawing instanceof Grouped) {
+            DrawItem item = new Grouped();
+            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
+                ((Grouped) item).addShape(checkDrawings(shape));
+            }
+            item.setAngle(drawing.getAngle());
+            ((Grouped) item).setTransparency(((Grouped) drawing).getTransparency());
+            drawing = item;
         }
 
         return drawing;

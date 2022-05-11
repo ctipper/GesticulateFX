@@ -111,14 +111,6 @@ public class CanvasTransferHandler {
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
-        if (drawing instanceof Grouped) {
-            DrawItem item = new Grouped();
-            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
-                ((Grouped) item).addShape(checkDrawings(shape));
-            }
-            drawing = item;
-        }
-
         if (drawing instanceof Picture) {
             DrawItem item = injector.getInstance(Picture.class);
             try {
@@ -129,6 +121,14 @@ public class CanvasTransferHandler {
             }
         }
         
+        if (drawing instanceof Grouped) {
+            DrawItem item = new Grouped();
+            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
+                ((Grouped) item).addShape(checkDrawings(shape));
+            }
+            drawing = item;
+        }
+
         return drawing;
     }
 
