@@ -60,6 +60,16 @@ public class BehaviourContext {
     }
 
     /**
+     * Activate the strategy's edit behaviour
+     * 
+     * @param item  a {@link net.perspective.draw.geom.DrawItem}
+     * @param index  the index of the item in list of drawings
+     */
+    public void edit(DrawItem item, int index) {
+        strategy.editItem(this, item, index);
+    }
+
+    /**
      * Activate the strategy's hover behaviour
      * 
      * @param item  a {@link net.perspective.draw.geom.DrawItem}

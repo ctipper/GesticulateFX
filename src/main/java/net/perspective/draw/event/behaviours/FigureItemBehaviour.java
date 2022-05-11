@@ -124,6 +124,11 @@ public class FigureItemBehaviour implements ItemBehaviours {
     }
 
     @Override
+    public void editItem(BehaviourContext context, DrawItem item, int index) {
+        // not implemented
+    }
+
+    @Override
     public void hoverItem(BehaviourContext context, DrawItem item) {
         switch (((Figure) item).getType()) {
             case LINE:

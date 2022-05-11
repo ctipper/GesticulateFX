@@ -78,6 +78,11 @@ public class PictureItemBehaviour implements ItemBehaviours {
     }
 
     @Override
+    public void editItem(BehaviourContext context, DrawItem item, int index) {
+        // not implemented
+    }
+
+    @Override
     public void hoverItem(BehaviourContext context, DrawItem item) {
         List<CanvasPoint[]> vertices = ((Picture) item).getVertices();
         CanvasPoint centre = item.rotationCentre();
