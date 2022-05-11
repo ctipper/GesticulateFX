@@ -202,7 +202,7 @@ public class StreetMap extends Picture {
     @Override
     public Node draw() {
         mv.setCenter(latitude, longitude);
-        mv.setZoom(5);
+        mv.setZoom(zoom);
         mv.setPrefWidth(end.x);
         mv.setPrefHeight(end.y);
         mv.setCursor(javafx.scene.Cursor.OPEN_HAND);

@@ -292,6 +292,7 @@ public class ApplicationController implements Initializable {
         streetmap.setEnd(900, 675);
         streetmap.setLatitude(52.0);
         streetmap.setLongitude(0);
+        streetmap.setZoom(5);
         view.setNewItem(streetmap);
         view.resetNewItem();
         menubutton.fire();
