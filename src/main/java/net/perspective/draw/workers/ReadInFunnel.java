@@ -49,6 +49,7 @@ import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.FileUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -167,7 +168,7 @@ public class ReadInFunnel extends Task<Object> {
             }
         }
 
-        if (drawing instanceof Picture) {
+        if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
             DrawItem item = injector.getInstance(Picture.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
