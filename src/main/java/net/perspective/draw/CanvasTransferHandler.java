@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.StreetMap;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,8 +129,16 @@ public class CanvasTransferHandler {
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
-        if (drawing instanceof Picture) {
+        if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
             DrawItem item = injector.getInstance(Picture.class);
+            try {
+                BeanUtils.copyProperties(item, drawing);
+                drawing = item;
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                logger.trace(ex.getMessage());
+            }
+        } else if (drawing instanceof StreetMap) {
+            DrawItem item = injector.getInstance(StreetMap.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
                 drawing = item;

@@ -14,6 +14,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -21,16 +24,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javax.inject.Inject;
-import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A structure for rendering an image of a street map that references an external list
- * of images.
+ * A structure for rendering an image of a street map
  * 
  * <p>A StreetMap is not allowed to rotate.
  * 
@@ -39,12 +39,10 @@ import org.slf4j.LoggerFactory;
 
 public class StreetMap extends Picture {
 
-    @Inject private transient DrawingArea drawarea;
-    @Inject private transient CanvasView view;
     private double latitude;
     private double longitude;
     private int zoom;
-    private final MapView mv;
+    private transient MapView mv;
 
     private static final long serialVersionUID = 1L;
 
@@ -195,9 +193,9 @@ public class StreetMap extends Picture {
     }
 
     /**
-     * Provide ImageVew for FX canvas
+     * Provide MapView for FX canvas
      * 
-     * @return an FX Path
+     * @return a MapView
      */
     @Override
     public Node draw() {
@@ -304,6 +302,17 @@ public class StreetMap extends Picture {
         copyright.setAlignment(Pos.CENTER);
         copyright.setMaxWidth(Double.MAX_VALUE);
         return new Group(copyright);
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.mv = new com.gluonhq.maps.MapView();
+    }
+
+    private void writeObject(ObjectOutputStream out)
+            throws IOException {
+        out.defaultWriteObject();
     }
 
 }

@@ -57,8 +57,8 @@ import org.slf4j.LoggerFactory;
 
 public class Picture implements DrawItem, Serializable {
 
-    @Inject private transient DrawingArea drawarea;
-    @Inject private transient CanvasView view;
+    @Inject protected transient DrawingArea drawarea;
+    @Inject protected transient CanvasView view;
     protected int index;
     protected CanvasPoint start, end;   // start is _untransformed_ coord of TL, end is offset
     protected double scale;

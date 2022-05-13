@@ -176,6 +176,14 @@ public class ReadInFunnel extends Task<Object> {
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
+        } else if (drawing instanceof StreetMap) {
+            DrawItem item = injector.getInstance(StreetMap.class);
+            try {
+                BeanUtils.copyProperties(item, drawing);
+                drawing = item;
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                logger.trace(ex.getMessage());
+            }
         }
 
         if (drawing instanceof Grouped grouped) {
