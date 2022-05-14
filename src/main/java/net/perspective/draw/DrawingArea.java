@@ -337,6 +337,7 @@ public class DrawingArea {
                 ((StreetMap) item).filterHandlers();
             }
             mapping = false;
+            mapindex = -1;
         }
         switch (handler) {
             case SELECTION -> {

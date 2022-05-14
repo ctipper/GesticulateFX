@@ -37,6 +37,7 @@ import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
@@ -71,7 +72,7 @@ public class RotationHandler implements Handler {
                 if ((item instanceof Figure) && !(((Figure) item).getType().equals(FigureType.LINE))
                         || (item instanceof Text)
                         || (item instanceof Grouped)
-                        || (item instanceof Picture)) {
+                        || ((item instanceof Picture) && !(item instanceof StreetMap))) {
                     if (getRegion(item.getTop()[0]).contains(listener.getStartX(), listener.getStartY())) {
                         view.setSelected(i);
                         break;
@@ -147,7 +148,7 @@ public class RotationHandler implements Handler {
             if ((item instanceof Figure)
                     || (item instanceof Text)
                     || (item instanceof Grouped)
-                    || (item instanceof Picture)) {
+                    || ((item instanceof Picture) && !(item instanceof StreetMap))) {
                 A = new CanvasPoint(listener.getStartX() - centre.x, listener.getStartY() - centre.y);
                 B = new CanvasPoint(listener.getTempX() - centre.x, listener.getTempY() - centre.y);
             }
