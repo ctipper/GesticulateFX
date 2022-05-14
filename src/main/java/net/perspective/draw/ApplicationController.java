@@ -289,9 +289,7 @@ public class ApplicationController implements Initializable {
         StreetMap streetmap = injector.getInstance(StreetMap.class);
         streetmap.setStart(20.0, 20.0);
         streetmap.setEnd(900, 675);
-        streetmap.setLatitude(52.0);
-        streetmap.setLongitude(0);
-        streetmap.setZoom(5);
+        streetmap.setLocation(52.0, 0, 5);
         view.setNewItem(streetmap);
         view.resetNewItem();
         view.setSelected(view.getDrawings().indexOf(streetmap));

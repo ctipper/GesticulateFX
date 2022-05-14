@@ -333,7 +333,7 @@ public class DrawingArea {
         if (mapping) {
             DrawItem item = view.getDrawings().get(mapindex);
             if (item instanceof StreetMap) {
-                ((StreetMap) item).setCenter();
+                ((StreetMap) item).setLocation();
                 ((StreetMap) item).filterHandlers();
             }
             mapping = false;
