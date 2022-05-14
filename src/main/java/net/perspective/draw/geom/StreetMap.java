@@ -18,10 +18,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import net.perspective.draw.DrawingArea;
@@ -43,6 +48,7 @@ public class StreetMap extends Picture {
     private double longitude;
     private int zoom;
     private transient MapView mv;
+    private transient EventHandler<InputEvent> filter;
 
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +68,12 @@ public class StreetMap extends Picture {
     public StreetMap(double x, double y) {
         super(x, y);
         mv = new MapView();
+        filter = (InputEvent event) -> {
+            logger.trace("Filtering out event {} ", event.getEventType());
+            event.consume();
+            InputEvent evt = (InputEvent) event.clone();
+            InputEvent.fireEvent(mv.getParent(), evt);
+        };
     }
 
     /**
@@ -185,11 +197,41 @@ public class StreetMap extends Picture {
         return bounds;
     }
 
+    /**
+     * Consolidate map properties
+     */
     public void setCenter() {
         MapPoint mp = mv.getCenter();
         setLatitude(mp.getLatitude());
         setLongitude(mp.getLongitude());
         setZoom((int) Math.round(mv.getZoom()));
+    }
+
+    /**
+     * map handlers need to be consumed
+     */
+    public void filterHandlers() {
+        mv.addEventFilter(MouseEvent.MOUSE_PRESSED, filter);
+        mv.addEventFilter(MouseEvent.MOUSE_DRAGGED, filter);
+        mv.addEventFilter(MouseEvent.MOUSE_RELEASED, filter);
+        mv.addEventFilter(ScrollEvent.SCROLL_STARTED, filter);
+        mv.addEventFilter(ScrollEvent.SCROLL_FINISHED, filter);
+        mv.addEventFilter(ScrollEvent.SCROLL, filter);
+        mv.addEventFilter(ZoomEvent.ZOOM_STARTED, filter);
+        mv.addEventFilter(ZoomEvent.ZOOM_FINISHED, filter);
+        mv.addEventFilter(ZoomEvent.ZOOM, filter);
+    }
+    
+    public void resetHandlers() {
+        mv.removeEventFilter(MouseEvent.MOUSE_PRESSED, filter);
+        mv.removeEventFilter(MouseEvent.MOUSE_DRAGGED, filter);
+        mv.removeEventFilter(MouseEvent.MOUSE_RELEASED, filter);
+        mv.removeEventFilter(ScrollEvent.SCROLL_STARTED, filter);
+        mv.removeEventFilter(ScrollEvent.SCROLL_FINISHED, filter);
+        mv.removeEventFilter(ScrollEvent.SCROLL, filter);
+        mv.removeEventFilter(ZoomEvent.ZOOM_STARTED, filter);
+        mv.removeEventFilter(ZoomEvent.ZOOM_FINISHED, filter);
+        mv.removeEventFilter(ZoomEvent.ZOOM, filter);
     }
 
     /**
