@@ -6,6 +6,7 @@
  */
 package net.perspective.draw.geom;
 
+import com.gluonhq.maps.MapPoint;
 import com.gluonhq.maps.MapView;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -18,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -209,8 +211,13 @@ public class StreetMap extends Picture {
     }
     
     public void setLocation() {
-        setLatitude(mv.getCenter().getLatitude());
-        setLongitude(mv.getCenter().getLongitude());
+        // must calculate center of map
+        Bounds bounds = mv.getLayoutBounds();
+        CanvasPoint centre = new CanvasPoint(mv.getLayoutX() + bounds.getCenterX(),
+                                             mv.getLayoutY() + bounds.getCenterY());
+        MapPoint mp = mv.getMapPosition(centre.x, centre.y);
+        setLatitude(mp.getLatitude());
+        setLongitude(mp.getLongitude());
         setZoom((int) Math.round(mv.getZoom()));
         logger.debug("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
