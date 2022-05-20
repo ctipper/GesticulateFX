@@ -83,7 +83,6 @@ import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
-import net.perspective.draw.geom.StreetMap;
 
 /**
  * 
@@ -95,9 +94,10 @@ public class ApplicationController implements Initializable {
 
     @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
     @Inject private Gesticulate application;
+    @Inject private CanvasView view;
     @Inject private ShareUtils share;
+    @Inject private MapController mapper;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private BooleanProperty themeProperty;
@@ -286,13 +286,7 @@ public class ApplicationController implements Initializable {
     
     @FXML
     private void handleMapInsertAction(ActionEvent e) {
-        StreetMap streetmap = injector.getInstance(StreetMap.class);
-        streetmap.setStart(20.0, 20.0);
-        streetmap.setEnd(900, 675);
-        streetmap.setLocation(52.0, 0, 5);
-        view.setNewItem(streetmap);
-        view.resetNewItem();
-        view.setSelected(view.getDrawings().indexOf(streetmap));
+        mapper.createMap();
         drawarea.changeHandlers(HandlerType.MAP);
         menubutton.fire();
     }

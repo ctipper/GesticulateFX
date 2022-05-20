@@ -77,7 +77,6 @@ import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
-import net.perspective.draw.geom.StreetMap;
 
 /**
  * 
@@ -94,6 +93,7 @@ public class DrawingArea {
     @Inject private KeyListener keylistener;
     @Inject private CanvasTransferHandler transferhandler;
     @Inject private Dropper dropper;
+    @Inject private MapController mapper;
     @Inject private G2 g2;
     private SubScene canvas;
     private Group root;
@@ -117,8 +117,6 @@ public class DrawingArea {
 
     private HandlerType handlertype, oldhandlertype;
     private ContextMenu contextmenu;
-    private boolean mapping;
-    private int mapindex;
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
     private EventHandler<InputEvent> arealistener;
@@ -134,8 +132,6 @@ public class DrawingArea {
      */
     @Inject
     public DrawingArea() {
-        mapping = false;
-        mapindex = -1;
     }
 
     void init(double width, double height) {
@@ -326,59 +322,44 @@ public class DrawingArea {
         this.oldhandlertype = this.handlertype;
         this.handlertype = handler;
         this.resetContextHandlers();
-        /** 
-         * MapView event handlers need to be consumed
-         * when mapping control is not active.
-         */
-        if (mapping) {
-            DrawItem item = view.getDrawings().get(mapindex);
-            if (item instanceof StreetMap) {
-                ((StreetMap) item).setLocation();
-                ((StreetMap) item).filterHandlers();
-            }
-            mapping = false;
-            mapindex = -1;
-        }
         switch (handler) {
             case SELECTION -> {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
                 this.setRotationMode(false);
                 this.setContextHandlers();
+                mapper.finaliseMap();
             }
             case FIGURE -> {
                 listener.setEventHandler(injector.getInstance(FigureHandler.class));
                 this.setRotationMode(false);
                 view.setSelected(-1);
+                mapper.finaliseMap();
             }
             case ROTATION -> {
                 listener.setEventHandler(injector.getInstance(RotationHandler.class));
                 this.setRotationMode(true);
                 this.setContextHandlers();
+                mapper.finaliseMap();
                 view.setSelected(-1);
             }
             case SKETCH -> {
                 listener.setEventHandler(injector.getInstance(SketchHandler.class));
                 this.setRotationMode(false);
+                mapper.finaliseMap();
                 view.setSelected(-1);
             }
             case TEXT -> {
                 listener.setEventHandler(injector.getInstance(TextHandler.class));
                 this.setRotationMode(false);
+                mapper.finaliseMap();
                 view.setSelected(-1);
             }
-            case MAP -> {
-                listener.setEventHandler(injector.getInstance(MapHandler.class));
-                mapping = true;
-                mapindex = view.getSelected();
-                // Remove MapView event filters
-                if (view.getDrawings().get(mapindex) instanceof StreetMap) {
-                    ((StreetMap) view.getDrawings().get(mapindex)).resetHandlers();
-                }
-            }
+            case MAP -> listener.setEventHandler(injector.getInstance(MapHandler.class));
             default -> {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
                 this.setRotationMode(false);
                 this.setContextHandlers();
+                mapper.finaliseMap();
                 view.setSelected(-1);
             }
         }

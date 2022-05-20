@@ -9,6 +9,7 @@ package net.perspective.draw.event.behaviours;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.MapController;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.DrawAreaListener;
@@ -25,7 +26,7 @@ public class MapItemBehaviour implements ItemBehaviours {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
-
+    @Inject private MapController mapper;
 
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
@@ -62,8 +63,8 @@ public class MapItemBehaviour implements ItemBehaviours {
     public void editItem(BehaviourContext context, DrawItem item, int index) {
         view.setSelected(index);
         // view.setEditing(KeyboardHandlerType.MAP);
+        mapper.initMap();
         drawarea.changeHandlers(HandlerType.MAP);
-        // canvas.getMapController().initMap();
     }
 
     @Override

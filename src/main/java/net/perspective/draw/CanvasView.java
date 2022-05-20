@@ -68,6 +68,7 @@ public class CanvasView {
     private Node drawGuides;
     private boolean isDrawing;
     private boolean isEditing;
+    private boolean isMapping;
     private boolean isMarquee;
     private boolean hasGuides;
 
@@ -686,6 +687,24 @@ public class CanvasView {
      */
     public boolean isEditing() {
         return isEditing;
+    }
+
+    /**
+     * Set mapping mode
+     * 
+     * @param isMapping
+     */
+    public void setMapping(boolean isMapping) {
+        this.isMapping = isMapping;
+    }
+
+    /**
+     * Is mapping mode
+     * 
+     * @return
+     */
+    public boolean isMapping() {
+        return isMapping;
     }
 
     /**
