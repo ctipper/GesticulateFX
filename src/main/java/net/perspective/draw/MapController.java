@@ -59,6 +59,9 @@ public class MapController {
         this.initMap();
     }
     
+    /**
+     * Initialise selected map
+     */
     public void initMap() {
         view.setMapping(true);
         mapindex = view.getSelected();
@@ -97,7 +100,7 @@ public class MapController {
 
         zoomSlider = new Slider();
         zoomSlider.setOrientation(Orientation.VERTICAL);
-        zoomSlider.setLayoutX(left + 10);
+        zoomSlider.setLayoutX(left + 14);
         zoomSlider.setLayoutY(top + 10);
         zoomSlider.setMinWidth(30);
         zoomSlider.setMinHeight(150);
@@ -111,6 +114,31 @@ public class MapController {
             setZoom(newValue.doubleValue());
         });
         drawarea.getCanvas().getChildren().add(zoomSlider);
+
+        int size = 18;
+        zoomInButton = new Button("+");
+        zoomInButton.setLayoutX(left + 4);
+        zoomInButton.setLayoutY(top + 155);
+        zoomInButton.setMinWidth(size);
+        zoomInButton.setMinHeight(size);
+        zoomInButton.setStyle("-fx-background-radius:0.333333em;-fx-border-color:transparent;-fx-padding:0;-fx-background-size:0;");
+        zoomInButton.setFocusTraversable(false);
+        zoomInButton.setOnAction(e -> {
+            zoomIn();
+        });
+        drawarea.getCanvas().getChildren().add(zoomInButton);
+
+        zoomOutButton = new Button("-");
+        zoomOutButton.setLayoutX(left + 10 + size);
+        zoomOutButton.setLayoutY(top + 155);
+        zoomOutButton.setMinWidth(size);
+        zoomOutButton.setMinHeight(size);
+        zoomOutButton.setStyle("-fx-background-radius:0.333333em;-fx-border-color:transparent;-fx-padding:0;-fx-background-size:0;");
+        zoomOutButton.setFocusTraversable(false);
+        zoomOutButton.setOnAction(e -> {
+            zoomOut();
+        });
+        drawarea.getCanvas().getChildren().add(zoomOutButton);
     }
 
     /**
@@ -122,6 +150,20 @@ public class MapController {
         map.adjustZoom(zoom);
     }
 
+    /**
+     * Zoom in map by one level
+     */
+    public void zoomIn() {
+        zoomSlider.increment();
+    }
+
+    /**
+     * Zoom out by one level
+     */
+    public void zoomOut() {
+        zoomSlider.decrement();
+    }
+
     public int getMinZoom() {
         return MIN_ZOOM;
     }
@@ -131,7 +173,9 @@ public class MapController {
     }
 
     public void removeSlider() {
-        drawarea.getCanvas().getChildren().remove(zoomSlider);           // remove zoomSlider if necessary
+        drawarea.getCanvas().getChildren().remove(zoomSlider);     // remove zoomSlider if necessary
+        drawarea.getCanvas().getChildren().remove(zoomInButton);   // remove zoomInButton if necessary
+        drawarea.getCanvas().getChildren().remove(zoomOutButton);  // remove zoomOutButton if necessary
     }
 
 }

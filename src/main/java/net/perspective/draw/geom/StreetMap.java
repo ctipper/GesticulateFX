@@ -131,10 +131,15 @@ public class StreetMap extends Picture {
         return zoom;
     }
 
+    /**
+     * Zoom MapView
+     * 
+     * @param zoom 
+     */
     public void adjustZoom(double zoom) {
         mv.setZoom(zoom);
     }
-
+    
     /**
      * Update the public properties of the streetmap 
      * 
