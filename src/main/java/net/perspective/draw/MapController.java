@@ -7,6 +7,11 @@
 package net.perspective.draw;
 
 import com.google.inject.Injector;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Orientation;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.DrawItem;
@@ -21,8 +26,17 @@ import net.perspective.draw.geom.StreetMap;
 public class MapController {
 
     @Inject private Injector injector;
+    @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    protected Slider zoomSlider;
+    protected Button zoomInButton;
+    protected Button zoomOutButton;
+    protected TextField geoLocation;
+    private StreetMap map;
     private int mapindex;
+
+    public static final int MIN_ZOOM = 2;
+    public static final int MAX_ZOOM = 20;
 
     /** Creates a new instance of <code>MapController</code> */
     public MapController() {
@@ -50,8 +64,10 @@ public class MapController {
         mapindex = view.getSelected();
         // Remove MapView event filters
         if (view.getDrawings().get(mapindex) instanceof StreetMap) {
-            ((StreetMap) view.getDrawings().get(mapindex)).resetHandlers();
-        } 
+            map = ((StreetMap) view.getDrawings().get(mapindex));
+            map.resetHandlers();
+            initializeZoomSlider(map);
+        }
     }
     
     /**
@@ -66,6 +82,56 @@ public class MapController {
             }
             view.setMapping(false);
             mapindex = -1;
+            removeSlider();
         }
     }
+
+    /**
+     * Place the map zoom slider on the canvas
+     * 
+     * @param map 
+     */
+    public void initializeZoomSlider(StreetMap map) {
+        int left = (int) map.getStart().x;
+        int top = (int) map.getStart().y;
+
+        zoomSlider = new Slider();
+        zoomSlider.setOrientation(Orientation.VERTICAL);
+        zoomSlider.setLayoutX(left + 10);
+        zoomSlider.setLayoutY(top + 10);
+        zoomSlider.setMinWidth(30);
+        zoomSlider.setMinHeight(150);
+        zoomSlider.setMin(getMinZoom());
+        zoomSlider.setMax(getMaxZoom());
+        zoomSlider.setValue(map.getZoom());
+        zoomSlider.setShowTickMarks(true);
+        zoomSlider.setBlockIncrement(1f);
+        zoomSlider.setFocusTraversable(false);
+        zoomSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            setZoom(newValue.doubleValue());
+        });
+        drawarea.getCanvas().getChildren().add(zoomSlider);
+    }
+
+    /**
+     * Set the map zoom level
+     * 
+     * @param zoom
+     */
+    public void setZoom(double zoom) {
+        map.adjustZoom(zoom);
+    }
+
+    public int getMinZoom() {
+        return MIN_ZOOM;
+    }
+
+    public int getMaxZoom() {
+        return MAX_ZOOM;
+    }
+
+    public void removeSlider() {
+        drawarea.getCanvas().getChildren().remove(zoomSlider);           // remove zoomSlider if necessary
+    }
+
 }
