@@ -281,8 +281,7 @@ public class StreetMap extends Picture {
     public Node draw() {
         mv.setCenter(latitude, longitude);
         mv.setZoom(zoom);
-        mv.setPrefWidth(end.x);
-        mv.setPrefHeight(end.y);
+        mv.setManaged(true);
         mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
         final Group copyright = createCopyright();
         StackPane bp = new StackPane() {
@@ -296,6 +295,8 @@ public class StreetMap extends Picture {
         bp.getChildren().addAll(mv, copyright);
         bp.setLayoutX(start.x);
         bp.setLayoutY(start.y);
+        bp.setPrefWidth(end.x);
+        bp.setPrefHeight(end.y);
         return bp;
     }
 

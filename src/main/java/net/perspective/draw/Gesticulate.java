@@ -188,7 +188,7 @@ public class Gesticulate extends GuiceApplication {
             });
         }
         // maps stylesheet
-        stage.getScene().getStylesheets().add("/stylesheets/style.css");
+        stage.getScene().getStylesheets().add(getClass().getResource("/stylesheets/style.css").toExternalForm());
     }
 
     public void setOnResize(ScrollPane pane) {
