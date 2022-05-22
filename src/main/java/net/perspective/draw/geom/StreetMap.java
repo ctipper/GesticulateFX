@@ -230,6 +230,20 @@ public class StreetMap extends Picture {
         setZoom((int) Math.round(mv.getZoom()));
         logger.debug("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
+    
+    /**
+     * Return lat/lon of layout point
+     * 
+     * @param location
+     * @return 
+     */
+    public MapPoint getPosition(double x, double y) {
+        // must calculate center of map
+        Bounds bounds = mv.getLayoutBounds();
+        CanvasPoint point = new CanvasPoint(x - mv.getLayoutX(), y - mv.getLayoutY());
+        MapPoint mp = mv.getMapPosition(point.x, point.y);
+        return mp;
+    }
 
     /**
      * map handlers need to be consumed

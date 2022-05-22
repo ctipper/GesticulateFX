@@ -6,6 +6,7 @@
  */
 package net.perspective.draw;
 
+import com.gluonhq.maps.MapPoint;
 import com.google.inject.Injector;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -22,6 +23,8 @@ import javax.inject.Singleton;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.StreetMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -48,6 +51,8 @@ public class MapController {
 
     public static final int MIN_ZOOM = 2;
     public static final int MAX_ZOOM = 20;
+
+    private static final Logger logger = LoggerFactory.getLogger(MapController.class.getName());
 
     /** Creates a new instance of <code>MapController</code> */
     public MapController() {
@@ -154,7 +159,7 @@ public class MapController {
         /**
          * close map glyph
          */
-        int qsize = 27;
+        int qsize = 26;
         Group icon = getQuitGlyph();
         quiticon = new Button();
         quiticon.setMinWidth(qsize);
@@ -169,6 +174,15 @@ public class MapController {
         quiticon.setGraphic(icon);
         quiticon.setOnAction(this::handleQuitAction);
         drawarea.getCanvas().getChildren().add(quiticon);
+
+        geoLocation = new TextField();
+        geoLocation.setMinWidth(180);
+        geoLocation.setMinHeight(30);
+        geoLocation.setLayoutX((int) map.getUp()[0].x - qsize - 196);
+        geoLocation.setLayoutY((int) map.getUp()[0].y + 10);
+        geoLocation.setFocusTraversable(true);
+        geoLocation.setText("");
+        drawarea.getCanvas().getChildren().add(geoLocation);
     }
 
     /**
@@ -206,7 +220,22 @@ public class MapController {
         drawarea.getCanvas().getChildren().remove(zoomSlider);     // remove zoomSlider if necessary
         drawarea.getCanvas().getChildren().remove(zoomInButton);   // remove zoomInButton if necessary
         drawarea.getCanvas().getChildren().remove(zoomOutButton);  // remove zoomOutButton if necessary
-        drawarea.getCanvas().getChildren().remove(quiticon);  // remove quiticon if necessary
+        drawarea.getCanvas().getChildren().remove(quiticon);       // remove quiticon if necessary
+        drawarea.getCanvas().getChildren().remove(geoLocation);       // remove geoLocation if necessary
+    }
+
+    /**
+     * Write out map location in Lat/Lon
+     * 
+     * @param x
+     * @param y 
+     */
+    public void putLocation(double x, double y) {
+        if (view.isMapping()) {
+            MapPoint loc = map.getPosition(x, y);
+            geoLocation.setText(String.format("%.6f %.6f", new Object[] { loc.getLatitude(), loc.getLongitude() }));
+            logger.debug("Geolocation: {}, {}", new Object[] { loc.getLatitude(), loc.getLongitude() });
+        }
     }
 
     /**
@@ -218,17 +247,17 @@ public class MapController {
         SVGPath path_a = new SVGPath();
         path_a.setContent(SVG_QUIT_A);
         path_a.getStyleClass().add("svgPath");
-        path_a.setStyle("-fx-stroke:black;-fx-stroke-width: 2.5;");
+        path_a.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:3.1;");
         path_a.setFill(Color.TRANSPARENT);
         SVGPath path_b = new SVGPath();
         path_b.setContent(SVG_QUIT_B);
         path_b.getStyleClass().add("svgPath");
-        path_b.setStyle("-fx-stroke:black;-fx-stroke-width: 2.5;");
+        path_b.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:3.1;");
         path_b.setFill(Color.TRANSPARENT);
         SVGPath path_c = new SVGPath();
         path_c.setContent(SVG_QUIT_C);
-        path_c.getStyleClass().add("svgThinPath");
-        path_c.setStyle("-fx-stroke:black;");
+        path_c.getStyleClass().add("svgPath");
+        path_c.setStyle("-fx-stroke:#a8a8a8;");
         path_c.setFill(Color.TRANSPARENT);
         Group glyph = new Group();
         glyph.getChildren().addAll(path_a, path_b, path_c);

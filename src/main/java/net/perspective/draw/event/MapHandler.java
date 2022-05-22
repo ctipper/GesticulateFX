@@ -6,12 +6,18 @@
  */
 package net.perspective.draw.event;
 
+import javax.inject.Inject;
+import net.perspective.draw.MapController;
+
 /**
  *
  * @author ctipper
  */
 
 public class MapHandler implements Handler {
+
+    @Inject private DrawAreaListener listener;
+    @Inject private MapController mapper;
 
     /** Creates a new instance of <code>MapHandler</code> */
     public MapHandler() {
@@ -29,7 +35,9 @@ public class MapHandler implements Handler {
 
     @Override
     public void clickEvent() {
-        
+       if (listener.getRightClick()) {
+           mapper.putLocation(listener.getStartX(), listener.getStartY());
+       } 
     }
 
     @Override
