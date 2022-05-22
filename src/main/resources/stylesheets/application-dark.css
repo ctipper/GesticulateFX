@@ -238,6 +238,33 @@
 .scroll-bar .increment-button:hover, .scroll-bar .decrement-button:hover  {
     -fx-background-color: #4a4a4a;
 }
+.slider .thumb {
+    -fx-background-color: #3a3a3a;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0.5em; /* 6 */
+
+    -fx-padding: 0.8em 0.333333em 0.8em 0.333333em;  /* 10 4 10 4 */
+}
+.slider:vertical .thumb {
+    -fx-padding: 0.333333em 0.8em 0.333333em 0.8em;  /* 4 10 4 10 */
+}
+.slider .track {
+    -fx-background-color: #3a3a3a;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0.083333em; /* 1 */
+}
+.slider .fill {
+    -fx-background-color: #3a3a3a;
+    -fx-padding: 0.083333em; /* 1 */
+}
+.slider:hover .track{
+    -fx-background-color: #3a3a3a;
+}
+.slider:hover .thumb{
+}
+.slider .thumb:pressed {
+}
 
 /**
  * Night theme svg styles
