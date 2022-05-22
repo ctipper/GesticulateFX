@@ -8,12 +8,18 @@ package net.perspective.draw;
 
 import com.google.inject.Injector;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.StreetMap;
 
@@ -28,12 +34,17 @@ public class MapController {
     @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
-    protected Slider zoomSlider;
-    protected Button zoomInButton;
-    protected Button zoomOutButton;
-    protected TextField geoLocation;
+    private Slider zoomSlider;
+    private Button zoomInButton;
+    private Button zoomOutButton;
+    private Button quiticon;
+    private TextField geoLocation;
     private StreetMap map;
     private int mapindex;
+
+    private final String SVG_QUIT_A = "M3.7732425 22.718011L22.702213 3.7890409";
+    private final String SVG_QUIT_B = "M3.7732425 3.7890409L22.702213 22.718011";
+    private final String SVG_QUIT_C = "M0.77324252 25.718011H25.679783V0.81147092H0.77324252Z";
 
     public static final int MIN_ZOOM = 2;
     public static final int MAX_ZOOM = 20;
@@ -115,12 +126,12 @@ public class MapController {
         });
         drawarea.getCanvas().getChildren().add(zoomSlider);
 
-        int size = 18;
+        int zsize = 18;
         zoomInButton = new Button("+");
         zoomInButton.setLayoutX(left + 4);
         zoomInButton.setLayoutY(top + 155);
-        zoomInButton.setMinWidth(size);
-        zoomInButton.setMinHeight(size);
+        zoomInButton.setMinWidth(zsize);
+        zoomInButton.setMinHeight(zsize);
         zoomInButton.setStyle("-fx-background-radius:0.333333em;-fx-border-color:transparent;-fx-padding:0;-fx-background-size:0;");
         zoomInButton.setFocusTraversable(false);
         zoomInButton.setOnAction(e -> {
@@ -129,16 +140,35 @@ public class MapController {
         drawarea.getCanvas().getChildren().add(zoomInButton);
 
         zoomOutButton = new Button("-");
-        zoomOutButton.setLayoutX(left + 10 + size);
+        zoomOutButton.setLayoutX(left + 10 + zsize);
         zoomOutButton.setLayoutY(top + 155);
-        zoomOutButton.setMinWidth(size);
-        zoomOutButton.setMinHeight(size);
+        zoomOutButton.setMinWidth(zsize);
+        zoomOutButton.setMinHeight(zsize);
         zoomOutButton.setStyle("-fx-background-radius:0.333333em;-fx-border-color:transparent;-fx-padding:0;-fx-background-size:0;");
         zoomOutButton.setFocusTraversable(false);
         zoomOutButton.setOnAction(e -> {
             zoomOut();
         });
         drawarea.getCanvas().getChildren().add(zoomOutButton);
+
+        /**
+         * close map glyph
+         */
+        int qsize = 27;
+        Group icon = getQuitGlyph();
+        quiticon = new Button();
+        quiticon.setMinWidth(qsize);
+        quiticon.setMinHeight(qsize);
+        quiticon.setStyle("-fx-background-radius:0.333333em;-fx-background-color:transparent;-fx-border-color:transparent;-fx-padding:0;-fx-background-size:0;");
+        quiticon.setLayoutX((int) map.getUp()[0].x - qsize - 10);
+        quiticon.setLayoutY((int) map.getUp()[0].y + 10);
+        quiticon.setAlignment(Pos.CENTER);
+        quiticon.setFocusTraversable(false);
+        quiticon.setMnemonicParsing(false);
+        quiticon.getStyleClass().add("menuicon");
+        quiticon.setGraphic(icon);
+        quiticon.setOnAction(this::handleQuitAction);
+        drawarea.getCanvas().getChildren().add(quiticon);
     }
 
     /**
@@ -176,6 +206,37 @@ public class MapController {
         drawarea.getCanvas().getChildren().remove(zoomSlider);     // remove zoomSlider if necessary
         drawarea.getCanvas().getChildren().remove(zoomInButton);   // remove zoomInButton if necessary
         drawarea.getCanvas().getChildren().remove(zoomOutButton);  // remove zoomOutButton if necessary
+        drawarea.getCanvas().getChildren().remove(quiticon);  // remove quiticon if necessary
+    }
+
+    /**
+     * Define the palette menu info icon
+     * 
+     * @return
+     */
+    private Group getQuitGlyph() {
+        SVGPath path_a = new SVGPath();
+        path_a.setContent(SVG_QUIT_A);
+        path_a.getStyleClass().add("svgPath");
+        path_a.setStyle("-fx-stroke:black;-fx-stroke-width: 2.5;");
+        path_a.setFill(Color.TRANSPARENT);
+        SVGPath path_b = new SVGPath();
+        path_b.setContent(SVG_QUIT_B);
+        path_b.getStyleClass().add("svgPath");
+        path_b.setStyle("-fx-stroke:black;-fx-stroke-width: 2.5;");
+        path_b.setFill(Color.TRANSPARENT);
+        SVGPath path_c = new SVGPath();
+        path_c.setContent(SVG_QUIT_C);
+        path_c.getStyleClass().add("svgThinPath");
+        path_c.setStyle("-fx-stroke:black;");
+        path_c.setFill(Color.TRANSPARENT);
+        Group glyph = new Group();
+        glyph.getChildren().addAll(path_a, path_b, path_c);
+        return glyph;
+    }
+
+    private void handleQuitAction(ActionEvent t) {
+        drawarea.changeHandlers(HandlerType.SELECTION);
     }
 
 }
