@@ -8,7 +8,14 @@ package net.perspective.draw;
 
 import com.gluonhq.maps.MapPoint;
 import com.google.inject.Injector;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -16,6 +23,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javax.inject.Inject;
@@ -69,6 +77,10 @@ public class MapController {
         streetmap.setStart(20.0, 20.0);
         streetmap.setEnd(width, height);
         streetmap.setLocation(50.0, 9, 4);
+        Image image = createCompatibleImage(width, height);
+        ImageItem img = new ImageItem(image);
+        int index = view.setImageItem(img);
+        streetmap.setImage(index, width, height);
         view.setNewItem(streetmap);
         view.resetNewItem();
         view.setSelected(view.getDrawings().indexOf(streetmap));
@@ -98,6 +110,8 @@ public class MapController {
             if (item instanceof StreetMap) {
                 ((StreetMap) item).setLocation();
                 ((StreetMap) item).filterHandlers();
+                Image image = createCompatibleImage((int) ((StreetMap) item).getEnd().getX(), (int) ((StreetMap) item).getEnd().getY());
+                view.getImageItem(mapindex).setImage(image);
             }
             view.setMapping(false);
             mapindex = -1;
@@ -266,6 +280,20 @@ public class MapController {
 
     private void handleQuitAction(ActionEvent t) {
         drawarea.changeHandlers(HandlerType.SELECTION);
+    }
+
+    private Image createCompatibleImage(int width, int height) {
+        BufferedImage image;
+        final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        final GraphicsDevice device = env.getDefaultScreenDevice();
+        final GraphicsConfiguration gc = device.getDefaultConfiguration();
+            image = gc.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
+        final Graphics2D g2 = image.createGraphics();
+        g2.setColor(java.awt.Color.lightGray);
+        g2.fillRect(0, 0, width, height);
+        g2.dispose();
+        Image fximg = SwingFXUtils.toFXImage(image, null);
+        return fximg;
     }
 
 }
