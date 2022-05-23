@@ -14,15 +14,19 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.SnapshotResult;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
+import javafx.util.Callback;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.HandlerType;
@@ -107,7 +111,7 @@ public class MapController {
             if (item instanceof StreetMap) {
                 ((StreetMap) item).setLocation();
                 ((StreetMap) item).filterHandlers();
-                Image image = createCompatibleImage((int) ((StreetMap) item).getEnd().getX(), (int) ((StreetMap) item).getEnd().getY());
+                Image image = createCompatibleImage((StreetMap) item, (int) ((StreetMap) item).getEnd().getX(), (int) ((StreetMap) item).getEnd().getY());
                 view.getImageItem(mapindex).setImage(image);
             }
             view.setMapping(false);
@@ -293,6 +297,32 @@ public class MapController {
         pixelWriter.setPixels(0, 0, width, height, format, getPixelArray(width, height, 211), 0, width);
         return image;
     }
+
+    /**
+     * Take a snapshot from StreetMap and render as Image
+     * @param map
+     * @param width
+     * @param height
+     * @return 
+     */
+    private Image createCompatibleImage(StreetMap map, int width, int height) {
+        final WritableImage image = new WritableImage(width, height);
+        Callback<SnapshotResult, Void> callback = (SnapshotResult capture) -> {
+            PixelWriter pixelWriter = image.getPixelWriter();
+            PixelReader pixelReader = capture.getImage().getPixelReader();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    Color color = pixelReader.getColor(x, y);
+                    pixelWriter.setColor(x, y, color);
+                }
+            }
+            return null;
+        };
+        SnapshotParameters params = new SnapshotParameters(); 
+        map.getSnapshot(callback, params, null);
+        return image;
+    }
+            
 
     /** 
      * Build a pixel array adapting method 

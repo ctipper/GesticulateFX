@@ -23,13 +23,17 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.SnapshotResult;
 import javafx.scene.control.Label;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
@@ -243,6 +247,10 @@ public class StreetMap extends Picture {
         CanvasPoint point = new CanvasPoint(x - mv.getLayoutX(), y - mv.getLayoutY());
         MapPoint mp = mv.getMapPosition(point.x, point.y);
         return mp;
+    }
+
+    public void getSnapshot(Callback<SnapshotResult, Void> callback, SnapshotParameters params, WritableImage image) {
+        mv.snapshot(callback, params, null);
     }
 
     /**
