@@ -8,14 +8,8 @@ package net.perspective.draw;
 
 import com.gluonhq.maps.MapPoint;
 import com.google.inject.Injector;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
+import java.nio.IntBuffer;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -24,6 +18,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javax.inject.Inject;
@@ -282,18 +279,43 @@ public class MapController {
         drawarea.changeHandlers(HandlerType.SELECTION);
     }
 
+    /**
+     * Build a greyScale image for backing store
+     * 
+     * @param width
+     * @param height
+     * @return 
+     */
     private Image createCompatibleImage(int width, int height) {
-        BufferedImage image;
-        final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        final GraphicsDevice device = env.getDefaultScreenDevice();
-        final GraphicsConfiguration gc = device.getDefaultConfiguration();
-            image = gc.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
-        final Graphics2D g2 = image.createGraphics();
-        g2.setColor(java.awt.Color.lightGray);
-        g2.fillRect(0, 0, width, height);
-        g2.dispose();
-        Image fximg = SwingFXUtils.toFXImage(image, null);
-        return fximg;
+        WritableImage image = new WritableImage(width, height);
+        PixelWriter pixelWriter = image.getPixelWriter();
+        WritablePixelFormat<IntBuffer> format = WritablePixelFormat.getIntArgbInstance();
+        pixelWriter.setPixels(0, 0, width, height, format, getPixelArray(width, height, 211), 0, width);
+        return image;
+    }
+
+    /** 
+     * Build a pixel array adapting method 
+     * @see <a href="https://stackoverflow.com/a/28426889">Improve javaFx processing performance</a>
+     * with loop optimisation from follow-up
+     * @see <a href="https://community.oracle.com/tech/developers/discussion/comment/12511325#Comment_12511325">community.oracle.com</a>
+     * @param width
+     * @param height
+     * @param value
+     * @return 
+     */
+    private int[] getPixelArray(int width, int height, int value) {
+        int[] pixels = new int[width * height]; // Buffer for all pixels
+        int alpha = 0xFF << 24;
+        for (int y = 0; y < height; y++) {
+            final int depthOffset = y * width;
+            for (int x = 0; x < width; x++) {
+                final int index = x + depthOffset;
+                int newArgb = alpha | (value << 16) | (value << 8) | value;
+                pixels[index] = newArgb;
+            }
+        }
+        return pixels;
     }
 
 }
