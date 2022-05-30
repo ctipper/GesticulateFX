@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
@@ -176,20 +177,27 @@ public class Gesticulate extends GuiceApplication {
         return this.stage;
     }
 
+    private Consumer<Boolean> csmr = null;
     public void setSystemTheme() {
-        final OsThemeDetector detector = OsThemeDetector.getDetector();
-        final boolean isDark = detector.isDark();
+        final boolean isDark = OsThemeDetector.getDetector().isDark();
         if (isDark) {
             controller.getThemeProperty().setValue(isDark); // non default value triggers event
         } else {
             controller.setAppStyles(false);
             resetStylesheets(false);
         }
-        detector.registerListener(darkTheme -> {
+        csmr = darkTheme -> {
             Platform.runLater(() -> {
                 controller.getThemeProperty().setValue(darkTheme);
             });
-        });
+        };
+        OsThemeDetector.getDetector().registerListener(csmr);
+    }
+
+    public void deregisterThemeListener() {
+        if (csmr != null) {
+            OsThemeDetector.getDetector().removeListener(csmr);
+        }
     }
 
     public void resetStylesheets(Boolean mode) {

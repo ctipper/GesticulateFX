@@ -711,6 +711,9 @@ public class ApplicationController implements Initializable {
                 application.setSystemTheme();
             } else {
                 themeProperty.setValue(s.equals("Dark"));
+                if (Gesticulate.MM_SYSTEM_THEME) {
+                    application.deregisterThemeListener();
+                }
             }
         });
         /**
