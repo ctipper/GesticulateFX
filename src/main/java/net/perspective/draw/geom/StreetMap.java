@@ -291,20 +291,28 @@ public class StreetMap extends Picture {
         mv.setZoom(zoom);
         mv.setManaged(true);
         mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
-        final Group copyright = createCopyright();
-        StackPane bp = new StackPane() {
-            @Override
-            protected void layoutChildren() {
-                super.layoutChildren();
-                copyright.setLayoutX(getWidth() - copyright.prefWidth(-1));
-                copyright.setLayoutY(getHeight() - copyright.prefHeight(-1));
-            }
-        };
-        bp.getChildren().addAll(mv, copyright);
+        bp = getContainer();
         bp.setLayoutX(start.x);
         bp.setLayoutY(start.y);
         bp.setPrefWidth(end.x);
         bp.setPrefHeight(end.y);
+        return bp;
+    }
+
+    private StackPane bp = null;
+    private StackPane getContainer() {
+        if (bp == null) {
+            final Group copyright = createCopyright();
+            bp = new StackPane() {
+                @Override
+                protected void layoutChildren() {
+                    super.layoutChildren();
+                    copyright.setLayoutX(getWidth() - copyright.prefWidth(-1));
+                    copyright.setLayoutY(getHeight() - copyright.prefHeight(-1));
+                }
+            };
+            bp.getChildren().addAll(mv, copyright);
+        }
         return bp;
     }
 
