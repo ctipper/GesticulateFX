@@ -223,7 +223,10 @@ public class StreetMap extends Picture {
         mv.setZoom(zm);
         logger.debug("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
-    
+
+    /**
+     * Set properties from MapView
+     */
     public void setLocation() {
         // must calculate center of map
         Bounds bounds = mv.getLayoutBounds();
@@ -237,14 +240,19 @@ public class StreetMap extends Picture {
     }
     
     /**
+     * Ensure MapView is refreshed in a timely manner
+     */
+    public void refreshLayout() {
+        mv.layout();
+    }
+
+    /**
      * Return lat/lon of layout point
      * 
      * @param location
      * @return 
      */
     public MapPoint getPosition(double x, double y) {
-        // must calculate center of map
-        Bounds bounds = mv.getLayoutBounds();
         CanvasPoint point = new CanvasPoint(x - mv.getLayoutX(), y - mv.getLayoutY());
         MapPoint mp = mv.getMapPosition(point.x, point.y);
         return mp;

@@ -25,7 +25,7 @@ public class MapHandler implements Handler {
 
     @Override
     public void upEvent() {
-        
+
     }
 
     @Override
@@ -47,6 +47,6 @@ public class MapHandler implements Handler {
 
     @Override
     public void dragEvent() {
-        
+        mapper.moveMap();
     }
 }

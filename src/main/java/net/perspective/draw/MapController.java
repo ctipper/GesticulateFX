@@ -253,6 +253,12 @@ public class MapController {
         }
     }
 
+    public void moveMap() {
+        if (view.isMapping()) {
+            map.refreshLayout();
+        }
+    }
+
     /**
      * Define the palette menu info icon
      * 
