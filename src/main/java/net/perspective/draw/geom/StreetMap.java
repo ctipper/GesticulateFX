@@ -73,6 +73,7 @@ public class StreetMap extends Picture {
     public StreetMap(double x, double y) {
         super(x, y);
         mv = new MapView();
+        mv.setManaged(true);
         filter = (InputEvent event) -> {
             logger.trace("Filtering out event {} ", event.getEventType());
             event.consume();
@@ -289,7 +290,6 @@ public class StreetMap extends Picture {
     public Node draw() {
         mv.setCenter(latitude, longitude);
         mv.setZoom(zoom);
-        mv.setManaged(true);
         mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
         bp = getContainer();
         bp.setLayoutX(start.x);
@@ -312,6 +312,7 @@ public class StreetMap extends Picture {
                 }
             };
             bp.getChildren().addAll(mv, copyright);
+            bp.setManaged(true);
         }
         return bp;
     }
