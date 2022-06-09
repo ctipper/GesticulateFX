@@ -268,12 +268,12 @@ public class MapController {
         SVGPath path_a = new SVGPath();
         path_a.setContent(SVG_QUIT_A);
         path_a.getStyleClass().add("svgPath");
-        path_a.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:3.1;");
+        path_a.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
         path_a.setFill(Color.TRANSPARENT);
         SVGPath path_b = new SVGPath();
         path_b.setContent(SVG_QUIT_B);
         path_b.getStyleClass().add("svgPath");
-        path_b.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:3.1;");
+        path_b.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
         path_b.setFill(Color.TRANSPARENT);
         SVGPath path_c = new SVGPath();
         path_c.setContent(SVG_QUIT_C);
