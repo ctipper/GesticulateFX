@@ -81,6 +81,7 @@ public class Text implements DrawItem, Serializable {
      * @param x the x position
      * @param y the y position
      */
+    @Override
     public void setStart(double x, double y) {
         if (start == null) {
             start = new CanvasPoint();
@@ -104,6 +105,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the item start point
      */
+    @Override
     public CanvasPoint getStart() {
         return start;
     }
@@ -114,6 +116,7 @@ public class Text implements DrawItem, Serializable {
      * @param x the width
      * @param y the height
      */
+    @Override
     public void setEnd(double x, double y) {
         if (end == null) {
             end = new CanvasPoint();
@@ -137,6 +140,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the dimensions
      */
+    @Override
     public CanvasPoint getEnd() {
         return end;
     }
@@ -218,6 +222,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @param canvas
      */
+    @Override
     public void updateProperties(DrawingArea drawarea) {
         this.setColor(drawarea.getColor());
         this.setTransparency(drawarea.getTransparency());
@@ -275,6 +280,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s = new CanvasPoint(start.x, start.y);
         s = this.getTransform(s);
@@ -287,6 +293,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up = new CanvasPoint(start.x + end.x, start.y);
         up = this.getTransform(up);
@@ -299,6 +306,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down = new CanvasPoint(start.x, start.y + end.y);
         down = this.getTransform(down);
@@ -311,6 +319,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e = new CanvasPoint(start.x + end.x, start.y + end.y);
         e = this.getTransform(e);
@@ -357,6 +366,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return canvas coordinates of axis of rotation
      */
+    @Override
     public CanvasPoint rotationCentre() {
         return start;
     }
@@ -366,6 +376,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return a transformed shape
      */
+    @Override
     public java.awt.Shape bounds() {
         Rectangle2D rect = new Rectangle2D.Double(0, 0, end.x, end.y);
         Area bounds = new Area(rect);
@@ -381,6 +392,7 @@ public class Text implements DrawItem, Serializable {
      * @param y canvas coordinate
      * @return a boolean property
      */
+    @Override
     public boolean contains(double x, double y) {
         return this.bounds().contains(x, y);
     }
@@ -391,6 +403,7 @@ public class Text implements DrawItem, Serializable {
      * @param xinc x increment
      * @param yinc y increment
      */
+    @Override
     public void moveTo(double xinc, double yinc) {
         start.translate(xinc, yinc);
     }
@@ -570,6 +583,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @param angle The angle in radians
      */
+    @Override
     public void setAngle(double angle) {
         this.angle = angle;
     }
@@ -579,6 +593,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return angle
      */
+    @Override
     public double getAngle() {
         return angle;
     }
@@ -590,6 +605,7 @@ public class Text implements DrawItem, Serializable {
      * @deprecated 
      */
     @Deprecated
+    @Override
     public void setVertical(boolean isVertical) {
         this.isVertical = isVertical;
     }
@@ -600,6 +616,7 @@ public class Text implements DrawItem, Serializable {
      * @deprecated 
      */
     @Deprecated
+    @Override
     public boolean isVertical() {
         return isVertical;
     }

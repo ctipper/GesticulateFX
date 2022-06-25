@@ -58,38 +58,22 @@ public class Dropper {
      */
     protected BasicStroke selectStroke(Integer strokeId, String strokeStyle) {
         BasicStroke stroke;
-        switch (strokeStyle) {
-            case "style1": // Plain stroke
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-                break;
-            case "style2":
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f);
-                break;
-            case "style3":
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes2.get(strokeId)), 0.0f);
-                break;
-            case "style4":
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes3.get(strokeId)), 0.0f);
-                break;
-            case "style5":
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes4.get(strokeId)), 0.0f);
-                break;
-            case "style6": // Arrow at start
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-                break;
-            case "style7": // Arrow at start
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f);
-                break;
-            case "style8": // Arrow at both ends
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-                break;
-            case "style9": // Arrow at both ends
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f);
-                break;
-            default:
-                stroke = new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-                break;
-        }
+        stroke = switch (strokeStyle) {
+            case "style1" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+            case "style2" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f);
+            case "style3" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes2.get(strokeId)), 0.0f);
+            case "style4" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes3.get(strokeId)), 0.0f);
+            case "style5" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes4.get(strokeId)), 0.0f);
+            case "style6" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+            case "style7" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f);
+            case "style8" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+            case "style9" -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, getDashes(dashes1.get(strokeId)), 0.0f);
+            default -> new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        }; // Plain stroke
+        // Arrow at start
+        // Arrow at start
+        // Arrow at both ends
+        // Arrow at both ends
         return stroke;
     }
 
@@ -167,37 +151,21 @@ public class Dropper {
 
         if (dash.length == 0) {
             // return style1, style6, style8
-            switch (arrow) {
-                case NONE:
-                    styleId = "style1";
-                    break;
-                case END:
-                    styleId = "style6";
-                    break;
-                case BOTH:
-                    styleId = "style8";
-                    break;
-                default:
-                    styleId = "style1";
-                    break;
-            }
+            styleId = switch (arrow) {
+                case NONE -> "style1";
+                case END -> "style6";
+                case BOTH -> "style8";
+                default -> "style1";
+            };
         }
         if (compareDashes(dash, getDashes(dashes1.get(strokeId)))) {
             // return style2, style7, style9
-            switch (arrow) {
-                case NONE:
-                    styleId = "style2";
-                    break;
-                case END:
-                    styleId = "style7";
-                    break;
-                case BOTH:
-                    styleId = "style9";
-                    break;
-                default:
-                    styleId = "style2";
-                    break;
-            }
+            styleId = switch (arrow) {
+                case NONE -> "style2";
+                case END -> "style7";
+                case BOTH -> "style9";
+                default -> "style2";
+            };
         }
         if (compareDashes(dash, getDashes(dashes2.get(strokeId)))) {
             // return style3

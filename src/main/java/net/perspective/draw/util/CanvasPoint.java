@@ -164,6 +164,7 @@ public class CanvasPoint implements Serializable, Cloneable {
         return super.clone();
     }
 
+    @Override
     public String toString() {
         return "[x: " + String.valueOf(x) + " y: " + String.valueOf(y) + "]";
     }

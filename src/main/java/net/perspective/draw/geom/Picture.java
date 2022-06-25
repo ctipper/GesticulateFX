@@ -114,6 +114,7 @@ public class Picture implements DrawItem, Serializable {
      * @param x the x position
      * @param y the y position
      */
+    @Override
     public void setStart(double x, double y) {
         if (start == null) {
             start = new CanvasPoint();
@@ -137,6 +138,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return the item start point
      */
+    @Override
     public CanvasPoint getStart() {
         return start;
     }
@@ -147,6 +149,7 @@ public class Picture implements DrawItem, Serializable {
      * @param x the width
      * @param y the height
      */
+    @Override
     public void setEnd(double x, double y) {
         if (end == null) {
             end = new CanvasPoint();
@@ -170,6 +173,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return the dimensions
      */
+    @Override
     public CanvasPoint getEnd() {
         return end;
     }
@@ -197,6 +201,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @param drawarea  the {@link net.perspective.draw.DrawingCanvas}
      */
+    @Override
     public void updateProperties(DrawingArea drawarea) {
         this.setTransparency(drawarea.getTransparency());
     }
@@ -207,6 +212,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s[];
         CanvasPoint[] p = getVertex(ContainsType.TL);
@@ -220,6 +226,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up[];
         CanvasPoint[] p = getVertex(ContainsType.TR);
@@ -233,6 +240,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down[];
         CanvasPoint[] p = getVertex(ContainsType.BL);
@@ -246,6 +254,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e[];
         CanvasPoint[] p = getVertex(ContainsType.BR);
@@ -286,6 +295,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return canvas coordinates of axis of rotation
      */
+    @Override
     public CanvasPoint rotationCentre() {
         return new CanvasPoint(start.x + (scale * end.x) / 2.0, start.y + (scale * end.y) / 2.0);
     }
@@ -295,6 +305,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return a transformed shape
      */
+    @Override
     public Shape bounds() {
         Rectangle2D rect = new Rectangle2D.Double(0, 0, end.x, end.y);
         Area bounds = new Area(rect);
@@ -311,6 +322,7 @@ public class Picture implements DrawItem, Serializable {
      * @param y  canvas coordinate
      * @return a boolean property
      */
+    @Override
     public boolean contains(double x, double y) {
         return this.bounds().contains(x, y);
     }
@@ -321,6 +333,7 @@ public class Picture implements DrawItem, Serializable {
      * @param xinc  x increment
      * @param yinc  y increment
      */
+    @Override
     public void moveTo(double xinc, double yinc) {
         start.translate(xinc, yinc);
     }
@@ -379,6 +392,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @param g2 Java2d graphics context
      */
+    @Override
     public void draw(Graphics2D g2) {
         AffineTransform defaultTransform, transform;
 
@@ -456,6 +470,7 @@ public class Picture implements DrawItem, Serializable {
      * @param isVertical  A boolean property
      */
     @Deprecated
+    @Override
     public void setVertical(boolean isVertical) {
         this.isVertical = isVertical;
     }
@@ -465,6 +480,7 @@ public class Picture implements DrawItem, Serializable {
      * @return a boolean property
      */
     @Deprecated
+    @Override
     public boolean isVertical() {
         return this.isVertical;
     }
@@ -474,6 +490,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @param angle  The angle in radians
      */
+    @Override
     public void setAngle(double angle) {
         this.angle = angle;
     }
@@ -483,6 +500,7 @@ public class Picture implements DrawItem, Serializable {
      * 
      * @return angle
      */
+    @Override
     public double getAngle() {
         return this.angle;
     }
@@ -539,23 +557,13 @@ public class Picture implements DrawItem, Serializable {
             sy = cxy.y + side;
             ey = cxy.y - side;
         }
-        switch (contains) {
-            case TL:
-                p = new CanvasPoint[] { p1, new CanvasPoint(sx, sy) };
-                break;
-            case BL:
-                p = new CanvasPoint[] { p2, new CanvasPoint(sx, ey) };
-                break;
-            case BR:
-                p = new CanvasPoint[] { p3, new CanvasPoint(ex, ey) };
-                break;
-            case TR:
-                p = new CanvasPoint[] { p4, new CanvasPoint(ex, sy) };
-                break;
-            default:
-                p = new CanvasPoint[] { p1, new CanvasPoint(sx, sy) };
-                break;
-        }
+        p = switch (contains) {
+            case TL -> new CanvasPoint[] { p1, new CanvasPoint(sx, sy) };
+            case BL -> new CanvasPoint[] { p2, new CanvasPoint(sx, ey) };
+            case BR -> new CanvasPoint[] { p3, new CanvasPoint(ex, ey) };
+            case TR -> new CanvasPoint[] { p4, new CanvasPoint(ex, sy) };
+            default -> new CanvasPoint[] { p1, new CanvasPoint(sx, sy) };
+        };
         return p;
     }
 

@@ -68,12 +68,8 @@ public class Edge extends Figure {
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
-            case POLYGON:
-                this.setClosed(true);
-                break;
-            default:
-                this.setClosed(false);
-                break;
+            case POLYGON -> this.setClosed(true);
+            default -> this.setClosed(false);
         }
     }
 
@@ -204,6 +200,7 @@ public class Edge extends Figure {
      * 
      * @return angle
      */
+    @Override
     public double getAngle() {
         if (!this.getType().equals(FigureType.LINE)) {
             return angle;

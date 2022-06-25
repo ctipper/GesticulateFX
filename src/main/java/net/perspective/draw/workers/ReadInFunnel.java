@@ -113,26 +113,24 @@ public class ReadInFunnel extends Task<Object> {
 
     private DrawItem checkDrawings(DrawItem drawing) {
 
-        if (drawing instanceof ArrowLine) {
+        if (drawing instanceof ArrowLine arrowLine) {
             DrawItem item = new Edge();
             try {
-                BeanUtils.copyProperties(item, ((ArrowLine) drawing).getLine());
-                ((ArrowLine) drawing).setLine((Edge) item);
+                BeanUtils.copyProperties(item, arrowLine.getLine());
+                arrowLine.setLine((Edge) item);
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
-            ((ArrowLine) drawing).setFactory();
-            ((ArrowLine) drawing).setEndPoints();
-            ((ArrowLine) drawing).setPath();
-        } else if (drawing instanceof Edge) {
-            ((Edge) drawing).setFactory();
-            ((Edge) drawing).setEndPoints();
-            ((Edge) drawing).setPath();
-        } else if (drawing instanceof Figure) {
-            switch (((Figure) drawing).getType()) {
-                case LINE:
-                case SKETCH:
-                case POLYGON:
+            arrowLine.setFactory();
+            arrowLine.setEndPoints();
+            arrowLine.setPath();
+        } else if (drawing instanceof Edge edge) {
+            edge.setFactory();
+            edge.setEndPoints();
+            edge.setPath();
+        } else if (drawing instanceof Figure figure) {
+            switch (figure.getType()) {
+                case LINE, SKETCH, POLYGON -> {
                     DrawItem item = new Edge();
                     try {
                         BeanUtils.copyProperties(item, drawing);
@@ -140,15 +138,15 @@ public class ReadInFunnel extends Task<Object> {
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         logger.trace(e.getMessage());
                     }
-                    ((Edge) drawing).setFactory();
-                    ((Edge) drawing).setEndPoints();
-                    ((Edge) drawing).setPath();
-                    break;
-                default:
-                    ((Figure) drawing).setFactory();
-                    ((Figure) drawing).setEndPoints();
-                    ((Figure) drawing).setPath();
-                    break;
+                    figure.setFactory();
+                    figure.setEndPoints();
+                    figure.setPath();
+                }
+                default -> {
+                    figure.setFactory();
+                    figure.setEndPoints();
+                    figure.setPath();
+                }
             }
         }
 
@@ -162,13 +160,13 @@ public class ReadInFunnel extends Task<Object> {
             }
         }
 
-        if (drawing instanceof Grouped) {
+        if (drawing instanceof Grouped grouped) {
             DrawItem item = new Grouped();
-            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
+            for (DrawItem shape : grouped.getShapes()) {
                 ((Grouped) item).addShape(checkDrawings(shape));
             }
             item.setAngle(drawing.getAngle());
-            ((Grouped) item).setTransparency(((Grouped) drawing).getTransparency());
+            ((Grouped) item).setTransparency(grouped.getTransparency());
             drawing = item;
         }
 

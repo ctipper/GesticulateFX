@@ -15,41 +15,20 @@ import net.perspective.draw.enums.DrawingType;
 
 public class FigureFactoryImpl implements FigureFactory {
 
+    @Override
     public Figure createFigure(DrawingType drawType) {
         Figure item;
 
-        switch (drawType) {
-            case LINE:
-            case HORIZONTAL:
-            case VERTICAL:
-                item = new Edge(FigureType.LINE);
-                break;
-            case CIRCLE:
-            case ELLIPSE:
-                item = new Figure(FigureType.CIRCLE);
-                break;
-            case SQUARE:
-            case RECTANGLE:
-                item = new Figure(FigureType.SQUARE);
-                break;
-            case TRIANGLE:
-            case ISOSCELES:
-                item = new Figure(FigureType.TRIANGLE);
-                break;
-            case HEXAGON:
-            case ISOHEX:
-                item = new Figure(FigureType.HEXAGON);
-                break;
-            case POLYGON:
-                item = new Edge(FigureType.POLYGON);
-                break;
-            case SKETCH:
-                item = new Edge(FigureType.SKETCH);
-                break;
-            default:
-                item = new Figure();
-                break;
-        }
+        item = switch (drawType) {
+            case LINE, HORIZONTAL, VERTICAL -> new Edge(FigureType.LINE);
+            case CIRCLE, ELLIPSE -> new Figure(FigureType.CIRCLE);
+            case SQUARE, RECTANGLE -> new Figure(FigureType.SQUARE);
+            case TRIANGLE, ISOSCELES -> new Figure(FigureType.TRIANGLE);
+            case HEXAGON, ISOHEX -> new Figure(FigureType.HEXAGON);
+            case POLYGON -> new Edge(FigureType.POLYGON);
+            case SKETCH -> new Edge(FigureType.SKETCH);
+            default -> new Figure();
+        };
         return item;
 
     }

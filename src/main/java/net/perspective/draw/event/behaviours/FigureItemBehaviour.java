@@ -221,23 +221,13 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 case CIRCLE:
                 case TRIANGLE:
                 case HEXAGON:
-                    switch (type) {
-                        case SQUARE:
-                            drawType = DrawingType.RECTANGLE;
-                            break;
-                        case CIRCLE:
-                            drawType = DrawingType.ELLIPSE;
-                            break;
-                        case TRIANGLE:
-                            drawType = DrawingType.ISOSCELES;
-                            break;
-                        case HEXAGON:
-                            drawType = DrawingType.HEXAGON;
-                            break;
-                        default:
-                            drawType = DrawingType.RECTANGLE;
-                            break;
-                    }
+                    drawType = switch (type) {
+                    case SQUARE -> DrawingType.RECTANGLE;
+                    case CIRCLE -> DrawingType.ELLIPSE;
+                    case TRIANGLE -> DrawingType.ISOSCELES;
+                    case HEXAGON -> DrawingType.HEXAGON;
+                    default -> DrawingType.RECTANGLE;
+                };
 
                     /**
                      * Permute containment selectors
@@ -361,6 +351,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                             break;
                     }
                     break;
+
                 default:
                     // All other Figures
                     drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);

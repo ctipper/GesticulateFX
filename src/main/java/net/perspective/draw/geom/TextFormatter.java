@@ -138,10 +138,10 @@ public class TextFormatter {
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
             Object o = iterator.next();
-            if (o instanceof org.jdom2.Text) {
-                cdata += ((org.jdom2.Text) o).getText();
-            } else if (o instanceof Element) {
-                cdata += getFlattenedText(((Element) o).getContent());
+            if (o instanceof org.jdom2.Text text1) {
+                cdata += text1.getText();
+            } else if (o instanceof Element element) {
+                cdata += getFlattenedText(element.getContent());
             }
         }
         return cdata;
@@ -202,15 +202,9 @@ public class TextFormatter {
         // Serif is the default
         String font = item.getFont();
         switch (font) {
-            case "SansSerif":
-                as.addAttribute(TextAttribute.FAMILY, java.awt.Font.SANS_SERIF);
-                break;
-            case "Monospaced":
-                as.addAttribute(TextAttribute.FAMILY, java.awt.Font.MONOSPACED);
-                break;
-            default:
-                as.addAttribute(TextAttribute.FAMILY, java.awt.Font.SERIF);
-                break;
+            case "SansSerif" -> as.addAttribute(TextAttribute.FAMILY, java.awt.Font.SANS_SERIF);
+            case "Monospaced" -> as.addAttribute(TextAttribute.FAMILY, java.awt.Font.MONOSPACED);
+            default -> as.addAttribute(TextAttribute.FAMILY, java.awt.Font.SERIF);
         }
         as.addAttribute(TextAttribute.SIZE, item.getSize());
         as.addAttribute(TextAttribute.KERNING, TextAttribute.KERNING_ON);
@@ -235,26 +229,26 @@ public class TextFormatter {
             if (i < list.size()) {
                 c = list.get(i);
                 offset = localoffset;
-                if (c instanceof org.jdom2.Text) {
-                    localoffset += ((org.jdom2.Text) c).getText().length();
+                if (c instanceof org.jdom2.Text text1) {
+                    localoffset += text1.getText().length();
                     if ((offset <= start) && (localoffset >= end)) {
-                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                        tt = new javafx.scene.text.Text(text1.getText());
                     } else if ((offset <= start) && (localoffset < end) && (localoffset >= start)) {
-                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                        tt = new javafx.scene.text.Text(text1.getText());
                     } else if ((offset <= start) && (localoffset < end) && (localoffset < start)) {
-                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                        tt = new javafx.scene.text.Text(text1.getText());
                     } else if ((offset > start) && (localoffset >= end) && (offset >= end)) {
-                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                        tt = new javafx.scene.text.Text(text1.getText());
                     } else if ((offset > start) && (localoffset >= end) && (offset < end)) {
-                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                        tt = new javafx.scene.text.Text(text1.getText());
                     } else if ((offset > start) && (localoffset < end) && (offset < end)) {
-                        tt = new javafx.scene.text.Text(((org.jdom2.Text) c).getText());
+                        tt = new javafx.scene.text.Text(text1.getText());
                     }
                     setFxFontAttributes(tt, item.getFont(), item.getSize(), fontstyle, item.getColor());
                     textlist.add(tt);
                     i++;
-                } else if (c instanceof Element) {
-                    Element e = ((Element) c).clone();
+                } else if (c instanceof Element element) {
+                    Element e = element.clone();
                     if (e.getName().equalsIgnoreCase("b")) {
                         fontstyle ^= FONT_BOLD;
                     } else if (e.getName().equalsIgnoreCase("i")) {
@@ -285,11 +279,11 @@ public class TextFormatter {
                     finished = true;
                 }
             }
-            if (c instanceof Element) {
+            if (c instanceof Element element) {
                 indices.push(i);
                 liststack.push(list);
                 newstack.push(newlist);
-                list = ((Element) c).getContent();
+                list = element.getContent();
                 newlist = new ArrayList<>();
                 i = 0;
             }
@@ -301,21 +295,21 @@ public class TextFormatter {
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
             Object element = iterator.next();
-            if (element instanceof org.jdom2.Text) {
-                offset += ((org.jdom2.Text) element).getText().length();
-            } else if (element instanceof Element) {
-                if (getLocalOffset(((Element) element).getContent()) != 0) {
-                    if (((Element) element).getName().equalsIgnoreCase("b")) {
+            if (element instanceof org.jdom2.Text text1) {
+                offset += text1.getText().length();
+            } else if (element instanceof Element element1) {
+                if (getLocalOffset(element1.getContent()) != 0) {
+                    if (element1.getName().equalsIgnoreCase("b")) {
                         as.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, offset,
-                                offset + getLocalOffset(((Element) element).getContent()));
-                    } else if (((Element) element).getName().equalsIgnoreCase("i")) {
+                                offset + getLocalOffset(element1.getContent()));
+                    } else if (element1.getName().equalsIgnoreCase("i")) {
                         as.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, offset,
-                                offset + getLocalOffset(((Element) element).getContent()));
-                    } else if (((Element) element).getName().equalsIgnoreCase("u")) {
+                                offset + getLocalOffset(element1.getContent()));
+                    } else if (element1.getName().equalsIgnoreCase("u")) {
                         as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, offset,
-                                offset + getLocalOffset(((Element) element).getContent()));
+                                offset + getLocalOffset(element1.getContent()));
                     }
-                    as = setFormattingAttributes(((Element) element).getContent(), as);
+                    as = setFormattingAttributes(element1.getContent(), as);
                 }
             }
         }
@@ -328,10 +322,10 @@ public class TextFormatter {
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
             Object o = iterator.next();
-            if (o instanceof org.jdom2.Text) {
-                localoffset += ((org.jdom2.Text) o).getText().length();
-            } else if (o instanceof Element) {
-                localoffset += getLocalOffset(((Element) o).getContent());
+            if (o instanceof org.jdom2.Text text1) {
+                localoffset += text1.getText().length();
+            } else if (o instanceof Element element) {
+                localoffset += getLocalOffset(element.getContent());
             }
         }
         return localoffset;

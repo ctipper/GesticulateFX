@@ -19,6 +19,7 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class FigurePointFactory implements PointFactory {
 
+    @Override
     public List<CanvasPoint> createPoints(DrawingType description, double... coords) {
         List<CanvasPoint> points;
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 0.0;

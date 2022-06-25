@@ -209,9 +209,9 @@ public class CanvasView {
                         item.updateProperties(drawarea);
                     }
                 }
-            } else if (item instanceof ArrowLine) {
+            } else if (item instanceof ArrowLine arrowLine) {
                 if (drawarea.getArrow() == ArrowType.NONE) {
-                    item = ((ArrowLine) item).getLine();
+                    item = arrowLine.getLine();
                     item.updateProperties(drawarea);
                 } else {
                     item.updateProperties(drawarea);
@@ -224,10 +224,10 @@ public class CanvasView {
              * Select item properties and update UI
              */
             DrawItem item = drawings.get(this.getSelected());
-            if (item instanceof Figure) {
-                this.figureDropper((Figure) item);
-            } else if (item instanceof Text) {
-                this.textDropper((Text) item);
+            if (item instanceof Figure figure) {
+                this.figureDropper(figure);
+            } else if (item instanceof Text text) {
+                this.textDropper(text);
             }
         }
     }
@@ -238,8 +238,8 @@ public class CanvasView {
          * get stroke
          */
         int strokeId = dropper.getStrokeIdBinary((BasicStroke) item.getStroke());
-        if (item instanceof ArrowLine) {
-            styleId = dropper.getStyleSelector((BasicStroke) item.getStroke(), ((ArrowLine) item).getArrowType());
+        if (item instanceof ArrowLine arrowLine) {
+            styleId = dropper.getStyleSelector((BasicStroke) item.getStroke(), arrowLine.getArrowType());
         } else {
             styleId = dropper.getStyleSelector((BasicStroke) item.getStroke(), ArrowType.NONE);
         }
@@ -253,8 +253,8 @@ public class CanvasView {
         /**
          * arrow type
          */
-        if (item instanceof ArrowLine) {
-            drawarea.setArrow(((ArrowLine) item).getArrowType());
+        if (item instanceof ArrowLine arrowLine) {
+            drawarea.setArrow(arrowLine.getArrowType());
         } else {
             drawarea.setArrow(ArrowType.NONE);
         }
@@ -397,9 +397,9 @@ public class CanvasView {
         if (this.getSelected() != -1 && !this.isMultiSelected()) {
             int selected = this.getBottomSelected();
             DrawItem item = drawings.get(selected);
-            if (item instanceof Grouped) {
+            if (item instanceof Grouped grouped) {
                 boolean added = false;
-                for (DrawItem shape : ((Grouped) item).getShapes()) {
+                for (DrawItem shape : grouped.getShapes()) {
                     if (!added) {
                         // replace selected
                         drawings.set(selected, shape);

@@ -55,8 +55,8 @@ public class CanvasTransferHandler {
 
         if (hasDrawItemFlavor(t.getTransferDataFlavors())) {
             try {
-                if (t.getTransferData(dataFlavor) instanceof DrawItem) {
-                    item = (DrawItem) t.getTransferData(dataFlavor);
+                if (t.getTransferData(dataFlavor) instanceof DrawItem drawItem) {
+                    item = drawItem;
                     // add item to Canvas
                     item.moveTo(shift, shift);
                     item = checkDrawings(item);
@@ -121,9 +121,9 @@ public class CanvasTransferHandler {
             }
         }
         
-        if (drawing instanceof Grouped) {
+        if (drawing instanceof Grouped grouped) {
             DrawItem item = new Grouped();
-            for (DrawItem shape : ((Grouped) drawing).getShapes()) {
+            for (DrawItem shape : grouped.getShapes()) {
                 ((Grouped) item).addShape(checkDrawings(shape));
             }
             drawing = item;

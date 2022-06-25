@@ -94,6 +94,7 @@ public class Figure implements DrawItem, Serializable {
      * @param x the x position
      * @param y the y position
      */
+    @Override
     public void setStart(double x, double y) {
         if (start == null) {
             start = new CanvasPoint();
@@ -106,6 +107,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return the figure start point
      */
+    @Override
     public CanvasPoint getStart() {
         return start;
     }
@@ -116,6 +118,7 @@ public class Figure implements DrawItem, Serializable {
      * @param x the width
      * @param y the height
      */
+    @Override
     public void setEnd(double x, double y) {
         if (end == null) {
             end = new CanvasPoint();
@@ -128,6 +131,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return the dimensions
      */
+    @Override
     public CanvasPoint getEnd() {
         return end;
     }
@@ -236,6 +240,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @param drawarea
      */
+    @Override
     public void updateProperties(DrawingArea drawarea) {
         this.setColor(drawarea.getColor());
         this.setFillColor(drawarea.getFillColor());
@@ -249,6 +254,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s[];
         CanvasPoint[] p = getVertex(ContainsType.TL);
@@ -262,6 +268,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up[];
         CanvasPoint[] p = getVertex(ContainsType.TR);
@@ -275,6 +282,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down[];
         CanvasPoint[] p = getVertex(ContainsType.BL);
@@ -288,6 +296,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e[];
         CanvasPoint[] p = getVertex(ContainsType.BR);
@@ -327,6 +336,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return canvas coordinates of axis of rotation
      */
+    @Override
     public CanvasPoint rotationCentre() {
         CanvasPoint p = new CanvasPoint();
         double x, y, w, h;
@@ -374,6 +384,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return a transformed shape
      */
+    @Override
     public java.awt.Shape bounds() {
         // Get transformed path
         java.awt.geom.AffineTransform transform = this.getTransform();
@@ -389,6 +400,7 @@ public class Figure implements DrawItem, Serializable {
      * @param y  canvas coordinate
      * @return a boolean property
      */
+    @Override
     public boolean contains(double x, double y) {
         if (this.type.equals(FigureType.NONE)) {
             return false;
@@ -403,6 +415,7 @@ public class Figure implements DrawItem, Serializable {
      * @param xinc  x increment
      * @param yinc  y increment
      */
+    @Override
     public void moveTo(double xinc, double yinc) {
         points.stream().forEach((p) -> {
             p.translate(xinc, yinc);
@@ -416,6 +429,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return an FX Path
      */
+    @Override
     public Node draw() {
         java.awt.geom.AffineTransform at;
 
@@ -504,6 +518,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return an FX Shape node
      */
+    @Override
     public Node drawAnchors(DrawingArea drawarea) {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
@@ -563,6 +578,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @param g2 Java2d graphics context
      */
+    @Override
     public void draw(Graphics2D g2) {
         java.awt.geom.AffineTransform defaultTransform, transform;
 
@@ -736,6 +752,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @param a  The angle in radians
      */
+    @Override
     public void setAngle(double angle) {
         this.angle = angle;
     }
@@ -745,6 +762,7 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return angle
      */
+    @Override
     public double getAngle() {
         return angle;
     }
@@ -756,6 +774,7 @@ public class Figure implements DrawItem, Serializable {
      * @deprecated 
      */
     @Deprecated
+    @Override
     public void setVertical(boolean isVertical) {
         this.isVertical = isVertical;
     }
@@ -766,6 +785,7 @@ public class Figure implements DrawItem, Serializable {
      * @deprecated 
      */
     @Deprecated
+    @Override
     public boolean isVertical() {
         return isVertical;
     }
@@ -1027,8 +1047,7 @@ public class Figure implements DrawItem, Serializable {
 
         if (stroke != null) {
             stream.writeBoolean(false);
-            if (stroke instanceof BasicStroke) {
-                BasicStroke s = (BasicStroke) stroke;
+            if (stroke instanceof BasicStroke s) {
                 stream.writeObject(BasicStroke.class);
                 stream.writeFloat(s.getLineWidth());
                 stream.writeInt(s.getEndCap());

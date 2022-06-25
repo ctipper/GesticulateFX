@@ -144,6 +144,7 @@ public class ArrowLine extends Figure {
     }
 
     @Transient
+    @Override
     public Stroke getStroke() {
         return line.getStroke();
     }
@@ -213,6 +214,7 @@ public class ArrowLine extends Figure {
      * 
      * @return an FX Path
      */
+    @Override
     public Node draw() {
         java.awt.geom.AffineTransform at;
         Group group = new Group();
@@ -430,11 +432,13 @@ public class ArrowLine extends Figure {
     }
 
     @Deprecated
+    @Override
     public void setColor(java.awt.Color color) {
         line.setColor(awtToFx(color));
     }
 
     @Deprecated
+    @Override
     public java.awt.Color getAwtColor() {
         return fxToAwt(line.getColor());
     }
@@ -444,6 +448,7 @@ public class ArrowLine extends Figure {
      * 
      * @param fillcolor
      */
+    @Override
     public void setFillColor(Color fillcolor) {
         line.setFillColor(fillcolor);
     }
@@ -454,16 +459,19 @@ public class ArrowLine extends Figure {
      * @return
      */
     @Transient
+    @Override
     public Color getFillColor() {
         return line.getFillColor();
     }
 
     @Deprecated
+    @Override
     public void setFillColor(java.awt.Color fillcolor) {
         line.setFillColor(awtToFx(fillcolor));
     }
 
     @Deprecated
+    @Override
     public java.awt.Color getAwtFillColor() {
         return fxToAwt(line.getFillColor());
     }

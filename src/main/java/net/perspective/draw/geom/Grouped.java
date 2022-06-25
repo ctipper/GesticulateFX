@@ -130,6 +130,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param x the x position
      * @param y the y position
      */
+    @Override
     public void setStart(double x, double y) {
         if (start == null) {
             start = new CanvasPoint();
@@ -153,6 +154,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return the item start point
      */
+    @Override
     public CanvasPoint getStart() {
         return start;
     }
@@ -163,6 +165,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param x the width
      * @param y the height
      */
+    @Override
     public void setEnd(double x, double y) {
         if (end == null) {
             end = new CanvasPoint();
@@ -186,10 +189,12 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return the dimensions
      */
+    @Override
     public CanvasPoint getEnd() {
         return end;
     }
 
+    @Override
     public void updateProperties(DrawingArea drawarea) {
         // no properties to set
     }
@@ -200,6 +205,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s = new CanvasPoint(start.x, start.y);
         s = getTransform(s);
@@ -212,6 +218,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of top-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up = new CanvasPoint(end.x, start.y);
         up = getTransform(up);
@@ -224,6 +231,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down = new CanvasPoint(start.x, end.y);
         down = getTransform(down);
@@ -236,6 +244,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e = new CanvasPoint(end.x, end.y);
         e = this.getTransform(e);
@@ -273,6 +282,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return canvas coordinates of axis of rotation
      */
+    @Override
     public CanvasPoint rotationCentre() {
         return new CanvasPoint((end.x - start.x) / 2.0 + start.x, (end.y - start.y) / 2.0 + start.y);
     }
@@ -282,6 +292,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return a transformed shape
      */
+    @Override
     public java.awt.Shape bounds() {
         Rectangle2D rect = new Rectangle2D.Double(start.x, start.y, end.x - start.x, end.y - start.y);
         Area bounds = new Area(rect);
@@ -297,6 +308,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param y  canvas coordinate
      * @return a boolean property
      */
+    @Override
     public boolean contains(double x, double y) {
         return this.bounds().contains(x, y);
     }
@@ -307,6 +319,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param xinc  x increment
      * @param yinc  y increment
      */
+    @Override
     public void moveTo(double xinc, double yinc) {
         shapes.stream().forEach((shape) -> {
             shape.moveTo(xinc, yinc);
@@ -314,6 +327,7 @@ public class Grouped implements DrawItem, Serializable {
         this.setBounds();
     }
 
+    @Override
     public Node draw() {
         Group group = new Group();
         for (DrawItem shape : shapes) {
@@ -330,6 +344,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return an FX Shape node
      */
+    @Override
     public Node drawAnchors(DrawingArea drawarea) {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
@@ -358,6 +373,7 @@ public class Grouped implements DrawItem, Serializable {
      * @param g2  the graphics context
      * @param canvas  the {@link net.perspective.draw.DrawingCanvas}
      */
+    @Override
     public void draw(Graphics2D g2) {
         java.awt.geom.AffineTransform defaultTransform;
 
@@ -397,6 +413,7 @@ public class Grouped implements DrawItem, Serializable {
      * @deprecated 
      */
     @Deprecated
+    @Override
     public void setVertical(boolean isVertical) {
         this.isVertical = isVertical;
     }
@@ -407,6 +424,7 @@ public class Grouped implements DrawItem, Serializable {
      * @deprecated 
      */
     @Deprecated
+    @Override
     public boolean isVertical() {
         return this.isVertical;
     }
@@ -416,6 +434,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @param angle  The angle in radians
      */
+    @Override
     public void setAngle(double angle) {
         this.angle = angle;
     }
@@ -425,6 +444,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return angle
      */
+    @Override
     public double getAngle() {
         return this.angle;
     }

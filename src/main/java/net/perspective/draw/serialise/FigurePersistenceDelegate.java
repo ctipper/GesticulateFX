@@ -23,8 +23,7 @@ public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
     @Override
     protected Expression instantiate(final Object oldInstance, final Encoder out) {
 
-        if (oldInstance instanceof Edge) {
-            Edge edge = (Edge) oldInstance;
+        if (oldInstance instanceof Edge edge) {
             return new Expression(edge, edge.getClass(), "new", new Object[]{
                 edge.getType()
             });

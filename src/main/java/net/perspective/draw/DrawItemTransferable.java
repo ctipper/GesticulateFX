@@ -57,6 +57,7 @@ public class DrawItemTransferable implements Transferable {
         }
     }
 
+    @Override
     public Object getTransferData(DataFlavor flavor)
         throws UnsupportedFlavorException {
         if (!isDataFlavorSupported(flavor)) {
@@ -81,10 +82,12 @@ public class DrawItemTransferable implements Transferable {
         return null;
     }
 
+    @Override
     public DataFlavor[] getTransferDataFlavors() {
         return new DataFlavor[] { dataFlavor };
     }
 
+    @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
         return dataFlavor.equals(flavor);
     }

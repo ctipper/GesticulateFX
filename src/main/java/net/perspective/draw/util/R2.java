@@ -103,23 +103,13 @@ public class R2 {
      * @return contains type
      */
     public static ContainsType permute(ContainsType contains, int quad) {
-        switch (quad) {
-            case 0:
-                contains = flip1(contains, quad);
-                break;
-            case 1:
-                contains = flip2(contains, quad);
-                break;
-            case 2:
-                contains = flip3(contains, quad);
-                break;
-            case 3:
-                contains = flip4(contains, quad);
-                break;
-            default:
-                contains = ContainsType.NONE;
-                break;
-        }
+        contains = switch (quad) {
+            case 0 -> flip1(contains, quad);
+            case 1 -> flip2(contains, quad);
+            case 2 -> flip3(contains, quad);
+            case 3 -> flip4(contains, quad);
+            default -> ContainsType.NONE;
+        };
         return contains;
     }
 
@@ -131,23 +121,13 @@ public class R2 {
      * @return contains type
      */
     public static ContainsType mutate(ContainsType contains, int quad) {
-        switch (quad) {
-            case 0:
-                contains = swap1(contains, quad);
-                break;
-            case 1:
-                contains = swap2(contains, quad);
-                break;
-            case 2:
-                contains = swap3(contains, quad);
-                break;
-            case 3:
-                contains = swap4(contains, quad);
-                break;
-            default:
-                contains = ContainsType.NONE;
-                break;
-        }
+        contains = switch (quad) {
+            case 0 -> swap1(contains, quad);
+            case 1 -> swap2(contains, quad);
+            case 2 -> swap3(contains, quad);
+            case 3 -> swap4(contains, quad);
+            default -> ContainsType.NONE;
+        };
         return contains;
     }
 
@@ -159,23 +139,13 @@ public class R2 {
      */
     public static int[] flip(int quad) {
         int[] flip;
-        switch (quad) {
-            case 0:
-                flip = flip1;
-                break;
-            case 1:
-                flip = flip2;
-                break;
-            case 2:
-                flip = flip3;
-                break;
-            case 3:
-                flip = flip4;
-                break;
-            default:
-                flip = flip3;
-                break;
-        }
+        flip = switch (quad) {
+            case 0 -> flip1;
+            case 1 -> flip2;
+            case 2 -> flip3;
+            case 3 -> flip4;
+            default -> flip3;
+        };
         return flip;
     }
 

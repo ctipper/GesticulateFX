@@ -21,6 +21,7 @@ public class FigurePathFactory implements PathFactory {
 
     Path2D.Double path;
 
+    @Override
     public Path2D.Double createPath(Figure figure) {
         CanvasPoint p0, p1, p2, p3;
         double x, y, w, h;
