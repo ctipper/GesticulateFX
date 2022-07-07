@@ -32,7 +32,7 @@
       <!-- remove existing runtime -->
       <delete dir="target/jfx/${bundle.dir}/${runtime.dir}" />
 
-      <exec executable="${runtime.path}/bin/jlink" osfamily="mac" failonerror="true" newenvironment="true">
+      <exec executable="${runtime.path}/bin/jlink" if:set="onmacos" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.path}"/>
          <arg value="--no-header-files"/>
          <arg value="--no-man-pages" />
@@ -41,12 +41,12 @@
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
          <arg value="--output" />
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
 
-      <exec executable="${runtime.windows.path}/bin/jlink" osfamily="windows" failonerror="true" newenvironment="true">
+      <exec executable="${runtime.windows.path}/bin/jlink" if:set="onwindows" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.windows.path}"/>
          <arg value="--no-header-files"/>
          <arg value="--no-man-pages" />
@@ -55,7 +55,7 @@
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods;${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
          <arg value="--output" />
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -69,7 +69,7 @@
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
          <arg value="--output" />
          <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -127,7 +127,7 @@
          </fileset>
       </copy>
 
-      <exec executable="${jpackage.path}/bin/jpackage" osfamily="mac" failonerror="true" newenvironment="true">
+      <exec executable="${jpackage.path}/bin/jpackage" if:set="onmacos" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="--type"/>
          <arg value="app-image"/>
@@ -159,7 +159,7 @@
          <arg value="src/site/deploy/macosx/bundle.properties" />
       </exec>
 
-      <exec executable="${jpackage.windows.path}/bin/jpackage.exe" osfamily="windows" failonerror="false" newenvironment="true">
+      <exec executable="${jpackage.windows.path}/bin/jpackage.exe" if:set="onwindows" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
          <arg value="--type"/>
          <arg value="app-image"/>
@@ -222,7 +222,7 @@
 
       <property name="isx.path" value="C:/Program Files (x86)/Inno Setup 6"/>
 
-      <exec executable="${jpackage.path}/bin/jpackage" osfamily="mac" failonerror="true" newenvironment="true">
+      <exec executable="${jpackage.path}/bin/jpackage" if:set="onmacos" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.path}"/>
          <arg value="--type"/>
          <arg value="dmg"/>
