@@ -133,7 +133,7 @@ public class CanvasView {
     /**
      * Add item to canvas
      * 
-     * @param item
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void appendItemToCanvas(DrawItem item) {
         drawings.add(item);
@@ -142,8 +142,8 @@ public class CanvasView {
     /**
      * Update the canvas item at given index
      * 
-     * @param index
-     * @param item
+     * @param index item index
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void updateCanvasItem(int index, DrawItem item) {
         drawings.set(index, item);
@@ -162,7 +162,7 @@ public class CanvasView {
     /**
      * Insert or update new item
      * 
-     * @param item
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void setNewItem(DrawItem item) {
         if (newitem.isEmpty()) {
@@ -183,7 +183,7 @@ public class CanvasView {
     /**
      * Get the new item
      * 
-     * @return a DrawItem
+     * @return the {@link net.perspective.draw.geom.DrawItem}
      */
     public Optional<DrawItem> getNewItem() {
         return newitem;
@@ -418,7 +418,7 @@ public class CanvasView {
     /**
      * Get the list of draw items
      * 
-     * @return
+     * @return list of {@link net.perspective.draw.geom.DrawItem}
      */
     public List<DrawItem> getDrawings() {
         return list;
@@ -427,7 +427,7 @@ public class CanvasView {
     /**
      * Get the list of image items
      * 
-     * @return
+     * @return list of {@link net.perspective.draw.ImageItem}
      */
     public List<ImageItem> getImageItems() {
         return images;
@@ -436,7 +436,7 @@ public class CanvasView {
     /**
      * Get the number of images
      * 
-     * @return
+     * @return size of image item list
      */
     public int getImageItemsSize() {
         return images.size();
@@ -445,8 +445,8 @@ public class CanvasView {
     /**
      * Add image to drawing and return image count
      * 
-     * @param imageItem
-     * @return
+     * @param imageItem the {@link net.perspective.draw.ImageItem}
+     * @return image item index
      */
     public int setImageItem(ImageItem imageItem) {
         images.add(imageItem);
@@ -456,8 +456,8 @@ public class CanvasView {
     /**
      * Set image at index
      * 
-     * @param i image index
-     * @param imageItem
+     * @param i image item index
+     * @param imageItem the {@link net.perspective.draw.ImageItem}
      */
     public void setImageItem(int i, ImageItem imageItem) {
         images.set(i, imageItem);
@@ -466,7 +466,7 @@ public class CanvasView {
     /**
      * Add image to drawing
      * 
-     * @param imageItem
+     * @param imageItem the {@link net.perspective.draw.ImageItem}
      */
     public void addImageItem(ImageItem imageItem) {
         images.add(imageItem);
@@ -475,8 +475,8 @@ public class CanvasView {
     /**
      * Get image item at index
      * 
-     * @param index
-     * @return
+     * @param index image item index
+     * @return {@link net.perspective.draw.ImageItem}
      */
     public ImageItem getImageItem(int index) {
         return images.get(index);
@@ -485,8 +485,8 @@ public class CanvasView {
     /**
      * Replace image at index
      * 
-     * @param index
-     * @param image
+     * @param index image item index
+     * @param image the {@link net.perspective.draw.ImageItem}
      */
     public void replaceImage(int index, Image image) {
         ImageItem item = images.get(index);
@@ -497,7 +497,7 @@ public class CanvasView {
     /**
      * Return the first selected item
      * 
-     * @param selection
+     * @param selection selected index
      */
     public void setSelected(int selection) {
         if (selection == -1) {
@@ -521,7 +521,7 @@ public class CanvasView {
     /**
      * Move the selection and update drawing anchors
      * 
-     * @param selection 
+     * @param selection selected index
      */
     public void moveSelection(int selection) {
         if (!drawingAnchors.getChildren().isEmpty()) {
@@ -539,7 +539,7 @@ public class CanvasView {
     /**
      * Define the drawing anchors
      * 
-     * @return  anchor group
+     * @return anchor {@link javafx.scene.Group}
      */
     private Group getAnchors() {
         Group anchorGroup = new Group();
@@ -592,7 +592,7 @@ public class CanvasView {
     /**
      * Get the selection
      * 
-     * @return
+     * @return set of selected indices
      */
     public Set<Integer> getMultiSelection() {
         return selectionIndex;
@@ -601,7 +601,7 @@ public class CanvasView {
     /**
      * Are multiple items selected
      * 
-     * @return
+     * @return multi-select active
      */
     public boolean isMultiSelected() {
         return selectionIndex.size() > 1;
@@ -610,7 +610,7 @@ public class CanvasView {
     /**
      * Select the DrawItems within given rectangular bounds
      * 
-     * @param item 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void selectShapes(DrawItem item) {
         Shape b = item.bounds();
@@ -626,7 +626,7 @@ public class CanvasView {
     /**
      * Is editing mode
      * 
-     * @return
+     * @return is editing
      */
     public boolean isEditing() {
         return false;
@@ -635,7 +635,7 @@ public class CanvasView {
     /**
      * Set drawing mode
      * 
-     * @param isDrawing
+     * @param isDrawing is drawing
      */
     public void setDrawing(boolean isDrawing) {
         this.isDrawing = isDrawing;
@@ -644,7 +644,7 @@ public class CanvasView {
     /**
      * Is drawing mode
      * 
-     * @return
+     * @return is drawing
      */
     public boolean isDrawing() {
         return isDrawing;
@@ -653,7 +653,7 @@ public class CanvasView {
     /**
      * Activate the marquee selection
      * 
-     * @param isMarquee 
+     * @param isMarquee is loup active
      */
     public void setMarquee(boolean isMarquee) {
         this.isMarquee = isMarquee;
@@ -671,7 +671,7 @@ public class CanvasView {
     /**
      * Marquee is drawing
      * 
-     * @return 
+     * @return is loup active
      */
     public boolean isMarquee() {
         return isMarquee;
@@ -680,7 +680,7 @@ public class CanvasView {
     /**
      * Helper method used by export routines
      * 
-     * @return 
+     * @return bounding {@link net.perspective.draw.util.CanvasPoint}
      */
     public CanvasPoint[] getBounds() {
         CanvasPoint topleft, bottomright;

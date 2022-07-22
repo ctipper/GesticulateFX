@@ -62,9 +62,9 @@ public class R2 {
     /**
      * Determine vertex quadrant
      * 
-     * @param vertex
-     * @param centre
-     * @return an integer index, see {@link net.perspective.draw.util.V2}
+     * @param vertex the vertex
+     * @param centre the centre point
+     * @return an integer index, see {@link net.perspective.draw.util.V2#declination(double, double)}
      */
     public static int quadrant(CanvasPoint vertex, CanvasPoint centre) {
         double theta = V2.declination(vertex.x - centre.x, vertex.y - centre.y);
@@ -74,9 +74,9 @@ public class R2 {
     /**
      * Determine edge quarter
      * 
-     * @param edge
-     * @param centre
-     * @return an integer index, see {@link net.perspective.draw.util.V2}
+     * @param edge the edge
+     * @param centre the centre point
+     * @return an integer index, see {@link net.perspective.draw.util.V2#declination(double, double)}
      */
     public static int quarter(CanvasPoint edge, CanvasPoint centre) {
         double theta = V2.declination(edge.x - centre.x, edge.y - centre.y);
@@ -86,9 +86,9 @@ public class R2 {
     /**
      * Determine vertex octant
      * 
-     * @param vertex
-     * @param centre
-     * @return an integer index, see {@link net.perspective.draw.util.V2}
+     * @param vertex the vertex
+     * @param centre the centre point
+     * @return an integer index, see {@link net.perspective.draw.util.V2#declination(double, double)}
      */
     public static int octant(CanvasPoint vertex, CanvasPoint centre) {
         double theta = V2.declination(vertex.x - centre.x, vertex.y - centre.y);
@@ -98,9 +98,9 @@ public class R2 {
     /**
      * Permute vertex labels
      * 
-     * @param contains
-     * @param quad
-     * @return contains type
+     * @param contains a {@link net.perspective.draw.enums.ContainsType}
+     * @param quad quadrant
+     * @return a {@link net.perspective.draw.enums.ContainsType}e
      */
     public static ContainsType permute(ContainsType contains, int quad) {
         contains = switch (quad) {
@@ -116,9 +116,9 @@ public class R2 {
     /**
      * Mutate edge labels
      * 
-     * @param contains
-     * @param quad
-     * @return contains type
+     * @param contains a {@link net.perspective.draw.enums.ContainsType}
+     * @param quad quadrant
+     * @return a {@link net.perspective.draw.enums.ContainsType}
      */
     public static ContainsType mutate(ContainsType contains, int quad) {
         contains = switch (quad) {
@@ -134,7 +134,7 @@ public class R2 {
     /**
      * Retrieve TL coordinate transforms
      * 
-     * @param quad
+     * @param quad quadrant
      * @return a numeric pair
      */
     public static int[] flip(int quad) {
@@ -252,3 +252,4 @@ public class R2 {
     }
 
 }
+

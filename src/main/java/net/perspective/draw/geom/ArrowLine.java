@@ -41,15 +41,27 @@ public class ArrowLine extends Figure {
 
     private static final long serialVersionUID = 1L;
 
+    /** Creates a new instance of <code>ArrowLine</code> */
     public ArrowLine() {
         this(0.25, 10, 9.3);
     }
 
+    /**
+     * Creates a new instance of <code>ArrowLine</code>
+     * 
+     * @param line the {@link net.perspective.draw.geom.Figure}
+     */
     public ArrowLine(Figure line) {
         this(0.25, 10, 9.3);
         this.line = line;
     }
 
+    /**
+     * Creates a new instance of <code>ArrowLine</code>
+     * 
+     * @param line the {@link net.perspective.draw.geom.Figure}
+     * @param arrowType the {@link net.perspective.draw.geom.ArrowType}
+     */
     @ConstructorProperties({"line", "arrowType"})
     public ArrowLine(Figure line, ArrowType arrowType) {
         this(0.25, 10, 9.3);
@@ -57,110 +69,220 @@ public class ArrowLine extends Figure {
         this.arrowType = arrowType;
     }
 
+    /**
+     * Creates a new instance of <code>ArrowLine</code>
+     * 
+     * @param angle the angle in radians
+     * @param outerRadius outer radius
+     * @param innerRadius inner radius
+     */
     public ArrowLine(double angle, double outerRadius, double innerRadius) {
         this.wedgeAngle = angle;
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
 
+    /**
+     * Set the line
+     * 
+     * @param line the {@link net.perspective.draw.geom.Figure}
+     */
     public void setLine(Figure line) {
         this.line = line;
     }
 
+    /**
+     * Get the line
+     * 
+     * @return the {@link net.perspective.draw.geom.Figure}
+     */
     public Figure getLine() {
         return line;
     }
 
+    /**
+     * Set the path and point factories used after de-serialisation
+     * 
+     * <p>This should method should almost never be called; it is needed by XML Reader.
+     */
     @Override
     public void setFactory() {
-        // This should method should almost never be called. Needed by XMLEncoder.
         line.setFactory();
     }
 
+    /**
+     * Set the untransformed TL coordinate of the figure
+     * 
+     * @param x the x position
+     * @param y the y position
+     */
     @Override
     public void setStart(double x, double y) {
         line.setStart(x, y);
     }
 
+    /**
+     * Return the untransformed TL coordinate of the figure
+     * 
+     * @return the figure start point
+     */
     @Override
     public CanvasPoint getStart() {
         return line.getStart();
     }
 
+    /**
+     * Set the untransformed BR coordinate of the figure
+     * 
+     * @param x the width
+     * @param y the height
+     */
     @Override
     public void setEnd(double x, double y) {
         line.setEnd(x, y);
     }
 
+    /** 
+     * Return the untransformed BR coordinate of the figure
+     * 
+     * @return the dimensions
+     */
     @Override
     public CanvasPoint getEnd() {
         return line.getEnd();
     }
 
+    /**
+     * Set a list of points
+     * 
+     * @param points the list of {@link net.perspective.draw.util.CanvasPoint}
+     */
     @Override
     public void setPoints(List<CanvasPoint> points) {
         line.setPoints(points);
     }
 
+    /**
+     * Initialise points List
+     * 
+     * @param drawtype the {@link net.perspective.draw.enums.DrawingType}
+     */
     @Override
     public void setPoints(DrawingType drawtype) {
         line.setPoints(drawtype);
     }
 
+    /**
+     * Initialise end points
+     */
     @Override
     public void setEndPoints() {
         line.setEndPoints();
     }
 
+    /**
+     * Returns points list
+     * 
+     * @return the list of {@link net.perspective.draw.util.CanvasPoint}
+     */
     @Override
     public List<CanvasPoint> getPoints() {
         return line.getPoints();
     }
 
+    /**
+     * Add a point to the List of points
+     * 
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     @Override
     public void addPoint(double x, double y) {
         line.addPoint(x, y);
     }
 
-    @Override
-    public FigureType getType() {
-        return line.getType();
-    }
-
-    public void setArrowType(ArrowType arrowType) {
-        this.arrowType = arrowType;
-    }
-
-    public ArrowType getArrowType() {
-        return arrowType;
-    }
-
-    public void setArrowStroke(Stroke stroke) {
-        this.stroke = stroke;
-    }
-
-    public Stroke getArrowStroke() {
-        return stroke;
-    }
-
-    @Transient
-    @Override
-    public Stroke getStroke() {
-        return line.getStroke();
-    }
-
+    /**
+     * Set the path from a List of points
+     */
     @Override
     @Transient
     public void setPath() {
         line.setPath();
     }
 
+    /**
+     * Returns the path describing the figure
+     * 
+     * @return path the {@link java.awt.geom.Path2D.Double}
+     */
     @Override
     @Transient
     public Path2D.Double getPath() {
         return line.getPath();
     }
 
+    /**
+     * Returns the figure type
+     * 
+     * @return the {@link net.perspective.draw.geom.FigureType}
+     */
+    @Override
+    public FigureType getType() {
+        return line.getType();
+    }
+
+    /**
+     * Sets the arrow type
+     * 
+     * @param arrowType the {@link net.perspective.draw.geom.ArrowType}
+     */
+    public void setArrowType(ArrowType arrowType) {
+        this.arrowType = arrowType;
+    }
+
+    /**
+     * Returns the arrow type
+     * 
+     * @return the {@link net.perspective.draw.geom.ArrowType}
+     */
+    public ArrowType getArrowType() {
+        return arrowType;
+    }
+
+    /**
+     * Sets the arrow stroke
+     * 
+     * @param stroke the {@link java.awt.Stroke}
+     */
+    public void setArrowStroke(Stroke stroke) {
+        this.stroke = stroke;
+    }
+
+    /**
+     * Returns the arrow stroke
+     * 
+     * @return the {@link java.awt.Stroke}
+     */
+    public Stroke getArrowStroke() {
+        return stroke;
+    }
+
+    /**
+     * Return the type of stroke
+     * 
+     * @return the {@link java.awt.Stroke}
+     */
+    @Transient
+    @Override
+    public Stroke getStroke() {
+        return line.getStroke();
+    }
+
+    /**
+     * Update the item properties, such as color, stroke etc.
+     * 
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     */
     @Override
     public void updateProperties(DrawingArea drawarea) {
         this.setColor(drawarea.getColor());
@@ -169,41 +291,84 @@ public class ArrowLine extends Figure {
         line.updateProperties(drawarea);
     }
 
+    /**
+     * 
+     * @return The 2-tuple of top-left corner location (transformed)
+     *         second point may be normalised
+     */
     @Override
     public CanvasPoint[] getTop() {
         return line.getTop();
     }
 
+    /**
+     * 
+     * @return The 2-tuple of top-right corner location (transformed)
+     *         second point may be normalised
+     */
     @Override
     public CanvasPoint[] getUp() {
         return line.getUp();
     }
 
+    /**
+     * 
+     * @return The 2-tuple of bottom-left corner location (transformed)
+     *         second point may be normalised
+     */
     @Override
     public CanvasPoint[] getDown() {
         return line.getDown();
     }
 
+    /**
+     * 
+     * @return The 2-tuple of bottom-right corner location (transformed)
+     *         second point may be normalised
+     */
     @Override
     public CanvasPoint[] getBottom() {
         return line.getBottom();
     }
 
+    /**
+     * Returns the location of the item centre point
+     * 
+     * @return canvas coordinates of axis of rotation
+     */
     @Override
     public CanvasPoint rotationCentre() {
         return line.rotationCentre();
     }
 
+    /**
+     * Returns an area that specifies the transformed boundary
+     * 
+     * @return a transformed shape
+     */
     @Override
     public Shape bounds() {
         return line.bounds();
     }
 
+    /**
+     * Detect if a point lies within the bounds, a convenience method
+     * 
+     * @param x canvas coordinate
+     * @param y canvas coordinate
+     * @return a boolean property
+     */
     @Override
     public boolean contains(double x, double y) {
         return line.contains(x, y);
     }
 
+    /**
+     * Translate the item
+     * 
+     * @param xinc x increment
+     * @param yinc y increment
+     */
     @Override
     public void moveTo(double xinc, double yinc) {
         line.moveTo(xinc, yinc);
@@ -212,7 +377,7 @@ public class ArrowLine extends Figure {
     /**
      * Provide a Path for FX canvas
      * 
-     * @return an FX Path
+     * @return the {@link javafx.scene.Node}
      */
     @Override
     public Node draw() {
@@ -245,6 +410,23 @@ public class ArrowLine extends Figure {
         return group;
     }
 
+    /**
+     * Render the item anchors to indicate selection
+     * 
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     * @return the {@link javafx.scene.Node}
+     */
+    @Override
+    public Node drawAnchors(DrawingArea drawarea) {
+        Node anchors = line.drawAnchors(drawarea);
+        return anchors;
+    }
+
+    /**
+     * Draw to a Java2d canvas for export
+     * 
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
+     */
     @Override
     public void draw(Graphics2D g2) {
         AffineTransform defaultTransform, transform;
@@ -272,12 +454,6 @@ public class ArrowLine extends Figure {
 
         // reset graphics context
         g2.setTransform(defaultTransform);
-    }
-
-    @Override
-    public Node drawAnchors(DrawingArea drawarea) {
-        Node anchors = line.drawAnchors(drawarea);
-        return anchors;
     }
 
     private Path2D.Double getTransformedStartDecoratorPath() {
@@ -372,7 +548,7 @@ public class ArrowLine extends Figure {
     /**
      * Collect first two points
      * 
-     * @return list of points
+     * @return the list of {@link net.perspective.draw.util.CanvasPoint}
      */
     private List<CanvasPoint> P_1() {
         CanvasPoint point;
@@ -395,7 +571,7 @@ public class ArrowLine extends Figure {
     /**
      * Collect last three points
      * 
-     * @return list of points
+     * @return the list of {@link net.perspective.draw.util.CanvasPoint}
      */
     private List<CanvasPoint> P_2() {
         CanvasPoint point;
@@ -420,11 +596,21 @@ public class ArrowLine extends Figure {
         return P2;
     }
 
+    /**
+     * Set stroke colour
+     * 
+     * @param color the {@link javafx.scene.paint.Color}
+     */
     @Override
     public void setColor(Color color) {
         line.setColor(color);
     }
 
+    /**
+     * Return stroke colour
+     * 
+     * @return colour the {@link javafx.scene.paint.Color}
+     */
     @Override
     @Transient
     public Color getColor() {
@@ -446,7 +632,7 @@ public class ArrowLine extends Figure {
     /**
      * Set the fill colour
      * 
-     * @param fillcolor
+     * @param fillcolor the {@link javafx.scene.paint.Color}
      */
     @Override
     public void setFillColor(Color fillcolor) {
@@ -456,7 +642,7 @@ public class ArrowLine extends Figure {
     /**
      * Return the fill colour
      * 
-     * @return
+     * @return the {@link javafx.scene.paint.Color}
      */
     @Transient
     @Override
@@ -476,11 +662,21 @@ public class ArrowLine extends Figure {
         return fxToAwt(line.getFillColor());
     }
 
+    /**
+     * Sets whether the shape is opaque
+     * 
+     * @param transparency 0 (clear) - 100 (opaque)
+     */
     @Override
     public void setTransparency(int transparency) {
         line.setTransparency(transparency);
     }
 
+    /**
+     * Returns transparency
+     * 
+     * @return transparency 0 (clear) - 100 (opaque)
+     */
     @Override
     @Transient
     public int getTransparency() {
@@ -500,17 +696,33 @@ public class ArrowLine extends Figure {
         return line.isVertical();
     }
 
+    /**
+     * Sets the rotation angle
+     * 
+     * @param angle the angle in radians
+     */
     @Override
     public void setAngle(double angle) {
         line.setAngle(angle);
     }
 
+    /**
+     * Return the rotation angle 
+     * 
+     * @return angle the angle in radians
+     */
     @Override
     @Transient
     public double getAngle() {
         return line.getAngle();
     }
 
+    /**
+     * Return a List of 2-tuples of vertices, second point normalised.
+     * Note that the points may not be cyclical.
+     * 
+     * @return a List of 2-tuples representing transformed vertices
+     */
     @Override
     public List<CanvasPoint[]> getVertices() {
         return line.getVertices();

@@ -14,6 +14,11 @@ import javax.swing.ImageIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 
+ * @author ctipper
+ */
+
 public class FileUtils {
 
     public final static String jpeg = "jpeg";
@@ -42,8 +47,12 @@ public class FileUtils {
         return ext;
     }
 
-    /*
+    /**
      * Ensure file has given file-extension
+     * 
+     * @param file the {@link java.io.File}
+     * @param extension file extension
+     * @return the {@link java.io.File}
      * 
      * @author ctipper
      */
@@ -72,8 +81,11 @@ public class FileUtils {
         return f;
     }
 
-    /*
+    /**
      * Returns a uniform image name with png extension
+     * 
+     * @param index the image index
+     * @return an image name
      * 
      * @author ctipper
      */
@@ -88,6 +100,9 @@ public class FileUtils {
 
     /**
      * Returns an ImageIcon, or null if the path was invalid.
+     * 
+     * @param path the image path
+     * @return an {@link javax.swing.ImageIcon}
      */
     public static ImageIcon createImageIcon(String path) {
         java.net.URL imgURL = FileUtils.class.getResource(path);

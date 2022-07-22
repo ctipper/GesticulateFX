@@ -54,7 +54,7 @@ public interface DrawItem {
     /**
      * Update the item properties, such as color, stroke etc.
      * 
-     * @param canvas
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
      */
     void updateProperties(DrawingArea drawarea);
 
@@ -92,14 +92,14 @@ public interface DrawItem {
     /**
      * Sets the rotation angle
      * 
-     * @param a The angle in radians
+     * @param angle the angle in radians
      */
     void setAngle(double angle);
 
     /**
      * Return the rotation angle 
      * 
-     * @return angle
+     * @return angle the angle in radians
      */
     double getAngle();
 
@@ -149,23 +149,24 @@ public interface DrawItem {
     CanvasPoint[] getBottom();
 
     /**
-     * Render a shadowed version of the item without transforming
+     * Provide a Path for FX canvas
      * 
-     * @return an FX Node
+     * @return the {@link javafx.scene.Node}
      */
     Node draw();
 
     /**
      * Render the item anchors to indicate selection
      * 
-     * @return an FX Node
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     * @return the {@link javafx.scene.Node}
      */
     Node drawAnchors(DrawingArea drawarea);
 
     /**
      * Render the item to the g2d canvas
      * 
-     * @param g2
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      */
     void draw(Graphics2D g2);
 

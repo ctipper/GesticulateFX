@@ -220,7 +220,7 @@ public class DrawingArea {
     /**
      * Get the theme fill colour
      * 
-     * @return
+     * @return web colour
      */
     public String getThemeFillColor() {
         return controller.getThemeFillColor();
@@ -229,7 +229,7 @@ public class DrawingArea {
     /**
      * Get the theme background colour
      * 
-     * @return
+     * @return web colour
      */
     public String getThemeBackgroundColor() {
         return controller.getThemeBackgroundColor();
@@ -238,7 +238,7 @@ public class DrawingArea {
     /**
      * Get the theme accent colour
      * 
-     * @return
+     * @return web colour
      */
     public String getThemeAccentColor() {
         return controller.getThemeAccentColor();
@@ -247,7 +247,7 @@ public class DrawingArea {
     /**
      * Get the scene
      * 
-     * @return
+     * @return the {@link javafx.scene.SubScene}
      */
     public SubScene getScene() {
         return canvas;
@@ -256,7 +256,7 @@ public class DrawingArea {
     /**
      * Get the canvas root
      * 
-     * @return
+     * @return the root node
      */
     public Group getCanvas() {
         return root;
@@ -273,7 +273,7 @@ public class DrawingArea {
     /**
      * Set mouse and touch handlers
      * 
-     * @param handler  HandlerType
+     * @param handler the {@link net.perspective.draw.enums.HandlerType}
      */
     public void changeHandlers(HandlerType handler) {
         this.oldhandlertype = this.handlertype;
@@ -307,7 +307,7 @@ public class DrawingArea {
     /**
      * Return the mouse handler type
      * 
-     * @return  HandlerType
+     * @return the {@link net.perspective.draw.enums.HandlerType}
      */
     public HandlerType getHandlerType() {
         return handlertype;
@@ -442,9 +442,9 @@ public class DrawingArea {
     /**
      * Move shape and steer to grid increments
      * 
-     * @param item
-     * @param xinc
-     * @param yinc
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @param xinc x increment
+     * @param yinc y increment
      */
     public void moveToWithIncrements(DrawItem item, double xinc, double yinc) {
         /**
@@ -469,8 +469,8 @@ public class DrawingArea {
     /**
      * Rotate a given item by a forced increment
      * 
-     * @param item   DrawItem
-     * @param theta  angle increment
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @param theta angle increment
      */
     public void rotateWithIncrements(DrawItem item, double theta) {
         double angle = item.getAngle();
@@ -484,7 +484,7 @@ public class DrawingArea {
     /**
      * Rotate given item by angle theta increment
      *
-     * @param item DrawItem
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
      * @param theta angle increment
      */
     public void rotateTo(DrawItem item, double theta) {
@@ -516,10 +516,10 @@ public class DrawingArea {
     /**
      * Rotate a point around figure axis by an angle
      *
-     * @param figure
-     * @param p
-     * @param angle
-     * @return
+     * @param figure the {@link net.perspective.draw.geom.Figure}
+     * @param p the {@link net.perspective.draw.util.CanvasPoint}
+     * @param angle the angle in radians
+     * @return the {@link net.perspective.draw.util.CanvasPoint}
      */
     protected CanvasPoint rotatePoint(Figure figure, CanvasPoint p, double angle) {
         CanvasPoint centre = figure.rotationCentre();
@@ -536,7 +536,7 @@ public class DrawingArea {
     /**
      * Set the drawing mode
      * 
-     * @param type  DrawType
+     * @param type the {@link net.perspective.draw.enums.DrawingType}
      */
     public void setDrawType(DrawingType type) {
         this.drawtype = Optional.ofNullable(type);
@@ -546,7 +546,7 @@ public class DrawingArea {
      * Return the canvas drawing type and also allows a 
      * correction if isometric drawing is enabled
      * 
-     * @return 
+     * @return optional of {@link net.perspective.draw.enums.DrawingType}
      */
     public Optional<DrawingType> getDrawType() {
         if (!drawtype.isPresent()) {
@@ -586,7 +586,7 @@ public class DrawingArea {
     /**
      * Set the stroke type
      * 
-     * @param stroke
+     * @param stroke the {@link java.awt.Stroke}
      */
     public void setStroke(java.awt.Stroke stroke) {
         this.stroke = stroke;
@@ -597,7 +597,7 @@ public class DrawingArea {
     /**
      * Get the stroke type
      * 
-     * @return
+     * @return the {@link java.awt.Stroke}
      */
     public java.awt.Stroke getStroke() {
         return this.stroke;
@@ -607,7 +607,7 @@ public class DrawingArea {
      * Set the basic stroke type
      * This is used when drawing, usually un-tinted
      * 
-     * @param stroke
+     * @param stroke the {@link java.awt.Stroke}
      */
     public void setPlainStroke(java.awt.Stroke stroke) {
         this.plainstroke = stroke;
@@ -618,7 +618,7 @@ public class DrawingArea {
     /**
      * Get the basic stroke type
      * 
-     * @return
+     * @return the {@link java.awt.Stroke}
      */
     public java.awt.Stroke getPlainStroke() {
         return plainstroke;
@@ -627,7 +627,7 @@ public class DrawingArea {
     /**
      * Set the stroke colour
      * 
-     * @param color
+     * @param color the {@link javafx.scene.paint.Color}
      */
     public void setColor(Color color) {
         this.color = color;
@@ -638,7 +638,7 @@ public class DrawingArea {
     /**
      * Get the stroke colour
      * 
-     * @return
+     * @return the {@link javafx.scene.paint.Color}
      */
     public Color getColor() {
         return this.color;
@@ -647,7 +647,7 @@ public class DrawingArea {
     /**
      * Set the fill colour
      * 
-     * @param fillcolor
+     * @param fillcolor the {@link javafx.scene.paint.Color}
      */
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
@@ -658,7 +658,7 @@ public class DrawingArea {
     /**
      * Get the fill colour
      * 
-     * @return
+     * @return the {@link javafx.scene.paint.Color}
      */
     public Color getFillColor() {
         return this.fillcolor;
@@ -667,7 +667,7 @@ public class DrawingArea {
     /**
      * Set transparency 0-100
      * 
-     * @param transparency
+     * @param transparency transparency 0 (clear) - 100 (opaque)
      */
     public void setTransparency(int transparency) {
         this.transparency = transparency;
@@ -678,7 +678,7 @@ public class DrawingArea {
     /**
      * Get the transparency
      * 
-     * @return
+     * @return transparency 0 (clear) - 100 (opaque)
      */
     public int getTransparency() {
         return this.transparency;
@@ -699,7 +699,7 @@ public class DrawingArea {
     /**
      * Get the text font
      * 
-     * @return
+     * @return font family
      */
     public String getFontFamily() {
         return fontfamily;
@@ -708,7 +708,7 @@ public class DrawingArea {
     /**
      * Update the font style
      * 
-     * @param fontstyle
+     * @param fontstyle font style Id
      */
     public void updateFontStyle(int fontstyle) {
         this.fontstyle = fontstyle;
@@ -720,7 +720,7 @@ public class DrawingArea {
     /**
      * Set the font style
      * 
-     * @param fontstyle
+     * @param fontstyle font style Id
      */
     public void setFontStyle(int fontstyle) {
         this.fontstyle = fontstyle;
@@ -729,7 +729,7 @@ public class DrawingArea {
     /**
      * Get the font style
      * 
-     * @return
+     * @return font style Id
      */
     public int getFontStyle() {
         return fontstyle;
@@ -738,7 +738,7 @@ public class DrawingArea {
     /**
      * Set the font size
      * 
-     * @param fontsize
+     * @param fontsize font size
      */
     public void setFontSize(int fontsize) {
         this.fontsize = fontsize;
@@ -750,7 +750,7 @@ public class DrawingArea {
     /**
      * Get the font size
      * 
-     * @return
+     * @return font size
      */
     public int getFontSize() {
         return fontsize;
@@ -759,7 +759,7 @@ public class DrawingArea {
     /**
      * Set the arrow type
      * 
-     * @param arrowtype
+     * @param arrowtype the {@link net.perspective.draw.geom.ArrowType}
      */
     public void setArrow(ArrowType arrowtype) {
         this.arrowtype = arrowtype;
@@ -770,7 +770,7 @@ public class DrawingArea {
     /**
      * Get the arrow type
      * 
-     * @return
+     * @return the {@link net.perspective.draw.geom.ArrowType}
      */
     public ArrowType getArrow() {
         return arrowtype;
@@ -788,7 +788,7 @@ public class DrawingArea {
     /**
      * Show drawing grid
      * 
-     * @param gridVisible
+     * @param gridVisible is grid visible
      */
     public void setGrid(boolean gridVisible) {
         this.gridVisible = gridVisible;
@@ -797,7 +797,7 @@ public class DrawingArea {
     /**
      * Grid is visible
      * 
-     * @return
+     * @return is grid visible
      */
     public boolean isGridVisible() {
         return gridVisible;
@@ -806,7 +806,7 @@ public class DrawingArea {
     /**
      * Enable snap to guides
      * 
-     * @param gridVisible 
+     * @param gridVisible is grid active
      */
     public void setSnapTo(boolean gridVisible) {
         listener.setSnapEnabled(gridVisible);
@@ -837,7 +837,7 @@ public class DrawingArea {
     /**
      * Set dark mode enabled
      * 
-     * @param darkModeEnabled 
+     * @param darkModeEnabled dark theme
      */
     public void setDarkModeEnabled(boolean darkModeEnabled) {
         this.darkModeEnabled = darkModeEnabled;
@@ -846,7 +846,7 @@ public class DrawingArea {
     /**
      * Is dark mode enabled
      * 
-     * @return 
+     * @return dark theme
      */
     public boolean isDarkModeEnabled() {
         return darkModeEnabled;
@@ -855,7 +855,7 @@ public class DrawingArea {
     /**
      * Define the drawing loup
      * 
-     * @param marquee
+     * @param marquee the loup
      */
     public void setMarquee(DrawItem marquee) {
         this.marquee = marquee;
@@ -864,7 +864,7 @@ public class DrawingArea {
     /**
      * Get the drawing loup
      * 
-     * @return
+     * @return the loup
      */
     public DrawItem getMarquee() {
         return marquee;
@@ -873,7 +873,7 @@ public class DrawingArea {
     /**
      * Set multiple selection mode
      * 
-     * @param multiSelectEnabled
+     * @param multiSelectEnabled is multi-select
      */
     public void setMultiSelectEnabled(boolean multiSelectEnabled) {
         this.multiSelectEnabled = multiSelectEnabled;
@@ -882,7 +882,7 @@ public class DrawingArea {
     /**
      * Get multiple selection mode
      * 
-     * @return
+     * @return is multi-select
      */
     public boolean isMultiSelectEnabled() {
         return multiSelectEnabled;

@@ -51,7 +51,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Insert a list of shapes
      * 
-     * @param shapes  a list of shapes
+     * @param shapes the list of {@link net.perspective.draw.geom.DrawItem}
      */
     public void setShapes(List<DrawItem> shapes) {
         this.shapes = shapes;
@@ -60,7 +60,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Retrieve the list of shapes
      * 
-     * @return a list of shapes
+     * @return shapes the list of {@link net.perspective.draw.geom.DrawItem}
      */
     public List<DrawItem> getShapes() {
         return shapes;
@@ -69,7 +69,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Add a shape to the group
      * 
-     * @param shape  a {@link net.perspective.draw.geom.DrawItem}
+     * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
     public void addShape(DrawItem shape) {
         if (shapes == null) {
@@ -82,7 +82,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Remove a shape from the list
      * 
-     * @param shape  a {@link net.perspective.draw.geom.DrawItem}
+     * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
     public void removeShape(DrawItem shape) {
         if (shapes != null) {
@@ -175,7 +175,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * 
-     * @param end
+     * @param end the end point
      * @deprecated
      */
     @Deprecated
@@ -194,6 +194,11 @@ public class Grouped implements DrawItem, Serializable {
         return end;
     }
 
+    /**
+     * Update the item properties no properties set
+     * 
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     */
     @Override
     public void updateProperties(DrawingArea drawarea) {
         // no properties to set
@@ -327,6 +332,11 @@ public class Grouped implements DrawItem, Serializable {
         this.setBounds();
     }
 
+    /**
+     * Provide a Group for FX canvas
+     * 
+     * @return the {@link javafx.scene.Node}
+     */
     @Override
     public Node draw() {
         Group group = new Group();
@@ -340,9 +350,10 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * Render the figure anchors to indicate selection
+     * Render the item anchors to indicate selection
      * 
-     * @return an FX Shape node
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     * @return the {@link javafx.scene.Node}
      */
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
@@ -368,10 +379,9 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * Render the group to the Java2d canvas for export
+     * Render the item to the g2d canvas
      * 
-     * @param g2  the graphics context
-     * @param canvas  the {@link net.perspective.draw.DrawingCanvas}
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      */
     @Override
     public void draw(Graphics2D g2) {
@@ -432,7 +442,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Sets the rotation angle
      * 
-     * @param angle  The angle in radians
+     * @param angle the angle in radians
      */
     @Override
     public void setAngle(double angle) {
@@ -442,7 +452,7 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Return the rotation angle 
      * 
-     * @return angle
+     * @return angle the angle in radians
      */
     @Override
     public double getAngle() {
@@ -451,7 +461,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * 
-     * @param start
+     * @param start the start point
      * @deprecated
      */
     @Deprecated
@@ -461,7 +471,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * 
-     * @return
+     * @return the start point
      * @deprecated
      */
     @Deprecated
@@ -472,7 +482,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * 
-     * @param end
+     * @param end the end point
      * @deprecated
      */
     @Deprecated
@@ -482,7 +492,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * 
-     * @return
+     * @return the end point
      * @deprecated
      */
     @Deprecated

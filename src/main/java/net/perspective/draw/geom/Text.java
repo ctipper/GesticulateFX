@@ -220,7 +220,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Update the text properties such as color, font etc.
      * 
-     * @param canvas
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
      */
     @Override
     public void updateProperties(DrawingArea drawarea) {
@@ -241,8 +241,6 @@ public class Text implements DrawItem, Serializable {
 
     /**
      * Set the width and height of the item in points
-     * 
-     * @param canvas
      */
     public void setDimensions() {
         javafx.scene.text.TextFlow layout = this.getLayout();
@@ -253,8 +251,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Return a layout used to calculate item properties
      * 
-     * @param canvas
-     * @return a javafx.scene.text.Text
+     * @return the {@link javafx.scene.text.TextFlow}
      */
     @Transient
     public javafx.scene.text.TextFlow getLayout() {
@@ -408,6 +405,11 @@ public class Text implements DrawItem, Serializable {
         start.translate(xinc, yinc);
     }
 
+    /**
+     * Provide a TextFlow for FX canvas
+     * 
+     * @return the {@link javafx.scene.Node}
+     */
     @Override
     public Node draw() {
         javafx.scene.text.TextFlow layout = getLayout();
@@ -418,6 +420,12 @@ public class Text implements DrawItem, Serializable {
         return layout;
     }
 
+    /**
+     * Render the item anchors to indicate selection
+     * 
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     * @return the {@link javafx.scene.Node}
+     */
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
         CanvasPoint pad = new CanvasPoint(7.0, 7.0);
@@ -453,6 +461,11 @@ public class Text implements DrawItem, Serializable {
         return anchors;
     }
 
+    /**
+     * Render the item to the g2d canvas
+     * 
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
+     */
     @Override
     public void draw(Graphics2D g2) {
         AffineTransform defaultTransform, transform, rotation;
@@ -489,7 +502,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Return a layout used to calculate item properties
      * 
-     * @param canvas
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      * @return a TextLayout
      */
     public TextLayout getLayout(Graphics2D g2) {
@@ -514,7 +527,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Convert font style from rich text to plain text style
      * 
-     * @return
+     * @return font id
      */
     private int getConvertedFontStyle() {
         int thisstyle = java.awt.Font.PLAIN;
@@ -533,7 +546,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Set item colour
      * 
-     * @param color
+     * @param color the {@link javafx.scene.paint.Color}
      */
     public void setColor(Color color) {
         this.color = color;
@@ -542,7 +555,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Return item colour
      * 
-     * @return
+     * @return the {@link javafx.scene.paint.Color}
      */
     @Transient
     public Color getColor() {
@@ -581,7 +594,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Sets the rotation angle
      * 
-     * @param angle The angle in radians
+     * @param angle the angle in radians
      */
     @Override
     public void setAngle(double angle) {
@@ -591,7 +604,7 @@ public class Text implements DrawItem, Serializable {
     /**
      * Return the rotation angle 
      * 
-     * @return angle
+     * @return angle the angle in radians
      */
     @Override
     public double getAngle() {
@@ -623,7 +636,7 @@ public class Text implements DrawItem, Serializable {
 
     /**
      * 
-     * @param start
+     * @param start the start point
      * @deprecated
      */
     @Deprecated
@@ -633,7 +646,7 @@ public class Text implements DrawItem, Serializable {
 
     /**
      * 
-     * @return
+     * @return the start point
      * @deprecated
      */
     @Deprecated
@@ -644,7 +657,7 @@ public class Text implements DrawItem, Serializable {
 
     /**
      * 
-     * @param end
+     * @param end the end point
      * @deprecated
      */
     @Deprecated
@@ -654,7 +667,7 @@ public class Text implements DrawItem, Serializable {
 
     /**
      * 
-     * @return
+     * @return the end point
      * @deprecated
      */
     @Deprecated
@@ -694,7 +707,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @param color  a {@link javafx.scene.paint.Color}
      * @param opacity float
-     * @return {@link java.awt.Color}
+     * @return the {@link java.awt.Color}
      */
     public static java.awt.Color fxToAwt(javafx.scene.paint.Color color, float opacity) {
         return new java.awt.Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), opacity);

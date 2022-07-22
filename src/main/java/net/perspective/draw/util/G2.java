@@ -24,6 +24,13 @@ public class G2 {
     public G2() {
     }
 
+    /**
+     * Draw the background grid
+     * 
+     * @param isDarkMode is dark mode
+     * @param bounds the canvas dimension
+     * @return a group of {@link javafx.scene.shape.Line}
+     */
     public Node drawGridLayout(boolean isDarkMode, CanvasPoint bounds) {
         Color minorColor, majorColor;
         /**

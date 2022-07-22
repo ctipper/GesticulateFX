@@ -46,7 +46,7 @@ public class CanvasPoint implements Serializable, Cloneable {
     /**
      * Set x coordinate
      * 
-     * @param u
+     * @param u x coordinate
      */
     public void setX(double u) {
         x = u;
@@ -55,7 +55,7 @@ public class CanvasPoint implements Serializable, Cloneable {
     /**
      * Return x coordinate
      * 
-     * @return x
+     * @return x x coordinate
      */
     public double getX() {
         return x;
@@ -64,7 +64,7 @@ public class CanvasPoint implements Serializable, Cloneable {
     /**
      * Set y coordinate
      * 
-     * @param v
+     * @param v y coordinate
      */
     public void setY(double v) {
         y = v;
@@ -73,7 +73,7 @@ public class CanvasPoint implements Serializable, Cloneable {
     /**
      * Return y coordinate
      * 
-     * @return y
+     * @return y y coordinate
      */
     public double getY() {
         return y;
@@ -82,8 +82,8 @@ public class CanvasPoint implements Serializable, Cloneable {
     /**
      * Set (x,y) position
      * 
-     * @param u
-     * @param v
+     * @param u x coordinate
+     * @param v y coordinate
      */
     public void setLocation(double u, double v) {
         x = u;
@@ -115,7 +115,7 @@ public class CanvasPoint implements Serializable, Cloneable {
     /**
      * Scale an instance uniformly
      * 
-     * @param scale
+     * @param scale scale parameter
      * @return an instance
      */
     public CanvasPoint grow(double scale) {

@@ -198,7 +198,7 @@ public class Edge extends Figure {
     /**
      * Return the rotation angle
      * 
-     * @return angle
+     * @return angle the angle in radians
      */
     @Override
     public double getAngle() {

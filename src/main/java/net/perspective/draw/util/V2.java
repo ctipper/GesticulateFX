@@ -18,9 +18,9 @@ public class V2 {
     /**
      * Rotate coordinate by angle theta
      * 
-     * @param x
-     * @param y
-     * @param theta
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param theta angle
      * @return a point
      */
     public static CanvasPoint rot(double x, double y, double theta) {
@@ -38,8 +38,8 @@ public class V2 {
     /**
      * Compute dot product of a and b
      * 
-     * @param a
-     * @param b
+     * @param a a vector
+     * @param b a vector
      * @return dot product
      */
     public static double dot(CanvasPoint a, CanvasPoint b) {
@@ -49,7 +49,7 @@ public class V2 {
     /**
      * Compute the L2, or euclidean, norm of p.
      * 
-     * @param p
+     * @param p a {@link net.perspective.draw.util.CanvasPoint}
      * @return norm of p
      */
     public static double L2(CanvasPoint p) {
@@ -59,8 +59,8 @@ public class V2 {
     /**
      * Compute the L2, or euclidean, norm of (x, y).
      * 
-     * @param x
-     * @param y
+     * @param x x coordinate
+     * @param y y coordinate
      * @return norm of (x, y)
      */
     public static double L2(double x, double y) {
@@ -70,8 +70,8 @@ public class V2 {
     /**
      * Rotate p by 90 degrees
      * 
-     * @param p
-     * @return a point
+     * @param p a {@link net.perspective.draw.util.CanvasPoint}
+     * @return a {@link net.perspective.draw.util.CanvasPoint}
      */
     public static CanvasPoint rot90(CanvasPoint p) {
         return new CanvasPoint(-p.y, p.x);
@@ -80,8 +80,8 @@ public class V2 {
     /**
      * Compute angle of arc defined by (x, y)
      * 
-     * @param x
-     * @param y
+     * @param x x coordinate
+     * @param y y coordinate
      * @return an angle defined in radians
      */
     public static double declination(double x, double y) {
@@ -99,7 +99,7 @@ public class V2 {
     /**
      * Normalise angle defined in radians
      * 
-     * @param angle
+     * @param angle the angle
      * @return norm of angle defined in radians
      */
     public static double norm_angle(double angle) {
@@ -117,10 +117,12 @@ public class V2 {
 
     /**
      * Determine quadrant of an arc defined by angle
+     * <pre>
      * 1 | 0
      * -----
      * 2 | 3
-     * @param angle
+     * </pre>
+     * @param angle the angle in radians
      * @return integer index
      */
     public static int quadrant(double angle) {
@@ -144,28 +146,30 @@ public class V2 {
 
     /**
      * Determine quarter of an arc defined by angle
+     * <pre>
      *  \1/
      * 2 - 0
-     *  /3\
-     * @param angle
+     *  /3\ 
+     * </pre>
+     * @param angle the angle in radians
      * @return integer index
      */
     public static int side(double angle) {
         int offset = -1;
         angle = V2.norm_angle(angle);
-        if ((angle >= Math.PI/4) && (angle < 3 * Math.PI/4)) {
+        if ((angle >= Math.PI / 4) && (angle < 3 * Math.PI / 4)) {
             offset = 0;
         }
-        if ((angle >= 3 * Math.PI/4) && (angle < Math.PI)) {
+        if ((angle >= 3 * Math.PI / 4) && (angle < Math.PI)) {
             offset = 1;
         }
-        if ((angle >= -Math.PI) && (angle < -3 * Math.PI/4)) {
+        if ((angle >= -Math.PI) && (angle < -3 * Math.PI / 4)) {
             offset = 1;
         }
-        if ((angle >= -3 * Math.PI/4) && (angle < -Math.PI/4)) {
+        if ((angle >= -3 * Math.PI / 4) && (angle < -Math.PI / 4)) {
             offset = 2;
         }
-        if ((angle >= -Math.PI/4) && (angle < Math.PI/4)) {
+        if ((angle >= -Math.PI / 4) && (angle < Math.PI / 4)) {
             offset = 3;
         }
         return offset;
@@ -173,42 +177,44 @@ public class V2 {
 
     /**
      * Determine octant of an arc defined by angle
+     * <pre>
      * 3  2  1
      *   \ /
      * 4  -  0
      *   / \
      * 5  6  7
-     * @param angle
+     * </pre>
+     * @param angle the angle in radians
      * @return integer index
      */
     public static int octet(double angle) {
         int offset = -1;
         angle = V2.norm_angle(angle);
-        if ((angle >= -Math.PI/8) && (angle < Math.PI/8)) {
+        if ((angle >= -Math.PI / 8) && (angle < Math.PI / 8)) {
             offset = 0;
         }
-        if ((angle >= Math.PI/8) && (angle < 3 * Math.PI/8)) {
+        if ((angle >= Math.PI / 8) && (angle < 3 * Math.PI / 8)) {
             offset = 1;
         }
-        if ((angle >= 3 * Math.PI/8) && (angle < 5 * Math.PI/8)) {
+        if ((angle >= 3 * Math.PI / 8) && (angle < 5 * Math.PI / 8)) {
             offset = 2;
         }
-        if ((angle >= 5 * Math.PI/8) && (angle < 7 * Math.PI/8)) {
+        if ((angle >= 5 * Math.PI / 8) && (angle < 7 * Math.PI / 8)) {
             offset = 3;
         }
-        if ((angle >= 7 * Math.PI/8) && (angle < Math.PI)) {
+        if ((angle >= 7 * Math.PI / 8) && (angle < Math.PI)) {
             offset = 4;
         }
-        if ((angle >= -Math.PI) && (angle < -7 * Math.PI/8)) {
+        if ((angle >= -Math.PI) && (angle < -7 * Math.PI / 8)) {
             offset = 4;
         }
-        if ((angle >= -7 * Math.PI/8) && (angle < -5 * Math.PI/8)) {
+        if ((angle >= -7 * Math.PI / 8) && (angle < -5 * Math.PI / 8)) {
             offset = 5;
         }
-        if ((angle >= -5 * Math.PI/8) && (angle < -3 * Math.PI/8)) {
+        if ((angle >= -5 * Math.PI / 8) && (angle < -3 * Math.PI / 8)) {
             offset = 6;
         }
-        if ((angle >= -3 * Math.PI/8) && (angle < -Math.PI/8)) {
+        if ((angle >= -3 * Math.PI / 8) && (angle < -Math.PI / 8)) {
             offset = 7;
         }
         return offset;

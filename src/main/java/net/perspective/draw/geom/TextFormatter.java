@@ -95,6 +95,7 @@ public class TextFormatter {
      * Load Text content into formatter
      *
      * @param item A Text item
+     * @return the {@link javafx.scene.text.Text}
      */
     public javafx.scene.text.Text readFxText(Text item) {
         this.readTextItem(item);
@@ -106,7 +107,7 @@ public class TextFormatter {
     /**
      * Load Text content into formatter
      *
-     * @param item A Text item
+     * @param item A {@link net.perspective.draw.geom.Text} item
      */
     private void readTextItem(Text item) {
         String content = normalizeText(item.getText());

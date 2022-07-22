@@ -219,7 +219,8 @@ public class ApplicationController implements Initializable {
      * 
      * It proved necessary to emit a window close event rather than
      * invoking Platform.exit() which is too simplistic for fx-guice
-     * @param e 
+     * 
+     * @param e the {@link javafx.event.ActionEvent}
      */
     @FXML
     private void handleOnQuitAction(ActionEvent e) {
@@ -296,7 +297,7 @@ public class ApplicationController implements Initializable {
     /**
      * Set the button graphic for line button
      * 
-     * @param vertical
+     * @param vertical is vertical line active
      */
     private void setLineButtonGraphic(Boolean vertical) {
         SVGPath path = new SVGPath();
@@ -324,7 +325,7 @@ public class ApplicationController implements Initializable {
      * Set the line type
      * Choice is horizontal or vertical
      * 
-     * @param type
+     * @param type horizontal false vertical true
      */
     public void setLineTypeProperty(Boolean type) {
         lineType.setValue(type);
@@ -334,7 +335,7 @@ public class ApplicationController implements Initializable {
      * Get the line type
      * Choice is horizontal or vertical
      * 
-     * @return
+     * @return horizontal false vertical true
      */
     public BooleanProperty getLineTypeProperty() {
         return lineType;
@@ -343,7 +344,7 @@ public class ApplicationController implements Initializable {
     /**
      * Snapshot button enabled property
      * 
-     * @return 
+     * @return snapshot button active
      */
     public BooleanProperty getSnapshotProperty() {
         return snapshotEnabled;
@@ -352,7 +353,7 @@ public class ApplicationController implements Initializable {
     /**
      * Binary choice from outline button state
      * 
-     * @return 
+     * @return outline selected property binding
      */
     public When getOutlineWhen() {
         return outlineSelected;
@@ -361,7 +362,7 @@ public class ApplicationController implements Initializable {
     /**
      * Dropper button enabled property
      * 
-     * @return 
+     * @return dropper is enabled
      */
     public BooleanProperty getDropperEnabledProperty() {
         return dropperEnabled;
@@ -370,7 +371,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get dropper button disabled
      * 
-     * @return !dropper armed
+     * @return dropper is disabled
      */
     public Boolean getDropperDisabled() {
         return !dropperEnabled.getValue();
@@ -388,7 +389,7 @@ public class ApplicationController implements Initializable {
     /**
      * Progress bar visible property
      * 
-     * @return 
+     * @return progress visible property
      */
     public BooleanProperty getProgressVisibleProperty() {
         return progressBarVisible;
@@ -397,7 +398,7 @@ public class ApplicationController implements Initializable {
     /**
      * Stroke type property
      * 
-     * @return 
+     * @return stroke type property
      */
     public ReadOnlyStringWrapper getStrokeTypeProperty() {
         return strokeTypeProperty;
@@ -406,88 +407,88 @@ public class ApplicationController implements Initializable {
     /**
      * Stroke style property
      * 
-     * @return 
+     * @return stroke style property
      */
     public ReadOnlyStringWrapper getStrokeStyleProperty() {
         return strokeStyleProperty;
     }
 
     /**
-     * Stroke color property
+     * Stroke colour property
      * 
-     * @return 
+     * @return stroke colour property
      */
     public ReadOnlyObjectWrapper<Color> getColorProperty() {
         return colorProperty;
     }
 
     /**
-     * Fill color property
+     * Fill colour property
      * 
-     * @return 
+     * @return fill colour property
      */
     public ReadOnlyObjectWrapper<Color> getFillColorProperty() {
         return fillColorProperty;
     }
 
     /**
-     * Get stroke via combo box
+     * Set stroke via combo box
      * 
-     * @return stroke combo box
+     * @param fontFamily the font family
      */
     public void setFontFamily(String fontFamily) {
         fontcombobox.getSelectionModel().select(fontFamily);
     }
 
     /**
-     * Set style via combo box
+     * Set font size via combo box
      * 
-     * @return style combo box
+     * @param fontSize the font size
      */
     public void setFontSize(int fontSize) {
         fontsizecombobox.getSelectionModel().select(String.valueOf(fontSize));
     }
 
     /**
-     * Font property
+     * Get font family property
      * 
-     * @return 
+     * @return font family property
      */
     public SimpleStringProperty getFontFamilyProperty() {
         return fontFamilyProperty;
     }
 
     /**
-     * Font size property
+     * Get font size property
      * 
-     * @return 
+     * @return font size property
      */
     public SimpleStringProperty getFontSizeProperty() {
         return fontSizeProperty;
     }
 
     /**
-     * Bold button enabled property
+     * Bold button active property
      * 
-     * @return 
+     * @return bold selected
      */
     public BooleanProperty getBoldProperty() {
         return boldProperty;
     }
 
     /**
-     * Italic button enabled property
+     * Italic button active property
      * 
-     * @return 
+     * @return italic selected
      */
     public BooleanProperty getItalicProperty() {
         return italicProperty;
     }
 
     /**
-     * Underline button enabled property
+     * Underline button active property
      * 
-     * @return 
+     * @return underlined selected
      */
     public BooleanProperty getUnderlinedProperty() {
         return underlinedProperty;
@@ -496,7 +497,7 @@ public class ApplicationController implements Initializable {
     /**
      * Progress bar progress property
      * 
-     * @return 
+     * @return progress property
      */
     public DoubleProperty getProgressProperty() {
         return progressbar.progressProperty();
@@ -504,8 +505,6 @@ public class ApplicationController implements Initializable {
 
     /**
      * Set progress bar indeterminate
-     * 
-     * @return 
      */
     public void setProgressIndeterminate() {
         progressbar.setProgress(-1);
@@ -514,7 +513,7 @@ public class ApplicationController implements Initializable {
     /**
      * Set status text to message
      * 
-     * @param message 
+     * @param message the status text
      */
     public void setStatusMessage(String message) {
         statusTransition.stop();
@@ -523,9 +522,9 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Get the theme
+     * Get the theme dark or light
      * 
-     * @return themeProperty
+     * @return is dark mode
      */
     public BooleanProperty getThemeProperty() {        
         return this.themeProperty;
@@ -534,7 +533,7 @@ public class ApplicationController implements Initializable {
     /**
      * Set theme via combo box
      * 
-     * @return stroke combo box
+     * @param themeType the theme
      */
     public void setThemeType(String themeType) {
         comboTheme.getSelectionModel().select(themeType);
@@ -543,7 +542,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get the theme
      * 
-     * @return themeProperty
+     * @return themeProperty the theme
      */
     public SimpleStringProperty getComboThemeProperty() {        
         return this.comboThemeProperty;
@@ -552,34 +551,34 @@ public class ApplicationController implements Initializable {
     /**
      * Get theme fill colour
      * 
-     * @return fillColor
+     * @return fillColor the fill colour
      */
     public String getThemeFillColor() {
         return themeFillColor.getValue();
     }
 
     /**
-     * Get them border colour
+     * Get theme background colour
      * 
-     * @return borderColor
+     * @return background background colour
      */
     public String getThemeBackgroundColor() {
         return themeBackgroundColor.getValue();
     }
 
     /**
-     * Get theme fill colour
+     * Get theme accent colour
      * 
-     * @return fillColor
+     * @return accent accent colour
      */
     public String getThemeAccentColor() {
         return themeAccentColor.getValue();
     }
 
     /**
-     * Get stroke via combo box
+     * Set stroke via combo box
      * 
-     * @return stroke combo box
+     * @param strokeId the stroke ID
      */
     public void setStrokeCombo(int strokeId) {
         strokecombobox.getSelectionModel().select(strokeId);
@@ -588,16 +587,16 @@ public class ApplicationController implements Initializable {
     /**
      * Set style via combo box
      * 
-     * @return style combo box
+     * @param styleId the style
      */
     public void setStyleCombo(String styleId) {
         stylecombobox.getSelectionModel().select(styleId);
     }
 
     /**
-     * Set canvas colour
+     * Set the colour
      * 
-     * @param color 
+     * @param color colour
      */
     public void setColor(Color color) {
         colorpicker.setValue(color);
@@ -606,9 +605,9 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Set canvas fill colour
+     * Set the fill colour
      * 
-     * @param fillcolor 
+     * @param fillcolor fill colour
      */
     public void setFillColor(Color fillcolor) {
         fillcolorpicker.setValue(fillcolor);
@@ -626,12 +625,12 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Cell factory for alternate colour stroke combo items
+     * Cell factory for theme colour stroke combo items
      * 
-     * @param alternate
-     * @return
+     * @param theme is dark mode
+     * @return the list cell {@link javafx.util.Callback}
      */
-    private Callback<ListView<String>, ListCell<String>> getCellFactory(Boolean alternate) {
+    private Callback<ListView<String>, ListCell<String>> getCellFactory(Boolean theme) {
         return (ListView<String> p) -> new ListCell<String>() {
 
             private final ImageView cellImage;
@@ -648,7 +647,7 @@ public class ApplicationController implements Initializable {
                 if (item == null || empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ImageView(new Image("images/" + item + (alternate ? "-alt" : "" ) + ".png")));
+                    setGraphic(new ImageView(new Image("images/" + item + (theme ? "-alt" : "" ) + ".png")));
                 }
             }
         };
@@ -657,7 +656,7 @@ public class ApplicationController implements Initializable {
     /**
      * Set the theme
      * 
-     * @param isDarkMode
+     * @param isDarkMode is dark mode
      */
     public void setAppStyles(Boolean isDarkMode) {
         // set theme colours
@@ -690,8 +689,8 @@ public class ApplicationController implements Initializable {
     /**
      * Initialise the controller
      * 
-     * @param url
-     * @param rb
+     * @param url the url
+     * @param rb resource
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -989,7 +988,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get one row constraints row
      * 
-     * @return
+     * @return the row constraint
      */
     private RowConstraints getRow() {
         RowConstraints con = new RowConstraints();
@@ -1000,7 +999,7 @@ public class ApplicationController implements Initializable {
     /**
      * Define the palette menu info icon
      * 
-     * @return
+     * @return the {@link javafx.scene.Group}
      */
     private Group getInfoGlyph() {
         SVGPath path_a = new SVGPath();
@@ -1019,7 +1018,7 @@ public class ApplicationController implements Initializable {
     /**
      * Define the theme selector icon
      * 
-     * @return 
+     * @return the {@link javafx.scene.shape.SVGPath}
      */
     private SVGPath getThemeGlyph() {
         SVGPath path_a = new SVGPath();
@@ -1031,8 +1030,8 @@ public class ApplicationController implements Initializable {
     /**
      * Provide a web colour for picker background CSS
      * 
-     * @param c
-     * @return
+     * @param c the {@link javafx.scene.paint.Color}
+     * @return the web colour
      */
     private String backgroundStyle(Color c) {
         return "-fx-background-color: " + toRGBCode(c) + ";";
@@ -1041,10 +1040,10 @@ public class ApplicationController implements Initializable {
     /**
      * Convert {@link javafx.scene.paint.Color} colour to web colour
      * 
-     * @see <a href="https://stackoverflow.com/a/18803814">https://stackoverflow.com/a/18803814</a>
+     * @see <a href="https://stackoverflow.com/a/18803814">How to get hex web String from Color?</a>
      * 
-     * @param color
-     * @return  web colour
+     * @param color the {@link javafx.scene.paint.Color}
+     * @return web colour
      */
     public String toRGBCode(Color color) {
         return String.format( "#%02X%02X%02X",

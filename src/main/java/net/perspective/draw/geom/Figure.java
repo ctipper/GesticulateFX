@@ -66,7 +66,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Creates a new instance of <code>Figure</code>
      * 
-     * @param type the FigureType
+     * @param type the {@link net.perspective.draw.geom.FigureType}
      */
     @ConstructorProperties({"type"})
     public Figure(FigureType type) {
@@ -139,7 +139,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Set a list of points
      * 
-     * @param points
+     * @param points the list of {@link net.perspective.draw.util.CanvasPoint}
      */
     public void setPoints(List<CanvasPoint> points) {
         this.points = points;
@@ -148,19 +148,10 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Initialise points List
      * 
-     * @param drawtype
+     * @param drawtype the {@link net.perspective.draw.enums.DrawingType}
      */
     public void setPoints(DrawingType drawtype) {
         this.points = pointfactory.createPoints(drawtype, start.x, start.y, end.x, end.y);
-    }
-
-    /**
-     * Returns points list
-     * 
-     * @return a List of points
-     */
-    public List<CanvasPoint> getPoints() {
-        return this.points;
     }
 
     /**
@@ -189,10 +180,19 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
+     * Returns points list
+     * 
+     * @return the list of {@link net.perspective.draw.util.CanvasPoint}
+     */
+    public List<CanvasPoint> getPoints() {
+        return this.points;
+    }
+
+    /**
      * Add a point to the List of points
      * 
-     * @param x
-     * @param y 
+     * @param x x coordinate
+     * @param y y coordinate
      */
     public void addPoint(double x, double y) {
         this.points.add(new CanvasPoint(x, y));
@@ -210,7 +210,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Returns the path describing the figure
      * 
-     * @return path
+     * @return path the {@link java.awt.geom.Path2D.Double}
      */
     @Transient
     public Path2D.Double getPath() {
@@ -220,7 +220,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Sets the figure type
      * 
-     * @param type
+     * @param type the {@link net.perspective.draw.geom.FigureType}
      */
     public void setType(FigureType type) {
         this.type = type;
@@ -229,7 +229,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Returns the figure type
      * 
-     * @return type
+     * @return the {@link net.perspective.draw.geom.FigureType}
      */
     public FigureType getType() {
         return this.type;
@@ -238,7 +238,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Update the figure properties, such as color, stroke etc.
      * 
-     * @param drawarea
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
      */
     @Override
     public void updateProperties(DrawingArea drawarea) {
@@ -322,6 +322,8 @@ public class Figure implements DrawItem, Serializable {
 
     /**
      * rotate Figure about centroid with optional 90 deg correction
+     * 
+     * @return the {@link java.awt.geom.AffineTransform}
      */
     protected java.awt.geom.AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
@@ -427,7 +429,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Provide a Path for FX canvas
      * 
-     * @return an FX Path
+     * @return the {@link javafx.scene.Node}
      */
     @Override
     public Node draw() {
@@ -514,9 +516,10 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
-     * Render the figure anchors to indicate selection
+     * Render the figure's anchors to indicate selection
      * 
-     * @return an FX Shape node
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
+     * @return the {@link javafx.scene.Node}
      */
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
@@ -576,7 +579,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Draw to a Java2d canvas for export
      * 
-     * @param g2 Java2d graphics context
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      */
     @Override
     public void draw(Graphics2D g2) {
@@ -656,7 +659,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Set stroke colour
      * 
-     * @param color
+     * @param color the {@link javafx.scene.paint.Color}
      */
     public void setColor(Color color) {
         this.color = color;
@@ -665,7 +668,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Return stroke colour
      * 
-     * @return color
+     * @return colour the {@link javafx.scene.paint.Color}
      */
     @Transient
     public Color getColor() {
@@ -685,7 +688,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Set the fill colour
      * 
-     * @param fillcolor
+     * @param fillcolor the {@link javafx.scene.paint.Color}
      */
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
@@ -694,7 +697,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Return the fill colour
      * 
-     * @return
+     * @return the {@link javafx.scene.paint.Color}
      */
     @Transient
     public Color getFillColor() {
@@ -750,7 +753,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Sets the rotation angle
      * 
-     * @param a  The angle in radians
+     * @param angle the angle in radians
      */
     @Override
     public void setAngle(double angle) {
@@ -760,7 +763,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Return the rotation angle 
      * 
-     * @return angle
+     * @return angle the angle in radians
      */
     @Override
     public double getAngle() {

@@ -124,7 +124,7 @@ public class Picture implements DrawItem, Serializable {
 
     /**
      * 
-     * @param start
+     * @param start the start point
      * @deprecated
      */
     @Deprecated
@@ -159,7 +159,7 @@ public class Picture implements DrawItem, Serializable {
 
     /**
      * 
-     * @param end
+     * @param end the end point
      * @deprecated
      */
     @Deprecated
@@ -181,7 +181,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Set the relative scale of the picture
      * 
-     * @param scale 
+     * @param scale the scale factor
      */
     public void setScale(double scale) {
         this.scale = scale;
@@ -190,7 +190,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Return the relative scale of the picture
      * 
-     * @return the scale
+     * @return the scale factor
      */
     public double getScale() {
         return scale;
@@ -199,7 +199,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Update the public properties of the picture 
      * 
-     * @param drawarea  the {@link net.perspective.draw.DrawingCanvas}
+     * @param drawarea the {@link net.perspective.draw.DrawingArea}
      */
     @Override
     public void updateProperties(DrawingArea drawarea) {
@@ -339,9 +339,9 @@ public class Picture implements DrawItem, Serializable {
     }
 
     /**
-     * Provide ImageVew for FX canvas
+     * Provide an ImageView for FX canvas
      * 
-     * @return an FX Path
+     * @return the {@link javafx.scene.Node}
      */
     @Override
     public Node draw() {
@@ -362,7 +362,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Render the picture anchors to indicate selection
      * 
-     * @return an FX Shape node
+     * @return the {@link javafx.scene.Node}
      */
     @Override
     public Node drawAnchors(DrawingArea drawarea) {
@@ -388,9 +388,9 @@ public class Picture implements DrawItem, Serializable {
     }
 
     /**
-     * Draw to a Java2d canvas for export
+     * Render the Picture to the g2d canvas
      * 
-     * @param g2 Java2d graphics context
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      */
     @Override
     public void draw(Graphics2D g2) {
@@ -429,8 +429,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Render a shadowed version of the picture
      * 
-     * @param g2  the graphics context
-     * @param drawarea  the {@link net.perspective.draw.DrawingArea}
+     * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      */
     private void sketch(Graphics2D g2) {
         AffineTransform defaultTransform;
@@ -488,7 +487,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Sets the rotation angle
      * 
-     * @param angle  The angle in radians
+     * @param angle the angle in radians
      */
     @Override
     public void setAngle(double angle) {
@@ -498,7 +497,7 @@ public class Picture implements DrawItem, Serializable {
     /**
      * Return the rotation angle 
      * 
-     * @return angle
+     * @return angle the angle in radians
      */
     @Override
     public double getAngle() {
@@ -572,6 +571,8 @@ public class Picture implements DrawItem, Serializable {
      * Note that the points may not be cyclical.
      * 
      * Refer to Figure.java and FigurePointFactory.java for details
+     * 
+     * @return the list of vertices
      */
     public List<CanvasPoint[]> getVertices() {
         double sx, sy, ex, ey;
@@ -617,7 +618,7 @@ public class Picture implements DrawItem, Serializable {
 
     /**
      * 
-     * @param start
+     * @param start the start point
      * @deprecated
      */
     @Deprecated
@@ -627,7 +628,7 @@ public class Picture implements DrawItem, Serializable {
 
     /**
      * 
-     * @return
+     * @return the start point
      * @deprecated
      */
     @Deprecated
@@ -638,7 +639,7 @@ public class Picture implements DrawItem, Serializable {
 
     /**
      * 
-     * @param end
+     * @param end the end point
      * @deprecated
      */
     @Deprecated
@@ -648,7 +649,7 @@ public class Picture implements DrawItem, Serializable {
 
     /**
      * 
-     * @return
+     * @return the end point
      * @deprecated
      */
     @Deprecated
