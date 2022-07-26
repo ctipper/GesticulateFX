@@ -412,6 +412,22 @@
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Quit" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <HBox focusTraversable="false" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
                 <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Button id="buttbackground" fx:id="backgroundbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="7">
+                    <graphic>
+                        <Group>
+                            <SVGPath content="M5.143747498204 14L9.71873749102 14C10.890381269668 14 11.6714771221 13.776829756448 12.285195291868 13.260748568234 12.898913461635999 12.744667380020001 13.289461387852 11.879882686256 13.289461387852 11.07089055338 13.289461387852 10.066624457396 12.745483919194 9.271580464742001 11.601736420990001 8.602069734086001 12.606002516974 7.960455283874 12.99655044319 7.37463339455 12.99655044319 6.509848700786001 12.99655044319 5.8124416896860005 12.647846937639999 5.07319025792 12.075973188537999 4.571057209928 11.476203158992 4.054976021714001 10.76484800767 3.831805778162 9.676893070354 3.831805778162L5.143747498204 3.831805778162M7.235968531504 5.575323305912001L9.50951538769 5.575323305912001C10.471937063008 5.575323305912001 10.988018251222 5.979819372350001 10.988018251222 6.733018944338 10.988018251222 7.472270376104 10.471937063008 7.876766442542 9.50951538769 7.876766442542L7.235968531504 7.876766442542M7.235968531504 9.620283970292L9.732685631242 9.620283970292C10.750899867448 9.620283970292 11.280929195884 10.080572597618 11.280929195884 10.945357291382 11.280929195884 11.796193844924 10.750899867448 12.25648247225 9.732685631242 12.25648247225L7.235968531504 12.25648247225" fillRule="EVEN_ODD" styleClass="svgFill"/>
+                            <SVGPath content="M9.035095 0.475739C4.358215 0.475739 0.566864 4.26709 0.566864 8.94397 0.566864 13.62085 4.358215 17.412201 9.035095 17.412201 13.711975 17.412201 17.503326 13.62085 17.503326 8.94397 17.503326 4.26709 13.711975 0.475739 9.035095 0.475739Z" styleClass="svgPath" fill="TRANSPARENT" />
+                        </Group>
+                    </graphic>
+                </Button>
+                <!--
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleChangeBackgroundAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Background..." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                -->
+                <ColorPicker id="pickbackgroundcolor" fx:id="backgroundcolorpicker" focusTraversable="false" prefWidth="120.0" prefHeight="20.0" styleClass="button" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                    <tooltip>
+                        <Tooltip text="Background..." />
+                    </tooltip>
+                </ColorPicker>
                 <!--
                 <CheckBox fx:id="checkTheme" focusTraversable="false" mnemonicParsing="false" text="" onAction="#handleModeChange" prefHeight="20.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="7" />
                 <ToggleButton fx:id="toggleTheme" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleModeChange" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Dark Theme" GridPane.columnIndex="1" GridPane.rowIndex="7" />
@@ -429,9 +445,6 @@
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
-                <!--
-                <RowConstraints prefHeight="35.0" />
-                -->
             </rowConstraints>
         </GridPane>
     </children>

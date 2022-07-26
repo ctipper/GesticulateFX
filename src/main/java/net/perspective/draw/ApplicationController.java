@@ -88,7 +88,7 @@ public class ApplicationController implements Initializable {
     private SimpleStringProperty comboFontProperty, comboFontSizeProperty;
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
-    private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor;
+    private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor, canvasBackgroundColor;
     private BooleanProperty lineType;
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
@@ -249,7 +249,7 @@ public class ApplicationController implements Initializable {
         share.exportPNG();
         menubutton.fire();
     }
-
+    
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
         snapshotEnabled.setValue(true);
@@ -576,6 +576,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Get canvas background colour
+     * 
+     * @return canvas background colour
+     */
+    public String getCanvasBackgroundColor() {
+        return canvasBackgroundColor.getValue();
+    }
+
+    /**
      * Set stroke via combo box
      * 
      * @param strokeId the stroke ID
@@ -670,6 +679,8 @@ public class ApplicationController implements Initializable {
             themeAccentColor.setValue("black");
         }
         // alter draw area colour settings
+        canvasBackgroundColor.setValue(themeBackgroundColor.getValue());
+        backgroundcolorpicker.setValue(Color.web(themeBackgroundColor.getValue()));
         drawarea.setDarkModeEnabled(isDarkMode);
         drawarea.setTheme();
         drawarea.redrawGrid();
@@ -698,6 +709,7 @@ public class ApplicationController implements Initializable {
         this.themeFillColor = new SimpleStringProperty("lightgray");
         this.themeBackgroundColor = new SimpleStringProperty("white");
         this.themeAccentColor = new SimpleStringProperty("black");
+        this.canvasBackgroundColor = new SimpleStringProperty("white");;
         this.prepareDarkModeOptions();
         this.themeProperty = new SimpleBooleanProperty();
         this.themeProperty.setValue(false);
@@ -805,6 +817,17 @@ public class ApplicationController implements Initializable {
         });
         this.fillColorProperty = new ReadOnlyObjectWrapper<>();
         this.fillColorProperty.bindBidirectional(pickerFillColorProperty);
+
+        // background colour picker
+        backgroundcolorpicker.setValue(Color.web(themeBackgroundColor.getValue()));
+        backgroundcolorpicker.setOnAction((ActionEvent event) -> {
+            Color c = backgroundcolorpicker.getValue();
+            if (c != null) {
+                canvasBackgroundColor.setValue(toRGBCode(c));
+            }
+            drawarea.setTheme();
+            drawarea.redrawGrid();
+        });
 
         // setup font style combo boxes
         fontcombobox.getItems().clear();
@@ -929,9 +952,9 @@ public class ApplicationController implements Initializable {
         }
         comboTheme.getSelectionModel().select("Light");
         appmenu.getRowConstraints().add(getRow());
-        appmenu.addRow(7, palette, comboTheme);
-        GridPane.setConstraints(palette, 0, 7, 1, 1, HPos.CENTER, VPos.CENTER);
-        GridPane.setConstraints(comboTheme, 1, 7, 1, 1, HPos.LEFT, VPos.BASELINE);
+        appmenu.addRow(8, palette, comboTheme);
+        GridPane.setConstraints(palette, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
+        GridPane.setConstraints(comboTheme, 1, 8, 1, 1, HPos.LEFT, VPos.BASELINE);
     }
 
     /**
@@ -1052,6 +1075,20 @@ public class ApplicationController implements Initializable {
             (int)( color.getBlue() * 255 ) );
     }
 
+    /**
+     * Parse colour as HEX string
+     * 
+     * @param colorStr e.g. "#FFFFFF"
+     * @return the {@link java.awt.Color}
+     */
+    public Color fromRGBCode(String colorStr) {
+    return new Color(
+            Double.valueOf(colorStr.substring(1, 3)) / 255,
+            Double.valueOf(colorStr.substring(3, 5)) / 255,
+            Double.valueOf(colorStr.substring(5, 7)) / 255,
+            1d);
+    }
+
     @FXML
     private GridPane appmenu;
     @FXML
@@ -1066,6 +1103,8 @@ public class ApplicationController implements Initializable {
     private ColorPicker colorpicker;
     @FXML
     private ColorPicker fillcolorpicker;
+    @FXML
+    private ColorPicker backgroundcolorpicker;
     @FXML
     private Button menubutton;
     @FXML

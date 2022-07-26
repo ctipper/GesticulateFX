@@ -119,7 +119,7 @@
     -fx-text-fill: #c0c481;
 }
 .button:pressed, .button:default:hover:pressed {
-  -fx-text-fill: #c0c481;
+    -fx-text-fill: #c0c481;
 }
 .toggle-button {
     -fx-text-fill: #c0c481;
@@ -165,6 +165,18 @@
 {
     -fx-text-fill: #c0c481;
 }
+.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
+    -fx-background-color: #1d1d1d;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
+.color-picker.button {
+    -fx-background-color: transparent, #212121, transparent, #212121;
+    -fx-background-radius: 0, 0, 0, 0;
+    -fx-padding: 0.166667em; /* 2 */
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
 .color-picker, .color-picker:focused, .color-picker:selected {
     -fx-border-width: 0;
     -fx-border-color: transparent;
@@ -172,11 +184,6 @@
 }
 .color-picker > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
-}
-.combo-box-popup .list-view, .color-palette, .custom-color-dialog {
-    -fx-background-color: #1d1d1d;
-    -fx-background-insets: 0, 1;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
 }
 .custom-color-dialog .controls-pane .customcolor-controls-background {
     -fx-background-color: #1d1d1d;

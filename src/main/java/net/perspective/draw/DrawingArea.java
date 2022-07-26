@@ -213,7 +213,7 @@ public class DrawingArea {
      * Set the canvas colour
      */
     public void setTheme(){
-        canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
+        canvas.setFill(Color.web(controller.getCanvasBackgroundColor()));
         view.moveSelection(view.getSelected());
     }
 

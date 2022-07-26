@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 
 /**
  *
@@ -18,6 +19,8 @@ import javax.inject.Inject;
  */
 
 public class G2 {
+    
+    @Inject private ApplicationController application;
 
     /** Creates a new instance of <code>G2</code> */
     @Inject
@@ -41,24 +44,29 @@ public class G2 {
          * The height of a minor grid cell.
          */
         double height = 10;
-        if (isDarkMode) {
+        Color c = Color.web(application.getCanvasBackgroundColor());
+        int r = (int) (c.getRed() * 255);
+        int g = (int) (c.getGreen() * 255);
+        int b = (int) (c.getBlue() * 255);
+        int rgb = (r << 16) + (g << 8) + b;
+        if (rgb < 0x808080) {
             /**
              * The colour for minor grid cells.
              */
-            minorColor = Color.web("#414141");
+            minorColor = new Color((r + 0x07) / 255.0, (g + 0x07) / 255.0, (b + 0x07) / 255.0, 1d);
             /**
              * The colour for major grid cells.
              */
-            majorColor = Color.web("#484848");
+            majorColor = new Color((r + 0x0e) / 255.0, (g + 0x0e) / 255.0, (b + 0x0e) / 255.0, 1d);
         } else {
             /**
              * The colour for minor grid cells.
              */
-            minorColor = Color.web("#f3f3f3");
+            minorColor = new Color(((r >= 0x0c) ? r - 0x0c : 0) / 255.0, ((g >= 0x0c) ? g - 0x0c : 0) / 255.0, ((b >= 0x0c) ? b - 0x0c : 0) / 255.0, 1d);
             /**
              * The colour for major grid cells.
              */
-            majorColor = Color.web("#d2d2d2");
+            majorColor = new Color(((r >= 0x2d) ? r - 0x2d : 0) / 255.0, ((g >= 0x2d) ? g - 0x2d : 0) / 255.0, ((b >= 0x2d) ? b - 0x2d : 0) / 255.0, 1d);
         }
         /**
          * The spacing factor for a major grid cell.
