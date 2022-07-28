@@ -63,6 +63,7 @@ import net.perspective.draw.event.keyboard.KeyListener;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.G2;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
@@ -357,6 +358,7 @@ public class Gesticulate extends GuiceApplication {
             bind(GroupedItemBehaviour.class);
             bind(FigureFactory.class).to(FigureFactoryImpl.class);
             bind(Picture.class);
+            bind(StreetMap.class);
             bind(ShareUtils.class);
             bind(ReadInFunnel.class);
             bind(WriteOutStreamer.class);

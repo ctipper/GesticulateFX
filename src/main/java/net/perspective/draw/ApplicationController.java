@@ -23,6 +23,7 @@
  */
 package net.perspective.draw;
 
+import com.google.inject.Injector;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
@@ -82,6 +83,7 @@ import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
+import net.perspective.draw.geom.StreetMap;
 
 /**
  * 
@@ -91,6 +93,7 @@ import net.perspective.draw.enums.KeyHandlerType;
 @Singleton
 public class ApplicationController implements Initializable {
 
+    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private Gesticulate application;
@@ -281,6 +284,18 @@ public class ApplicationController implements Initializable {
         menubutton.fire();
     }
     
+    @FXML
+    private void handleMapInsertAction(ActionEvent e) {
+        StreetMap streetmap = injector.getInstance(StreetMap.class);
+        streetmap.setStart(20.0, 20.0);
+        streetmap.setEnd(900, 675);
+        streetmap.setLatitude(52.0);
+        streetmap.setLongitude(0);
+        view.setNewItem(streetmap);
+        view.resetNewItem();
+        menubutton.fire();
+    }
+
     @FXML
     private void handlePngSnapshotAction(ActionEvent e) {
         snapshotEnabled.setValue(true);
@@ -1023,17 +1038,17 @@ public class ApplicationController implements Initializable {
         }
         comboTheme.getSelectionModel().select("Light");
         appmenu.getRowConstraints().add(getRow());
-        appmenu.addRow(8, palette, comboTheme);
-        GridPane.setConstraints(palette, 0, 8, 1, 1, HPos.CENTER, VPos.CENTER);
-        GridPane.setConstraints(comboTheme, 1, 8, 1, 1, HPos.LEFT, VPos.BASELINE);
+        appmenu.addRow(9, palette, comboTheme);
+        GridPane.setConstraints(palette, 0, 9, 1, 1, HPos.CENTER, VPos.CENTER);
+        GridPane.setConstraints(comboTheme, 1, 9, 1, 1, HPos.LEFT, VPos.BASELINE);
     }
 
     /**
      * Add the palette box to slider menu and configure
      */
     private void prepareAboutBoxMenu() {
-        int lastrow = 9;    // first empty row
-        int hboxes = 11;    // empty row count
+        int lastrow = 10;    // first empty row
+        int hboxes = 10;    // empty row count
         
         for (int i=0; i<hboxes; i++) {
             appmenu.getRowConstraints().add(getRow());
