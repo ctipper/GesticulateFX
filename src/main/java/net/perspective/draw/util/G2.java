@@ -53,11 +53,11 @@ public class G2 {
             /**
              * The colour for minor grid cells.
              */
-            minorColor = new Color((r + 0x07) / 255.0, (g + 0x07) / 255.0, (b + 0x07) / 255.0, 1d);
+            minorColor = new Color(((r <= 0xf8) ? r + 0x07 : 0xff) / 255.0, ((g <= 0xf8) ? g + 0x07 : 0xff) / 255.0, ((b <= 0xf8) ? b + 0x07 : 0xff) / 255.0, 1d);
             /**
              * The colour for major grid cells.
              */
-            majorColor = new Color((r + 0x0e) / 255.0, (g + 0x0e) / 255.0, (b + 0x0e) / 255.0, 1d);
+            majorColor = new Color(((r <= 0xf1) ? r + 0x0e : 0xff) / 255.0, ((g <= 0xf1) ? g + 0x0e : 0xff) / 255.0, ((b <= 0xf1) ? b + 0x0e : 0xff) / 255.0, 1d);
         } else {
             /**
              * The colour for minor grid cells.

@@ -576,12 +576,31 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Set canvas background colour
+     * 
+     * @param c canvas background colour
+     */
+    public void setCanvasBackgroundColor(String c) {
+        canvasBackgroundColor.setValue(c);
+    }
+
+    /**
      * Get canvas background colour
      * 
      * @return canvas background colour
      */
     public String getCanvasBackgroundColor() {
         return canvasBackgroundColor.getValue();
+    }
+
+
+    /**
+     * Set colour of background colour picker
+     * 
+     * @param c web colour
+     */
+    public void setBackgroundPickerColor(String c) {
+        backgroundcolorpicker.setValue(Color.web(c));
     }
 
     /**
@@ -679,8 +698,8 @@ public class ApplicationController implements Initializable {
             themeAccentColor.setValue("black");
         }
         // alter draw area colour settings
-        canvasBackgroundColor.setValue(themeBackgroundColor.getValue());
-        backgroundcolorpicker.setValue(Color.web(themeBackgroundColor.getValue()));
+        setCanvasBackgroundColor(themeBackgroundColor.getValue());
+        setBackgroundPickerColor(themeBackgroundColor.getValue());
         drawarea.setDarkModeEnabled(isDarkMode);
         drawarea.setTheme();
         drawarea.redrawGrid();

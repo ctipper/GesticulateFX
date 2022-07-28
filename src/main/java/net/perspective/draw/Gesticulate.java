@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Consumer;
 import javafx.application.Platform;
@@ -136,6 +137,17 @@ public class Gesticulate extends GuiceApplication {
             controller.setThemeType("Light");
         }
 
+        Optional<String> canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"));
+        if (canvasColor.isEmpty()) {
+            controller.setCanvasBackgroundColor(controller.getThemeBackgroundColor());
+            controller.setBackgroundPickerColor(controller.getThemeBackgroundColor());
+            drawarea.setTheme();
+        } else {
+            controller.setCanvasBackgroundColor(canvasColor.get());
+            controller.setBackgroundPickerColor(canvasColor.get());
+            drawarea.setTheme();
+        }
+
         // Install the canvas
         pane.setContent(drawarea.getScene());
         this.setOnResize(pane);
@@ -227,6 +239,7 @@ public class Gesticulate extends GuiceApplication {
     public void stop() {
         userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
         userPrefs.setProperty("systemTheme", controller.getComboThemeProperty().getValue());
+        userPrefs.setProperty("canvasColor", controller.getCanvasBackgroundColor());
         setUserPreferences(userPrefs);
         logger.trace("set user preferences");
         Platform.exit();
