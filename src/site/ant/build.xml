@@ -228,6 +228,8 @@
          <arg value="dmg"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
+         <arg value="--resource-dir"/>
+         <arg value="src/site/deploy/macosx"/>
          <arg value="--dest"/>
          <arg value="target/jfx"/>
          <arg value="--app-image"/>
