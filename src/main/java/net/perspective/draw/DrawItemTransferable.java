@@ -86,7 +86,7 @@ public class DrawItemTransferable implements Transferable {
             DrawItem item = (DrawItem) in.readObject();
             return item;
         } catch (IOException e) {
-            logger.warn("I/O Exception");
+            logger.warn("I/O Exception " + e.getMessage());
         } catch (ClassNotFoundException e) {
             logger.warn("ClassNotFound");
         } finally {

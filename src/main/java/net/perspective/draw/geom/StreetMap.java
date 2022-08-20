@@ -307,7 +307,7 @@ public class StreetMap extends Picture {
         return bp;
     }
 
-    private StackPane bp = null;
+    private transient StackPane bp = null;
     private StackPane getContainer() {
         if (bp == null) {
             final Group copyright = createCopyright();
