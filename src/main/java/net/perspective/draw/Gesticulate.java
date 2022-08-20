@@ -137,16 +137,12 @@ public class Gesticulate extends GuiceApplication {
             controller.setThemeType("Light");
         }
 
-        Optional<String> canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"));
-        if (canvasColor.isEmpty()) {
-            controller.setCanvasBackgroundColor(controller.getThemeBackgroundColor());
-            controller.setBackgroundPickerColor(controller.getThemeBackgroundColor());
-            drawarea.setTheme();
-        } else {
-            controller.setCanvasBackgroundColor(canvasColor.get());
-            controller.setBackgroundPickerColor(canvasColor.get());
-            drawarea.setTheme();
-        }
+        // configure canvas background
+        var canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"))
+                .orElseGet(controller::getThemeBackgroundColor);
+        controller.setCanvasBackgroundColor(canvasColor);
+        controller.setBackgroundPickerColor(canvasColor);
+        drawarea.setTheme();
 
         // Install the canvas
         pane.setContent(drawarea.getScene());
