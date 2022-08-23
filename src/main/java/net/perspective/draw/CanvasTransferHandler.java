@@ -142,6 +142,7 @@ public class CanvasTransferHandler {
             try {
                 BeanUtils.copyProperties(item, drawing);
                 drawing = item;
+                ((StreetMap) drawing).filterHandlers();
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }

@@ -413,7 +413,7 @@ public class StreetMap extends Picture {
     private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        this.mv = new com.gluonhq.maps.MapView();
+        mv = new MapView();
     }
 
     private void writeObject(ObjectOutputStream out)
