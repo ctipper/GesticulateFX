@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -144,7 +145,7 @@ public class StreetMap extends Picture {
     public void adjustZoom(double zoom) {
         mv.setZoom(zoom);
     }
-    
+
     /**
      * Update the public properties of the streetmap 
      * 
@@ -236,7 +237,7 @@ public class StreetMap extends Picture {
         setLatitude(mp.getLatitude());
         setLongitude(mp.getLongitude());
         setZoom((int) Math.round(mv.getZoom()));
-        logger.debug("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
+        logger.trace("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
     
     /**
@@ -259,7 +260,9 @@ public class StreetMap extends Picture {
     }
 
     public void getSnapshot(Callback<SnapshotResult, Void> callback, SnapshotParameters params, WritableImage image) {
-        mv.snapshot(callback, params, null);
+        Platform.runLater(() -> {
+            mv.snapshot(callback, params, null);
+        });
     }
 
     /**

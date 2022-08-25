@@ -46,10 +46,11 @@ import org.slf4j.LoggerFactory;
 public class CanvasTransferHandler {
 
     @Inject private Injector injector;
+    @Inject private CanvasView view;
+    @Inject private MapController mapping;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
-    @Inject private CanvasView view;
     private double shift;
 
     public static int COPY = 1;
@@ -143,6 +144,7 @@ public class CanvasTransferHandler {
                 BeanUtils.copyProperties(item, drawing);
                 drawing = item;
                 ((StreetMap) drawing).filterHandlers();
+                drawing = mapping.copyMap(((StreetMap) drawing));
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }

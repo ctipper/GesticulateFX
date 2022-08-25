@@ -14,6 +14,7 @@ import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -94,27 +95,27 @@ public class MapItemBehaviour implements ItemBehaviours {
                 st.translate(diffsx, diffsy);
                 item.setStart(st.x, st.y);
                 item.setEnd(en.x - st.x, en.y - st.y);
-//                canvas.getMapController().resizeMap((StreetMap) item, context.err_ix(-diffsx), context.err_iy(-diffsy));
+                mapper.resizeMap((StreetMap) item);
                 break;
             case BL:
                 st.translate(diffsx, 0);
                 en.translate(0, diffey);
                 item.setStart(st.x, st.y);
                 item.setEnd(en.x - st.x, en.y - st.y);
-//                canvas.getMapController().resizeMap((StreetMap) item, context.err_ix(-diffsx), context.err_iy(diffey));
+                mapper.resizeMap((StreetMap) item);
                 break;
             case BR:
                 en.translate(diffex, diffey);
                 item.setStart(st.x, st.y);
                 item.setEnd(en.x - st.x, en.y - st.y);
-//                canvas.getMapController().resizeMap((StreetMap) item, context.err_ix(diffex), context.err_iy(diffey));
+                mapper.resizeMap((StreetMap) item);
                 break;
             case TR:
                 st.translate(0, diffsy);
                 en.translate(diffex, 0);
                 item.setStart(st.x, st.y);
                 item.setEnd(en.x - st.x, en.y - st.y);
-//                canvas.getMapController().resizeMap((StreetMap) item, context.err_ix(diffex), context.err_iy(-diffsy));
+                mapper.resizeMap((StreetMap) item);
                 break;
             case SHAPE:
                 if (listener.isSnapEnabled()) {

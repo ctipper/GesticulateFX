@@ -9,6 +9,7 @@ package net.perspective.draw;
 import com.gluonhq.maps.MapPoint;
 import com.google.inject.Injector;
 import java.nio.IntBuffer;
+import java.time.Instant;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
@@ -109,15 +110,24 @@ public class MapController {
         if (mapindex != -1) {
             DrawItem item = view.getDrawings().get(mapindex);
             if (item instanceof StreetMap) {
-                ((StreetMap) item).setLocation();
                 ((StreetMap) item).filterHandlers();
-                Image image = createCompatibleImage((StreetMap) item, (int) ((StreetMap) item).getEnd().getX(), (int) ((StreetMap) item).getEnd().getY());
-                view.getImageItem(mapindex).setImage(image);
+                resizeMap((StreetMap) item);
             }
             view.setMapping(false);
             mapindex = -1;
             removeSlider();
         }
+    }
+
+    /**
+     * Finalise map background image
+     * 
+     * @param item an {@link net.perspective.draw.geom.StreetMap}
+     */
+    public void resizeMap(StreetMap item) {
+        item.setLocation();
+        Image image = createCompatibleImage(item, (int) item.getEnd().getX(), (int) item.getEnd().getY());
+        view.replaceImage(item.getImageIndex(), image);
     }
 
     /**
@@ -290,6 +300,20 @@ public class MapController {
     }
 
     /**
+     * Initialise StreetMap image for use by copy procedure
+     * 
+     * @param item a {@link net.perspective.draw.geom.StreetMap}
+     * @return an {@link net.perspective.draw.geom.StreetMap}
+     */
+    public StreetMap copyMap(StreetMap item) {
+        view.getImageItems().add(new ImageItem(Instant.now()));
+        item.setImageIndex(view.getImageItems().size() - 1);
+        Image image = createCompatibleImage(item, (int) item.getEnd().getX(), (int) item.getEnd().getY());
+        view.getImageItem(item.getImageIndex()).setImage(image);
+        return item;
+    }
+
+    /**
      * Build a greyScale image for backing store
      * 
      * @param width
@@ -316,8 +340,11 @@ public class MapController {
         Callback<SnapshotResult, Void> callback = (SnapshotResult capture) -> {
             PixelWriter pixelWriter = image.getPixelWriter();
             PixelReader pixelReader = capture.getImage().getPixelReader();
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
+            // mixing int and double is treacherous
+            int w = Math.min(width, (int) capture.getImage().getWidth());
+            int h = Math.min(height, (int) capture.getImage().getHeight());
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
                     Color color = pixelReader.getColor(x, y);
                     pixelWriter.setColor(x, y, color);
                 }
