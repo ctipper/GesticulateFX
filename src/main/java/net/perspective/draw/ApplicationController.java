@@ -549,6 +549,15 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Adjust theme fill colour by providing an offset
+     * 
+     * @return fillColor the fill colour
+     */
+    public void adjustThemeFillColor(String c) {
+        themeFillColor.setValue(getThemeColor(c));
+    }
+
+    /**
      * Get theme fill colour
      * 
      * @return fillColor the fill colour
@@ -689,15 +698,16 @@ public class ApplicationController implements Initializable {
     public void setAppStyles(Boolean isDarkMode) {
         // set theme colours
         if (isDarkMode) {
-            themeFillColor.setValue("#1d1d1d");
+            // themeFillColor.setValue("#1d1d1d");
             themeBackgroundColor.setValue("#3a3a3a");
             themeAccentColor.setValue("#c0c481");
         } else {
-            themeFillColor.setValue("lightgray");
+            // themeFillColor.setValue("lightgray");
             themeBackgroundColor.setValue("white");
             themeAccentColor.setValue("black");
         }
         // alter draw area colour settings
+        adjustThemeFillColor(themeBackgroundColor.getValue());
         setCanvasBackgroundColor(themeBackgroundColor.getValue());
         setBackgroundPickerColor(themeBackgroundColor.getValue());
         drawarea.setDarkModeEnabled(isDarkMode);
@@ -843,6 +853,7 @@ public class ApplicationController implements Initializable {
             Color c = backgroundcolorpicker.getValue();
             if (c != null) {
                 canvasBackgroundColor.setValue(toRGBCode(c));
+                adjustThemeFillColor(toRGBCode(c));
             }
             drawarea.setTheme();
             drawarea.redrawGrid();
@@ -1077,6 +1088,33 @@ public class ApplicationController implements Initializable {
      */
     private String backgroundStyle(Color c) {
         return "-fx-background-color: " + toRGBCode(c) + ";";
+    }
+
+    /**
+     * Offset a given color used by adjust theme colour
+     * 
+     * @param color a web colour
+     * @return a new web colour
+     */
+    private String getThemeColor(String color) {
+        Color newColor;
+        Color c = Color.web(color);
+        int r = (int) (c.getRed() * 255);
+        int g = (int) (c.getGreen() * 255);
+        int b = (int) (c.getBlue() * 255);
+        int rgb = (r << 16) + (g << 8) + b;
+        if (rgb < 0x808080) {
+            /**
+             * The colour for dark theme.
+             */
+            newColor = new Color(((r >= 0x1d) ? r - 0x1d : 0) / 255.0, ((g >= 0x1d) ? g - 0x1d : 0) / 255.0, ((b >= 0x1d) ? b - 0x1d : 0) / 255.0, 1d);
+        } else {
+            /**
+             * The colour for light theme.
+             */
+            newColor = new Color(((r >= 0x2c) ? r - 0x2c : 0) / 255.0, ((g >= 0x2c) ? g - 0x2c : 0) / 255.0, ((b >= 0x2c) ? b - 0x2c : 0) / 255.0, 1d);
+        }
+        return toRGBCode(newColor);
     }
 
     /**

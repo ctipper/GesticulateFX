@@ -142,6 +142,7 @@ public class Gesticulate extends GuiceApplication {
                 .orElseGet(controller::getThemeBackgroundColor);
         controller.setCanvasBackgroundColor(canvasColor);
         controller.setBackgroundPickerColor(canvasColor);
+        controller.adjustThemeFillColor(canvasColor);
         drawarea.setTheme();
 
         // Install the canvas
