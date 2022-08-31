@@ -16,7 +16,7 @@
     </organization>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>18</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>18.0.2</javafx.version>
         <slf4j.version>1.7.32</slf4j.version>

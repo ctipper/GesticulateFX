@@ -475,7 +475,7 @@ public class Text implements DrawItem, Serializable {
         transform = new AffineTransform();
         TextLayout layout = this.getLayout(g2);
 
-        g2.setColor(fxToAwt(getColor(), ((float) getTransparency()) / 100));
+        g2.setColor(fxToAwt(getColor()));
         CanvasPoint axis = this.rotationCentre();
         CanvasPoint offset = new CanvasPoint(0.0, end.y - layout.getDescent());
         offset = V2.rot(offset.x, offset.y, getAngle());
