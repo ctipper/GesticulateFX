@@ -556,7 +556,7 @@ public class Figure implements DrawItem, Serializable {
         anchor.setCenterX(u.x);
         anchor.setCenterY(u.y);
         anchor.setRadius(5.0);
-        anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setFill(Color.web(drawarea.getCanvasBackgroundColor()));
         anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         return anchor;
@@ -569,7 +569,7 @@ public class Figure implements DrawItem, Serializable {
         anchor.setY(u.y - 4.0);
         anchor.setWidth(8.0);
         anchor.setHeight(8.0);
-        anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setFill(Color.web(drawarea.getCanvasBackgroundColor()));
         anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         anchor.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, u.x, u.y));

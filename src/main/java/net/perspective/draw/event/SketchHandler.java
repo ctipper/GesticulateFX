@@ -55,7 +55,7 @@ public class SketchHandler implements Handler  {
         // Initialise stroke and fill
         item.setStroke(drawarea.getPlainStroke());
         item.setColor(Color.web(drawarea.getThemeFillColor()));
-        item.setFillColor(Color.web(drawarea.getThemeBackgroundColor()));
+        item.setFillColor(Color.web(drawarea.getCanvasBackgroundColor()));
         // Initialise sketch
         item.setPoints(drawarea.getDrawType().orElse(DrawingType.POINT));
         item.addPoint(listener.getStartX(), listener.getStartY());

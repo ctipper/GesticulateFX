@@ -381,7 +381,7 @@ public class Picture implements DrawItem, Serializable {
         anchor.setCenterX(u.x);
         anchor.setCenterY(u.y);
         anchor.setRadius(5.0);
-        anchor.setFill(Color.web(drawarea.getThemeBackgroundColor()));
+        anchor.setFill(Color.web(drawarea.getCanvasBackgroundColor()));
         anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         return anchor;

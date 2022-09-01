@@ -245,6 +245,15 @@ public class DrawingArea {
     }
 
     /**
+     * Get the canvas background colour
+     * 
+     * @return web colour
+     */
+    public String getCanvasBackgroundColor() {
+        return controller.getCanvasBackgroundColor();
+    }
+
+    /**
      * Get the scene
      * 
      * @return the {@link javafx.scene.SubScene}
