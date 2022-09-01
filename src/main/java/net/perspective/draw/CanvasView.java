@@ -289,7 +289,6 @@ public class CanvasView {
         drawarea.updateFontStyle(fontStyle);
     }
 
-
     /**
      * Send DrawItem backwards in drawing list
      */
@@ -298,12 +297,12 @@ public class CanvasView {
             DrawItem item = drawings.get(this.getSelected());
             if (this.getSelected() > 0) {
                 int selection = this.getSelected();
+                drawings.remove(selection);
                 if (selection < 2) {
                     drawings.add(0, item);
                 } else {
                     drawings.add(selection - 1, item);
                 }
-                drawings.remove(selection + 1);
             }
         }
     }
@@ -316,8 +315,8 @@ public class CanvasView {
             DrawItem item = drawings.get(this.getSelected());
             if (this.getSelected() != 0) {
                 int selection = this.getSelected();
+                drawings.remove(selection);
                 drawings.add(0, item);
-                drawings.remove(selection + 1);
             }
         }
     }
@@ -330,12 +329,12 @@ public class CanvasView {
             DrawItem item = drawings.get(this.getSelected());
             if (this.getSelected() < (drawings.size() - 1)) {
                 int selection = this.getSelected();
-                if (selection >= (drawings.size() - 2)) {
+                drawings.remove(selection);
+                if (selection >= (drawings.size() - 1)) {
                     drawings.add(item);
                 } else {
-                    drawings.add(selection + 2, item);
+                    drawings.add(selection + 1, item);
                 }
-                drawings.remove(selection);
             }
         }
     }
@@ -348,8 +347,8 @@ public class CanvasView {
             DrawItem item = drawings.get(this.getSelected());
             if (this.getSelected() != drawings.size() - 1) {
                 int selection = this.getSelected();
-                drawings.add(item);
                 drawings.remove(selection);
+                drawings.add(item);
             }
         }
     }
