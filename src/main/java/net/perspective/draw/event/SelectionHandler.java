@@ -8,6 +8,7 @@ package net.perspective.draw.event;
 
 import com.google.inject.Injector;
 import java.awt.BasicStroke;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
@@ -42,6 +43,8 @@ public class SelectionHandler implements Handler {
     @Inject private DrawAreaListener listener;
     @Inject private BehaviourContext context;
     @Inject private FigureFactory figurefactory;
+    private ArrayList<Double> coordsX, coordsY;
+    private ArrayList<Double>  midX, midY;
 
     // Following fields apply to marquee
     private static final BasicStroke marqueeStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -61,6 +64,8 @@ public class SelectionHandler implements Handler {
             view.moveSelection(view.getSelected());
             context.resetContainment();
         }
+        view.setGuides(false);
+        drawarea.resetGuides();
     }
 
     @Override
@@ -94,9 +99,26 @@ public class SelectionHandler implements Handler {
             if (context.getContainment().equals(ContainsType.NONE) && (!view.isMultiSelected() || !drawarea.isMultiSelectEnabled())) {
                 view.setSelected(-1);
             }
-            if (view.getSelected() != -1 && listener.isSnapEnabled()) {
-                CanvasPoint start = drawings.get(view.getSelected()).getStart();
-                context.setOmega(start.getX(), start.getY());
+        }
+        if (view.getSelected() != -1 && listener.isSnapEnabled()) {
+            CanvasPoint start = drawings.get(view.getSelected()).getStart();
+            context.setOmega(start.getX(), start.getY());
+        }
+        /**
+         * setup data structures for guides
+         */
+        if (view.getSelected() != -1 && !listener.isSnapEnabled() && drawarea.isGuideEnabled() && drawings.size() < 15) {
+            coordsX = new ArrayList<>();
+            coordsY = new ArrayList<>();
+            midX = new ArrayList<>();
+            midY = new ArrayList<>();
+            DrawItem item = drawings.get(view.getSelected());
+            for (var drawing : drawings) {
+                if (drawings.indexOf(drawing) != view.getSelected()) {
+                    if (!item.bounds().intersects(drawing.bounds().getBounds2D())) {
+                        computeCoords(drawing);
+                    }
+                }
             }
         }
     }
@@ -139,6 +161,61 @@ public class SelectionHandler implements Handler {
 
                 if (listener.isSnapEnabled()) {
                     context.setOmega(context.getOmega().getX() + xinc, context.getOmega().getY() + yinc);
+                } else if (drawarea.isGuideEnabled() && view.getDrawings().size() < 15) {
+                    // compute bounds X
+                    Double topX = item.getTop()[0].getX();
+                    Double upX = item.getUp()[0].getX();
+                    Double downX = item.getDown()[0].getX();
+                    Double botX = item.getBottom()[0].getX();
+                    // compute min max
+                    Double minx = minimum(topX, upX, downX, botX);
+                    Double maxx = maximum(topX, upX, downX, botX);
+                    // compute mid
+                    Double midx = (minx + maxx) / 2;
+                    // compute bounds Y
+                    Double topY = item.getTop()[0].getY();
+                    Double upY = item.getUp()[0].getY();
+                    Double downY = item.getDown()[0].getY();
+                    Double botY = item.getBottom()[0].getY();
+                    // compute min max
+                    Double miny = minimum(topY, upY, downY, botY);
+                    Double maxy = maximum(topY, upY, downY, botY);
+                    // compute mid
+                    Double midy = (miny + maxy) / 2;
+                    boolean added = false;
+                    for (var coord : coordsX) {
+                        if (minx.intValue() == coord.intValue()) {
+                            drawarea.addGuide(false, minx);
+                            added = true;
+                        }
+                        if (maxx.intValue() == coord.intValue()) {
+                            drawarea.addGuide(false, maxx);
+                            added = true;
+                        }
+                    }
+                    for (var coord : coordsY) {
+                        if (miny.intValue() == coord.intValue()) {
+                            drawarea.addGuide(true, miny);
+                            added = true;
+                        }
+                        if (maxy.intValue() == coord.intValue()) {
+                            drawarea.addGuide(true, maxy);
+                            added = true;
+                        }
+                    }
+                    for (var coord : midX) {
+                        if (midx.intValue() == coord.intValue()) {
+                            drawarea.addGuide(false, midx);
+                            added = true;
+                        }
+                    }
+                    for (var coord : midY) {
+                        if (midy.intValue() == coord.intValue()) {
+                            drawarea.addGuide(true, midy);
+                            added = true;
+                        }
+                    }
+                    view.setGuides(added);
                 }
                 if (item instanceof Figure) {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
@@ -181,5 +258,46 @@ public class SelectionHandler implements Handler {
             view.setMarquee(true);
         }
     }
+
+    private void computeCoords(DrawItem item) {
+        // compute bounds X
+        Double topX = item.getTop()[0].getX();
+        Double upX = item.getUp()[0].getX();
+        Double downX = item.getDown()[0].getX();
+        Double botX = item.getBottom()[0].getX();
+        // compute min mid max
+        Double minx = minimum(topX, upX, downX, botX);
+        coordsX.add(minx);
+        Double maxx = maximum(topX, upX, downX, botX);
+        coordsX.add(maxx);
+        // compute mid
+        midX.add((minx + maxx) / 2);
+        // compute bounds Y
+        Double topY = item.getTop()[0].getY();
+        Double upY = item.getUp()[0].getY();
+        Double downY = item.getDown()[0].getY();
+        Double botY = item.getBottom()[0].getY();
+        // compute min mid max
+        Double miny = minimum(topY, upY, downY, botY);
+        coordsY.add(miny);
+        Double maxy = maximum(topY, upY, downY, botY);
+        coordsY.add(maxy);
+        // compute mid
+        midY.add((miny + maxy) / 2);
+    }
+
+    private Double minimum(Double a, Double b, Double c, Double d) {
+        Double min1 = Math.min(a, b);
+        Double min2 = Math.min(c, d);
+        Double min3 = Math.min(min1, min2);
+        return min3;
+    }
+
+     private Double maximum(Double a, Double b, Double c, Double d) {
+         Double max1 = Math.max(a, b);
+         Double max2 = Math.max(c, d);
+         Double max3 = Math.max(max1, max2);
+         return max3;
+     }
 
 }

@@ -47,8 +47,10 @@ public class CanvasView {
     private final Set<Integer> selectionIndex;
     private Group drawingAnchors;
     private Node drawMarquee;
+    private Node drawGuides;
     private boolean isDrawing;
     private boolean isMarquee;
+    private boolean hasGuides;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
 
@@ -89,6 +91,7 @@ public class CanvasView {
             while (change.next()) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
                 int g = (drawarea.isGridVisible() ? 1 : 0);
+                if (hasGuides()) g += 1;
                 if (change.wasPermutated()) {
                     for (int i = change.getFrom(); i < change.getTo(); ++i) {
                         // permutate
@@ -674,6 +677,33 @@ public class CanvasView {
      */
     public boolean isMarquee() {
         return isMarquee;
+    }
+
+    /**
+     * Activate the guides
+     * 
+     * @param hasGuides marquee is active
+     */
+    public void setGuides(boolean hasGuides) {
+        this.hasGuides = hasGuides;
+        if (hasGuides) {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawGuides);
+            drawGuides = drawarea.getGuides().draw();
+            nodes.add(0, drawGuides);
+        } else {
+            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            nodes.remove(drawGuides);
+        }
+    }
+
+    /**
+     * Guides are drawing
+     * 
+     * @return is drawing
+     */
+    public boolean hasGuides() {
+        return hasGuides;
     }
 
     /**

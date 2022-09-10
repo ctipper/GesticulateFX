@@ -50,6 +50,8 @@ import net.perspective.draw.util.G2;
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 import net.perspective.draw.event.TextHandler;
+import net.perspective.draw.geom.FigureFactory;
+import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.geom.TextFormatter;
 
@@ -79,9 +81,12 @@ public class DrawingArea {
     private int transparency;
     private ArrowType arrowtype;
     private DrawItem marquee;
+    private Grouped guides;
+    private FigureFactory figurefactory;
     private boolean gridVisible;
     private boolean darkModeEnabled;
     private boolean multiSelectEnabled;
+    private boolean isGuideEnabled;
     private Transferable clipboard;
 
     private HandlerType handlertype, oldhandlertype;
@@ -118,6 +123,9 @@ public class DrawingArea {
         this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
         this.gridVisible = false;
+        guides = new Grouped();
+        figurefactory = new FigureFactoryImpl();
+        setGuideEnabled(true);
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type
@@ -844,6 +852,58 @@ public class DrawingArea {
     }
 
     /**
+     * Add a guide to canvas
+     * 
+     * @param xy false is x true is y
+     * @param p an xy value
+     */
+    public void addGuide(boolean xy, Double p) {
+        if (xy) {
+            // horizontal rule
+            Figure guide = figurefactory.createFigure(DrawingType.LINE);
+            guide.setStart(0, p);
+            guide.setEnd(getScene().getWidth(), p);
+            guide.setPoints(DrawingType.LINE);
+            guide.setEndPoints();
+            guide.setPath();
+            guide.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            guide.setColor(Color.rgb(204, 102, 255));
+            guide.setFillColor(Color.rgb(48, 96, 255));
+            guide.setTransparency(25);
+            guides.addShape(guide);
+        } else {
+            // vertical rule
+            Figure guide = figurefactory.createFigure(DrawingType.LINE);
+            guide.setStart(p, 0);
+            guide.setEnd(p, getScene().getHeight());
+            guide.setPoints(DrawingType.LINE);
+            guide.setEndPoints();
+            guide.setPath();
+            guide.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            guide.setColor(Color.rgb(204, 102, 255));
+            guide.setFillColor(Color.rgb(48, 96, 255));
+            guide.setTransparency(25);
+            guides.addShape(guide);
+        }
+    }
+
+    /**
+     * Get the guides
+     * 
+     * @return a {@link net.perspective.draw.geom.Grouped}
+     */
+    public Grouped getGuides() {
+        return guides;
+    }
+
+    /**
+     * Clear the list of guides
+     */
+    public void resetGuides() {
+        guides = new Grouped();
+    }
+
+    /**
      * Set dark mode enabled
      * 
      * @param darkModeEnabled dark theme
@@ -859,6 +919,24 @@ public class DrawingArea {
      */
     public boolean isDarkModeEnabled() {
         return darkModeEnabled;
+    }
+
+    /**
+     * Activate alignment guides
+     * 
+     * @param isGuideEnabled 
+     */
+    public void setGuideEnabled(boolean isGuideEnabled) {
+        this.isGuideEnabled = isGuideEnabled;
+    }
+
+    /**
+     * Alignment guides are enabled
+     * 
+     * @return isGuideEnabled guides are activated
+     */
+    public boolean isGuideEnabled() {
+        return isGuideEnabled;
     }
 
     /**
