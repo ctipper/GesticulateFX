@@ -125,7 +125,6 @@ public class DrawingArea {
         this.gridVisible = false;
         guides = new Grouped();
         figurefactory = new FigureFactoryImpl();
-        setGuideEnabled(true);
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type

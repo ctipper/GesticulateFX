@@ -93,6 +93,7 @@ public class ApplicationController implements Initializable {
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
     private BooleanProperty gridProperty;
+    private BooleanProperty guideProperty;
     private BooleanProperty boldProperty;
     private BooleanProperty italicProperty;
     private BooleanProperty underlinedProperty;
@@ -769,6 +770,11 @@ public class ApplicationController implements Initializable {
         this.gridProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             application.drawGrid(newValue);
         });
+        this.guideProperty = new SimpleBooleanProperty();
+        this.guideProperty.bindBidirectional(this.checkGuide.selectedProperty());
+        this.guideProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            drawarea.setGuideEnabled(newValue);
+        });
 
         // Initialize the sliding application menu
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
@@ -1156,6 +1162,8 @@ public class ApplicationController implements Initializable {
     private ComboBox<String> comboTheme;
     @FXML
     private CheckBox checkGrid;
+    @FXML
+    private CheckBox checkGuide;
     @FXML
     private ColorPicker colorpicker;
     @FXML

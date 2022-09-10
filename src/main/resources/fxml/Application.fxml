@@ -340,6 +340,19 @@
                         <Insets left="14.0" top="4.0" />
                     </VBox.margin>
                 </Label>
+                <CheckBox fx:id="checkGuide" alignment="BOTTOM_CENTER" focusTraversable="false" mnemonicParsing="false" text="">
+                    <VBox.margin>
+                        <Insets left="16.0" top="8.0" />
+                    </VBox.margin>
+                </CheckBox>
+                <Label text="Align">
+                    <font>
+                        <Font size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets left="14.0" top="4.0" />
+                    </VBox.margin>
+                </Label>
             </children>
         </VBox>
         <HBox translateX="45.0" translateY="292.0" AnchorPane.topAnchor="83.0">
