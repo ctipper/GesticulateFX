@@ -43,8 +43,8 @@ public class SelectionHandler implements Handler {
     @Inject private DrawAreaListener listener;
     @Inject private BehaviourContext context;
     @Inject private FigureFactory figurefactory;
-    private ArrayList<Double> coordsX, coordsY;
-    private ArrayList<Double>  midX, midY;
+    private List<Double> coordsX, coordsY;
+    private List<Double> midX, midY;
 
     // Following fields apply to marquee
     private static final BasicStroke marqueeStroke = new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -228,7 +228,7 @@ public class SelectionHandler implements Handler {
                     context.alter(item, xinc, yinc);
                 } else {
                     // Rest of shapes
-                if (listener.isSnapEnabled()) {
+                    if (listener.isSnapEnabled()) {
                         xinc = context.getOmega().getX() - item.getStart().getX();
                         yinc = context.getOmega().getY() - item.getStart().getY();
                         drawarea.moveToWithIncrements(item, xinc, yinc);

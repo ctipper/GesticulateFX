@@ -38,22 +38,23 @@ import net.perspective.draw.event.FigureHandler;
 import net.perspective.draw.event.RotationHandler;
 import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.event.SketchHandler;
+import net.perspective.draw.event.TextHandler;
 import net.perspective.draw.geom.ArrowType;
 import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
+import net.perspective.draw.geom.FigureFactory;
+import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.Text;
+import net.perspective.draw.geom.TextFormatter;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
-import net.perspective.draw.event.TextHandler;
-import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
-import net.perspective.draw.geom.Text;
-import net.perspective.draw.geom.TextFormatter;
 
 /**
  * 
@@ -859,7 +860,7 @@ public class DrawingArea {
     public void addGuide(boolean xy, Double p) {
         if (xy) {
             // horizontal rule
-            Figure guide = figurefactory.createFigure(DrawingType.LINE);
+            Edge guide = (Edge) figurefactory.createFigure(DrawingType.LINE);
             guide.setStart(0, p);
             guide.setEnd(getScene().getWidth(), p);
             guide.setPoints(DrawingType.LINE);
@@ -872,7 +873,7 @@ public class DrawingArea {
             guides.addShape(guide);
         } else {
             // vertical rule
-            Figure guide = figurefactory.createFigure(DrawingType.LINE);
+            Edge guide = (Edge) figurefactory.createFigure(DrawingType.LINE);
             guide.setStart(p, 0);
             guide.setEnd(p, getScene().getHeight());
             guide.setPoints(DrawingType.LINE);
