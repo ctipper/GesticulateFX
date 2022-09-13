@@ -162,6 +162,7 @@ public class SelectionHandler implements Handler {
                 if (listener.isSnapEnabled()) {
                     context.setOmega(context.getOmega().getX() + xinc, context.getOmega().getY() + yinc);
                 } else if (drawarea.isGuideEnabled() && view.getDrawings().size() < 15) {
+                    drawarea.resetGuides();
                     // compute bounds X
                     Double topX = item.getTop()[0].getX();
                     Double upX = item.getUp()[0].getX();
@@ -193,6 +194,7 @@ public class SelectionHandler implements Handler {
                             added = true;
                         }
                     }
+                    int i = 0;
                     for (var coord : coordsY) {
                         if (miny.intValue() == coord.intValue()) {
                             drawarea.addGuide(true, miny);
