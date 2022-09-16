@@ -48,6 +48,9 @@
                 <ToolBar prefHeight="70.0" style="">
                     <items>
                         <Button id="butthamburger" fx:id="menubutton" focusTraversable="false" mnemonicParsing="false" styleClass="menubutton" text="">
+                            <tooltip>
+                                <Tooltip text="Options" />
+                            </tooltip>
                             <graphic>
                                 <SVGPath content="M1.992523 17.007477L17.932587 17.007477L17.932587 15.014954L1.992523 15.014954Z M1.992523 17.007477L17.932587 17.007477L17.932587 15.014954L1.992523 15.014954Z M1.992523 10.365738L17.932587 10.365738L17.932587 8.373215L1.992523 8.373215Z M1.992523 10.365738L17.932587 10.365738L17.932587 8.373215L1.992523 8.373215Z M1.992523 3.723999L17.932587 3.723999L17.932587 1.731476L1.992523 1.731476Z M1.992523 3.723999L17.932587 3.723999L17.932587 1.731476L1.992523 1.731476Z" styleClass="svgFillPath" />
                             </graphic>
@@ -253,27 +256,42 @@
                     <VBox.margin>
                         <Insets bottom="3.0" left="4.0" right="4.0" top="3.0" fx:id="x1" />
                     </VBox.margin>
+                    <tooltip>
+                        <Tooltip text="New" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M0.000000 26.000000L0.000000 0.097198L13.947662 0.097198L18.928970 5.078506L18.928970 26.000000Z M13.947662 0.097198L13.947662 5.078506L18.928970 5.078506" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </Button>
                 <Button id="buttopenin" fx:id="openinbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleReadInAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Open" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M0.000000 16.000000L19.427109 16.000000L23.412155 5.539246L3.985046 5.539246Z M0.000000 16.000000L0.000000 2.052338L1.494400 0.557938L5.479446 0.557938L6.973846 2.052338L19.427109 2.052338L19.427109 5.539246" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </Button>
                 <Button id="buttsaveto" fx:id="savetobutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSaveToAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Save" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M3.237854 20.000000C1.449646 20.000000,0.000000 18.550354,0.000000 16.762146C0.000000 14.973938,1.449646 13.524292,3.237854 13.524292L19.427124 13.524292C21.215332 13.524292,22.664978 14.973938,22.664978 16.762146C22.664978 18.550354,21.215332 20.000000,19.427124 20.000000Z M0.110321 15.924133L3.237854 3.810730C3.690643 2.120880,4.808670 0.572876,6.475708 0.572876L16.189270 0.572876C17.856308 0.572876,18.974335 2.120880,19.427124 3.810730L22.554657 15.924133 M19.427124 16.762146l0 0" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </Button>
                 <Region prefHeight="5.0" />
                 <ToggleButton id="buttselect" fx:id="selectbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSelectionAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Select" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M3.6728664049999997 0.6236943L3.6728664049999997 12.36993695 4.43515941 12.33528245 6.5141404099999995 9.840506099999999 9.667261649999999 15.453753949999998 11.0532487 15.419107949999999 11.15719775 13.582674449999999 9.078216750000001 10.394904149999999 9.00891625 9.459362699999998 9.42471245 9.147515549999998 12.369935250000001 9.182161549999998 12.369935250000001 8.142671219999999 4.7470048600000005 0.6583397304999986Z" fillRule="EVEN_ODD" styleClass="svgFill"/>
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="buttrotate" fx:id="rotatebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Rotate" />
+                    </tooltip>
                     <graphic>
                         <Group>
                             <SVGPath content="M21.629684 21.629684C23.929916 19.348648,25.217789 16.239441,25.204208 13.000000C25.185959 8.644104,22.866867 4.621231,19.102112 2.430817C17.250137 1.353287,15.142548 0.798416,13.000000 0.795792C8.613281 0.790421,4.496872 3.043732,2.430817 6.897888C-1.933624 15.039612,3.776276 24.929062,13.000000 25.204208C14.427063 25.246780,15.847687 24.996307,17.174149 24.468262 M21.629684 21.629684L20.633423 17.644638 M21.629684 21.629684L25.614731 20.633423" styleClass="svgPath"  fill="TRANSPARENT"/>

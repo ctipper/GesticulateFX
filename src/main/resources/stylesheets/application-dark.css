@@ -272,6 +272,11 @@
 }
 .slider .thumb:pressed {
 }
+.tooltip {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-size: 10pt;
+}
 
 /**
  * Night theme svg styles
