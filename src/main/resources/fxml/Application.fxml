@@ -301,53 +301,80 @@
                 </ToggleButton>
                 <Region prefHeight="5.0" />
                 <ToggleButton id="buttslope" fx:id="slopebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Line" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M0.000000 17.000000L22.415894 0.561676" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="buttline" fx:id="linebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleLineTypeAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Horizontal" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="buttcircle" fx:id="circlebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleCircleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Circle" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M21.211685 11.000000C21.211685 8.291565,20.135605 5.694397,18.220596 3.779404C16.305603 1.864395,13.708435 0.788315,11.000000 0.788315C8.291565 0.788315,5.694397 1.864395,3.779404 3.779404C1.864395 5.694397,0.788315 8.291565,0.788315 11.000000C0.788315 13.708435,1.864395 16.305603,3.779404 18.220596C5.694397 20.135605,8.291565 21.211685,11.000000 21.211685C13.708435 21.211685,16.305603 20.135605,18.220596 18.220596C20.135605 16.305603,21.211685 13.708435,21.211685 11.000000Z" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="buttsquare" fx:id="squarebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSquareAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Square" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M0.788300 21.211700L21.211700 21.211700L21.211700 0.788300L0.788300 0.788300Z" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="butttriangle" fx:id="trianglebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTriangleAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Triangle" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M0.000000 22.000000L21.917755 22.000000L10.958878 0.082245Z" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="butthexagon" fx:id="hexagonbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleHexagonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Hexagon" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M6.104309 21.211700L17.895691 21.211700L23.791382 11.000000L17.895691 0.788300L6.104309 0.788300L0.208618 11.000000Z" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="buttpolygon" fx:id="polygonbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handlePolygonAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Polygon" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M18.730026 5.361984L13.638016 0.269974C4.441025 0.341461,-2.007233 9.368988,0.907990 18.092010C1.734192 20.564240,3.469177 22.750504,6.000000 23.184021C7.693268 23.474060,11.145432 21.827255,13.638016 20.638016C15.358093 19.817337,18.366989 18.381744,18.730026 18.092010C22.815308 14.831955,22.815308 8.622040,18.730026 5.361984Z" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="buttsketch" fx:id="sketchbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleSketchAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Sketch" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M9.683105 12.160538C9.387039 11.739883,8.870743 11.533356,8.366211 11.633789C7.209183 11.864105,6.822739 13.242813,7.049316 14.530975C7.212357 15.457993,7.598648 16.360352,8.366211 16.901367C11.324356 18.986465,15.644501 15.517441,14.160538 10.975342C13.918884 10.235748,13.520340 9.555481,12.975342 9.000000C9.410904 5.367126,3.067444 7.514481,1.781738 12.950684C0.468903 18.501633,5.099258 23.668060,11.000000 23.485840C17.038956 23.299332,21.461807 17.802231,21.008408 11.633789C20.603149 6.120422,16.446732 1.645233,11.000000 0.571884C7.478043 -0.122177,3.828094 0.742279,0.991592 2.942276" styleClass="svgPath" fill="TRANSPARENT" />
                     </graphic>
                 </ToggleButton>
                 <ToggleButton id="butttext" fx:id="textbutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleTextAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
+                    <tooltip>
+                        <Tooltip text="Text" />
+                    </tooltip>
                     <graphic>
                         <SVGPath content="M5.7743912 4.659300000000002L26.437938 4.659300000000002 26.663155 9.888090000000005 26.043805 9.94099 25.142944999999997 8.03962 24.073171999999996 6.772030000000001 22.834484999999997 6.138230000000007 17.823432999999998 6.138230000000007 17.598218 6.296680000000009 17.654518 24.835080000000005 18.161252 25.94422 18.780595 26.63082 19.68146 27.00054 21.370577 27.317440000000005 21.314277 27.792780000000008 10.898047 27.792780000000008 10.898047 27.317440000000005 12.812382 27.21181 13.713244 26.736459999999994 14.501498999999999 25.36323999999999 14.557799 24.623829999999984 14.557799 6.296679999999981 14.219975 6.085419999999985 9.208923899999998 6.085419999999985 8.195453699999998 6.71920999999999 7.407198799999998 7.511459999999985 6.956766999999998 8.356509999999986 6.675247799999998 8.99029999999999 6.224815999999999 9.835349999999991 5.549168799999999 9.835349999999991Z" fillRule="EVEN_ODD" styleClass="svgFill" />
                     </graphic>
                 </ToggleButton>
                 <CheckBox fx:id="checkGuide" alignment="BOTTOM_CENTER" focusTraversable="false" mnemonicParsing="false" text="">
                     <tooltip>
-                        <Tooltip text="Toggle Guides" />
+                        <Tooltip text="Enable Guides" />
                     </tooltip>
                     <VBox.margin>
                         <Insets left="16.0" top="8.0" />

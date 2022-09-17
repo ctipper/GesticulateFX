@@ -46,6 +46,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -301,14 +302,19 @@ public class ApplicationController implements Initializable {
      * @param vertical is vertical line active
      */
     private void setLineButtonGraphic(Boolean vertical) {
+        Tooltip tooltip;
         SVGPath path = new SVGPath();
         if (vertical) {
             path.setContent(SVG_VERTICAL);
+            tooltip = new Tooltip("Vertical");
+            
         } else {
             path.setContent(SVG_HORIZONTAL);
+            tooltip = new Tooltip("Horizontal");
         }
         path.getStyleClass().add("svgPath");
         linebutton.setGraphic(path);
+        linebutton.setTooltip(tooltip);
     }
 
     /**
