@@ -72,7 +72,7 @@ public class DoubleStroke implements Stroke, Serializable {
 
             switch (type) {
                 case PathIterator.SEG_MOVETO:
-                    if (bp.size() != 0) {
+                    if (!bp.isEmpty()) {
                         traceStroke(bp, left, right);
                     }
                     bp.clear();
@@ -96,7 +96,7 @@ public class DoubleStroke implements Stroke, Serializable {
                     break;
             }
         }
-        if (bp.size() != 0) {
+        if (!bp.isEmpty()) {
             traceStroke(bp, left, right);
         }
 
@@ -220,7 +220,7 @@ public class DoubleStroke implements Stroke, Serializable {
         }
 
         // Handle the last point of the bezier path
-        if (bp.isClosed() && bp.size() > 0) {
+        if (bp.isClosed() && !bp.isEmpty()) {
             double[] tmp = prevCorners;
             prevCorners = currentCorners;
             currentCorners = computeThickLine(

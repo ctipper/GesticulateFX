@@ -202,9 +202,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 that.y = this.y.clone();
                 return that;
             } catch (CloneNotSupportedException e) {
-                InternalError error = new InternalError();
-                error.initCause(e);
-                throw error;
+                throw new InternalError(e);
             }
         }
 
@@ -354,7 +352,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     public Path2D.Double toGeneralPath() {
         Path2D.Double gp = new Path2D.Double();
         gp.setWindingRule(windingRule);
-        if (size() == 0) {
+        if (isEmpty()) {
             gp.moveTo(0, 0);
             gp.lineTo(0, 0 + 1);
         } else if (size() == 1) {
@@ -760,7 +758,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      */
     public CanvasPoint getPointOnPath(double relative, double flatness) {
         // This method works only for straight lines
-        if (size() == 0) {
+        if (isEmpty()) {
             return null;
         } else if (size() == 1) {
             return get(0).getControlPoint(0);
@@ -986,7 +984,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * control point C0 to the bezier path.
      */
     public void moveTo(double x1, double y1) {
-        if (size() != 0) {
+        if (!isEmpty()) {
             throw new IllegalPathStateException("moveTo only allowed when empty");
         }
         Node node = new Node(x1, y1);
@@ -1006,7 +1004,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * The bezier path must already have at least one node.
      */
     public void lineTo(double x1, double y1) {
-        if (size() == 0) {
+        if (isEmpty()) {
             throw new IllegalPathStateException("lineTo only allowed when not empty");
         }
         get(size() - 1).keepColinear = false;
@@ -1026,7 +1024,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      */
     public void quadTo(double x1, double y1,
             double x2, double y2) {
-        if (size() == 0) {
+        if (isEmpty()) {
             throw new IllegalPathStateException("quadTo only allowed when not empty");
         }
 
@@ -1045,7 +1043,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     public void curveTo(double x1, double y1,
             double x2, double y2,
             double x3, double y3) {
-        if (size() == 0) {
+        if (isEmpty()) {
             throw new IllegalPathStateException("curveTo only allowed when not empty");
         }
         Node lastPoint = get(size() - 1);

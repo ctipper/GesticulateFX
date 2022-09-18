@@ -155,7 +155,7 @@ public class Bezier {
      * digitized points. 
      */
     public static BezierPath fitBezierPath(BezierPath digitizedPoints, double error) {
-        ArrayList<CanvasPoint> d = new ArrayList<CanvasPoint>(digitizedPoints.size());
+        ArrayList<CanvasPoint> d = new ArrayList<>(digitizedPoints.size());
         for (BezierPath.Node n : digitizedPoints) {
             d.add(new CanvasPoint(n.x[0], n.y[0]));
         }
@@ -187,8 +187,8 @@ public class Bezier {
         } else {
 
             double squaredDistance = minDistance * minDistance;
-            java.util.ArrayList<CanvasPoint> cleaned = new ArrayList<CanvasPoint>();
-            if (digitizedPoints.size() > 0) {
+            java.util.ArrayList<CanvasPoint> cleaned = new ArrayList<>();
+            if (!digitizedPoints.isEmpty()) {
                 CanvasPoint prev = digitizedPoints.get(0);
                 cleaned.add(prev);
                 for (CanvasPoint p : digitizedPoints) {
@@ -219,8 +219,8 @@ public class Bezier {
      * @return Digitized points without subsequent duplicates.
      */
     private static ArrayList<CanvasPoint> removeCoincidentPoints(java.util.List<CanvasPoint> digitizedPoints) {
-        java.util.ArrayList<CanvasPoint> cleaned = new ArrayList<CanvasPoint>();
-        if (digitizedPoints.size() > 0) {
+        java.util.ArrayList<CanvasPoint> cleaned = new ArrayList<>();
+        if (!digitizedPoints.isEmpty()) {
             CanvasPoint prev = digitizedPoints.get(0);
             cleaned.add(prev);
             for (CanvasPoint p : digitizedPoints) {
@@ -248,16 +248,16 @@ public class Bezier {
      */
     public static ArrayList<ArrayList<CanvasPoint>> splitAtCorners(java.util.List<CanvasPoint> digitizedPoints, double maxAngle, double minDistance) {
         ArrayList<Integer> cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
-        ArrayList<ArrayList<CanvasPoint>> segments = new ArrayList<ArrayList<CanvasPoint>>(cornerIndices.size() + 1);
+        ArrayList<ArrayList<CanvasPoint>> segments = new ArrayList<>(cornerIndices.size() + 1);
 
         if (cornerIndices.isEmpty()) {
-            segments.add(new ArrayList<CanvasPoint>(digitizedPoints));
+            segments.add(new ArrayList<>(digitizedPoints));
         } else {
-            segments.add(new ArrayList<CanvasPoint>(digitizedPoints.subList(0, cornerIndices.get(0) + 1)));
+            segments.add(new ArrayList<>(digitizedPoints.subList(0, cornerIndices.get(0) + 1)));
             for (int i = 1; i < cornerIndices.size(); i++) {
-                segments.add(new ArrayList<CanvasPoint>(digitizedPoints.subList(cornerIndices.get(i - 1), cornerIndices.get(i) + 1)));
+                segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.get(i - 1), cornerIndices.get(i) + 1)));
             }
-            segments.add(new ArrayList<CanvasPoint>(digitizedPoints.subList(cornerIndices.get(cornerIndices.size() - 1), digitizedPoints.size())));
+            segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.get(cornerIndices.size() - 1), digitizedPoints.size())));
         }
 
         return segments;
@@ -273,7 +273,7 @@ public class Bezier {
      * @return list of corner indices.
      */
     public static ArrayList<Integer> findCorners(java.util.List<CanvasPoint> digitizedPoints, double minAngle, double minDistance) {
-        ArrayList<Integer> cornerIndices = new ArrayList<Integer>();
+        ArrayList<Integer> cornerIndices = new ArrayList<>();
 
         double squaredDistance = minDistance * minDistance;
 
@@ -341,8 +341,8 @@ public class Bezier {
      * @return Digitized points with reduced noise.
      */
     public static ArrayList<CanvasPoint> reduceNoise(java.util.List<CanvasPoint> digitizedPoints, double weight) {
-        java.util.ArrayList<CanvasPoint> cleaned = new ArrayList<CanvasPoint>();
-        if (digitizedPoints.size() > 0) {
+        java.util.ArrayList<CanvasPoint> cleaned = new ArrayList<>();
+        if (!digitizedPoints.isEmpty()) {
             CanvasPoint prev = digitizedPoints.get(0);
             cleaned.add(prev);
             double pnWeight = (1d - weight) / 2d; // weight of previous and next
@@ -553,7 +553,7 @@ public class Bezier {
         }
 
         for (i = first + 1; i <= last; i++) {
-            u[i - first] = u[i - first] / u[last - first];
+            u[i - first] /= u[last - first];
         }
 
         return (u);
