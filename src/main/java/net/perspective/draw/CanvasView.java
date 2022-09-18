@@ -559,7 +559,7 @@ public class CanvasView {
     public int getSelected() {
         int i;
         if (!selectionIndex.isEmpty()) {
-            Integer[] a = selectionIndex.toArray(new Integer[selectionIndex.size()]);
+            Integer[] a = selectionIndex.toArray(Integer[]::new);
             // find first value
             i = a[0];
         } else {
@@ -577,7 +577,7 @@ public class CanvasView {
     public int getBottomSelected() {
         int i;
         if (!selectionIndex.isEmpty()) {
-            Integer[] a = selectionIndex.toArray(new Integer[selectionIndex.size()]);
+            Integer[] a = selectionIndex.toArray(Integer[]::new);
             // find minimum value
             i = a[0];
             for (Integer as : a) {

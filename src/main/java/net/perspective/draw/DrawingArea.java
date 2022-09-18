@@ -171,7 +171,7 @@ public class DrawingArea {
             view.moveSelection(view.getSelected());
         });
         controller.getFontSizeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            this.setFontSize(Integer.valueOf(newValue));
+            this.setFontSize(Integer.parseInt(newValue));
             view.moveSelection(view.getSelected());
         });
         controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {

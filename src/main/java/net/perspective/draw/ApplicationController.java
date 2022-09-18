@@ -1152,9 +1152,9 @@ public class ApplicationController implements Initializable {
      */
     public Color fromRGBCode(String colorStr) {
     return new Color(
-            Double.valueOf(colorStr.substring(1, 3)) / 255,
-            Double.valueOf(colorStr.substring(3, 5)) / 255,
-            Double.valueOf(colorStr.substring(5, 7)) / 255,
+            Double.parseDouble(colorStr.substring(1, 3)) / 255,
+            Double.parseDouble(colorStr.substring(3, 5)) / 255,
+            Double.parseDouble(colorStr.substring(5, 7)) / 255,
             1d);
     }
 

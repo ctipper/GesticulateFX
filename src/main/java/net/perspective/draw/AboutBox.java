@@ -46,7 +46,7 @@ public class AboutBox extends Dialog<ButtonType> {
         aboutLabel[1] = new Label("Version 1.0");
         // higher java versions use runtime property
         String[] elements = System.getProperty("java.specification.version").split("\\.");
-        if (Integer.valueOf(elements[0]) < 2) {
+        if (Integer.parseInt(elements[0]) < 2) {
             aboutLabel[2] = new Label("JRE " + System.getProperty("java.version"));
         } else {
             aboutLabel[2] = new Label("JRE " + System.getProperty("java.runtime.version"));

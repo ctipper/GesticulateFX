@@ -87,7 +87,7 @@ public class Grouped implements DrawItem, Serializable {
     public void removeShape(DrawItem shape) {
         if (shapes != null) {
             shapes.remove(shape);
-            if (shapes.size() > 0) {
+            if (!shapes.isEmpty()) {
                 this.setBounds();
             }
         }
