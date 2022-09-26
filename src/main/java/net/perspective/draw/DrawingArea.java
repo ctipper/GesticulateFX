@@ -297,25 +297,19 @@ public class DrawingArea {
         this.handlertype = handler;
         this.resetContextHandlers();
         switch (handler) {
-            case SELECTION:
+            case SELECTION -> {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
                 this.setContextHandlers();
-                break;
-            case FIGURE:
-                listener.setEventHandler(injector.getInstance(FigureHandler.class));
-                break;
-            case ROTATION:
+            }
+            case FIGURE -> listener.setEventHandler(injector.getInstance(FigureHandler.class));
+            case ROTATION -> {
                 listener.setEventHandler(injector.getInstance(RotationHandler.class));
                 this.setContextHandlers();
-                break;
-            case SKETCH:
-                listener.setEventHandler(injector.getInstance(SketchHandler.class));
-                break;
-            case TEXT:
-                listener.setEventHandler(injector.getInstance(TextHandler.class));
-                break;
-            default:
-                break;
+            }
+            case SKETCH -> listener.setEventHandler(injector.getInstance(SketchHandler.class));
+            case TEXT -> listener.setEventHandler(injector.getInstance(TextHandler.class));
+            default -> {
+            }
         }
         view.setSelected(-1);
         view.setDrawing(false);
@@ -438,20 +432,15 @@ public class DrawingArea {
     private void setStrokeType(Integer strokeId, String strokeStyle) {
         setStroke(dropper.selectStroke(strokeId, strokeStyle));
         switch (strokeStyle) {
-            case "style6": // Arrow at start
+            case "style6" -> // Arrow at start
                 setArrow(ArrowType.END);
-                break;
-            case "style7": // Arrow at start
+            case "style7" -> // Arrow at start
                 setArrow(ArrowType.END);
-                break;
-            case "style8": // Arrow at both ends
+            case "style8" -> // Arrow at both ends
                 setArrow(ArrowType.BOTH);
-                break;
-            case "style9": // Arrow at both ends
+            case "style9" -> // Arrow at both ends
                 setArrow(ArrowType.BOTH);
-                break;
-            default:
-                resetArrow();
+            default -> resetArrow();
         }
         setPlainStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     }
@@ -573,28 +562,20 @@ public class DrawingArea {
         DrawingType type = drawtype.get();
         if (controller.getOneToOneEnabled()) {
             switch (type) {
-                case CIRCLE:
-                    break;
-                case ELLIPSE:
-                    type = DrawingType.CIRCLE;
-                    break;
-                case SQUARE:
-                    break;
-                case RECTANGLE:
-                    type = DrawingType.SQUARE;
-                    break;
-                case TRIANGLE:
-                    break;
-                case ISOSCELES:
-                    type = DrawingType.TRIANGLE;
-                    break;
-                case HEXAGON:
-                    type = DrawingType.ISOHEX;
-                    break;
-                case ISOHEX:
-                    break;
-                default:
-                    break;
+                case CIRCLE -> {
+                }
+                case ELLIPSE -> type = DrawingType.CIRCLE;
+                case SQUARE -> {
+                }
+                case RECTANGLE -> type = DrawingType.SQUARE;
+                case TRIANGLE -> {
+                }
+                case ISOSCELES -> type = DrawingType.TRIANGLE;
+                case HEXAGON -> type = DrawingType.ISOHEX;
+                case ISOHEX -> {
+                }
+                default -> {
+                }
             }
         }
         return Optional.of(type);

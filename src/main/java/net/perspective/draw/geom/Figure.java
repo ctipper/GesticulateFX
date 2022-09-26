@@ -159,23 +159,22 @@ public class Figure implements DrawItem, Serializable {
      */
     public void setEndPoints() {
         switch (this.type) {
-            case CIRCLE:
-            case SQUARE:
+            case CIRCLE, SQUARE -> {
                 start = new CanvasPoint(points.get(0).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
-                break;
-            case TRIANGLE:
+            }
+            case TRIANGLE -> {
                 start = new CanvasPoint(points.get(1).x, points.get(0).y);
                 end = new CanvasPoint(points.get(2).x, points.get(2).y);
-                break;
-            case HEXAGON:
+            }
+            case HEXAGON -> {
                 start = new CanvasPoint(points.get(1).x, points.get(0).y);
                 end = new CanvasPoint(points.get(4).x, points.get(3).y);
-                break;
-            default:
+            }
+            default -> {
                 start = points.get(0);
                 end = points.get(points.size() - 1);
-                break;
+            }
         }
     }
 
@@ -526,16 +525,14 @@ public class Figure implements DrawItem, Serializable {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         switch (this.type) {
-            case LINE:
-            case SKETCH:
-            case POLYGON:
+            case LINE, SKETCH, POLYGON -> {
                 // end points marked
                 anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
                 anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
-                break;
-            case NONE:
-                break;
-            default:
+            }
+            case NONE -> {
+            }
+            default -> {
                 CanvasPoint center = this.rotationCentre();
                 anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
                 anchors.getChildren().add(this.anchor(drawarea, end.x, start.y));
@@ -545,7 +542,7 @@ public class Figure implements DrawItem, Serializable {
                 anchors.getChildren().add(this.edgeAnchor(drawarea, start.x, center.y));
                 anchors.getChildren().add(this.edgeAnchor(drawarea, center.x, end.y));
                 anchors.getChildren().add(this.edgeAnchor(drawarea, end.x, center.y));
-                break;
+            }
         }
         return anchors;
     }
@@ -612,39 +609,23 @@ public class Figure implements DrawItem, Serializable {
 
     public StrokeLineJoin getLineJoin(BasicStroke stroke) {
         javafx.scene.shape.StrokeLineJoin jfxjoin;
-        switch (stroke.getLineJoin()) {
-            case BasicStroke.JOIN_MITER:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.MITER;
-                break;
-            case BasicStroke.JOIN_ROUND:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
-                break;
-            case BasicStroke.JOIN_BEVEL:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.BEVEL;
-                break;
-            default:
-                jfxjoin = javafx.scene.shape.StrokeLineJoin.ROUND;
-                break;
-        }
+        jfxjoin = switch (stroke.getLineJoin()) {
+            case BasicStroke.JOIN_MITER -> javafx.scene.shape.StrokeLineJoin.MITER;
+            case BasicStroke.JOIN_ROUND -> javafx.scene.shape.StrokeLineJoin.ROUND;
+            case BasicStroke.JOIN_BEVEL -> javafx.scene.shape.StrokeLineJoin.BEVEL;
+            default -> javafx.scene.shape.StrokeLineJoin.ROUND;
+        };
         return jfxjoin;
     }
 
     public StrokeLineCap getLineCap(BasicStroke stroke) {
         javafx.scene.shape.StrokeLineCap jfxcap;
-        switch (stroke.getEndCap()) {
-            case BasicStroke.CAP_BUTT:
-                jfxcap = javafx.scene.shape.StrokeLineCap.BUTT;
-                break;
-            case BasicStroke.CAP_ROUND:
-                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
-                break;
-            case BasicStroke.CAP_SQUARE:
-                jfxcap = javafx.scene.shape.StrokeLineCap.SQUARE;
-                break;
-            default:
-                jfxcap = javafx.scene.shape.StrokeLineCap.ROUND;
-                break;
-        }
+        jfxcap = switch (stroke.getEndCap()) {
+            case BasicStroke.CAP_BUTT -> javafx.scene.shape.StrokeLineCap.BUTT;
+            case BasicStroke.CAP_ROUND -> javafx.scene.shape.StrokeLineCap.ROUND;
+            case BasicStroke.CAP_SQUARE -> javafx.scene.shape.StrokeLineCap.SQUARE;
+            default -> javafx.scene.shape.StrokeLineCap.ROUND;
+        };
         return jfxcap;
     }
 
@@ -824,23 +805,18 @@ public class Figure implements DrawItem, Serializable {
             case SQUARE:
             case TRIANGLE:
             case HEXAGON:
-                switch (contains) {
-                    case TL:
-                        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
-                        break;
-                    case BL:
-                        p = new CanvasPoint[] { new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side) };
-                        break;
-                    case BR:
-                        p = new CanvasPoint[] { new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side) };
-                        break;
-                    case TR:
-                        p = new CanvasPoint[] { new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side) };
-                        break;
-                    default:
-                        p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
-                        break;
-                }
+                p = switch (contains) {
+                    case TL ->
+                        new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
+                    case BL ->
+                        new CanvasPoint[]{new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side)};
+                    case BR ->
+                        new CanvasPoint[]{new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side)};
+                    case TR ->
+                        new CanvasPoint[]{new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side)};
+                    default ->
+                        new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
+                };
                 break;
             default:
                 p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
