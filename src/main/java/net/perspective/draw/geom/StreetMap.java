@@ -236,7 +236,7 @@ public class StreetMap extends Picture {
         MapPoint mp = mv.getMapPosition(centre.x, centre.y);
         setLatitude(mp.getLatitude());
         setLongitude(mp.getLongitude());
-        setZoom((int) Math.round(mv.getZoom()));
+        setZoom((int) Math.round(mv.getMapZoom()));
         logger.trace("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
     
