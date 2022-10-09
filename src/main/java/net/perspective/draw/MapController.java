@@ -152,7 +152,7 @@ public class MapController {
         zoomSlider.setBlockIncrement(1f);
         zoomSlider.setFocusTraversable(false);
         zoomSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            // setZoom(newValue.doubleValue());
+            setZoom(newValue.doubleValue());
         });
         drawarea.getCanvas().getChildren().add(zoomSlider);
 
@@ -254,6 +254,15 @@ public class MapController {
         drawarea.getCanvas().getChildren().remove(zoomOutButton);  // remove zoomOutButton if necessary
         drawarea.getCanvas().getChildren().remove(quiticon);       // remove quiticon if necessary
         drawarea.getCanvas().getChildren().remove(geoLocation);       // remove geoLocation if necessary
+    }
+
+    /**
+     * Centre the map
+     */
+    public void setPosition() {
+        MapPoint mp = map.getPosition();
+        map.setLatitude(mp.getLatitude());
+        map.setLongitude(mp.getLongitude());
     }
 
     /**

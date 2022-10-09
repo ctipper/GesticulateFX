@@ -52,6 +52,7 @@ public class MapHandler implements Handler {
 
     @Override
     public void zoomEvent() {
+        mapper.setPosition();
         mapper.setZoomSlider();
     }
 

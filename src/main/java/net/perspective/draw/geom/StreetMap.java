@@ -143,7 +143,17 @@ public class StreetMap extends Picture {
      * @param zoom 
      */
     public void adjustZoom(double zoom) {
+        mv.setCenter(latitude, longitude);
         mv.setZoom(zoom);
+    }
+
+    /**
+     * Get the current map zoom level
+     * 
+     * @return a zoom level
+     */
+    public double getMapZoom() {
+        return mv.getMapZoom();
     }
 
     /**
@@ -221,7 +231,7 @@ public class StreetMap extends Picture {
         setLongitude(lon);
         setZoom((int) Math.round(zm));
         mv.setCenter(lat, lon);
-        mv.setZoom(zm);
+        mv.setZoom(zoom);
         logger.debug("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
 
@@ -261,12 +271,16 @@ public class StreetMap extends Picture {
     }
 
     /**
-     * Get the current map zoom level
+     * Return lat/lon of centre point
      * 
-     * @return a zoom level
+     * @return the {@link com.gluonhq.maps.MapPoint}
      */
-    public double getMapZoom() {
-        return mv.getMapZoom();
+    public MapPoint getPosition() {
+        // must calculate center of map
+        Bounds bounds = mv.getLayoutBounds();
+        CanvasPoint centre = new CanvasPoint(mv.getLayoutX() + bounds.getCenterX(),
+                                             mv.getLayoutY() + bounds.getCenterY());
+        return mv.getMapPosition(centre.x, centre.y);
     }
 
     /**
