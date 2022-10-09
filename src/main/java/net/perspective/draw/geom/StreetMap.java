@@ -250,8 +250,9 @@ public class StreetMap extends Picture {
     /**
      * Return lat/lon of layout point
      * 
-     * @param location
-     * @return 
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the {@link com.gluonhq.maps.MapPoint}
      */
     public MapPoint getPosition(double x, double y) {
         CanvasPoint point = new CanvasPoint(x - mv.getLayoutX(), y - mv.getLayoutY());
@@ -259,6 +260,13 @@ public class StreetMap extends Picture {
         return mp;
     }
 
+    /**
+     * Provide callback snapshot of MapView content
+     * 
+     * @param callback a {@link javafx.util.Callback}
+     * @param params the {@link javafx.scene.SnapshotParameters}
+     * @param image an {@link javafx.scene.image.WritableImage}
+     */
     public void getSnapshot(Callback<SnapshotResult, Void> callback, SnapshotParameters params, WritableImage image) {
         Platform.runLater(() -> {
             mv.snapshot(callback, params, null);
