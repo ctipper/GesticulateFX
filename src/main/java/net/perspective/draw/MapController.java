@@ -147,12 +147,12 @@ public class MapController {
         zoomSlider.setMinHeight(150);
         zoomSlider.setMin(getMinZoom());
         zoomSlider.setMax(getMaxZoom());
-        zoomSlider.setValue(map.getZoom());
+        zoomSlider.setValue(map.getMapZoom());
         zoomSlider.setShowTickMarks(true);
         zoomSlider.setBlockIncrement(1f);
         zoomSlider.setFocusTraversable(false);
         zoomSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            setZoom(newValue.doubleValue());
+            // setZoom(newValue.doubleValue());
         });
         drawarea.getCanvas().getChildren().add(zoomSlider);
 
@@ -211,19 +211,19 @@ public class MapController {
     }
 
     /**
-     * Set the zoom slider to current zoom level
-     */
-    public void setZoomSlider() {
-        zoomSlider.setValue(map.getMapZoom());
-    }
-
-    /**
      * Set the map zoom level
      * 
      * @param zoom
      */
     public void setZoom(double zoom) {
         map.adjustZoom(zoom);
+    }
+
+    /**
+     * Set the zoom slider to current zoom level
+     */
+    public void setZoomSlider() {
+        zoomSlider.setValue(map.getMapZoom());
     }
 
     /**
