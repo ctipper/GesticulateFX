@@ -104,4 +104,9 @@ public class FigureHandler implements Handler {
         view.setDrawing(true);
     }
 
+    @Override
+    public void zoomEvent() {
+
+    }
+
 }

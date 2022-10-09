@@ -39,4 +39,6 @@ public interface Handler {
     void hoverEvent();
 
     void dragEvent();
+
+    void zoomEvent();
 }

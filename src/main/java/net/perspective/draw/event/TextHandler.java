@@ -76,4 +76,9 @@ public class TextHandler implements Handler {
     public void dragEvent() {
     }
 
+    @Override
+    public void zoomEvent() {
+
+    }
+
 }

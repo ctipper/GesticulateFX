@@ -179,6 +179,11 @@ public class RotationHandler implements Handler {
         }
     }
 
+    @Override
+    public void zoomEvent() {
+
+    }
+
     /**
      * Get an area centred on the specified point
      * 

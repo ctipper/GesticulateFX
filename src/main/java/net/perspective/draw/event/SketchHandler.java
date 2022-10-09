@@ -111,4 +111,9 @@ public class SketchHandler implements Handler  {
         view.setNewItem(item);
     }
 
+    @Override
+    public void zoomEvent() {
+
+    }
+
 }

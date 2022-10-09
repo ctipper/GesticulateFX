@@ -26,8 +26,10 @@ package net.perspective.draw.event;
 import javafx.scene.SubScene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
+import javafx.scene.input.ZoomEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -82,6 +84,12 @@ public class DrawAreaListener {
         });
         canvas.addEventHandler(TouchEvent.TOUCH_STATIONARY, (TouchEvent event) -> {
             touchStationary(event);
+        });
+        canvas.addEventHandler(ScrollEvent.SCROLL, (ScrollEvent event) -> {
+            scrollEvent(event);
+        });
+        canvas.addEventHandler(ZoomEvent.ZOOM, (ZoomEvent event) -> {
+            zoomEvent(event);
         });
     }
 
@@ -141,6 +149,18 @@ public class DrawAreaListener {
         tempX = touch.getX();
         tempY = touch.getY();
         handler.dragEvent();
+    }
+
+    protected void scrollEvent(ScrollEvent se) {
+        tempX = se.getX();
+        tempY = se.getY();
+        handler.zoomEvent();
+    }
+
+    protected void zoomEvent(ZoomEvent ze) {
+        tempX = ze.getX();
+        tempY = ze.getY();
+        handler.zoomEvent();
     }
 
     public void setStartX(double x) {

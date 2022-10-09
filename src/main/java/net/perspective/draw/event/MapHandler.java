@@ -49,4 +49,10 @@ public class MapHandler implements Handler {
     public void dragEvent() {
         mapper.moveMap();
     }
+
+    @Override
+    public void zoomEvent() {
+        mapper.setZoomSlider();
+    }
+
 }

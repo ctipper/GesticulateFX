@@ -303,6 +303,11 @@ public class SelectionHandler implements Handler {
         }
     }
 
+    @Override
+    public void zoomEvent() {
+
+    }
+
     private void computeCoords(DrawItem item) {
         // compute bounds X
         Double topX = item.getTop()[0].getX();

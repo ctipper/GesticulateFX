@@ -261,6 +261,15 @@ public class StreetMap extends Picture {
     }
 
     /**
+     * Get the current map zoom level
+     * 
+     * @return a zoom level
+     */
+    public double getMapZoom() {
+        return mv.getMapZoom();
+    }
+
+    /**
      * Provide callback snapshot of MapView content
      * 
      * @param callback a {@link javafx.util.Callback}

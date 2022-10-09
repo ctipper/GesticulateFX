@@ -211,6 +211,13 @@ public class MapController {
     }
 
     /**
+     * Set the zoom slider to current zoom level
+     */
+    public void setZoomSlider() {
+        zoomSlider.setValue(map.getMapZoom());
+    }
+
+    /**
      * Set the map zoom level
      * 
      * @param zoom
