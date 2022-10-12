@@ -77,6 +77,7 @@ import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import net.perspective.draw.geom.StreetMap;
 
 /**
  * 
@@ -334,6 +335,7 @@ public class DrawingArea {
                 this.setRotationMode(false);
                 view.setSelected(-1);
                 mapper.finaliseMap();
+                view.setSelected(-1);
             }
             case ROTATION -> {
                 listener.setEventHandler(injector.getInstance(RotationHandler.class));
@@ -435,7 +437,7 @@ public class DrawingArea {
                 view.setSelected(-1);
             }
         });
-        contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
+        // contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
         SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
         MenuItem menuGroup = new MenuItem("Group Selection");
         menuGroup.setOnAction((ActionEvent e) -> {
@@ -449,7 +451,7 @@ public class DrawingArea {
                 view.ungroupSelection();
             }
         });
-        contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
+        // contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
         SeparatorMenuItem sendSeparator = new SeparatorMenuItem();
         MenuItem menuSBItem = new MenuItem("Send Backwards");
         menuSBItem.setOnAction((ActionEvent e) -> {
@@ -479,11 +481,37 @@ public class DrawingArea {
                 view.setSelected(-1);
             }
         });
-        contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
+        // contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
+        MenuItem menuEditMapItem = new MenuItem("Edit");
+        menuEditMapItem.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                editMapItem();
+            }
+        });
+        // contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
+        SeparatorMenuItem editSeparator = new SeparatorMenuItem();
         contextlistener = (ContextMenuEvent event) -> {
+            if (view.getSelected() != -1 && !view.isMapping() && view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
+                contextmenu.getItems().clear();
+                contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
+            } else {
+                contextmenu.getItems().clear();
+            }
+            contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
+            contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
+            contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
             contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
         };
         popuplistener = (TouchEvent event) -> {
+            if (view.getSelected() != -1 && !view.isMapping() && view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
+                contextmenu.getItems().clear();
+                contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
+            } else {
+                contextmenu.getItems().clear();
+            }
+            contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
+            contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
+            contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
             TouchPoint touch = event.getTouchPoints().get(0);
             contextmenu.show(canvas, touch.getScreenX(), touch.getScreenY());
         };
@@ -494,6 +522,19 @@ public class DrawingArea {
         };
     }
 
+    /**
+     * Initiate map edit mode
+     */
+    protected void editMapItem() {
+        if (view.getSelected() != -1) {
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            if (item instanceof StreetMap) {
+                this.changeHandlers(HandlerType.MAP);
+                mapper.initMap();
+            }
+        }
+    }
+ 
     private void setStrokeType(Integer strokeId, String strokeStyle) {
         setStroke(dropper.selectStroke(strokeId, strokeStyle));
         switch (strokeStyle) {
