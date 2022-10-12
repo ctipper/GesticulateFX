@@ -187,8 +187,6 @@ public class Gesticulate extends GuiceApplication {
                 share.readCanvas(e.getFiles().get(0));
             });
         }
-        // maps stylesheet
-        stage.getScene().getStylesheets().add(getClass().getResource("/stylesheets/style.css").toExternalForm());
     }
 
     public void setOnResize(ScrollPane pane) {
@@ -241,11 +239,13 @@ public class Gesticulate extends GuiceApplication {
             stage.getScene().getStylesheets().clear();
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-dark.css");
             stage.getScene().getStylesheets().add("/stylesheets/application-dark.css");
+            stage.getScene().getStylesheets().add("/stylesheets/style.css"); // maps stylesheet
         } else {
             stage.getScene().getStylesheets().clear();
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-light.css");
             stage.getScene().getStylesheets().add("/stylesheets/application.css");
-        }
+            stage.getScene().getStylesheets().add("/stylesheets/style.css"); // maps stylesheet
+    }
     }
 
     /**
