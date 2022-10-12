@@ -78,7 +78,7 @@ public class Gesticulate extends GuiceApplication {
     private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
-    protected static final boolean MM_SYSTEM_THEME = false;
+    protected static final boolean MM_SYSTEM_THEME = true;
 
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
