@@ -46,6 +46,7 @@ public class DrawAreaListener {
     private double tempX, tempY;     // Hold co-ordinates of current mouseDragged event.
     private boolean leftbutton, rightbutton;
     private boolean doubleclick;
+    private double wheel;
     private boolean snapEnabled;
 
     /** Creates a new instance of <code>DrawAreaMouseListener</code> */
@@ -154,12 +155,14 @@ public class DrawAreaListener {
     protected void scrollEvent(ScrollEvent se) {
         tempX = se.getX();
         tempY = se.getY();
+        this.wheel = se.getDeltaY() > 1 ? .1 : se.getDeltaY() < -1 ? -.1 : 0;
         handler.zoomEvent();
     }
 
     protected void zoomEvent(ZoomEvent ze) {
         tempX = ze.getX();
         tempY = ze.getY();
+        this.wheel = ze.getZoomFactor() - 1;
         handler.zoomEvent();
     }
 
@@ -205,6 +208,10 @@ public class DrawAreaListener {
 
     public boolean doubleClicked() {
         return this.doubleclick;
+    }
+
+    public double getWheel() {
+        return this.wheel;
     }
 
     /**

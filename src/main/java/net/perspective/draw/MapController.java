@@ -216,7 +216,34 @@ public class MapController {
      * @param zoom
      */
     public void setZoom(double zoom) {
-        map.adjustZoom(zoom);
+        if (zoom > getMaxZoom() || zoom < getMinZoom()) {
+            return;
+        }
+        MapPoint mp = map.getPosition();
+        map.setLatitude(mp.getLatitude());
+        map.setLongitude(mp.getLongitude());
+        map.adjustZoom(Math.round(zoom));
+    }
+
+    /**
+     * Set map lat/lon by screen coordinate
+     * 
+     * @param x sceneX
+     * @param y sceneY
+     */
+    public void setPosition(double x, double y) {
+        MapPoint mp = map.getPosition(x, y);
+        map.setLatitude(mp.getLatitude());
+        map.setLongitude(mp.getLongitude());
+    }
+
+    /**
+     * Get the map zoom level
+     * 
+     * @return the zoom level
+     */
+    public double getMapZoom() {
+        return map.getMapZoom();
     }
 
     /**

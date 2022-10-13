@@ -249,7 +249,7 @@ public class StreetMap extends Picture {
         setZoom((int) Math.round(mv.getMapZoom()));
         logger.trace("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
-    
+
     /**
      * Ensure MapView is refreshed in a timely manner
      */
