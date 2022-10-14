@@ -265,8 +265,7 @@ public class StreetMap extends Picture {
      * @return the {@link com.gluonhq.maps.MapPoint}
      */
     public MapPoint getPosition(double x, double y) {
-        CanvasPoint point = new CanvasPoint(x - mv.getLayoutX(), y - mv.getLayoutY());
-        MapPoint mp = mv.getMapPosition(point.x, point.y);
+        MapPoint mp = mv.getMapPosition(x, y);
         return mp;
     }
 

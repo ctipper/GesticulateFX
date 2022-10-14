@@ -52,7 +52,6 @@ public class MapHandler implements Handler {
 
     @Override
     public void zoomEvent() {
-        mapper.setPosition(listener.getTempX(), listener.getTempY());
         mapper.setZoom(mapper.getMapZoom() + listener.getWheel());
         mapper.setZoomSlider();
     }
