@@ -47,7 +47,7 @@ public class CanvasTransferHandler {
 
     @Inject private Injector injector;
     @Inject private CanvasView view;
-    @Inject private MapController mapping;
+    @Inject private MapController mapper;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor dataFlavor;
@@ -142,9 +142,9 @@ public class CanvasTransferHandler {
             DrawItem item = injector.getInstance(StreetMap.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
+                ((StreetMap) item).filterHandlers();
                 drawing = item;
-                ((StreetMap) drawing).filterHandlers();
-                drawing = mapping.copyMap(((StreetMap) drawing));
+                drawing = mapper.copyMap(((StreetMap) drawing));
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
