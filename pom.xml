@@ -165,7 +165,7 @@
         <dependency>
             <groupId>com.github.ctipper</groupId>
             <artifactId>maps</artifactId>
-            <version>8f5ecf810c</version>
+            <version>5ceb4fc1bf</version>
         </dependency>
 
         <!-- sl4j logging  -->

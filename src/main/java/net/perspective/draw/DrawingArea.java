@@ -59,6 +59,7 @@ import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.event.TextHandler;
 import net.perspective.draw.event.keyboard.DummyKeyHandler;
+import net.perspective.draw.event.keyboard.MapKeyHandler;
 import net.perspective.draw.event.keyboard.MoveKeyHandler;
 import net.perspective.draw.event.keyboard.KeyListener;
 import net.perspective.draw.geom.ArrowType;
@@ -70,6 +71,7 @@ import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
+import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.geom.TextFormatter;
 import net.perspective.draw.util.CanvasPoint;
@@ -77,7 +79,6 @@ import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
-import net.perspective.draw.geom.StreetMap;
 
 /**
  * 
@@ -333,7 +334,6 @@ public class DrawingArea {
             case FIGURE -> {
                 listener.setEventHandler(injector.getInstance(FigureHandler.class));
                 this.setRotationMode(false);
-                view.setSelected(-1);
                 mapper.finaliseMap();
                 view.setSelected(-1);
             }
@@ -377,7 +377,7 @@ public class DrawingArea {
         switch (handler) {
             // case TEXT -> keylistener.setEventHandler(injector.getInstance(TextKeyHandler.class));
             case MOVE -> keylistener.setEventHandler(injector.getInstance(MoveKeyHandler.class));
-            // case MAP -> keylistener.setEventHandler(injector.getInstance(MapKeyHandler.class));
+            case MAP -> keylistener.setEventHandler(injector.getInstance(MapKeyHandler.class));
             default -> keylistener.setEventHandler(injector.getInstance(DummyKeyHandler.class));
         }
     }
@@ -530,6 +530,7 @@ public class DrawingArea {
             DrawItem item = view.getDrawings().get(view.getSelected());
             if (item instanceof StreetMap) {
                 this.changeHandlers(HandlerType.MAP);
+                view.setEditing(KeyHandlerType.MAP);
                 mapper.initMap();
             }
         }

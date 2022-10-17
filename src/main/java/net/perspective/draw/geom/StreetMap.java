@@ -157,6 +157,16 @@ public class StreetMap extends Picture {
     }
 
     /**
+     * Move the map by xy increment
+     * 
+     * @param diffx the x translation
+     * @param diffy the y translation
+     */
+    public void moveMap(double diffx, double diffy) {
+        mv.moveMap(diffx, diffy);
+    }
+
+    /**
      * Update the public properties of the streetmap 
      * 
      * @param canvas  the {@link net.perspective.draw.DrawingArea}

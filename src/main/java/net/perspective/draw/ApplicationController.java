@@ -288,6 +288,7 @@ public class ApplicationController implements Initializable {
     private void handleMapInsertAction(ActionEvent e) {
         mapper.createMap();
         drawarea.changeHandlers(HandlerType.MAP);
+        view.setEditing(KeyHandlerType.MAP);
         menubutton.fire();
     }
 

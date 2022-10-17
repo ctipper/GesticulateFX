@@ -12,6 +12,7 @@ import net.perspective.draw.DrawingArea;
 import net.perspective.draw.MapController;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.HandlerType;
+import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.StreetMap;
@@ -63,9 +64,9 @@ public class MapItemBehaviour implements ItemBehaviours {
     @Override
     public void editItem(BehaviourContext context, DrawItem item, int index) {
         view.setSelected(index);
-        // view.setEditing(KeyboardHandlerType.MAP);
         mapper.initMap();
         drawarea.changeHandlers(HandlerType.MAP);
+        view.setEditing(KeyHandlerType.MAP);
     }
 
     @Override

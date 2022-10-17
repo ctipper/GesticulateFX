@@ -31,6 +31,7 @@ import javafx.util.Callback;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.HandlerType;
+import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.StreetMap;
 import org.slf4j.Logger;
@@ -117,6 +118,11 @@ public class MapController {
             mapindex = -1;
             removeSlider();
         }
+    }
+
+    public void quitMapping() {
+        drawarea.changeHandlers(HandlerType.SELECTION);
+        view.setEditing(KeyHandlerType.MOVE);
     }
 
     /**
@@ -219,9 +225,7 @@ public class MapController {
         if (zoom > getMaxZoom() || zoom < getMinZoom()) {
             return;
         }
-        MapPoint mp = map.getPosition();
-        map.setLatitude(mp.getLatitude());
-        map.setLongitude(mp.getLongitude());
+        this.setPosition();
         map.adjustZoom(Math.round(zoom));
     }
 
@@ -274,7 +278,7 @@ public class MapController {
     /**
      * Centre the map
      */
-    public void setPosition() {
+    private void setPosition() {
         MapPoint mp = map.getPosition();
         map.setLatitude(mp.getLatitude());
         map.setLongitude(mp.getLongitude());
@@ -294,6 +298,20 @@ public class MapController {
         }
     }
 
+    /**
+     * Pan the map
+     * 
+     * @param diffx  x increment
+     * @param diffy  y increment
+     */
+    public void moveMap(int diffx, int diffy) {
+        map.moveMap(diffx, diffy);
+        this.moveMap();
+    }
+
+    /**
+     * Refresh map layout
+     */
     public void moveMap() {
         if (view.isMapping()) {
             map.refreshLayout();
