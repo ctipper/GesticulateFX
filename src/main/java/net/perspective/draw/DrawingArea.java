@@ -301,17 +301,29 @@ public class DrawingArea {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
                 this.setContextHandlers();
             }
-            case FIGURE -> listener.setEventHandler(injector.getInstance(FigureHandler.class));
+            case FIGURE -> {
+                listener.setEventHandler(injector.getInstance(FigureHandler.class));
+                view.setSelected(-1);
+            }
             case ROTATION -> {
                 listener.setEventHandler(injector.getInstance(RotationHandler.class));
                 this.setContextHandlers();
+                view.setSelected(-1);
             }
-            case SKETCH -> listener.setEventHandler(injector.getInstance(SketchHandler.class));
-            case TEXT -> listener.setEventHandler(injector.getInstance(TextHandler.class));
+            case SKETCH -> {
+                listener.setEventHandler(injector.getInstance(SketchHandler.class));
+                view.setSelected(-1);
+            }
+            case TEXT -> {
+                listener.setEventHandler(injector.getInstance(TextHandler.class));
+                view.setSelected(-1);
+            }
             default -> {
+                listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                this.setContextHandlers();
+                view.setSelected(-1);
             }
         }
-        view.setSelected(-1);
         view.setDrawing(false);
     }
 
