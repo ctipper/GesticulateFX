@@ -33,12 +33,16 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
+import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.event.FigureHandler;
 import net.perspective.draw.event.RotationHandler;
 import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.event.TextHandler;
+import net.perspective.draw.event.keyboard.DummyKeyHandler;
+import net.perspective.draw.event.keyboard.MoveKeyHandler;
+import net.perspective.draw.event.keyboard.KeyListener;
 import net.perspective.draw.geom.ArrowType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Edge;
@@ -68,6 +72,7 @@ public class DrawingArea {
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
     @Inject private DrawAreaListener listener;
+    @Inject private KeyListener keylistener;
     @Inject private CanvasTransferHandler transferhandler;
     @Inject private Dropper dropper;
     @Inject private G2 g2;
@@ -120,6 +125,7 @@ public class DrawingArea {
         this.setDrawType(DrawingType.SKETCH);
         this.arrowtype = ArrowType.NONE;
         listener.initializeHandlers(canvas);
+        keylistener.initializeHandlers(canvas);
         this.addContextMenu();
         this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
@@ -325,6 +331,20 @@ public class DrawingArea {
             }
         }
         view.setDrawing(false);
+    }
+
+    /**
+     * Set keyboard handlers
+     * 
+     * @param handler the {@link net.perspective.draw.enums.KeyboardHandlerType}
+     */
+    public void setKeyboardHandler(KeyHandlerType handler) {
+        switch (handler) {
+            // case TEXT -> keylistener.setEventHandler(injector.getInstance(TextKeyHandler.class));
+            case MOVE -> keylistener.setEventHandler(injector.getInstance(MoveKeyHandler.class));
+            // case MAP -> keylistener.setEventHandler(injector.getInstance(MapKeyHandler.class));
+            default -> keylistener.setEventHandler(injector.getInstance(DummyKeyHandler.class));
+        }
     }
 
     /**

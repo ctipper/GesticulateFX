@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
@@ -48,9 +49,8 @@ public class CanvasView {
     private Group drawingAnchors;
     private Node drawMarquee;
     private Node drawGuides;
-    private boolean isDrawing;
-    private boolean isMarquee;
-    private boolean hasGuides;
+    private boolean isDrawing, isEditing;
+    private boolean isMarquee, hasGuides;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
 
@@ -626,12 +626,47 @@ public class CanvasView {
     }
 
     /**
+     * Initialise the given editing mode defined by KeyboardHandlerType
+     * 
+     * @param keyHandler the keyboard handler
+     */
+    public void setEditing(KeyHandlerType keyHandler) {
+        switch (keyHandler) {
+            case TEXT -> {
+                setEditing(true);
+                drawarea.setKeyboardHandler(keyHandler);
+            }
+            case MOVE -> {
+                setEditing(false);
+                drawarea.setKeyboardHandler(keyHandler);
+            }
+            case MAP -> {
+                setEditing(false);
+                drawarea.setKeyboardHandler(keyHandler);
+            }
+            default -> {
+                setEditing(false);
+                drawarea.setKeyboardHandler(keyHandler);
+            }
+        }
+    }
+
+    /**
+     * Set editing mode
+     * 
+     * @param isEditing editing is active
+     */
+    public void setEditing(boolean isEditing) {
+        this.isEditing = isEditing;
+    }
+
+    /**
      * Is editing mode
      * 
      * @return is editing
      */
     public boolean isEditing() {
-        return false;
+        return isEditing;
     }
 
     /**

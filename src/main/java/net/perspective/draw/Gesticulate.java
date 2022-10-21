@@ -40,6 +40,7 @@ import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
+import net.perspective.draw.event.keyboard.KeyListener;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Picture;
@@ -325,6 +326,7 @@ public class Gesticulate extends GuiceApplication {
             bind(SelectionHandler.class);
             bind(SketchHandler.class);
             bind(TextHandler.class);
+            bind(KeyListener.class);
             bind(BehaviourContext.class);
             bind(FigureItemBehaviour.class);
             bind(PictureItemBehaviour.class);
