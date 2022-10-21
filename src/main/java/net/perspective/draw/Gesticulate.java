@@ -40,6 +40,8 @@ import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
+import net.perspective.draw.event.keyboard.DummyKeyHandler;
+import net.perspective.draw.event.keyboard.MoveKeyHandler;
 import net.perspective.draw.event.keyboard.KeyListener;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.FigureFactoryImpl;
@@ -55,8 +57,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import net.perspective.draw.event.keyboard.DummyKeyHandler;
-import net.perspective.draw.event.keyboard.MoveKeyHandler;
 
 /**
  * 
@@ -68,6 +68,7 @@ public class Gesticulate extends GuiceApplication {
     @Inject private GuiceFXMLLoader fxmlLoader;
     @Inject private ApplicationController controller;
     @Inject private DrawingArea drawarea;
+    @Inject private KeyListener keylistener;
     @Inject private ShareUtils share;
     private Stage stage;
     private Properties userPrefs;
@@ -103,6 +104,8 @@ public class Gesticulate extends GuiceApplication {
 
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
+        // keyboard events are consumed by the scene
+        keylistener.initializeHandlers(scene);
 
         primaryStage.setTitle("GesticulateFX");
         primaryStage.setResizable(true);

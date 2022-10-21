@@ -49,8 +49,10 @@ public class CanvasView {
     private Group drawingAnchors;
     private Node drawMarquee;
     private Node drawGuides;
-    private boolean isDrawing, isEditing;
-    private boolean isMarquee, hasGuides;
+    private boolean isDrawing;
+    private boolean isEditing;
+    private boolean isMarquee;
+    private boolean hasGuides;
 
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
 

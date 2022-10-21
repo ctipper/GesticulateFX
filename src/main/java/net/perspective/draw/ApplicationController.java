@@ -65,6 +65,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
+import net.perspective.draw.enums.KeyHandlerType;
 
 /**
  * 
@@ -75,6 +76,7 @@ import net.perspective.draw.enums.HandlerType;
 public class ApplicationController implements Initializable {
 
     @Inject private DrawingArea drawarea;
+    @Inject private CanvasView view;
     @Inject private Gesticulate application;
     @Inject private ShareUtils share;
     private BooleanProperty snapshotEnabled;
@@ -141,64 +143,75 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleSelectionAction(ActionEvent e) {
         drawarea.changeHandlers(HandlerType.SELECTION);
+        view.setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleRotationAction(ActionEvent e) {
         drawarea.changeHandlers(HandlerType.ROTATION);
+        view.setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleLineAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.LINE);
         drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleLineTypeAction(ActionEvent e) {
         this.setDrawAreaLineType();
         drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleCircleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.ELLIPSE);
         drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleSquareAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.RECTANGLE);
         drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.ISOSCELES);
         drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleHexagonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.HEXAGON);
         drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handlePolygonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.POLYGON);
         drawarea.changeHandlers(HandlerType.SKETCH);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleSketchAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.SKETCH);
         drawarea.changeHandlers(HandlerType.SKETCH);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleTextAction(ActionEvent e) {
         drawarea.changeHandlers(HandlerType.TEXT);
+        view.setEditing(KeyHandlerType.NONE);
     }
 
     @FXML

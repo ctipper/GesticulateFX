@@ -29,28 +29,47 @@ public class MoveKeyHandler implements KeyHandler {
 
     @Override
     public void keyPressed() {
-        if ((view.getSelected() != -1) && (!view.isEditing())) {
-            DrawItem item = view.getDrawings().get(view.getSelected());
-            switch (keylistener.getKeycode()) {
-                case KP_UP, UP -> {
-                }
-                case KP_DOWN, DOWN -> {
-                }
-                case KP_LEFT, LEFT -> {
-                }
-                case KP_RIGHT, RIGHT -> {
-                }
-                case DELETE -> {
-                }
-                default -> {
-                }
-            }
-        }
+
     }
 
     @Override
     public void keyReleased() {
-        
+        if ((view.getSelected() != -1) && (!view.isEditing())) {
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            switch (keylistener.getKeyCode()) {
+                case KP_UP, UP -> {
+                    if (!drawarea.isRotationMode()) {
+                        drawarea.snapUp(item);
+                    }
+                }
+                case KP_DOWN, DOWN -> {
+                    if (!drawarea.isRotationMode()) {
+                        drawarea.snapDown(item);
+                    }
+                }
+                case KP_LEFT, LEFT -> {
+                    if (drawarea.isRotationMode()) {
+                        drawarea.rotateLeft(item);
+                    } else {
+                        drawarea.snapLeft(item);
+                    }
+                }
+                case KP_RIGHT, RIGHT -> {
+                    if (drawarea.isRotationMode()) {
+                        drawarea.rotateRight(item);
+                    } else {
+                        drawarea.snapRight(item);
+                    }
+                }
+                case DELETE -> {
+                    view.deleteSelectedItem();
+                }
+                default -> {
+                }
+            }
+            view.moveSelection(view.getSelected());
+            view.updateCanvasItem(view.getSelected(), item);
+        }
     }
 
     @Override

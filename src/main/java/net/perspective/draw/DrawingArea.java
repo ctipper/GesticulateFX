@@ -89,6 +89,7 @@ public class DrawingArea {
     private DrawItem marquee;
     private Grouped guides;
     private FigureFactory figurefactory;
+    private boolean rotationMode;
     private boolean gridVisible;
     private boolean darkModeEnabled;
     private boolean multiSelectEnabled;
@@ -125,7 +126,7 @@ public class DrawingArea {
         this.setDrawType(DrawingType.SKETCH);
         this.arrowtype = ArrowType.NONE;
         listener.initializeHandlers(canvas);
-        keylistener.initializeHandlers(canvas);
+        view.setEditing(KeyHandlerType.MOVE);
         this.addContextMenu();
         this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
@@ -305,27 +306,33 @@ public class DrawingArea {
         switch (handler) {
             case SELECTION -> {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                this.setRotationMode(false);
                 this.setContextHandlers();
             }
             case FIGURE -> {
                 listener.setEventHandler(injector.getInstance(FigureHandler.class));
+                this.setRotationMode(false);
                 view.setSelected(-1);
             }
             case ROTATION -> {
                 listener.setEventHandler(injector.getInstance(RotationHandler.class));
+                this.setRotationMode(true);
                 this.setContextHandlers();
                 view.setSelected(-1);
             }
             case SKETCH -> {
                 listener.setEventHandler(injector.getInstance(SketchHandler.class));
+                this.setRotationMode(false);
                 view.setSelected(-1);
             }
             case TEXT -> {
                 listener.setEventHandler(injector.getInstance(TextHandler.class));
+                this.setRotationMode(false);
                 view.setSelected(-1);
             }
             default -> {
                 listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                this.setRotationMode(false);
                 this.setContextHandlers();
                 view.setSelected(-1);
             }
@@ -478,6 +485,50 @@ public class DrawingArea {
     }
 
     /**
+     * Up align shape to grid
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void snapUp(DrawItem item) {
+        double y = item.getTop()[0].getY();
+        double yinc = ((((int) ((y / 10) + 0.5)) - 1) * 10.0) - y;
+        item.moveTo(0, yinc);
+    }
+
+    /**
+     * Down align shape to grid
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void snapDown(DrawItem item) {
+        double y = item.getTop()[0].getY();
+        double yinc = ((((int) ((y / 10) + 0.5)) + 1) * 10.0) - y;
+        item.moveTo(0, yinc);
+    }
+
+    /**
+     * Left align shape to grid
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void snapLeft(DrawItem item) {
+        double x = item.getTop()[0].getX();
+        double xinc = ((((int) ((x / 10) + 0.5)) - 1) * 10.0) - x;
+        item.moveTo(xinc, 0);
+    }
+
+    /**
+     * Right align shape to grid
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void snapRight(DrawItem item) {
+        double x = item.getTop()[0].getX();
+        double xinc = ((((int) ((x / 10) + 0.5)) + 1) * 10.0) - x;
+        item.moveTo(xinc, 0);
+    }
+
+    /**
      * Move shape and steer to grid increments
      * 
      * @param item the {@link net.perspective.draw.geom.DrawItem}
@@ -502,6 +553,30 @@ public class DrawingArea {
         // corrected incremental offset
         double inc_yc = y - Math.round(y / 10) * 10.0;
         item.moveTo(inc_xa - inc_xc, inc_ya - inc_yc);
+    }
+
+    /**
+     * Rotate anti-clockwise by 15°
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void rotateLeft(DrawItem item) {
+        double angle = item.getAngle();
+        double theta = ((((int) (Math.signum(angle) * 0.5)) - 1) * pib12);
+        double zeta = (Math.round(angle / pib12) * pib12) + theta;
+        this.rotateTo(item, zeta - angle);
+    }
+
+    /**
+     * Rotate clockwise by 15°
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void rotateRight(DrawItem item) {
+        double angle = item.getAngle();
+        double theta = ((((int) (Math.signum(angle) * 0.5)) + 1) * pib12);
+        double zeta = (Math.round(angle / pib12) * pib12) + theta;
+        this.rotateTo(item, zeta - angle);
     }
 
     /**
@@ -968,6 +1043,24 @@ public class DrawingArea {
      */
     public DrawItem getMarquee() {
         return marquee;
+    }
+
+    /**
+     * Set rotation mode
+     * 
+     * @param rotationMode is rotating
+     */
+    public void setRotationMode(boolean rotationMode) {
+        this.rotationMode = rotationMode;
+    }
+
+    /**
+     * Is rotation mode enabled
+     * 
+     * @return is rotating
+     */
+    public boolean isRotationMode() {
+        return rotationMode;
     }
 
     /**

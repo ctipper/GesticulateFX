@@ -6,7 +6,7 @@
  */
 package net.perspective.draw.event.keyboard;
 
-import javafx.scene.SubScene;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
@@ -38,14 +38,14 @@ public class KeyListener {
         this.handler = handler;
     }
 
-    public void initializeHandlers(SubScene canvas) {
-        canvas.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+    public void initializeHandlers(Scene scene) {
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             keyPressed(event);
         });
-        canvas.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             keyReleased(event);
         });
-        canvas.addEventHandler(KeyEvent.KEY_TYPED, (KeyEvent event) -> {
+        scene.addEventHandler(KeyEvent.KEY_TYPED, (KeyEvent event) -> {
             keyTyped(event);
         });
     }
@@ -83,14 +83,14 @@ public class KeyListener {
     /**
      * @return the keychar
      */
-    public String getKeychar() {
+    public String getKeyChar() {
         return keychar;
     }
 
     /**
      * @return the keycode
      */
-    public KeyCode getKeycode() {
+    public KeyCode getKeyCode() {
         return keycode;
     }
 
