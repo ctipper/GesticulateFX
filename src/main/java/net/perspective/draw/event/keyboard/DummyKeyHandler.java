@@ -6,6 +6,8 @@
  */
 package net.perspective.draw.event.keyboard;
 
+import javax.inject.Inject;
+
 /**
  *
  * @author ctipper
@@ -13,7 +15,10 @@ package net.perspective.draw.event.keyboard;
 
 public class DummyKeyHandler implements KeyHandler {
 
+    @Inject KeyListener keylistener;
+
     /** Creates a new instance of <code>DummyKeyHandler</code> */
+    @Inject
     public DummyKeyHandler() {
     }
 

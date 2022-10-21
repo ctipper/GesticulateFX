@@ -55,6 +55,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import net.perspective.draw.event.keyboard.DummyKeyHandler;
+import net.perspective.draw.event.keyboard.MoveKeyHandler;
 
 /**
  * 
@@ -327,6 +329,8 @@ public class Gesticulate extends GuiceApplication {
             bind(SketchHandler.class);
             bind(TextHandler.class);
             bind(KeyListener.class);
+            bind(MoveKeyHandler.class);
+            bind(DummyKeyHandler.class);
             bind(BehaviourContext.class);
             bind(FigureItemBehaviour.class);
             bind(PictureItemBehaviour.class);
