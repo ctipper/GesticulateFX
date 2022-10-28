@@ -29,11 +29,6 @@ public class MoveKeyHandler implements KeyHandler {
 
     @Override
     public void keyPressed() {
-
-    }
-
-    @Override
-    public void keyReleased() {
         if ((view.getSelected() != -1) && (!view.isEditing())) {
             DrawItem item = view.getDrawings().get(view.getSelected());
             switch (keylistener.getKeyCode()) {
@@ -70,6 +65,11 @@ public class MoveKeyHandler implements KeyHandler {
             view.moveSelection(view.getSelected());
             view.updateCanvasItem(view.getSelected(), item);
         }
+    }
+
+    @Override
+    public void keyReleased() {
+
     }
 
     @Override

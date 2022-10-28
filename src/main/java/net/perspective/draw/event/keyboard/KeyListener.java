@@ -39,7 +39,7 @@ public class KeyListener {
     }
 
     public void initializeHandlers(Scene scene) {
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             keyPressed(event);
         });
         scene.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
