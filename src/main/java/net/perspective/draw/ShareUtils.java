@@ -46,7 +46,7 @@ public class ShareUtils {
 
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
-        this.margin = 3.0;  // half max stroke width
+        this.margin = 5.0;  // half max stroke width
     }
 
     public void resetCanvasFile() {
