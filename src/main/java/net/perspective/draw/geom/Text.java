@@ -6,7 +6,7 @@
  */
 
 /**
- * Copyright (c) 2022 e-conomist
+ * Copyright (c) 2022 Christopher Tipper
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
