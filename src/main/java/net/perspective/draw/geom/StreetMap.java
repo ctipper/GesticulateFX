@@ -360,10 +360,8 @@ public class StreetMap extends Picture {
         mv.setZoom(zoom);
         mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
         bp = getContainer();
-        bp.setLayoutX(start.x);
-        bp.setLayoutY(start.y);
-        bp.setPrefWidth(end.x);
-        bp.setPrefHeight(end.y);
+        bp.relocate(start.x, start.y);
+        bp.setPrefSize(end.x, end.y);
         return bp;
     }
 

@@ -137,6 +137,9 @@ public class MapController {
         }
     }
 
+    /**
+     * Set keyboard and mouse handlers on exiting mapping mode
+     */
     public void quitMapping() {
         drawarea.changeHandlers(HandlerType.SELECTION);
         view.setEditing(KeyHandlerType.MOVE);
@@ -362,7 +365,7 @@ public class MapController {
     }
 
     private void handleQuitAction(ActionEvent t) {
-        drawarea.changeHandlers(HandlerType.SELECTION);
+        quitMapping();
     }
 
     /**
