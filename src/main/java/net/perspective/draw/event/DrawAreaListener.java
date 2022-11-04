@@ -88,6 +88,7 @@ public class DrawAreaListener {
         });
         canvas.addEventHandler(ScrollEvent.SCROLL, (ScrollEvent event) -> {
             scrollEvent(event);
+            event.consume(); // prevent event percolating to parent
         });
         canvas.addEventHandler(ZoomEvent.ZOOM, (ZoomEvent event) -> {
             zoomEvent(event);
