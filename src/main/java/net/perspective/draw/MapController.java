@@ -246,7 +246,7 @@ public class MapController {
             return;
         }
         this.setPosition();
-        map.adjustZoom(Math.round(zoom));
+        map.adjustZoom(Long.valueOf(Math.round(zoom)).doubleValue());
     }
 
     /**

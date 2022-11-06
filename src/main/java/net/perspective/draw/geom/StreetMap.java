@@ -256,7 +256,7 @@ public class StreetMap extends Picture {
     public void setLocation(double lat, double lon, double zm) {
         setLatitude(lat);
         setLongitude(lon);
-        setZoom((int) Math.round(zm));
+        setZoom(Long.valueOf(Math.round(zm)).intValue());
         mv.setCenter(lat, lon);
         mv.setZoom(zoom);
         logger.debug("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
@@ -273,7 +273,7 @@ public class StreetMap extends Picture {
         MapPoint mp = mv.getMapPosition(centre.x, centre.y);
         setLatitude(mp.getLatitude());
         setLongitude(mp.getLongitude());
-        setZoom((int) Math.round(mv.getMapZoom()));
+        setZoom(Long.valueOf(Math.round(mv.getMapZoom())).intValue());
         logger.trace("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
 

@@ -103,7 +103,11 @@ public class SelectionHandler implements Handler {
                     if (item instanceof StreetMap) {
                         context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
                         boolean found = context.select(item, i);
-                        if (found) break;
+                        if (found) {
+                            // there is usually a small discrepency caused by serialisation
+                            ((StreetMap) item).setLocation();
+                            break;
+                        }
                     } else {
                         context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
                         boolean found = context.select(item, i);
