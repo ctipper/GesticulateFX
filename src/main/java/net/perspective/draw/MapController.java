@@ -97,6 +97,7 @@ public class MapController {
         streetmap.setStart(20.0, 20.0);
         streetmap.setEnd(width, height);
         streetmap.setLocation(50.0, 9, 4);
+        streetmap.init();
         Image image = createCompatibleImage(width, height);
         ImageItem img = new ImageItem(image);
         int index = view.setImageItem(img);

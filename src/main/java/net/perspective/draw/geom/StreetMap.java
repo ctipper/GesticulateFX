@@ -101,6 +101,15 @@ public class StreetMap extends Picture {
     }
 
     /**
+     * Initialise {@link com.gluonhq.maps.MapView}
+     */
+    public void init() {
+        mv.setCenter(latitude, longitude);
+        mv.setZoom(zoom);
+        mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
+    }
+
+    /**
      * Set the latitude of the streetmap
      * 
      * @param latitude  the latitude
@@ -186,7 +195,7 @@ public class StreetMap extends Picture {
     /**
      * Update the public properties of the streetmap 
      * 
-     * @param canvas  the {@link net.perspective.draw.DrawingArea}
+     * @param drawarea  the {@link net.perspective.draw.DrawingArea}
      */
     public void updateProperties(DrawingArea drawarea) {
         this.setTransparency(drawarea.getTransparency());
@@ -356,9 +365,6 @@ public class StreetMap extends Picture {
      */
     @Override
     public Node draw() {
-        mv.setCenter(latitude, longitude);
-        mv.setZoom(zoom);
-        mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
         bp = getContainer();
         bp.relocate(start.x, start.y);
         bp.setPrefSize(end.x, end.y);

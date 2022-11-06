@@ -180,6 +180,7 @@ public class ReadInFunnel extends Task<Object> {
             DrawItem item = injector.getInstance(StreetMap.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
+                ((StreetMap) item).init();
                 ((StreetMap) item).filterHandlers();
                 drawing = item;
             } catch (IllegalAccessException | InvocationTargetException ex) {

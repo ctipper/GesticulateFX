@@ -142,6 +142,7 @@ public class CanvasTransferHandler {
             DrawItem item = injector.getInstance(StreetMap.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
+                ((StreetMap) item).init();
                 ((StreetMap) item).filterHandlers();
                 drawing = item;
                 drawing = mapper.copyMap(((StreetMap) drawing));
