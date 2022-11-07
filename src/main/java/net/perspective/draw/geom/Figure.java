@@ -673,11 +673,25 @@ public class Figure implements DrawItem, Serializable {
         return color;
     }
 
+    /**
+     * Set the swing colour
+     * 
+     * @param color the {@link java.awt.Color}
+     * 
+     * @deprecated
+     */
     @Deprecated
     public void setColor(java.awt.Color color) {
         this.color = awtToFx(color);
     }
 
+    /**
+     * Get the swing colour
+     * 
+     * @return a {@link java.awt.Color}
+     * 
+     * @deprecated
+     */
     @Deprecated
     public java.awt.Color getAwtColor() {
         return fxToAwt(getColor());
@@ -702,11 +716,25 @@ public class Figure implements DrawItem, Serializable {
         return fillcolor;
     }
 
+    /**
+     * Set the swing fill colour
+     * 
+     * @param fillcolor the {@link java.awt.Color}
+     * 
+     * @deprecated
+     */
     @Deprecated
     public void setFillColor(java.awt.Color fillcolor) {
         this.fillcolor = awtToFx(fillcolor);
     }
 
+    /**
+     * Get the swing fill colour
+     * 
+     * @return a {@link java.awt.Color}
+     * 
+     * @deprecated
+     */
     @Deprecated
     public java.awt.Color getAwtFillColor() {
         return fxToAwt(getFillColor());
@@ -715,7 +743,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Set the type of stroke
      * 
-     * @param stroke
+     * @param stroke the {@link java.awt.Stroke}
      */
     public void setStroke(Stroke stroke) {
         this.stroke = stroke;
@@ -724,7 +752,7 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Return the type of stroke
      * 
-     * @return a stroke
+     * @return a {@link java.awt.Stroke}
      */
     public Stroke getStroke() {
         return stroke;

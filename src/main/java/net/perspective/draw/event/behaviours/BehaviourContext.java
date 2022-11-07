@@ -226,19 +226,19 @@ public class BehaviourContext {
     }
 
     /**
-     * Get the mouse drag origin
+     * Set the mouse drag origin
      * 
-     * @param x
-     * @param y 
+     * @param x the x coordinate
+     * @param y the y coordinate
      */
     public void setOmega(double x, double y) {
         this.omega = new CanvasPoint(x, y);
     }
 
     /**
-     * Set the mouse drag origin
+     * Get the mouse drag origin
      * 
-     * @return 
+     * @return a {@link net.perspective.draw.util.CanvasPoint}
      */
     public CanvasPoint getOmega() {
         return omega;

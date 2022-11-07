@@ -48,4 +48,7 @@ public class BasicStrokePersistenceDelegate extends DefaultPersistenceDelegate {
                 });
     }
 
+    /** Creates a new instance of <code>BasicStrokePersistenceDelegate</code> */
+    public BasicStrokePersistenceDelegate() {}
+
 }

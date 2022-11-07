@@ -360,7 +360,7 @@ public class DrawingArea {
     /**
      * Set keyboard handlers
      * 
-     * @param handler the {@link net.perspective.draw.enums.KeyboardHandlerType}
+     * @param handler the {@link net.perspective.draw.enums.KeyHandlerType}
      */
     public void setKeyboardHandler(KeyHandlerType handler) {
         switch (handler) {

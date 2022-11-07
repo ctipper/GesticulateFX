@@ -42,4 +42,7 @@ public class ArrowTypePersistenceDelegate extends DefaultPersistenceDelegate {
         });
     }
 
+    /** Creates a new instance of <code>ArrowTypePersistenceDelegate</code> */
+    public ArrowTypePersistenceDelegate() {}
+
 }

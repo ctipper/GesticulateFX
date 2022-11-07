@@ -587,7 +587,7 @@ public class ApplicationController implements Initializable {
     /**
      * Adjust theme fill colour by providing an offset
      * 
-     * @return fillColor the fill colour
+     * @param c the web fill color
      */
     public void adjustThemeFillColor(String c) {
         themeFillColor.setValue(getThemeColor(c));
@@ -596,7 +596,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get theme fill colour
      * 
-     * @return fillColor the fill colour
+     * @return fillColor the web fill colour
      */
     public String getThemeFillColor() {
         return themeFillColor.getValue();
@@ -605,7 +605,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get theme background colour
      * 
-     * @return background background colour
+     * @return background background web colour
      */
     public String getThemeBackgroundColor() {
         return themeBackgroundColor.getValue();
@@ -614,7 +614,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get theme accent colour
      * 
-     * @return accent accent colour
+     * @return accent accent web colour
      */
     public String getThemeAccentColor() {
         return themeAccentColor.getValue();
@@ -623,7 +623,7 @@ public class ApplicationController implements Initializable {
     /**
      * Set canvas background colour
      * 
-     * @param c canvas background colour
+     * @param c canvas background web colour
      */
     public void setCanvasBackgroundColor(String c) {
         canvasBackgroundColor.setValue(c);
@@ -632,7 +632,7 @@ public class ApplicationController implements Initializable {
     /**
      * Get canvas background colour
      * 
-     * @return canvas background colour
+     * @return canvas background web colour
      */
     public String getCanvasBackgroundColor() {
         return canvasBackgroundColor.getValue();
@@ -1186,6 +1186,9 @@ public class ApplicationController implements Initializable {
             Integer.parseInt(colorStr.substring(5, 7), 16) / 255,
             1d);
     }
+
+    /** Creates a new instance of <code>ApplicationController</code> */
+    public ApplicationController() {}
 
     @FXML
     private GridPane appmenu;

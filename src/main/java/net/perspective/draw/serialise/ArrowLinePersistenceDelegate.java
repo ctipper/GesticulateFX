@@ -63,4 +63,7 @@ public class ArrowLinePersistenceDelegate extends DefaultPersistenceDelegate {
                         new Object[]{line.getAwtFillColor()}));
     }
 
+    /** Creates a new instance of <code>ArrowLinePersistenceDelegate</code> */
+    public ArrowLinePersistenceDelegate() {}
+
 }

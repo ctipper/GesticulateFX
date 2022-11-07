@@ -49,10 +49,7 @@ public class ArrowLine extends Figure {
 
     public Figure line;
     public ArrowType arrowType;
-    /**
-     * Pointiness of arrow.
-     */
-    private double wedgeAngle;
+    private double wedgeAngle;  // Pointiness of arrow.
     private double outerRadius;
     private double innerRadius;
 
@@ -361,7 +358,7 @@ public class ArrowLine extends Figure {
     /**
      * Returns an area that specifies the transformed boundary
      * 
-     * @return a transformed shape
+     * @return a transformed {@link java.awt.Shape}
      */
     @Override
     public Shape bounds() {
