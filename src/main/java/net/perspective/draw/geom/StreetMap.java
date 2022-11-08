@@ -71,6 +71,7 @@ public class StreetMap extends Picture {
     private double longitude;
     private int zoom;
     private transient MapView mv;
+    private transient StackPane bp;
     private transient EventHandler<InputEvent> filter;
 
     private static final long serialVersionUID = 1L;
@@ -106,7 +107,17 @@ public class StreetMap extends Picture {
     public void init() {
         mv.setCenter(latitude, longitude);
         mv.setZoom(zoom);
-        mv.setCursor(javafx.scene.Cursor.OPEN_HAND);
+        final Group copyright = retrieveAttribution();
+        bp = new StackPane() {
+            @Override
+            protected void layoutChildren() {
+                super.layoutChildren();
+                copyright.setLayoutX(getWidth() - copyright.prefWidth(-1));
+                copyright.setLayoutY(getHeight() - copyright.prefHeight(-1));
+            }
+        };
+        bp.getChildren().addAll(mv, copyright);
+        bp.setCursor(javafx.scene.Cursor.OPEN_HAND);
     }
 
     /**
@@ -365,27 +376,8 @@ public class StreetMap extends Picture {
      */
     @Override
     public Node draw() {
-        bp = getContainer();
         bp.relocate(start.x, start.y);
         bp.setPrefSize(end.x, end.y);
-        return bp;
-    }
-
-    private transient StackPane bp = null;
-    private StackPane getContainer() {
-        if (bp == null) {
-            final Group copyright = createCopyright();
-            bp = new StackPane() {
-                @Override
-                protected void layoutChildren() {
-                    super.layoutChildren();
-                    copyright.setLayoutX(getWidth() - copyright.prefWidth(-1));
-                    copyright.setLayoutY(getHeight() - copyright.prefHeight(-1));
-                }
-            };
-            bp.getChildren().addAll(mv, copyright);
-            bp.setManaged(true);
-        }
         return bp;
     }
 
@@ -463,7 +455,7 @@ public class StreetMap extends Picture {
         g2.setTransform(defaultTransform);
     }
 
-    private Group createCopyright() {
+    private Group retrieveAttribution() {
         final Label copyright = new Label(
                 """
                 Map data \u00a9 OpenStreetMap contributors, CC-BY-SA.
