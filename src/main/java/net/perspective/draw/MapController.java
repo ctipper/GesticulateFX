@@ -421,7 +421,8 @@ public class MapController {
             }
             return null;
         };
-        SnapshotParameters params = new SnapshotParameters(); 
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
         map.getSnapshot(callback, params, null);
         return image;
     }

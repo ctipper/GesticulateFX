@@ -338,7 +338,7 @@ public class StreetMap extends Picture {
      */
     public void getSnapshot(Callback<SnapshotResult, Void> callback, SnapshotParameters params, WritableImage image) {
         Platform.runLater(() -> {
-            mv.snapshot(callback, params, null);
+            bp.snapshot(callback, params, null);
         });
     }
 
