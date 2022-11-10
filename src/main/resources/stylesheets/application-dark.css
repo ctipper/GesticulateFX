@@ -267,10 +267,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     -fx-background-insets: 0;
     -fx-background-radius: 0.5em; /* 6 */
 
-    -fx-padding: 0.8em 0.333333em 0.8em 0.333333em;  /* 10 4 10 4 */
+    -fx-padding: 0.666667em 0.333333em 0.666667em 0.333333em;  /* 8 4 8 4 */
 }
 .slider:vertical .thumb {
-    -fx-padding: 0.333333em 0.8em 0.333333em 0.8em;  /* 4 10 4 10 */
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em;  /* 4 8 4 8 */
 }
 .slider .track {
     -fx-background-color: #3a3a3a;
