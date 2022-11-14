@@ -438,7 +438,13 @@
                     </graphic>
                 </Button>
                 <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleImgImportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Insert Images..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button id="buttpdfexport" fx:id="pdfbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                <Button id="buttmapinsert" fx:id="mapbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleMapInsertAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                    <graphic>
+                        <SVGPath content="M15.817 0.113A0.5 0.5 0 0 1 16 0.5V14.5A0.5 0.5 0 0 1 15.598 14.99L10.598 15.99A0.502 0.502 0 0 1 10.402000000000001 15.99L5.5 15.01 0.5979999999999999 15.99A0.5 0.5 0 0 1 0 15.5V1.5A0.5 0.5 0 0 1 0.402 1.01L5.402 0.010000000000000009A0.5 0.5 0 0 1 5.598 0.010000000000000009L10.5 0.99 15.402000000000001 0.010000000000000009A0.5 0.5 0 0 1 15.817 0.113ZM10 1.91L6 1.1099999999999999V14.09L10 14.89V1.91ZM11 14.89L15 14.09V1.11L11 1.9100000000000001V14.89ZM5 14.09V1.11L1 1.9100000000000001V14.89L5 14.09Z" styleClass="svgThinPath" fill="TRANSPARENT" />
+                    </graphic>
+                </Button>
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleMapInsertAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Insert Map..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Button id="buttpdfexport" fx:id="pdfbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                     <graphic>
                         <Group>
                             <SVGPath content="M7.152279690172 10.37348354228L9.760581911686 10.37348354228C11.629632701434 10.37348354228 12.829172760526 9.04841022119 12.829172760526 6.984085468334 12.829172760526 4.947656995922001 11.6714771221 3.831805778162 9.551359808356 3.831805778162L5.060058656872 3.831805778162 5.060058656872 14 7.152279690172 14M7.152279690172 8.62996601453L7.152279690172 5.575323305912001 9.105019321252 5.575323305912001C10.220870539012001 5.575323305912001 10.736951727226 6.063508213682001 10.736951727226 7.109618730332 10.736951727226 8.14178110676 10.220870539012001 8.62996601453 9.105019321252 8.62996601453" fillRule="EVEN_ODD" styleClass="svgFill"/>
@@ -446,8 +452,8 @@
                         </Group>
                     </graphic>
                 </Button>
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export PDF..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button id="buttsvgexport" fx:id="svgbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePdfExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export PDF..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Button id="buttsvgexport" fx:id="svgbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                     <graphic>
                         <Group>
                             <SVGPath content="M12.466521114754 6.928292907446C12.466521114754 5.993767512572001 12.257299011424 5.380049342804 11.755165963431999 4.822123733924 11.071707092554 4.068924161936 9.941907734572 3.6644280954979997 8.477353011262 3.6644280954979997 6.036428472412 3.6644280954979997 4.6276663099899995 4.808175593702 4.6276663099899995 6.7888115052260005 4.6276663099899995 8.364951350312001 5.422710302644 9.132099062522 7.4870350555 9.522646988738L8.909745358144 9.801609793177999C10.304559380344 10.066624457396 10.820640568558 10.457172383612 10.820640568558 11.28011265671 10.820640568558 12.130949210252 10.039544716125999 12.647030398466 8.770263955924 12.647030398466 7.34755365328 12.647030398466 6.552509660626 12.04726036892 6.482768959516 10.959305431604001L4.446340487104 10.959305431604001C4.571873749102 13.135215306236 6.064324752856 14.320807225106 8.658678834147999 14.320807225106 11.280929195884 14.320807225106 12.829172760526 13.09337088557 12.829172760526 11.029046132714 12.829172760526 9.425010007184 12.02018062765 8.588121593863999 10.137181697679999 8.225469948092L8.547093712372 7.918610863208C7.054642708617999 7.625699918546 6.6222503617360005 7.332788973884 6.6222503617360005 6.593537542118001 6.6222503617360005 5.826389829908001 7.305709232613999 5.338204922138001 8.379716029708 5.338204922138001 9.704789350797999 5.338204922138001 10.444040782563999 5.8961305310180006 10.513781483673998 6.928292907446" fillRule="EVEN_ODD" styleClass="svgFill"/>
@@ -455,8 +461,8 @@
                         </Group>
                     </graphic>
                 </Button>
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export SVG..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <Button id="buttpngexport" fx:id="pngbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleSvgExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export SVG..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Button id="buttpngexport" fx:id="pngbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="5">
                     <graphic>
                         <Group>
                             <SVGPath content="M5.074006797094 14L9.049226760364 14C10.597470325006 14 11.573840140546 13.637348354228 12.257299011424 12.81440808113 13.0662911443 11.865934546034 13.498683491182 10.485068664056 13.498683491182 8.90892881897 13.498683491182 7.346737114106 13.0662911443 5.965871232128 12.257299011424 5.003449556810001 11.573840140546 4.180509283712 10.611418465227999 3.831805778162 9.049226760364 3.831805778162L5.074006797094 3.831805778162M7.166227830394 12.25648247225L7.166227830394 5.575323305912001 9.049226760364 5.575323305912001C10.625366605450001 5.575323305912001 11.406462457882 6.67722638345 11.406462457882 8.922876959192 11.406462457882 11.154579394712 10.625366605450001 12.25648247225 9.049226760364 12.25648247225" fillRule="EVEN_ODD" styleClass="svgFill"/>
@@ -464,13 +470,7 @@
                         </Group>
                     </graphic>
                 </Button>
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <Button id="buttmapinsert" fx:id="mapbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleMapInsertAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-                    <graphic>
-                        <SVGPath content="M15.817 0.113A0.5 0.5 0 0 1 16 0.5V14.5A0.5 0.5 0 0 1 15.598 14.99L10.598 15.99A0.502 0.502 0 0 1 10.402000000000001 15.99L5.5 15.01 0.5979999999999999 15.99A0.5 0.5 0 0 1 0 15.5V1.5A0.5 0.5 0 0 1 0.402 1.01L5.402 0.010000000000000009A0.5 0.5 0 0 1 5.598 0.010000000000000009L10.5 0.99 15.402000000000001 0.010000000000000009A0.5 0.5 0 0 1 15.817 0.113ZM10 1.91L6 1.1099999999999999V14.09L10 14.89V1.91ZM11 14.89L15 14.09V1.11L11 1.9100000000000001V14.89ZM5 14.09V1.11L1 1.9100000000000001V14.89L5 14.09Z" styleClass="svgThinPath" fill="TRANSPARENT" />
-                    </graphic>
-                </Button>
-                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleMapInsertAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Insert Map..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Button alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngExportAction" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Export Image..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <Button id="buttquitapp" fx:id="quitbutton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleOnQuitAction" prefHeight="20.0" styleClass="menuicon" text="" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                     <graphic>
                         <Group>
