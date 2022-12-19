@@ -163,7 +163,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
-         <arg value="Copyright © 2021 Christopher Tipper" />
+         <arg value="Copyright © 2022 Christopher Tipper" />
          <arg value="--mac-package-identifier" />
          <arg value="net.perspective.draw.GesticulateFX" />
          <arg value="--mac-app-category" />
@@ -195,7 +195,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
-         <arg value="Copyright © 2021 Christopher Tipper" />
+         <arg value="Copyright © 2022 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
          <arg value="--app-version" />
@@ -225,13 +225,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation" />
          <arg value="--copyright" />
-         <arg value="Copyright © 2021 Christopher Tipper" />
+         <arg value="Copyright © 2022 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
          <arg value="--app-version" />
          <arg value="${version.internal}" />
-         <arg value="--icon"/>
-         <arg value="src/site/deploy/linux/${bundle.linux.icon}"/>
       </exec>
    </target>
 
@@ -272,6 +270,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--linux-shortcut"/>
          <arg value="--file-associations" />
          <arg value="src/site/deploy/linux/bundle.properties" />
+         <arg value="--icon"/>
+         <arg value="src/site/deploy/linux/${bundle.linux.icon}"/>
       </exec>
 
       <echo if:set="onwindows" message="Calling ISCC"/>
