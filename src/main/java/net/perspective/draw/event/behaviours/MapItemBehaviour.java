@@ -103,7 +103,7 @@ public class MapItemBehaviour implements ItemBehaviours {
         /**
          * Ternary operators ensure minimum size for StreetMap
          */
-        double min_w = 256, min_h = 180;        // mimimum width and height of viewport
+        double min_w = 276, min_h = 180;        // mimimum width and height of viewport
         diffsx = en.x - st.x - xinc < min_w ? 0 : xinc;   // diff relative to TL corner
         diffsy = en.y - st.y - yinc < min_h ? 0 : yinc;   // diff relative to TL corner
         diffex = en.x - st.x + xinc < min_w ? 0 : xinc;   // reversed sign for BR corner
