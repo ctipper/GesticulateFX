@@ -4,5 +4,5 @@ An app for sketching freehand diagrams. GesticulateFX is not geared towards grap
 
 It supports vector shapes, curve-fitted lines and images. Text editing is planned.
 
-Copyright © 2022 Christopher Tipper
+Copyright © 2023 Christopher Tipper
 
