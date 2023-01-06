@@ -272,7 +272,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputDirectory>${project.build.directory}/jfx/app</outputDirectory>
+                    <outputDirectory>${project.build.directory}/build/app</outputDirectory>
                     <archive>
                         <compress>true</compress>
                         <index>true</index>
@@ -300,7 +300,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/jfx/app/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/build/app/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>

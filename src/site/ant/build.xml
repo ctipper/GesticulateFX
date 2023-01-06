@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    <target name="jlink" depends="-init-project">
 
       <!-- remove existing runtime -->
-      <delete dir="target/jfx/${bundle.dir}/${runtime.dir}" />
+      <delete dir="target/build/${bundle.dir}/${runtime.dir}" />
 
       <exec executable="${runtime.path}/bin/jlink" if:set="onmacos" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.path}"/>
@@ -60,7 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
          <arg value="--output" />
-         <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
+         <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
 
       <exec executable="${runtime.windows.path}/bin/jlink" if:set="onwindows" failonerror="true" newenvironment="true">
@@ -74,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
          <arg value="--output" />
-         <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
+         <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
 
       <exec executable="${runtime.windows.path}/bin/jlink" if:set="onlinux" failonerror="true" newenvironment="true">
@@ -88,57 +88,57 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--add-modules" />
          <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
          <arg value="--output" />
-         <arg value="target/jfx/${bundle.dir}/${runtime.dir}" />
+         <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
    </target>
 
    <target name="bundle" depends="jlink" description="Build App Bundle">
 
-      <mkdir dir="target/jfx/${bundle.dir}/${dist.dir}" />
-      <mkdir dir="target/jfx/${bundle.dir}/${dist.dir}/lib" />
+      <mkdir dir="target/build/${bundle.dir}/${dist.dir}" />
+      <mkdir dir="target/build/${bundle.dir}/${dist.dir}/lib" />
 
       <!-- remove existing libraries -->
       <delete>
-         <fileset file="target/jfx/${bundle.dir}/${dist.dir}/*"/>
-         <fileset file="target/jfx/${bundle.dir}/${dist.dir}/lib/*" />
+         <fileset file="target/build/${bundle.dir}/${dist.dir}/*"/>
+         <fileset file="target/build/${bundle.dir}/${dist.dir}/lib/*" />
       </delete>
 
       <echo if:set="onmacos" message="Delete bundles"/>
 
-      <delete dir="target/jfx/${app.name}.app" if:set="onmacos"/>
+      <delete dir="target/build/${app.name}.app" if:set="onmacos"/>
 
       <delete if:set="onmacos">
-         <fileset file="target/jfx/*.dmg"/>
+         <fileset file="target/build/*.dmg"/>
       </delete>
 
       <echo if:set="onwindows" message="Delete builds"/>
 
-      <delete dir="target/jfx/${app.name}" if:set="onwindows"/>
+      <delete dir="target/build/${app.name}" if:set="onwindows"/>
 
       <delete if:set="onwindows">
-         <fileset file="target/jfx/${app.name}_Setup_*.exe"/>
+         <fileset file="target/build/${app.name}_Setup_*.exe"/>
       </delete>
 
-      <delete dir="target/jfx/temp" if:set="onwindows"/>
+      <delete dir="target/build/temp" if:set="onwindows"/>
 
       <echo if:set="onlinux" message="Delete builds"/>
 
-      <delete dir="target/jfx/${app.name}" if:set="onlinux"/>
+      <delete dir="target/build/${app.name}" if:set="onlinux"/>
 
       <delete if:set="onlinux">
-         <fileset file="target/jfx/gesticulatefx*.deb"/>
+         <fileset file="target/build/gesticulatefx*.deb"/>
       </delete>
 
-      <delete dir="target/jfx/temp" if:set="onlinux"/>
+      <delete dir="target/build/temp" if:set="onlinux"/>
 
-      <copy todir="target/jfx/${bundle.dir}/${dist.dir}">
-         <fileset dir="target/jfx/app">
+      <copy todir="target/build/${bundle.dir}/${dist.dir}">
+         <fileset dir="target/build/app">
             <include name="${jlink.launcher.name}-${version.public}.jar"/>
          </fileset>
       </copy>
 
-      <copy todir="target/jfx/${bundle.dir}/${dist.dir}/lib">
-         <fileset dir="target/jfx/app/lib">
+      <copy todir="target/build/${bundle.dir}/${dist.dir}/lib">
+         <fileset dir="target/build/app/lib">
             <include name="**/*.jar"/>
             <exclude name="**/javafx-*.jar"/>
          </fileset>
@@ -149,11 +149,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input"/>
-         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="target/build/${bundle.dir}/${dist.dir}"/>
          <arg value="--dest"/>
-         <arg value="target/jfx"/>
+         <arg value="target/build"/>
          <arg value="--runtime-image"/>
-         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
+         <arg value="target/build/${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--main-class"/>
@@ -181,11 +181,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input" />
-         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="target/build/${bundle.dir}/${dist.dir}"/>
          <arg value="--dest"/>
-         <arg value="target/jfx"/>
+         <arg value="target/build"/>
          <arg value="--runtime-image"/>
-         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
+         <arg value="target/build/${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--main-class"/>
@@ -203,7 +203,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--icon"/>
          <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
          <arg value="--temp" />
-         <arg value="target/jfx/temp" />
+         <arg value="target/build/temp" />
       </exec>
 
       <exec executable="${jpackage.windows.path}/bin/jpackage" if:set="onlinux" failonerror="false" newenvironment="true">
@@ -211,11 +211,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input" />
-         <arg value="target/jfx/${bundle.dir}/${dist.dir}"/>
+         <arg value="target/build/${bundle.dir}/${dist.dir}"/>
          <arg value="--dest"/>
-         <arg value="target/jfx"/>
+         <arg value="target/build"/>
          <arg value="--runtime-image"/>
-         <arg value="target/jfx/${bundle.dir}/${runtime.dir}"/>
+         <arg value="target/build/${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--main-class"/>
@@ -246,9 +246,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--resource-dir"/>
          <arg value="src/site/deploy/macosx"/>
          <arg value="--dest"/>
-         <arg value="target/jfx"/>
+         <arg value="target/build"/>
          <arg value="--app-image"/>
-         <arg value="target/jfx/${app.name}.app"/>
+         <arg value="target/build/${app.name}.app"/>
       </exec>
 
       <echo if:set="onlinux" message="Creating DEB package"/>
@@ -260,9 +260,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--dest"/>
-         <arg value="target/jfx"/>
+         <arg value="target/build"/>
          <arg value="--app-image"/>
-         <arg value="target/jfx/${app.name}"/>
+         <arg value="target/build/${app.name}"/>
          <arg value="--install-dir"/>
          <arg value="/opt"/>
          <arg value="--linux-menu-group"/>
@@ -279,7 +279,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <exec executable="${isx.path}/ISCC.exe" osfamily="Windows" 
             dir="src/site/innosetup" 
             logError="true"
-            output="target/jfx/bundle/gesticulate-fx.log">
+            output="target/build/bundle/gesticulate-fx.log">
          <arg value="/DMyAppVersion=${version.internal}"/>
          <arg value="gesticulate-fx.iss"/>
       </exec>

@@ -48,7 +48,7 @@ AppSupportURL={#AppURL}
 AppUpdatesURL={#AppURL}
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
-OutputDir=../../../target/jfx
+OutputDir=../../../target/build
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -63,7 +63,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\deploy\windows\document.ico"; DestDir: {app}/icons;
-Source: "..\..\..\target\jfx\GesticulateFX\*"; DestDir: {app}; Flags: recursesubdirs
+Source: "..\..\..\target\build\GesticulateFX\*"; DestDir: {app}; Flags: recursesubdirs
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"
