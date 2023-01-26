@@ -165,11 +165,13 @@ public class CanvasView {
     /**
      * Update the canvas item at given index
      * 
-     * @param index item index
+     * @param selection item index
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
-    public void updateCanvasItem(int index, DrawItem item) {
-        drawings.set(index, item);
+    public void updateCanvasItem(int selection, DrawItem item) {
+        if (selection != -1) {
+            drawings.set(selection, item);
+        }
     }
 
     /**
