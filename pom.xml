@@ -16,9 +16,9 @@
     </organization>
 
     <properties>
-        <java.version>19</java.version>
+        <java.version>20</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>19.0.2.1</javafx.version>
+        <javafx.version>20.0.1</javafx.version>
         <slf4j.version>2.0.6</slf4j.version>
         <log4j.version>2.19.0</log4j.version>
         <batik.version>1.16</batik.version>
