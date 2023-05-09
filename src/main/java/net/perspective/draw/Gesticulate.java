@@ -77,6 +77,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import net.perspective.draw.text.TextEditor;
 
 /**
  * 
@@ -367,6 +368,8 @@ public class Gesticulate extends GuiceApplication {
             bind(Picture.class);
             bind(StreetMap.class);
             bind(MapController.class);
+            bind(TextController.class);
+            bind(TextEditor.class);
             bind(ShareUtils.class);
             bind(ReadInFunnel.class);
             bind(WriteOutStreamer.class);
