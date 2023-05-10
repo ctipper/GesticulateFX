@@ -33,6 +33,7 @@ public class TextController {
     /** 
      * Creates a new instance of <code>TextController</code>
      */
+    @Inject
     public TextController() {
     }
 

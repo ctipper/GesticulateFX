@@ -8,6 +8,7 @@ package net.perspective.draw.text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.inject.Inject;
 import net.perspective.draw.geom.Text;
 
 /**
@@ -23,6 +24,7 @@ public class TextEditor implements Editor {
     /**
      * Creates a new instance of <code>TextEditor</code>
      */
+    @Inject
     public TextEditor() {
         caretstart = caretend = 0;
         clipboard = "";

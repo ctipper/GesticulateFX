@@ -83,6 +83,7 @@ public class MapController {
     private static final Logger logger = LoggerFactory.getLogger(MapController.class.getName());
 
     /** Creates a new instance of <code>MapController</code> */
+    @Inject
     public MapController() {
         mapindex = -1;
     }
