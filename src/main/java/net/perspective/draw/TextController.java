@@ -23,6 +23,7 @@ public class TextController {
     @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     private Editor editor;
 
     public static final int FONT_BOLD = 1;
@@ -165,35 +166,35 @@ public class TextController {
      */
     private void formatSelected(int format) {
         switch (format) {
-//            case FONT_BOLD:
-//                if ((drawarea.getFontStyle() & FONT_BOLD) == FONT_BOLD) {
-//                    drawarea.getToolPanel().toggleFormattingButton(FONT_BOLD, false);
-//                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_BOLD);
-//                } else {
-//                    drawarea.getToolPanel().toggleFormattingButton(FONT_BOLD, true);
-//                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_BOLD);
-//                }
-//                break;
-//            case FONT_ITALIC:
-//                if ((drawarea.getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
-//                    drawarea.getToolPanel().toggleFormattingButton(FONT_ITALIC, false);
-//                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_ITALIC);
-//                } else {
-//                    drawarea.getToolPanel().toggleFormattingButton(FONT_ITALIC, true);
-//                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_ITALIC);
-//                }
-//                break;
-//            case FONT_UNDERLINED:
-//                if ((drawarea.getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
-//                    drawarea.getToolPanel().toggleFormattingButton(FONT_UNDERLINED, false);
-//                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_UNDERLINED);
-//                } else {
-//                    drawarea.getToolPanel().toggleFormattingButton(FONT_UNDERLINED, true);
-//                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_UNDERLINED);
-//                }
-//                break;
-            default:
-                break;
+            case FONT_BOLD -> {
+                if ((drawarea.getFontStyle() & FONT_BOLD) == FONT_BOLD) {
+                    controller.getBoldProperty().setValue(Boolean.FALSE);
+                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_BOLD);
+                } else {
+                    controller.getBoldProperty().setValue(Boolean.TRUE);
+                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_BOLD);
+                }
+            }
+            case FONT_ITALIC -> {
+                if ((drawarea.getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
+                    controller.getItalicProperty().setValue(Boolean.FALSE);
+                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_ITALIC);
+                } else {
+                    controller.getItalicProperty().setValue(Boolean.TRUE);
+                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_ITALIC);
+                }
+            }
+            case FONT_UNDERLINED -> {
+                if ((drawarea.getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
+                    controller.getUnderlinedProperty().setValue(Boolean.FALSE);
+                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_UNDERLINED);
+                } else {
+                    controller.getUnderlinedProperty().setValue(Boolean.TRUE);
+                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_UNDERLINED);
+                }
+            }
+            default -> {
+            }
         }
     }
 
