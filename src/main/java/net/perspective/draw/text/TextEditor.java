@@ -191,7 +191,7 @@ public class TextEditor implements Editor {
      * @param c The character to insert
      */
     @Override
-    public void insertChar(char c) {
+    public void insertChar(String c) {
         String startText = text.substring(0, caretstart);
         String endText = text.substring(caretend);
         if (text.equals(" ")) {

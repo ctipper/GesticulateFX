@@ -92,7 +92,7 @@ public interface Editor {
      * 
      * @param c The character to insert
      */
-    void insertChar(char c);
+    void insertChar(String c);
 
     /**
      * insert text action
