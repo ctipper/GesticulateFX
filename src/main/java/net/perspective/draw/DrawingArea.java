@@ -78,6 +78,7 @@ import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import net.perspective.draw.event.keyboard.TextKeyHandler;
 
 /**
  * 
@@ -142,6 +143,7 @@ public class DrawingArea {
         contextmenu = new ContextMenu();
         contextlistener = null;
         view.setDrawingListener();
+        view.enableRichText(false);
         this.prepareDrawing();
         this.setDrawType(DrawingType.SKETCH);
         this.arrowtype = ArrowType.NONE;
@@ -374,7 +376,7 @@ public class DrawingArea {
      */
     public void setKeyboardHandler(KeyHandlerType handler) {
         switch (handler) {
-            // case TEXT -> keylistener.setEventHandler(injector.getInstance(TextKeyHandler.class));
+            case TEXT -> keylistener.setEventHandler(injector.getInstance(TextKeyHandler.class));
             case MOVE -> keylistener.setEventHandler(injector.getInstance(MoveKeyHandler.class));
             case MAP -> keylistener.setEventHandler(injector.getInstance(MapKeyHandler.class));
             default -> keylistener.setEventHandler(injector.getInstance(DummyKeyHandler.class));

@@ -58,6 +58,7 @@ public class CanvasView {
     @Inject private DrawingArea drawarea;
     @Inject private ApplicationController controller;
     @Inject private Dropper dropper;
+    @Inject private TextController textController;
     private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private final List<ImageItem> images;
@@ -182,6 +183,15 @@ public class CanvasView {
             drawings.remove(this.getSelected());
             setSelected(-1);
         }
+    }
+
+    /**
+     * Use the textController's rich text markup
+     * 
+     * @param isRichText formatted text active
+     */
+    public void enableRichText(boolean isRichText) {
+        textController.enableRichText(isRichText);
     }
 
     /**

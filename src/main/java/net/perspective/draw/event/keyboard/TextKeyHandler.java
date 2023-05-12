@@ -30,7 +30,7 @@ import net.perspective.draw.TextController;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
-import net.perspective.draw.text.TextEditor;
+import net.perspective.draw.text.Editor;
 
 /**
  * 
@@ -42,7 +42,8 @@ public class TextKeyHandler implements KeyHandler {
     @Inject private Injector injector;
     @Inject private CanvasView view;
     @Inject private KeyListener keylistener;
-    @Inject private TextEditor editor;
+    @Inject private TextController controller;
+    private Editor editor;
     private int selection = -1;
     private boolean selectToLeft = false;
     private int composedTextStartIndex = -1;
@@ -64,6 +65,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyPressed() {
+        this.editor = controller.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
@@ -200,6 +202,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyTyped() {
+        this.editor = controller.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
@@ -226,7 +229,7 @@ public class TextKeyHandler implements KeyHandler {
 //    public void inputMethodTextChanged(InputMethodEvent e) {
 //        int commitCount = e.getCommittedCharacterCount();
 //        AttributedCharacterIterator text = e.getText();
-//        this.editor = injector.getInstance(TextEditor.class);
+//        this.editor = controller.getEditor();
 //        if ((view.getSelected() != -1) && (view.isEditing())) {
 //            DrawItem item = view.getDrawings().get(view.getSelected());
 //            if (item instanceof Text) {

@@ -27,7 +27,7 @@ import com.google.inject.Injector;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.Text;
-import net.perspective.draw.text.*;
+import net.perspective.draw.text.Editor;
 
 /**
  * 
@@ -59,9 +59,9 @@ public class TextController {
      * 
      * @param isRichText enable formatted text
      */
-    public void enableText(boolean isRichText) {
+    public void enableRichText(boolean isRichText) {
         if (!view.isEditing()) {
-            this.editor = injector.getInstance(TextEditor.class);
+            this.editor = injector.getInstance(Editor.class);
         }
     }
 

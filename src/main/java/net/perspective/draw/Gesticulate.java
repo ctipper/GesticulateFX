@@ -53,31 +53,17 @@ import javax.inject.Inject;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
 import net.perspective.draw.event.*;
-import net.perspective.draw.event.behaviours.BehaviourContext;
-import net.perspective.draw.event.behaviours.FigureItemBehaviour;
-import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
-import net.perspective.draw.event.behaviours.MapItemBehaviour;
-import net.perspective.draw.event.behaviours.PictureItemBehaviour;
-import net.perspective.draw.event.keyboard.DummyKeyHandler;
-import net.perspective.draw.event.keyboard.MapKeyHandler;
-import net.perspective.draw.event.keyboard.MoveKeyHandler;
-import net.perspective.draw.event.keyboard.KeyListener;
-import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
-import net.perspective.draw.geom.Picture;
-import net.perspective.draw.geom.StreetMap;
+import net.perspective.draw.event.behaviours.*;
+import net.perspective.draw.event.keyboard.*;
+import net.perspective.draw.geom.*;
 import net.perspective.draw.util.G2;
-import net.perspective.draw.workers.ImageLoadWorker;
-import net.perspective.draw.workers.PDFWorker;
-import net.perspective.draw.workers.PNGWorker;
-import net.perspective.draw.workers.ReadInFunnel;
-import net.perspective.draw.workers.SVGWorker;
-import net.perspective.draw.workers.WriteOutStreamer;
+import net.perspective.draw.text.Editor;
+import net.perspective.draw.text.TextEditor;
+import net.perspective.draw.workers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import net.perspective.draw.text.TextEditor;
 
 /**
  * 
@@ -360,6 +346,7 @@ public class Gesticulate extends GuiceApplication {
             bind(DummyKeyHandler.class);
             bind(MapKeyHandler.class);
             bind(MoveKeyHandler.class);
+            bind(TextKeyHandler.class);
             bind(BehaviourContext.class);
             bind(FigureItemBehaviour.class);
             bind(PictureItemBehaviour.class);
@@ -370,7 +357,7 @@ public class Gesticulate extends GuiceApplication {
             bind(StreetMap.class);
             bind(MapController.class);
             bind(TextController.class);
-            bind(TextEditor.class);
+            bind(Editor.class).to(TextEditor.class);
             bind(ShareUtils.class);
             bind(ReadInFunnel.class);
             bind(WriteOutStreamer.class);
