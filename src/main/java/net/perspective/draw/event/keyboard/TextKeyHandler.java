@@ -43,7 +43,6 @@ public class TextKeyHandler implements KeyHandler {
     @Inject private CanvasView view;
     @Inject private KeyListener keylistener;
     @Inject private TextController controller;
-    private Editor editor;
     private int selection = -1;
     private boolean selectToLeft = false;
     private int composedTextStartIndex = -1;
@@ -65,7 +64,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyPressed() {
-        this.editor = controller.getEditor();
+        Editor editor = controller.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
@@ -202,7 +201,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyTyped() {
-        this.editor = controller.getEditor();
+        Editor editor = controller.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
