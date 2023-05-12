@@ -32,7 +32,6 @@ import net.perspective.draw.geom.ArrowLine;
 import net.perspective.draw.geom.ArrowType;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
 
 /**
  * 
@@ -44,10 +43,9 @@ public class FigureHandler implements Handler {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
-    private final FigureFactory figurefactory;
+    @Inject private FigureFactory figurefactory;
 
     public FigureHandler() {
-        this.figurefactory = new FigureFactoryImpl();
     }
 
     @Override

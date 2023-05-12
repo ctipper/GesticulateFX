@@ -23,6 +23,7 @@
  */
 package net.perspective.draw.geom;
 
+import javax.inject.Inject;
 import net.perspective.draw.enums.DrawingType;
 
 /**
@@ -31,6 +32,10 @@ import net.perspective.draw.enums.DrawingType;
  */
 
 public class FigureFactoryImpl implements FigureFactory {
+
+    @Inject
+    public FigureFactoryImpl() {
+    }
 
     @Override
     public Figure createFigure(DrawingType drawType) {

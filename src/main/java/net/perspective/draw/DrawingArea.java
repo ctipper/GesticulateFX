@@ -67,7 +67,6 @@ import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Edge;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.FigureType;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
@@ -94,6 +93,7 @@ public class DrawingArea {
     @Inject private DrawAreaListener listener;
     @Inject private KeyListener keylistener;
     @Inject private CanvasTransferHandler transferhandler;
+    @Inject private FigureFactory figurefactory;
     @Inject private Dropper dropper;
     @Inject private MapController mapper;
     @Inject private G2 g2;
@@ -109,7 +109,6 @@ public class DrawingArea {
     private ArrowType arrowtype;
     private DrawItem marquee;
     private Grouped guides;
-    private FigureFactory figurefactory;
     private boolean rotationMode;
     private boolean gridVisible;
     private boolean darkModeEnabled;
@@ -153,7 +152,7 @@ public class DrawingArea {
         this.changeHandlers(HandlerType.SELECTION);
         this.gridVisible = false;
         guides = new Grouped();
-        figurefactory = new FigureFactoryImpl();
+        figurefactory = injector.getInstance(FigureFactory.class);
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type
