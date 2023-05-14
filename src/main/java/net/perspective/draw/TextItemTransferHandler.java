@@ -29,9 +29,10 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -46,7 +47,7 @@ public class TextItemTransferHandler {
     public static int COPY = 1;
     public static int MOVE = 2;
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(TextItemTransferHandler.class.getName());
 
     @Inject
     public TextItemTransferHandler() {
@@ -79,14 +80,14 @@ public class TextItemTransferHandler {
         return false;
     }
 
-    protected Transferable createTransferable() {
+    public Transferable createTransferable() {
         injector.getInstance(TextController.class).copySelectedText();
         String data = injector.getInstance(TextController.class).getClipboard();
         logger.trace("Transfer data: {}", data);
         return new StringSelection(data);
     }
 
-    protected void exportDone(Transferable data, int action) {
+    public void exportDone(Transferable data, int action) {
         if (action == MOVE) {
             injector.getInstance(TextController.class).cutSelectedText();
             logger.debug("Removed selected text");

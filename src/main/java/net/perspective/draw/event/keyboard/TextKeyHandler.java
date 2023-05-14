@@ -24,13 +24,18 @@
 package net.perspective.draw.event.keyboard;
 
 import com.google.inject.Injector;
+import java.awt.datatransfer.Transferable;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.TextController;
+import net.perspective.draw.TextItemTransferHandler;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.text.Editor;
+
+import static net.perspective.draw.CanvasTransferHandler.COPY;
+import static net.perspective.draw.CanvasTransferHandler.MOVE;
 
 /**
  * 
@@ -43,6 +48,8 @@ public class TextKeyHandler implements KeyHandler {
     @Inject private CanvasView view;
     @Inject private KeyListener keylistener;
     @Inject private TextController controller;
+    @Inject private TextItemTransferHandler transferhandler;
+    private Transferable clipboard;
     private int selection = -1;
     private boolean selectToLeft = false;
     private int composedTextStartIndex = -1;
@@ -101,6 +108,26 @@ public class TextKeyHandler implements KeyHandler {
                         // Insert date
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
                             // view.insertDateAndTime((Text) item);
+                        }
+                    }
+                    case X -> {
+                        // cut selected
+                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                            clipboard = transferhandler.createTransferable();
+                            transferhandler.exportDone(clipboard, MOVE);
+                        }
+                    }
+                    case C -> {
+                        // copy selected
+                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                            clipboard = transferhandler.createTransferable();
+                            transferhandler.exportDone(clipboard, COPY);
+                        }
+                    }
+                    case V -> {
+                        // paste selected
+                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                            transferhandler.importData(clipboard);
                         }
                     }
                     case BACK_SPACE -> {
