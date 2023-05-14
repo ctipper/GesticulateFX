@@ -188,28 +188,22 @@ public class TextController {
             case FONT_BOLD -> {
                 if ((drawarea.getFontStyle() & FONT_BOLD) == FONT_BOLD) {
                     controller.getBoldProperty().setValue(Boolean.FALSE);
-                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_BOLD);
                 } else {
                     controller.getBoldProperty().setValue(Boolean.TRUE);
-                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_BOLD);
                 }
             }
             case FONT_ITALIC -> {
                 if ((drawarea.getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
                     controller.getItalicProperty().setValue(Boolean.FALSE);
-                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_ITALIC);
                 } else {
                     controller.getItalicProperty().setValue(Boolean.TRUE);
-                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_ITALIC);
                 }
             }
             case FONT_UNDERLINED -> {
                 if ((drawarea.getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
                     controller.getUnderlinedProperty().setValue(Boolean.FALSE);
-                    drawarea.updateFontStyle(drawarea.getFontStyle() ^ FONT_UNDERLINED);
                 } else {
                     controller.getUnderlinedProperty().setValue(Boolean.TRUE);
-                    drawarea.updateFontStyle(drawarea.getFontStyle() | FONT_UNDERLINED);
                 }
             }
             default -> {

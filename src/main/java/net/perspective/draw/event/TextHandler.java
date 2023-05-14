@@ -23,9 +23,12 @@
  */
 package net.perspective.draw.event;
 
+import com.google.inject.Injector;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.TextController;
+import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.Text;
 
 /**
@@ -35,6 +38,7 @@ import net.perspective.draw.geom.Text;
 
 public class TextHandler implements Handler {
 
+    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
@@ -58,13 +62,13 @@ public class TextHandler implements Handler {
     public void clickEvent() {
         if (!view.isEditing()) {
             Text item = new Text(listener.getTempX(), listener.getTempY());
-            // item = view.getTextController().initializeItem(item);
+            item = injector.getInstance(TextController.class).initializeItem(item);
             item.updateProperties(drawarea);
             view.setNewItem(item);
             view.resetNewItem();
             int i = view.getDrawings().size() - 1;
             view.setSelected(i);
-            // view.setEditing(KeyboardHandlerType.TEXT);
+            view.setEditing(KeyHandlerType.TEXT);
         } else if (view.getSelected() != -1) {
             view.updateSelectedItem();
             view.moveSelection(view.getSelected());

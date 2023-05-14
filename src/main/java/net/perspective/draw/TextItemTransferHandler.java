@@ -31,12 +31,14 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * 
  * @author ctipper
  */
 
+@Singleton
 public class TextItemTransferHandler {
 
     @Inject private Injector injector;

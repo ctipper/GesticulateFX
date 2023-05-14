@@ -180,7 +180,7 @@ public class TextKeyHandler implements KeyHandler {
                     }
                 }
                 ((Text) item).setDimensions();
-                view.moveSelection(view.getSelected());
+                view.updateSelectedItem();
             }
         }
     }
@@ -207,13 +207,13 @@ public class TextKeyHandler implements KeyHandler {
             DrawItem item = view.getDrawings().get(selection);
             if (item instanceof Text) {
                 String c = keylistener.getKeyChar();
-                if (!keylistener.isIsControlDown() || !keylistener.isIsMetaDown()) {
+                if (!keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
                     // edit
                     editor.insertChar(c);
                     editor.commitText((Text) item);
                 }
                 ((Text) item).setDimensions();
-                view.moveSelection(view.getSelected());
+                view.updateSelectedItem();
             }
         }
     }
@@ -240,7 +240,7 @@ public class TextKeyHandler implements KeyHandler {
 //                        editor.commitText((Text) item);
 //                    }
 //                    ((Text) item).setDimensions();
-//                    view.moveSelection(view.getSelected());
+//                    view.updateSelectedItem();
 //                }
 //
 //                if (text != null) {
@@ -266,7 +266,7 @@ public class TextKeyHandler implements KeyHandler {
 //                            editor.commitText((Text) item);
 //                        }
 //                        ((Text) item).setDimensions();
-//                        view.moveSelection(view.getSelected());
+//                        view.updateSelectedItem();
 //                    }
 //
 //                    // Save the latest committed text information
