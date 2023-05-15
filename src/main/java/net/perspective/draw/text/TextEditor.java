@@ -195,9 +195,9 @@ public class TextEditor implements Editor {
         String startText = text.substring(0, caretstart);
         String endText = text.substring(caretend);
         if (text.equals(" ")) {
-            text = String.valueOf(c);
+            text = c;
         } else {
-            text = startText + String.valueOf(c) + endText;
+            text = startText + c + endText;
         }
         caretstart = caretstart + 1;
         caretend = caretstart;
