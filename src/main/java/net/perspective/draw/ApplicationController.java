@@ -515,6 +515,30 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Increment font size
+     */
+    public void incrementFontSize() {
+        String size = getFontSizeProperty().getValue();
+        int index = fontSize.indexOf(size) + 1;
+        if (index >= fontSize.size()) {
+            index = fontSize.size() - 1;
+        }
+        this.setFontSize(Integer.parseInt(fontSize.get(index)));
+    }
+
+    /**
+     * Decrement font size
+     */
+    public void decrementFontSize() {
+        String size = getFontSizeProperty().getValue();
+        int index = fontSize.indexOf(size) - 1;
+        if (index < 0) {
+            index = 0;
+        }
+        this.setFontSize(Integer.parseInt(fontSize.get(index)));
+    }
+
+    /**
      * Bold button active property
      * 
      * @return bold selected

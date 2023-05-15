@@ -23,9 +23,9 @@
  */
 package net.perspective.draw.event.keyboard;
 
-import com.google.inject.Injector;
 import java.awt.datatransfer.Transferable;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.TextController;
 import net.perspective.draw.TextItemTransferHandler;
@@ -44,10 +44,10 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 
 public class TextKeyHandler implements KeyHandler {
 
-    @Inject private Injector injector;
     @Inject private CanvasView view;
+    @Inject private ApplicationController controller;
     @Inject private KeyListener keylistener;
-    @Inject private TextController controller;
+    @Inject private TextController textController;
     @Inject private TextItemTransferHandler transferhandler;
     private Transferable clipboard;
     private int selection = -1;
@@ -71,7 +71,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyPressed() {
-        Editor editor = controller.getEditor();
+        Editor editor = textController.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
@@ -89,25 +89,19 @@ public class TextKeyHandler implements KeyHandler {
                     case B -> {
                         // Bold
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            injector.getInstance(TextController.class).formatSelectedText(TextController.FONT_BOLD);
+                            textController.formatSelectedText(TextController.FONT_BOLD);
                         }
                     }
                     case I -> {
                         // Italic
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            injector.getInstance(TextController.class).formatSelectedText(TextController.FONT_ITALIC);
+                            textController.formatSelectedText(TextController.FONT_ITALIC);
                         }
                     }
                     case U -> {
                         // Underline
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            injector.getInstance(TextController.class).formatSelectedText(TextController.FONT_UNDERLINED);
-                        }
-                    }
-                    case SEMICOLON -> {
-                        // Insert date
-                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            // view.insertDateAndTime((Text) item);
+                            textController.formatSelectedText(TextController.FONT_UNDERLINED);
                         }
                     }
                     case X -> {
@@ -128,6 +122,24 @@ public class TextKeyHandler implements KeyHandler {
                         // paste selected
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
                             transferhandler.importData(clipboard);
+                        }
+                    }
+                    case PLUS, ADD, EQUALS -> {
+                        // zoom font up
+                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                            controller.incrementFontSize();
+                        }
+                    }
+                    case MINUS, SUBTRACT -> {
+                        // zoom font down
+                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                            controller.decrementFontSize();
+                        }
+                    }
+                    case SEMICOLON -> {
+                        // Insert date
+                        if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                            view.insertDateAndTime((Text) item);
                         }
                     }
                     case BACK_SPACE -> {
@@ -228,7 +240,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyTyped() {
-        Editor editor = controller.getEditor();
+        Editor editor = textController.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
@@ -255,7 +267,7 @@ public class TextKeyHandler implements KeyHandler {
 //    public void inputMethodTextChanged(InputMethodEvent e) {
 //        int commitCount = e.getCommittedCharacterCount();
 //        AttributedCharacterIterator text = e.getText();
-//        this.editor = controller.getEditor();
+//        this.editor = textController.getEditor();
 //        if ((view.getSelected() != -1) && (view.isEditing())) {
 //            DrawItem item = view.getDrawings().get(view.getSelected());
 //            if (item instanceof Text) {

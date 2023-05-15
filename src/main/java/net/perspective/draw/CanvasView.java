@@ -26,6 +26,8 @@ package net.perspective.draw;
 import java.awt.BasicStroke;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -447,6 +449,18 @@ public class CanvasView {
                 this.setSelected(-1);
             }
         }
+    }
+
+    /**
+     * Insert date and time into Text item
+     * 
+     * @param item the {@link net.perspective.draw.geom.Text}
+     */
+    public void insertDateAndTime(Text item) {
+        ZonedDateTime zoned = ZonedDateTime.now();
+        String timestamp = zoned.format(DateTimeFormatter.ofPattern("dd/MM/yyyy kk:mm"));
+        textController.getEditor().insertText(timestamp);
+        textController.getEditor().commitText(item);
     }
 
     /**
