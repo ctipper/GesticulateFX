@@ -220,6 +220,7 @@ public class TextKeyHandler implements KeyHandler {
                 }
                 ((Text) item).setDimensions();
                 view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
             }
         }
     }
@@ -253,6 +254,7 @@ public class TextKeyHandler implements KeyHandler {
                 }
                 ((Text) item).setDimensions();
                 view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
             }
         }
     }
