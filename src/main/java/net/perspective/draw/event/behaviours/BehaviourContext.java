@@ -47,7 +47,7 @@ public class BehaviourContext {
     private double sgnd_area;
     private CanvasPoint omega;
 
-    /**
+    /** 
      * Creates a new instance of <code>BehaviourContext</code> 
      */
     @Inject

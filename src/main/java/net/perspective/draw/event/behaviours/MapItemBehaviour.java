@@ -47,7 +47,7 @@ public class MapItemBehaviour implements ItemBehaviours {
     @Inject private DrawAreaListener listener;
     @Inject private MapController mapper;
 
-    /**
+    /** 
      * Creates a new instance of <code>MapItemBehaviour</code> 
      */
     @Inject

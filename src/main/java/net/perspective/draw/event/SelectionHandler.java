@@ -55,7 +55,7 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class SelectionHandler implements Handler {
 
-    @Inject Injector injector;
+    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;

@@ -24,11 +24,15 @@
 package net.perspective.draw.event;
 
 import com.google.inject.Injector;
+import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
 import net.perspective.draw.enums.KeyHandlerType;
+import net.perspective.draw.event.behaviours.BehaviourContext;
+import net.perspective.draw.event.behaviours.TextItemBehaviour;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
 
 /**
@@ -42,6 +46,8 @@ public class TextHandler implements Handler {
     @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
+    @Inject private BehaviourContext context;
+    @Inject private TextController textController;
 
     /**
      * Creates a new instance of <code>TextHandler</code> 
@@ -52,17 +58,26 @@ public class TextHandler implements Handler {
 
     @Override
     public void upEvent() {
+        // noop
     }
 
     @Override
     public void downEvent() {
+        if (view.isEditing()) {
+            // Text isEditing code here
+            if (!listener.getRightClick()) {
+                DrawItem item = view.getDrawings().get(view.getSelected());
+                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.select(item, 0);
+            }
+        }
     }
 
     @Override
     public void clickEvent() {
         if (!view.isEditing()) {
             Text item = new Text(listener.getTempX(), listener.getTempY());
-            item = injector.getInstance(TextController.class).initializeItem(item);
+            item = textController.initializeItem(item);
             item.updateProperties(drawarea);
             view.setNewItem(item);
             view.resetNewItem();
@@ -77,15 +92,32 @@ public class TextHandler implements Handler {
 
     @Override
     public void hoverEvent() {
+        if (view.getSelected() != -1) {
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            if (item instanceof Text) {
+                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.hover(item);
+            }
+        } else {
+            drawarea.getScene().setCursor(Cursor.DEFAULT);
+        }
     }
 
     @Override
     public void dragEvent() {
+        if (view.isEditing()) {
+            // Text isSelecting code here
+            if (view.getSelected() != -1) {
+                DrawItem item = view.getDrawings().get(view.getSelected());
+                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.alter(item, 0, 0);
+            }
+        }
     }
 
     @Override
     public void zoomEvent() {
-
+        // noop
     }
 
 }

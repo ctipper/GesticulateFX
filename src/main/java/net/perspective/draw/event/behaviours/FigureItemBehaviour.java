@@ -49,7 +49,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
-    /**
+    /** 
      * Creates a new instance of <code>FigureItemBehaviour</code> 
      */
     @Inject

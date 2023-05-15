@@ -352,6 +352,7 @@ public class Gesticulate extends GuiceApplication {
             bind(PictureItemBehaviour.class);
             bind(GroupedItemBehaviour.class);
             bind(MapItemBehaviour.class);
+            bind(TextItemBehaviour.class);
             bind(FigureFactory.class).to(FigureFactoryImpl.class);
             bind(Picture.class);
             bind(StreetMap.class);

@@ -46,6 +46,7 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
@@ -551,6 +552,17 @@ public class DrawingArea {
             default -> resetArrow();
         }
         setPlainStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    }
+
+    /**
+     * Get the item text
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @return the {@link java.awt.font.TextLayout}
+     */
+    public TextFlow getTextLayout(DrawItem item) {
+        TextFlow layout = ((Text) item).getLayout();
+        return layout;
     }
 
     /**
