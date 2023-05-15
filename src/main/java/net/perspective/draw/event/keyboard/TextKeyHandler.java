@@ -66,8 +66,6 @@ public class TextKeyHandler implements KeyHandler {
 
     /**
      * Pressed event
-     * 
-     * @param e a key event
      */
     @Override
     public void keyPressed() {
@@ -227,8 +225,6 @@ public class TextKeyHandler implements KeyHandler {
 
     /**
      * Released event
-     * 
-     * @param e a key event
      */
     @Override
     public void keyReleased() {
@@ -236,8 +232,6 @@ public class TextKeyHandler implements KeyHandler {
 
     /**
      * Typed event
-     * 
-     * @param e a key event
      */
     @Override
     public void keyTyped() {
@@ -247,7 +241,7 @@ public class TextKeyHandler implements KeyHandler {
             DrawItem item = view.getDrawings().get(selection);
             if (item instanceof Text) {
                 String c = keylistener.getKeyChar();
-                if (!keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
+                if (!c.isEmpty() && !keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
                     // edit
                     editor.insertChar(c);
                     editor.commitText((Text) item);
