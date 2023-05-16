@@ -89,7 +89,7 @@ public class TextItemBehaviour implements ItemBehaviours {
 
     @Override
     public void hoverItem(BehaviourContext context, DrawItem item) {
-        if (item.contains(listener.getTempX(), listener.getTempY())) {
+        if (item.contains(listener.getTempX(), listener.getTempY()) && view.isEditing()) {
             drawarea.getScene().setCursor(Cursor.TEXT);
         } else {
             drawarea.getScene().setCursor(Cursor.DEFAULT);

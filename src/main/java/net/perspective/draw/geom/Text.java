@@ -434,6 +434,7 @@ public class Text implements DrawItem, Serializable {
         layout.setLayoutX(axis.x);
         layout.setLayoutY(axis.y);
         layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, 0, 0));
+        layout.setMouseTransparent(true);
         return layout;
     }
 

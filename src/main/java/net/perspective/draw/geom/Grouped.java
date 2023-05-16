@@ -363,6 +363,7 @@ public class Grouped implements DrawItem, Serializable {
         CanvasPoint c = this.rotationCentre();
         group.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, c.x, c.y));
         group.setCursor(javafx.scene.Cursor.OPEN_HAND);
+        group.setMouseTransparent(true);
         return group;
     }
 

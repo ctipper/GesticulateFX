@@ -373,6 +373,7 @@ public class Picture implements DrawItem, Serializable {
         iv.setX(start.x + (scale >= 0 ? 0 : end.x * scale ));
         iv.setY(start.y + (scale >= 0 ? 0 : end.y * scale ));
         iv.setCursor(javafx.scene.Cursor.OPEN_HAND);
+        iv.setMouseTransparent(true);
         return iv;
     }
 

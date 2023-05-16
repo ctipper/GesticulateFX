@@ -40,12 +40,14 @@ import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
 import net.perspective.draw.event.behaviours.MapItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
+import net.perspective.draw.event.behaviours.TextItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
 import net.perspective.draw.geom.FigureFactory;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
+import net.perspective.draw.geom.Text;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
@@ -96,35 +98,50 @@ public class SelectionHandler implements Handler {
     @Override
     public void downEvent() {
         List<DrawItem> drawings = view.getDrawings();
-        if (!drawings.isEmpty() && !listener.getRightClick()) {
-            int i = drawings.size() - 1;
-            context.setContainment(ContainsType.NONE);
-            do {
-                DrawItem item = drawings.get(i);
-                if (item instanceof Figure) {
-                    context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
-                    boolean found = context.select(item, i);
-                    if (found) break;
-                } else if (item instanceof Picture) {
-                    if (item instanceof StreetMap) {
-                        context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+        if (view.isEditing()) {
+            // Text isEditing code here
+            if (!listener.getRightClick()) {
+                DrawItem item = drawings.get(view.getSelected());
+                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.select(item, 0);
+            }
+        } else {
+            if (!drawings.isEmpty() && !listener.getRightClick()) {
+                int i = drawings.size() - 1;
+                context.setContainment(ContainsType.NONE);
+                do {
+                    DrawItem item = drawings.get(i);
+                    if (item instanceof Figure) {
+                        context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                         boolean found = context.select(item, i);
-                        if (found) break;
-                    } else {
-                        context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
-                        boolean found = context.select(item, i);
-                        if (found) break;
+                        if (found) {
+                            break;
+                        }
+                    } else if (item instanceof Picture) {
+                        if (item instanceof StreetMap) {
+                            context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+                            boolean found = context.select(item, i);
+                            if (found) {
+                                break;
+                            }
+                        } else {
+                            context.setBehaviour(injector.getInstance(PictureItemBehaviour.class));
+                            boolean found = context.select(item, i);
+                            if (found) {
+                                break;
+                            }
+                        }
+                    } else if (item.contains(listener.getStartX(), listener.getStartY())) {
+                        // Rest of Shapes
+                        view.setSelected(i);
+                        context.setContainment(ContainsType.SHAPE);
+                        break;
                     }
-                } else if (item.contains(listener.getStartX(), listener.getStartY())) {
-                    // Rest of Shapes
-                    view.setSelected(i);
-                    context.setContainment(ContainsType.SHAPE);
-                    break;
+                    i--;
+                } while (i >= 0);
+                if (context.getContainment().equals(ContainsType.NONE) && (!view.isMultiSelected() || !drawarea.isMultiSelectEnabled())) {
+                    view.setSelected(-1);
                 }
-                i--;
-            } while (i >= 0);
-            if (context.getContainment().equals(ContainsType.NONE) && (!view.isMultiSelected() || !drawarea.isMultiSelectEnabled())) {
-                view.setSelected(-1);
             }
         }
         if (view.getSelected() != -1 && listener.isSnapEnabled()) {
@@ -159,14 +176,19 @@ public class SelectionHandler implements Handler {
                 do {
                     DrawItem item = drawings.get(i);
                     if (item.contains(listener.getTempX(), listener.getTempY())) {
-                        if (item instanceof StreetMap) {
+                        if (item instanceof Text) {
+                            context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                            context.edit(item, i);
+                            break;
+                        } else if (item instanceof StreetMap) {
                             context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
                             context.edit(item, i);
                             break;
                         }
                     }
                     i--;
-                } while (i >= 0);            }
+                } while (i >= 0);
+            }
         }
     }
 
@@ -182,6 +204,9 @@ public class SelectionHandler implements Handler {
                 context.hover(item);
             } else if (item instanceof Grouped) {
                 context.setBehaviour(injector.getInstance(GroupedItemBehaviour.class));
+                context.hover(item);
+            } else if (item instanceof Text) {
+                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                 context.hover(item);
             }
         } else {
@@ -262,7 +287,20 @@ public class SelectionHandler implements Handler {
                     }
                     view.setGuides(added);
                 }
-                if (item instanceof Figure) {
+                if (item instanceof Text) {
+                    if (!view.isEditing()) {
+                        if (listener.isSnapEnabled()) {
+                            xinc = context.getOmega().getX() - item.getStart().getX();
+                            yinc = context.getOmega().getY() - item.getStart().getY();
+                            drawarea.moveToWithIncrements(item, xinc, yinc);
+                        } else {
+                            item.moveTo(xinc, yinc);
+                        }
+                    } else {
+                        context.setBehaviour(new TextItemBehaviour());
+                        context.alter(item, 0, 0);
+                    }
+                } else if (item instanceof Figure) {
                     context.setBehaviour(injector.getInstance(FigureItemBehaviour.class));
                     context.alter(item, xinc, yinc);
                 } else if (item instanceof Picture) {
@@ -311,7 +349,6 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void zoomEvent() {
-
     }
 
     private void computeCoords(DrawItem item) {

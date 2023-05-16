@@ -468,6 +468,7 @@ public class Figure implements DrawItem, Serializable {
             fxpath.setFill(alphafill);
         }
         fxpath.setCursor(Cursor.OPEN_HAND);
+        fxpath.setMouseTransparent(true);
         return fxpath;
     }
 

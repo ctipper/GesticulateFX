@@ -421,6 +421,7 @@ public class ArrowLine extends Figure {
             group.getChildren().add(fxpath_2);
         }
         group.setCursor(javafx.scene.Cursor.OPEN_HAND);
+        group.setMouseTransparent(true);
         return group;
     }
 
