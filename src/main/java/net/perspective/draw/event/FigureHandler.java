@@ -45,6 +45,7 @@ public class FigureHandler implements Handler {
     @Inject private DrawAreaListener listener;
     @Inject private FigureFactory figurefactory;
 
+    @Inject
     public FigureHandler() {
     }
 
@@ -104,7 +105,6 @@ public class FigureHandler implements Handler {
 
     @Override
     public void zoomEvent() {
-
     }
 
 }

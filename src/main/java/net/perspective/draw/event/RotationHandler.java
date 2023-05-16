@@ -54,6 +54,13 @@ public class RotationHandler implements Handler {
     @Inject private DrawAreaListener listener;
     private double omega;
 
+    /**
+     * Creates a new instance of <code>RotationHandler</code> 
+     */
+    @Inject
+    public RotationHandler() {
+    }
+
     @Override
     public void upEvent() {
         if (view.getSelected() != -1) {

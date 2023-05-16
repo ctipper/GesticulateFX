@@ -46,6 +46,10 @@ public class SketchHandler implements Handler  {
     @Inject private DrawAreaListener listener;
     @Inject private FigureFactory figurefactory;
 
+    /**
+     * Creates a new instance of <code>SketchHandler</code> 
+     */
+    @Inject
     public SketchHandler() {
     }
 

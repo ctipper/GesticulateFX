@@ -25,6 +25,7 @@ package net.perspective.draw.event.behaviours;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.geom.DrawItem;
@@ -46,7 +47,10 @@ public class BehaviourContext {
     private double sgnd_area;
     private CanvasPoint omega;
 
-    /** Creates a new instance of <code>BehaviourContext</code> */
+    /**
+     * Creates a new instance of <code>BehaviourContext</code> 
+     */
+    @Inject
     public BehaviourContext() {
         this.quad = -1;
         this.sgnd_area = -1d;

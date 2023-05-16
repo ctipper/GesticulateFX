@@ -70,6 +70,12 @@ public class SelectionHandler implements Handler {
     private static final Color marqueeColor = Color.rgb(204, 102, 255);         // Light blue
     private static final Color fillColor = Color.rgb(48, 96, 255);              // Dark blue
 
+    /**
+     * Creates a new instance of <code>SelectionHandler</code> 
+     */
+    public SelectionHandler() {
+    }
+
     @Override
     public void upEvent() {
         if (view.isMarquee()) {

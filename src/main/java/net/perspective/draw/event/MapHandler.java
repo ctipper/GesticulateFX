@@ -36,7 +36,10 @@ public class MapHandler implements Handler {
     @Inject private DrawAreaListener listener;
     @Inject private MapController mapper;
 
-    /** Creates a new instance of <code>MapHandler</code> */
+    /**
+     * Creates a new instance of <code>MapHandler</code> 
+     */
+    @Inject
     public MapHandler() {
     }
 

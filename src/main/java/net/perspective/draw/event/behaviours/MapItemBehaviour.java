@@ -47,6 +47,13 @@ public class MapItemBehaviour implements ItemBehaviours {
     @Inject private DrawAreaListener listener;
     @Inject private MapController mapper;
 
+    /**
+     * Creates a new instance of <code>MapItemBehaviour</code> 
+     */
+    @Inject
+    public MapItemBehaviour() {
+    }
+
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;

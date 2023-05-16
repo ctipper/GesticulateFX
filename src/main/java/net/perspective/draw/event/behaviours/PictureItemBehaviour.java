@@ -47,6 +47,13 @@ public class PictureItemBehaviour implements ItemBehaviours {
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
+    /**
+     * Creates a new instance of <code>PictureItemBehaviour</code> 
+     */
+    @Inject
+    public PictureItemBehaviour() {
+    }
+
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;
@@ -58,28 +65,28 @@ public class PictureItemBehaviour implements ItemBehaviours {
             if (context.getRegion(vertex[0]).contains(listener.getStartX(), listener.getStartY())) {
                 quad = R2.quadrant(vertex[1], centre);
                 switch (quad) {
-                    case 0:
+                    case 0 -> {
                         view.setSelected(index);
                         context.setContainment(ContainsType.TR);
                         found = true;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         view.setSelected(index);
                         context.setContainment(ContainsType.TL);
                         found = true;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         view.setSelected(index);
                         context.setContainment(ContainsType.BL);
                         found = true;
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         view.setSelected(index);
                         context.setContainment(ContainsType.BR);
                         found = true;
-                        break;
-                    default:
-                        break;
+                    }
+                    default -> {
+                    }
                 }
             }
         }
@@ -264,38 +271,38 @@ public class PictureItemBehaviour implements ItemBehaviours {
             if (context.getRegion(vertex[0]).contains(listener.getTempX(), listener.getTempY())) {
                 octa = R2.octant(vertex[1], centre);
                 switch (octa) {
-                    case 0:
+                    case 0 -> {
                         drawarea.getScene().setCursor(Cursor.E_RESIZE);
                         found = true;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         drawarea.getScene().setCursor(Cursor.NE_RESIZE);
                         found = true;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         drawarea.getScene().setCursor(Cursor.N_RESIZE);
                         found = true;
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         drawarea.getScene().setCursor(Cursor.NW_RESIZE);
                         found = true;
-                        break;
-                    case 4:
+                    }
+                    case 4 -> {
                         drawarea.getScene().setCursor(Cursor.W_RESIZE);
                         found = true;
-                        break;
-                    case 5:
+                    }
+                    case 5 -> {
                         drawarea.getScene().setCursor(Cursor.SW_RESIZE);
                         found = true;
-                        break;
-                    case 6:
+                    }
+                    case 6 -> {
                         drawarea.getScene().setCursor(Cursor.S_RESIZE);
                         found = true;
-                        break;
-                    case 7:
+                    }
+                    case 7 -> {
                         drawarea.getScene().setCursor(Cursor.SE_RESIZE);
                         found = true;
-                        break;
+                    }
                 }
             }
             if (found) {

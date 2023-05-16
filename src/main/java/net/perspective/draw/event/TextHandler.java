@@ -39,7 +39,10 @@ public class TextHandler implements Handler {
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
-    /** Creates a new instance of <code>TextHandler</code> */
+    /**
+     * Creates a new instance of <code>TextHandler</code> 
+     */
+    @Inject
     public TextHandler() {
     }
 

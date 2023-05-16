@@ -34,7 +34,9 @@ public class DummyKeyHandler implements KeyHandler {
 
     @Inject KeyListener keylistener;
 
-    /** Creates a new instance of <code>DummyKeyHandler</code> */
+    /**
+     * Creates a new instance of <code>DummyKeyHandler</code> 
+     */
     @Inject
     public DummyKeyHandler() {
     }

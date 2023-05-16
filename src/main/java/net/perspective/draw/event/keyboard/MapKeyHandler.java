@@ -38,7 +38,9 @@ public class MapKeyHandler implements KeyHandler {
     @Inject MapController mapper;
     @Inject KeyListener keylistener;
 
-    /** Creates a new instance of <code>MapKeyHandler</code> */
+    /**
+     * Creates a new instance of <code>MapKeyHandler</code> 
+     */
     @Inject
     public MapKeyHandler() {
     }

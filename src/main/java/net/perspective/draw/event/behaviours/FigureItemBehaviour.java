@@ -49,6 +49,13 @@ public class FigureItemBehaviour implements ItemBehaviours {
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
 
+    /**
+     * Creates a new instance of <code>FigureItemBehaviour</code> 
+     */
+    @Inject
+    public FigureItemBehaviour() {
+    }
+
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         boolean found = false;

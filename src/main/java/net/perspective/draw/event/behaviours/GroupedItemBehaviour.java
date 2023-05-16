@@ -39,6 +39,13 @@ public class GroupedItemBehaviour implements ItemBehaviours {
     @Inject private DrawingArea drawarea;
     @Inject private DrawAreaListener listener;
 
+    /**
+     * Creates a new instance of <code>GroupedItemBehaviour</code> 
+     */
+    @Inject
+    public GroupedItemBehaviour() {
+    }
+
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         // Not implemented

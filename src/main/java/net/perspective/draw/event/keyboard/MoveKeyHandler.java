@@ -39,7 +39,9 @@ public class MoveKeyHandler implements KeyHandler {
     @Inject CanvasView view;
     @Inject KeyListener keylistener;
 
-    /** Creates a new instance of <code>MoveKeyHandler</code> */
+    /**
+     * Creates a new instance of <code>MoveKeyHandler</code>
+     */
     @Inject
     public MoveKeyHandler() {
     }

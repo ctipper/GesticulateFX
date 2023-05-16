@@ -46,7 +46,9 @@ public class KeyListener {
     private boolean isShiftDown;
     private boolean isShortcutDown;
 
-    /** Creates a new instance of <code>KeyHandler</code> */
+    /**
+     * Creates a new instance of <code>KeyHandler</code> 
+     */
     @Inject
     public KeyListener() {
     }
