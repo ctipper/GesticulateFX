@@ -51,7 +51,7 @@ public class G2 {
      * @param bounds the canvas dimension
      * @return a group of {@link javafx.scene.shape.Line}
      */
-    public Node drawGridLayout(boolean isDarkMode, CanvasPoint bounds) {
+    public Node drawGridLayout(CanvasPoint bounds) {
         Color minorColor, majorColor;
         /**
          * The width of a minor grid cell.

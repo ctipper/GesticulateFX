@@ -1001,7 +1001,7 @@ public class DrawingArea {
         }
         if (isGridVisible()) {
             CanvasPoint bounds = new CanvasPoint(getScene().getWidth(), getScene().getHeight());
-            Node gridrea = g2.drawGridLayout(isDarkModeEnabled(), bounds);
+            Node gridrea = g2.drawGridLayout(bounds);
             nodes.add(0, gridrea);
         }
     }
