@@ -23,12 +23,22 @@
  */
 package net.perspective.draw.util;
 
+import java.util.Arrays;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
+import net.perspective.draw.DrawingArea;
+import net.perspective.draw.TextController;
+import net.perspective.draw.geom.DrawItem;
+import net.perspective.draw.text.Editor;
 
 /**
  *
@@ -38,10 +48,49 @@ import net.perspective.draw.ApplicationController;
 public class G2 {
     
     @Inject private ApplicationController application;
+    @Inject private DrawingArea drawarea;
+    @Inject private TextController textController;
 
     /** Creates a new instance of <code>G2</code> */
     @Inject
     public G2() {
+    }
+
+    public Path highlightText(DrawItem item) {
+        Path highlight = new Path();
+        CanvasPoint axis, offset;
+        Editor editor = textController.getEditor();
+        TextFlow layout = drawarea.getTextLayout(item);
+        if (editor.getCaretStart() == editor.getCaretEnd()) {
+            // Retrieve caret path for insertion index.
+            PathElement[] carets = layout.caretShape(editor.getCaretStart(), true);
+            highlight.getElements().addAll(Arrays.asList(carets));
+            highlight.setStroke(Color.BLACK);
+            highlight.setFill(Color.BLACK);
+        } else {
+            PathElement[] path = layout.rangeShape​(editor.getCaretStart(), editor.getCaretEnd());
+            highlight.getElements().addAll(Arrays.asList(path));
+            highlight.setStroke(Color.rgb(110, 165, 232, 0.3));
+            highlight.setFill(Color.rgb(110, 165, 232, 0.3));
+        }
+        highlight.setStrokeLineJoin(StrokeLineJoin.ROUND);
+        highlight.setStrokeLineCap(StrokeLineCap.ROUND);
+        // move highlight origin
+        axis = item.rotationCentre();
+        offset = new CanvasPoint(0, 0);
+        offset = V2.rot(offset.x, offset.y, item.getAngle());
+        if (item.isVertical()) {
+            offset = V2.rot(offset.x, offset.y, -Math.PI / 2);
+            highlight.setTranslateX(axis.x + offset.x);
+            highlight.setTranslateY(axis.y + offset.y);
+            // 90 degree positive rotation
+            highlight.setRotate(-Math.PI / 2);
+        } else {
+            highlight.setTranslateX(axis.x + offset.x);
+            highlight.setTranslateY(axis.y + offset.y);
+        }
+        highlight.setRotate(item.getAngle());
+        return highlight;
     }
 
     /**

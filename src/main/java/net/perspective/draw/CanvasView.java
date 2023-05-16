@@ -41,11 +41,13 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
+import net.perspective.draw.util.G2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +63,7 @@ public class CanvasView {
     @Inject private ApplicationController controller;
     @Inject private Dropper dropper;
     @Inject private TextController textController;
+    @Inject private G2 g2;
     private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private final List<ImageItem> images;
@@ -69,6 +72,7 @@ public class CanvasView {
     private Group drawingAnchors;
     private Node drawMarquee;
     private Node drawGuides;
+    private Path highlight;
     private boolean isDrawing;
     private boolean isEditing;
     private boolean isMapping;
@@ -551,11 +555,17 @@ public class CanvasView {
         if (selection == -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
+            nodes.remove(highlight);
             selectionIndex.clear();
             drawingAnchors.getChildren().clear();
         } else {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
+            nodes.remove(highlight);
+            if (isEditing()) {
+                highlight = g2.highlightText(drawings.get(selection));
+                nodes.add(highlight);
+            }            
             if (!drawarea.isMultiSelectEnabled()) {
                 selectionIndex.clear();
                 drawingAnchors.getChildren().clear();
@@ -575,10 +585,15 @@ public class CanvasView {
         if (!drawingAnchors.getChildren().isEmpty()) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
+            nodes.remove(highlight);
             drawingAnchors.getChildren().clear();
         }
         if (selection != -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            if (isEditing()) {
+                highlight = g2.highlightText(drawings.get(selection));
+                nodes.add(highlight);
+            }
             drawingAnchors = getAnchors();
             nodes.add(drawingAnchors);
         }

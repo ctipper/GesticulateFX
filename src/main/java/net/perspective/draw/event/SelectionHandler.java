@@ -297,7 +297,7 @@ public class SelectionHandler implements Handler {
                             item.moveTo(xinc, yinc);
                         }
                     } else {
-                        context.setBehaviour(new TextItemBehaviour());
+                        context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                         context.alter(item, 0, 0);
                     }
                 } else if (item instanceof Figure) {
