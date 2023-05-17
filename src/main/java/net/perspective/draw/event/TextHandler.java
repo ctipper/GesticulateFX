@@ -84,6 +84,7 @@ public class TextHandler implements Handler {
             int i = view.getDrawings().size() - 1;
             view.setSelected(i);
             view.setEditing(KeyHandlerType.TEXT);
+            view.setTextHighlight(i);
         } else if (view.getSelected() != -1) {
             view.updateSelectedItem();
             view.moveSelection(view.getSelected());

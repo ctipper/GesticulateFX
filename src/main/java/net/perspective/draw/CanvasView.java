@@ -562,10 +562,6 @@ public class CanvasView {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
-            if (isEditing()) {
-                highlight = g2.highlightText(drawings.get(selection));
-                nodes.add(highlight);
-            }            
             if (!drawarea.isMultiSelectEnabled()) {
                 selectionIndex.clear();
                 drawingAnchors.getChildren().clear();
@@ -573,6 +569,7 @@ public class CanvasView {
             selectionIndex.add(selection);
             drawingAnchors = getAnchors();
             nodes.add(drawingAnchors);
+            setTextHighlight(selection);
         }
     }
 
@@ -590,12 +587,18 @@ public class CanvasView {
         }
         if (selection != -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            if (isEditing()) {
-                highlight = g2.highlightText(drawings.get(selection));
-                nodes.add(highlight);
-            }
             drawingAnchors = getAnchors();
             nodes.add(drawingAnchors);
+            setTextHighlight(selection);
+        }
+    }
+
+    public void setTextHighlight(int selection) {
+        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+        nodes.remove(highlight);
+        if (isEditing()) {
+            highlight = g2.highlightText(drawings.get(selection));
+            nodes.add(highlight);
         }
     }
 

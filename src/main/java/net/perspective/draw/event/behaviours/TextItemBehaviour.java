@@ -69,6 +69,7 @@ public class TextItemBehaviour implements ItemBehaviours {
 
         editor.setCaretStart(currentHit.getInsertionIndex());
         editor.setCaretEnd(editor.getCaretStart());
+        view.setTextHighlight(index);
         return true;
     }
 
@@ -85,6 +86,7 @@ public class TextItemBehaviour implements ItemBehaviours {
         textController.editItem((Text) item, currentHit.getInsertionIndex());
         view.setSelected(index);
         view.setEditing(KeyHandlerType.TEXT);
+        view.setTextHighlight(index);
     }
 
     @Override
@@ -113,5 +115,6 @@ public class TextItemBehaviour implements ItemBehaviours {
         } else if (select < editor.getCaretEnd()) {
             editor.setCaretStart(select);
         }
+        view.setTextHighlight(view.getSelected());
     }
 }
