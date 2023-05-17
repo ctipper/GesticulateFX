@@ -27,8 +27,8 @@ import com.google.inject.Injector;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.slf4j.Logger;
@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 public class TextItemTransferHandler {
 
     @Inject private Injector injector;
+    private final Clipboard clipboard;
 
     public static int COPY = 1;
     public static int MOVE = 2;
@@ -51,6 +52,7 @@ public class TextItemTransferHandler {
 
     @Inject
     public TextItemTransferHandler() {
+        clipboard = Clipboard.getSystemClipboard();
     }
 
     public boolean canImport(DataFlavor[] flavors) {
@@ -64,17 +66,18 @@ public class TextItemTransferHandler {
         }
 
         if (hasStringFlavor(t.getTransferDataFlavors())) {
-            try {
-                String str = (String) t.getTransferData(DataFlavor.stringFlavor);
+            // try {
+                // String str = (String) t.getTransferData(DataFlavor.stringFlavor);
+                String str = clipboard.getString();
                 injector.getInstance(TextController.class).setClipboard(str);
                 injector.getInstance(TextController.class).pasteSelectedText();
                 logger.debug("Pasted text");
                 return true;
-            } catch (UnsupportedFlavorException e) {
-                logger.warn("importData: Unsupported data flavor.");
-            } catch (IOException e) {
-                logger.warn("importData: I/O exception.");
-            }
+            // } catch (UnsupportedFlavorException e) {
+            //    logger.warn("importData: Unsupported data flavor.");
+            // } catch (IOException e) {
+            //    logger.warn("importData: I/O exception.");
+            // }
         }
         logger.trace("ImportData");
         return false;
@@ -83,6 +86,10 @@ public class TextItemTransferHandler {
     public Transferable createTransferable() {
         injector.getInstance(TextController.class).copySelectedText();
         String data = injector.getInstance(TextController.class).getClipboard();
+        // update system clipboard
+        ClipboardContent content = new ClipboardContent();
+        content.putString(data);
+        clipboard.setContent(content);
         logger.trace("Transfer data: {}", data);
         return new StringSelection(data);
     }
