@@ -27,6 +27,8 @@ import com.google.inject.Injector;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javax.inject.Inject;
@@ -65,19 +67,23 @@ public class TextItemTransferHandler {
             return false;
         }
 
+        String str;
         if (hasStringFlavor(t.getTransferDataFlavors())) {
-            // try {
-                // String str = (String) t.getTransferData(DataFlavor.stringFlavor);
-                String str = clipboard.getString();
+             try {
+                if (clipboard.hasString()) {
+                    str = clipboard.getString();
+                } else {
+                    str = (String) t.getTransferData(DataFlavor.stringFlavor);
+                }
                 injector.getInstance(TextController.class).setClipboard(str);
                 injector.getInstance(TextController.class).pasteSelectedText();
                 logger.debug("Pasted text");
                 return true;
-            // } catch (UnsupportedFlavorException e) {
-            //    logger.warn("importData: Unsupported data flavor.");
-            // } catch (IOException e) {
-            //    logger.warn("importData: I/O exception.");
-            // }
+             } catch (UnsupportedFlavorException e) {
+                logger.warn("importData: Unsupported data flavor.");
+             } catch (IOException e) {
+                logger.warn("importData: I/O exception.");
+             }
         }
         logger.trace("ImportData");
         return false;
