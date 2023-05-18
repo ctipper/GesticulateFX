@@ -98,6 +98,7 @@ public class DrawingArea {
     @Inject private DrawAreaListener listener;
     @Inject private KeyListener keylistener;
     @Inject private CanvasTransferHandler transferhandler;
+    @Inject private TextItemTransferHandler textTransferhandler;
     @Inject private FigureFactory figurefactory;
     @Inject private Dropper dropper;
     @Inject private MapController mapper;
@@ -443,6 +444,44 @@ public class DrawingArea {
                 view.setSelected(-1);
             }
         });
+        MenuItem menuTextCut = new MenuItem("Cut");
+        menuTextCut.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                DrawItem item = view.getDrawings().get(view.getSelected());
+                if (item instanceof Text) {
+                    clipboard = textTransferhandler.createTransferable();
+                    textTransferhandler.exportDone(clipboard, MOVE);
+                    ((Text) item).setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
+                }
+            }
+        });
+        MenuItem menuTextCopy = new MenuItem("Copy");
+        menuTextCopy.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                DrawItem item = view.getDrawings().get(view.getSelected());
+                if (item instanceof Text) {
+                    clipboard = textTransferhandler.createTransferable();
+                    textTransferhandler.exportDone(clipboard, COPY);
+                    ((Text) item).setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
+                }
+            }
+        });
+        MenuItem menuTextPaste = new MenuItem("Paste");
+        menuTextPaste.setOnAction((ActionEvent e) -> {
+                DrawItem item = view.getDrawings().get(view.getSelected());
+                if (item instanceof Text) {
+                    if (clipboard != null) {
+                        textTransferhandler.importData(clipboard);
+                    }
+                    ((Text) item).setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
+                }
+        });
         // contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
         SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
         MenuItem menuGroup = new MenuItem("Group Selection");
@@ -514,7 +553,13 @@ public class DrawingArea {
             } else {
                 contextmenu.getItems().clear();
             }
-            contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
+            if (view.getSelected() != -1 && !view.isMapping() && view.isEditing()) {
+                if (view.getDrawings().get(view.getSelected()) instanceof Text) {
+                    contextmenu.getItems().addAll(menuTextCut, menuTextCopy, menuTextPaste);
+                }
+            } else {
+                contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
+            }
             contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
             contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
             contextmenu.show(canvas, event.getScreenX(), event.getScreenY());

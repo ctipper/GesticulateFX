@@ -29,6 +29,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import javafx.application.Platform;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javax.inject.Inject;
@@ -45,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class TextItemTransferHandler {
 
     @Inject private Injector injector;
-    private final Clipboard clipboard;
+    private Clipboard clipboard;
 
     public static int COPY = 1;
     public static int MOVE = 2;
@@ -54,7 +55,9 @@ public class TextItemTransferHandler {
 
     @Inject
     public TextItemTransferHandler() {
-        clipboard = Clipboard.getSystemClipboard();
+        Platform.runLater(() -> {
+            clipboard = Clipboard.getSystemClipboard();
+        });
     }
 
     public boolean canImport(DataFlavor[] flavors) {
