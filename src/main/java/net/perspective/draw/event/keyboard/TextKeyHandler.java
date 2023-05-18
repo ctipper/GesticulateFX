@@ -117,7 +117,7 @@ public class TextKeyHandler implements KeyHandler {
                     case V -> {
                         // paste selected
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            transferhandler.importData(clipboard);
+                            if (clipboard != null) transferhandler.importData(clipboard);
                         }
                     }
                     case PLUS, ADD, EQUALS -> {

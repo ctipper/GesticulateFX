@@ -79,6 +79,9 @@ import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
+import net.perspective.draw.event.behaviours.BehaviourContext;
+import net.perspective.draw.event.behaviours.MapItemBehaviour;
+import net.perspective.draw.event.behaviours.TextItemBehaviour;
 import net.perspective.draw.event.keyboard.TextKeyHandler;
 
 /**
@@ -99,6 +102,7 @@ public class DrawingArea {
     @Inject private Dropper dropper;
     @Inject private MapController mapper;
     @Inject private G2 g2;
+    @Inject private BehaviourContext context;
     private SubScene canvas;
     private Group root;
 
@@ -490,12 +494,23 @@ public class DrawingArea {
                 editMapItem();
             }
         });
+        MenuItem menuEditTextItem = new MenuItem("Edit");
+        menuEditTextItem.setOnAction((ActionEvent e) -> {
+            if (view.getSelected() != -1) {
+                editTextItem();
+            }
+        });
         // contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
         SeparatorMenuItem editSeparator = new SeparatorMenuItem();
         contextlistener = (ContextMenuEvent event) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
-                contextmenu.getItems().clear();
-                contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
+                if (view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
+                    contextmenu.getItems().clear();
+                    contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
+                } else if (view.getDrawings().get(view.getSelected()) instanceof Text) {
+                    contextmenu.getItems().clear();
+                    contextmenu.getItems().addAll(menuEditTextItem, editSeparator);
+                }
             } else {
                 contextmenu.getItems().clear();
             }
@@ -531,13 +546,25 @@ public class DrawingArea {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());
             if (item instanceof StreetMap) {
-                this.changeHandlers(HandlerType.MAP);
-                view.setEditing(KeyHandlerType.MAP);
-                mapper.initMap();
+                context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+                context.edit(item, view.getSelected());
             }
         }
     }
  
+    /**
+     * Initiate text edit mode
+     */
+    protected void editTextItem() {
+        if (view.getSelected() != -1) {
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            if (item instanceof Text) {
+                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.edit(item, view.getSelected());
+            }
+        }
+    }
+
     private void setStrokeType(Integer strokeId, String strokeStyle) {
         setStroke(dropper.selectStroke(strokeId, strokeStyle));
         switch (strokeStyle) {

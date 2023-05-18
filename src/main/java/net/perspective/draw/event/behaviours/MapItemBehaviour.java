@@ -88,9 +88,9 @@ public class MapItemBehaviour implements ItemBehaviours {
     @Override
     public void editItem(BehaviourContext context, DrawItem item, int index) {
         view.setSelected(index);
-        mapper.initMap();
         drawarea.changeHandlers(HandlerType.MAP);
         view.setEditing(KeyHandlerType.MAP);
+        mapper.initMap();
     }
 
     @Override
