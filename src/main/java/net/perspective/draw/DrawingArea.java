@@ -98,7 +98,6 @@ public class DrawingArea {
     @Inject private DrawAreaListener listener;
     @Inject private KeyListener keylistener;
     @Inject private CanvasTransferHandler transferhandler;
-    @Inject private TextItemTransferHandler textTransferhandler;
     @Inject private FigureFactory figurefactory;
     @Inject private Dropper dropper;
     @Inject private MapController mapper;
@@ -449,8 +448,7 @@ public class DrawingArea {
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
                 if (item instanceof Text) {
-                    clipboard = textTransferhandler.createTransferable();
-                    textTransferhandler.exportDone(clipboard, MOVE);
+                    view.cutTextItem();
                     ((Text) item).setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
@@ -462,8 +460,7 @@ public class DrawingArea {
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
                 if (item instanceof Text) {
-                    clipboard = textTransferhandler.createTransferable();
-                    textTransferhandler.exportDone(clipboard, COPY);
+                    view.copyTextItem();
                     ((Text) item).setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
@@ -474,9 +471,7 @@ public class DrawingArea {
         menuTextPaste.setOnAction((ActionEvent e) -> {
                 DrawItem item = view.getDrawings().get(view.getSelected());
                 if (item instanceof Text) {
-                    if (clipboard != null) {
-                        textTransferhandler.importData(clipboard);
-                    }
+                    view.pasteTextItem();
                     ((Text) item).setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
