@@ -359,6 +359,7 @@ public class DrawingArea {
             case TEXT -> {
                 listener.setEventHandler(injector.getInstance(TextHandler.class));
                 this.setRotationMode(false);
+                this.setContextHandlers();
                 mapper.finaliseMap();
                 view.setSelected(-1);
             }
