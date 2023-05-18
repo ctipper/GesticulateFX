@@ -52,8 +52,6 @@ public class TextKeyHandler implements KeyHandler {
     private Transferable clipboard;
     private int selection = -1;
     private boolean selectToLeft = false;
-    private int composedTextStartIndex = -1;
-    private int composedTextEndIndex = -1;
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
 
@@ -252,80 +250,5 @@ public class TextKeyHandler implements KeyHandler {
             }
         }
     }
-
-    /**
-     * Input method handler inspired by 
-     * javax.swing.text.JTextComponent.replaceInputMethodText()
-     * 
-     * @param e an input event
-     */
-//    @Override
-//    public void inputMethodTextChanged(InputMethodEvent e) {
-//        int commitCount = e.getCommittedCharacterCount();
-//        AttributedCharacterIterator text = e.getText();
-//        this.editor = textController.getEditor();
-//        if ((view.getSelected() != -1) && (view.isEditing())) {
-//            DrawItem item = view.getDrawings().get(view.getSelected());
-//            if (item instanceof Text) {
-//                // old composed text deletion
-//                if (composedTextExists()) {
-//                    for (int i = 0; i < composedTextEndIndex; i++) {
-//                        // edit
-//                        editor.backSpace();
-//                        editor.commitText((Text) item);
-//                    }
-//                    ((Text) item).setDimensions();
-//                    view.updateSelectedItem();
-//                }
-//
-//                if (text != null) {
-//                    text.first();
-//                    int committedTextStartIndex = 0;
-//                    int committedTextEndIndex = 0;
-//
-//                    // committed text insertion
-//                    if (commitCount > 0) {
-//                        for (char c = text.current(); commitCount > 0;
-//                            c = text.next(), commitCount--) {
-//                            // Remember latest committed text end index
-//                            committedTextEndIndex++;
-//                        }
-//                    }
-//
-//                    // new composed text insertion
-//                    composedTextEndIndex = 0;
-//                    for (char c = text.first(); c != CharacterIterator.DONE; c = text.next(), composedTextEndIndex++) {
-//                        if (Character.getType(c) != Character.CONTROL) {
-//                            // edit
-//                            editor.insertChar(c);
-//                            editor.commitText((Text) item);
-//                        }
-//                        ((Text) item).setDimensions();
-//                        view.updateSelectedItem();
-//                    }
-//
-//                    // Save the latest committed text information
-//                    if (committedTextStartIndex != committedTextEndIndex) {
-//                        composedTextStartIndex = -1;
-//                    } else {
-//                        composedTextStartIndex = 0;
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    /**
-     * Caret position changed
-     * 
-     * @param e in input method event
-     */
-//    @Override
-//    public void caretPositionChanged(InputMethodEvent e) {
-//    }
-
-//    private boolean composedTextExists() {
-//	return (composedTextStartIndex != -1);
-//    }
 
 }
