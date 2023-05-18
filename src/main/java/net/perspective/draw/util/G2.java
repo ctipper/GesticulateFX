@@ -33,6 +33,8 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.TextFlow;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.DrawingArea;
@@ -56,9 +58,15 @@ public class G2 {
     public G2() {
     }
 
+    /**
+     * Highlight the text control or provide a visual cursor
+     * 
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @return a {@link javafx.scene.shape.Path}
+     */
+    @SuppressWarnings("deprecation") 
     public Path highlightText(DrawItem item) {
         Path highlight = new Path();
-        CanvasPoint axis, offset;
         Editor editor = textController.getEditor();
         TextFlow layout = drawarea.getTextLayout(item);
         if (editor.getCaretStart() == editor.getCaretEnd()) {
@@ -75,21 +83,11 @@ public class G2 {
         }
         highlight.setStrokeLineJoin(StrokeLineJoin.ROUND);
         highlight.setStrokeLineCap(StrokeLineCap.ROUND);
+        highlight.setStrokeWidth(1);
         // move highlight origin
-        axis = item.rotationCentre();
-        offset = new CanvasPoint(0, 0);
-        offset = V2.rot(offset.x, offset.y, item.getAngle());
-        if (item.isVertical()) {
-            offset = V2.rot(offset.x, offset.y, -Math.PI / 2);
-            highlight.setTranslateX(axis.x + offset.x);
-            highlight.setTranslateY(axis.y + offset.y);
-            // 90 degree positive rotation
-            highlight.setRotate(-Math.PI / 2);
-        } else {
-            highlight.setTranslateX(axis.x + offset.x);
-            highlight.setTranslateY(axis.y + offset.y);
-        }
-        highlight.setRotate(item.getAngle());
+        CanvasPoint axis = item.rotationCentre();
+        highlight.getTransforms().add(new Rotate((item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
+        highlight.getTransforms().add(new Translate(axis.x, axis.y));
         return highlight;
     }
 
