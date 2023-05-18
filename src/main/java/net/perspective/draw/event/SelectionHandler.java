@@ -102,8 +102,10 @@ public class SelectionHandler implements Handler {
             // Text isEditing code here
             if (!listener.getRightClick()) {
                 DrawItem item = drawings.get(view.getSelected());
-                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
-                context.select(item, 0);
+                if (item instanceof Text) {
+                    context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                    context.select(item, view.getSelected());
+                }
             }
         } else {
             if (!drawings.isEmpty() && !listener.getRightClick()) {
