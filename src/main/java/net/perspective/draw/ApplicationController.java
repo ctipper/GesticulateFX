@@ -23,7 +23,6 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
@@ -92,7 +91,6 @@ import net.perspective.draw.enums.KeyHandlerType;
 @Singleton
 public class ApplicationController implements Initializable {
 
-    @Inject private Injector injector;
     @Inject private DrawingArea drawarea;
     @Inject private Gesticulate application;
     @Inject private CanvasView view;

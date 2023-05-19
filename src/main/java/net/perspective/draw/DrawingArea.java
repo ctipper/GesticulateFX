@@ -482,13 +482,13 @@ public class DrawingArea {
         SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
         MenuItem menuGroup = new MenuItem("Group Selection");
         menuGroup.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 view.groupSelection();
             }
         });
         MenuItem menuUnGroup = new MenuItem("Ungroup Selection");
         menuUnGroup.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 view.ungroupSelection();
             }
         });
@@ -496,28 +496,28 @@ public class DrawingArea {
         SeparatorMenuItem sendSeparator = new SeparatorMenuItem();
         MenuItem menuSBItem = new MenuItem("Send Backwards");
         menuSBItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 view.sendBackwards();
                 view.setSelected(-1);
             }
         });
         MenuItem menuBFItem = new MenuItem("Bring Forwards");
         menuBFItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 view.bringForwards();
                 view.setSelected(-1);
             }
         });
         MenuItem menuSTBItem = new MenuItem("Send to Back");
         menuSTBItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 view.sendToBack();
                 view.setSelected(-1);
             }
         });
         MenuItem menuBTFItem = new MenuItem("Bring to Front");
         menuBTFItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 view.bringToFront();
                 view.setSelected(-1);
             }

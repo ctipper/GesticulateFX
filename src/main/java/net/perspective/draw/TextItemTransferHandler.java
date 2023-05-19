@@ -1,5 +1,5 @@
 /**
- * CanvasTransferHandler.java
+ * TextItemTransferHandler.java
  * 
  * Created on May 22, 2010, 2:02:19 PM
  * 

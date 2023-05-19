@@ -142,4 +142,5 @@ public interface Editor {
      * @return Some textual data
      */
     String getClipboard();
+
 }
