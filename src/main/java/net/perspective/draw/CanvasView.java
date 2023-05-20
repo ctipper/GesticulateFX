@@ -35,6 +35,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -43,6 +45,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
+import javafx.util.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.KeyHandlerType;
@@ -74,6 +77,7 @@ public class CanvasView {
     private final List<ImageItem> images;
     private Optional<DrawItem> newitem;
     private final Set<Integer> selectionIndex;
+    private final Timeline caretTimeline;
     private Transferable clipboard;
     private Group drawingAnchors;
     private Node drawMarquee;
@@ -97,6 +101,15 @@ public class CanvasView {
         newitem = Optional.empty();
         this.selectionIndex = new LinkedHashSet<>();
         this.drawingAnchors = new Group();
+        /**
+         * provide cursor animation
+         */
+        this.caretTimeline = new Timeline();
+        this.caretTimeline.setCycleCount(Timeline.INDEFINITE);
+        this.caretTimeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, e -> highlight.setStroke(Color.TRANSPARENT)),
+                new KeyFrame(Duration.seconds(.5), e -> highlight.setStroke(Color.BLACK)),
+                new KeyFrame(Duration.seconds(1)));
     }
 
     /**
@@ -604,6 +617,11 @@ public class CanvasView {
         nodes.remove(highlight);
         if (isEditing()) {
             highlight = g2.highlightText(drawings.get(selection));
+            if (textController.getEditor().getCaretStart() == textController.getEditor().getCaretEnd()) {
+                caretTimeline.play();
+            } else {
+                caretTimeline.stop();
+            }
             nodes.add(highlight);
         }
     }
