@@ -78,7 +78,7 @@ public class G2 {
         } else {
             PathElement[] path = layout.rangeShape​(editor.getCaretStart(), editor.getCaretEnd());
             highlight.getElements().addAll(Arrays.asList(path));
-            highlight.setStroke(Color.rgb(110, 165, 232, 0.3));
+            highlight.setStroke(Color.TRANSPARENT);
             highlight.setFill(Color.rgb(110, 165, 232, 0.3));
         }
         highlight.setStrokeLineJoin(StrokeLineJoin.ROUND);

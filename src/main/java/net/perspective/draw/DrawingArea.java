@@ -602,6 +602,9 @@ public class DrawingArea {
             if (item instanceof Text) {
                 context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                 context.edit(item, view.getSelected());
+                ((Text) item).setDimensions();
+                view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
             }
         }
     }
