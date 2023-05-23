@@ -24,6 +24,7 @@
 package net.perspective.draw.geom;
 
 import java.awt.font.TextAttribute;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.AttributedString;
@@ -128,7 +129,14 @@ public class TextFormatter {
      */
     private void readTextItem(Text item) {
         String content = normalizeText(item.getText());
-        StringReader r = new StringReader(content);
+        /**
+         * A naive implementation would use a StringReader jdom api has a
+         * warning about file encodings use an InputStream
+         *
+         * @see
+         * <a href="https://www.jdom.org/docs/apidocs/org/jdom2/input/SAXBuilder.html#build-java.io.Reader-">https://www.jdom.org/docs/apidocs/</a>
+         */
+        ByteArrayInputStream r = new ByteArrayInputStream(content.getBytes());
         try {
             currentdom = builder.build(r);
         } catch (JDOMException e) {
