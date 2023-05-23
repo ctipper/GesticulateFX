@@ -229,16 +229,31 @@ public class TextKeyHandler implements KeyHandler {
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem item = view.getDrawings().get(selection);
-            if (item instanceof Text) {
-                String c = keylistener.getKeyChar();
-                if (!c.isEmpty() && !keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
-                    // edit
-                    editor.insertChar(c);
-                    editor.commitText((Text) item);
-                }
-                ((Text) item).setDimensions();
+            if (item instanceof Text text) {
+                String keyChar = keylistener.getKeyChar();
+                /**
+                 * On Windows 11 event.keyCode() will likely return &lt;DEL&gt;
+                 * as a valid character and this needs to be rejected before
+                 * inserting into the jdom used to sanitise input
+                 * 
+                 * @see {@link net.perspective.draw.geom.TextFormatter#readFxText}
+                 */
+                if (!keyChar.isEmpty()) {
+                    boolean illegalChar = false;
+                    for (Integer t : keyChar.codePoints().toArray()) {
+                        if (Character.getType(t) == Character.CONTROL) {
+                            illegalChar = true;
+                        }
+                    }
+                    if (!illegalChar && !keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
+                        // edit
+                        editor.insertChar(keyChar);
+                        editor.commitText(text);
+                    }
+                text.setDimensions();
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
+                }
             }
         }
     }
