@@ -247,7 +247,7 @@ public class TextKeyHandler implements KeyHandler {
                     }
                     if (!illegalChar && !keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
                         // edit
-                        editor.insertChar(keyChar);
+                        editor.insertText(keyChar);
                         editor.commitText(text);
                     }
                 text.setDimensions();

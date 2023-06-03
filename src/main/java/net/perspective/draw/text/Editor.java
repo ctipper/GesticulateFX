@@ -88,13 +88,6 @@ public interface Editor {
     void deleteChar();
 
     /**
-     * keyboard type action
-     * 
-     * @param c The character to insert
-     */
-    void insertChar(String c);
-
-    /**
      * insert text action
      * 
      * @param string text

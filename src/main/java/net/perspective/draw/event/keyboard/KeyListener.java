@@ -67,7 +67,7 @@ public class KeyListener {
          * behaviour from the TilePane in root window
          */
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
-            if (event.getCode() == KeyCode.SPACE) {
+            if (KeyCode.SPACE.equals(event.getCode())  || KeyCode.ENTER.equals(event.getCode())) {
                 logger.trace("Filtering out event {}, {}", event.getEventType(), event.getCode().getName());
                 event.consume();
                 KeyEvent evt = (KeyEvent) event.clone();

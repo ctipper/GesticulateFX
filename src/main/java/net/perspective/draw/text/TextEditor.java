@@ -186,24 +186,6 @@ public class TextEditor implements Editor {
     }
 
     /**
-     * keyboard type action
-     * 
-     * @param c The character to insert
-     */
-    @Override
-    public void insertChar(String c) {
-        String startText = text.substring(0, caretstart);
-        String endText = text.substring(caretend);
-        if (text.equals(" ")) {
-            text = c;
-        } else {
-            text = startText + c + endText;
-        }
-        caretstart = caretstart + 1;
-        caretend = caretstart;
-    }
-
-    /**
      * insert text action
      * 
      * @param string text
