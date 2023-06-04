@@ -28,8 +28,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -48,8 +46,6 @@ public class KeyListener {
     private boolean isShiftDown;
     private boolean isShortcutDown;
 
-    private static final Logger logger = LoggerFactory.getLogger(KeyListener.class.getName());
-
     /**
      * Creates a new instance of <code>KeyHandler</code> 
      */
@@ -62,18 +58,6 @@ public class KeyListener {
     }
 
     public void initializeHandlers(Scene scene) {
-        /**
-         * It is proven necessary to insert this workaround because KeyCode.SPACE triggers unwanted
-         * behaviour from the TilePane in root window
-         */
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
-            if (KeyCode.SPACE.equals(event.getCode())  || KeyCode.ENTER.equals(event.getCode())) {
-                logger.trace("Filtering out event {}, {}", event.getEventType(), event.getCode().getName());
-                event.consume();
-                KeyEvent evt = (KeyEvent) event.clone();
-                KeyEvent.fireEvent(scene, evt);
-            }
-        });
         scene.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             keyPressed(event);
         });
