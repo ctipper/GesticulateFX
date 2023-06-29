@@ -25,7 +25,6 @@ package net.perspective.draw;
 
 import java.awt.BasicStroke;
 import java.awt.Shape;
-import java.awt.datatransfer.Transferable;
 import java.awt.geom.Rectangle2D;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,8 +54,6 @@ import net.perspective.draw.util.G2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.perspective.draw.TextItemTransferHandler.COPY;
-import static net.perspective.draw.TextItemTransferHandler.MOVE;
 
 /**
  * 
@@ -70,7 +67,6 @@ public class CanvasView {
     @Inject private ApplicationController controller;
     @Inject private Dropper dropper;
     @Inject private TextController textController;
-    @Inject private TextItemTransferHandler transferhandler;
     @Inject private G2 g2;
     private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
@@ -78,7 +74,6 @@ public class CanvasView {
     private Optional<DrawItem> newitem;
     private final Set<Integer> selectionIndex;
     private final Timeline caretTimeline;
-    private Transferable clipboard;
     private Group drawingAnchors;
     private Node drawMarquee;
     private Node drawGuides;
@@ -761,25 +756,21 @@ public class CanvasView {
      * cut the text item
      */
     public void cutTextItem() {
-        clipboard = transferhandler.createTransferable();
-        transferhandler.exportDone(clipboard, MOVE);
+        textController.cutSelectedText();
     }
 
     /**
      * copy the text item
      */
     public void copyTextItem() {
-        clipboard = transferhandler.createTransferable();
-        transferhandler.exportDone(clipboard, COPY);
+        textController.copySelectedText();
     }
 
     /**
      * paste the text item
      */
     public void pasteTextItem() {
-        if (clipboard != null) {
-            transferhandler.importData(clipboard);
-        }
+        textController.pasteSelectedText();
     }
 
 

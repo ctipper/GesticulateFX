@@ -25,6 +25,9 @@ package net.perspective.draw.text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javax.inject.Inject;
 import net.perspective.draw.geom.Text;
 
@@ -35,7 +38,8 @@ import net.perspective.draw.geom.Text;
 
 public class TextEditor implements Editor {
 
-    private String text, clipboard;
+    private String text;
+    private Clipboard clipboard;
     private int caretstart, caretend;
 
     /**
@@ -44,7 +48,9 @@ public class TextEditor implements Editor {
     @Inject
     public TextEditor() {
         caretstart = caretend = 0;
-        clipboard = "";
+        Platform.runLater(() -> {
+            clipboard = Clipboard.getSystemClipboard();
+        });
     }
 
     /**
@@ -108,7 +114,7 @@ public class TextEditor implements Editor {
     @Override
     public void cutText() {
         String newText = text.substring(0, caretstart) + text.substring(caretend);
-        clipboard = text.substring(caretstart, caretend);
+        this.setClipboard(text.substring(caretstart, caretend));
         if (newText.length() == 0) {
             text = " ";
         } else {
@@ -122,7 +128,7 @@ public class TextEditor implements Editor {
      */
     @Override
     public void copyText() {
-        clipboard = text.substring(caretstart, caretend);
+        this.setClipboard(text.substring(caretstart, caretend));
     }
 
     /**
@@ -132,13 +138,14 @@ public class TextEditor implements Editor {
     public void pasteText() {
         String startText = text.substring(0, caretstart);
         String endText = text.substring(caretend);
-        String newText = startText + clipboard + endText;
+        String clip = this.getClipboard();
+        String newText = startText + clip + endText;
         if (newText.length() == 0) {
             text = " ";
         } else {
             text = newText;
         }
-        caretend = caretstart + clipboard.length();
+        caretend = caretstart + clip.length();
         caretstart = caretend;
     }
 
@@ -250,8 +257,11 @@ public class TextEditor implements Editor {
      * @param s Some textual data
      */
     @Override
-    public void setClipboard(String s) {
-        clipboard = s;
+    public void setClipboard(String str) {
+        // update system clipboard
+        ClipboardContent content = new ClipboardContent();
+        content.putString(str);
+        clipboard.setContent(content);
     }
 
     /**
@@ -261,7 +271,13 @@ public class TextEditor implements Editor {
      */
     @Override
     public String getClipboard() {
-        return clipboard;
+        String str;
+        if (clipboard.hasString()) {
+            str = clipboard.getString();
+        } else {
+            str = "";
+        }
+        return str;
     }
 
 }
