@@ -24,7 +24,6 @@
 package net.perspective.draw.event.keyboard;
 
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
