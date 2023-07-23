@@ -299,59 +299,52 @@ public class TextKeyHandler implements KeyHandler {
         }
     }
 
-    /**
+     /**
      * Handles an input method event.
-     *
      * @param event the {@code InputMethodEvent} to be handled
      */
     public void handleInputMethodEvent(InputMethodEvent event) {
+        int commitCount = event.getCommitted().length();
         Editor editor = textController.getEditor();
+        selection = view.getSelected();
         if ((view.getSelected() != -1) && (view.isEditing())) {
-            DrawItem drawitem = view.getDrawings().get(view.getSelected());
-            if (drawitem instanceof Text item) {
-                // old composed item deletion
+            DrawItem item = view.getDrawings().get(selection);
+            if (item instanceof Text text) {
+                // old composed text deletion
                 if (composedTextExists()) {
                     for (int i = 0; i < composedTextEndIndex; i++) {
                         // edit
                         editor.backSpace();
-                        editor.commitText(item);
+                        editor.commitText(text);
                     }
-                    item.setDimensions();
+                    text.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
 
-                // committed item insertion
+                // committed text insertion
                 int committedTextStartIndex = 0;
-                int committedTextEndIndex = event.getCommitted().length();
-
-                if (committedTextEndIndex != 0) {
-                    // edit
-                    editor.insertText(event.getCommitted());
-                    editor.commitText(item);
-                    item.setDimensions();
-                    view.updateSelectedItem();
-                    view.moveSelection(view.getSelected());
+                int committedTextEndIndex = 0;
+                if (commitCount != 0) {
+                    String committed = event.getCommitted();
+                    // Remember latest committed text end index
+                    committedTextEndIndex = committed.length();
                 }
 
-                // new composed item insertion
-                composedTextEndIndex = 0;
+                // new composed text insertion
                 StringBuilder composed = new StringBuilder();
                 for (InputMethodTextRun run : event.getComposed()) {
-                    composedTextEndIndex = composedTextEndIndex + run.getText().length();
                     composed.append(run.getText());
                 }
+                composedTextEndIndex = composed.length();
+                // edit
+                editor.insertText(composed.toString());
+                editor.commitText(text);
+                text.setDimensions();
+                view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
 
-                if (composed.length() != 0) {
-                    // edit
-                    editor.insertText(composed.toString());
-                    editor.commitText(item);
-                    item.setDimensions();
-                    view.updateSelectedItem();
-                    view.moveSelection(view.getSelected());
-                }
-
-                // Save the latest committed item information
+                // Save the latest committed text information
                 if (committedTextStartIndex != committedTextEndIndex) {
                     composedTextStartIndex = -1;
                 } else {
