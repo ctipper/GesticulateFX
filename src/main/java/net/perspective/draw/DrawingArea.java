@@ -36,19 +36,23 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.InputEvent;
+import javafx.scene.input.InputMethodRequests;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.*;
@@ -72,11 +76,13 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 public class DrawingArea {
 
     @Inject private Injector injector;
+    @Inject private Gesticulate app;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
     @Inject private DrawAreaListener listener;
     @Inject private KeyListener keylistener;
     @Inject private CanvasTransferHandler transferhandler;
+    @Inject private TextController textController;
     @Inject private FigureFactory figurefactory;
     @Inject private Dropper dropper;
     @Inject private MapController mapper;
@@ -107,6 +113,7 @@ public class DrawingArea {
     private EventHandler<ContextMenuEvent> contextlistener;
     private EventHandler<TouchEvent> popuplistener;
     private EventHandler<InputEvent> arealistener;
+    private InputMethodRequests inputMethodRequestsHandler;
 
     java.util.List<Float> strokeTypes = Arrays.asList(1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 8.0f, 10.0f);
     java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
@@ -1245,6 +1252,56 @@ public class DrawingArea {
      */
     public boolean isMultiSelectEnabled() {
         return multiSelectEnabled;
+    }
+
+    public InputMethodRequests getInputMethodRequests() {
+        if (inputMethodRequestsHandler == null) {
+            inputMethodRequestsHandler = new InputMethodRequestsHandler();
+        }
+        return inputMethodRequestsHandler;
+    }
+
+    /**
+     * Default implementation of the InputMethodRequests interface.
+     */
+    class InputMethodRequestsHandler implements InputMethodRequests {
+
+        @Override
+        public Point2D getTextLocation(int i) {
+            Point2D location = new Point2D(0, 0);
+            Scene scene = app.getStage().getScene();
+            Window window = scene != null ? scene.getWindow() : null;
+            if (window == null) {
+                return location;
+            }
+            if (view.isEditing() && view.getDrawings().get(view.getSelected()) instanceof Text item) {
+                // windows position
+                location = new Point2D(window.getX() + scene.getX(), window.getY() + scene.getY());
+                // compute position of Text item
+                Point2D offset = new Point2D((int) item.getStart().getX(), (int) (item.getStart().getY() + item.getEnd().getY()));
+                location.add(offset);
+                // a very basic estimate of character offset based on font size
+                Point2D position = new Point2D((int) textController.getEditor().getCaretStart() * item.getSize() / 2, 0);
+                location.add(position);
+            }
+            return location;
+        }
+
+        @Override
+        public int getLocationOffset(int i, int i1) {
+            return 0;
+        }
+
+        @Override
+        public void cancelLatestCommittedText() {
+            
+        }
+
+        @Override
+        public String getSelectedText() {
+            return "";
+        }
+
     }
 
 }
