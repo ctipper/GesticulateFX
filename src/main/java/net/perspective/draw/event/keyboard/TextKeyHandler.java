@@ -22,6 +22,8 @@
  */
 package net.perspective.draw.event.keyboard;
 
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.InputMethodTextRun;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
@@ -51,6 +53,8 @@ public class TextKeyHandler implements KeyHandler {
     private HandlerType handlerType;
     private boolean isEditing = false;
     private boolean pressed = false;
+    private int composedTextStartIndex = -1;
+    private int composedTextEndIndex = -1;
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
 
@@ -293,4 +297,63 @@ public class TextKeyHandler implements KeyHandler {
         }
     }
 
+     /**
+     * Handles an input method event.
+     * @param event the {@code InputMethodEvent} to be handled
+     */
+    public void handleInputMethodEvent(InputMethodEvent event) {
+        int commitCount = event.getCommitted().length();
+        Editor editor = textController.getEditor();
+        selection = view.getSelected();
+        if ((view.getSelected() != -1) && (view.isEditing())) {
+            DrawItem item = view.getDrawings().get(selection);
+            if (item instanceof Text text) {
+                // old composed text deletion
+                if (composedTextExists()) {
+                    for (int i = 0; i < composedTextEndIndex; i++) {
+                        // edit
+                        editor.backSpace();
+                        editor.commitText(text);
+                    }
+                    text.setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
+                }
+
+                // committed text insertion
+                int committedTextStartIndex = 0;
+                int committedTextEndIndex = 0;
+                if (commitCount != 0) {
+                    String committed = event.getCommitted();
+                    // Remember latest committed text end index
+                    committedTextEndIndex = committed.length();
+                }
+
+                // new composed text insertion
+                StringBuilder composed = new StringBuilder();
+                for (InputMethodTextRun run : event.getComposed()) {
+                    composed.append(run.getText());
+                }
+                composedTextEndIndex = composed.length();
+                // edit
+                editor.insertText(composed.toString());
+                editor.commitText(text);
+                text.setDimensions();
+                view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
+
+                // Save the latest committed text information
+                if (committedTextStartIndex != committedTextEndIndex) {
+                    composedTextStartIndex = -1;
+                } else {
+                    composedTextStartIndex = 0;
+                }
+            }
+        }
+    }
+
+    private boolean composedTextExists() {
+	return (composedTextStartIndex != -1);
+    }
+    
 }
