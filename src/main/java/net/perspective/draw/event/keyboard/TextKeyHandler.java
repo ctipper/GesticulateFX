@@ -304,7 +304,6 @@ public class TextKeyHandler implements KeyHandler {
      * @param event the {@code InputMethodEvent} to be handled
      */
     public void handleInputMethodEvent(InputMethodEvent event) {
-        int commitCount = event.getCommitted().length();
         Editor editor = textController.getEditor();
         selection = view.getSelected();
         if ((view.getSelected() != -1) && (view.isEditing())) {
@@ -325,24 +324,34 @@ public class TextKeyHandler implements KeyHandler {
                 // committed text insertion
                 int committedTextStartIndex = 0;
                 int committedTextEndIndex = 0;
-                if (commitCount != 0) {
+                if (event.getCommitted().length() != 0) {
                     String committed = event.getCommitted();
                     // Remember latest committed text end index
                     committedTextEndIndex = committed.length();
+                    // edit
+                    editor.insertText(committed);
+                    editor.commitText(text);
+                    text.setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
                 }
 
                 // new composed text insertion
+                composedTextEndIndex = 0;
                 StringBuilder composed = new StringBuilder();
                 for (InputMethodTextRun run : event.getComposed()) {
+                    composedTextEndIndex = composedTextEndIndex + run.getText().length();
                     composed.append(run.getText());
                 }
-                composedTextEndIndex = composed.length();
-                // edit
-                editor.insertText(composed.toString());
-                editor.commitText(text);
-                text.setDimensions();
-                view.updateSelectedItem();
-                view.moveSelection(view.getSelected());
+
+                if (composed.length() != 0) {
+                    // edit
+                    editor.insertText(composed.toString());
+                    editor.commitText(text);
+                    text.setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
+                }
 
                 // Save the latest committed text information
                 if (committedTextStartIndex != committedTextEndIndex) {
