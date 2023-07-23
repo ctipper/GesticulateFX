@@ -23,11 +23,15 @@
  */
 package net.perspective.draw.event.keyboard;
 
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.Gesticulate;
 
 /**
  *
@@ -37,6 +41,7 @@ import javax.inject.Singleton;
 @Singleton
 public class KeyListener {
 
+    @Inject Gesticulate app;
     private KeyHandler handler;
     private String keychar;
     private KeyCode keycode;
@@ -45,6 +50,8 @@ public class KeyListener {
     private boolean isMetaDown;
     private boolean isShiftDown;
     private boolean isShortcutDown;
+
+    private EventHandler<InputMethodEvent> inputMethodTextChangeHandler;
 
     /**
      * Creates a new instance of <code>KeyHandler</code> 
@@ -55,6 +62,14 @@ public class KeyListener {
 
     public void setEventHandler(KeyHandler handler) {
         this.handler = handler;
+        if (handler instanceof TextKeyHandler textHandler) {
+            inputMethodTextChangeHandler = textHandler::handleInputMethodEvent;
+            app.getStage().getScene().addEventHandler(InputMethodEvent.ANY, inputMethodTextChangeHandler);
+        } else {
+            if (inputMethodTextChangeHandler != null) {
+                app.getStage().getScene().removeEventHandler(InputMethodEvent.ANY, inputMethodTextChangeHandler);
+            }
+        }
     }
 
     public void initializeHandlers(Scene scene) {
