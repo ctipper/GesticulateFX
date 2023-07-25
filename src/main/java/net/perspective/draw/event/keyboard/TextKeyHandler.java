@@ -204,7 +204,7 @@ public class TextKeyHandler implements KeyHandler {
                         }
                         editor.setCaretEnd(textlength);
                     }
-                    case ENTER -> {
+                    case ESCAPE-> {
                         // commit
                         editor.commitText(item);
                         view.updateSelectedItem();
@@ -304,36 +304,35 @@ public class TextKeyHandler implements KeyHandler {
      */
     public void handleInputMethodEvent(InputMethodEvent event) {
         Editor editor = textController.getEditor();
-        selection = view.getSelected();
         if ((view.getSelected() != -1) && (view.isEditing())) {
-            DrawItem item = view.getDrawings().get(selection);
-            if (item instanceof Text text) {
-                // old composed text deletion
+            DrawItem drawitem = view.getDrawings().get(view.getSelected());
+            if (drawitem instanceof Text item) {
+                // old composed item deletion
                 if (composedTextExists()) {
                     for (int i = 0; i < composedTextEndIndex; i++) {
                         // edit
                         editor.backSpace();
-                        editor.commitText(text);
+                        editor.commitText(item);
                     }
-                    text.setDimensions();
+                    item.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
 
-                // committed text insertion
+                // committed item insertion
                 int committedTextStartIndex = 0;
                 int committedTextEndIndex = event.getCommitted().length();
 
                 if (committedTextEndIndex != 0) {
                     // edit
                     editor.insertText(event.getCommitted());
-                    editor.commitText(text);
-                    text.setDimensions();
+                    editor.commitText(item);
+                    item.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
 
-                // new composed text insertion
+                // new composed item insertion
                 composedTextEndIndex = 0;
                 StringBuilder composed = new StringBuilder();
                 for (InputMethodTextRun run : event.getComposed()) {
@@ -344,13 +343,13 @@ public class TextKeyHandler implements KeyHandler {
                 if (composed.length() != 0) {
                     // edit
                     editor.insertText(composed.toString());
-                    editor.commitText(text);
-                    text.setDimensions();
+                    editor.commitText(item);
+                    item.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
 
-                // Save the latest committed text information
+                // Save the latest committed item information
                 if (committedTextStartIndex != committedTextEndIndex) {
                     composedTextStartIndex = -1;
                 } else {
