@@ -63,10 +63,10 @@ public class KeyListener {
         this.handler = handler;
         if (handler instanceof TextKeyHandler textHandler) {
             inputMethodTextChangeHandler = textHandler::handleInputMethodEvent;
-            app.getStage().getScene().addEventHandler(InputMethodEvent.ANY, inputMethodTextChangeHandler);
+            app.getStage().getScene().addEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
         } else {
             if (inputMethodTextChangeHandler != null) {
-                app.getStage().getScene().removeEventHandler(InputMethodEvent.ANY, inputMethodTextChangeHandler);
+                app.getStage().getScene().removeEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
             }
         }
     }
