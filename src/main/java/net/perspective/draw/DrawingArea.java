@@ -235,6 +235,9 @@ public class DrawingArea {
         transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
+        if (getCanvas().getInputMethodRequests() == null) {
+            getCanvas().setInputMethodRequests(getInputMethodRequests());
+        }
     }
 
     /**
