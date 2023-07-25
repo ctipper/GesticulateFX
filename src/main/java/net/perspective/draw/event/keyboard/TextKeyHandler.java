@@ -299,6 +299,7 @@ public class TextKeyHandler implements KeyHandler {
 
      /**
      * Handles an input method event.
+     * 
      * @param event the {@code InputMethodEvent} to be handled
      */
     public void handleInputMethodEvent(InputMethodEvent event) {
@@ -321,13 +322,11 @@ public class TextKeyHandler implements KeyHandler {
 
                 // committed text insertion
                 int committedTextStartIndex = 0;
-                int committedTextEndIndex = 0;
-                if (event.getCommitted().length() != 0) {
-                    String committed = event.getCommitted();
-                    // Remember latest committed text end index
-                    committedTextEndIndex = committed.length();
+                int committedTextEndIndex = event.getCommitted().length();
+
+                if (committedTextEndIndex != 0) {
                     // edit
-                    editor.insertText(committed);
+                    editor.insertText(event.getCommitted());
                     editor.commitText(text);
                     text.setDimensions();
                     view.updateSelectedItem();
