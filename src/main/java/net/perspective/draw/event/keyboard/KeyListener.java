@@ -30,7 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.perspective.draw.Gesticulate;
+import net.perspective.draw.DrawingArea;
 
 /**
  *
@@ -40,7 +40,7 @@ import net.perspective.draw.Gesticulate;
 @Singleton
 public class KeyListener {
 
-    @Inject Gesticulate app;
+    @Inject DrawingArea drawarea;
     private KeyHandler handler;
     private String keychar;
     private KeyCode keycode;
@@ -63,10 +63,10 @@ public class KeyListener {
         this.handler = handler;
         if (handler instanceof TextKeyHandler textHandler) {
             inputMethodTextChangeHandler = textHandler::handleInputMethodEvent;
-            app.getStage().getScene().addEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
+            drawarea.getScene().getRoot().addEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
         } else {
             if (inputMethodTextChangeHandler != null) {
-                app.getStage().getScene().removeEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
+                drawarea.getScene().getRoot().removeEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
             }
         }
     }
