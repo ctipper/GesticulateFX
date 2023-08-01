@@ -272,6 +272,10 @@ public class StreetMap extends Picture {
 
     /**
      * Consolidate map properties
+     * 
+     * @param lat latitude
+     * @param lon longitude
+     * @param zm zoom level
      */
     public void setLocation(double lat, double lon, double zm) {
         setLatitude(lat);
@@ -384,6 +388,7 @@ public class StreetMap extends Picture {
     /**
      * Render the picture anchors to indicate selection
      * 
+     * @param drawarea
      * @return an FX Shape node
      */
     @Override

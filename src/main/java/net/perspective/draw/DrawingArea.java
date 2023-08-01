@@ -629,7 +629,8 @@ public class DrawingArea {
      * Get the item text
      * 
      * @param item the {@link net.perspective.draw.geom.DrawItem}
-     * @return the {@link java.awt.font.TextLayout}
+     * 
+     * @return the {@link javafx.scene.text.TextFlow}
      */
     public TextFlow getTextLayout(DrawItem item) {
         TextFlow layout = ((Text) item).getLayout();

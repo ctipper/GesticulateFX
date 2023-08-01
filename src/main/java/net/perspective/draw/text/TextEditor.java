@@ -254,7 +254,7 @@ public class TextEditor implements Editor {
     /**
      * Set the clipboard text
      * 
-     * @param s Some textual data
+     * @param str Some textual data
      */
     @Override
     public void setClipboard(String str) {
