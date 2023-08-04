@@ -1065,8 +1065,8 @@ public class ApplicationController implements Initializable {
      * Add the palette box to slider menu and configure
      */
     private void prepareAboutBoxMenu() {
-        int lastrow = 10;    // first empty row
-        int hboxes = 10;    // empty row count
+        int lastrow = 10;   // first empty row
+        int hboxes = 11;    // empty row count
         
         for (int i=0; i<hboxes; i++) {
             appmenu.getRowConstraints().add(getRow());
