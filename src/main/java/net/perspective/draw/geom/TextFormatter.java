@@ -26,7 +26,6 @@ package net.perspective.draw.geom;
 import java.awt.font.TextAttribute;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.Iterator;

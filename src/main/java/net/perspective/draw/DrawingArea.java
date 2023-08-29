@@ -49,40 +49,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.perspective.draw.enums.DrawingType;
-import net.perspective.draw.enums.HandlerType;
-import net.perspective.draw.enums.KeyHandlerType;
-import net.perspective.draw.event.DrawAreaListener;
-import net.perspective.draw.event.FigureHandler;
-import net.perspective.draw.event.RotationHandler;
-import net.perspective.draw.event.MapHandler;
-import net.perspective.draw.event.SelectionHandler;
-import net.perspective.draw.event.SketchHandler;
-import net.perspective.draw.event.TextHandler;
-import net.perspective.draw.event.keyboard.DummyKeyHandler;
-import net.perspective.draw.event.keyboard.MapKeyHandler;
-import net.perspective.draw.event.keyboard.MoveKeyHandler;
-import net.perspective.draw.event.keyboard.KeyListener;
-import net.perspective.draw.geom.ArrowType;
-import net.perspective.draw.geom.DrawItem;
-import net.perspective.draw.geom.Edge;
-import net.perspective.draw.geom.Figure;
-import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureType;
-import net.perspective.draw.geom.Grouped;
-import net.perspective.draw.geom.Picture;
-import net.perspective.draw.geom.StreetMap;
-import net.perspective.draw.geom.Text;
-import net.perspective.draw.geom.TextFormatter;
+import net.perspective.draw.enums.*;
+import net.perspective.draw.event.*;
+import net.perspective.draw.event.behaviours.*;
+import net.perspective.draw.event.keyboard.*;
+import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
-import net.perspective.draw.event.behaviours.BehaviourContext;
-import net.perspective.draw.event.behaviours.MapItemBehaviour;
-import net.perspective.draw.event.behaviours.TextItemBehaviour;
-import net.perspective.draw.event.keyboard.TextKeyHandler;
 
 /**
  * 
