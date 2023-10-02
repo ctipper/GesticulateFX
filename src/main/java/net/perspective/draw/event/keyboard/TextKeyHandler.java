@@ -204,7 +204,7 @@ public class TextKeyHandler implements KeyHandler {
                         }
                         editor.setCaretEnd(textlength);
                     }
-                    case ENTER -> {
+                    case ESCAPE -> {
                         // commit
                         editor.commitText(item);
                         view.updateSelectedItem();
