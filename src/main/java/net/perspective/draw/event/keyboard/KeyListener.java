@@ -23,9 +23,7 @@
  */
 package net.perspective.draw.event.keyboard;
 
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.inject.Inject;
@@ -50,8 +48,6 @@ public class KeyListener {
     private boolean isShiftDown;
     private boolean isShortcutDown;
 
-    private EventHandler<InputMethodEvent> inputMethodTextChangeHandler;
-
     /**
      * Creates a new instance of <code>KeyHandler</code> 
      */
@@ -62,12 +58,9 @@ public class KeyListener {
     public void setEventHandler(KeyHandler handler) {
         this.handler = handler;
         if (handler instanceof TextKeyHandler textHandler) {
-            inputMethodTextChangeHandler = textHandler::handleInputMethodEvent;
-            drawarea.getScene().getRoot().addEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
+            drawarea.getCanvas().setOnInputMethodTextChanged(textHandler::handleInputMethodEvent);
         } else {
-            if (inputMethodTextChangeHandler != null) {
-                drawarea.getScene().getRoot().removeEventFilter(InputMethodEvent.INPUT_METHOD_TEXT_CHANGED, inputMethodTextChangeHandler);
-            }
+            drawarea.getCanvas().setOnInputMethodTextChanged(null);
         }
     }
 
