@@ -44,7 +44,8 @@ public class DrawItemTransferable implements Transferable {
 
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
-    DataFlavor dataFlavor;
+    String imageType = "image/x-java-image;class=java.awt.Image";
+    DataFlavor[] dataFlavor;
     private final ByteArrayOutputStream out;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawItemTransferable.class.getName());
@@ -68,7 +69,9 @@ public class DrawItemTransferable implements Transferable {
 
         //Try to create a DataFlavor for Figures
         try {
-            dataFlavor = new DataFlavor(mimeType);
+            dataFlavor = new DataFlavor[2];
+            dataFlavor[0] = new DataFlavor(mimeType);
+            dataFlavor[1] = new DataFlavor(imageType);
         } catch (ClassNotFoundException e) {
             logger.warn("mimeType failed in DrawItemTransferable");
         }
@@ -83,8 +86,13 @@ public class DrawItemTransferable implements Transferable {
         ByteArrayInputStream bin = new ByteArrayInputStream(out.toByteArray());
         try {
             ObjectInputStream in = new ObjectInputStream(bin);
-            DrawItem item = (DrawItem) in.readObject();
-            return item;
+            if (dataFlavor[0].equals(flavor)) {
+                DrawItem item = (DrawItem) in.readObject();
+                return item;
+            } else if (dataFlavor[1].equals(flavor)) {
+                java.awt.Image item = (java.awt.Image) in.readObject();
+                return item;
+            }
         } catch (IOException e) {
             logger.warn("I/O Exception " + e.getMessage());
         } catch (ClassNotFoundException e) {
@@ -101,12 +109,15 @@ public class DrawItemTransferable implements Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { dataFlavor };
+        return dataFlavor;
     }
 
     @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
-        return dataFlavor.equals(flavor);
+        for (int i = 0; i < 2; i++) {
+            return dataFlavor[i].equals(flavor);
+        }
+        return false;
     }
 
 }

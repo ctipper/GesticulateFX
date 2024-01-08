@@ -24,11 +24,15 @@
 package net.perspective.draw;
 
 import com.google.inject.Injector;
+import java.awt.Graphics2D;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import javax.inject.Inject;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Grouped;
@@ -46,12 +50,16 @@ import org.slf4j.LoggerFactory;
 public class CanvasTransferHandler {
 
     @Inject private Injector injector;
+    @Inject private DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private MapController mapper;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
-    DataFlavor dataFlavor;
+    DataFlavor drawItemFlavor;
+    String dataflavor = "";
     private double shift;
+    private double pageWidth;      // canvas width pixels
+    private double pageHeight;     // canvas height pixels
 
     public static int COPY = 1;
     public static int MOVE = 2;
@@ -62,7 +70,7 @@ public class CanvasTransferHandler {
     public CanvasTransferHandler() {
         //Try to create a DataFlavor for drawItems.
         try {
-            dataFlavor = new DataFlavor(mimeType);
+            drawItemFlavor = new DataFlavor(mimeType);
         } catch (ClassNotFoundException e) {
             logger.warn("mimeType failed in CanvasTransferHandler");
         }
@@ -70,16 +78,29 @@ public class CanvasTransferHandler {
     }
 
     public boolean importData(Transferable t) {
-        DrawItem item;
-
         if (hasDrawItemFlavor(t.getTransferDataFlavors())) {
             try {
-                if (t.getTransferData(dataFlavor) instanceof DrawItem drawItem) {
-                    item = drawItem;
+                if (dataflavor.equals("drawitem")) {
+                    DrawItem item = (DrawItem) t.getTransferData(drawItemFlavor);
                     // add item to Canvas
                     item.moveTo(shift, shift);
                     item = checkDrawings(item);
                     view.appendItemToCanvas(item);
+                } else if (dataflavor.equals("imageitem")) {
+                    java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
+                    Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
+                    Picture picture = injector.getInstance(Picture.class);
+                    ImageItem item = new ImageItem(image);
+                    item.setFormat("PNG");
+                    int index = view.setImageItem(item);
+                    double width = (double) image.getWidth();
+                    double height = (double) image.getHeight();
+                    double scale = getScale(width, height);
+                    logger.debug("Image relative scale: {}", scale);
+                    picture.setImage(index, width, height);
+                    picture.setScale(scale);
+                    view.setNewItem(picture);
+                    view.resetNewItem();
                 }
                 shift = shift + 20.0;
                 logger.debug("Item added to canvas");
@@ -117,15 +138,18 @@ public class CanvasTransferHandler {
     }
 
     protected boolean hasDrawItemFlavor(DataFlavor[] flavors) {
-        if (dataFlavor == null) {
-            return false;
-        }
-
         for (DataFlavor f : flavors) {
-            if (dataFlavor.equals(f)) {
+            if (drawItemFlavor.equals(f)) {
+                logger.debug(mimeType);
+                dataflavor = "drawitem";
+                return true;
+            } else if (DataFlavor.imageFlavor.equals(f)) {
+                logger.debug("image/x-java-image;class=java.awt.Image");
+                dataflavor = "imageitem";
                 return true;
             }
         }
+
         return false;
     }
 
@@ -160,6 +184,66 @@ public class CanvasTransferHandler {
         }
 
         return drawing;
+    }
+
+    /**
+     * Get a representative scale for images larger than page size
+     * 
+     * 1. ImageWidth &gt; pageWidth resize to 80% pageWidth
+     * 2. ImageHeight &gt; pageHeight resize to 80% pageHeight
+     * 3. if imageSize &lt; pageSize do nothing
+     * 
+     * @param width
+     * @param height
+     * @return 
+     */
+    private double getScale(double width, double height) {
+        pageWidth = drawarea.getScene().getWidth();
+        pageHeight = drawarea.getScene().getHeight();
+        if ((width <= pageWidth) && (height <= pageHeight)) {
+            return 1d;
+        }
+        if ((width <= pageWidth) && (height > pageHeight)) {
+            return 0.8 * pageHeight / height;
+        }
+        if ((width > pageWidth) && (height <= pageHeight)) {
+            return 0.8 * pageWidth / width;
+        }
+        if ((width > pageWidth) && (height > pageHeight)) {
+            double ratio_w = pageWidth / width;
+            double ratio_h = pageHeight / height;
+            if (ratio_w <= ratio_h) {
+                return 0.8 * pageWidth / width;
+            } else {
+                return 0.8 * pageHeight / height;
+            }
+        }
+        return 1d;
+    }
+
+    /**
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     *
+     * @see <a href="https://stackoverflow.com/a/13605411">https://stackoverflow.com</a>
+     */
+    public BufferedImage toBufferedImage(java.awt.Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
     }
 
 }
