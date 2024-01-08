@@ -23,7 +23,6 @@
  */
 package net.perspective.draw;
 
-import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -87,12 +86,6 @@ public class DrawItemTransferable implements Transferable {
             if (dataFlavor.equals(flavor)) {
                 DrawItem item = (DrawItem) in.readObject();
                 return item;
-            } else if (DataFlavor.imageFlavor.equals(flavor)) {
-                logger.debug(flavor.getMimeType());
-                if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(flavor)) {
-                    java.awt.Image image = (java.awt.Image) Toolkit.getDefaultToolkit().getSystemClipboard().getData(flavor);
-                    return image;
-                }
             }
         } catch (IOException e) {
             logger.warn("I/O Exception " + e.getMessage());
@@ -116,12 +109,7 @@ public class DrawItemTransferable implements Transferable {
 
     @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
-        if (dataFlavor.equals(flavor)) {
-            return true;
-        } else if (DataFlavor.imageFlavor.equals(flavor)) {
-            return true;
-        }
-        return false;
+        return dataFlavor.equals(flavor);
     }
 
 }
