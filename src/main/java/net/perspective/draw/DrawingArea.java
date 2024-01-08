@@ -124,8 +124,6 @@ public class DrawingArea {
         root = new Group();
         canvas = new SubScene(root, width, height);
         canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
-        contextmenu = new ContextMenu();
-        contextlistener = null;
         view.setDrawingListener();
         view.enableRichText(false);
         this.prepareDrawing();
@@ -139,7 +137,6 @@ public class DrawingArea {
         this.gridVisible = false;
         guides = new Grouped();
         figurefactory = injector.getInstance(FigureFactory.class);
-        systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type
@@ -402,6 +399,8 @@ public class DrawingArea {
      * Set up the context menu
      */
     public void addContextMenu() {
+        contextmenu = new ContextMenu();
+        systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         MenuItem menuCut = new MenuItem("Cut");
         menuCut.setOnAction((ActionEvent e) -> {
             if (view.getSelected() != -1) {
@@ -421,7 +420,8 @@ public class DrawingArea {
         });
         MenuItem menuPaste = new MenuItem("Paste");
         menuPaste.setOnAction((ActionEvent e) -> {
-            transferhandler.importData(systemClipboard.getContents(null));
+            clipboard = systemClipboard.getContents(null);
+            transferhandler.importData(clipboard);
             view.setSelected(-1);
         });
         MenuItem menuTextCut = new MenuItem("Cut");
