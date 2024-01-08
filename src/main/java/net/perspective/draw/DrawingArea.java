@@ -27,8 +27,6 @@ import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -409,6 +407,7 @@ public class DrawingArea {
             if (view.getSelected() != -1) {
                 clipboard = transferhandler.createTransferable();
                 transferhandler.exportDone(clipboard, MOVE);
+                systemClipboard.setContents(clipboard, null);
                 view.setSelected(-1);
             }
         });
@@ -417,20 +416,13 @@ public class DrawingArea {
             if (view.getSelected() != -1) {
                 clipboard = transferhandler.createTransferable();
                 transferhandler.exportDone(clipboard, COPY);
-            }
+                systemClipboard.setContents(clipboard, null);
+        }
         });
         MenuItem menuPaste = new MenuItem("Paste");
         menuPaste.setOnAction((ActionEvent e) -> {
-            if (clipboard != null) {
-                if (systemClipboard.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
-                    transferhandler.importData(systemClipboard.getContents(null));
-                    // nullify system clipboard
-                    systemClipboard.setContents(new StringSelection(""), null);
-                } else {
-                    transferhandler.importData(clipboard);
-                }
-                view.setSelected(-1);
-            }
+            transferhandler.importData(systemClipboard.getContents(null));
+            view.setSelected(-1);
         });
         MenuItem menuTextCut = new MenuItem("Cut");
         menuTextCut.setOnAction((ActionEvent e) -> {
@@ -526,16 +518,13 @@ public class DrawingArea {
         // contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
         SeparatorMenuItem editSeparator = new SeparatorMenuItem();
         contextlistener = (ContextMenuEvent event) -> {
+            contextmenu.getItems().clear();
             if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
                 if (view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
-                    contextmenu.getItems().clear();
                     contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
                 } else if (view.getDrawings().get(view.getSelected()) instanceof Text) {
-                    contextmenu.getItems().clear();
                     contextmenu.getItems().addAll(menuEditTextItem, editSeparator);
                 }
-            } else {
-                contextmenu.getItems().clear();
             }
             if (view.getSelected() != -1 && !view.isMapping() && view.isEditing()) {
                 if (view.getDrawings().get(view.getSelected()) instanceof Text) {
@@ -549,11 +538,9 @@ public class DrawingArea {
             contextmenu.show(canvas, event.getScreenX(), event.getScreenY());
         };
         popuplistener = (TouchEvent event) -> {
+            contextmenu.getItems().clear();
             if (view.getSelected() != -1 && !view.isMapping() && view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
-                contextmenu.getItems().clear();
                 contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
-            } else {
-                contextmenu.getItems().clear();
             }
             contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
             contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);

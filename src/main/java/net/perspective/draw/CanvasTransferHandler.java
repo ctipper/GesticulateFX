@@ -90,6 +90,7 @@ public class CanvasTransferHandler {
                     java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
                     Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
                     Picture picture = injector.getInstance(Picture.class);
+                    picture.moveTo(shift, shift);
                     ImageItem item = new ImageItem(image);
                     item.setFormat("PNG");
                     int index = view.setImageItem(item);

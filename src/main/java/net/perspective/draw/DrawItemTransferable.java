@@ -103,7 +103,7 @@ public class DrawItemTransferable implements Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        DataFlavor[] flavors = {dataFlavor, DataFlavor.imageFlavor};
+        DataFlavor[] flavors = { dataFlavor };
         return flavors;
     }
 
