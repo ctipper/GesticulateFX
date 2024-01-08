@@ -23,6 +23,7 @@
  */
 package net.perspective.draw;
 
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -44,8 +45,7 @@ public class DrawItemTransferable implements Transferable {
 
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
-    String imageType = "image/x-java-image;class=java.awt.Image";
-    DataFlavor[] dataFlavor;
+    DataFlavor dataFlavor;
     private final ByteArrayOutputStream out;
 
     private static final Logger logger = LoggerFactory.getLogger(DrawItemTransferable.class.getName());
@@ -69,9 +69,7 @@ public class DrawItemTransferable implements Transferable {
 
         //Try to create a DataFlavor for Figures
         try {
-            dataFlavor = new DataFlavor[2];
-            dataFlavor[0] = new DataFlavor(mimeType);
-            dataFlavor[1] = new DataFlavor(imageType);
+            dataFlavor = new DataFlavor(mimeType);
         } catch (ClassNotFoundException e) {
             logger.warn("mimeType failed in DrawItemTransferable");
         }
@@ -86,12 +84,15 @@ public class DrawItemTransferable implements Transferable {
         ByteArrayInputStream bin = new ByteArrayInputStream(out.toByteArray());
         try {
             ObjectInputStream in = new ObjectInputStream(bin);
-            if (dataFlavor[0].equals(flavor)) {
+            if (dataFlavor.equals(flavor)) {
                 DrawItem item = (DrawItem) in.readObject();
                 return item;
-            } else if (dataFlavor[1].equals(flavor)) {
-                java.awt.Image item = (java.awt.Image) in.readObject();
-                return item;
+            } else if (DataFlavor.imageFlavor.equals(flavor)) {
+                logger.debug(flavor.getMimeType());
+                if (Toolkit.getDefaultToolkit().getSystemClipboard().isDataFlavorAvailable(flavor)) {
+                    java.awt.Image image = (java.awt.Image) Toolkit.getDefaultToolkit().getSystemClipboard().getData(flavor);
+                    return image;
+                }
             }
         } catch (IOException e) {
             logger.warn("I/O Exception " + e.getMessage());
@@ -109,13 +110,16 @@ public class DrawItemTransferable implements Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return dataFlavor;
+        DataFlavor[] flavors = {dataFlavor, DataFlavor.imageFlavor};
+        return flavors;
     }
 
     @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
-        for (int i = 0; i < 2; i++) {
-            return dataFlavor[i].equals(flavor);
+        if (dataFlavor.equals(flavor)) {
+            return true;
+        } else if (DataFlavor.imageFlavor.equals(flavor)) {
+            return true;
         }
         return false;
     }

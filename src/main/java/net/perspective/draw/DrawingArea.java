@@ -25,6 +25,10 @@ package net.perspective.draw;
 
 import com.google.inject.Injector;
 import java.awt.BasicStroke;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,6 +101,7 @@ public class DrawingArea {
     private boolean multiSelectEnabled;
     private boolean isGuideEnabled;
     private Transferable clipboard;
+    private Clipboard systemClipboard;
 
     private HandlerType handlertype, oldhandlertype;
     private ContextMenu contextmenu;
@@ -136,6 +141,7 @@ public class DrawingArea {
         this.gridVisible = false;
         guides = new Grouped();
         figurefactory = injector.getInstance(FigureFactory.class);
+        systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type
@@ -416,7 +422,13 @@ public class DrawingArea {
         MenuItem menuPaste = new MenuItem("Paste");
         menuPaste.setOnAction((ActionEvent e) -> {
             if (clipboard != null) {
-                transferhandler.importData(clipboard);
+                if (systemClipboard.isDataFlavorAvailable(DataFlavor.imageFlavor)) {
+                    transferhandler.importData(systemClipboard.getContents(null));
+                    // nullify system clipboard
+                    systemClipboard.setContents(new StringSelection(""), null);
+                } else {
+                    transferhandler.importData(clipboard);
+                }
                 view.setSelected(-1);
             }
         });
