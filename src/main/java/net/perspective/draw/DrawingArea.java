@@ -137,6 +137,7 @@ public class DrawingArea {
         this.gridVisible = false;
         guides = new Grouped();
         figurefactory = injector.getInstance(FigureFactory.class);
+        systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
              * Set stroke type
@@ -396,33 +397,54 @@ public class DrawingArea {
     }
 
     /**
+     * Cut the selected item
+     */
+    public void cutSelectedItem() {
+        if (view.getSelected() != -1) {
+            clipboard = transferhandler.createTransferable();
+            transferhandler.exportDone(clipboard, MOVE);
+            systemClipboard.setContents(clipboard, null);
+            view.setSelected(-1);
+        }
+    }
+
+    /**
+     * Copy the selected item
+     */
+    public void copySelectedItem() {
+        if (view.getSelected() != -1) {
+            clipboard = transferhandler.createTransferable();
+            transferhandler.exportDone(clipboard, COPY);
+            systemClipboard.setContents(clipboard, null);
+        }
+
+    }
+
+    /**
+     * Paste the selected item
+     */
+    public void pasteSelectedItem() {
+        clipboard = systemClipboard.getContents(null);
+        transferhandler.importData(clipboard);
+        view.setSelected(-1);
+    }
+
+    /**
      * Set up the context menu
      */
     public void addContextMenu() {
         contextmenu = new ContextMenu();
-        systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         MenuItem menuCut = new MenuItem("Cut");
         menuCut.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
-                clipboard = transferhandler.createTransferable();
-                transferhandler.exportDone(clipboard, MOVE);
-                systemClipboard.setContents(clipboard, null);
-                view.setSelected(-1);
-            }
+            cutSelectedItem();
         });
         MenuItem menuCopy = new MenuItem("Copy");
         menuCopy.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
-                clipboard = transferhandler.createTransferable();
-                transferhandler.exportDone(clipboard, COPY);
-                systemClipboard.setContents(clipboard, null);
-        }
+            copySelectedItem();
         });
         MenuItem menuPaste = new MenuItem("Paste");
         menuPaste.setOnAction((ActionEvent e) -> {
-            clipboard = systemClipboard.getContents(null);
-            transferhandler.importData(clipboard);
-            view.setSelected(-1);
+            pasteSelectedItem();
         });
         MenuItem menuTextCut = new MenuItem("Cut");
         menuTextCut.setOnAction((ActionEvent e) -> {
