@@ -39,6 +39,8 @@ public class MoveKeyHandler implements KeyHandler {
     @Inject CanvasView view;
     @Inject KeyListener keylistener;
 
+    private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+
     /**
      * Creates a new instance of <code>MoveKeyHandler</code>
      */
@@ -48,7 +50,10 @@ public class MoveKeyHandler implements KeyHandler {
 
     @Override
     public void keyPressed() {
-        if ((view.getSelected() != -1) && (!view.isEditing())) {
+        /**
+         * Keyboard movement semantics
+         */
+        if ((view.getSelected() != -1) && !view.isEditing()) {
             DrawItem item = view.getDrawings().get(view.getSelected());
             switch (keylistener.getKeyCode()) {
                 case KP_UP, UP -> {
@@ -83,6 +88,33 @@ public class MoveKeyHandler implements KeyHandler {
             }
             view.moveSelection(view.getSelected());
             view.updateCanvasItem(view.getSelected(), item);
+        }
+        /**
+         * Keyboard paste operation semantics
+         */
+        if (!view.isEditing()) {
+            switch (keylistener.getKeyCode()) {
+                case X -> {
+                    // cut selected
+                    if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                        drawarea.cutSelectedItem();
+                    }
+                }
+                case C -> {
+                    // copy selected
+                    if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                        drawarea.copySelectedItem();
+                    }
+                }
+                case V -> {
+                    // paste selected
+                    if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                        drawarea.pasteSelectedItem();
+                    }
+                }
+                default -> {
+                }
+            }
         }
     }
 
