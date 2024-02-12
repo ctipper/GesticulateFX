@@ -150,6 +150,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 .menu-item .label, .menu-item:pressed .label {
     -fx-text-fill: #c0c481;
 }
+.context-menu {
+    -fx-border-radius: 4, 4, 4, 4;
+    -fx-background-radius: 4, 4, 4, 4;
+}
 .combo-box-base {
     -fx-padding: 0.0835em; /* 2 */
     -fx-height: 1.35em;
@@ -165,6 +169,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 .combo-box-base .arrow-button {
     -fx-background-color: #3a3a3a;
+}
+.combo-box-popup .list-view {
+    -fx-border-radius: 4, 4, 4, 4;
+    -fx-background-color: transparent;
 }
 .combo-box-popup .list-view .list-cell {
     -fx-text-fill: #c0c481;
