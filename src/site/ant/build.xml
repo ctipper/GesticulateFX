@@ -58,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -72,7 +72,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods;${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -86,7 +86,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}/jmods:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom,jdk.crypto.ec" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
