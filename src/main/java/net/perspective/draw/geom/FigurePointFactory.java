@@ -36,6 +36,12 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class FigurePointFactory implements PointFactory {
 
+    private List<CanvasPoint> pentagram;
+
+    public FigurePointFactory() {
+        pentagram = new ArrayList<>();
+    }
+
     @Override
     public List<CanvasPoint> createPoints(DrawingType description, double... coords) {
         List<CanvasPoint> points;
@@ -53,25 +59,27 @@ public class FigurePointFactory implements PointFactory {
             endY = coords[3];
         }
 
+        points = new ArrayList<>();
+
         switch (description) {
+            case POINT:
+                points.add(new CanvasPoint(startX, startY));
+                points.add(new CanvasPoint(startX, startY));
+                break;
             case LINE:
-                points = new ArrayList<>();
                 points.add(new CanvasPoint(startX, startY));
                 points.add(new CanvasPoint(endX, endY));
                 break;
             case HORIZONTAL:
-                points = new ArrayList<>();
                 points.add(new CanvasPoint(startX, startY));
                 points.add(new CanvasPoint(endX, startY));
                 break;
             case VERTICAL:
-                points = new ArrayList<>();
                 points.add(new CanvasPoint(startX, startY));
                 points.add(new CanvasPoint(startX, endY));
                 break;
             case CIRCLE:
             case SQUARE:
-                points = new ArrayList<>();
                 x = startX;
                 y = startY;
                 width = endX - startX;
@@ -88,7 +96,6 @@ public class FigurePointFactory implements PointFactory {
                 break;
             case ELLIPSE:
             case RECTANGLE:
-                points = new ArrayList<>();
                 p0 = new CanvasPoint(startX, startY);
                 p1 = new CanvasPoint(startX, endY);
                 p2 = new CanvasPoint(endX, endY);
@@ -99,7 +106,6 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p3);
                 break;
             case TRIANGLE:
-                points = new ArrayList<>();
                 width = endX - startX;
                 height = endY - startY;
                 maxLength = Math.max(Math.abs(width), Math.abs(height));
@@ -111,7 +117,6 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p2);
                 break;
             case ISOSCELES:
-                points = new ArrayList<>();
                 width = endX - startX;
                 height = endY - startY;
                 p0 = new CanvasPoint(startX + width / 2, startY);
@@ -122,7 +127,6 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p2);
                 break;
             case HEXAGON:
-                points = new ArrayList<>();
                 width = endX - startX;
                 height = endY - startY;
                 p0 = new CanvasPoint(startX + width / 4, startY);
@@ -139,7 +143,6 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p5);
                 break;
             case ISOHEX:
-                points = new ArrayList<>();
                 width = endX - startX;
                 height = endY - startY;
                 maxLength = Math.max(Math.abs(width), Math.abs(height));
@@ -158,15 +161,91 @@ public class FigurePointFactory implements PointFactory {
                 points.add(p4);
                 points.add(p5);
                 break;
-            case SKETCH:
-            case POLYGON:
-                points = new ArrayList<>();
+            case PENTAGRAM:
+                if (pentagram.isEmpty()) {
+                    pentagram = makePentagram(pentagram);
+                }
+                width = endX - startX;
+                height = endY - startY;
+                for(CanvasPoint g : pentagram) {
+                    points.add(new CanvasPoint(startX + width * g.getX(), startY + height * g.getY()));
+                }
                 break;
+            case ISOGRAM:
+                if (pentagram.isEmpty()) {
+                    pentagram = makePentagram(pentagram);
+                }
+                width = endX - startX;
+                height = endY - startY;
+                maxLength = Math.max(Math.abs(width), Math.abs(height));
+                for(CanvasPoint g : pentagram) {
+                    points.add(new CanvasPoint(startX + maxLength * Math.signum(width) * g.getX(), startY + maxLength * Math.signum(height) * g.getY()));
+                }
+                break;
+            case POLYGON:
+            case SKETCH:
+                break;
+            case TEXT:
+            case PICTURE:
             default:
-                points = new ArrayList<>();
                 break;
         }
         return points;
+    }
+
+    /**
+     * Record vertices of unit pentagram anti-clockwise
+     * 
+     * @return vertices of unit pentagram 
+     */
+    private List<CanvasPoint> makePentagram(List<CanvasPoint> gram) {
+        double a = 2/(1 + Math.sqrt(5));
+        double j = 1 - a * Math.cos(Math.PI/10);
+        double l = a * Math.sin(Math.PI/10);
+
+        double cx = 0.5d;
+        double cy = a / 2 * (1 - j) / (l + a);
+        double ex = l + a * (1 + j) / 2;
+        double ey = 1 - j;
+        double dx = (a * l * (j - 1) - 2 * (l + a) * (1 - l)) / (a * (j - 1) - 2 * (1 - l));
+        double dy = -2 / a * dx + 2 * (l + a) / a;
+        double fx = (1 + l - j) / 2;
+        double fy = 1 - j;
+        double gx = (a * (l + a) * (j - 1) - 2 * (l + a) * l) / (a * (j - 1) - 2 * (l + a));
+        double gy = 2 / a * gx - 2 * l / a;
+
+        // outer pairs
+        CanvasPoint p = new CanvasPoint(l, 0);
+        CanvasPoint q = new CanvasPoint(l + a, 0);
+        CanvasPoint r = new CanvasPoint(1, 1 - j);
+        CanvasPoint s = new CanvasPoint(0.5d, 1);
+        CanvasPoint t = new CanvasPoint(0, 1 - j);
+
+        // inner pairs
+        CanvasPoint c = new CanvasPoint(cx, cy);
+        CanvasPoint d = new CanvasPoint(dx, dy);
+        CanvasPoint e = new CanvasPoint(ex, ey);
+        CanvasPoint f = new CanvasPoint(fx, fy);
+        CanvasPoint g = new CanvasPoint(gx, gy);
+
+        // a = p--c--q--d--r--e--s--f--t--g--cycle;
+        gram.add(p); // 0
+        gram.add(c); // 1
+        gram.add(q); // 2
+        gram.add(d); // 3
+        gram.add(r); // 4
+        gram.add(e); // 5
+        gram.add(s); // 6
+        gram.add(f); // 7
+        gram.add(t); // 8
+        gram.add(g); // 9
+
+        // reflection in line y = .5
+        for(CanvasPoint z : gram) {
+            z.y = 1 - z.y;
+        }
+
+        return gram;
     }
 
 }
