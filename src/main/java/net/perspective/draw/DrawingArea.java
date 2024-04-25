@@ -831,6 +831,9 @@ public class DrawingArea {
                 case HEXAGON -> type = DrawingType.ISOHEX;
                 case ISOHEX -> {
                 }
+                case PENTAGRAM -> type = DrawingType.ISOGRAM;
+                case ISOGRAM -> {
+                }
                 default -> {
                 }
             }

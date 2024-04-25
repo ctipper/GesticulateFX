@@ -188,6 +188,10 @@ public class Figure implements DrawItem, Serializable {
                 start = new CanvasPoint(points.get(1).x, points.get(0).y);
                 end = new CanvasPoint(points.get(4).x, points.get(3).y);
             }
+            case PENTAGRAM -> {
+                start = new CanvasPoint(points.get(8).x, points.get(6).y);
+                end = new CanvasPoint(points.get(4).x, points.get(2).y);
+            }
             default -> {
                 start = points.get(0);
                 end = points.get(points.size() - 1);
@@ -490,27 +494,27 @@ public class Figure implements DrawItem, Serializable {
         PathIterator iterator = path.getPathIterator(at);
         while (!iterator.isDone()) {
             switch (iterator.currentSegment(coords)) {
-            case PathIterator.SEG_MOVETO:
+            case PathIterator.SEG_MOVETO -> {
                 MoveTo moveTo = new MoveTo();
                 moveTo.setX(coords[0]);
                 moveTo.setY(coords[1]);
                 fxpath.getElements().add(moveTo);
-                break;
-            case PathIterator.SEG_LINETO:
+                }
+            case PathIterator.SEG_LINETO -> {
                 LineTo lineTo = new LineTo();
                 lineTo.setX(coords[0]);
                 lineTo.setY(coords[1]);
                 fxpath.getElements().add(lineTo);
-                break;
-            case PathIterator.SEG_QUADTO:
+                }
+            case PathIterator.SEG_QUADTO -> {
                 QuadCurveTo quadCurveTo = new QuadCurveTo();
                 quadCurveTo.setX(coords[2]);
                 quadCurveTo.setY(coords[3]);
                 quadCurveTo.setControlX(coords[0]);
                 quadCurveTo.setControlY(coords[1]);
                 fxpath.getElements().add(quadCurveTo);
-                break;
-            case PathIterator.SEG_CUBICTO:
+                }
+            case PathIterator.SEG_CUBICTO -> {
                 CubicCurveTo cubicTo = new CubicCurveTo();
                 cubicTo.setX(coords[4]);
                 cubicTo.setY(coords[5]);
@@ -519,13 +523,13 @@ public class Figure implements DrawItem, Serializable {
                 cubicTo.setControlX2(coords[2]);
                 cubicTo.setControlY2(coords[3]);
                 fxpath.getElements().add(cubicTo);
-                break;
-            case PathIterator.SEG_CLOSE:
+                }
+            case PathIterator.SEG_CLOSE -> {
                 ClosePath closePath = new ClosePath();
                 fxpath.getElements().add(closePath);
-                break;
-            default:
-                break;
+                }
+            default -> {
+                }
             }
             iterator.next();
         }
@@ -605,7 +609,7 @@ public class Figure implements DrawItem, Serializable {
         transform = this.getTransform();
         g2.transform(transform);
 
-        if (isClosed()) {
+        if (this.isClosed()) {
             AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) getTransparency() / 100);
             g2.setComposite(ac);
             g2.setColor(fxToAwt(getFillColor(), ((float) getTransparency()) / 100));
@@ -826,9 +830,16 @@ public class Figure implements DrawItem, Serializable {
      * @return a signed area for three vertex region
      */
     public double sgnd_area() {
-        CanvasPoint p1 = points.get(0);
-        CanvasPoint p2 = points.get(1);
-        CanvasPoint p3 = points.get(2);
+        CanvasPoint p1, p2, p3;
+        if (type.equals(FigureType.PENTAGRAM)) {
+            p1 = points.get(1);
+            p2 = points.get(3);
+            p3 = points.get(5);
+        } else {
+            p1 = points.get(0);
+            p2 = points.get(1);
+            p3 = points.get(2);
+        }
         double _area = (p1.x * p2.y - p2.x * p1.y) + (p2.x * p3.y - p3.x * p2.y) + (p3.x * p1.y - p1.x * p3.y);
         return Math.signum(_area);
     }
@@ -851,6 +862,7 @@ public class Figure implements DrawItem, Serializable {
             case SQUARE:
             case TRIANGLE:
             case HEXAGON:
+            case PENTAGRAM:
                 p = switch (contains) {
                     case TL ->
                         new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
@@ -882,10 +894,7 @@ public class Figure implements DrawItem, Serializable {
         List<CanvasPoint[]> vert = new ArrayList<>();
         List<CanvasPoint[]> vertices = new ArrayList<>();
         switch (this.getType()) {
-            case SQUARE:
-            case CIRCLE:
-            case TRIANGLE:
-            case HEXAGON:
+            case SQUARE, CIRCLE, TRIANGLE, HEXAGON, PENTAGRAM -> {
                 // determine average dimension
                 double width = Math.abs(start.x - end.x);
                 double height = Math.abs(start.y - end.y);
@@ -911,12 +920,12 @@ public class Figure implements DrawItem, Serializable {
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, end.y), new CanvasPoint(sx, ey) });   // BL
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(ex, ey) });     // BR
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, start.y), new CanvasPoint(ex, sy) });   // TR
-                break;
-            default:
+            }
+            default -> {
                 // combine real and virtual vertices
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
-                break;
+            }
         }
         // transform real and virtual vertices
         for (CanvasPoint[] p : vert) {
@@ -937,10 +946,7 @@ public class Figure implements DrawItem, Serializable {
         List<CanvasPoint[]> vert = new ArrayList<>();
         List<CanvasPoint[]> vertices = new ArrayList<>();
         switch (this.getType()) {
-            case SQUARE:
-            case CIRCLE:
-            case TRIANGLE:
-            case HEXAGON:
+            case SQUARE, CIRCLE, TRIANGLE, HEXAGON, PENTAGRAM -> {
                 // determine average dimension
                 double width = Math.abs(start.x - end.x);
                 double height = Math.abs(start.y - end.y);
@@ -967,12 +973,12 @@ public class Figure implements DrawItem, Serializable {
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, cxy.y), new CanvasPoint(sx, cxy.y) }); // LL
                 vert.add(new CanvasPoint[] { new CanvasPoint(cxy.x, end.y), new CanvasPoint(cxy.x, ey) });   // BB
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, cxy.y), new CanvasPoint(ex, cxy.y) });   // RR
-                break;
-            default:
+            }
+            default -> {
                 // combine real and virtual vertices
                 vert.add(new CanvasPoint[] { new CanvasPoint(start.x, start.y), new CanvasPoint(start.x, start.y) });
                 vert.add(new CanvasPoint[] { new CanvasPoint(end.x, end.y), new CanvasPoint(end.x, end.y) });
-                break;
+            }
         }
         // transform real and virtual vertices
         for (CanvasPoint[] p : vert) {

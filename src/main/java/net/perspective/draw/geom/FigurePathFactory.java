@@ -117,6 +117,23 @@ public class FigurePathFactory implements PathFactory {
                     return null;
                 }
                 break;
+            case PENTAGRAM:
+                if (points.size() > 8) {
+                    path.moveTo(points.get(0).x, points.get(0).y);
+                    path.lineTo(points.get(1).x, points.get(1).y);
+                    path.lineTo(points.get(2).x, points.get(2).y);
+                    path.lineTo(points.get(3).x, points.get(3).y);
+                    path.lineTo(points.get(4).x, points.get(4).y);
+                    path.lineTo(points.get(5).x, points.get(5).y);
+                    path.lineTo(points.get(6).x, points.get(6).y);
+                    path.lineTo(points.get(7).x, points.get(7).y);
+                    path.lineTo(points.get(8).x, points.get(8).y);
+                    path.lineTo(points.get(9).x, points.get(9).y);
+                    path.closePath();
+                } else {
+                    return null;
+                }
+                break;
             case SKETCH:
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);

@@ -72,28 +72,28 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 if (context.getRegion(vertex[0]).contains(listener.getStartX(), listener.getStartY())) {
                     quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
-                        case 0:
+                        case 0 -> {
                             view.setSelected(index);
                             context.setContainment(ContainsType.TR);
                             found = true;
-                            break;
-                        case 1:
+                        }
+                        case 1 -> {
                             view.setSelected(index);
                             context.setContainment(ContainsType.TL);
                             found = true;
-                            break;
-                        case 2:
+                        }
+                        case 2 -> {
                             view.setSelected(index);
                             context.setContainment(ContainsType.BL);
                             found = true;
-                            break;
-                        case 3:
+                        }
+                        case 3 -> {
                             view.setSelected(index);
                             context.setContainment(ContainsType.BR);
                             found = true;
-                            break;
-                        default:
-                            break;
+                        }
+                        default -> {
+                        }
                     }
                 }
             }
@@ -106,28 +106,28 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     if (context.getRegion(edge[0]).contains(listener.getStartX(), listener.getStartY())) {
                         quad = R2.quarter(edge[1], centre);
                         switch (quad) {
-                            case 0:
+                            case 0 -> {
                                 view.setSelected(index);
                                 context.setContainment(ContainsType.TT);
                                 found = true;
-                                break;
-                            case 1:
+                            }
+                            case 1 -> {
                                 view.setSelected(index);
                                 context.setContainment(ContainsType.LL);
                                 found = true;
-                                break;
-                            case 2:
+                            }
+                            case 2 -> {
                                 view.setSelected(index);
                                 context.setContainment(ContainsType.BB);
                                 found = true;
-                                break;
-                            case 3:
+                            }
+                            case 3 -> {
                                 view.setSelected(index);
                                 context.setContainment(ContainsType.RR);
                                 found = true;
-                                break;
-                            default:
-                                break;
+                            }
+                            default -> {
+                            }
                         }
                         context.setEdgeDetected(found);
                     }
@@ -155,7 +155,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     @Override
     public void hoverItem(BehaviourContext context, DrawItem item) {
         switch (((Figure) item).getType()) {
-            case LINE:
+            case LINE -> {
                 CanvasPoint st = item.getStart();
                 CanvasPoint en = item.getEnd();
                 if (context.getRegion(st).contains(listener.getTempX(), listener.getTempY())) {
@@ -167,11 +167,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }
-                break;
-            case SQUARE:
-            case CIRCLE:
-            case TRIANGLE:
-            case HEXAGON:
+            }
+            case SQUARE, CIRCLE, TRIANGLE, HEXAGON, PENTAGRAM -> {
                 List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
                 CanvasPoint centre = item.rotationCentre();
                 boolean found = this.switchVertices(context, vertices, centre);
@@ -184,15 +181,15 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         drawarea.getScene().setCursor(Cursor.DEFAULT);
                     }
                 }
-                break;
-            default:
+            }
+            default -> {
                 // All other Figures
                 if (item.contains(listener.getTempX(), listener.getTempY())) {
                     drawarea.getScene().setCursor(Cursor.OPEN_HAND);
                 } else {
                     drawarea.getScene().setCursor(Cursor.DEFAULT);
                 }
-                break;
+            }
         }
     }
 
@@ -245,11 +242,13 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 case CIRCLE:
                 case TRIANGLE:
                 case HEXAGON:
+                case PENTAGRAM:
                     drawType = switch (type) {
                     case SQUARE -> DrawingType.RECTANGLE;
                     case CIRCLE -> DrawingType.ELLIPSE;
                     case TRIANGLE -> DrawingType.ISOSCELES;
                     case HEXAGON -> DrawingType.HEXAGON;
+                    case PENTAGRAM -> DrawingType.PENTAGRAM;
                     default -> DrawingType.RECTANGLE;
                 };
 
