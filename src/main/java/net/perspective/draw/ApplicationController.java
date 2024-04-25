@@ -109,7 +109,7 @@ public class ApplicationController implements Initializable {
     private SimpleObjectProperty<Color> pickerColorProperty, pickerFillColorProperty;
     private ReadOnlyObjectWrapper<Color> colorProperty, fillColorProperty;
     private SimpleStringProperty themeBackgroundColor, themeFillColor, themeAccentColor, canvasBackgroundColor;
-    private BooleanProperty lineType;
+    private BooleanProperty lineType, sketchType;
     private BooleanProperty dropperEnabled;
     private BooleanProperty oneToOneEnabled;
     private BooleanProperty gridProperty;
@@ -126,6 +126,8 @@ public class ApplicationController implements Initializable {
     private final String SVG_INFO_A = "M9.853952797256 11.684608723148C9.505249291706 12.312275033138 8.97521996327 13.051526464904 8.654412738164 13.051526464904 8.389398073946 13.051526464904 8.403346214168 12.758615520242 8.500983195722 12.39596387447L9.937641638588 7.081722449888 9.853952797256 6.998033608556001 6.645880546196 7.402529674994001 6.53429542442 7.86281830232 7.343287557296 7.946507143652C7.6222503617360005 7.974403424096 7.678042922624 8.155729246982 7.5804059410699995 8.532329032976001L6.506399143976 12.507548996246C6.213488199314 13.58155579334 6.548243564642 14.167377682664 7.482768959516 14.167377682664 8.83573856105 14.167377682664 9.686575114592 13.09337088557 10.272397003916 11.921727106921999M9.268130907932001 6.202989615902C9.979486059254 6.202989615902 10.467670967023999 5.742700988576001 10.467670967023999 4.975553276366 10.467670967023999 4.292094405488001 9.965537919032 3.957339040160001 9.351819749264 3.957339040160001 8.528879476166 3.957339040160001 8.13833154995 4.58500535015 8.13833154995 5.184775379696001 8.13833154995 5.8124416896860005 8.598620177276 6.202989615902 9.268130907932001 6.202989615902";
     private final String SVG_INFO_B = "M8.360382 0.503647C3.683502 0.503647-0.107849 4.294998-0.107849 8.971878-0.107849 13.648758 3.683502 17.440109 8.360382 17.440109 13.037262 17.440109 16.828613 13.648758 16.828613 8.971878 16.828613 4.294998 13.037262 0.503647 8.360382 0.503647Z";
     private final String SVG_PAL = "M11.377778 2.1333336C6.039629199999999 2.1333336 1.711111299999999 6.312592199999999 1.711111299999999 11.466667000000001 1.711111299999999 16.620742 6.0396291999999985 20.8 11.377778 20.8 12.269259 20.8 12.988888999999999 20.105186 12.988888999999999 19.244444 12.988888999999999 18.84 12.833147999999998 18.477038 12.570000999999998 18.202223 12.317592999999997 17.927407 12.167222999999998 17.56963 12.167222999999998 17.170371 12.167222999999998 16.30963 12.886851999999998 15.614815 13.778332999999998 15.614815H15.674073999999997C18.638519999999996 15.614815 21.044444999999996 13.291852 21.044444999999996 10.42963 21.044444999999996 5.8459261 16.715926999999997 2.1333336000000003 11.377777999999996 2.1333336000000003ZM5.4703702 11.466667C4.5788889 11.466667 3.8592589999999998 10.771851999999999 3.8592589999999998 9.911111 3.8592589999999998 9.0503705 4.5788889 8.3555554 5.4703702 8.3555554 6.3618516 8.3555554 7.0814815 9.0503705 7.0814815 9.911111 7.0814815 10.771851999999999 6.3618516 11.466667 5.4703702 11.466667ZM8.6925927 7.3185186C7.8011113000000005 7.3185186 7.081481500000001 6.6237034999999995 7.081481500000001 5.7629629 7.081481500000001 4.902222399999999 7.8011113000000005 4.2074073 8.6925927 4.2074073 9.5840741 4.2074073 10.303704 4.902222399999999 10.303704 5.7629629 10.303704 6.6237034999999995 9.5840741 7.3185186 8.6925927 7.3185186ZM14.062963 7.3185186C13.171482 7.3185186 12.451852 6.6237034999999995 12.451852 5.7629629 12.451852 4.902222399999999 13.171482000000001 4.2074073 14.062963 4.2074073 14.954445 4.2074073 15.674074 4.902222399999999 15.674074 5.7629629 15.674074 6.6237034999999995 14.954445 7.3185186 14.062963 7.3185186ZM17.285185 11.466667000000001C16.393704 11.466667000000001 15.674074 10.771852 15.674074 9.911111000000002 15.674074 9.050370500000001 16.393704 8.355555400000002 17.285185 8.355555400000002 18.176667 8.355555400000002 18.896296999999997 9.050370500000001 18.896296999999997 9.911111000000002 18.896296999999997 10.771852000000003 18.176667 11.466667000000001 17.285185 11.466667000000001Z";
+    private final String SVG_SKETCH = "M9.683105 12.160538C9.387039 11.739883,8.870743 11.533356,8.366211 11.633789C7.209183 11.864105,6.822739 13.242813,7.049316 14.530975C7.212357 15.457993,7.598648 16.360352,8.366211 16.901367C11.324356 18.986465,15.644501 15.517441,14.160538 10.975342C13.918884 10.235748,13.520340 9.555481,12.975342 9.000000C9.410904 5.367126,3.067444 7.514481,1.781738 12.950684C0.468903 18.501633,5.099258 23.668060,11.000000 23.485840C17.038956 23.299332,21.461807 17.802231,21.008408 11.633789C20.603149 6.120422,16.446732 1.645233,11.000000 0.571884C7.478043 -0.122177,3.828094 0.742279,0.991592 2.942276";
+    private final String SVG_POLYGON = "M18.730026 5.361984L13.638016 0.269974C4.441025 0.341461,-2.007233 9.368988,0.907990 18.092010C1.734192 20.564240,3.469177 22.750504,6.000000 23.184021C7.693268 23.474060,11.145432 21.827255,13.638016 20.638016C15.358093 19.817337,18.366989 18.381744,18.730026 18.092010C22.815308 14.831955,22.815308 8.622040,18.730026 5.361984Z";
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
 
@@ -219,15 +221,8 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
-    private void handlePolygonAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.POLYGON);
-        drawarea.changeHandlers(HandlerType.SKETCH);
-        view.setEditing(KeyHandlerType.NONE);
-    }
-
-    @FXML
-    private void handleSketchAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.SKETCH);
+    private void handleSketchTypeAction(ActionEvent e) {
+        this.setDrawAreaSketchType();
         drawarea.changeHandlers(HandlerType.SKETCH);
         view.setEditing(KeyHandlerType.NONE);
     }
@@ -331,6 +326,26 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
+    private void handleSketchAction(ActionEvent e) {
+        setSketchButtonGraphic(true);
+        setSketchTypeProperty(true);
+        sketchbutton.setSelected(true);
+        setDrawAreaSketchType();
+        drawarea.changeHandlers(HandlerType.SKETCH);
+        tabbutton_2.fire();
+    }
+
+    @FXML
+    private void handlePolygonAction(ActionEvent e) {
+        setSketchButtonGraphic(false);
+        setSketchTypeProperty(false);
+        sketchbutton.setSelected(true);
+        setDrawAreaSketchType();
+        drawarea.changeHandlers(HandlerType.SKETCH);
+        tabbutton_2.fire();
+    }
+
+    @FXML
     private void handleAboutBoxAction(ActionEvent e) {
         menubutton.fire();
         if (aboutBox == null) {
@@ -352,7 +367,6 @@ public class ApplicationController implements Initializable {
         if (vertical) {
             path.setContent(SVG_VERTICAL);
             tooltip = new Tooltip("Vertical");
-            
         } else {
             path.setContent(SVG_HORIZONTAL);
             tooltip = new Tooltip("Horizontal");
@@ -391,6 +405,58 @@ public class ApplicationController implements Initializable {
      */
     public BooleanProperty getLineTypeProperty() {
         return lineType;
+    }
+
+    /**
+     * Set the button graphic for sketch button
+     * 
+     * @param sketch is sketch active
+     */
+    private void setSketchButtonGraphic(Boolean sketch) {
+        Tooltip tooltip;
+        SVGPath path = new SVGPath();
+        if (sketch) {
+            path.setContent(SVG_SKETCH);
+            tooltip = new Tooltip("Sketch");
+        } else {
+            path.setContent(SVG_POLYGON);
+            tooltip = new Tooltip("Polygon");
+        }
+        path.getStyleClass().add("svgPath");
+        path.setFill(Color.TRANSPARENT);
+        sketchbutton.setGraphic(path);
+        sketchbutton.setTooltip(tooltip);
+    }
+
+    /**
+     * Set the sketch type polygon or sketch
+     */
+    private void setDrawAreaSketchType() {
+        if (sketchType.getValue()) {
+            drawarea.setDrawType(DrawingType.SKETCH);
+        } else {
+            drawarea.setDrawType(DrawingType.POLYGON);
+        }
+    }
+
+    /**
+     * Set the sketch type
+     * Choice is sketch or polyogon
+     * 
+     * @param type polygon false sketch true
+     */
+    public void setSketchTypeProperty(Boolean type) {
+        sketchType.setValue(type);
+    }
+
+    /**
+     * Get the sketch type
+     * Choice is sketch or polygon
+     * 
+     * @param type polygon false sketch true
+     */
+    public BooleanProperty getSketchTypeProperty() {
+        return sketchType;
     }
 
     /**
@@ -978,14 +1044,27 @@ public class ApplicationController implements Initializable {
         this.setupStatusTransition();
         // animate line button panel
         this.prepareSlideTabButtonsAnimation();
+        // animate sketch button panel
+        this.prepareSlideTabButtonsAnimation_2();
         // attach affordance button
         this.affordtab.setOnAction((ActionEvent event) -> tabbutton.fire());
+        // attach affordance button
+        this.affordtab_2.setOnAction((ActionEvent event) -> tabbutton_2.fire());
         // special line button handler
         this.lineType = new SimpleBooleanProperty();
         this.lineType.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (linebutton.isSelected()) {
                 setDrawAreaLineType();
                 drawarea.changeHandlers(HandlerType.FIGURE);
+            }
+        });
+        // special sketch button handler
+        this.sketchType = new SimpleBooleanProperty();
+        setSketchTypeProperty(Boolean.TRUE);
+        this.sketchType.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (sketchbutton.isSelected()) {
+                setDrawAreaSketchType();
+                drawarea.changeHandlers(HandlerType.SKETCH);
             }
         });
         this.prepareAboutBoxMenu();
@@ -1009,7 +1088,7 @@ public class ApplicationController implements Initializable {
     }
 
     /**
-     * Set the button panel slider transition
+     * Set the line button panel slider transition
      */
     private void prepareSlideTabButtonsAnimation() {
         TranslateTransition openTab = new TranslateTransition(new Duration(200), linepanel);
@@ -1018,6 +1097,24 @@ public class ApplicationController implements Initializable {
         TranslateTransition closeTab = new TranslateTransition(new Duration(200), linepanel);
         tabbutton.setOnAction((ActionEvent event) -> {
             if (linepanel.getTranslateX() < panelWidth) {
+                openTab.play();
+            } else {
+                closeTab.setToX(-panelWidth);
+                closeTab.play();
+            }
+        });
+    }
+
+    /**
+     * Set the sketch button panel slider transition
+     */
+    private void prepareSlideTabButtonsAnimation_2() {
+        TranslateTransition openTab = new TranslateTransition(new Duration(200), sketchpanel);
+        double panelWidth = sketchpanel.getPrefTileWidth() + 2 * sketchpanel.getHgap() + 1;
+        openTab.setToX(panelWidth);
+        TranslateTransition closeTab = new TranslateTransition(new Duration(200), sketchpanel);
+        tabbutton_2.setOnAction((ActionEvent event) -> {
+            if (sketchpanel.getTranslateX() < panelWidth) {
                 openTab.play();
             } else {
                 closeTab.setToX(-panelWidth);
@@ -1284,5 +1381,13 @@ public class ApplicationController implements Initializable {
     private ToggleButton tabbutton;
     @FXML
     private Button affordtab;
+    @FXML
+    private ToggleButton sketchbutton;
+    @FXML
+    private TilePane sketchpanel;
+    @FXML
+    private ToggleButton tabbutton_2;
+    @FXML
+    private Button affordtab_2;
 
 }

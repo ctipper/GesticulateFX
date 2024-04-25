@@ -36,24 +36,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #statusbar {
     -fx-background-color: #f3f3f3;
 }
-#buttpanel {
+#buttpanel, #buttpanel_2 {
     -fx-background-color: #fefefe;
     -fx-border-color: #f3f3f3;
     -fx-border-style: solid;
     -fx-border-width: 1;
     -fx-padding: 4;
 }
-#buttontab, #buttontab:selected {
+#buttontab, #buttontab:selected, #buttontab_2, #buttontab_2:selected {
     -fx-background-color: #fefefe;
     -fx-border-color: #f3f3f3;
     -fx-border-width: 1;
     -fx-padding: 2 0 2 0;
 }
-#buttontab:hover {
+#buttontab:hover, #buttontab_2:hover {
     -fx-background-color: #f3f3f3;
     -fx-border-color: #fefefe;
 }
-#buttonafford {
+#buttonafford, #buttonafford_2 {
     -fx-background-color: transparent;
     -fx-border-style: none;
     -fx-border-width: 0;
