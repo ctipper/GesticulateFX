@@ -212,6 +212,13 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
+    private void handlePentagramAction(ActionEvent e) {
+        drawarea.setDrawType(DrawingType.PENTAGRAM);
+        drawarea.changeHandlers(HandlerType.FIGURE);
+        view.setEditing(KeyHandlerType.NONE);
+    }
+
+    @FXML
     private void handlePolygonAction(ActionEvent e) {
         drawarea.setDrawType(DrawingType.POLYGON);
         drawarea.changeHandlers(HandlerType.SKETCH);

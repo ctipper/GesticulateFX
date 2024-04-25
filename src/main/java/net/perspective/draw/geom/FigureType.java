@@ -29,5 +29,5 @@ package net.perspective.draw.geom;
  */
 
 public enum FigureType {
-    LINE, CIRCLE, SQUARE, TRIANGLE, HEXAGON, SKETCH, POLYGON, NONE
+    LINE, CIRCLE, SQUARE, TRIANGLE, HEXAGON, PENTAGRAM, SKETCH, POLYGON, NONE
 }
