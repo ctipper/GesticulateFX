@@ -39,16 +39,17 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Consumer;
 import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import javafx.application.Platform.Preferences;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.*;
+import javafx.util.Subscription;
 import javax.inject.Inject;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
@@ -197,9 +198,11 @@ public class Gesticulate extends GuiceApplication {
         return this.stage;
     }
 
-    private ChangeListener<ColorScheme> csmr = null;
+    private final Preferences preferences = Platform.getPreferences();
+    private Consumer<ColorScheme> csmr = null;
+    private Subscription csub = Subscription.EMPTY;
+
     public void setSystemTheme() {
-        Preferences preferences = Platform.getPreferences();
         ColorScheme colorScheme = preferences.getColorScheme();
         final boolean isDark = colorScheme.equals(ColorScheme.DARK);
         if (isDark) {
@@ -208,23 +211,14 @@ public class Gesticulate extends GuiceApplication {
             controller.setAppStyles(false);
             resetStylesheets(false);
         }
-        csmr = (observable, oldValue, newValue) -> {
-            Platform.runLater(() -> {
-                if (newValue.equals(ColorScheme.DARK)) {
-                    controller.getThemeProperty().setValue(true);
-                } else {
-                    controller.getThemeProperty().setValue(false);
-                }
-            });
+        csmr = (var darkTheme) -> {
+            controller.getThemeProperty().setValue(darkTheme.equals(ColorScheme.DARK));
         };
-        preferences.colorSchemeProperty().addListener(csmr);
+        csub = preferences.colorSchemeProperty().subscribe(csmr);
     }
 
     public void deregisterThemeListener() {
-        if (csmr != null) {
-            Preferences preferences = Platform.getPreferences();
-            preferences.colorSchemeProperty().removeListener(csmr);
-        }
+        csub.unsubscribe();
     }
 
     public void resetStylesheets(Boolean mode) {

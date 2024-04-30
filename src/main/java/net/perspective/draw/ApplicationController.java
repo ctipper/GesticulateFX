@@ -880,7 +880,7 @@ public class ApplicationController implements Initializable {
         this.themeFillColor = new SimpleStringProperty("lightgray");
         this.themeBackgroundColor = new SimpleStringProperty("white");
         this.themeAccentColor = new SimpleStringProperty("black");
-        this.canvasBackgroundColor = new SimpleStringProperty("white");;
+        this.canvasBackgroundColor = new SimpleStringProperty("white");
         this.prepareDarkModeOptions();
         this.themeProperty = new SimpleBooleanProperty();
         this.themeProperty.setValue(false);
