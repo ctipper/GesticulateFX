@@ -4,7 +4,6 @@
  * Created on Oct 19, 2013 5:26:43 PM
  * 
  */
-
 /**
  * Copyright (c) 2024 Christopher Tipper
  *
@@ -28,7 +27,6 @@ import com.cathive.fx.guice.GuiceFXMLLoader;
 import com.cathive.fx.guice.GuiceFXMLLoader.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.jthemedetecor.OsThemeDetector;
 import java.awt.Desktop;
 import java.awt.desktop.OpenFilesEvent;
 import java.io.FileNotFoundException;
@@ -41,8 +39,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.function.Consumer;
+import javafx.application.ColorScheme;
 import javafx.application.Platform;
+import javafx.application.Platform.Preferences;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -56,9 +56,9 @@ import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.*;
 import net.perspective.draw.event.keyboard.*;
 import net.perspective.draw.geom.*;
-import net.perspective.draw.util.G2;
 import net.perspective.draw.text.Editor;
 import net.perspective.draw.text.TextEditor;
+import net.perspective.draw.util.G2;
 import net.perspective.draw.workers.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,10 +66,9 @@ import org.slf4j.LoggerFactory;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 /**
- * 
+ *
  * @author ctipper
  */
-
 public class Gesticulate extends GuiceApplication {
 
     @Inject private GuiceFXMLLoader fxmlLoader;
@@ -99,7 +98,6 @@ public class Gesticulate extends GuiceApplication {
     }
 
     /**
-     * 
      * @param primaryStage
      * @throws Exception
      */
@@ -199,26 +197,33 @@ public class Gesticulate extends GuiceApplication {
         return this.stage;
     }
 
-    private Consumer<Boolean> csmr = null;
+    private ChangeListener<ColorScheme> csmr = null;
     public void setSystemTheme() {
-        final boolean isDark = OsThemeDetector.getDetector().isDark();
+        Preferences preferences = Platform.getPreferences();
+        ColorScheme colorScheme = preferences.getColorScheme();
+        final boolean isDark = colorScheme.equals(ColorScheme.DARK);
         if (isDark) {
             controller.getThemeProperty().setValue(isDark); // non default value triggers event
         } else {
             controller.setAppStyles(false);
             resetStylesheets(false);
         }
-        csmr = darkTheme -> {
+        csmr = (observable, oldValue, newValue) -> {
             Platform.runLater(() -> {
-                controller.getThemeProperty().setValue(darkTheme);
+                if (newValue.equals(ColorScheme.DARK)) {
+                    controller.getThemeProperty().setValue(true);
+                } else {
+                    controller.getThemeProperty().setValue(false);
+                }
             });
         };
-        OsThemeDetector.getDetector().registerListener(csmr);
+        preferences.colorSchemeProperty().addListener(csmr);
     }
 
     public void deregisterThemeListener() {
         if (csmr != null) {
-            OsThemeDetector.getDetector().removeListener(csmr);
+            Preferences preferences = Platform.getPreferences();
+            preferences.colorSchemeProperty().removeListener(csmr);
         }
     }
 
@@ -233,13 +238,13 @@ public class Gesticulate extends GuiceApplication {
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-light.css");
             stage.getScene().getStylesheets().add("/stylesheets/application.css");
             stage.getScene().getStylesheets().add("/stylesheets/style.css"); // maps stylesheet
-    }
+        }
     }
 
     /**
      * Set the canvas grid
-     * 
-     * @param gridEnabled 
+     *
+     * @param gridEnabled
      */
     public void drawGrid(boolean gridEnabled) {
         drawarea.setGrid(gridEnabled);
@@ -314,11 +319,10 @@ public class Gesticulate extends GuiceApplication {
     }
 
     /**
-     * The main() method is ignored in correctly deployed JavaFX application.
-     * main() serves only as fallback in case the application can not be
-     * launched through deployment artifacts, e.g., in IDEs with limited FX
-     * support.
-     * 
+     * The main() method is ignored in correctly deployed JavaFX application. main() serves only as
+     * fallback in case the application can not be launched through deployment artifacts, e.g., in
+     * IDEs with limited FX support.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
