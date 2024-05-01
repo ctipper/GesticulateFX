@@ -138,7 +138,7 @@ public class Gesticulate extends GuiceApplication {
 
         // set the theme from user preferences
         if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
-            setSystemTheme();
+            // setSystemTheme();
             controller.setThemeType("System");
         } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
             controller.getThemeProperty().setValue(true); // non default value triggers event
