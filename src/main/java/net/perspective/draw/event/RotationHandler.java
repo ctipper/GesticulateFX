@@ -100,6 +100,7 @@ public class RotationHandler implements Handler {
                 if ((item instanceof Figure) && ((Figure) item).getType().equals(FigureType.LINE)) {
                     if (item.contains(listener.getStartX(), listener.getStartY())) {
                         view.setSelected(i);
+                        break;
                     }
                 }
                 i--;
