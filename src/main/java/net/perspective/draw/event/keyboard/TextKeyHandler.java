@@ -4,7 +4,6 @@
  * Created on 15 May 2023 17:28:45
  * 
  */
-
 /**
  * Copyright (c) 2024 Christopher Tipper
  *
@@ -26,26 +25,32 @@ package net.perspective.draw.event.keyboard;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
+import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.text.Editor;
 
-
 /**
- * 
+ *
  * @author ctipper
  */
-
 public class TextKeyHandler implements KeyHandler {
 
+    @Inject DrawingArea drawarea;
     @Inject private CanvasView view;
     @Inject private ApplicationController controller;
     @Inject private KeyListener keylistener;
     @Inject private TextController textController;
     private int selection = -1;
     private boolean selectToLeft = false;
+    private DrawingType drawingtype;
+    private HandlerType handlerType;
+    private boolean isEditing = false;
+    private boolean pressed = false;
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
 
@@ -54,6 +59,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Inject
     public TextKeyHandler() {
+        handlerType = HandlerType.SELECTION;
     }
 
     /**
@@ -211,6 +217,23 @@ public class TextKeyHandler implements KeyHandler {
                 view.moveSelection(view.getSelected());
             }
         }
+        switch (keylistener.getKeyCode()) {
+            case ALT, ALT_GRAPH -> {
+                if (!pressed) {
+                    drawingtype = drawarea.getDrawType().orElse(null);
+                    handlerType = drawarea.getHandlerType();
+                    selection = view.getSelected();
+                    drawarea.setDrawType(null);
+                    drawarea.changeHandlers(HandlerType.SELECTION);
+                    isEditing = view.isEditing();
+                    view.setEditing(false);
+                    pressed = true;
+                }
+                drawarea.setMultiSelectEnabled(true);
+            }
+            default -> {
+            }
+        }
     }
 
     /**
@@ -218,6 +241,18 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyReleased() {
+        switch (keylistener.getKeyCode()) {
+            case ALT, ALT_GRAPH -> {
+                drawarea.setDrawType(drawingtype);
+                drawarea.changeHandlers(handlerType);
+                drawarea.setMultiSelectEnabled(false);
+                view.setEditing(isEditing);
+                view.setSelected(selection);
+                pressed = false;
+            }
+            default -> {
+            }
+        }
     }
 
     /**
@@ -232,10 +267,10 @@ public class TextKeyHandler implements KeyHandler {
             if (item instanceof Text text) {
                 String keyChar = keylistener.getKeyChar();
                 /**
-                 * On Windows 11 event.keyCode() will likely return &lt;DEL&gt;
-                 * as a valid character and this needs to be rejected before
-                 * inserting into the jdom used to sanitise input
-                 * 
+                 * On Windows 11 event.keyCode() will likely return &lt;DEL&gt; as a valid character
+                 * and this needs to be rejected before inserting into the jdom used to sanitise
+                 * input
+                 *
                  * @see {@link net.perspective.draw.geom.TextFormatter#readFxText}
                  */
                 if (!keyChar.isEmpty()) {
@@ -250,9 +285,9 @@ public class TextKeyHandler implements KeyHandler {
                         editor.insertText(keyChar);
                         editor.commitText(text);
                     }
-                text.setDimensions();
-                view.updateSelectedItem();
-                view.moveSelection(view.getSelected());
+                    text.setDimensions();
+                    view.updateSelectedItem();
+                    view.moveSelection(view.getSelected());
                 }
             }
         }

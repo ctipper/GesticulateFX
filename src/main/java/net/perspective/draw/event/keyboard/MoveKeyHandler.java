@@ -26,6 +26,8 @@ package net.perspective.draw.event.keyboard;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.geom.DrawItem;
 
 /**
@@ -38,6 +40,9 @@ public class MoveKeyHandler implements KeyHandler {
     @Inject DrawingArea drawarea;
     @Inject CanvasView view;
     @Inject KeyListener keylistener;
+    private DrawingType drawingtype;
+    private HandlerType handlertype;
+    private boolean pressed = false;
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
 
@@ -46,6 +51,7 @@ public class MoveKeyHandler implements KeyHandler {
      */
     @Inject
     public MoveKeyHandler() {
+        handlertype = HandlerType.SELECTION;
     }
 
     @Override
@@ -116,11 +122,34 @@ public class MoveKeyHandler implements KeyHandler {
                 }
             }
         }
+        switch (keylistener.getKeyCode()) {
+            case ALT, ALT_GRAPH -> {
+                if (!pressed) {
+                    drawingtype = drawarea.getDrawType().orElse(null);
+                    handlertype = drawarea.getHandlerType();
+                    drawarea.setDrawType(null);
+                    drawarea.changeHandlers(HandlerType.SELECTION);
+                    pressed = true;
+                }
+                drawarea.setMultiSelectEnabled(true);
+            }
+            default -> {
+            }
+        }
     }
 
     @Override
     public void keyReleased() {
-
+        switch (keylistener.getKeyCode()) {
+            case ALT, ALT_GRAPH -> {
+                drawarea.setDrawType(drawingtype);
+                drawarea.changeHandlers(handlertype);
+                drawarea.setMultiSelectEnabled(false);
+                pressed = false;
+            }
+            default -> {
+            }
+        }
     }
 
     @Override
