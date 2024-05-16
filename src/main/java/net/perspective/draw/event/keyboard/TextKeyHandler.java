@@ -70,8 +70,8 @@ public class TextKeyHandler implements KeyHandler {
         Editor editor = textController.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
-            DrawItem item = view.getDrawings().get(selection);
-            if (item instanceof Text) {
+            DrawItem drawitem = view.getDrawings().get(selection);
+            if (drawitem instanceof Text item) {
                 // edit
                 int textlength = editor.getLength();
                 switch (keylistener.getKeyCode()) {
@@ -133,13 +133,13 @@ public class TextKeyHandler implements KeyHandler {
                     case SEMICOLON -> {
                         // Insert date
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            view.insertDateAndTime((Text) item);
+                            view.insertDateAndTime(item);
                         }
                     }
                     case BACK_SPACE -> {
                         // edit
                         editor.backSpace();
-                        editor.commitText((Text) item);
+                        editor.commitText(item);
                     }
                     case KP_LEFT, LEFT -> {
                         if (keylistener.isIsShiftDown()) {
@@ -186,7 +186,7 @@ public class TextKeyHandler implements KeyHandler {
                     case DELETE -> {
                         // edit
                         editor.deleteChar();
-                        editor.commitText(((Text) item));
+                        editor.commitText(item);
                     }
                     case HOME -> {
                         editor.setCaretStart(0);
@@ -202,7 +202,7 @@ public class TextKeyHandler implements KeyHandler {
                     }
                     case ENTER -> {
                         // commit
-                        editor.commitText(((Text) item));
+                        editor.commitText(item);
                         view.updateSelectedItem();
                         view.setSelected(-1);
                         view.setEditing(KeyHandlerType.MOVE);
@@ -212,7 +212,7 @@ public class TextKeyHandler implements KeyHandler {
                     default -> {
                     }
                 }
-                ((Text) item).setDimensions();
+                item.setDimensions();
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
@@ -263,8 +263,8 @@ public class TextKeyHandler implements KeyHandler {
         Editor editor = textController.getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
-            DrawItem item = view.getDrawings().get(selection);
-            if (item instanceof Text text) {
+            DrawItem drawitem = view.getDrawings().get(selection);
+            if (drawitem instanceof Text item) {
                 String keyChar = keylistener.getKeyChar();
                 /**
                  * On Windows 11 event.keyCode() will likely return &lt;DEL&gt; as a valid character
@@ -283,9 +283,9 @@ public class TextKeyHandler implements KeyHandler {
                     if (!illegalChar && !keylistener.isIsControlDown() && !keylistener.isIsMetaDown()) {
                         // edit
                         editor.insertText(keyChar);
-                        editor.commitText(text);
+                        editor.commitText(item);
                     }
-                    text.setDimensions();
+                    item.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }

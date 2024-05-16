@@ -857,29 +857,21 @@ public class Figure implements DrawItem, Serializable {
         double height = Math.abs(start.y - end.y);
         double side = 0.25 * (width + height); // half average side
         CanvasPoint cxy = this.rotationCentre();
-        switch (type) {
-            case CIRCLE:
-            case SQUARE:
-            case TRIANGLE:
-            case HEXAGON:
-            case PENTAGRAM:
-                p = switch (contains) {
-                    case TL ->
-                        new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
-                    case BL ->
-                        new CanvasPoint[]{new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side)};
-                    case BR ->
-                        new CanvasPoint[]{new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side)};
-                    case TR ->
-                        new CanvasPoint[]{new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side)};
-                    default ->
-                        new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
-                };
-                break;
-            default:
-                p = new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
-                break;
-        }
+        p = switch (type) {
+            case CIRCLE, SQUARE, TRIANGLE, HEXAGON, PENTAGRAM -> switch (contains) {
+                case TL ->
+                new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
+                case BL ->
+                new CanvasPoint[]{new CanvasPoint(x, y + height), new CanvasPoint(cxy.x - side, cxy.y + side)};
+                case BR ->
+                new CanvasPoint[]{new CanvasPoint(x + width, y + height), new CanvasPoint(cxy.x + side, cxy.y + side)};
+                case TR ->
+                new CanvasPoint[]{new CanvasPoint(x + width, y), new CanvasPoint(cxy.x + side, cxy.y - side)};
+                default ->
+                new CanvasPoint[]{new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side)};
+            };
+            default -> new CanvasPoint[] { new CanvasPoint(x, y), new CanvasPoint(cxy.x - side, cxy.y - side) };
+        };
         return p;
     }
 

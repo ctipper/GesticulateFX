@@ -238,20 +238,16 @@ public class FigureItemBehaviour implements ItemBehaviours {
         } else {
 
             switch (type) {
-                case SQUARE:
-                case CIRCLE:
-                case TRIANGLE:
-                case HEXAGON:
-                case PENTAGRAM:
+                case SQUARE, CIRCLE, TRIANGLE, HEXAGON, PENTAGRAM -> {
                     drawType = switch (type) {
-                    case SQUARE -> DrawingType.RECTANGLE;
-                    case CIRCLE -> DrawingType.ELLIPSE;
-                    case TRIANGLE -> DrawingType.ISOSCELES;
-                    case HEXAGON -> DrawingType.HEXAGON;
-                    case PENTAGRAM -> DrawingType.PENTAGRAM;
-                    default -> DrawingType.RECTANGLE;
-                };
-
+                        case SQUARE -> DrawingType.RECTANGLE;
+                        case CIRCLE -> DrawingType.ELLIPSE;
+                        case TRIANGLE -> DrawingType.ISOSCELES;
+                        case HEXAGON -> DrawingType.HEXAGON;
+                        case PENTAGRAM -> DrawingType.PENTAGRAM;
+                        default -> DrawingType.RECTANGLE;
+                    };
+                    
                     /**
                      * Permute containment selectors
                      */
@@ -289,8 +285,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     int sin_t = flip[1];
 
                     // correct increment for angle of rotation
-                    @SuppressWarnings("deprecation") 
-                    double t = item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0);
+                    @SuppressWarnings("deprecation")
+                            double t = item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0);
                     double delta = V2.norm_angle(4 * t + 2 * Math.PI) / 2;
                     CanvasPoint inc = V2.rot(xinc, yinc, t - delta);
 
@@ -373,9 +369,8 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         default:
                             break;
                     }
-                    break;
-
-                default:
+                }
+                default -> {
                     // All other Figures
                     drawarea.getScene().getRoot().setCursor(Cursor.CLOSED_HAND);
                     if (listener.isSnapEnabled()) {
@@ -385,7 +380,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     } else {
                         item.moveTo(xinc, yinc);
                     }
-                    break;
+                }
             }
         }
     }
@@ -397,38 +392,38 @@ public class FigureItemBehaviour implements ItemBehaviours {
             if (context.getRegion(vertex[0]).contains(listener.getTempX(), listener.getTempY())) {
                 octa = R2.octant(vertex[1], centre);
                 switch (octa) {
-                    case 0:
+                    case 0 -> {
                         drawarea.getScene().setCursor(Cursor.E_RESIZE);
                         found = true;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         drawarea.getScene().setCursor(Cursor.NE_RESIZE);
                         found = true;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         drawarea.getScene().setCursor(Cursor.N_RESIZE);
                         found = true;
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         drawarea.getScene().setCursor(Cursor.NW_RESIZE);
                         found = true;
-                        break;
-                    case 4:
+                    }
+                    case 4 -> {
                         drawarea.getScene().setCursor(Cursor.W_RESIZE);
                         found = true;
-                        break;
-                    case 5:
+                    }
+                    case 5 -> {
                         drawarea.getScene().setCursor(Cursor.SW_RESIZE);
                         found = true;
-                        break;
-                    case 6:
+                    }
+                    case 6 -> {
                         drawarea.getScene().setCursor(Cursor.S_RESIZE);
                         found = true;
-                        break;
-                    case 7:
+                    }
+                    case 7 -> {
                         drawarea.getScene().setCursor(Cursor.SE_RESIZE);
                         found = true;
-                        break;
+                    }
                 }
             }
             if (found) {

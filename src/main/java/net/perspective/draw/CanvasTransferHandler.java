@@ -163,14 +163,14 @@ public class CanvasTransferHandler {
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
-        } else if (drawing instanceof StreetMap) {
+        } else if (drawing instanceof StreetMap streetMap) {
             DrawItem item = injector.getInstance(StreetMap.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
                 ((StreetMap) item).init();
                 ((StreetMap) item).filterHandlers();
                 drawing = item;
-                drawing = mapper.copyMap(((StreetMap) drawing));
+                drawing = mapper.copyMap(streetMap);
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
@@ -231,8 +231,8 @@ public class CanvasTransferHandler {
      * @see <a href="https://stackoverflow.com/a/13605411">https://stackoverflow.com</a>
      */
     public BufferedImage toBufferedImage(java.awt.Image img) {
-        if (img instanceof BufferedImage) {
-            return (BufferedImage) img;
+        if (img instanceof BufferedImage bufferedImage) {
+            return bufferedImage;
         }
 
         // Create a buffered image with transparency

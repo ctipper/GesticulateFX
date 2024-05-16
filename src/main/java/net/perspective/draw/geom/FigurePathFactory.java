@@ -47,16 +47,15 @@ public class FigurePathFactory implements PathFactory {
         path = new Path2D.Double();
         java.util.List<CanvasPoint> points = figure.getPoints();
         switch (figure.getType()) {
-            case LINE:
+            case LINE -> {
                 if (points.size() > 1) {
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
                 } else {
                     return null;
                 }
-            break;
-            case SQUARE:
-            case CIRCLE:
+            }
+            case SQUARE, CIRCLE -> {
                 if (points.size() > 3) {
                     x = y = w = h = 0;
                     p0 = points.get(0);
@@ -93,8 +92,8 @@ public class FigurePathFactory implements PathFactory {
                 } else {
                     return null;
                 }
-                break;
-            case TRIANGLE:
+            }
+            case TRIANGLE -> {
                 if (points.size() > 2) {
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
@@ -103,8 +102,8 @@ public class FigurePathFactory implements PathFactory {
                 } else {
                     return null;
                 }
-                break;
-            case HEXAGON:
+            }
+            case HEXAGON -> {
                 if (points.size() > 5) {
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
@@ -116,8 +115,8 @@ public class FigurePathFactory implements PathFactory {
                 } else {
                     return null;
                 }
-                break;
-            case PENTAGRAM:
+            }
+            case PENTAGRAM -> {
                 if (points.size() > 8) {
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
@@ -133,20 +132,21 @@ public class FigurePathFactory implements PathFactory {
                 } else {
                     return null;
                 }
-                break;
-            case SKETCH:
+            }
+            case SKETCH -> {
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);
                 path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
-                break;
-            case POLYGON:
+            }
+            case POLYGON -> {
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);
                 path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
                 path.closePath();
-                break;
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
         return path;
     }

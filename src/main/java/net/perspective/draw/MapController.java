@@ -116,8 +116,8 @@ public class MapController {
         view.setMapping(true);
         mapindex = view.getSelected();
         // Remove MapView event filters
-        if (view.getDrawings().get(mapindex) instanceof StreetMap) {
-            map = ((StreetMap) view.getDrawings().get(mapindex));
+        if (view.getDrawings().get(mapindex) instanceof StreetMap streetMap) {
+            map = streetMap;
             map.resetHandlers();
             initializeZoomSlider(map);
         }
@@ -129,9 +129,9 @@ public class MapController {
     public void finaliseMap() {
         if (mapindex != -1) {
             DrawItem item = view.getDrawings().get(mapindex);
-            if (item instanceof StreetMap) {
-                ((StreetMap) item).filterHandlers();
-                resizeMap((StreetMap) item);
+            if (item instanceof StreetMap streetMap) {
+                streetMap.filterHandlers();
+                resizeMap(streetMap);
             }
             view.setMapping(false);
             mapindex = -1;

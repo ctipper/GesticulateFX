@@ -208,6 +208,7 @@ public class StreetMap extends Picture {
      * 
      * @param drawarea  the {@link net.perspective.draw.DrawingArea}
      */
+    @Override
     public void updateProperties(DrawingArea drawarea) {
         this.setTransparency(drawarea.getTransparency());
     }
@@ -218,6 +219,7 @@ public class StreetMap extends Picture {
      * 
      * @return the 2-tuple of top-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getTop() {
         CanvasPoint s = new CanvasPoint(start.x, start.y);
         return new CanvasPoint[] { s, s };
@@ -229,6 +231,7 @@ public class StreetMap extends Picture {
      * 
      * @return the 2-tuple of top-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getUp() {
         CanvasPoint up = new CanvasPoint(start.x + end.x, start.y);
         return new CanvasPoint[] { up, up };
@@ -240,6 +243,7 @@ public class StreetMap extends Picture {
      * 
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getDown() {
         CanvasPoint down = new CanvasPoint(start.x, start.y + end.y);
         return new CanvasPoint[] { down, down };
@@ -251,6 +255,7 @@ public class StreetMap extends Picture {
      * 
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
+    @Override
     public CanvasPoint[] getBottom() {
         CanvasPoint e = new CanvasPoint(start.x + end.x, start.y + end.y);
         return new CanvasPoint[] { e, e };
@@ -261,6 +266,7 @@ public class StreetMap extends Picture {
      * 
      * @return a transformed shape
      */
+    @Override
     public Shape bounds() {
         Rectangle2D rect = new Rectangle2D.Double(0, 0, end.x, end.y);
         Area bounds = new Area(rect);
@@ -407,6 +413,7 @@ public class StreetMap extends Picture {
      * 
      * @param g2  the graphics context
      */
+    @Override
     public void draw(Graphics2D g2) {
         AffineTransform defaultTransform, transform;
 
