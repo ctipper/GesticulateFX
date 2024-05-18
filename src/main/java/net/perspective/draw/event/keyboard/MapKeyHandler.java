@@ -25,7 +25,10 @@ package net.perspective.draw.event.keyboard;
 
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.DrawingArea;
 import net.perspective.draw.MapController;
+import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.enums.HandlerType;
 
 /**
  *
@@ -34,9 +37,15 @@ import net.perspective.draw.MapController;
 
 public class MapKeyHandler implements KeyHandler {
 
+    @Inject DrawingArea drawarea;
     @Inject CanvasView view;
     @Inject MapController mapper;
     @Inject KeyListener keylistener;
+    private int selection = -1;
+    private DrawingType drawingtype;
+    private HandlerType handlerType;
+    private boolean isMapping = false;
+    private boolean pressed = false;
 
     /**
      * Creates a new instance of <code>MapKeyHandler</code> 
@@ -56,11 +65,41 @@ public class MapKeyHandler implements KeyHandler {
                 case ESCAPE -> mapper.quitMapping();
             }
         }
+        switch (keylistener.getKeyCode()) {
+            case ALT, ALT_GRAPH -> {
+                if (!pressed) {
+                    drawingtype = drawarea.getDrawType().orElse(null);
+                    handlerType = drawarea.getHandlerType();
+                    selection = view.getSelected();
+                    drawarea.setDrawType(null);
+                    drawarea.changeHandlers(HandlerType.SELECTION);
+                    isMapping = view.isMapping();
+                    view.setMapping(false);
+                    pressed = true;
+                }
+                drawarea.setMultiSelectEnabled(true);
+            }
+            default -> {
+            }
+        }
     }
 
     @Override
     public void keyReleased() {
+        switch (keylistener.getKeyCode()) {
+            case ALT, ALT_GRAPH -> {
+                drawarea.setDrawType(drawingtype);
+                drawarea.changeHandlers(handlerType);
+                drawarea.setMultiSelectEnabled(false);
+                view.setMapping(isMapping);
+                view.setSelected(selection);
+                mapper.initMap();
+                pressed = false;
 
+            }
+            default -> {
+            }
+        }
     }
 
     @Override
