@@ -302,6 +302,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     -fx-text-fill: white;
     -fx-font-size: 10pt;
 }
+.text-field {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+}
 
 /**
  * Night theme svg styles

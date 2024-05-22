@@ -349,18 +349,24 @@ public class MapController {
         SVGPath path_a = new SVGPath();
         path_a.setContent(SVG_QUIT_A);
         path_a.getStyleClass().add("svgPath");
-        path_a.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
         path_a.setFill(Color.TRANSPARENT);
         SVGPath path_b = new SVGPath();
         path_b.setContent(SVG_QUIT_B);
         path_b.getStyleClass().add("svgPath");
-        path_b.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
         path_b.setFill(Color.TRANSPARENT);
         SVGPath path_c = new SVGPath();
         path_c.setContent(SVG_QUIT_C);
         path_c.getStyleClass().add("svgPath");
-        path_c.setStyle("-fx-stroke:#a8a8a8;");
         path_c.setFill(Color.TRANSPARENT);
+        if (drawarea.isDarkModeEnabled()) {
+            path_a.setStyle("-fx-stroke:#3a3a3a;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
+            path_b.setStyle("-fx-stroke:#3a3a3a;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
+            path_c.setStyle("-fx-stroke:#3a3a3a;");
+        } else {
+            path_a.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
+            path_b.setStyle("-fx-stroke:#a8a8a8;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
+            path_c.setStyle("-fx-stroke:#a8a8a8;");
+        }
         Group glyph = new Group();
         glyph.getChildren().addAll(path_a, path_b, path_c);
         return glyph;
