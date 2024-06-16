@@ -607,6 +607,11 @@ public class CanvasView {
         }
     }
 
+    /**
+     * Provide a cursor whilst editing text
+     * 
+     * @param selection index of the current drawitem
+     */
     public void setTextHighlight(int selection) {
         ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         nodes.remove(highlight);

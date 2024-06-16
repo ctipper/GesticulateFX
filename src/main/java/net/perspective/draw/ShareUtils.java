@@ -61,15 +61,26 @@ public class ShareUtils {
     private final double margin;
     public final ExecutorService executor;
 
+    /**
+     * Creates a new instance of <code>ShareUtils</code>
+     */
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
         this.margin = 5.0;  // half max stroke width
     }
 
+    /**
+     * Reset the canvas file reference
+     */
     public void resetCanvasFile() {
         this.canvasfile = null;
     }
 
+    /**
+     * Return the canvas file reference
+     * 
+     * @return the canvas file
+     */
     public File getCanvasFile() {
         return canvasfile;
     }
@@ -126,6 +137,11 @@ public class ShareUtils {
         controller.setSelectionMode();
     }
 
+    /**
+     * Provide a chooser to select canvas file
+     * 
+     * @return the canvas file
+     */
     public File chooseCanvas() {
         FileChooser chooser = new FileChooser();
         String userDirectoryString = System.getProperty("user.home");
@@ -142,6 +158,9 @@ public class ShareUtils {
         return result;
     }
 
+    /**
+     * Store the canvas in a file
+     */
     public void exportCanvas() {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
@@ -166,11 +185,21 @@ public class ShareUtils {
         this.writeCanvas(file);
     }
 
+    /**
+     * Read the canvas file from location
+     * 
+     * @param path the file location
+     */
     public void loadCanvas(String path) {
         final File file = new File(path);
         this.readCanvas(file);
     }
 
+    /**
+     * Read the canvas file
+     * 
+     * @param file the stored file
+     */
     public void readCanvas(File file) {
         ReadInFunnel reader = injector.getInstance(ReadInFunnel.class);
         reader.setFile(file);
@@ -180,6 +209,11 @@ public class ShareUtils {
         executor.submit(reader);
     }
 
+    /**
+     * Write the canvas to storage
+     * 
+     * @param file a file to write
+     */
     public void writeCanvas(File file) {
         WriteOutStreamer streamer = injector.getInstance(WriteOutStreamer.class);
         streamer.setFile(file);
@@ -189,6 +223,9 @@ public class ShareUtils {
         executor.submit(streamer);
     }
 
+    /**
+     * Export PDF of drawing
+     */
     public void exportPDF() {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
@@ -218,6 +255,9 @@ public class ShareUtils {
         executor.submit(pdfWorker);
     }
 
+    /**
+     * Export SVG of drawing
+     */
     public void exportSVG() {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
@@ -247,6 +287,9 @@ public class ShareUtils {
         executor.submit(svgWorker);
     }
 
+    /**
+     * Export a bitmap of drawing
+     */
     public void exportPNG() {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {
@@ -277,6 +320,9 @@ public class ShareUtils {
         executor.submit(pngWorker);
     }
 
+    /**
+     * Capture a snapshot of canvas to Desktop folder
+     */
     public void snapshotPNG() {
         // Detect empty canvas
         if (view.getDrawings().isEmpty()) {

@@ -93,12 +93,20 @@ public class Gesticulate extends GuiceApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
+    /**
+     * Init the application
+     * 
+     * @param modules
+     * @throws Exception
+     */
     @Override
     public void init(final List<Module> modules) throws Exception {
         modules.add(new FxmlModule());
     }
 
     /**
+     * Construct the user interface
+     * 
      * @param primaryStage
      * @throws Exception
      */
@@ -176,6 +184,11 @@ public class Gesticulate extends GuiceApplication {
         }
     }
 
+    /**
+     * Resize scrollpane on window resize
+     * 
+     * @param pane
+     */
     public void setOnResize(ScrollPane pane) {
         pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
             drawarea.getScene().setHeight((double) new_val);
@@ -187,6 +200,11 @@ public class Gesticulate extends GuiceApplication {
         });
     }
 
+    /**
+     * Set the size of the stage
+     * 
+     * @param stage the stage
+     */
     public void sizeStage(Stage stage) {
         stage.setX(frameLeft);
         stage.setY(frameTop);
@@ -194,6 +212,11 @@ public class Gesticulate extends GuiceApplication {
         stage.setHeight(sceneHeight);
     }
 
+    /**
+     * Retrieve the stage
+     * 
+     * @return the stage
+     */
     public Stage getStage() {
         return this.stage;
     }
@@ -202,6 +225,9 @@ public class Gesticulate extends GuiceApplication {
     private Consumer<ColorScheme> csmr = null;
     private Subscription csub = Subscription.EMPTY;
 
+    /**
+     * Set the application theme
+     */
     public void setSystemTheme() {
         ColorScheme colorScheme = preferences.getColorScheme();
         final boolean isDark = colorScheme.equals(ColorScheme.DARK);
@@ -211,18 +237,27 @@ public class Gesticulate extends GuiceApplication {
             controller.setAppStyles(false);
             resetStylesheets(false);
         }
+        // initialise the theme listener
         csmr = (var darkTheme) -> {
             controller.getThemeProperty().setValue(darkTheme.equals(ColorScheme.DARK));
         };
         csub = preferences.colorSchemeProperty().subscribe(csmr);
     }
 
+    /**
+     * Remove theme listener
+     */
     public void deregisterThemeListener() {
         csub.unsubscribe();
     }
 
-    public void resetStylesheets(Boolean mode) {
-        if (mode) {
+    /**
+     * Reset aopplication stylesheets
+     * 
+     * @param isDark is dark theme selected
+     */
+    public void resetStylesheets(Boolean isDark) {
+        if (isDark) {
             stage.getScene().getStylesheets().clear();
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-dark.css");
             stage.getScene().getStylesheets().add("/stylesheets/application-dark.css");
@@ -246,6 +281,9 @@ public class Gesticulate extends GuiceApplication {
         drawarea.redrawGrid();
     }
 
+    /**
+     * Quit the application
+     */
     @Override
     public void stop() {
         userPrefs.setProperty("darkTheme", controller.getThemeProperty().getValue().toString());
@@ -267,6 +305,11 @@ public class Gesticulate extends GuiceApplication {
         return appDirs.getUserConfigDir("GesticulateFX", null, "ctipper", true) + System.getProperty("file.separator");
     }
 
+    /**
+     * Persist the user preferences
+     * 
+     * @param prefs the user preferences as properties
+     */
     public void setUserPreferences(Properties prefs) {
         AppDirs appDirs = AppDirsFactory.getInstance();
         Path paramPath = Paths.get(appDirs.getUserConfigDir("GesticulateFX", null, "ctipper", true), "userprefs.properties");
@@ -279,6 +322,11 @@ public class Gesticulate extends GuiceApplication {
         }
     }
 
+    /**
+     * Retrieve the user preferences
+     * 
+     * @return user preferencies as properties
+     */
     public Properties getUserPreferences() {
         Properties prefs = new Properties();
         AppDirs appDirs = AppDirsFactory.getInstance();
