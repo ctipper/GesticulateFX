@@ -115,7 +115,7 @@ public class ShareUtils {
         chooser.setInitialDirectory(userDirectory);
         chooser.setTitle("Choose Pictures...");
         chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.svg"),
                 new FileChooser.ExtensionFilter("All Documents", "*.*"));
         List<File> result = chooser.showOpenMultipleDialog(application.getStage());
         if (result == null) {

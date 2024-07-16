@@ -24,6 +24,8 @@
 package net.perspective.draw.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,6 +46,7 @@ public class FileUtils {
     public final static String tiff = "tiff";
     public final static String tif = "tif";
     public final static String png = "png";
+    public final static String svg = "svg";
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class.getName());
 
@@ -65,7 +68,7 @@ public class FileUtils {
     }
 
     /**
-     * Ensure file has given file-extension
+     * Ensure file has given file extension
      * 
      * @param file the {@link java.io.File}
      * @param extension file extension
@@ -128,6 +131,48 @@ public class FileUtils {
         } else {
             logger.warn("Couldn't find file: " + path);
             return null;
+        }
+    }
+
+    /**
+     * Return path reference without file extension
+     * 
+     * @param name file name
+     * @return the canonical file name
+     */
+    public static String getNameWithoutExtension(String name) {
+        int i = name.lastIndexOf('.');
+        if (i != -1) {
+            name = name.substring(0, i);
+        }
+        return name;
+    }
+
+    /**
+     * Return file extension from path reference
+     * 
+     * @param name file name
+     * @return the file extension
+     */
+    public static String getExtension(String name) {
+        int index = name.lastIndexOf('.');
+        if (index < 0) {
+            return "";
+        }
+        return name.substring(index + 1);
+    }
+
+    /**
+     * Write out data to a file
+     * 
+     * @param file {@link java.io.File}
+     * @param data text to write out
+     */
+    public static void writeStringToFile(File file, String data) {
+        try (PrintWriter out = new PrintWriter(file)) {
+            out.write(data);
+        } catch (FileNotFoundException ex) {
+            logger.error("Couldn't locate file {}", file.getAbsoluteFile());
         }
     }
 
