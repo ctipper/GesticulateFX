@@ -558,10 +558,12 @@
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
             <children>
+                <!--
                 <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <HBox focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
                 <HBox focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                -->
             </children>
             <columnConstraints>
                 <ColumnConstraints prefWidth="64.0" />
@@ -570,7 +572,9 @@
                 <ColumnConstraints prefWidth="64.0" />
             </columnConstraints>
             <rowConstraints>
+                <!--
                 <RowConstraints prefHeight="64.0" />
+                -->
             </rowConstraints>
         </GridPane>
     </children>

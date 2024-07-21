@@ -23,8 +23,13 @@
  */
 package net.perspective.draw;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -41,6 +46,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -82,6 +88,17 @@ import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
+import net.perspective.draw.util.FileUtils;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.TranscodingHints;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.util.SVGConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -128,6 +145,8 @@ public class ApplicationController implements Initializable {
     private final String SVG_PAL = "M11.377778 2.1333336C6.039629199999999 2.1333336 1.711111299999999 6.312592199999999 1.711111299999999 11.466667000000001 1.711111299999999 16.620742 6.0396291999999985 20.8 11.377778 20.8 12.269259 20.8 12.988888999999999 20.105186 12.988888999999999 19.244444 12.988888999999999 18.84 12.833147999999998 18.477038 12.570000999999998 18.202223 12.317592999999997 17.927407 12.167222999999998 17.56963 12.167222999999998 17.170371 12.167222999999998 16.30963 12.886851999999998 15.614815 13.778332999999998 15.614815H15.674073999999997C18.638519999999996 15.614815 21.044444999999996 13.291852 21.044444999999996 10.42963 21.044444999999996 5.8459261 16.715926999999997 2.1333336000000003 11.377777999999996 2.1333336000000003ZM5.4703702 11.466667C4.5788889 11.466667 3.8592589999999998 10.771851999999999 3.8592589999999998 9.911111 3.8592589999999998 9.0503705 4.5788889 8.3555554 5.4703702 8.3555554 6.3618516 8.3555554 7.0814815 9.0503705 7.0814815 9.911111 7.0814815 10.771851999999999 6.3618516 11.466667 5.4703702 11.466667ZM8.6925927 7.3185186C7.8011113000000005 7.3185186 7.081481500000001 6.6237034999999995 7.081481500000001 5.7629629 7.081481500000001 4.902222399999999 7.8011113000000005 4.2074073 8.6925927 4.2074073 9.5840741 4.2074073 10.303704 4.902222399999999 10.303704 5.7629629 10.303704 6.6237034999999995 9.5840741 7.3185186 8.6925927 7.3185186ZM14.062963 7.3185186C13.171482 7.3185186 12.451852 6.6237034999999995 12.451852 5.7629629 12.451852 4.902222399999999 13.171482000000001 4.2074073 14.062963 4.2074073 14.954445 4.2074073 15.674074 4.902222399999999 15.674074 5.7629629 15.674074 6.6237034999999995 14.954445 7.3185186 14.062963 7.3185186ZM17.285185 11.466667000000001C16.393704 11.466667000000001 15.674074 10.771852 15.674074 9.911111000000002 15.674074 9.050370500000001 16.393704 8.355555400000002 17.285185 8.355555400000002 18.176667 8.355555400000002 18.896296999999997 9.050370500000001 18.896296999999997 9.911111000000002 18.896296999999997 10.771852000000003 18.176667 11.466667000000001 17.285185 11.466667000000001Z";
     private final String SVG_SKETCH = "M9.683105 12.160538C9.387039 11.739883,8.870743 11.533356,8.366211 11.633789C7.209183 11.864105,6.822739 13.242813,7.049316 14.530975C7.212357 15.457993,7.598648 16.360352,8.366211 16.901367C11.324356 18.986465,15.644501 15.517441,14.160538 10.975342C13.918884 10.235748,13.520340 9.555481,12.975342 9.000000C9.410904 5.367126,3.067444 7.514481,1.781738 12.950684C0.468903 18.501633,5.099258 23.668060,11.000000 23.485840C17.038956 23.299332,21.461807 17.802231,21.008408 11.633789C20.603149 6.120422,16.446732 1.645233,11.000000 0.571884C7.478043 -0.122177,3.828094 0.742279,0.991592 2.942276";
     private final String SVG_POLYGON = "M18.730026 5.361984L13.638016 0.269974C4.441025 0.341461,-2.007233 9.368988,0.907990 18.092010C1.734192 20.564240,3.469177 22.750504,6.000000 23.184021C7.693268 23.474060,11.145432 21.827255,13.638016 20.638016C15.358093 19.817337,18.366989 18.381744,18.730026 18.092010C22.815308 14.831955,22.815308 8.622040,18.730026 5.361984Z";
+
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class.getName());
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
 
@@ -870,6 +889,7 @@ public class ApplicationController implements Initializable {
         stylecombobox.setButtonCell(styleCellFactory.call(null));
         stylecombobox.setCellFactory(styleCellFactory);
         stylecombobox.getSelectionModel().select(style);
+        this.prepareLibraryDrawer();
     }
 
     /**
@@ -1242,6 +1262,27 @@ public class ApplicationController implements Initializable {
     }
 
     /**
+     * Populate library drawer with SVG icons
+     */
+    private void prepareLibraryDrawer() {
+        for (int i=0; i < 16; i++) {
+            ImageView[] image = new ImageView[4];
+            for (int j=0; j < 4; j++) {
+                try {
+                    image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i*4 + j)), null));
+                    image[j].setFitWidth(50.0);
+                    image[j].setPreserveRatio(true);
+                } catch (IOException ex) {
+                    logger.error("Can't fetch resource {}", svgStrings.get(i*j));
+                }
+            }
+            libmenu.getRowConstraints().add(getRow());
+            libmenu.getRowConstraints().getLast().setPrefHeight(64.0);
+            libmenu.addRow(i, image[0], image[1], image[2], image[3]);
+        }
+    }
+
+    /**
      * Get one row constraints row
      * 
      * @return the row constraint
@@ -1347,6 +1388,68 @@ public class ApplicationController implements Initializable {
             Integer.parseInt(colorStr.substring(3, 5), 16) / 255,
             Integer.parseInt(colorStr.substring(5, 7), 16) / 255,
             1d);
+    }
+
+    java.util.List<String> svgStrings = Arrays.asList("bath.svg", "bridge-water.svg", "bridge.svg", "bus.svg", "cable-car.svg", "camera.svg", "campground.svg", "car-side.svg",
+            "car.svg", "caravan.svg", "cart-flatbed.svg", "cat.svg", "child-dress.svg", "child.svg", "children.svg", "circle-exclamation.svg",
+            "circle-h.svg", "city.svg", "compass.svg", "dog.svg", "fish-fins.svg", "gas-pump.svg", "gear.svg", "gift.svg",
+            "house.svg", "industry.svg", "info.svg", "landmark.svg", "location-dot.svg", "masks-theater.svg", "motorcycle.svg", "mountains.svg",
+            "mug-saucer.svg", "people-line.svg", "people-pulling.svg", "people-roof.svg", "person-biking.svg", "person-digging.svg", "person-dress.svg", "person-falling.svg",
+            "person-hiking.svg", "person-shelter.svg", "person-skiing.svg", "person-swimming.svg", "person-walking-luggage.svg", "person.svg", "phone-volume.svg", "plane-departure.svg",
+            "plane.svg", "recycle.svg", "restroom.svg", "road-barrier.svg", "sailboat.svg", "school.svg", "ship.svg", "square-h.svg",
+            "square-phone.svg", "tractor.svg", "train-subway.svg", "trees.svg", "truck-field.svg", "utensils.svg", "water.svg", "wheelchair.svg");
+
+    private BufferedImage rasterizeSVGResource(String filename) throws IOException {
+
+        final BufferedImage[] imagePointer = new BufferedImage[1];
+
+        // Rendering hints can't be set programatically, so
+        // we override defaults with a temporary stylesheet.
+        // These defaults emphasize quality and precision, and
+        // are more similar to the defaults of other SVG viewers.
+        // SVG documents can still override these defaults.
+        String css = "svg {"
+                + "shape-rendering: geometricPrecision;"
+                + "text-rendering:  geometricPrecision;"
+                + "color-rendering: optimizeQuality;"
+                + "image-rendering: optimizeQuality;"
+                + "fill: " + themeAccentColor.getValue() + ";"
+                + "}";
+        Path cssFile = Files.createTempFile(Files.createTempDirectory("temp-dir"), "batik-default-override-", ".css");
+        FileUtils.writeStringToFile(cssFile.toFile(), css);
+        TranscodingHints transcoderHints = new TranscodingHints();
+        transcoderHints.put(ImageTranscoder.KEY_XML_PARSER_VALIDATING, Boolean.FALSE);
+        transcoderHints.put(ImageTranscoder.KEY_DOM_IMPLEMENTATION,
+                SVGDOMImplementation.getDOMImplementation());
+        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT_NAMESPACE_URI,
+                SVGConstants.SVG_NAMESPACE_URI);
+        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT, "svg");
+        transcoderHints.put(ImageTranscoder.KEY_USER_STYLESHEET_URI, cssFile.toUri().toString());
+        transcoderHints.put(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, Boolean.TRUE);
+
+        try (InputStream file = getClass().getResourceAsStream("/svg/" + filename)) {
+            TranscoderInput input = new TranscoderInput(file);
+
+            ImageTranscoder t = new ImageTranscoder() {
+
+                @Override
+                public BufferedImage createImage(int width, int height) {
+                    return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                }
+
+                @Override
+                public void writeImage(BufferedImage image, TranscoderOutput out) throws TranscoderException {
+                    imagePointer[0] = image;
+                }
+            };
+            t.setTranscodingHints(transcoderHints);
+            t.transcode(input, null);
+        } catch (TranscoderException ex) {
+            logger.error("Couldn't convert {}", filename);
+        } catch (IOException ex) {
+            logger.error("Couldn't read SVG image {}", filename);
+        }
+        return imagePointer[0];
     }
 
     /** Creates a new instance of <code>ApplicationController</code> */
