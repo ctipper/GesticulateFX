@@ -299,6 +299,10 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
+    private void handleLibraryAction(ActionEvent e) {
+    }
+
+    @FXML
     private void handleImgImportAction(ActionEvent e) {
         share.setImageFiles(share.chooseImages());
         share.readPictures();
@@ -921,6 +925,10 @@ public class ApplicationController implements Initializable {
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
 
+        // Initialize the sliding library menu
+        libmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        this.prepareSlideLibraryAnimation();
+
         // bind a property to the snapshot button disable state
         this.snapshotEnabled = new SimpleBooleanProperty();
         this.snapshotEnabled.bindBidirectional(snapshotbutton.disableProperty());
@@ -1082,6 +1090,23 @@ public class ApplicationController implements Initializable {
                 openNav.play();
             } else {
                 closeNav.setToX(-(appmenu.getWidth()));
+                closeNav.play();
+            }
+        });
+    }
+
+    /**
+     * Set the slide menu transition
+     */
+    private void prepareSlideLibraryAnimation() {
+        TranslateTransition openNav = new TranslateTransition(new Duration(350), libmenu);
+        openNav.setToX(0);
+        TranslateTransition closeNav = new TranslateTransition(new Duration(350), libmenu);
+        librarybutton.setOnAction((ActionEvent event) -> {
+            if (libmenu.getTranslateX() != 0) {
+                openNav.play();
+            } else {
+                closeNav.setToX(libmenu.getWidth());
                 closeNav.play();
             }
         });
@@ -1330,6 +1355,8 @@ public class ApplicationController implements Initializable {
     @FXML
     private GridPane appmenu;
     @FXML
+    private GridPane libmenu;
+    @FXML
     private ToggleButton selectbutton;
     @FXML
     private ToggleGroup toolToggles;
@@ -1349,6 +1376,8 @@ public class ApplicationController implements Initializable {
     private Button menubutton;
     @FXML
     private Button snapshotbutton;
+    @FXML
+    private Button librarybutton;
     @FXML
     private ToggleButton dropperbutton;
     @FXML

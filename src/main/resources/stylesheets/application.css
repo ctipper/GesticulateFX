@@ -30,6 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #appmenu {
     -fx-background-color: #fefefe;
 }
+#libmenu {
+    -fx-background-color: #fefefe;
+}
 #scrollarea {
     -fx-background-color: #f3f3f3;
 }

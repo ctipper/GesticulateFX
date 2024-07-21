@@ -217,7 +217,7 @@
                                 </HBox>
                             </children>
                         </VBox>
-                        <Region prefWidth="20.0" />
+                        <Region prefWidth="5.0" />
                         <Button id="buttsnapshot" fx:id="snapshotbutton" focusTraversable="false" mnemonicParsing="false" onAction="#handlePngSnapshotAction" styleClass="formatbutton" text="">
                             <tooltip>
                                 <Tooltip text="Snapshot to Desktop" />
@@ -228,6 +228,14 @@
                                     <SVGPath content="M11.383999 1.2555966C10.325399999999998 1.2555966 8.9545699 1.2650866 7.825404899999999 1.3434866 9.721426899999999 1.3435386 12.666303999999998 1.3472866000000001 13.198450999999999 1.7907526 13.736277999999999 2.2389496 13.735559999999998 4.6992916000000005 13.735559999999998 6.3239557 13.735559999999998 7.9486197 13.736277999999999 10.408961999999999 13.198450999999999 10.857158 12.961370999999998 11.054728 12.207716999999999 11.156685 11.317592999999999 11.218487 11.337822999999998 11.218487 11.364012999999998 11.218487 11.384002999999998 11.218487 13.277098999999998 11.218487 16.285629 11.219417 16.823455 10.771220999999999 17.361282 10.323023999999998 17.362517999999998 7.862682199999998 17.362517 6.238018199999999 17.362517 4.613353599999999 17.361317 2.1530125999999994 16.823455 1.7048145999999988 16.285629 1.2566195999999987 13.277099 1.2555965999999987 11.384003 1.2555965999999987Z" styleClass="svgThinPath" fill="TRANSPARENT"/>
                                     <SVGPath content="M13.718182 6.3143638C13.718182 4.6896998 13.718045 2.2295558 13.180218 1.7813587999999996 12.642392 1.3331627999999995 9.6337099 1.3330557999999995 7.7406129 1.3330557999999995 5.8475159 1.3330557999999995 2.8388329000000008 1.3331627999999995 2.3010069 1.7813587999999996 1.7631799 2.2295557999999995 1.7630428999999999 4.6896998 1.7630428999999999 6.3143638 1.7630428999999999 7.9390278 1.7631799 10.399172 2.3010069 10.847368 2.8388329 11.295563999999999 5.847515899999999 11.295670999999999 7.7406129 11.295670999999999 9.6337099 11.295670999999999 12.642392000000001 11.295563999999999 13.180218 10.847368 13.718045 10.399172 13.718182 7.9390278 13.718182 6.3143638Z" styleClass="svgThinPath" fill="TRANSPARENT"/>
                                 </Group>
+                            </graphic>
+                        </Button>
+                        <Button id="buttlibrary" fx:id="librarybutton" focusTraversable="false" mnemonicParsing="false" onAction="#handleLibraryAction" styleClass="formatbutton" text="">
+                            <tooltip>
+                                <Tooltip text="Show Icon Library" />
+                            </tooltip>
+                            <graphic>
+                                <SVGPath content="M0 2.625C0 1.6597656250000001 0.784765625 0.875 1.75 0.875L12.25 0.875C13.215234375 0.875 14 1.6597656250000001 14 2.625L14 11.375C14 12.340234375 13.215234375 13.125 12.25 13.125L1.75 13.125C0.7847656250000001 13.125 0 12.340234375 0 11.375L0 2.625ZM8.85390625 5.537109375C8.730859375 5.356640625 8.528515625 5.25 8.3125 5.25S7.891406250000001 5.356640625 7.7710937499999995 5.537109375L5.3921874999999995 9.026171875000001 4.6675781249999995 8.12109375C4.541796875 7.9652343750000005 4.3531249999999995 7.875 4.15625 7.875S3.7679687500000005 7.9652343750000005 3.6449218750000005 8.12109375L1.8949218750000003 10.30859375C1.7363281250000004 10.50546875 1.7062500000000003 10.776171875000001 1.8156250000000003 11.003124999999999S2.1546875000000005 11.375 2.40625 11.375L5.03125 11.375 5.90625 11.375 11.59375 11.375C11.837109374999999 11.375 12.061328125000001 11.241015625000001 12.1734375 11.025S12.271875 10.54921875 12.13515625 10.349609375L8.85390625 5.537109375ZM3.0625 5.25A1.3125 1.3125 0 1 0 3.0625 2.625 1.3125 1.3125 0 1 0 3.0625 5.25Z" styleClass="svgFill" fillRule="EVEN_ODD" fill="TRANSPARENT"/>
                             </graphic>
                         </Button>
                     </items>
@@ -543,6 +551,26 @@
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
                 <RowConstraints prefHeight="35.0" />
+            </rowConstraints>
+        </GridPane>
+        <GridPane id="libmenu" fx:id="libmenu" prefHeight="600.0" prefWidth="256.0" translateX="256" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="83.0">
+            <padding>
+                <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+            </padding>
+            <children>
+                <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <HBox focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <HBox focusTraversable="false" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <HBox focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints prefWidth="64.0" />
+                <ColumnConstraints prefWidth="64.0" />
+                <ColumnConstraints prefWidth="64.0" />
+                <ColumnConstraints prefWidth="64.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints prefHeight="64.0" />
             </rowConstraints>
         </GridPane>
     </children>
