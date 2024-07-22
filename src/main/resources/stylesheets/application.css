@@ -62,6 +62,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+#buttonlib {
+    -fx-background-color: transparent;
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-label-padding: 0;
+}
 .dialog-pane {
     -fx-background-color: #fefefe;
 }
