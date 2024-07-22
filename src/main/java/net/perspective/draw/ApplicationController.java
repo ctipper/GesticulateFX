@@ -1265,11 +1265,13 @@ public class ApplicationController implements Initializable {
      * Populate library drawer with SVG icons
      */
     private void prepareLibraryDrawer() {
+        libmenu.getChildren().clear();
+        libmenu.getRowConstraints().clear();
         for (int i=0; i < 16; i++) {
             ImageView[] image = new ImageView[4];
             for (int j=0; j < 4; j++) {
                 try {
-                    image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i*4 + j)), null));
+                    image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i*4 + j), themeAccentColor.getValue()), null));
                     image[j].setFitWidth(50.0);
                     image[j].setPreserveRatio(true);
                 } catch (IOException ex) {
@@ -1399,7 +1401,7 @@ public class ApplicationController implements Initializable {
             "plane.svg", "recycle.svg", "restroom.svg", "road-barrier.svg", "sailboat.svg", "school.svg", "ship.svg", "square-h.svg",
             "square-phone.svg", "tractor.svg", "train-subway.svg", "trees.svg", "truck-field.svg", "utensils.svg", "water.svg", "wheelchair.svg");
 
-    private BufferedImage rasterizeSVGResource(String filename) throws IOException {
+    private BufferedImage rasterizeSVGResource(String filename, String fillColor) throws IOException {
 
         final BufferedImage[] imagePointer = new BufferedImage[1];
 
@@ -1413,7 +1415,7 @@ public class ApplicationController implements Initializable {
                 + "text-rendering:  geometricPrecision;"
                 + "color-rendering: optimizeQuality;"
                 + "image-rendering: optimizeQuality;"
-                + "fill: " + themeAccentColor.getValue() + ";"
+                + "fill: " + fillColor + ";"
                 + "}";
         Path cssFile = Files.createTempFile(Files.createTempDirectory("temp-dir"), "batik-default-override-", ".css");
         FileUtils.writeStringToFile(cssFile.toFile(), css);
