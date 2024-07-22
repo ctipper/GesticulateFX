@@ -23,6 +23,7 @@
  */
 package net.perspective.draw;
 
+import com.google.inject.Injector;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -89,6 +90,7 @@ import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
+import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
 import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
@@ -1126,6 +1128,7 @@ public class ApplicationController implements Initializable {
         librarybutton.setOnAction((ActionEvent event) -> {
             if (libmenu.getTranslateX() != 0) {
                 openNav.play();
+                shift = 20.0;
             } else {
                 closeNav.setToX(libmenu.getWidth());
                 closeNav.play();
@@ -1262,6 +1265,37 @@ public class ApplicationController implements Initializable {
         appmenu.addRow(lastrow + hboxes + 2, about, aboutmenu);
     }
 
+    @Inject private Injector injector;
+    private double shift = 20.0;
+
+    /**
+     * Insert SVG icon from selected button
+     * 
+     * @param ev a {@link javafx.event.ActionEvent}
+     */
+    public void insertSVGAction(ActionEvent ev) {
+        String filename = ((Button) ev.getSource()).getId().substring(3);
+        try {
+            Image image = SwingFXUtils.toFXImage(rasterizeSVGResource(filename, toRGBCode(drawarea.getFillColor())), null);
+            Picture picture = injector.getInstance(Picture.class);
+            picture.setStart(shift, shift);
+            ImageItem item = new ImageItem(image);
+            item.setFormat(FileUtils.getExtension(filename));
+            int index = view.setImageItem(item);
+            double width = (double) image.getWidth();
+            double height = (double) image.getHeight();
+            double scale =  64d / width;
+            logger.trace("Image relative scale: {}", scale);
+            picture.setImage(index, width, height);
+            picture.setScale(scale);
+            view.setNewItem(picture);
+            view.resetNewItem();
+        } catch (IOException ex) {
+            logger.error("Can't fetch resource {}", filename);
+        }
+        shift = shift + 45.0;
+    }
+
     /**
      * Populate library drawer with SVG icons
      */
@@ -1273,11 +1307,11 @@ public class ApplicationController implements Initializable {
             Button[] button = new Button[4];
             for (int j=0; j < 4; j++) {
                 try {
-                    image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i*4 + j), themeAccentColor.getValue()), null));
+                    image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i * 4 + j), themeAccentColor.getValue()), null));
                     image[j].setFitWidth(36.0);
                     image[j].setPreserveRatio(true);
                     button[j] = new Button();
-                    button[j].setId("ia_" + svgStrings.get(i*4 + j));
+                    button[j].setId("ia_" + svgStrings.get(i * 4 + j));
                     button[j].getStyleClass().add("buttonlib");
                     button[j].setGraphic(image[j]);
                     button[j].setPrefWidth(50.0);
@@ -1286,11 +1320,12 @@ public class ApplicationController implements Initializable {
                     button[j].setAlignment(Pos.CENTER);
                     button[j].setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
                     button[j].setMaxSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+                    button[j].setOnAction(this::insertSVGAction);
                 } catch (IOException ex) {
                     logger.error("Can't fetch resource {}", svgStrings.get(i*j));
                 }
             }
-            libmenu.getRowConstraints().add(getRow());
+            libmenu.getRowConstraints().add(new RowConstraints());
             libmenu.getRowConstraints().getLast().setPrefHeight(53.0);
             libmenu.getRowConstraints().getLast().setMinHeight(53.0);
             libmenu.getRowConstraints().getLast().setMaxHeight(53.0);
