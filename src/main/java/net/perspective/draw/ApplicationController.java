@@ -1284,7 +1284,7 @@ public class ApplicationController implements Initializable {
             int index = view.setImageItem(item);
             double width = (double) image.getWidth();
             double height = (double) image.getHeight();
-            double scale =  64d / width;
+            double scale =  64d / height;
             logger.trace("Image relative scale: {}", scale);
             picture.setImage(index, width, height);
             picture.setScale(scale);
@@ -1443,14 +1443,14 @@ public class ApplicationController implements Initializable {
             1d);
     }
 
-    java.util.List<String> svgStrings = Arrays.asList("bath.svg", "bridge-water.svg", "bridge.svg", "bus.svg", "cable-car.svg", "camera.svg", "campground.svg", "car-side.svg",
-            "car.svg", "caravan.svg", "cart-flatbed.svg", "cat.svg", "child-dress.svg", "child.svg", "children.svg", "circle-exclamation.svg",
-            "circle-h.svg", "city.svg", "compass.svg", "dog.svg", "fish-fins.svg", "gas-pump.svg", "gear.svg", "gift.svg",
-            "house.svg", "industry.svg", "info.svg", "landmark.svg", "location-dot.svg", "masks-theater.svg", "motorcycle.svg", "mountains.svg",
-            "mug-saucer.svg", "people-line.svg", "people-pulling.svg", "people-roof.svg", "person-biking.svg", "person-digging.svg", "person-dress.svg", "person-falling.svg",
-            "person-hiking.svg", "person-shelter.svg", "person-skiing.svg", "person-swimming.svg", "person-walking-luggage.svg", "person.svg", "phone-volume.svg", "plane-departure.svg",
-            "plane.svg", "recycle.svg", "restroom.svg", "road-barrier.svg", "sailboat.svg", "school.svg", "ship.svg", "square-h.svg",
-            "square-phone.svg", "tractor.svg", "train-subway.svg", "trees.svg", "truck-field.svg", "utensils.svg", "water.svg", "wheelchair.svg");
+    java.util.List<String> svgStrings = Arrays.asList("bed.svg", "bridge-water.svg", "bridge.svg", "bullhorn.svg", "bus.svg", "cable-car.svg", "camera.svg", "campground.svg",
+        "car-side.svg", "car.svg", "caravan.svg", "cart-flatbed.svg", "cat.svg", "child-dress.svg", "child.svg", "children.svg",
+        "circle-exclamation.svg", "circle-h.svg", "circle-info.svg", "city.svg", "compass.svg", "dog.svg", "fish-fins.svg", "gas-pump.svg",
+        "gear.svg", "gift.svg", "house.svg", "industry.svg", "landmark.svg", "location-dot.svg", "masks-theater.svg", "motorcycle.svg",
+        "mountains.svg", "mug-saucer.svg", "people-line.svg", "people-pulling.svg", "people-roof.svg", "person-biking.svg", "person-digging.svg", "person-dress.svg",
+        "person-falling.svg", "person-hiking.svg", "person-shelter.svg", "person-skiing.svg", "person-swimming.svg", "person-walking-luggage.svg", "person.svg", "phone-volume.svg",
+        "plane-departure.svg", "plane.svg", "recycle.svg", "restroom.svg", "road-barrier.svg", "sailboat.svg", "school.svg", "ship.svg",
+        "square-phone.svg", "tractor.svg", "train-subway.svg", "trees.svg", "truck-field.svg", "utensils.svg", "water.svg", "wheelchair.svg");
 
     private BufferedImage rasterizeSVGResource(String filename, String fillColor) throws IOException {
 
