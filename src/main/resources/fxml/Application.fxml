@@ -533,10 +533,6 @@
                         <Tooltip text="Background..." />
                     </tooltip>
                 </ColorPicker>
-                <!--
-                <CheckBox fx:id="checkTheme" focusTraversable="false" mnemonicParsing="false" text="" onAction="#handleModeChange" prefHeight="20.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                <ToggleButton fx:id="toggleTheme" alignment="CENTER_LEFT" focusTraversable="false" mnemonicParsing="false" onAction="#handleModeChange" prefWidth="150.0" prefHeight="20.0" styleClass="menuitem" text="Dark Theme" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                -->
             </children>
             <columnConstraints>
                 <ColumnConstraints />
@@ -555,7 +551,7 @@
         </GridPane>
         <GridPane id="libmenu" fx:id="libmenu" prefHeight="600.0" prefWidth="228.0" translateX="228" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="81.0">
             <padding>
-                <Insets bottom="0.0" left="5.0" right="0.0" top="0.0" />
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
             </padding>
             <children>
                 <!--
