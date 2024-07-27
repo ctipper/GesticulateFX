@@ -266,7 +266,7 @@
                 </graphic>
             </Button>
         </TilePane>
-        <VBox id="toolpanel" fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0" AnchorPane.bottomAnchor="21" AnchorPane.topAnchor="82.0">
+        <VBox id="toolpanel" fx:id="toolbuttons" prefHeight="-1.0" prefWidth="50.0" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="82.0">
             <fx:define>
                 <ToggleGroup fx:id="toolToggles" />
             </fx:define>
@@ -452,7 +452,7 @@
                 </graphic>
             </ToggleButton>
         </HBox>
-        <GridPane id="appmenu" fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="81.0">
+        <GridPane id="appmenu" fx:id="appmenu" prefHeight="600.0" prefWidth="200.0" translateX="-200" AnchorPane.bottomAnchor="21.0" AnchorPane.topAnchor="83.0">
             <padding>
                 <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
             </padding>
@@ -549,9 +549,9 @@
                 <RowConstraints prefHeight="35.0" />
             </rowConstraints>
         </GridPane>
-        <GridPane id="libmenu" fx:id="libmenu" prefHeight="600.0" prefWidth="228.0" translateX="228" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="81.0">
+        <GridPane id="libmenu" fx:id="libmenu" prefHeight="600.0" prefWidth="225.0" translateX="225.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="21.0" AnchorPane.topAnchor="83.0">
             <padding>
-                <Insets bottom="10.0" left="8.0" right="5.0" top="10.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
             <children>
                 <!--
