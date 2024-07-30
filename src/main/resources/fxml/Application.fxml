@@ -549,7 +549,7 @@
                 <RowConstraints prefHeight="35.0" />
             </rowConstraints>
         </GridPane>
-        <GridPane id="libmenu" fx:id="libmenu" prefHeight="600.0" prefWidth="225.0" translateX="225.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="21.0" AnchorPane.topAnchor="83.0">
+        <GridPane id="libmenu" fx:id="libmenu" prefHeight="600.0" prefWidth="210.0" translateX="210.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="21.0" AnchorPane.topAnchor="83.0">
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
@@ -562,10 +562,10 @@
                 -->
             </children>
             <columnConstraints>
-                <ColumnConstraints prefWidth="64.0" />
-                <ColumnConstraints prefWidth="64.0" />
-                <ColumnConstraints prefWidth="64.0" />
-                <ColumnConstraints prefWidth="64.0" />
+                <ColumnConstraints prefWidth="50.0" />
+                <ColumnConstraints prefWidth="50.0" />
+                <ColumnConstraints prefWidth="50.0" />
+                <ColumnConstraints prefWidth="50.0" />
             </columnConstraints>
             <rowConstraints>
                 <!--

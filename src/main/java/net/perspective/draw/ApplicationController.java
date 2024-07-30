@@ -1308,27 +1308,27 @@ public class ApplicationController implements Initializable {
             for (int j=0; j < 4; j++) {
                 try {
                     image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i * 4 + j), themeAccentColor.getValue()), null));
-                    image[j].setFitWidth(36.0);
+                    image[j].setFitWidth(35.0);
                     image[j].setPreserveRatio(true);
                     button[j] = new Button();
                     button[j].setId("ia_" + svgStrings.get(i * 4 + j));
                     button[j].getStyleClass().add("buttonlib");
                     button[j].setGraphic(image[j]);
-                    button[j].setPrefWidth(50.0);
-                    button[j].setPrefHeight(50.0);
-                    button[j].setPadding(new Insets(0));
+                    button[j].setPrefWidth(45.0);
+                    button[j].setPrefHeight(45.0);
+                    button[j].setPadding(new Insets(0.0));
                     button[j].setAlignment(Pos.CENTER);
                     button[j].setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
                     button[j].setMaxSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
                     button[j].setOnAction(this::insertSVGAction);
                 } catch (IOException ex) {
-                    logger.error("Can't fetch resource {}", svgStrings.get(i*j));
+                    logger.error("Can't fetch resource {}", svgStrings.get(i * 4 + j));
                 }
             }
             libmenu.getRowConstraints().add(new RowConstraints());
-            libmenu.getRowConstraints().getLast().setPrefHeight(53.0);
-            libmenu.getRowConstraints().getLast().setMinHeight(53.0);
-            libmenu.getRowConstraints().getLast().setMaxHeight(53.0);
+            libmenu.getRowConstraints().getLast().setPrefHeight(50.0);
+            libmenu.getRowConstraints().getLast().setMinHeight(50.0);
+            libmenu.getRowConstraints().getLast().setMaxHeight(50.0);
             libmenu.addRow(i, button[0], button[1], button[2], button[3]);
         }
         GridPane.setHalignment(libmenu, HPos.CENTER);
