@@ -70,6 +70,10 @@ public class PNGWorker extends Task<Object> {
         this.opacity = opacity;
     }
 
+    public boolean isOpacity() {
+        return opacity;
+    }
+
     public void setMargin(double margin) {
         this.margin = margin;
     }
@@ -77,7 +81,7 @@ public class PNGWorker extends Task<Object> {
     @Override
     protected Object call() throws Exception {
         logger.info("PNG export started...");
-        return new Serialiser(this.opacity);
+        return new Serialiser();
     }
 
     @Override
@@ -102,12 +106,10 @@ public class PNGWorker extends Task<Object> {
 
     final class Serialiser {
 
-        private final boolean opacity;
         double scale = 1.375;
 
-        Serialiser(boolean opacity) {
+        Serialiser() {
             logger.info("PNG export initialised.");
-            this.opacity = opacity;
             this.make();
         }
 
@@ -125,7 +127,7 @@ public class PNGWorker extends Task<Object> {
             g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
             g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
             g2.setBackground(Color.WHITE);
-            if (opacity) {
+            if (isOpacity()) {
                 // fill background
                 g2.setPaint(Color.WHITE);
                 g2.fillRect(0, 0, img.getWidth(), img.getHeight());
