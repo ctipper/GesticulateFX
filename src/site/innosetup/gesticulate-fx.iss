@@ -85,6 +85,15 @@ Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\shell\open\comm
 Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\FriendlyAppName"; ValueType: string; ValueData: "{#AppName}";
 Root: HKLM; Subkey: "Software\Classes\Applications\{#AppExeName}\SupportedTypes"; ValueType: string; ValueData: ".gst";
 
+Root: HKCR; Subkey: "{#AppName}"; ValueData: "Program {#AppName}"; ValueType: string;  ValueName: ""; Flags: UninsDeleteKey
+Root: HKCR; Subkey: "{#AppName}\DefaultIcon"; ValueData: "{app}\{#AppExeName},0"; ValueType: string; ValueName: ""
+Root: HKCR; Subkey: "{#AppName}\shell\open\command";  ValueData: """{app}\{#AppExeName}"" ""%1""";  ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: ".jpg"; ValueData: "{#AppName}"; ValueType: string; ValueName: ""; Flags: UninsDeleteValue
+Root: HKCR; Subkey: ".jpeg"; ValueData: "{#AppName}"; ValueType: string; ValueName: ""; Flags: UninsDeleteValue
+Root: HKCR; Subkey: ".gif"; ValueData: "{#AppName}"; ValueType: string; ValueName: ""; Flags: UninsDeleteValue
+Root: HKCR; Subkey: ".png"; ValueData: "{#AppName}"; ValueType: string; ValueName: ""; Flags: UninsDeleteValue
+Root: HKCR; Subkey: ".svg"; ValueData: "{#AppName}"; ValueType: string; ValueName: ""; Flags: UninsDeleteValue
+
 [Code]
 
 { ///////////////////////////////////////////////////////////////////// }
