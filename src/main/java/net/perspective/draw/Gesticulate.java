@@ -29,6 +29,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import java.awt.Desktop;
 import java.awt.desktop.OpenFilesEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -172,14 +174,17 @@ public class Gesticulate extends GuiceApplication {
         // open canvas from file if requested
         final Parameters parameters = getParameters();
         final List<String> args = parameters.getRaw();
-        final String file = !args.isEmpty() ? args.get(0) : "";
-        if (file.length() != 0) {
-            share.loadCanvas(file);
+        final List<File> files = new ArrayList<>();
+        for (String arg : args) {
+            files.add(new File(arg));
+        }
+        if (!files.isEmpty()) {
+            share.loadCanvas(files);
         }
         if (MAC_OS_X) {
             Desktop desktop = Desktop.getDesktop();
             desktop.setOpenFileHandler((OpenFilesEvent e) -> {
-                share.readCanvas(e.getFiles().get(0));
+                share.loadCanvas(e.getFiles());
             });
         }
     }

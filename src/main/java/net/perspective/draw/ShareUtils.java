@@ -128,6 +128,14 @@ public class ShareUtils {
      * Load images
      */
     public void readPictures() {
+        this.readPictures(this.chooseImages());
+    }
+
+    /**
+     * Load images from list of Files
+     */
+    public void readPictures(List<File> files) {
+        this.setImageFiles(files);
         if (this.getImageFiles() != null) {
             imageLoader = injector.getInstance(ImageLoadWorker.class);
             controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
@@ -188,11 +196,16 @@ public class ShareUtils {
     /**
      * Read the canvas file from location
      * 
-     * @param path the file location
+     * @param files a list of files
      */
-    public void loadCanvas(String path) {
-        final File file = new File(path);
-        this.readCanvas(file);
+    public void loadCanvas(List<File> files) {
+        File file = files.get(0);
+        if (FileUtils.getExtension(file).equals("gst")) {
+            view.clearView();
+            readCanvas(file);
+        } else {
+            readPictures(files);
+        }
     }
 
     /**
