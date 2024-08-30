@@ -326,7 +326,6 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleImgImportAction(ActionEvent e) {
-        share.setImageFiles(share.chooseImages());
         share.readPictures();
         menubutton.fire();
     }
