@@ -276,6 +276,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--linux-shortcut"/>
          <arg value="--file-associations" />
          <arg value="src/site/deploy/linux/bundle.properties" />
+         <arg value="--file-associations" />
+         <arg value="src/site/deploy/linux/jpeg.properties" />
+         <arg value="--file-associations" />
+         <arg value="src/site/deploy/linux/png.properties" />
+         <arg value="--file-associations" />
+         <arg value="src/site/deploy/linux/svg+xml.properties" />
          <arg value="--icon"/>
          <arg value="src/site/deploy/linux/${bundle.linux.icon}"/>
       </exec>
