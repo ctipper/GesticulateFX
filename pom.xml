@@ -16,9 +16,9 @@
     </organization>
 
     <properties>
-        <java.version>22</java.version>
+        <java.version>23</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>22.0.2</javafx.version>
+        <javafx.version>23.0.1</javafx.version>
         <slf4j.version>2.0.13</slf4j.version>
         <log4j.version>2.23.1</log4j.version>
         <batik.version>1.17</batik.version>
@@ -252,7 +252,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <release>${java.version}</release>
+                    <release>23</release>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <executable>${env.JAVA_HOME}/bin/javac</executable>
