@@ -2,6 +2,7 @@ target
 .classpath
 .project
 .settings/
+.vscode
 nbactions.xml
 nb-configuration.xml
 setpath

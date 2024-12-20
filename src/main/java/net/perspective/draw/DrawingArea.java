@@ -63,7 +63,8 @@ import static net.perspective.draw.CanvasTransferHandler.COPY;
 import static net.perspective.draw.CanvasTransferHandler.MOVE;
 
 /**
- * 
+ * DrawingArea
+ *
  * @author ctipper
  */
 
@@ -111,7 +112,7 @@ public class DrawingArea {
     java.util.List<String> strokeStrings = Arrays.asList("stroke1", "stroke2", "stroke3", "stroke4",
             "stroke5", "stroke6", "stroke7", "stroke8", "stroke9");
 
-    final static double pib12 = Math.PI / 12;
+    final static double PIB_12 = Math.PI / 12;
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
@@ -193,7 +194,7 @@ public class DrawingArea {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_BOLD);
             }
             view.moveSelection(view.getSelected());
-            });
+        });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
                 this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_ITALIC);
@@ -232,14 +233,14 @@ public class DrawingArea {
     /**
      * Set the canvas colour
      */
-    public void setTheme(){
+    public void setTheme() {
         canvas.setFill(Color.web(controller.getCanvasBackgroundColor()));
         view.moveSelection(view.getSelected());
     }
 
     /**
      * Get the theme fill colour
-     * 
+     *
      * @return web colour
      */
     public String getThemeFillColor() {
@@ -248,7 +249,7 @@ public class DrawingArea {
 
     /**
      * Get the theme background colour
-     * 
+     *
      * @return web colour
      */
     public String getThemeBackgroundColor() {
@@ -257,7 +258,7 @@ public class DrawingArea {
 
     /**
      * Get the theme accent colour
-     * 
+     *
      * @return web colour
      */
     public String getThemeAccentColor() {
@@ -266,7 +267,7 @@ public class DrawingArea {
 
     /**
      * Get the canvas background colour
-     * 
+     *
      * @return web colour
      */
     public String getCanvasBackgroundColor() {
@@ -275,7 +276,7 @@ public class DrawingArea {
 
     /**
      * Get the scene
-     * 
+     *
      * @return the {@link javafx.scene.SubScene}
      */
     public SubScene getScene() {
@@ -284,7 +285,7 @@ public class DrawingArea {
 
     /**
      * Get the canvas root
-     * 
+     *
      * @return the root node
      */
     public Group getCanvas() {
@@ -301,7 +302,7 @@ public class DrawingArea {
 
     /**
      * Set mouse and touch handlers
-     * 
+     *
      * @param handler the {@link net.perspective.draw.enums.HandlerType}
      */
     public void changeHandlers(HandlerType handler) {
@@ -355,7 +356,7 @@ public class DrawingArea {
 
     /**
      * Set keyboard handlers
-     * 
+     *
      * @param handler the {@link net.perspective.draw.enums.KeyHandlerType}
      */
     public void setKeyboardHandler(KeyHandlerType handler) {
@@ -369,7 +370,7 @@ public class DrawingArea {
 
     /**
      * Return the mouse handler type
-     * 
+     *
      * @return the {@link net.perspective.draw.enums.HandlerType}
      */
     public HandlerType getHandlerType() {
@@ -450,9 +451,9 @@ public class DrawingArea {
         menuTextCut.setOnAction((ActionEvent e) -> {
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                if (item instanceof Text) {
+                if (item instanceof Text text) {
                     view.cutTextItem();
-                    ((Text) item).setDimensions();
+                    text.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
@@ -462,9 +463,9 @@ public class DrawingArea {
         menuTextCopy.setOnAction((ActionEvent e) -> {
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                if (item instanceof Text) {
+                if (item instanceof Text text) {
                     view.copyTextItem();
-                    ((Text) item).setDimensions();
+                    text.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
@@ -472,13 +473,13 @@ public class DrawingArea {
         });
         MenuItem menuTextPaste = new MenuItem("Paste");
         menuTextPaste.setOnAction((ActionEvent e) -> {
-                DrawItem item = view.getDrawings().get(view.getSelected());
-                if (item instanceof Text) {
-                    view.pasteTextItem();
-                    ((Text) item).setDimensions();
-                    view.updateSelectedItem();
-                    view.moveSelection(view.getSelected());
-                }
+            DrawItem item = view.getDrawings().get(view.getSelected());
+            if (item instanceof Text text) {
+                view.pasteTextItem();
+                text.setDimensions();
+                view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
+            }
         });
         // contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
         SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
@@ -589,17 +590,17 @@ public class DrawingArea {
             }
         }
     }
- 
+
     /**
      * Initiate text edit mode
      */
     protected void editTextItem() {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());
-            if (item instanceof Text) {
+            if (item instanceof Text text) {
                 context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
-                context.edit(item, view.getSelected());
-                ((Text) item).setDimensions();
+                context.edit(text, view.getSelected());
+                text.setDimensions();
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
@@ -617,16 +618,17 @@ public class DrawingArea {
                 setArrow(ArrowType.BOTH);
             case "style9" -> // Arrow at both ends
                 setArrow(ArrowType.BOTH);
-            default -> resetArrow();
+            default ->
+                resetArrow();
         }
         setPlainStroke(new BasicStroke(strokeTypes.get(strokeId), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     }
 
     /**
      * Get the item text
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
-     * 
+     *
      * @return the {@link javafx.scene.text.TextFlow}
      */
     public TextFlow getTextLayout(DrawItem item) {
@@ -636,7 +638,7 @@ public class DrawingArea {
 
     /**
      * Up align shape to grid
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void snapUp(DrawItem item) {
@@ -647,7 +649,7 @@ public class DrawingArea {
 
     /**
      * Down align shape to grid
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void snapDown(DrawItem item) {
@@ -658,7 +660,7 @@ public class DrawingArea {
 
     /**
      * Left align shape to grid
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void snapLeft(DrawItem item) {
@@ -669,7 +671,7 @@ public class DrawingArea {
 
     /**
      * Right align shape to grid
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void snapRight(DrawItem item) {
@@ -680,7 +682,7 @@ public class DrawingArea {
 
     /**
      * Move shape and steer to grid increments
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      * @param xinc x increment
      * @param yinc y increment
@@ -707,43 +709,43 @@ public class DrawingArea {
 
     /**
      * Rotate anti-clockwise by 15°
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void rotateLeft(DrawItem item) {
         double angle = item.getAngle();
-        double theta = ((((int) (Math.signum(angle) * 0.5)) - 1) * pib12);
-        double zeta = (Math.round(angle / pib12) * pib12) + theta;
+        double theta = ((((int) (Math.signum(angle) * 0.5)) - 1) * PIB_12);
+        double zeta = (Math.round(angle / PIB_12) * PIB_12) + theta;
         this.rotateTo(item, zeta - angle);
     }
 
     /**
      * Rotate clockwise by 15°
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void rotateRight(DrawItem item) {
         double angle = item.getAngle();
-        double theta = ((((int) (Math.signum(angle) * 0.5)) + 1) * pib12);
-        double zeta = (Math.round(angle / pib12) * pib12) + theta;
+        double theta = ((((int) (Math.signum(angle) * 0.5)) + 1) * PIB_12);
+        double zeta = (Math.round(angle / PIB_12) * PIB_12) + theta;
         this.rotateTo(item, zeta - angle);
     }
 
     /**
      * Rotate a given item by a forced increment
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      * @param theta angle increment
      */
     public void rotateWithIncrements(DrawItem item, double theta) {
         double angle = item.getAngle();
         // actual incremental offset
-        double inc_th = Math.round(theta / pib12) * pib12;
+        double inc_th = Math.round(theta / PIB_12) * PIB_12;
         // corrected incremental offset
-        double zeta = angle - Math.round(angle / pib12) * pib12;
+        double zeta = angle - Math.round(angle / PIB_12) * PIB_12;
         this.rotateTo(item, inc_th - zeta);
     }
-    
+
     /**
      * Rotate given item by angle theta increment
      *
@@ -798,7 +800,7 @@ public class DrawingArea {
 
     /**
      * Set the drawing mode
-     * 
+     *
      * @param type the {@link net.perspective.draw.enums.DrawingType}
      */
     public void setDrawType(DrawingType type) {
@@ -806,9 +808,9 @@ public class DrawingArea {
     }
 
     /**
-     * Return the canvas drawing type and also allows a 
-     * correction if isometric drawing is enabled
-     * 
+     * Return the canvas drawing type and also allows a correction if isometric
+     * drawing is enabled
+     *
      * @return optional of {@link net.perspective.draw.enums.DrawingType}
      */
     public Optional<DrawingType> getDrawType() {
@@ -821,17 +823,22 @@ public class DrawingArea {
             switch (type) {
                 case CIRCLE -> {
                 }
-                case ELLIPSE -> type = DrawingType.CIRCLE;
+                case ELLIPSE ->
+                    type = DrawingType.CIRCLE;
                 case SQUARE -> {
                 }
-                case RECTANGLE -> type = DrawingType.SQUARE;
+                case RECTANGLE ->
+                    type = DrawingType.SQUARE;
                 case TRIANGLE -> {
                 }
-                case ISOSCELES -> type = DrawingType.TRIANGLE;
-                case HEXAGON -> type = DrawingType.ISOHEX;
+                case ISOSCELES ->
+                    type = DrawingType.TRIANGLE;
+                case HEXAGON ->
+                    type = DrawingType.ISOHEX;
                 case ISOHEX -> {
                 }
-                case PENTAGRAM -> type = DrawingType.ISOGRAM;
+                case PENTAGRAM ->
+                    type = DrawingType.ISOGRAM;
                 case ISOGRAM -> {
                 }
                 default -> {
@@ -843,18 +850,19 @@ public class DrawingArea {
 
     /**
      * Set the stroke type
-     * 
+     *
      * @param stroke the {@link java.awt.Stroke}
      */
     public void setStroke(java.awt.Stroke stroke) {
         this.stroke = stroke;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
 
     /**
      * Get the stroke type
-     * 
+     *
      * @return the {@link java.awt.Stroke}
      */
     public java.awt.Stroke getStroke() {
@@ -862,20 +870,20 @@ public class DrawingArea {
     }
 
     /**
-     * Set the basic stroke type
-     * This is used when drawing, usually un-tinted
-     * 
+     * Set the basic stroke type This is used when drawing, usually un-tinted
+     *
      * @param stroke the {@link java.awt.Stroke}
      */
     public void setPlainStroke(java.awt.Stroke stroke) {
         this.plainstroke = stroke;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
 
     /**
      * Get the basic stroke type
-     * 
+     *
      * @return the {@link java.awt.Stroke}
      */
     public java.awt.Stroke getPlainStroke() {
@@ -884,18 +892,19 @@ public class DrawingArea {
 
     /**
      * Set the stroke colour
-     * 
+     *
      * @param color the {@link javafx.scene.paint.Color}
      */
     public void setColor(Color color) {
         this.color = color;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
 
     /**
      * Get the stroke colour
-     * 
+     *
      * @return the {@link javafx.scene.paint.Color}
      */
     public Color getColor() {
@@ -904,18 +913,19 @@ public class DrawingArea {
 
     /**
      * Set the fill colour
-     * 
+     *
      * @param fillcolor the {@link javafx.scene.paint.Color}
      */
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
 
     /**
      * Get the fill colour
-     * 
+     *
      * @return the {@link javafx.scene.paint.Color}
      */
     public Color getFillColor() {
@@ -924,18 +934,19 @@ public class DrawingArea {
 
     /**
      * Set transparency 0-100
-     * 
+     *
      * @param transparency transparency 0 (clear) - 100 (opaque)
      */
     public void setTransparency(int transparency) {
         this.transparency = transparency;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
 
     /**
      * Get the transparency
-     * 
+     *
      * @return transparency 0 (clear) - 100 (opaque)
      */
     public int getTransparency() {
@@ -944,7 +955,7 @@ public class DrawingArea {
 
     /**
      * Set the text font
-     * 
+     *
      * @param fontfamily
      */
     public void setFontFamily(String fontfamily) {
@@ -956,7 +967,7 @@ public class DrawingArea {
 
     /**
      * Get the text font
-     * 
+     *
      * @return font family
      */
     public String getFontFamily() {
@@ -965,7 +976,7 @@ public class DrawingArea {
 
     /**
      * Update the font style
-     * 
+     *
      * @param fontstyle font style Id
      */
     public void updateFontStyle(int fontstyle) {
@@ -977,7 +988,7 @@ public class DrawingArea {
 
     /**
      * Set the font style
-     * 
+     *
      * @param fontstyle font style Id
      */
     public void setFontStyle(int fontstyle) {
@@ -986,7 +997,7 @@ public class DrawingArea {
 
     /**
      * Get the font style
-     * 
+     *
      * @return font style Id
      */
     public int getFontStyle() {
@@ -995,7 +1006,7 @@ public class DrawingArea {
 
     /**
      * Set the font size
-     * 
+     *
      * @param fontsize font size
      */
     public void setFontSize(int fontsize) {
@@ -1007,7 +1018,7 @@ public class DrawingArea {
 
     /**
      * Get the font size
-     * 
+     *
      * @return font size
      */
     public int getFontSize() {
@@ -1016,18 +1027,19 @@ public class DrawingArea {
 
     /**
      * Set the arrow type
-     * 
+     *
      * @param arrowtype the {@link net.perspective.draw.geom.ArrowType}
      */
     public void setArrow(ArrowType arrowtype) {
         this.arrowtype = arrowtype;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
-    
+
     /**
      * Get the arrow type
-     * 
+     *
      * @return the {@link net.perspective.draw.geom.ArrowType}
      */
     public ArrowType getArrow() {
@@ -1039,13 +1051,14 @@ public class DrawingArea {
      */
     public void resetArrow() {
         arrowtype = ArrowType.NONE;
-        if (controller.getDropperDisabled())
+        if (controller.getDropperDisabled()) {
             view.updateSelectedItem();
+        }
     }
 
     /**
      * Show drawing grid
-     * 
+     *
      * @param gridVisible is grid visible
      */
     public void setGrid(boolean gridVisible) {
@@ -1054,7 +1067,7 @@ public class DrawingArea {
 
     /**
      * Grid is visible
-     * 
+     *
      * @return is grid visible
      */
     public boolean isGridVisible() {
@@ -1063,7 +1076,7 @@ public class DrawingArea {
 
     /**
      * Enable snap to guides
-     * 
+     *
      * @param gridVisible is grid active
      */
     public void setSnapTo(boolean gridVisible) {
@@ -1094,7 +1107,7 @@ public class DrawingArea {
 
     /**
      * Add a guide to canvas
-     * 
+     *
      * @param xy false is x true is y
      * @param p an xy value
      */
@@ -1130,7 +1143,7 @@ public class DrawingArea {
 
     /**
      * Get the guides
-     * 
+     *
      * @return a {@link net.perspective.draw.geom.Grouped}
      */
     public Grouped getGuides() {
@@ -1146,7 +1159,7 @@ public class DrawingArea {
 
     /**
      * Set dark mode enabled
-     * 
+     *
      * @param darkModeEnabled dark theme
      */
     public void setDarkModeEnabled(boolean darkModeEnabled) {
@@ -1155,7 +1168,7 @@ public class DrawingArea {
 
     /**
      * Is dark mode enabled
-     * 
+     *
      * @return dark theme
      */
     public boolean isDarkModeEnabled() {
@@ -1164,8 +1177,8 @@ public class DrawingArea {
 
     /**
      * Activate alignment guides
-     * 
-     * @param isGuideEnabled 
+     *
+     * @param isGuideEnabled
      */
     public void setGuideEnabled(boolean isGuideEnabled) {
         this.isGuideEnabled = isGuideEnabled;
@@ -1173,7 +1186,7 @@ public class DrawingArea {
 
     /**
      * Alignment guides are enabled
-     * 
+     *
      * @return isGuideEnabled guides are activated
      */
     public boolean isGuideEnabled() {
@@ -1182,7 +1195,7 @@ public class DrawingArea {
 
     /**
      * Define the drawing loup
-     * 
+     *
      * @param marquee the loup
      */
     public void setMarquee(DrawItem marquee) {
@@ -1191,7 +1204,7 @@ public class DrawingArea {
 
     /**
      * Get the drawing loup
-     * 
+     *
      * @return the loup
      */
     public DrawItem getMarquee() {
@@ -1200,7 +1213,7 @@ public class DrawingArea {
 
     /**
      * Set rotation mode
-     * 
+     *
      * @param rotationMode is rotating
      */
     public void setRotationMode(boolean rotationMode) {
@@ -1209,7 +1222,7 @@ public class DrawingArea {
 
     /**
      * Is rotation mode enabled
-     * 
+     *
      * @return is rotating
      */
     public boolean isRotationMode() {
@@ -1218,7 +1231,7 @@ public class DrawingArea {
 
     /**
      * Set multiple selection mode
-     * 
+     *
      * @param multiSelectEnabled is multi-select
      */
     public void setMultiSelectEnabled(boolean multiSelectEnabled) {
@@ -1227,7 +1240,7 @@ public class DrawingArea {
 
     /**
      * Get multiple selection mode
-     * 
+     *
      * @return is multi-select
      */
     public boolean isMultiSelectEnabled() {

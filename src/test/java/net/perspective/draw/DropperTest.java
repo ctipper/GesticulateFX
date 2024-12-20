@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
+ * DropperTest
  *
  * @author ctipper
  */

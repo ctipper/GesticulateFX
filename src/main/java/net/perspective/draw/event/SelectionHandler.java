@@ -51,6 +51,7 @@ import net.perspective.draw.geom.Text;
 import net.perspective.draw.util.CanvasPoint;
 
 /**
+ * Handles selection of items on the canvas
  * 
  * @author ctipper
  */
@@ -264,7 +265,6 @@ public class SelectionHandler implements Handler {
                             added = true;
                         }
                     }
-                    int i = 0;
                     for (var coord : coordsY) {
                         if (miny.intValue() == coord.intValue()) {
                             drawarea.addGuide(true, miny);

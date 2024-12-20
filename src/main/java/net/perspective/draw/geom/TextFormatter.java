@@ -158,7 +158,7 @@ public class TextFormatter {
         return content;
     }
 
-    private String getFlattenedText(List fragment) {
+    private String getFlattenedText(List<Content> fragment) {
         String cdata = "";
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
@@ -341,7 +341,7 @@ public class TextFormatter {
         return as;
     }
 
-    private int getLocalOffset(List fragment) {
+    private int getLocalOffset(List<Content> fragment) {
         // Calculate length of Element text
         int localoffset = 0;
         Iterator iterator = fragment.iterator();
