@@ -190,7 +190,7 @@ public class StreetMap extends Picture {
      * @return a zoom level
      */
     public double getMapZoom() {
-        return mv.getMapZoom();
+        return mv.getMapZoom().get();
     }
 
     /**
@@ -303,7 +303,7 @@ public class StreetMap extends Picture {
         MapPoint mp = mv.getMapPosition(centre.x, centre.y);
         setLatitude(mp.getLatitude());
         setLongitude(mp.getLongitude());
-        setZoom(Long.valueOf(Math.round(mv.getMapZoom())).intValue());
+        setZoom(Long.valueOf(Math.round(mv.getMapZoom().get())).intValue());
         logger.trace("Lat {} Long {}, Zoom {}", getLatitude(), getLongitude(), getZoom());
     }
 
