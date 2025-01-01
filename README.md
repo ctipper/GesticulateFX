@@ -6,5 +6,5 @@ It supports vector shapes, curve-fitted lines, images may be pasted or imported 
 
 To build `JAVAFX_HOME` environment variable needs to be set and uses the latest JDK release. Platform builds are in the site directory using `ant` script. This assumes that JDK is in `~/Applications` folder.
 
-Copyright © 2024 Christopher Tipper
+![GesticulateFX, sketch freehand diagrams using JavaFX](https://www.e-conomist.me.uk/images/144dpi/gesticulate-fx-15.png)
 
