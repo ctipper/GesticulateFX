@@ -156,7 +156,7 @@ public class CanvasTransferHandler {
 
     private DrawItem checkDrawings(DrawItem drawing) {
         if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
-            DrawItem item = injector.getInstance(Picture.class);
+            var item = injector.getInstance(Picture.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
                 return item;
@@ -177,9 +177,9 @@ public class CanvasTransferHandler {
         }
         
         if (drawing instanceof Grouped grouped) {
-            DrawItem item = new Grouped();
+            var item = injector.getInstance(Grouped.class);
             for (DrawItem shape : grouped.getShapes()) {
-                ((Grouped) item).addShape(checkDrawings(shape));
+                item.addShape(checkDrawings(shape));
             }
             return item;
         }
