@@ -134,7 +134,7 @@ public class SelectionHandler implements Handler {
                                 break;
                             }
                         }
-                    } else if (item.contains(listener.getStartX(), listener.getStartY())) {
+                    } else if (item != null && item.contains(listener.getStartX(), listener.getStartY())) {
                         // Rest of Shapes
                         view.setSelected(i);
                         context.setContainment(ContainsType.SHAPE);
@@ -148,8 +148,11 @@ public class SelectionHandler implements Handler {
             }
         }
         if (view.getSelected() != -1 && listener.isSnapEnabled()) {
-            CanvasPoint start = drawings.get(view.getSelected()).getStart();
-            context.setOmega(start.getX(), start.getY());
+            DrawItem selectedItem = drawings.get(view.getSelected());
+            if (selectedItem != null) {
+                CanvasPoint start = selectedItem.getStart();
+                context.setOmega(start.getX(), start.getY());
+            }
         }
         /**
          * setup data structures for guides
@@ -160,10 +163,12 @@ public class SelectionHandler implements Handler {
             midX = new ArrayList<>();
             midY = new ArrayList<>();
             DrawItem item = drawings.get(view.getSelected());
-            for (var drawing : drawings) {
-                if (drawings.indexOf(drawing) != view.getSelected()) {
-                    if (!item.bounds().intersects(drawing.bounds().getBounds2D())) {
-                        computeCoords(drawing);
+            if (item != null) {
+                for (var drawing : drawings) {
+                    if (drawings.indexOf(drawing) != view.getSelected()) {
+                        if (!item.bounds().intersects(drawing.bounds().getBounds2D())) {
+                            computeCoords(drawing);
+                        }
                     }
                 }
             }
@@ -229,6 +234,10 @@ public class SelectionHandler implements Handler {
 
             for (Integer selection : view.getMultiSelection()) {
                 DrawItem item = view.getDrawings().get(selection);
+
+                if (item == null) {
+                    continue; // Skip null items
+                }
 
                 if (listener.isSnapEnabled()) {
                     context.setOmega(context.getOmega().getX() + xinc, context.getOmega().getY() + yinc);

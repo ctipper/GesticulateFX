@@ -149,7 +149,7 @@ public class CanvasView {
                     if (change.wasRemoved()) {
                         int i = 0;
                         List<Node> deleted = new ArrayList<>();
-                        for (DrawItem removal : change.getRemoved()) {
+                        for (int j = 0; j < change.getRemovedSize(); j++) {
                             // remove item
                             deleted.add(nodes.get(change.getFrom() + i + g));
                             i++;
@@ -256,20 +256,25 @@ public class CanvasView {
             DrawItem item = drawings.get(this.getSelected());
             item.updateProperties(drawarea);
 
-            if ((item instanceof Figure) && !(item instanceof ArrowLine)) {
-                FigureType type = ((Figure) item).getType();
-                if (drawarea.getArrow() != ArrowType.NONE) {
-                    if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
-                        item = new ArrowLine((Figure) item);
+            switch (item) {
+                case Figure figure when !(figure instanceof ArrowLine) -> {
+                    FigureType type = figure.getType();
+                    if (drawarea.getArrow() != ArrowType.NONE) {
+                        if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
+                            item = new ArrowLine(figure);
+                            item.updateProperties(drawarea);
+                        }
+                    }
+                }
+                case ArrowLine arrowLine -> {
+                    if (drawarea.getArrow() == ArrowType.NONE) {
+                        item = arrowLine.getLine();
+                        item.updateProperties(drawarea);
+                    } else {
                         item.updateProperties(drawarea);
                     }
                 }
-            } else if (item instanceof ArrowLine arrowLine) {
-                if (drawarea.getArrow() == ArrowType.NONE) {
-                    item = arrowLine.getLine();
-                    item.updateProperties(drawarea);
-                } else {
-                    item.updateProperties(drawarea);
+                default -> {
                 }
             }
 
@@ -279,10 +284,11 @@ public class CanvasView {
              * Select item properties and update UI
              */
             DrawItem item = drawings.get(this.getSelected());
-            if (item instanceof Figure figure) {
-                this.figureDropper(figure);
-            } else if (item instanceof Text text) {
-                this.textDropper(text);
+            switch (item) {
+                case Figure figure -> this.figureDropper(figure);
+                case Text text -> this.textDropper(text);
+                default -> {
+                }
             }
         }
     }
