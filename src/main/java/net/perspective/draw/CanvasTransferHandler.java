@@ -159,18 +159,18 @@ public class CanvasTransferHandler {
             DrawItem item = injector.getInstance(Picture.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
-                drawing = item;
+                return item;
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
-        } else if (drawing instanceof StreetMap streetMap) {
-            DrawItem item = injector.getInstance(StreetMap.class);
+        } else if (drawing instanceof StreetMap streetmap) {
+            var item = injector.getInstance(StreetMap.class);
             try {
-                BeanUtils.copyProperties(item, drawing);
-                ((StreetMap) item).init();
-                ((StreetMap) item).filterHandlers();
-                drawing = item;
-                drawing = mapper.copyMap(streetMap);
+                BeanUtils.copyProperties(item, streetmap);
+                item.init();
+                item.filterHandlers();
+                mapper.copyMap(item);
+                return item;
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
@@ -181,7 +181,7 @@ public class CanvasTransferHandler {
             for (DrawItem shape : grouped.getShapes()) {
                 ((Grouped) item).addShape(checkDrawings(shape));
             }
-            drawing = item;
+            return item;
         }
 
         return drawing;
