@@ -26,6 +26,8 @@ package net.perspective.draw.event;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
@@ -53,6 +55,7 @@ public class RotationHandler implements Handler {
     @Inject private CanvasView view;
     @Inject private DrawAreaListener listener;
     private double omega;
+    private final Map<CanvasPoint, Area> regionCache = new HashMap<>();
 
     /**
      * Creates a new instance of <code>RotationHandler</code> 
@@ -199,9 +202,10 @@ public class RotationHandler implements Handler {
      * @return area
      */
     protected Area getRegion(CanvasPoint p) {
-        Rectangle2D rect;
-        rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
-        return new Area(rect);
+        return regionCache.computeIfAbsent(p, key -> {
+            Rectangle2D rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
+            return new Area(rect);
+        });
     }
 
 }

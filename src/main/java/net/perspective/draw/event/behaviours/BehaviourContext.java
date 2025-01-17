@@ -224,8 +224,7 @@ public class BehaviourContext {
      * @return area
      */
     public Area getRegion(CanvasPoint p) {
-        Rectangle2D rect;
-        rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
+        Rectangle2D rect = new Rectangle2D.Double(p.x - 10.0, p.y - 10.0, 20.0, 20.0);
         return new Area(rect);
     }
 
