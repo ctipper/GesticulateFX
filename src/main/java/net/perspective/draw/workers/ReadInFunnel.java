@@ -96,17 +96,15 @@ public class ReadInFunnel extends Task<Object> {
         Platform.runLater(() -> {
             if (success) {
                 drawarea.prepareDrawing();
-                for (ImageItem picture : pictures) {
-                    int index = view.setImageItem(picture);
-                }
-                try {
-                    for (DrawItem drawing : drawings) {
-                        drawing = checkDrawings(drawing);
-                        view.setNewItem(drawing);
-                        view.resetNewItem();
+                for (DrawItem drawitem : drawings) {
+                    if (drawitem instanceof Picture picture) {
+                        var i = picture.getImageIndex();
+                        var j = view.setImageItem(pictures.get(i));
+                        picture.setImageIndex(j);
                     }
-                } catch (ClassCastException e) {
-                    logger.warn(e.getMessage());
+                    drawitem = checkDrawings(drawitem);
+                    view.setNewItem(drawitem);
+                    view.resetNewItem();
                 }
             }
         });
