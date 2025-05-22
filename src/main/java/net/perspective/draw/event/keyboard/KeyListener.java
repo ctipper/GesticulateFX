@@ -57,11 +57,6 @@ public class KeyListener {
 
     public void setEventHandler(KeyHandler handler) {
         this.handler = handler;
-        if (handler instanceof TextKeyHandler textHandler) {
-            drawarea.getCanvas().setOnInputMethodTextChanged(textHandler::handleInputMethodEvent);
-        } else {
-            drawarea.getCanvas().setOnInputMethodTextChanged(null);
-        }
     }
 
     public void initializeHandlers(Scene scene) {
