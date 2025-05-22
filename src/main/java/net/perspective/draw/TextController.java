@@ -112,7 +112,6 @@ public class TextController {
         item.setDimensions();
         TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
         item.tf.setOnInputMethodTextChanged(textKeyHandler::handleInputMethodEvent);
-
     }
 
     /**
