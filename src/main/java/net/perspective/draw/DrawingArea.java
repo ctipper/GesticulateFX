@@ -237,9 +237,6 @@ public class DrawingArea {
         transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
-        if (getCanvas().getInputMethodRequests() == null) {
-            getCanvas().setInputMethodRequests(getInputMethodRequests());
-        }
     }
 
     /**
@@ -609,6 +606,12 @@ public class DrawingArea {
             if (item instanceof Text text) {
                 context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                 context.edit(text, view.getSelected());
+<<<<<<< HEAD
+=======
+                text.setDimensions();
+                TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+                text.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, this.getInputMethodRequests());
+>>>>>>> 3e8ed57 (attach IME handlers to text flow node)
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
