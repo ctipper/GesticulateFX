@@ -25,6 +25,7 @@ package net.perspective.draw.event.keyboard;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.InputMethodTextRun;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
@@ -40,6 +41,7 @@ import net.perspective.draw.text.Editor;
  *
  * @author ctipper
  */
+@Singleton
 public class TextKeyHandler implements KeyHandler {
 
     @Inject DrawingArea drawarea;
@@ -297,9 +299,9 @@ public class TextKeyHandler implements KeyHandler {
         }
     }
 
-     /**
+    /**
      * Handles an input method event.
-     * 
+     *
      * @param event the {@code InputMethodEvent} to be handled
      */
     public void handleInputMethodEvent(InputMethodEvent event) {
