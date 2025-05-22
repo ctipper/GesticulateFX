@@ -26,6 +26,7 @@ package net.perspective.draw;
 import com.google.inject.Injector;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.event.keyboard.TextKeyHandler;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.text.Editor;
 
@@ -89,6 +90,8 @@ public class TextController {
         editor.setCaretStart(0);
         editor.setCaretEnd(editor.readPlainText().length());
         item.setDimensions();
+        TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+        item.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, drawarea.getInputMethodRequests());
         return item;
     }
 
@@ -107,6 +110,8 @@ public class TextController {
         editor.setCaretStart(start);
         editor.setCaretEnd(start);
         item.setDimensions();
+        TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+        item.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, drawarea.getInputMethodRequests());
     }
 
     /**
@@ -123,6 +128,8 @@ public class TextController {
         editor.setCaretStart(0);
         editor.setCaretEnd(editor.readPlainText().length());
         item.setDimensions();
+        TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+        item.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, drawarea.getInputMethodRequests());
     }
 
     /**

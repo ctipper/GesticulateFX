@@ -40,8 +40,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.InputMethodRequests;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -270,9 +273,9 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the {@link javafx.scene.text.TextFlow}
      */
+    javafx.scene.text.TextFlow tf;
     @Transient
     public javafx.scene.text.TextFlow getLayout() {
-        javafx.scene.text.TextFlow tf;
         // Verify that this is Rich Text
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(text);
@@ -286,6 +289,11 @@ public class Text implements DrawItem, Serializable {
         }
         tf.autosize();
         return tf;
+    }
+
+    public void attachInputMethodHandler(EventHandler<? super InputMethodEvent> handler, InputMethodRequests requests) {
+        tf.setOnInputMethodTextChanged(handler);
+        tf.setInputMethodRequests(requests);
     }
 
     /**
@@ -429,7 +437,7 @@ public class Text implements DrawItem, Serializable {
      */
     @Override
     public Node draw() {
-        javafx.scene.text.TextFlow layout = getLayout();
+        javafx.scene.text.TextFlow layout = tf;
         CanvasPoint axis = this.rotationCentre();
         layout.setLayoutX(axis.x);
         layout.setLayoutY(axis.y);

@@ -235,9 +235,6 @@ public class DrawingArea {
         transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
         view.clearView();
         this.clear();
-        if (getCanvas().getInputMethodRequests() == null) {
-            getCanvas().setInputMethodRequests(getInputMethodRequests());
-        }
     }
 
     /**
@@ -608,6 +605,8 @@ public class DrawingArea {
                 context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                 context.edit(text, view.getSelected());
                 text.setDimensions();
+                TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+                text.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, this.getInputMethodRequests());
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
@@ -1274,15 +1273,18 @@ public class DrawingArea {
             if (window == null) {
                 return location;
             }
+
             if (view.isEditing() && view.getDrawings().get(view.getSelected()) instanceof Text item) {
-                // windows position
-                location = new Point2D(window.getX() + scene.getX(), window.getY() + scene.getY());
-                // compute position of Text item
-                Point2D offset = new Point2D((int) item.getStart().getX(), (int) (item.getStart().getY() + item.getEnd().getY()));
-                location.add(offset);
-                // a very basic estimate of character offset based on font size
-                Point2D position = new Point2D((int) textController.getEditor().getCaretStart() * item.getSize() / 2, 0);
-                location.add(position);
+                // Get the text layout node (TextFlow or equivalent)
+                javafx.scene.Node textLayoutNode = item.getLayout();
+
+                // Convert the local coordinates (caret position) in the layout node to scene coordinates.
+                Point2D caretScenePosition = textLayoutNode.localToScene(textController.getEditor().getCaretStart() * item.getSize() / 2, 0);
+
+                // Add window offset:
+                location = new Point2D(window.getX() + scene.getX() + caretScenePosition.getX(), window.getY() + scene.getY() + caretScenePosition.getY());
+
+                return location;
             }
             return location;
         }
