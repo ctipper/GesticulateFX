@@ -40,8 +40,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.InputMethodRequests;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -272,6 +275,7 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the {@link javafx.scene.text.TextFlow}
      */
+    javafx.scene.text.TextFlow tf;
     @Transient
     public javafx.scene.text.TextFlow getLayout() {
         // Verify that this is Rich Text
@@ -286,6 +290,11 @@ public class Text implements DrawItem, Serializable {
             tf = new javafx.scene.text.TextFlow(tt);
         }
         return tf;
+    }
+
+    public void attachInputMethodHandler(EventHandler<? super InputMethodEvent> handler, InputMethodRequests requests) {
+        tf.setOnInputMethodTextChanged(handler);
+        tf.setInputMethodRequests(requests);
     }
 
     /**

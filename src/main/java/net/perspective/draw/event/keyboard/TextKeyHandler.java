@@ -299,9 +299,9 @@ public class TextKeyHandler implements KeyHandler {
         }
     }
 
-     /**
+    /**
      * Handles an input method event.
-     * 
+     *
      * @param event the {@code InputMethodEvent} to be handled
      */
     public void handleInputMethodEvent(InputMethodEvent event) {
