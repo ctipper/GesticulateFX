@@ -23,9 +23,10 @@
  */
 package net.perspective.draw.event;
 
-import com.google.inject.Injector;
-import javafx.scene.Cursor;
 import javax.inject.Inject;
+import com.google.inject.Injector;
+import javafx.application.Platform;
+import javafx.scene.Cursor;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
@@ -34,6 +35,8 @@ import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.TextItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -48,6 +51,8 @@ public class TextHandler implements Handler {
     @Inject private DrawAreaListener listener;
     @Inject private BehaviourContext context;
     @Inject private TextController textController;
+
+    private static final Logger logger = LoggerFactory.getLogger(TextHandler.class);
 
     /**
      * Creates a new instance of <code>TextHandler</code> 
@@ -79,12 +84,31 @@ public class TextHandler implements Handler {
             Text item = new Text(listener.getTempX(), listener.getTempY());
             item = textController.initializeItem(item);
             item.updateProperties(drawarea);
+            final javafx.scene.text.TextFlow flow = item.tf;
+            flow.setFocusTraversable(true);
+            flow.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null) {
+                    Platform.runLater(() -> {
+                        if (flow.getScene() != null && flow.getScene().getWindow() != null && flow.getScene().getWindow().isShowing()) {
+                            flow.requestFocus();
+                        }
+                    });
+                }
+            });
             view.setNewItem(item);
             view.resetNewItem();
             int i = view.getDrawings().size() - 1;
             view.setSelected(i);
             view.setEditing(KeyHandlerType.TEXT);
             view.setTextHighlight(i);
+            Platform.runLater(() -> {
+                logger.debug("TextFlow in draw() focused: {}", flow.isFocused());
+                if (flow.getScene() != null) {
+                    logger.debug("Scene focus owner: {}", flow.getScene().getFocusOwner());
+                } else {
+                    logger.debug("TextFlow in draw() is not in a scene yet.");
+                }
+            });
         } else if (view.getSelected() != -1) {
             view.updateSelectedItem();
             view.moveSelection(view.getSelected());
