@@ -640,7 +640,7 @@ public class DrawingArea {
      * @return the {@link javafx.scene.text.TextFlow}
      */
     public TextFlow getTextLayout(DrawItem item) {
-        TextFlow layout = ((Text) item).getLayout();
+        TextFlow layout = ((Text) item).tf;
         return layout;
     }
 
