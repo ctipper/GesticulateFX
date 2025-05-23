@@ -37,7 +37,6 @@ import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import net.perspective.draw.event.keyboard.TextKeyHandler;
 
 /**
@@ -104,6 +103,7 @@ public class TextHandler implements Handler {
             view.setEditing(KeyHandlerType.TEXT);
             view.setTextHighlight(i);
             Platform.runLater(() -> {
+                logger.debug("TextFlow in draw() focused: {}", flow.isFocused());
                 if (flow.getScene() != null) {
                     logger.debug("Scene focus owner: {}", flow.getScene().getFocusOwner());
                 } else {
