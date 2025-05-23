@@ -55,6 +55,8 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.geom.Edge;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import net.perspective.draw.enums.*;
@@ -606,12 +608,9 @@ public class DrawingArea {
             if (item instanceof Text text) {
                 context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                 context.edit(text, view.getSelected());
-<<<<<<< HEAD
-=======
                 text.setDimensions();
                 TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
                 text.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, this.getInputMethodRequests());
->>>>>>> 3e8ed57 (attach IME handlers to text flow node)
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
