@@ -268,12 +268,12 @@ public class Text implements DrawItem, Serializable {
             (double) layout.getLayoutBounds().getHeight());
     }
 
+    public javafx.scene.text.TextFlow tf;
     /**
      * Return a layout used to calculate item properties
      * 
      * @return the {@link javafx.scene.text.TextFlow}
      */
-    javafx.scene.text.TextFlow tf;
     @Transient
     public javafx.scene.text.TextFlow getLayout() {
         // Verify that this is Rich Text
@@ -442,7 +442,6 @@ public class Text implements DrawItem, Serializable {
         layout.setLayoutX(axis.x);
         layout.setLayoutY(axis.y);
         layout.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, 0, 0));
-        layout.setMouseTransparent(true);
         return layout;
     }
 
