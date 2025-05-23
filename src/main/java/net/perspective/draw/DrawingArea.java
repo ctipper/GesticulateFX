@@ -52,9 +52,11 @@ import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
+import javafx.scene.shape.Path;
 import javafx.stage.Window;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javafx.scene.shape.PathElement;
 import net.perspective.draw.enums.*;
 import net.perspective.draw.event.*;
 import net.perspective.draw.event.behaviours.*;
@@ -1267,30 +1269,91 @@ public class DrawingArea {
 
         @Override
         public Point2D getTextLocation(int i) {
-            Point2D location = new Point2D(0, 0);
             Scene scene = app.getStage().getScene();
             Window window = scene != null ? scene.getWindow() : null;
             if (window == null) {
-                return location;
+                return new Point2D(0, 0);
             }
 
-            if (view.isEditing() && view.getDrawings().get(view.getSelected()) instanceof Text item) {
-                // Get the text layout node (TextFlow or equivalent)
-                javafx.scene.Node textLayoutNode = item.getLayout();
+            if (view.isEditing() && view.getSelected() != -1 &&
+                view.getDrawings().get(view.getSelected()) instanceof net.perspective.draw.geom.Text textItem) {
 
-                // Convert the local coordinates (caret position) in the layout node to scene coordinates.
-                Point2D caretScenePosition = textLayoutNode.localToScene(textController.getEditor().getCaretStart() * item.getSize() / 2, 0);
+                javafx.scene.text.TextFlow textFlow = textItem.tf;
 
-                // Add window offset:
-                location = new Point2D(window.getX() + scene.getX() + caretScenePosition.getX(), window.getY() + scene.getY() + caretScenePosition.getY());
+                if (textFlow == null || textFlow.getScene() == null) {
+                    // Fallback if tf is not ready or not in scene
+                    return new Point2D(window.getX() + scene.getX(), window.getY() + scene.getY());
+                }
 
-                return location;
+                // Use the 'i' (offset) parameter to get the location of the character at that offset.
+                PathElement[] caretPathElements = textFlow.caretShape(i, true); // true for leading edge
+                if (caretPathElements == null || caretPathElements.length == 0) {
+                     // Fallback if caretShape is null (e.g. offset out of bounds or empty text)
+                    javafx.geometry.Bounds textFlowBoundsInScene = textFlow.localToScene(textFlow.getLayoutBounds());
+                     if (textFlowBoundsInScene == null) return new Point2D(window.getX() + scene.getX(), window.getY() + scene.getY());
+                     return new Point2D(window.getX() + scene.getX() + textFlowBoundsInScene.getMinX(),
+                                       window.getY() + scene.getY() + textFlowBoundsInScene.getMinY() + textItem.getSize()); // Approx Y
+                }
+                
+                // Create a temporary Path from the elements to get its layout bounds.
+                // These bounds are in the TextFlow's local coordinate system because caretShape() provides them as such.
+                Path tempCaretPath = new Path(caretPathElements);
+                javafx.geometry.Bounds caretBounds = tempCaretPath.getLayoutBounds();
+                Point2D caretLocalPosition = new Point2D(caretBounds.getMinX(), caretBounds.getMinY());
+
+                Point2D caretScenePosition = textFlow.localToScene(caretLocalPosition);
+                if (caretScenePosition == null) {
+                    // Fallback if localToScene fails
+                    javafx.geometry.Bounds fb = textFlow.localToScene(textFlow.getLayoutBounds());
+                    if (fb == null) return new Point2D(window.getX() + scene.getX(), window.getY() + scene.getY());
+                    return new Point2D(window.getX() + scene.getX() + fb.getMinX(), window.getY() + scene.getY() + fb.getMinY() + textItem.getSize());
+                }
+
+                return new Point2D(window.getX() + scene.getX() + caretScenePosition.getX(),
+                                   window.getY() + scene.getY() + caretScenePosition.getY());
             }
-            return location;
+            return new Point2D(window.getX() + scene.getX(), window.getY() + scene.getY()); // Default if not editing Text
         }
 
         @Override
-        public int getLocationOffset(int i, int i1) {
+        public int getLocationOffset(int x, int y) { // x, y are SCREEN coordinates
+            if (view.isEditing() && view.getSelected() != -1 &&
+                view.getDrawings().get(view.getSelected()) instanceof net.perspective.draw.geom.Text textItem) {
+
+                javafx.scene.text.TextFlow textFlow = textItem.tf; // Use the instance from Text.java
+
+                if (textFlow == null || textFlow.getScene() == null) {
+                    return 0;
+                }
+
+                Scene scene = app.getStage().getScene();
+                Window window = scene != null ? scene.getWindow() : null;
+                if (window == null) {
+                    return 0;
+                }
+
+                // Convert screen coordinates to TextFlow's local coordinates
+                Point2D sceneCoords = new Point2D(x - window.getX() - scene.getX(), y - window.getY() - scene.getY());
+                Point2D localCoords = textFlow.sceneToLocal(sceneCoords);
+
+                if (localCoords == null) return 0;
+
+                // For TextFlow, hit-testing is complex. If it mostly contains a single Text node:
+                if (!textFlow.getChildren().isEmpty() && textFlow.getChildren().get(0) instanceof javafx.scene.text.Text) {
+                    javafx.scene.text.Text textNode = (javafx.scene.text.Text) textFlow.getChildren().get(0);
+                    Point2D textNodeLocalCoords = textNode.parentToLocal(localCoords);
+                    if (textNodeLocalCoords == null) return 0;
+
+                    javafx.scene.text.HitInfo hit = textNode.hitTest(textNodeLocalCoords);
+                    if (hit != null) {
+                        return hit.getInsertionIndex();
+                    }
+                } else {
+                    // TODO: Implement robust hit testing for complex TextFlow content
+                    // As a fallback, you might return the current caret position, though not ideal.
+                    return textController.getEditor().getCaretStart();
+                }
+            }
             return 0;
         }
 
