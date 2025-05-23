@@ -264,6 +264,7 @@ public class Text implements DrawItem, Serializable {
      */
     public void setDimensions() {
         javafx.scene.text.TextFlow layout = this.getLayout();
+        layout.autosize();
         end = new CanvasPoint((double) layout.getLayoutBounds().getWidth(),
             (double) layout.getLayoutBounds().getHeight());
     }
@@ -287,7 +288,6 @@ public class Text implements DrawItem, Serializable {
             javafx.scene.text.Text tt = formatter.readFxText(this);
             tf = new javafx.scene.text.TextFlow(tt);
         }
-        tf.autosize();
         return tf;
     }
 
