@@ -171,6 +171,7 @@ public class Gesticulate extends GuiceApplication {
 
         // Install the canvas
         pane.setContent(drawarea.getScene());
+        pane.setFocusTraversable(true);
         this.setOnResize(pane);
 
         // open canvas from file if requested
