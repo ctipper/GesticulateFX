@@ -275,7 +275,6 @@ public class Text implements DrawItem, Serializable {
      * 
      * @return the {@link javafx.scene.text.TextFlow}
      */
-    javafx.scene.text.TextFlow tf;
     @Transient
     public javafx.scene.text.TextFlow getLayout() {
         // Verify that this is Rich Text
