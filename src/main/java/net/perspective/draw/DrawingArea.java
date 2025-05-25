@@ -608,9 +608,6 @@ public class DrawingArea {
             if (item instanceof Text text) {
                 context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
                 context.edit(text, view.getSelected());
-                text.setDimensions();
-                TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
-                text.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, this.getInputMethodRequests());
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
