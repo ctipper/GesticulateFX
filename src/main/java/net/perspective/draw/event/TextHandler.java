@@ -38,6 +38,8 @@ import net.perspective.draw.geom.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.perspective.draw.event.keyboard.TextKeyHandler;
+
 /**
  *
  * @author ctipper
@@ -102,13 +104,16 @@ public class TextHandler implements Handler {
             view.setEditing(KeyHandlerType.TEXT);
             view.setTextHighlight(i);
             Platform.runLater(() -> {
-                logger.debug("TextFlow in draw() focused: {}", flow.isFocused());
                 if (flow.getScene() != null) {
                     logger.debug("Scene focus owner: {}", flow.getScene().getFocusOwner());
                 } else {
                     logger.debug("TextFlow in draw() is not in a scene yet.");
                 }
+                logger.debug("TextFlow focused: {}", flow.isFocused());
             });
+            TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+            flow.setOnInputMethodTextChanged(textKeyHandler::handleInputMethodEvent);
+            flow.getParent().setInputMethodRequests(drawarea.getInputMethodRequests());
         } else if (view.getSelected() != -1) {
             view.updateSelectedItem();
             view.moveSelection(view.getSelected());
