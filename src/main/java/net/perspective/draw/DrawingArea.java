@@ -451,9 +451,8 @@ public class DrawingArea {
         menuTextCut.setOnAction((ActionEvent e) -> {
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                if (item instanceof Text text) {
+                if (item instanceof Text) {
                     view.cutTextItem();
-                    text.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
@@ -463,9 +462,8 @@ public class DrawingArea {
         menuTextCopy.setOnAction((ActionEvent e) -> {
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                if (item instanceof Text text) {
+                if (item instanceof Text) {
                     view.copyTextItem();
-                    text.setDimensions();
                     view.updateSelectedItem();
                     view.moveSelection(view.getSelected());
                 }
@@ -474,9 +472,8 @@ public class DrawingArea {
         MenuItem menuTextPaste = new MenuItem("Paste");
         menuTextPaste.setOnAction((ActionEvent e) -> {
             DrawItem item = view.getDrawings().get(view.getSelected());
-            if (item instanceof Text text) {
+            if (item instanceof Text) {
                 view.pasteTextItem();
-                text.setDimensions();
                 view.updateSelectedItem();
                 view.moveSelection(view.getSelected());
             }
