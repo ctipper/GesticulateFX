@@ -91,7 +91,7 @@ public class TextController {
         editor.setCaretEnd(editor.readPlainText().length());
         item.setDimensions();
         TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
-        item.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, drawarea.getInputMethodRequests());
+        item.tf.setOnInputMethodTextChanged(textKeyHandler::handleInputMethodEvent);
         return item;
     }
 
@@ -111,7 +111,8 @@ public class TextController {
         editor.setCaretEnd(start);
         item.setDimensions();
         TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
-        item.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, drawarea.getInputMethodRequests());
+        item.tf.setOnInputMethodTextChanged(textKeyHandler::handleInputMethodEvent);
+
     }
 
     /**
@@ -129,7 +130,7 @@ public class TextController {
         editor.setCaretEnd(editor.readPlainText().length());
         item.setDimensions();
         TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
-        item.attachInputMethodHandler(textKeyHandler::handleInputMethodEvent, drawarea.getInputMethodRequests());
+        item.tf.setOnInputMethodTextChanged(textKeyHandler::handleInputMethodEvent);
     }
 
     /**
@@ -142,6 +143,8 @@ public class TextController {
             editor.cutText();
             editor.commitText(item);
             item.setDimensions();
+            TextKeyHandler textKeyHandler = injector.getInstance(TextKeyHandler.class);
+            item.tf.setOnInputMethodTextChanged(textKeyHandler::handleInputMethodEvent);
         }
         view.moveSelection(view.getSelected());
     }
