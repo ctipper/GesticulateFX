@@ -17,7 +17,7 @@ An ant runner is provided `mvn clean package -P ant-builder` for app bundle or `
 1 - The branch `inputstream` represents a naive implementation of input method event handling for the text editing feature. After much back-and-forth with an AI it seems that 
 [github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not set up for users to customise this. Currently it would require me to implement with a TextField node as opposed to the custom code with a TextFlow node. This is not too difficult but it would require dismantling the infrastructure to provide formatted text.
 
-2 - For the future it would be desirable to provide multi-line text blocks with formatting, similar to [Microsoft OneNote](https://www.onenote.com/). Given that [github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not designed for developers to customise a third-party library is needed, and serialisation is the key challenge.
+2 - For the future it would be desirable to provide multi-line text blocks with formatting, similar to [Microsoft OneNote](https://www.onenote.com/). Given that [github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not designed for developers to customise, a third-party library is needed and serialisation is the key challenge.
 
 Pull requests are welcome, but also I am not providing this as a commercial service so don't @ me if turn-around is lengthy.
 
