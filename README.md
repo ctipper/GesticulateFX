@@ -4,9 +4,9 @@ An app for sketching freehand diagrams. GesticulateFX is not geared towards grap
 
 It supports vector shapes, curve-fitted lines, images may be pasted or imported from shell and there is a mapping component.
 
-To build and run, a `JAVAFX_HOME` environment variable needs to be set and this uses the latest javafx release. ```mvn clean compile exec:exec```
+To build and run, a `JAVAFX_HOME` environment variable needs to be set and this uses the latest JavaFX release. ```mvn clean compile exec:exec```
 
-Platform builds are in the site directory using `ant` script. This assumes that JDK is in `~/Applications` folder.
+Platform builds are in the site directory using `ant` script. This assumes that the JDK is in `~/Applications` folder.
 
 An ant runner is provided `mvn clean package -P ant-builder` for app bundle or `mvn clean install -P ant-builder` for platform installer.
 
@@ -14,9 +14,11 @@ An ant runner is provided `mvn clean package -P ant-builder` for app bundle or `
 
 ## Possible directions
 
-1 - The branch `inputstream` represents a naïve implementation of input method event handling for the text editing feature. It currently has no effect, even though a best effort has been made to use patterns from an existing java implementation (not published).
+1 - The branch `inputstream` represents a naive implementation of input method event handling for the text editing feature. After much back-and-forth with an AI it seems that 
+[github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not set up for users to customise this. Currently it would require me to implement with a TextField node as opposed to the custom code with a TextFlow node. This is not too difficult but it would require dismantling the infrastructure to provide formatted text.
 
-Any help complying with javafx frameworks for IME is appreciated, though I strongly suspect [github.com/openjdk/jfx](https://github.com/openjdk/jfx) has not envisioned this scenario and that much work needs to be done upstream. Be careful, this branch is unstable due to needs to keep in sync with the code base.
+2 - For the future it would be desirable to provide multi-line text blocks with formatting, similar to [Microsoft OneNote](https://www.onenote.com/). Given that [github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not designed for developers to customise a third-party library is needed, and serialisation is the key challenge.
 
-2 - Text editing currently is a very simple implementation. To provide multi-line text blocks with formatting requires a much more robust framework using methods analogous to [github.com/ProseMirror/prosemirrror](https://github.com/ProseMirror/prosemirror) which uses a flattened-node composer which is then serialised both to UI and to backing store. I do not know how to implement this and obviously prosemirror is a robust text editing tool with many capabilities that I do not need to implement. It is also written for the web.
+Pull requests are welcome, but also I am not providing this as a commercial service so don't @ me if turn-around is lengthy.
+
 
