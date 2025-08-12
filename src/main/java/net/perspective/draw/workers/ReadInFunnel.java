@@ -188,8 +188,8 @@ public class ReadInFunnel extends Task<Object> {
 
         if (drawing instanceof Grouped grouped) {
             DrawItem item = new Grouped();
-            for (DrawItem shape : grouped.getShapes()) {
-                ((Grouped) item).addShape(checkDrawings(shape));
+            for (DrawItem shape : grouped.getDrawItems()) {
+                ((Grouped) item).addDrawItem(checkDrawings(shape));
             }
             item.setAngle(drawing.getAngle());
             ((Grouped) item).setTransparency(grouped.getTransparency());
@@ -244,7 +244,7 @@ public class ReadInFunnel extends Task<Object> {
                 decoder = new XMLDecoder(new BufferedInputStream(zf.getInputStream(ze)));
                 decoder.setExceptionListener((Exception ex) -> {
                     logger.warn(ex.getMessage());
-                    success = false;
+                    // success = false;
                 });
                 drawings = (ArrayList<DrawItem>) decoder.readObject();
                 updateProgress(3L, 3L);

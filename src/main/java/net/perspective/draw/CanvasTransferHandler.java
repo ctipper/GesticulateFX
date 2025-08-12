@@ -178,8 +178,8 @@ public class CanvasTransferHandler {
         
         if (drawing instanceof Grouped grouped) {
             var item = injector.getInstance(Grouped.class);
-            for (DrawItem shape : grouped.getShapes()) {
-                item.addShape(checkDrawings(shape));
+            for (DrawItem shape : grouped.getDrawItems()) {
+                item.addDrawItem(checkDrawings(shape));
             }
             return item;
         }

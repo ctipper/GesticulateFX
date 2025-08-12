@@ -1121,7 +1121,7 @@ public class DrawingArea {
             guide.setColor(Color.rgb(204, 102, 255));
             guide.setFillColor(Color.rgb(48, 96, 255));
             guide.setTransparency(25);
-            guides.addShape(guide);
+            guides.addDrawItem(guide);
         } else {
             // vertical rule
             Edge guide = (Edge) figurefactory.createFigure(DrawingType.LINE);
@@ -1134,7 +1134,7 @@ public class DrawingArea {
             guide.setColor(Color.rgb(204, 102, 255));
             guide.setFillColor(Color.rgb(48, 96, 255));
             guide.setTransparency(25);
-            guides.addShape(guide);
+            guides.addDrawItem(guide);
         }
     }
 

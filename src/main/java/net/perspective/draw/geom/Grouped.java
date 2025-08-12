@@ -70,7 +70,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @param shapes the list of {@link net.perspective.draw.geom.DrawItem}
      */
-    public void setShapes(List<DrawItem> shapes) {
+    public void setDrawItems(List<DrawItem> shapes) {
         this.shapes = shapes;
     }
 
@@ -79,7 +79,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @return shapes the list of {@link net.perspective.draw.geom.DrawItem}
      */
-    public List<DrawItem> getShapes() {
+    public List<DrawItem> getDrawItems() {
         return shapes;
     }
 
@@ -88,7 +88,7 @@ public class Grouped implements DrawItem, Serializable {
      * 
      * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
-    public void addShape(DrawItem shape) {
+    public void addDrawItem(DrawItem shape) {
         if (shapes == null) {
             shapes = new ArrayList<>();
         }

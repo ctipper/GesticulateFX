@@ -426,7 +426,7 @@ public class CanvasView {
 
             // create a Grouped item and queue items for removal
             for (Integer index : this.getMultiSelection()) {
-                groupedItem.addShape(drawings.get(index));
+                groupedItem.addDrawItem(drawings.get(index));
                 selection.add(index);
             }
             // reverse sort removals
@@ -459,7 +459,7 @@ public class CanvasView {
             DrawItem item = drawings.get(selected);
             if (item instanceof Grouped grouped) {
                 boolean added = false;
-                for (DrawItem shape : grouped.getShapes()) {
+                for (DrawItem shape : grouped.getDrawItems()) {
                     if (!added) {
                         // replace selected
                         drawings.set(selected, shape);
