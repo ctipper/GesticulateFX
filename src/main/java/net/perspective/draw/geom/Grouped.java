@@ -24,10 +24,11 @@
 package net.perspective.draw.geom;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.beans.Transient;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
@@ -35,14 +36,17 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.util.CanvasPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * A structure for managing groups of shapes
- * 
+ *
  * @author ctipper
  */
 
@@ -53,6 +57,7 @@ public class Grouped implements DrawItem, Serializable {
     private boolean isVertical;
     private double angle;
     private CanvasPoint start, end;
+    private double scale;
 
     private static final Logger logger = LoggerFactory.getLogger(Grouped.class.getName());
 
@@ -63,11 +68,12 @@ public class Grouped implements DrawItem, Serializable {
         transparency = 0;
         isVertical = false;
         angle = 0;
+        scale = 1.0;
     }
 
     /**
      * Insert a list of shapes
-     * 
+     *
      * @param shapes the list of {@link net.perspective.draw.geom.DrawItem}
      */
     public void setDrawItems(List<DrawItem> shapes) {
@@ -76,7 +82,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Retrieve the list of shapes
-     * 
+     *
      * @return shapes the list of {@link net.perspective.draw.geom.DrawItem}
      */
     public List<DrawItem> getDrawItems() {
@@ -85,7 +91,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Add a shape to the group
-     * 
+     *
      * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
     public void addDrawItem(DrawItem shape) {
@@ -98,7 +104,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Remove a shape from the list
-     * 
+     *
      * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
     public void removeShape(DrawItem shape) {
@@ -111,7 +117,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * Set the bounds of the group taking into account orientation of all enclosed shapes
+     * Set the bounds of the group using transformed bounds
      */
     private void setBounds() {
         CanvasPoint topleft, bottomright;
@@ -143,7 +149,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Set the untransformed TL coordinate of the picture
-     * 
+     *
      * @param x the x position
      * @param y the y position
      */
@@ -156,7 +162,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     *
      * @param start
      * @deprecated
      */
@@ -168,7 +174,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Return the untransformed TL coordinate of the picture
-     * 
+     *
      * @return the item start point
      */
     @Override
@@ -178,7 +184,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Set the dimensions of the picture
-     * 
+     *
      * @param x the width
      * @param y the height
      */
@@ -191,7 +197,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     *
      * @param end the end point
      * @deprecated
      */
@@ -203,7 +209,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Return the dimensions of the item
-     * 
+     *
      * @return the dimensions
      */
     @Override
@@ -212,8 +218,26 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
+     * Set the relative scale of the picture
+     *
+     * @param scale the scale factor
+     */
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
+    /**
+     * Return the relative scale of the picture
+     *
+     * @return the scale factor
+     */
+    public double getScale() {
+        return scale;
+    }
+
+    /**
      * Update the item properties no properties set
-     * 
+     *
      * @param drawarea the {@link net.perspective.draw.DrawingArea}
      */
     @Override
@@ -224,53 +248,57 @@ public class Grouped implements DrawItem, Serializable {
     /**
      * Returns the 2-tuple of top-left corner location (transformed)
      * the second point is not normalised
-     * 
+     *
      * @return the 2-tuple of top-left corner location (transformed)
      */
     @Override
     public CanvasPoint[] getTop() {
-        CanvasPoint s = new CanvasPoint(start.x, start.y);
-        s = getTransform(s);
-        return new CanvasPoint[] { s, s };
+        CanvasPoint s[];
+        CanvasPoint[] p = getVertex(ContainsType.TL);
+        s = new CanvasPoint[]{this.getTransform(p[0]), this.getTransform(p[1])};
+        return s;
     }
 
     /**
      * Returns the 2-tuple of top-right corner location (transformed)
      * the second point is not normalised
-     * 
+     *
      * @return the 2-tuple of top-right corner location (transformed)
      */
     @Override
     public CanvasPoint[] getUp() {
-        CanvasPoint up = new CanvasPoint(end.x, start.y);
-        up = getTransform(up);
-        return new CanvasPoint[] { up, up };
+        CanvasPoint up[];
+        CanvasPoint[] p = getVertex(ContainsType.TR);
+        up = new CanvasPoint[]{this.getTransform(p[0]), this.getTransform(p[1])};
+        return up;
     }
 
     /**
      * Returns the 2-tuple of bottom-left corner location (transformed)
      * the second point is not normalised
-     * 
+     *
      * @return the 2-tuple of bottom-left corner location (transformed)
      */
     @Override
     public CanvasPoint[] getDown() {
-        CanvasPoint down = new CanvasPoint(start.x, end.y);
-        down = getTransform(down);
-        return new CanvasPoint[] { down, down };
+        CanvasPoint down[];
+        CanvasPoint[] p = getVertex(ContainsType.BL);
+        down = new CanvasPoint[]{this.getTransform(p[0]), this.getTransform(p[1])};
+        return down;
     }
 
     /**
      * Returns the 2-tuple of bottom-right corner location (transformed)
      * the second point is not normalised
-     * 
+     *
      * @return the 2-tuple of bottom-right corner location (transformed)
      */
     @Override
     public CanvasPoint[] getBottom() {
-        CanvasPoint e = new CanvasPoint(end.x, end.y);
-        e = this.getTransform(e);
-        return new CanvasPoint[] { e, e };
+        CanvasPoint e[];
+        CanvasPoint[] p = getVertex(ContainsType.BR);
+        e = new CanvasPoint[]{this.getTransform(p[0]), this.getTransform(p[1])};
+        return e;
     }
 
     private CanvasPoint getTransform(CanvasPoint point) {
@@ -301,17 +329,17 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Returns the location of the picture centre point
-     * 
+     *
      * @return canvas coordinates of axis of rotation
      */
     @Override
     public CanvasPoint rotationCentre() {
-        return new CanvasPoint((end.x - start.x) / 2.0 + start.x, (end.y - start.y) / 2.0 + start.y);
+        return new CanvasPoint(scale * (end.x - start.x) / 2.0 + start.x, scale * (end.y - start.y) / 2.0 + start.y);
     }
 
     /**
      * Returns an area that specifies the transformed boundary
-     * 
+     *
      * @return a transformed shape
      */
     @Override
@@ -319,15 +347,18 @@ public class Grouped implements DrawItem, Serializable {
         Rectangle2D rect = new Rectangle2D.Double(start.x, start.y, end.x - start.x, end.y - start.y);
         Area bounds = new Area(rect);
         java.awt.geom.AffineTransform transform = this.getTransform();
+        transform.translate(start.x, start.y);
+        transform.scale(scale, scale);
+        transform.translate(-start.x, -start.y);
         bounds.transform(transform);
         return bounds;
     }
 
     /**
      * Detect if a point lies within the bounds, a convenience method
-     * 
-     * @param x  canvas coordinate
-     * @param y  canvas coordinate
+     *
+     * @param x canvas coordinate
+     * @param y canvas coordinate
      * @return a boolean property
      */
     @Override
@@ -337,9 +368,9 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Translate the group
-     * 
-     * @param xinc  x increment
-     * @param yinc  y increment
+     *
+     * @param xinc x increment
+     * @param yinc y increment
      */
     @Override
     public void moveTo(double xinc, double yinc) {
@@ -351,7 +382,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Provide a Group for FX canvas
-     * 
+     *
      * @return the {@link javafx.scene.Node}
      */
     @Override
@@ -361,7 +392,10 @@ public class Grouped implements DrawItem, Serializable {
             group.getChildren().add(shape.draw());
         }
         CanvasPoint c = this.rotationCentre();
-        group.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, c.x, c.y));
+        group.getTransforms().add(new Rotate(angle * 180 / Math.PI, c.x, c.y));
+        group.getTransforms().add(new Translate(start.x, start.y));
+        group.getTransforms().add(new Scale(scale, scale));
+        group.getTransforms().add(new Translate(-start.x, -start.y));
         group.setCursor(javafx.scene.Cursor.OPEN_HAND);
         group.setMouseTransparent(true);
         return group;
@@ -369,7 +403,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Render the item anchors to indicate selection
-     * 
+     *
      * @param drawarea the {@link net.perspective.draw.DrawingArea}
      * @return the {@link javafx.scene.Node}
      */
@@ -378,9 +412,9 @@ public class Grouped implements DrawItem, Serializable {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
-        anchors.getChildren().add(this.anchor(drawarea, end.x, start.y));
-        anchors.getChildren().add(this.anchor(drawarea, start.x, end.y));
-        anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x + scale * (end.x - start.x), start.y));
+        anchors.getChildren().add(this.anchor(drawarea, start.x, start.y + scale * (end.y - start.y)));
+        anchors.getChildren().add(this.anchor(drawarea, start.x + scale * (end.x - start.x), start.y + scale * (end.y - start.y)));
         return anchors;
     }
 
@@ -398,7 +432,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Render the item to the g2d canvas
-     * 
+     *
      * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      */
     @Override
@@ -406,7 +440,12 @@ public class Grouped implements DrawItem, Serializable {
         java.awt.geom.AffineTransform defaultTransform;
 
         defaultTransform = g2.getTransform();
-        g2.transform(this.getTransform());
+
+        AffineTransform transform = this.getTransform();
+        transform.translate(start.x, start.y);
+        transform.scale(scale, scale);
+        transform.translate(-start.x, -start.y);
+        g2.transform(transform);
 
         for (DrawItem shape : shapes) {
             shape.draw(g2);
@@ -418,7 +457,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Sets whether the shape is opaque
-     * 
+     *
      * @param transparency 0 (clear) - 100 (opaque)
      */
     public void setTransparency(int transparency) {
@@ -427,7 +466,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Returns transparency
-     * 
+     *
      * @return transparency 0 (clear) - 100 (opaque)
      */
     public int getTransparency() {
@@ -436,9 +475,9 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Sets the shape to be perpendicular to baseline
-     * 
-     * @param isVertical  A boolean property
-     * @deprecated 
+     *
+     * @param isVertical A boolean property
+     * @deprecated
      */
     @Deprecated
     @Override
@@ -447,9 +486,9 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     *
      * @return a boolean property
-     * @deprecated 
+     * @deprecated
      */
     @Deprecated
     @Override
@@ -459,7 +498,7 @@ public class Grouped implements DrawItem, Serializable {
 
     /**
      * Sets the rotation angle
-     * 
+     *
      * @param angle the angle in radians
      */
     @Override
@@ -468,8 +507,8 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * Return the rotation angle 
-     * 
+     * Return the rotation angle
+     *
      * @return angle the angle in radians
      */
     @Override
@@ -478,7 +517,124 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     * Signed area of a region using Gauss' formula (or Shoelace algorithm)
+     *
+     * @return a signed area for three vertex region
+     */
+    public double sgnd_area() {
+        CanvasPoint p1 = new CanvasPoint(), p2 = new CanvasPoint(), p3 = new CanvasPoint();
+        if (scale < 0) {
+            p1.setLocation(1d, 1d);
+            p2.setLocation(1d + end.x - start.x, 1d);
+            p3.setLocation(1d + end.x - start.x, 1d + end.y - start.y);
+        } else {
+            p1.setLocation(1d, 1d);
+            p2.setLocation(1d, 1d + end.y - start.y);
+            p3.setLocation(1d + end.x - start.x, 1d + end.y - start.y);
+        }
+        double _area = (p1.x * p2.y - p2.x * p1.y) + (p2.x * p3.y - p3.x * p2.y) + (p3.x * p1.y - p1.x * p3.y);
+        return Math.signum(_area);
+    }
+
+    /**
+     * Return the 2-tuple of vertices, second point normalised.
+     *
+     * @return 2-tuple representing vertex points
+     */
+    private CanvasPoint[] getVertex(ContainsType contains) {
+        CanvasPoint p[];
+        double sx, sy, ex, ey;
+        double width = Math.abs(end.x - start.x);
+        double height = Math.abs(end.y - start.y);
+        double side = 0.25 * (width + height); // half average side
+        CanvasPoint cxy = this.rotationCentre();
+        // determine real vertices
+        CanvasPoint p1 = new CanvasPoint(start.x, start.y);                             // TL
+        CanvasPoint p2 = new CanvasPoint(start.x, start.y + scale * (end.y - start.y)); // BL
+        CanvasPoint p3 = new CanvasPoint(start.x + scale * (end.x - start.x), start.y + scale * (end.y - start.y)); // BR
+        CanvasPoint p4 = new CanvasPoint(start.x + scale * (end.x - start.x), start.y); // TR
+        // determine virtual vertices
+        if (p1.x < p3.x) {
+            sx = cxy.x - side;
+            ex = cxy.x + side;
+        } else {
+            sx = cxy.x + side;
+            ex = cxy.x - side;
+        }
+        if (p1.y < p3.y) {
+            sy = cxy.y - side;
+            ey = cxy.y + side;
+        } else {
+            sy = cxy.y + side;
+            ey = cxy.y - side;
+        }
+        p = switch (contains) {
+            case TL ->
+                new CanvasPoint[]{p1, new CanvasPoint(sx, sy)};
+            case BL ->
+                new CanvasPoint[]{p2, new CanvasPoint(sx, ey)};
+            case BR ->
+                new CanvasPoint[]{p3, new CanvasPoint(ex, ey)};
+            case TR ->
+                new CanvasPoint[]{p4, new CanvasPoint(ex, sy)};
+            default ->
+                new CanvasPoint[]{p1, new CanvasPoint(sx, sy)};
+        };
+        return p;
+    }
+
+    /**
+     * Return 2-point array of vertices, second point normalised. Note that the points may not be
+     * cyclical.
+     *
+     * Refer to Figure.java and FigurePointFactory.java for details
+     *
+     * @return
+     */
+    public List<CanvasPoint[]> getVertices() {
+        double sx, sy, ex, ey;
+        List<CanvasPoint[]> vert = new ArrayList<>();
+        List<CanvasPoint[]> vertices = new ArrayList<>();
+        // determine average dimension
+        double width = Math.abs(end.x - start.x);
+        double height = Math.abs(end.y - start.y);
+        double side = 0.25 * (width + height); // half average side
+        CanvasPoint cxy = this.rotationCentre();
+        // determine real vertices
+        CanvasPoint p1 = new CanvasPoint(start.x, start.y);                             // TL
+        CanvasPoint p2 = new CanvasPoint(start.x, start.y + scale * (end.y - start.y)); // BL
+        CanvasPoint p3 = new CanvasPoint(start.x + scale * (end.x - start.x), start.y + scale * (end.y - start.y)); // BR
+        CanvasPoint p4 = new CanvasPoint(start.x + scale * (end.x - start.x), start.y); // TR
+        // determine virtual vertices
+        if (p1.x < p3.x) {
+            sx = cxy.x - side;
+            ex = cxy.x + side;
+        } else {
+            sx = cxy.x + side;
+            ex = cxy.x - side;
+        }
+        if (p1.y < p3.y) {
+            sy = cxy.y - side;
+            ey = cxy.y + side;
+        } else {
+            sy = cxy.y + side;
+            ey = cxy.y - side;
+        }
+        // combine real and virtual vertices
+        vert.add(new CanvasPoint[]{p1, new CanvasPoint(sx, sy)});
+        vert.add(new CanvasPoint[]{p2, new CanvasPoint(sx, ey)});
+        vert.add(new CanvasPoint[]{p3, new CanvasPoint(ex, ey)});
+        vert.add(new CanvasPoint[]{p4, new CanvasPoint(ex, sy)});
+        // transform real and virtual vertices
+        for (CanvasPoint[] p : vert) {
+            CanvasPoint[] point = new CanvasPoint[]{this.getTransform(p[0]), this.getTransform(p[1])};
+            vertices.add(point);
+        }
+        return vertices;
+    }
+
+    /**
+     *
      * @param start the start point
      * @deprecated
      */
@@ -488,7 +644,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     *
      * @return the start point
      * @deprecated
      */
@@ -499,7 +655,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     *
      * @param end the end point
      * @deprecated
      */
@@ -509,7 +665,7 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * 
+     *
      * @return the end point
      * @deprecated
      */

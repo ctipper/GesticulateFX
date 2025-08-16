@@ -193,6 +193,7 @@ public class ReadInFunnel extends Task<Object> {
             }
             item.setAngle(drawing.getAngle());
             ((Grouped) item).setTransparency(grouped.getTransparency());
+            ((Grouped) item).setScale(grouped.getScale());            
             drawing = item;
         }
 
