@@ -134,7 +134,13 @@ public class SelectionHandler implements Handler {
                                 break;
                             }
                         }
-                    } else if (item != null && item.contains(listener.getStartX(), listener.getStartY())) {
+                    } else if (item instanceof Grouped) {
+                        context.setBehaviour(injector.getInstance(GroupedItemBehaviour.class));
+                        boolean found = context.select(item, i);
+                        if (found) {
+                            break;
+                        }
+                     } else if (item != null && item.contains(listener.getStartX(), listener.getStartY())) {
                         // Rest of Shapes
                         view.setSelected(i);
                         context.setContainment(ContainsType.SHAPE);
