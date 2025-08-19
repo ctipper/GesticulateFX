@@ -493,7 +493,7 @@ public class Text implements DrawItem, Serializable {
         transform = new AffineTransform();
         TextLayout layout = this.getLayout(g2);
 
-        g2.setColor(fxToAwt(getColor()));
+        g2.setPaint(fxToAwt(getColor()));
         CanvasPoint axis = this.rotationCentre();
         CanvasPoint offset = new CanvasPoint(0.0, end.y - layout.getDescent());
         offset = V2.rot(offset.x, offset.y, getAngle());
@@ -511,7 +511,15 @@ public class Text implements DrawItem, Serializable {
         rotation.setToRotation((float) getAngle());
         transform.concatenate(rotation);
         g2.transform(transform);
-        layout.draw(g2, (float) 0.0, (float) 0.0);
+        Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
+        Matcher matcher = parpattern.matcher(text);
+        if (matcher.find()) {
+            TextFormatter formatter = new TextFormatter();
+            AttributedString as = formatter.readFormattedText(this);
+            g2.drawString(as.getIterator(), 0.0f, 0.0f);
+        } else {
+            g2.drawString(text, 0.0f, 0.0f);
+        }
 
         // reset graphics context
         g2.setTransform(defaultTransform);
