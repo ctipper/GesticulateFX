@@ -151,6 +151,15 @@
             <version>a793bb2b76</version>
         </dependency>
 
+        <!-- JFree SVG -->
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>org.jfree.svg</artifactId>
+            <version>5.0.7</version>
+        </dependency>
+
+
         <!-- sl4j logging  -->
 
         <dependency>
