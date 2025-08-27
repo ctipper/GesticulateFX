@@ -254,7 +254,10 @@ public class CanvasView {
              * Update item properties
              */
             DrawItem item = drawings.get(this.getSelected());
-            item.updateProperties(drawarea);
+
+            if (!this.isMultiSelected() && !drawarea.isMultiSelectEnabled()) {
+                item.updateProperties(drawarea);
+            }
 
             switch (item) {
                 case Figure figure when !(figure instanceof ArrowLine) -> {
@@ -418,7 +421,7 @@ public class CanvasView {
      * Group selected DrawItems
      */
     public void groupSelection() {
-        if (this.isMultiSelected()) {
+        if (this.getSelected() != -1) {
             Grouped groupedItem = new Grouped();
             List<DrawItem> removals = new ArrayList<>();
             List<Integer> selection =  new ArrayList<>();
@@ -454,7 +457,7 @@ public class CanvasView {
      * Explode selected DrawItem group
      */
     public void ungroupSelection() {
-        if (this.getSelected() != -1 && !this.isMultiSelected()) {
+        if (this.getSelected() != -1) {
             int selected = this.getBottomSelected();
             DrawItem item = drawings.get(selected);
             if (item instanceof Grouped grouped) {
