@@ -181,6 +181,9 @@ public class CanvasTransferHandler {
             for (DrawItem shape : grouped.getDrawItems()) {
                 item.addDrawItem(checkDrawings(shape));
             }
+            item.setAngle(grouped.getAngle());
+            item.setTransparency(grouped.getTransparency());
+            item.setScale(grouped.getScale());
             return item;
         }
 

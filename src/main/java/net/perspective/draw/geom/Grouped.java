@@ -107,7 +107,7 @@ public class Grouped implements DrawItem, Serializable {
      *
      * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
-    public void removeShape(DrawItem shape) {
+    public void removeDrawItem(DrawItem shape) {
         if (shapes != null) {
             shapes.remove(shape);
             if (!shapes.isEmpty()) {
