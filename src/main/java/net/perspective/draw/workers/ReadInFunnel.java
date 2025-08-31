@@ -173,7 +173,7 @@ public class ReadInFunnel extends Task<Object> {
         }
 
         if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
-            Picture item = new Picture();
+            Picture item = injector.getInstance(Picture.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
                 drawing = item;
@@ -181,7 +181,7 @@ public class ReadInFunnel extends Task<Object> {
                 logger.trace(ex.getMessage());
             }
         } else if (drawing instanceof StreetMap) {
-            StreetMap item = new StreetMap();
+            StreetMap item = injector.getInstance(StreetMap.class);
             try {
                 BeanUtils.copyProperties(item, drawing);
                 item.init();
@@ -199,7 +199,7 @@ public class ReadInFunnel extends Task<Object> {
             }
             item.setAngle(grouped.getAngle());
             item.setTransparency(grouped.getTransparency());
-            item.setScale(grouped.getScale());            
+            item.setScale(grouped.getScale());
             drawing = item;
         }
 

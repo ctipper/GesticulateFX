@@ -417,6 +417,8 @@ public class Gesticulate extends GuiceApplication {
             bind(SVGWorker.class);
             bind(PNGWorker.class);
             bind(G2.class);
+            bind(Picture.class);
+            bind(StreetMap.class);
         }
     }
 
