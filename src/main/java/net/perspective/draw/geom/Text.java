@@ -511,15 +511,7 @@ public class Text implements DrawItem, Serializable {
         rotation.setToRotation((float) getAngle());
         transform.concatenate(rotation);
         g2.transform(transform);
-        Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
-        Matcher matcher = parpattern.matcher(text);
-        if (matcher.find()) {
-            TextFormatter formatter = new TextFormatter();
-            AttributedString as = formatter.readFormattedText(this);
-            g2.drawString(as.getIterator(), 0.0f, 0.0f);
-        } else {
-            g2.drawString(text, 0.0f, 0.0f);
-        }
+        layout.draw(g2, 0.0f, 0.0f);
 
         // reset graphics context
         g2.setTransform(defaultTransform);

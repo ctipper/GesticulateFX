@@ -129,45 +129,51 @@ public class ReadInFunnel extends Task<Object> {
 
     private DrawItem checkDrawings(DrawItem drawing) {
 
-        if (drawing instanceof ArrowLine arrowLine) {
-            DrawItem item = new Edge();
-            try {
-                BeanUtils.copyProperties(item, arrowLine.getLine());
-                arrowLine.setLine((Edge) item);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                logger.trace(ex.getMessage());
+        switch (drawing) {
+            case ArrowLine arrowLine -> {
+                Edge item = new Edge();
+                try {
+                    BeanUtils.copyProperties(item, arrowLine.getLine());
+                    arrowLine.setLine(item);
+                } catch (IllegalAccessException | InvocationTargetException ex) {
+                    logger.trace(ex.getMessage());
+                }
+                arrowLine.setFactory();
+                arrowLine.setEndPoints();
+                arrowLine.setPath();
             }
-            arrowLine.setFactory();
-            arrowLine.setEndPoints();
-            arrowLine.setPath();
-        } else if (drawing instanceof Edge edge) {
-            edge.setFactory();
-            edge.setEndPoints();
-            edge.setPath();
-        } else if (drawing instanceof Figure figure) {
-            switch (figure.getType()) {
-                case LINE, SKETCH, POLYGON -> {
-                    DrawItem item = new Edge();
-                    try {
-                        BeanUtils.copyProperties(item, drawing);
-                        drawing = item;
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        logger.trace(e.getMessage());
+            case Edge edge -> {
+                edge.setFactory();
+                edge.setEndPoints();
+                edge.setPath();
+            }
+            case Figure figure -> {
+                switch (figure.getType()) {
+                    case LINE, SKETCH, POLYGON -> {
+                        Edge item = new Edge();
+                        try {
+                            BeanUtils.copyProperties(item, figure);
+                            figure = item;
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            logger.warn(e.getMessage());
+                        }
+                        figure.setFactory();
+                        figure.setEndPoints();
+                        figure.setPath();
                     }
-                    figure.setFactory();
-                    figure.setEndPoints();
-                    figure.setPath();
+                    default -> {
+                        figure.setFactory();
+                        figure.setEndPoints();
+                        figure.setPath();
+                    }
                 }
-                default -> {
-                    figure.setFactory();
-                    figure.setEndPoints();
-                    figure.setPath();
-                }
+            }
+            default -> {
             }
         }
 
         if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
-            DrawItem item = injector.getInstance(Picture.class);
+            Picture item = new Picture();
             try {
                 BeanUtils.copyProperties(item, drawing);
                 drawing = item;
@@ -175,11 +181,11 @@ public class ReadInFunnel extends Task<Object> {
                 logger.trace(ex.getMessage());
             }
         } else if (drawing instanceof StreetMap) {
-            DrawItem item = injector.getInstance(StreetMap.class);
+            StreetMap item = new StreetMap();
             try {
                 BeanUtils.copyProperties(item, drawing);
-                ((StreetMap) item).init();
-                ((StreetMap) item).filterHandlers();
+                item.init();
+                item.filterHandlers();
                 drawing = item;
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
@@ -187,13 +193,13 @@ public class ReadInFunnel extends Task<Object> {
         }
 
         if (drawing instanceof Grouped grouped) {
-            DrawItem item = new Grouped();
+            Grouped item = new Grouped();
             for (DrawItem shape : grouped.getDrawItems()) {
-                ((Grouped) item).addDrawItem(checkDrawings(shape));
+                item.addDrawItem(checkDrawings(shape));
             }
-            item.setAngle(drawing.getAngle());
-            ((Grouped) item).setTransparency(grouped.getTransparency());
-            ((Grouped) item).setScale(grouped.getScale());            
+            item.setAngle(grouped.getAngle());
+            item.setTransparency(grouped.getTransparency());
+            item.setScale(grouped.getScale());            
             drawing = item;
         }
 
