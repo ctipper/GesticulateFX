@@ -23,20 +23,34 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import com.google.inject.Injector;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.TranscodingHints;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.util.SVGConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
@@ -85,23 +99,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
-import org.apache.batik.anim.dom.SVGDOMImplementation;
-import org.apache.batik.transcoder.SVGAbstractTranscoder;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.TranscodingHints;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.util.SVGConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -1265,6 +1267,7 @@ public class ApplicationController implements Initializable {
     }
 
     @Inject private Injector injector;
+    private final ExecutorService executor = Executors.newCachedThreadPool();
     private double shift = 20.0;
 
     /**
@@ -1273,26 +1276,31 @@ public class ApplicationController implements Initializable {
      * @param ev a {@link javafx.event.ActionEvent}
      */
     public void insertSVGAction(ActionEvent ev) {
-        String filename = ((Button) ev.getSource()).getId().substring(3);
-        try {
-            Image image = SwingFXUtils.toFXImage(rasterizeSVGResource(filename, toRGBCode(drawarea.getFillColor())), null);
-            Picture picture = injector.getInstance(Picture.class);
-            picture.setStart(shift, shift);
-            ImageItem item = new ImageItem(image);
-            item.setFormat(FileUtils.getExtension(filename));
-            int index = view.setImageItem(item);
-            double width = (double) image.getWidth();
-            double height = (double) image.getHeight();
-            double scale =  64d / height;
-            logger.trace("Image relative scale: {}", scale);
-            picture.setImage(index, width, height);
-            picture.setScale(scale);
-            view.setNewItem(picture);
-            view.resetNewItem();
-        } catch (IOException ex) {
-            logger.error("Can't fetch resource {}", filename);
-        }
-        shift = shift + 45.0;
+        final String filename = ((Button) ev.getSource()).getId().substring(3);
+        CompletableFuture.runAsync(() -> {
+            try {
+                Image image = SwingFXUtils.toFXImage(rasterizeSVGResource(filename, toRGBCode(drawarea.getFillColor())), null);
+                Picture picture = injector.getInstance(Picture.class);
+                picture.setStart(shift, shift);
+                ImageItem item = new ImageItem(image);
+                item.setFormat(FileUtils.getExtension(filename));
+                int index = view.setImageItem(item);
+                double width = (double) image.getWidth();
+                double height = (double) image.getHeight();
+                double scale = 64d / height;
+                logger.trace("Image relative scale: {}", scale);
+                picture.setImage(index, width, height);
+                picture.setScale(scale);
+                Platform.runLater(() -> {
+                    view.setNewItem(picture);
+                    view.resetNewItem();
+                });
+            } catch (IOException ex) {
+                logger.error("Can't fetch resource {}", filename);
+            }
+        }, executor).thenRun(() -> {
+            shift += 45.0;
+        });
     }
 
     /**
