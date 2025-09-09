@@ -221,7 +221,6 @@ public class ReadInFunnel extends Task<Object> {
             }
         }
 
-        @SuppressWarnings("unchecked")
         public void make() throws IOException {
             try (ZipFile zf = new ZipFile(file)) {
                 updateProgress(0L, 3L);
@@ -231,7 +230,21 @@ public class ReadInFunnel extends Task<Object> {
                 decoder.setExceptionListener((Exception ex) -> {
                     logger.warn(ex.getMessage());
                 });
-                pictures = (ArrayList<ImageItem>) decoder.readObject();
+                Object obj = decoder.readObject();
+
+                if (obj == null) {
+                    throw new IllegalStateException("XMLDecoder returned null object");
+                }
+
+                if (obj instanceof List<?>) {
+                    @SuppressWarnings("unchecked")
+                    List<ImageItem> list = (List<ImageItem>) obj;
+                    pictures = new ArrayList<>(list);
+                } else {
+                    throw new IllegalStateException(
+                        "Unexpected object type from XMLDecoder: " + obj.getClass().getName()
+                    );
+                }
                 updateProgress(1L, 3L);
 
                 int index = 0;
@@ -253,7 +266,21 @@ public class ReadInFunnel extends Task<Object> {
                     logger.warn(ex.getMessage());
                     // success = false;
                 });
-                drawings = (ArrayList<DrawItem>) decoder.readObject();
+                obj = decoder.readObject();
+
+                if (obj == null) {
+                    throw new IllegalStateException("XMLDecoder returned null object");
+                }
+
+                if (obj instanceof List<?>) {
+                    @SuppressWarnings("unchecked")
+                    List<DrawItem> list = (List<DrawItem>) obj;
+                    drawings = new ArrayList<>(list);
+                } else {
+                    throw new IllegalStateException(
+                        "Unexpected object type from XMLDecoder: " + obj.getClass().getName()
+                    );
+                }
                 updateProgress(3L, 3L);
             }
         }
