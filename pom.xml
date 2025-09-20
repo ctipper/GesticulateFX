@@ -18,11 +18,11 @@
     <properties>
         <java.version>24</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>24.0.2</javafx.version>
+        <javafx.version>25-ea+29</javafx.version>
         <slf4j.version>2.0.17</slf4j.version>
-        <log4j.version>2.24.3</log4j.version>
+        <log4j.version>2.25.1</log4j.version>
         <batik.version>1.19</batik.version>
-        <junit.version>5.12.2</junit.version>
+        <junit.version>5.13.4</junit.version>
         <skipTests>true</skipTests>
     </properties>
 

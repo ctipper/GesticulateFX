@@ -215,7 +215,7 @@ public class ReadInFunnel extends Task<Object> {
             try {
                 success = true;
                 this.make();
-            } catch (IOException | NullPointerException e) {
+            } catch (IOException | IllegalStateException | NullPointerException e) {
                 logger.warn(e.getMessage());
                 success = false;
             }

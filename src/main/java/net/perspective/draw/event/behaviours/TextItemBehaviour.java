@@ -65,7 +65,7 @@ public class TextItemBehaviour implements ItemBehaviours {
 
         // currently fix for vertical TextFlow is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
-        currentHit = layout.hitTest(point);
+        currentHit = layout.getHitInfo(point);
 
         editor.setCaretStart(currentHit.getInsertionIndex());
         editor.setCaretEnd(editor.getCaretStart());
@@ -81,7 +81,7 @@ public class TextItemBehaviour implements ItemBehaviours {
 
         // currently fix for vertical TextFlow is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
-        currentHit = layout.hitTest(point);
+        currentHit = layout.getHitInfo(point);
 
         view.setSelected(index);
         view.setEditing(KeyHandlerType.TEXT);
@@ -107,7 +107,7 @@ public class TextItemBehaviour implements ItemBehaviours {
 
         // currently fix for vertical TextFlow is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
-        currentHit = layout.hitTest(point);
+        currentHit = layout.getHitInfo(point);
 
         int select = currentHit.getInsertionIndex();
         if (select > editor.getCaretStart()) {
