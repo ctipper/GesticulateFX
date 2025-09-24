@@ -86,6 +86,20 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
+    CanvasView provideCanvasView(Provider<DrawingArea> drawareaProvider,
+    Provider<ApplicationController> controllerProvider,
+    Provider<TextController> textControllerProvider) {
+        return new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
+    }
+
+    @Provides
+    @Singleton
+    Gesticulate provideGesticulate() {
+        return new Gesticulate();
+    }
+
+    @Provides
+    @Singleton
     CanvasTransferHandler provideCanvasTransferHandler() {
         return new CanvasTransferHandler();
     }
