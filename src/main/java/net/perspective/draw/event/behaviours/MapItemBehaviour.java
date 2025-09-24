@@ -42,10 +42,10 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class MapItemBehaviour implements ItemBehaviours {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
-    @Inject private MapController mapper;
+    @Inject DrawingArea drawarea;
+    @Inject CanvasView view;
+    @Inject DrawAreaListener listener;
+    @Inject MapController mapper;
 
     /** 
      * Creates a new instance of <code>MapItemBehaviour</code> 

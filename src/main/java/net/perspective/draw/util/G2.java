@@ -49,9 +49,9 @@ import net.perspective.draw.text.Editor;
 
 public class G2 {
     
-    @Inject private ApplicationController application;
-    @Inject private DrawingArea drawarea;
-    @Inject private TextController textController;
+    @Inject ApplicationController application;
+    @Inject DrawingArea drawarea;
+    @Inject TextController textController;
 
     /** Creates a new instance of <code>G2</code> */
     @Inject

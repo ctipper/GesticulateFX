@@ -23,7 +23,6 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -50,6 +49,7 @@ import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.*;
 import net.perspective.draw.event.*;
@@ -71,17 +71,16 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 @Singleton
 public class DrawingArea {
 
-    @Inject private Injector injector;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private DrawAreaListener listener;
-    @Inject private KeyListener keylistener;
-    @Inject private CanvasTransferHandler transferhandler;
-    @Inject private FigureFactory figurefactory;
-    @Inject private Dropper dropper;
-    @Inject private MapController mapper;
-    @Inject private G2 g2;
-    @Inject private BehaviourContext context;
+    private final CanvasView view;
+    private final ApplicationController controller;
+    @Inject DrawAreaListener listener;
+    @Inject KeyListener keylistener;
+    @Inject CanvasTransferHandler transferhandler;
+    @Inject FigureFactory figurefactory;
+    @Inject Dropper dropper;
+    @Inject MapController mapper;
+    @Inject G2 g2;
+    @Inject BehaviourContext context;
     private SubScene canvas;
     private Group root;
 
@@ -102,6 +101,19 @@ public class DrawingArea {
     private Transferable clipboard;
     private Clipboard systemClipboard;
 
+    @Inject Provider<SelectionHandler> selectionHandlerProvider;
+    @Inject Provider<FigureHandler> figureHandlerProvider;
+    @Inject Provider<RotationHandler> rotationHandlerProvider;
+    @Inject Provider<SketchHandler> sketchHandlerProvider;
+    @Inject Provider<TextHandler> textHandlerProvider;
+    @Inject Provider<MapHandler> mapHandlerProvider;
+    @Inject Provider<TextKeyHandler> textKeyHandlerProvider;
+    @Inject Provider<MoveKeyHandler> moveKeyHandlerProvider;
+    @Inject Provider<MapKeyHandler> mapKeyHandlerProvider;
+    @Inject Provider<DummyKeyHandler> dummyKeyHandlerProvider;
+    @Inject Provider<MapItemBehaviour> mapItemBehaviourProvider;
+    @Inject Provider<TextItemBehaviour> textItemBehaviourProvider;
+
     private HandlerType handlertype, oldhandlertype;
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
@@ -118,7 +130,9 @@ public class DrawingArea {
      * Creates a new instance of <code>DrawingArea</code>
      */
     @Inject
-    public DrawingArea() {
+    public DrawingArea(CanvasView view, ApplicationController controller) {
+        this.view = view;
+        this.controller = controller;
     }
 
     void init(double width, double height) {
@@ -137,7 +151,6 @@ public class DrawingArea {
         this.changeHandlers(HandlerType.SELECTION);
         this.gridVisible = false;
         guides = new Grouped();
-        figurefactory = injector.getInstance(FigureFactory.class);
         systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
@@ -311,40 +324,40 @@ public class DrawingArea {
         this.resetContextHandlers();
         switch (handler) {
             case SELECTION -> {
-                listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                listener.setEventHandler(selectionHandlerProvider.get());
                 this.setRotationMode(false);
                 this.setContextHandlers();
                 mapper.finaliseMap();
             }
             case FIGURE -> {
-                listener.setEventHandler(injector.getInstance(FigureHandler.class));
+                listener.setEventHandler(figureHandlerProvider.get());
                 this.setRotationMode(false);
                 mapper.finaliseMap();
                 view.setSelected(-1);
             }
             case ROTATION -> {
-                listener.setEventHandler(injector.getInstance(RotationHandler.class));
+                listener.setEventHandler(rotationHandlerProvider.get());
                 this.setRotationMode(true);
                 this.setContextHandlers();
                 mapper.finaliseMap();
                 view.setSelected(-1);
             }
             case SKETCH -> {
-                listener.setEventHandler(injector.getInstance(SketchHandler.class));
+                listener.setEventHandler(sketchHandlerProvider.get());
                 this.setRotationMode(false);
                 mapper.finaliseMap();
                 view.setSelected(-1);
             }
             case TEXT -> {
-                listener.setEventHandler(injector.getInstance(TextHandler.class));
+                listener.setEventHandler(textHandlerProvider.get());
                 this.setRotationMode(false);
                 this.setContextHandlers();
                 mapper.finaliseMap();
                 view.setSelected(-1);
             }
-            case MAP -> listener.setEventHandler(injector.getInstance(MapHandler.class));
+            case MAP -> listener.setEventHandler(mapHandlerProvider.get());
             default -> {
-                listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                listener.setEventHandler(selectionHandlerProvider.get());
                 this.setRotationMode(false);
                 this.setContextHandlers();
                 mapper.finaliseMap();
@@ -361,10 +374,10 @@ public class DrawingArea {
      */
     public void setKeyboardHandler(KeyHandlerType handler) {
         switch (handler) {
-            case TEXT -> keylistener.setEventHandler(injector.getInstance(TextKeyHandler.class));
-            case MOVE -> keylistener.setEventHandler(injector.getInstance(MoveKeyHandler.class));
-            case MAP -> keylistener.setEventHandler(injector.getInstance(MapKeyHandler.class));
-            default -> keylistener.setEventHandler(injector.getInstance(DummyKeyHandler.class));
+            case TEXT -> keylistener.setEventHandler(textKeyHandlerProvider.get());
+            case MOVE -> keylistener.setEventHandler(moveKeyHandlerProvider.get());
+            case MAP -> keylistener.setEventHandler(mapKeyHandlerProvider.get());
+            default -> keylistener.setEventHandler(dummyKeyHandlerProvider.get());
         }
     }
 
@@ -582,7 +595,7 @@ public class DrawingArea {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());
             if (item instanceof StreetMap) {
-                context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
+                context.setBehaviour(mapItemBehaviourProvider.get());
                 context.edit(item, view.getSelected());
             }
         }
@@ -595,7 +608,7 @@ public class DrawingArea {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());
             if (item instanceof Text text) {
-                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.setBehaviour(textItemBehaviourProvider.get());
                 context.edit(text, view.getSelected());
                 text.setDimensions();
                 view.updateSelectedItem();

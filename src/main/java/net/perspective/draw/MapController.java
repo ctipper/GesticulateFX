@@ -24,7 +24,6 @@
 package net.perspective.draw;
 
 import com.gluonhq.maps.MapPoint;
-import com.google.inject.Injector;
 import java.nio.IntBuffer;
 import java.time.Instant;
 import javafx.beans.value.ObservableValue;
@@ -46,6 +45,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.util.Callback;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
@@ -63,9 +63,9 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class MapController {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
+    @Inject DrawingArea drawarea;
+    @Inject CanvasView view;
+    @Inject Provider<StreetMap> streetMapProvider;
     private Slider zoomSlider;
     private Button zoomInButton;
     private Button zoomOutButton;
@@ -95,7 +95,7 @@ public class MapController {
     public void createMap() {
         int width = 900, height = 675;
 
-        StreetMap streetmap = injector.getInstance(StreetMap.class);
+        StreetMap streetmap = streetMapProvider.get();
         streetmap.setStart(20.0, 20.0);
         streetmap.setEnd(width, height);
         streetmap.setLocation(50.0, 9, 4);

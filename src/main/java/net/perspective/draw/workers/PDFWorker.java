@@ -53,9 +53,9 @@ import org.slf4j.LoggerFactory;
 
 public class PDFWorker extends Task<Object> {
 
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    @Inject CanvasView view;
+    @Inject ApplicationController controller;
+    @Inject ShareUtils share;
     private File file;
     private double margin;
 

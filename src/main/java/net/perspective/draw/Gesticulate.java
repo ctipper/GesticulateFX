@@ -23,18 +23,9 @@
  */
 package net.perspective.draw;
 
-import com.cathive.fx.guice.GuiceApplication;
-import com.cathive.fx.guice.GuiceFXMLLoader;
-import com.cathive.fx.guice.GuiceFXMLLoader.Result;
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 import java.awt.Desktop;
 import java.awt.desktop.OpenFilesEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,29 +34,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Consumer;
+import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javafx.application.Application;
 import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import javafx.application.Platform.Preferences;
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.stage.*;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Subscription;
-import javax.inject.Inject;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
-import net.perspective.draw.event.*;
-import net.perspective.draw.event.behaviours.*;
-import net.perspective.draw.event.keyboard.*;
-import net.perspective.draw.geom.*;
-import net.perspective.draw.text.Editor;
-import net.perspective.draw.text.TextEditor;
-import net.perspective.draw.util.G2;
-import net.perspective.draw.workers.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.perspective.draw.event.keyboard.KeyListener;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
@@ -74,13 +62,13 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
  *
  * @author ctipper
  */
-public class Gesticulate extends GuiceApplication {
 
-    @Inject private GuiceFXMLLoader fxmlLoader;
-    @Inject private ApplicationController controller;
-    @Inject private DrawingArea drawarea;
-    @Inject private KeyListener keylistener;
-    @Inject private ShareUtils share;
+public class Gesticulate extends Application {
+ 
+    @Inject DrawingArea drawarea;
+    @Inject KeyListener keylistener;
+    @Inject ShareUtils share;
+    private ApplicationController controller;
     private Stage stage;
     private Properties userPrefs;
 
@@ -95,17 +83,23 @@ public class Gesticulate extends GuiceApplication {
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
     protected static final boolean MM_SYSTEM_THEME = true;
 
+    // Create the Dagger component
+    private static final DrawAppComponent appComponent = DaggerDrawAppComponent.builder()
+                .drawAppModule(new DrawAppModule())
+                .build();
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
+    @Inject
+    public Gesticulate() {
+    }
+    
     /**
      * Init the application
      * 
-     * @param modules
      * @throws Exception
      */
     @Override
-    public void init(final List<Module> modules) throws Exception {
-        modules.add(new FxmlModule());
+    public void init() throws Exception {
     }
 
     /**
@@ -116,78 +110,94 @@ public class Gesticulate extends GuiceApplication {
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
+        try {
+            appComponent.inject(this);
+            FxAppComponent fxApp = appComponent.fxApp()
+                    .application(this)
+                    .mainWindow(primaryStage)
+                    .build();
+            controller = appComponent.provideApplicationController().get();
+            FXMLLoader loader = fxApp.loader(getClass().getResource("/fxml/Application.fxml"));
+            loader.setController(controller);
+            final Parent root = loader.load();
+            // Put the loaded user interface onto the primary stage.
+            Scene scene = new Scene(root);
+            // keyboard events are consumed by the scene
+            keylistener.initializeHandlers(scene);
 
-        final Parent root = result.getRoot();
-
-        // Put the loaded user interface onto the primary stage.
-        Scene scene = new Scene(root);
-        // keyboard events are consumed by the scene
-        keylistener.initializeHandlers(scene);
-
-        primaryStage.setTitle("GesticulateFX");
-        primaryStage.setResizable(true);
-        primaryStage.setScene(scene);
-        primaryStage.setOnCloseRequest((WindowEvent e) -> {
-            stop();
-        });
-
-        // Size the primary stage
-        this.sizeStage(primaryStage);
-
-        // Show the primary stage
-        primaryStage.show();
-        this.stage = primaryStage;
-
-        // Initialise the scroll area
-        final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
-
-        // retrieve user preferences
-        this.userPrefs = getUserPreferences();
-
-        // Initialize the canvas and apply handlers
-        drawarea.init(pane.getWidth(), pane.getHeight());
-
-        // set the theme from user preferences
-        if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
-            // setSystemTheme();
-            controller.setThemeType("System");
-        } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
-            controller.getThemeProperty().setValue(true); // non default value triggers event
-            controller.setThemeType("Dark");
-        } else {
-            controller.setAppStyles(false);
-            resetStylesheets(false);
-            controller.setThemeType("Light");
-        }
-
-        // configure canvas background
-        var canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"))
-                .orElseGet(controller::getThemeBackgroundColor);
-        controller.setCanvasBackgroundColor(canvasColor);
-        controller.setBackgroundPickerColor(canvasColor);
-        controller.adjustThemeFillColor(canvasColor);
-        drawarea.setTheme();
-
-        // Install the canvas
-        pane.setContent(drawarea.getScene());
-        this.setOnResize(pane);
-
-        // open canvas from file if requested
-        final Parameters parameters = getParameters();
-        final List<String> args = parameters.getRaw();
-        final List<File> files = new ArrayList<>();
-        for (String arg : args) {
-            files.add(new File(arg));
-        }
-        if (!files.isEmpty()) {
-            share.loadCanvas(files);
-        }
-        if (MAC_OS_X) {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.setOpenFileHandler((OpenFilesEvent e) -> {
-                share.loadCanvas(e.getFiles());
+            primaryStage.setTitle("GesticulateFX");
+            primaryStage.setResizable(true);
+            primaryStage.setScene(scene);
+            primaryStage.setOnCloseRequest((WindowEvent e) -> {
+                stop();
             });
+            // Size the primary stage
+            this.sizeStage(primaryStage);
+
+            // Show the primary stage
+            primaryStage.show();
+            this.stage = primaryStage;
+
+            // Initialise the scroll area
+            final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
+            // retrieve user preferences
+            this.userPrefs = getUserPreferences();
+
+            // Initialize the canvas and apply handlers
+            drawarea.init(pane.getWidth(), pane.getHeight());
+            logger.trace("initialized stage");
+
+            // set the theme from user preferences
+            if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
+                // setSystemTheme();
+                controller.setThemeType("System");
+            } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
+                controller.getThemeProperty().setValue(true); // non default value triggers event
+                controller.setThemeType("Dark");
+            } else {
+                controller.setAppStyles(false);
+                resetStylesheets(false);
+                controller.setThemeType("Light");
+            }
+
+            // configure canvas background
+            var canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"))
+                    .orElseGet(controller::getThemeBackgroundColor);
+            controller.setCanvasBackgroundColor(canvasColor);
+            controller.setBackgroundPickerColor(canvasColor);
+            controller.adjustThemeFillColor(canvasColor);
+            drawarea.setTheme();
+
+            // Install the canvas
+            pane.setContent(drawarea.getScene());
+            this.setOnResize(pane);
+
+            // open canvas from file if requested
+            final Parameters parameters = getParameters();
+            final List<String> args = parameters.getRaw();
+            final List<File> files = new ArrayList<>();
+            for (String arg : args) {
+                files.add(new File(arg));
+            }
+            if (!files.isEmpty()) {
+                share.loadCanvas(files);
+            }
+            if (MAC_OS_X) {
+                Desktop desktop = Desktop.getDesktop();
+                desktop.setOpenFileHandler((OpenFilesEvent e) -> {
+                    share.loadCanvas(e.getFiles());
+                });
+            }
+        } catch (IOException e) {
+            logger.error("Failed to load FXML: {}", e.getMessage());
+            e.printStackTrace();
+            // Show error dialog or exit gracefully
+            Platform.exit();
+        } catch (Exception e) {
+            logger.error("Error: {}", e.getMessage());
+            e.printStackTrace();
+            // Show error dialog or exit gracefully
+            Platform.exit();
         }
     }
 
@@ -376,50 +386,6 @@ public class Gesticulate extends GuiceApplication {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-
-    private static class FxmlModule extends AbstractModule {
-
-        @Override
-        protected void configure() {
-            bind(ApplicationController.class);
-            bind(DrawingArea.class);
-            bind(CanvasView.class);
-            bind(CanvasTransferHandler.class);
-            bind(Dropper.class);
-            bind(DrawAreaListener.class);
-            bind(FigureHandler.class);
-            bind(RotationHandler.class);
-            bind(SelectionHandler.class);
-            bind(SketchHandler.class);
-            bind(TextHandler.class);
-            bind(MapHandler.class);
-            bind(KeyListener.class);
-            bind(DummyKeyHandler.class);
-            bind(MapKeyHandler.class);
-            bind(MoveKeyHandler.class);
-            bind(TextKeyHandler.class);
-            bind(BehaviourContext.class);
-            bind(FigureItemBehaviour.class);
-            bind(PictureItemBehaviour.class);
-            bind(GroupedItemBehaviour.class);
-            bind(MapItemBehaviour.class);
-            bind(TextItemBehaviour.class);
-            bind(FigureFactory.class).to(FigureFactoryImpl.class);
-            bind(MapController.class);
-            bind(TextController.class);
-            bind(Editor.class).to(TextEditor.class);
-            bind(ShareUtils.class);
-            bind(ReadInFunnel.class);
-            bind(WriteOutStreamer.class);
-            bind(ImageLoadWorker.class);
-            bind(PDFWorker.class);
-            bind(SVGWorker.class);
-            bind(PNGWorker.class);
-            bind(G2.class);
-            bind(Picture.class);
-            bind(StreetMap.class);
-        }
     }
 
 }

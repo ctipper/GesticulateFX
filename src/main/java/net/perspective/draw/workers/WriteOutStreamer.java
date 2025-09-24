@@ -60,9 +60,9 @@ import org.slf4j.LoggerFactory;
 
 public class WriteOutStreamer extends Task<Object> {
 
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    @Inject CanvasView view;
+    @Inject ApplicationController controller;
+    @Inject ShareUtils share;
     private File file;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
