@@ -118,32 +118,33 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    FigureHandler provideFigureHandler() {
-        return new FigureHandler();
+    FigureHandler provideFigureHandler(DrawingArea drawarea, CanvasView view) {
+        return new FigureHandler(drawarea, view);
     }
 
     @Provides
     @Singleton
-    RotationHandler provideRotationHandler() {
-        return new RotationHandler();
+    RotationHandler provideRotationHandler(DrawingArea drawarea, CanvasView view) {
+        return new RotationHandler(drawarea, view);
     }
 
     @Provides
     @Singleton
-    SelectionHandler provideSelectionHandler() {
-        return new SelectionHandler();
+    SelectionHandler provideSelectionHandler(DrawingArea drawarea,
+            CanvasView view, ApplicationController controller) {
+        return new SelectionHandler(drawarea, view, controller);
     }
 
     @Provides
     @Singleton
-    SketchHandler provideSketchHandler() {
-        return new SketchHandler();
+    SketchHandler provideSketchHandler(DrawingArea drawarea, CanvasView view) {
+        return new SketchHandler(drawarea, view);
     }
 
     @Provides
     @Singleton
-    TextHandler provideTextHandler() {
-        return new TextHandler();
+    TextHandler provideTextHandler(DrawingArea drawarea, CanvasView view) {
+        return new TextHandler(drawarea, view);
     }
 
     @Provides

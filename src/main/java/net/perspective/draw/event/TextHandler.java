@@ -42,8 +42,8 @@ import net.perspective.draw.geom.Text;
 
 public class TextHandler implements Handler {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject DrawAreaListener listener;
     @Inject BehaviourContext context;
     @Inject TextController textController;
@@ -53,7 +53,9 @@ public class TextHandler implements Handler {
      * Creates a new instance of <code>TextHandler</code> 
      */
     @Inject
-    public TextHandler() {
+    public TextHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override
