@@ -114,7 +114,7 @@ public class ApplicationController implements Initializable {
 
     private final Provider<DrawingArea> drawingAreaProvider;
     private final Provider<CanvasView> canvasViewProvider;
-    @Inject Gesticulate application;
+    private final Provider<Gesticulate> applicationProvider;
     @Inject ShareUtils share;
     @Inject MapController mapper;
     @Inject Provider<Picture> pictureProvider;
@@ -282,9 +282,8 @@ public class ApplicationController implements Initializable {
      */
     @FXML
     private void handleOnQuitAction(ActionEvent e) {
-        application.getStage().fireEvent(
-            new WindowEvent(
-                application.getStage(),
+        applicationProvider.get().getStage().fireEvent(new WindowEvent(
+                applicationProvider.get().getStage(),
                 WindowEvent.WINDOW_CLOSE_REQUEST
             )
         );
@@ -377,7 +376,7 @@ public class ApplicationController implements Initializable {
         menubutton.fire();
         if (aboutBox == null) {
             aboutBox = new AboutBox();
-            Stage stage = application.getStage();
+            Stage stage = applicationProvider.get().getStage();
             aboutBox.initOwner(stage);
         }
         aboutBox.showAndWait();
@@ -918,11 +917,11 @@ public class ApplicationController implements Initializable {
             String s = comboTheme.getValue();
             comboThemeProperty.setValue(s);
             if (s.equals("System") && Gesticulate.MM_SYSTEM_THEME) {
-                application.setSystemTheme();
+                applicationProvider.get().setSystemTheme();
             } else {
                 themeProperty.setValue(s.equals("Dark"));
                 if (Gesticulate.MM_SYSTEM_THEME) {
-                    application.deregisterThemeListener();
+                    applicationProvider.get().deregisterThemeListener();
                 }
             }
         });
@@ -931,13 +930,13 @@ public class ApplicationController implements Initializable {
          */
         this.themeProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             setAppStyles(newValue);
-            // reset application stylesheets
-            application.resetStylesheets(newValue);
+            // reset applicationProvider.get() stylesheets
+            applicationProvider.get().resetStylesheets(newValue);
         });
         this.gridProperty = new SimpleBooleanProperty();
         this.gridProperty.bindBidirectional(this.checkGrid.selectedProperty());
         this.gridProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            application.drawGrid(newValue);
+            applicationProvider.get().drawGrid(newValue);
         });
         this.guideProperty = new SimpleBooleanProperty();
         this.guideProperty.bindBidirectional(this.checkGuide.selectedProperty());
@@ -945,7 +944,7 @@ public class ApplicationController implements Initializable {
             drawingAreaProvider.get().setGuideEnabled(newValue);
         });
 
-        // Initialize the sliding application menu
+        // Initialize the sliding applicationProvider.get() menu
         appmenu.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         this.prepareSlideMenuAnimation();
 
@@ -1514,9 +1513,11 @@ public class ApplicationController implements Initializable {
     /** Creates a new instance of <code>ApplicationController</code> */
     @Inject
     public ApplicationController(Provider<DrawingArea> drawingAreaProvider, 
-            Provider<CanvasView> canvasViewProvider) {
+            Provider<CanvasView> canvasViewProvider,
+            Provider<Gesticulate> applicationProvider) {
         this.drawingAreaProvider = drawingAreaProvider;
         this.canvasViewProvider = canvasViewProvider;
+        this.applicationProvider = applicationProvider;
     }
 
     @FXML

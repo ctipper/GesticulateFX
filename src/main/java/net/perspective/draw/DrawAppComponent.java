@@ -23,7 +23,6 @@
  */
 package net.perspective.draw;
 
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import dagger.Component;
 import net.perspective.draw.event.DrawAreaListener;
@@ -72,8 +71,8 @@ public interface DrawAppComponent {
 
     FxAppComponent.Builder fxApp();
 
-    Provider<ApplicationController> provideApplicationController();
-
+    ApplicationController provideApplicationController();
+    
     DrawingArea drawingArea();
     
     CanvasView canvasView();

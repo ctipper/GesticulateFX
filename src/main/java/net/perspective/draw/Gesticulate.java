@@ -35,6 +35,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Consumer;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javafx.application.Application;
@@ -65,10 +66,11 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 public class Gesticulate extends Application {
  
-    @Inject DrawingArea drawarea;
+    private DrawAppComponent appComponent;
+    private ApplicationController controller;
+    @Inject Provider<DrawingArea> drawareaProvider;
     @Inject KeyListener keylistener;
     @Inject ShareUtils share;
-    private ApplicationController controller;
     private Stage stage;
     private Properties userPrefs;
 
@@ -83,10 +85,6 @@ public class Gesticulate extends Application {
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
     protected static final boolean MM_SYSTEM_THEME = true;
 
-    // Create the Dagger component
-    private static final DrawAppComponent appComponent = DaggerDrawAppComponent.builder()
-                .drawAppModule(new DrawAppModule())
-                .build();
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
     @Inject
@@ -111,12 +109,15 @@ public class Gesticulate extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         try {
+            appComponent = DaggerDrawAppComponent.builder()
+                    .drawAppModule(new DrawAppModule())
+                    .build();
             appComponent.inject(this);
+            controller = appComponent.provideApplicationController();
             FxAppComponent fxApp = appComponent.fxApp()
                     .application(this)
                     .mainWindow(primaryStage)
                     .build();
-            controller = appComponent.provideApplicationController().get();
             FXMLLoader loader = fxApp.loader(getClass().getResource("/fxml/Application.fxml"));
             loader.setController(controller);
             final Parent root = loader.load();
@@ -144,7 +145,7 @@ public class Gesticulate extends Application {
             this.userPrefs = getUserPreferences();
 
             // Initialize the canvas and apply handlers
-            drawarea.init(pane.getWidth(), pane.getHeight());
+            drawareaProvider.get().init(pane.getWidth(), pane.getHeight());
             logger.trace("initialized stage");
 
             // set the theme from user preferences
@@ -166,10 +167,10 @@ public class Gesticulate extends Application {
             controller.setCanvasBackgroundColor(canvasColor);
             controller.setBackgroundPickerColor(canvasColor);
             controller.adjustThemeFillColor(canvasColor);
-            drawarea.setTheme();
+            drawareaProvider.get().setTheme();
 
             // Install the canvas
-            pane.setContent(drawarea.getScene());
+            pane.setContent(drawareaProvider.get().getScene());
             this.setOnResize(pane);
 
             // open canvas from file if requested
@@ -208,12 +209,12 @@ public class Gesticulate extends Application {
      */
     public void setOnResize(ScrollPane pane) {
         pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawarea.getScene().setHeight((double) new_val);
-            drawarea.redrawGrid();
+            drawareaProvider.get().getScene().setHeight((double) new_val);
+            drawareaProvider.get().redrawGrid();
         });
         pane.widthProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawarea.getScene().setWidth((double) new_val);
-            drawarea.redrawGrid();
+            drawareaProvider.get().getScene().setWidth((double) new_val);
+            drawareaProvider.get().redrawGrid();
         });
     }
 
@@ -293,9 +294,9 @@ public class Gesticulate extends Application {
      * @param gridEnabled
      */
     public void drawGrid(boolean gridEnabled) {
-        drawarea.setGrid(gridEnabled);
-        drawarea.setSnapTo(gridEnabled);
-        drawarea.redrawGrid();
+        drawareaProvider.get().setGrid(gridEnabled);
+        drawareaProvider.get().setSnapTo(gridEnabled);
+        drawareaProvider.get().redrawGrid();
     }
 
     /**
