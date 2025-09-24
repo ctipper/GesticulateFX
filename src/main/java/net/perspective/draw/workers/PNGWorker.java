@@ -47,9 +47,9 @@ import org.slf4j.LoggerFactory;
 
 public class PNGWorker extends Task<Object> {
 
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    @Inject CanvasView view;
+    @Inject ApplicationController controller;
+    @Inject ShareUtils share;
     protected File file;
     private boolean opacity;
     private double margin;

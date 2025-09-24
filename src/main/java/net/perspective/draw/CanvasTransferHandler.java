@@ -23,25 +23,25 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.awt.Graphics2D;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -50,10 +50,11 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class CanvasTransferHandler {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private MapController mapper;
+    @Inject DrawingArea drawarea;
+    @Inject CanvasView view;
+    @Inject MapController mapper;
+    @Inject Provider<Picture> pictureProvider;
+    @Inject Provider<StreetMap> streetMapProvider;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor drawItemFlavor;
@@ -90,7 +91,7 @@ public class CanvasTransferHandler {
                 } else if (dataflavor.equals("imageitem")) {
                     java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
                     Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
-                    Picture picture = injector.getInstance(Picture.class);
+                    Picture picture = pictureProvider.get();
                     picture.moveTo(shift, shift);
                     ImageItem item = new ImageItem(image);
                     item.setFormat("PNG");
@@ -157,7 +158,7 @@ public class CanvasTransferHandler {
 
     private DrawItem checkDrawings(DrawItem drawing) {
         if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
-            var item = injector.getInstance(Picture.class);
+            var item = pictureProvider.get();
             try {
                 BeanUtils.copyProperties(item, drawing);
                 return item;
@@ -165,7 +166,7 @@ public class CanvasTransferHandler {
                 logger.trace(ex.getMessage());
             }
         } else if (drawing instanceof StreetMap streetmap) {
-            var item = injector.getInstance(StreetMap.class);
+            var item = streetMapProvider.get();
             try {
                 BeanUtils.copyProperties(item, streetmap);
                 item.init();

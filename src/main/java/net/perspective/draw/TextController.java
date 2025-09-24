@@ -23,8 +23,8 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.text.Editor;
@@ -37,10 +37,10 @@ import net.perspective.draw.text.Editor;
 @Singleton
 public class TextController {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
+    private final DrawingArea drawarea;
+    private final Provider<CanvasView> view;
+    private final ApplicationController controller;
+    private final Provider<Editor> editorProvider;
     private Editor editor;
 
     public static final int FONT_BOLD = 1;
@@ -51,7 +51,12 @@ public class TextController {
      * Creates a new instance of <code>TextController</code>
      */
     @Inject
-    public TextController() {
+    public TextController(DrawingArea drawarea, Provider<CanvasView> view,
+            ApplicationController controller, Provider<Editor> editorProvider) {
+        this.drawarea = drawarea;
+        this.view = view;
+        this.controller = controller;
+        this.editorProvider = editorProvider;
     }
 
     /**
@@ -60,8 +65,8 @@ public class TextController {
      * @param isRichText enable formatted text
      */
     public void enableRichText(boolean isRichText) {
-        if (!view.isEditing()) {
-            this.editor = injector.getInstance(Editor.class);
+        if (!view.get().isEditing()) {
+            this.editor = editorProvider.get();
         }
     }
 
@@ -129,22 +134,22 @@ public class TextController {
      * Cut the selected text
      */
     public void cutSelectedText() {
-        if (view.isEditing()) {
-            Text item = (Text) view.getDrawings().get(view.getSelected());
+        if (view.get().isEditing()) {
+            Text item = (Text) view.get().getDrawings().get(view.get().getSelected());
             editor.editText(item);
             editor.cutText();
             editor.commitText(item);
             item.setDimensions();
         }
-        view.moveSelection(view.getSelected());
+        view.get().moveSelection(view.get().getSelected());
     }
 
     /**
      * Copy the selected text
      */
     public void copySelectedText() {
-        if (view.isEditing()) {
-            Text item = (Text) view.getDrawings().get(view.getSelected());
+        if (view.get().isEditing()) {
+            Text item = (Text) view.get().getDrawings().get(view.get().getSelected());
             editor.editText(item);
             editor.copyText();
             editor.commitText(item);
@@ -155,14 +160,14 @@ public class TextController {
      * Paste the selected text
      */
     public void pasteSelectedText() {
-        if (view.isEditing()) {
-            Text item = (Text) view.getDrawings().get(view.getSelected());
+        if (view.get().isEditing()) {
+            Text item = (Text) view.get().getDrawings().get(view.get().getSelected());
             editor.editText(item);
             editor.pasteText();
             editor.commitText(item);
             item.setDimensions();
         }
-        view.moveSelection(view.getSelected());
+        view.get().moveSelection(view.get().getSelected());
     }
 
     /**
@@ -175,7 +180,7 @@ public class TextController {
      */
     public void formatSelectedText(int format) {
         this.formatSelected(format);
-        view.moveSelection(view.getSelected());
+        view.get().moveSelection(view.get().getSelected());
     }
 
     /**

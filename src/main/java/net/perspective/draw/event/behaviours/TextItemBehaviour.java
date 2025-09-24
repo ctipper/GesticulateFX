@@ -44,10 +44,10 @@ import net.perspective.draw.text.Editor;
 
 public class TextItemBehaviour implements ItemBehaviours {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
-    @Inject private TextController textController;
+    @Inject DrawingArea drawarea;
+    @Inject CanvasView view;
+    @Inject DrawAreaListener listener;
+    @Inject TextController textController;
 
     /** 
      * Creates a new instance of <code>TextItemBehaviour</code> 

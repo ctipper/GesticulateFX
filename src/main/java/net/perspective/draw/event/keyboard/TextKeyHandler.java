@@ -41,10 +41,10 @@ import net.perspective.draw.text.Editor;
 public class TextKeyHandler implements KeyHandler {
 
     @Inject DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private KeyListener keylistener;
-    @Inject private TextController textController;
+    @Inject CanvasView view;
+    @Inject ApplicationController controller;
+    @Inject KeyListener keylistener;
+    @Inject TextController textController;
     private int selection = -1;
     private boolean selectToLeft = false;
     private DrawingType drawingtype;

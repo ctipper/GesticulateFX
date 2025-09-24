@@ -46,6 +46,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.*;
@@ -63,11 +64,11 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class CanvasView {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private ApplicationController controller;
-    @Inject private Dropper dropper;
-    @Inject private TextController textController;
-    @Inject private G2 g2;
+    @Inject Provider<DrawingArea> drawarea;
+    @Inject Provider<ApplicationController> controller;
+    @Inject Dropper dropper;
+    @Inject Provider<TextController> textController;
+    @Inject G2 g2;
     private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private final List<ImageItem> images;
@@ -130,8 +131,8 @@ public class CanvasView {
         drawings = FXCollections.observableList(list);
         drawings.addListener((ListChangeListener.Change<? extends DrawItem> change) -> {
             while (change.next()) {
-                ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-                int g = (drawarea.isGridVisible() ? 1 : 0);
+                ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
+                int g = (drawarea.get().isGridVisible() ? 1 : 0);
                 if (hasGuides()) g += 1;
                 if (change.wasPermutated()) {
                     for (int i = change.getFrom(); i < change.getTo(); ++i) {
@@ -211,7 +212,7 @@ public class CanvasView {
      * @param isRichText formatted text active
      */
     public void enableRichText(boolean isRichText) {
-        textController.enableRichText(isRichText);
+        textController.get().enableRichText(isRichText);
     }
 
     /**
@@ -249,32 +250,32 @@ public class CanvasView {
      * of the selected item if dropper is enabled
      */
     public void updateSelectedItem() {
-        if (this.getSelected() != -1 && controller.getDropperDisabled()) {
+        if (this.getSelected() != -1 && controller.get().getDropperDisabled()) {
             /**
              * Update item properties
              */
             DrawItem item = drawings.get(this.getSelected());
 
-            if (!this.isMultiSelected() && !drawarea.isMultiSelectEnabled()) {
-                item.updateProperties(drawarea);
+            if (!this.isMultiSelected() && !drawarea.get().isMultiSelectEnabled()) {
+                item.updateProperties(drawarea.get());
             }
 
             switch (item) {
                 case Figure figure when !(figure instanceof ArrowLine) -> {
                     FigureType type = figure.getType();
-                    if (drawarea.getArrow() != ArrowType.NONE) {
+                    if (drawarea.get().getArrow() != ArrowType.NONE) {
                         if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
                             item = new ArrowLine(figure);
-                            item.updateProperties(drawarea);
+                            item.updateProperties(drawarea.get());
                         }
                     }
                 }
                 case ArrowLine arrowLine -> {
-                    if (drawarea.getArrow() == ArrowType.NONE) {
+                    if (drawarea.get().getArrow() == ArrowType.NONE) {
                         item = arrowLine.getLine();
-                        item.updateProperties(drawarea);
+                        item.updateProperties(drawarea.get());
                     } else {
-                        item.updateProperties(drawarea);
+                        item.updateProperties(drawarea.get());
                     }
                 }
                 default -> {
@@ -282,7 +283,7 @@ public class CanvasView {
             }
 
             this.updateCanvasItem(this.getSelected(), item);
-        } else if (this.getSelected() != -1 && !controller.getDropperDisabled()) { // dropper enabled
+        } else if (this.getSelected() != -1 && !controller.get().getDropperDisabled()) { // dropper enabled
             /**
              * Select item properties and update UI
              */
@@ -313,22 +314,22 @@ public class CanvasView {
          */
         Color color = item.getColor();
         Color fillcolor = item.getFillColor();
-        logger.trace("color: {} fillcolor: {}", controller.toRGBCode(color), controller.toRGBCode(fillcolor));
+        logger.trace("color: {} fillcolor: {}", controller.get().toRGBCode(color), controller.get().toRGBCode(fillcolor));
         /**
          * arrow type
          */
         if (item instanceof ArrowLine arrowLine) {
-            drawarea.setArrow(arrowLine.getArrowType());
+            drawarea.get().setArrow(arrowLine.getArrowType());
         } else {
-            drawarea.setArrow(ArrowType.NONE);
+            drawarea.get().setArrow(ArrowType.NONE);
         }
         /**
          * set properties
          */
-        controller.setStrokeCombo(strokeId);
-        controller.setStyleCombo(styleId);
-        controller.setColor(color);
-        controller.setFillColor(fillcolor);
+        controller.get().setStrokeCombo(strokeId);
+        controller.get().setStyleCombo(styleId);
+        controller.get().setColor(color);
+        controller.get().setFillColor(fillcolor);
     }
 
     private void textDropper(Text item) {
@@ -343,14 +344,14 @@ public class CanvasView {
          * get text colour
          */
         Color color = item.getColor();
-        logger.trace("color: {}", controller.toRGBCode(color));
+        logger.trace("color: {}", controller.get().toRGBCode(color));
         /**
          * set properties
          */
-        controller.setColor(color);
-        controller.setFontFamily(fontFamily);
-        controller.setFontSize(fontSize);
-        drawarea.updateFontStyle(fontStyle);
+        controller.get().setColor(color);
+        controller.get().setFontFamily(fontFamily);
+        controller.get().setFontSize(fontSize);
+        drawarea.get().updateFontStyle(fontStyle);
     }
 
     /**
@@ -486,8 +487,8 @@ public class CanvasView {
     public void insertDateAndTime(Text item) {
         ZonedDateTime zoned = ZonedDateTime.now();
         String timestamp = zoned.format(DateTimeFormatter.ofPattern("dd/MM/yyyy kk:mm"));
-        textController.getEditor().insertText(timestamp);
-        textController.getEditor().commitText(item);
+        textController.get().getEditor().insertText(timestamp);
+        textController.get().getEditor().commitText(item);
     }
 
     /**
@@ -576,16 +577,16 @@ public class CanvasView {
      */
     public void setSelected(int selection) {
         if (selection == -1) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
             selectionIndex.clear();
             drawingAnchors.getChildren().clear();
         } else {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
-            if (!drawarea.isMultiSelectEnabled()) {
+            if (!drawarea.get().isMultiSelectEnabled()) {
                 selectionIndex.clear();
                 drawingAnchors.getChildren().clear();
             }
@@ -603,13 +604,13 @@ public class CanvasView {
      */
     public void moveSelection(int selection) {
         if (!drawingAnchors.getChildren().isEmpty()) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
             drawingAnchors.getChildren().clear();
         }
         if (selection != -1) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             drawingAnchors = getAnchors();
             nodes.add(drawingAnchors);
             setTextHighlight(selection);
@@ -622,11 +623,11 @@ public class CanvasView {
      * @param selection index of the current drawitem
      */
     public void setTextHighlight(int selection) {
-        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+        ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
         nodes.remove(highlight);
         if (isEditing()) {
             highlight = g2.highlightText(drawings.get(selection));
-            if (textController.getEditor().getCaretStart() == textController.getEditor().getCaretEnd()) {
+            if (textController.get().getEditor().getCaretStart() == textController.get().getEditor().getCaretEnd()) {
                 caretTimeline.play();
             } else {
                 caretTimeline.stop();
@@ -643,7 +644,7 @@ public class CanvasView {
     private Group getAnchors() {
         Group anchorGroup = new Group();
         for (Integer item : selectionIndex) {
-            anchorGroup.getChildren().add(drawings.get(item).drawAnchors(drawarea));
+            anchorGroup.getChildren().add(drawings.get(item).drawAnchors(drawarea.get()));
         }
         return anchorGroup;
     }
@@ -731,19 +732,19 @@ public class CanvasView {
         switch (keyHandler) {
             case TEXT -> {
                 setEditing(true);
-                drawarea.setKeyboardHandler(keyHandler);
+                drawarea.get().setKeyboardHandler(keyHandler);
             }
             case MOVE -> {
                 setEditing(false);
-                drawarea.setKeyboardHandler(keyHandler);
+                drawarea.get().setKeyboardHandler(keyHandler);
             }
             case MAP -> {
                 setEditing(false);
-                drawarea.setKeyboardHandler(keyHandler);
+                drawarea.get().setKeyboardHandler(keyHandler);
             }
             default -> {
                 setEditing(false);
-                drawarea.setKeyboardHandler(keyHandler);
+                drawarea.get().setKeyboardHandler(keyHandler);
             }
         }
     }
@@ -770,21 +771,21 @@ public class CanvasView {
      * cut the text item
      */
     public void cutTextItem() {
-        textController.cutSelectedText();
+        textController.get().cutSelectedText();
     }
 
     /**
      * copy the text item
      */
     public void copyTextItem() {
-        textController.copySelectedText();
+        textController.get().copySelectedText();
     }
 
     /**
      * paste the text item
      */
     public void pasteTextItem() {
-        textController.pasteSelectedText();
+        textController.get().pasteSelectedText();
     }
 
 
@@ -832,12 +833,12 @@ public class CanvasView {
     public void setMarquee(boolean isMarquee) {
         this.isMarquee = isMarquee;
         if (isMarquee) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawMarquee);
-            drawMarquee = drawarea.getMarquee().draw();
+            drawMarquee = drawarea.get().getMarquee().draw();
             nodes.add(drawMarquee);
         } else {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawMarquee);
         }
     }
@@ -859,12 +860,12 @@ public class CanvasView {
     public void setGuides(boolean hasGuides) {
         this.hasGuides = hasGuides;
         if (hasGuides) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawGuides);
-            drawGuides = drawarea.getGuides().draw();
+            drawGuides = drawarea.get().getGuides().draw();
             nodes.add(0, drawGuides);
         } else {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+            ObservableList<Node> nodes = drawarea.get().getCanvas().getChildren();
             nodes.remove(drawGuides);
         }
     }

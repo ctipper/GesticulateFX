@@ -34,8 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import com.google.inject.Injector;
+import javax.inject.Provider;
 import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
@@ -110,14 +109,15 @@ import net.perspective.draw.util.FileUtils;
  * @author ctipper
  */
 
-@Singleton
+@FxAppScoped
 public class ApplicationController implements Initializable {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private Gesticulate application;
-    @Inject private CanvasView view;
-    @Inject private ShareUtils share;
-    @Inject private MapController mapper;
+    private final Provider<DrawingArea> drawingAreaProvider;
+    private final Provider<CanvasView> canvasViewProvider;
+    @Inject Gesticulate application;
+    @Inject ShareUtils share;
+    @Inject MapController mapper;
+    @Inject Provider<Picture> pictureProvider;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
     private BooleanProperty themeProperty;
@@ -158,7 +158,7 @@ public class ApplicationController implements Initializable {
     @FXML 
     private void handleWipeAction(ActionEvent e) {
         share.resetCanvasFile();
-        drawarea.prepareDrawing();
+        drawingAreaProvider.get().prepareDrawing();
     }
 
     @FXML
@@ -185,76 +185,76 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleSelectionAction(ActionEvent e) {
-        drawarea.changeHandlers(HandlerType.SELECTION);
-        view.setEditing(KeyHandlerType.MOVE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.SELECTION);
+        canvasViewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleRotationAction(ActionEvent e) {
-        drawarea.changeHandlers(HandlerType.ROTATION);
-        view.setEditing(KeyHandlerType.MOVE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.ROTATION);
+        canvasViewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleLineAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.LINE);
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().setDrawType(DrawingType.LINE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleLineTypeAction(ActionEvent e) {
         this.setDrawAreaLineType();
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleCircleAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.ELLIPSE);
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().setDrawType(DrawingType.ELLIPSE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleSquareAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.RECTANGLE);
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().setDrawType(DrawingType.RECTANGLE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.ISOSCELES);
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().setDrawType(DrawingType.ISOSCELES);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleHexagonAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.HEXAGON);
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().setDrawType(DrawingType.HEXAGON);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handlePentagramAction(ActionEvent e) {
-        drawarea.setDrawType(DrawingType.PENTAGRAM);
-        drawarea.changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().setDrawType(DrawingType.PENTAGRAM);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleSketchTypeAction(ActionEvent e) {
         this.setDrawAreaSketchType();
-        drawarea.changeHandlers(HandlerType.SKETCH);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.SKETCH);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleTextAction(ActionEvent e) {
-        drawarea.changeHandlers(HandlerType.TEXT);
-        view.setEditing(KeyHandlerType.NONE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.TEXT);
+        canvasViewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
@@ -264,7 +264,7 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void handleOpacityAction(ActionEvent e) {
-        drawarea.setTransparency(outlineSelected.then(0).otherwise(100).intValue());
+        drawingAreaProvider.get().setTransparency(outlineSelected.then(0).otherwise(100).intValue());
     }
 
     @FXML
@@ -311,8 +311,8 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleMapInsertAction(ActionEvent e) {
         mapper.createMap();
-        drawarea.changeHandlers(HandlerType.MAP);
-        view.setEditing(KeyHandlerType.MAP);
+        drawingAreaProvider.get().changeHandlers(HandlerType.MAP);
+        canvasViewProvider.get().setEditing(KeyHandlerType.MAP);
         menubutton.fire();
     }
 
@@ -338,7 +338,7 @@ public class ApplicationController implements Initializable {
         setLineTypeProperty(false);
         linebutton.setSelected(true);
         setDrawAreaLineType();
-        drawarea.changeHandlers(HandlerType.FIGURE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
         tabbutton.fire();
     }
 
@@ -348,7 +348,7 @@ public class ApplicationController implements Initializable {
         setLineTypeProperty(true);
         linebutton.setSelected(true);
         setDrawAreaLineType();
-        drawarea.changeHandlers(HandlerType.FIGURE);
+        drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
         tabbutton.fire();
     }
 
@@ -358,7 +358,7 @@ public class ApplicationController implements Initializable {
         setSketchTypeProperty(true);
         sketchbutton.setSelected(true);
         setDrawAreaSketchType();
-        drawarea.changeHandlers(HandlerType.SKETCH);
+        drawingAreaProvider.get().changeHandlers(HandlerType.SKETCH);
         tabbutton_2.fire();
     }
 
@@ -368,7 +368,7 @@ public class ApplicationController implements Initializable {
         setSketchTypeProperty(false);
         sketchbutton.setSelected(true);
         setDrawAreaSketchType();
-        drawarea.changeHandlers(HandlerType.SKETCH);
+        drawingAreaProvider.get().changeHandlers(HandlerType.SKETCH);
         tabbutton_2.fire();
     }
 
@@ -408,9 +408,9 @@ public class ApplicationController implements Initializable {
      */
     private void setDrawAreaLineType() {
         if (lineType.getValue()) {
-            drawarea.setDrawType(DrawingType.VERTICAL);
+            drawingAreaProvider.get().setDrawType(DrawingType.VERTICAL);
         } else {
-            drawarea.setDrawType(DrawingType.HORIZONTAL);
+            drawingAreaProvider.get().setDrawType(DrawingType.HORIZONTAL);
         }
     }
 
@@ -460,9 +460,9 @@ public class ApplicationController implements Initializable {
      */
     private void setDrawAreaSketchType() {
         if (sketchType.getValue()) {
-            drawarea.setDrawType(DrawingType.SKETCH);
+            drawingAreaProvider.get().setDrawType(DrawingType.SKETCH);
         } else {
-            drawarea.setDrawType(DrawingType.POLYGON);
+            drawingAreaProvider.get().setDrawType(DrawingType.POLYGON);
         }
     }
 
@@ -827,7 +827,7 @@ public class ApplicationController implements Initializable {
     public void setSelectionMode() {
         // selection mode by default
         this.selectbutton.setSelected(true);
-        drawarea.changeHandlers(HandlerType.SELECTION);
+        drawingAreaProvider.get().changeHandlers(HandlerType.SELECTION);
     }
 
     /**
@@ -879,9 +879,9 @@ public class ApplicationController implements Initializable {
         adjustThemeFillColor(themeBackgroundColor.getValue());
         setCanvasBackgroundColor(themeBackgroundColor.getValue());
         setBackgroundPickerColor(themeBackgroundColor.getValue());
-        drawarea.setDarkModeEnabled(isDarkMode);
-        drawarea.setTheme();
-        drawarea.redrawGrid();
+        drawingAreaProvider.get().setDarkModeEnabled(isDarkMode);
+        drawingAreaProvider.get().setTheme();
+        drawingAreaProvider.get().redrawGrid();
         // reset combo boxes
         String stroke = strokecombobox.getSelectionModel().getSelectedItem();
         Callback<ListView<String>, ListCell<String>> strokeCellFactory = getCellFactory(isDarkMode);
@@ -942,7 +942,7 @@ public class ApplicationController implements Initializable {
         this.guideProperty = new SimpleBooleanProperty();
         this.guideProperty.bindBidirectional(this.checkGuide.selectedProperty());
         this.guideProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            drawarea.setGuideEnabled(newValue);
+            drawingAreaProvider.get().setGuideEnabled(newValue);
         });
 
         // Initialize the sliding application menu
@@ -1034,8 +1034,8 @@ public class ApplicationController implements Initializable {
                 canvasBackgroundColor.setValue(toRGBCode(c));
                 adjustThemeFillColor(toRGBCode(c));
             }
-            drawarea.setTheme();
-            drawarea.redrawGrid();
+            drawingAreaProvider.get().setTheme();
+            drawingAreaProvider.get().redrawGrid();
         });
 
         // setup font style combo boxes
@@ -1087,7 +1087,7 @@ public class ApplicationController implements Initializable {
         this.lineType.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (linebutton.isSelected()) {
                 setDrawAreaLineType();
-                drawarea.changeHandlers(HandlerType.FIGURE);
+                drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
             }
         });
         // special sketch button handler
@@ -1096,7 +1096,7 @@ public class ApplicationController implements Initializable {
         this.sketchType.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (sketchbutton.isSelected()) {
                 setDrawAreaSketchType();
-                drawarea.changeHandlers(HandlerType.SKETCH);
+                drawingAreaProvider.get().changeHandlers(HandlerType.SKETCH);
             }
         });
         this.prepareAboutBoxMenu();
@@ -1266,7 +1266,6 @@ public class ApplicationController implements Initializable {
         appmenu.addRow(lastrow + hboxes + 2, about, aboutmenu);
     }
 
-    @Inject private Injector injector;
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private double shift = 20.0;
 
@@ -1279,12 +1278,12 @@ public class ApplicationController implements Initializable {
         final String filename = ((Button) ev.getSource()).getId().substring(3);
         CompletableFuture.runAsync(() -> {
             try {
-                Image image = SwingFXUtils.toFXImage(rasterizeSVGResource(filename, toRGBCode(drawarea.getFillColor())), null);
-                Picture picture = injector.getInstance(Picture.class);
+                Image image = SwingFXUtils.toFXImage(rasterizeSVGResource(filename, toRGBCode(drawingAreaProvider.get().getFillColor())), null);
+                Picture picture = pictureProvider.get();
                 picture.setStart(shift, shift);
                 ImageItem item = new ImageItem(image);
                 item.setFormat(FileUtils.getExtension(filename));
-                int index = view.setImageItem(item);
+                int index = canvasViewProvider.get().setImageItem(item);
                 double width = (double) image.getWidth();
                 double height = (double) image.getHeight();
                 double scale = 64d / height;
@@ -1292,8 +1291,8 @@ public class ApplicationController implements Initializable {
                 picture.setImage(index, width, height);
                 picture.setScale(scale);
                 Platform.runLater(() -> {
-                    view.setNewItem(picture);
-                    view.resetNewItem();
+                    canvasViewProvider.get().setNewItem(picture);
+                    canvasViewProvider.get().resetNewItem();
                 });
             } catch (IOException ex) {
                 logger.error("Can't fetch resource {}", filename);
@@ -1513,7 +1512,12 @@ public class ApplicationController implements Initializable {
     }
 
     /** Creates a new instance of <code>ApplicationController</code> */
-    public ApplicationController() {}
+    @Inject
+    public ApplicationController(Provider<DrawingArea> drawingAreaProvider, 
+            Provider<CanvasView> canvasViewProvider) {
+        this.drawingAreaProvider = drawingAreaProvider;
+        this.canvasViewProvider = canvasViewProvider;
+    }
 
     @FXML
     private GridPane appmenu;

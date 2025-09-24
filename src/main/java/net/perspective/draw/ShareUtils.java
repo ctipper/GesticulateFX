@@ -23,7 +23,6 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.io.File;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -36,6 +35,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.stage.FileChooser;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.util.FileUtils;
 import net.perspective.draw.workers.ImageLoadWorker;
@@ -53,19 +53,21 @@ import net.perspective.draw.workers.WriteOutStreamer;
 @Singleton
 public class ShareUtils {
 
-    @Inject private Injector injector;
-    @Inject private Gesticulate application;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
+    @Inject Provider<Gesticulate> application;
+    @Inject Provider<CanvasView> view;
+    @Inject Provider<ApplicationController> controller;
+    @Inject Provider<ImageLoadWorker> imageLoadWorkerProvider;
+    @Inject Provider<ReadInFunnel> readInFunnelProvider;
+    @Inject Provider<WriteOutStreamer> writeOutStreamerProvider;
+    @Inject Provider<PDFWorker> pdfWorkerProvider;
+    @Inject Provider<SVGWorker> svgWorkerProvider;
+    @Inject Provider<PNGWorker> pngWorkerProvider;
     private ImageLoadWorker imageLoader;
     private List<File> imageFiles;
     private File canvasfile;
     private final double margin;
     public final ExecutorService executor;
 
-    /**
-     * Creates a new instance of <code>ShareUtils</code>
-     */
     public ShareUtils() {
         this.executor = Executors.newCachedThreadPool();
         this.margin = 5.0;  // half max stroke width
@@ -119,7 +121,7 @@ public class ShareUtils {
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif", "*.svg"),
                 new FileChooser.ExtensionFilter("All Documents", "*.*"));
-        List<File> result = chooser.showOpenMultipleDialog(application.getStage());
+        List<File> result = chooser.showOpenMultipleDialog(application.get().getStage());
         if (result == null) {
             return null;
         }
@@ -139,12 +141,12 @@ public class ShareUtils {
     public void readPictures(List<File> files) {
         this.setImageFiles(files);
         if (this.getImageFiles() != null) {
-            imageLoader = injector.getInstance(ImageLoadWorker.class);
-            controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-            controller.setProgressIndeterminate();
+            imageLoader = imageLoadWorkerProvider.get();
+            controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+            controller.get().setProgressIndeterminate();
             executor.submit(imageLoader);
         }
-        controller.setSelectionMode();
+        controller.get().setSelectionMode();
     }
 
     /**
@@ -161,7 +163,7 @@ public class ShareUtils {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("GST", "*.gst"),
             new FileChooser.ExtensionFilter("All Documents", "*.*"));
-        File result = chooser.showOpenDialog(application.getStage());
+        File result = chooser.showOpenDialog(application.get().getStage());
         if (result == null) {
             return null;
         }
@@ -173,7 +175,7 @@ public class ShareUtils {
      */
     public void exportCanvas() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.get().getDrawings().isEmpty()) {
             return;
         }
 
@@ -185,7 +187,7 @@ public class ShareUtils {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("GST", "*.gst"),
             new FileChooser.ExtensionFilter("All Documents", "*.*"));
-        File result = chooser.showSaveDialog(application.getStage());
+        File result = chooser.showSaveDialog(application.get().getStage());
         if (result == null) {
             return;
         }
@@ -203,7 +205,7 @@ public class ShareUtils {
     public void loadCanvas(List<File> files) {
         File file = files.get(0);
         if (FileUtils.getExtension(file).equals("gst")) {
-            view.clearView();
+            view.get().clearView();
             readCanvas(file);
         } else {
             readPictures(files);
@@ -216,11 +218,11 @@ public class ShareUtils {
      * @param file the stored file
      */
     public void readCanvas(File file) {
-        ReadInFunnel reader = injector.getInstance(ReadInFunnel.class);
+        ReadInFunnel reader = readInFunnelProvider.get();
         reader.setFile(file);
         this.canvasfile = file;
-        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controller.getProgressProperty().bind(reader.progressProperty());
+        controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.get().getProgressProperty().bind(reader.progressProperty());
         executor.submit(reader);
     }
 
@@ -230,11 +232,11 @@ public class ShareUtils {
      * @param file a file to write
      */
     public void writeCanvas(File file) {
-        WriteOutStreamer streamer = injector.getInstance(WriteOutStreamer.class);
+        WriteOutStreamer streamer = writeOutStreamerProvider.get();
         streamer.setFile(file);
         this.canvasfile = file;
-        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controller.getProgressProperty().bind(streamer.progressProperty());
+        controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.get().getProgressProperty().bind(streamer.progressProperty());
         executor.submit(streamer);
     }
 
@@ -243,7 +245,7 @@ public class ShareUtils {
      */
     public void exportPDF() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.get().getDrawings().isEmpty()) {
             return;
         }
 
@@ -255,18 +257,18 @@ public class ShareUtils {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("PDF", "*.pdf"),
             new FileChooser.ExtensionFilter("All Documents", "*.*"));
-        File result = chooser.showSaveDialog(application.getStage());
+        File result = chooser.showSaveDialog(application.get().getStage());
         if (result == null) {
             return;
         }
 
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "pdf");
-        PDFWorker pdfWorker = injector.getInstance(PDFWorker.class);
+        PDFWorker pdfWorker = pdfWorkerProvider.get();
         pdfWorker.setFile(file);
         pdfWorker.setMargin(this.margin);
-        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controller.setProgressIndeterminate();
+        controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.get().setProgressIndeterminate();
         executor.submit(pdfWorker);
     }
 
@@ -275,7 +277,7 @@ public class ShareUtils {
      */
     public void exportSVG() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.get().getDrawings().isEmpty()) {
             return;
         }
 
@@ -287,18 +289,18 @@ public class ShareUtils {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("SVG", "*.svg"),
             new FileChooser.ExtensionFilter("All Images", "*.*"));
-        File result = chooser.showSaveDialog(application.getStage());
+        File result = chooser.showSaveDialog(application.get().getStage());
         if (result == null) {
             return;
         }
 
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "svg");
-        SVGWorker svgWorker = injector.getInstance(SVGWorker.class);
+        SVGWorker svgWorker = svgWorkerProvider.get();
         svgWorker.setFile(file);
         svgWorker.setMargin(this.margin);
-        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controller.setProgressIndeterminate();
+        controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.get().setProgressIndeterminate();
         executor.submit(svgWorker);
     }
 
@@ -307,7 +309,7 @@ public class ShareUtils {
      */
     public void exportPNG() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.get().getDrawings().isEmpty()) {
             return;
         }
 
@@ -319,19 +321,19 @@ public class ShareUtils {
         chooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("PNG", "*.png"),
             new FileChooser.ExtensionFilter("All Images", "*.*"));
-        File result = chooser.showSaveDialog(application.getStage());
+        File result = chooser.showSaveDialog(application.get().getStage());
         if (result == null) {
             return;
         }
 
         // wrangle filename with correct extension
         final File file = FileUtils.cleanseFileName(result, "png");
-        PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
+        PNGWorker pngWorker = pngWorkerProvider.get();
         pngWorker.setFile(file);
         pngWorker.setOpacity(false);
         pngWorker.setMargin(this.margin);
-        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controller.setProgressIndeterminate();
+        controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.get().setProgressIndeterminate();
         executor.submit(pngWorker);
     }
 
@@ -340,8 +342,8 @@ public class ShareUtils {
      */
     public void snapshotPNG() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
-            controller.getSnapshotProperty().setValue(false);
+        if (view.get().getDrawings().isEmpty()) {
+            controller.get().getSnapshotProperty().setValue(false);
             return;
         }
 
@@ -358,11 +360,11 @@ public class ShareUtils {
         String path = Paths.get(userPath) + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
         File file = new File(path);
 
-        PNGWorker pngWorker = injector.getInstance(PNGWorker.class);
+        PNGWorker pngWorker = pngWorkerProvider.get();
         pngWorker.setFile(file);
         pngWorker.setMargin(this.margin);
-        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controller.setProgressIndeterminate();
+        controller.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.get().setProgressIndeterminate();
         executor.submit(pngWorker);
     }
 
