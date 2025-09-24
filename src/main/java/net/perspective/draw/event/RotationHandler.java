@@ -51,8 +51,8 @@ import net.perspective.draw.util.V2;
 
 public class RotationHandler implements Handler {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject DrawAreaListener listener;
     private double omega;
     private final Map<CanvasPoint, Area> regionCache = new HashMap<>();
@@ -61,7 +61,9 @@ public class RotationHandler implements Handler {
      * Creates a new instance of <code>RotationHandler</code> 
      */
     @Inject
-    public RotationHandler() {
+    public RotationHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override

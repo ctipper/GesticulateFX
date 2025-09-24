@@ -58,9 +58,9 @@ import net.perspective.draw.util.CanvasPoint;
 
 public class SelectionHandler implements Handler {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
-    @Inject ApplicationController controller;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    private final ApplicationController controller;
     @Inject DrawAreaListener listener;
     @Inject BehaviourContext context;
     @Inject FigureFactory figurefactory;
@@ -81,7 +81,11 @@ public class SelectionHandler implements Handler {
      * Creates a new instance of <code>SelectionHandler</code> 
      */
     @Inject
-    public SelectionHandler() {
+    public SelectionHandler(DrawingArea drawarea,
+            CanvasView view, ApplicationController controller) {
+        this.drawarea = drawarea;
+        this.view = view;
+        this.controller = controller;
     }
 
     @Override
