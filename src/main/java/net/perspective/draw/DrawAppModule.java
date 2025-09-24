@@ -71,8 +71,9 @@ public class DrawAppModule {
     @Singleton
     ApplicationController provideApplicationController(
             Provider<DrawingArea> drawingAreaProvider,
-            Provider<CanvasView> canvasViewProvider) {
-        return new ApplicationController(drawingAreaProvider, canvasViewProvider);
+            Provider<CanvasView> canvasViewProvider,
+            Provider<Gesticulate> applicationProvider) {
+        return new ApplicationController(drawingAreaProvider, canvasViewProvider, applicationProvider);
     }
     
     @Provides
