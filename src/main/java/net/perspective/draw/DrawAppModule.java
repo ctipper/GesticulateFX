@@ -45,12 +45,8 @@ import net.perspective.draw.event.keyboard.KeyListener;
 import net.perspective.draw.event.keyboard.MapKeyHandler;
 import net.perspective.draw.event.keyboard.MoveKeyHandler;
 import net.perspective.draw.event.keyboard.TextKeyHandler;
-import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
-import net.perspective.draw.text.Editor;
-import net.perspective.draw.text.TextEditor;
 import net.perspective.draw.util.G2;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
@@ -118,8 +114,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    FigureHandler provideFigureHandler(DrawingArea drawarea, CanvasView view) {
-        return new FigureHandler(drawarea, view);
+    FigureHandler provideFigureHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        FigureHandler figureHandler = new FigureHandler(drawarea, view);
+        component.inject(figureHandler);
+        return figureHandler;
     }
 
     @Provides
@@ -221,12 +219,6 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    FigureFactory provideFigureFactory() {
-        return new FigureFactoryImpl();
-    }
-
-    @Provides
-    @Singleton
     MapController provideMapController() {
         return new MapController();
     }
@@ -237,12 +229,6 @@ public class DrawAppModule {
 //            ApplicationController controller, Provider<Editor> editorProvider) {
 //        return new TextController(drawarea, viewProvider, controller, editorProvider);
 //    }
-
-    @Provides
-    @Singleton
-    Editor provideEditor() {
-        return new TextEditor();
-    }
 
     @Provides
     @Singleton

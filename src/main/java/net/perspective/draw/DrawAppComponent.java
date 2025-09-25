@@ -60,7 +60,7 @@ import net.perspective.draw.workers.WriteOutStreamer;
  * @author ctipper
  */
 @Singleton
-@Component(modules = {DrawAppModule.class})
+@Component(modules = {DrawAppModule.class, DrawAppBindingModule.class})
 public interface DrawAppComponent {
 
     void inject(Gesticulate gesticulate);
@@ -68,6 +68,8 @@ public interface DrawAppComponent {
     void inject(CanvasView view);
 
     void inject(DrawingArea drawingArea);
+    
+    void inject(FigureHandler figureHandler);
 
     FxAppComponent.Builder fxApp();
 

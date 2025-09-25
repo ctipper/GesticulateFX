@@ -42,8 +42,8 @@ public class FigureHandler implements Handler {
 
     private final DrawingArea drawarea;
     private final CanvasView view;
-    @Inject DrawAreaListener listener;
     @Inject FigureFactory figurefactory;
+    @Inject DrawAreaListener listener;
 
     @Inject
     public FigureHandler(DrawingArea drawarea, CanvasView view) {
