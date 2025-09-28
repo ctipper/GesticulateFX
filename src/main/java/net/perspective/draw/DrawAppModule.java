@@ -223,12 +223,14 @@ public class DrawAppModule {
         return new MapController();
     }
 
-//    @Provides
-//    @Singleton
-//    TextController provideTextController(DrawingArea drawarea, Provider<CanvasView> viewProvider,
-//            ApplicationController controller, Provider<Editor> editorProvider) {
-//        return new TextController(drawarea, viewProvider, controller, editorProvider);
-//    }
+    @Provides
+    @Singleton
+    TextController provideTextController(DrawingArea drawarea, Provider<CanvasView> viewProvider,
+            ApplicationController controller, DrawAppComponent component) {
+        TextController textController = new TextController(drawarea, viewProvider, controller);
+        component.inject(textController);
+        return textController;
+    }
 
     @Provides
     @Singleton
