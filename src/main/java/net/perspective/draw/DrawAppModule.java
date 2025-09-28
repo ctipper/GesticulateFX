@@ -134,8 +134,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    TextHandler provideTextHandler(DrawingArea drawarea, CanvasView view) {
-        return new TextHandler(drawarea, view);
+    TextHandler provideTextHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        TextHandler textHandler = new TextHandler(drawarea, view);
+        component.inject(textHandler);
+        return textHandler;
     }
 
     @Provides
@@ -268,8 +270,8 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    G2 provideG2() {
-        return new G2();
+    G2 provideG2(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> controllerProvider) {
+        return new G2(drawareaProvider, controllerProvider);
     }
 
     @Provides

@@ -73,6 +73,8 @@ public interface DrawAppComponent {
 
     void inject(SketchHandler sketchHandler);
 
+    void inject(TextHandler textHandler);
+    
     FxAppComponent.Builder fxApp();
 
     ApplicationController provideApplicationController();
