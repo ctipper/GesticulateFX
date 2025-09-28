@@ -136,8 +136,11 @@ public class DrawAppModule {
     @Provides
     @Singleton
     SelectionHandler provideSelectionHandler(DrawingArea drawarea,
-            CanvasView view, ApplicationController controller) {
-        return new SelectionHandler(drawarea, view, controller);
+            CanvasView view, ApplicationController controller,
+            DrawAppComponent component) {
+        SelectionHandler selectionHandler = new SelectionHandler(drawarea, view, controller);
+        component.inject(selectionHandler);
+        return selectionHandler;
     }
 
     @Provides
@@ -194,8 +197,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    FigureItemBehaviour provideFigureItemBehaviour() {
-        return new FigureItemBehaviour();
+    FigureItemBehaviour provideFigureItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        FigureItemBehaviour figureItemBehaviour = new FigureItemBehaviour(drawarea, view);
+        component.inject(figureItemBehaviour);
+        return figureItemBehaviour;
     }
 
     @Provides
