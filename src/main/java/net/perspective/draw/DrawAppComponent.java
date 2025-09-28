@@ -75,6 +75,8 @@ public interface DrawAppComponent {
 
     void inject(TextHandler textHandler);
     
+    void inject(TextController textController);
+    
     FxAppComponent.Builder fxApp();
 
     ApplicationController provideApplicationController();
@@ -129,7 +131,7 @@ public interface DrawAppComponent {
 
     MapController mapController();
 
-    TextController textController();
+    TextController TextController();
 
     Editor editor();
 

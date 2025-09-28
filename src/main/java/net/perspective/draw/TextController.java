@@ -40,8 +40,7 @@ public class TextController {
     private final DrawingArea drawarea;
     private final Provider<CanvasView> view;
     private final ApplicationController controller;
-    private final Provider<Editor> editorProvider;
-    private Editor editor;
+    @Inject Editor editor;
 
     public static final int FONT_BOLD = 1;
     public static final int FONT_ITALIC = 2;
@@ -52,11 +51,10 @@ public class TextController {
      */
     @Inject
     public TextController(DrawingArea drawarea, Provider<CanvasView> view,
-            ApplicationController controller, Provider<Editor> editorProvider) {
+            ApplicationController controller) {
         this.drawarea = drawarea;
         this.view = view;
         this.controller = controller;
-        this.editorProvider = editorProvider;
     }
 
     /**
@@ -66,7 +64,7 @@ public class TextController {
      */
     public void enableRichText(boolean isRichText) {
         if (!view.get().isEditing()) {
-            this.editor = editorProvider.get();
+            // this.editor = editorProvider.get();
         }
     }
 
