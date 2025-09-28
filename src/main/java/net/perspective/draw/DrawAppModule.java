@@ -156,20 +156,21 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    MapKeyHandler provideMapKeyHandler() {
-        return new MapKeyHandler();
+    MapKeyHandler provideMapKeyHandler(DrawingArea drawarea, CanvasView view) {
+        return new MapKeyHandler(drawarea, view);
     }
 
     @Provides
     @Singleton
-    MoveKeyHandler provideMoveKeyHandler() {
-        return new MoveKeyHandler();
+    MoveKeyHandler provideMoveKeyHandler(DrawingArea drawarea, CanvasView view) {
+        return new MoveKeyHandler(drawarea, view);
     }
 
     @Provides
     @Singleton
-    TextKeyHandler provideTextKeyHandler() {
-        return new TextKeyHandler();
+    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea,
+            CanvasView view, ApplicationController controller) {
+        return new TextKeyHandler(drawarea, view, controller);
     }
 
     @Provides

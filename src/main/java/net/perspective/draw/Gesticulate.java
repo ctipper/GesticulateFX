@@ -155,8 +155,8 @@ public class Gesticulate extends Application {
                 // setSystemTheme();
                 controller.setThemeType("System");
             } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
-                controller.getThemeProperty().setValue(true); // non default value triggers event
-                controller.setThemeType("Dark");
+                // controller.getThemeProperty().setValue(true); // non default value triggers event
+                // controller.setThemeType("Dark");
             } else {
                 controller.setAppStyles(false);
                 resetStylesheets(false);
