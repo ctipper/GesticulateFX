@@ -54,13 +54,16 @@ public class G2 {
     
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<ApplicationController> applicationProvider;
-    @Inject TextController textController;
+    private final Provider<TextController> textControllerProvider;
 
     /** Creates a new instance of <code>G2</code> */
     @Inject
-    public G2(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> applicationProvider) {
+    public G2(Provider<DrawingArea> drawareaProvider, 
+            Provider<ApplicationController> applicationProvider,
+            Provider<TextController> textControllerProvider) {
         this.drawareaProvider = drawareaProvider;
         this.applicationProvider = applicationProvider;
+        this.textControllerProvider = textControllerProvider;
     }
 
     /**
@@ -72,7 +75,7 @@ public class G2 {
     @SuppressWarnings("deprecation") 
     public Path highlightText(DrawItem item) {
         Path highlight = new Path();
-        Editor editor = textController.getEditor();
+        Editor editor = textControllerProvider.get().getEditor();
         TextFlow layout = drawareaProvider.get().getTextLayout(item);
         if (editor.getCaretStart() == editor.getCaretEnd()) {
             // Retrieve caret path for insertion index.

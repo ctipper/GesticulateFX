@@ -81,8 +81,12 @@ public class DrawAppModule {
     @Singleton
     CanvasView provideCanvasView(Provider<DrawingArea> drawareaProvider,
     Provider<ApplicationController> controllerProvider,
-    Provider<TextController> textControllerProvider) {
-        return new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
+    Provider<TextController> textControllerProvider,
+    DrawAppComponent component) {
+        CanvasView view = new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
+        component.inject(view);
+        return view;
+        
     }
 
     @Provides
@@ -270,8 +274,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    G2 provideG2(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> controllerProvider) {
-        return new G2(drawareaProvider, controllerProvider);
+    G2 provideG2(Provider<DrawingArea> drawareaProvider, 
+            Provider<ApplicationController> controllerProvider,
+            Provider<TextController> textControllerProvider) {
+        return new G2(drawareaProvider, controllerProvider, textControllerProvider);
     }
 
     @Provides
