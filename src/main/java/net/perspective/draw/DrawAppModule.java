@@ -65,13 +65,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ApplicationController provideApplicationController(
-            Provider<DrawingArea> drawingAreaProvider,
-            Provider<CanvasView> canvasViewProvider,
-            Provider<Gesticulate> applicationProvider) {
-        return new ApplicationController(drawingAreaProvider, canvasViewProvider, applicationProvider);
+    ApplicationController provideApplicationController(Provider<DrawingArea> drawingAreaProvider, CanvasView view, Gesticulate application) {
+        return new ApplicationController(drawingAreaProvider, view, application);
     }
-    
+
     @Provides
     @Singleton
     DrawingArea provideDrawingArea(CanvasView view, ApplicationController controller, DrawAppComponent component) {
@@ -86,12 +83,6 @@ public class DrawAppModule {
     Provider<ApplicationController> controllerProvider,
     Provider<TextController> textControllerProvider) {
         return new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
-    }
-
-    @Provides
-    @Singleton
-    Gesticulate provideGesticulate() {
-        return new Gesticulate();
     }
 
     @Provides
