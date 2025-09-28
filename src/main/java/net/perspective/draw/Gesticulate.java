@@ -89,10 +89,6 @@ public class Gesticulate extends Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Gesticulate.class.getName());
 
-    @Inject
-    public Gesticulate() {
-    }
-    
     /**
      * Init the application
      * 
@@ -100,6 +96,10 @@ public class Gesticulate extends Application {
      */
     @Override
     public void init() throws Exception {
+        appComponent = DaggerDrawAppComponent.builder()
+                .drawAppModule(new DrawAppModule())
+                .build();
+        appComponent.inject(this);
     }
 
     /**
@@ -111,18 +111,15 @@ public class Gesticulate extends Application {
     @Override
     public void start(final Stage primaryStage) throws Exception {
         try {
-            appComponent = DaggerDrawAppComponent.builder()
-                    .drawAppModule(new DrawAppModule())
-                    .build();
-            appComponent.inject(this);
-            controller = appComponent.provideApplicationController();
             FxAppComponent fxApp = appComponent.fxApp()
-                    .application(this)
-                    .mainWindow(primaryStage)
-                    .build();
+                .application(this)
+                .mainWindow(primaryStage)
+                .build();
             FXMLLoader loader = fxApp.loader(getClass().getResource("/fxml/Application.fxml"));
-            loader.setController(controller);
+            loader.setControllerFactory(param -> appComponent.applicationController());
             final Parent root = loader.load();
+            controller = appComponent.applicationController();
+            controller.setApplication(this);
             // Put the loaded user interface onto the primary stage.
             Scene scene = new Scene(root);
             // keyboard events are consumed by the scene
@@ -277,7 +274,6 @@ public class Gesticulate extends Application {
      * @param isDark is dark theme selected
      */
     public void resetStylesheets(Boolean isDark) {
-        System.out.println("Stage " + (stage==null?"null":"isSet"));
         if (isDark) {
             stage.getScene().getStylesheets().clear();
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-dark.css");

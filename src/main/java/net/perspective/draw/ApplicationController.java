@@ -114,7 +114,7 @@ public class ApplicationController implements Initializable {
 
     private final Provider<DrawingArea> drawingAreaProvider;
     private final Provider<CanvasView> viewProvider;
-    private final Provider<Gesticulate> applicationProvider;
+    private Gesticulate application;
     @Inject ShareUtils share;
     @Inject MapController mapper;
     @Inject Provider<Picture> pictureProvider;
@@ -154,6 +154,10 @@ public class ApplicationController implements Initializable {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class.getName());
 
     private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+
+    public void setApplication(Gesticulate application) {
+        this.application = application;
+    }
 
     @FXML 
     private void handleWipeAction(ActionEvent e) {
@@ -282,8 +286,8 @@ public class ApplicationController implements Initializable {
      */
     @FXML
     private void handleOnQuitAction(ActionEvent e) {
-        applicationProvider.get().getStage().fireEvent(new WindowEvent(
-                applicationProvider.get().getStage(),
+        application.getStage().fireEvent(new WindowEvent(
+                application.getStage(),
                 WindowEvent.WINDOW_CLOSE_REQUEST
             )
         );
@@ -376,7 +380,7 @@ public class ApplicationController implements Initializable {
         menubutton.fire();
         if (aboutBox == null) {
             aboutBox = new AboutBox();
-            Stage stage = applicationProvider.get().getStage();
+            Stage stage = application.getStage();
             aboutBox.initOwner(stage);
         }
         aboutBox.showAndWait();
@@ -917,11 +921,11 @@ public class ApplicationController implements Initializable {
             String s = comboTheme.getValue();
             comboThemeProperty.setValue(s);
             if (s.equals("System") && Gesticulate.MM_SYSTEM_THEME) {
-                applicationProvider.get().setSystemTheme();
+                application.setSystemTheme();
             } else {
                 themeProperty.setValue(s.equals("Dark"));
                 if (Gesticulate.MM_SYSTEM_THEME) {
-                    applicationProvider.get().deregisterThemeListener();
+                    application.deregisterThemeListener();
                 }
             }
         });
@@ -931,12 +935,12 @@ public class ApplicationController implements Initializable {
         this.themeProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             setAppStyles(newValue);
             // reset application stylesheets
-            applicationProvider.get().resetStylesheets(newValue);
+            application.resetStylesheets(newValue);
         });
         this.gridProperty = new SimpleBooleanProperty();
         this.gridProperty.bindBidirectional(this.checkGrid.selectedProperty());
         this.gridProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            applicationProvider.get().drawGrid(newValue);
+            application.drawGrid(newValue);
         });
         this.guideProperty = new SimpleBooleanProperty();
         this.guideProperty.bindBidirectional(this.checkGuide.selectedProperty());
@@ -1512,12 +1516,9 @@ public class ApplicationController implements Initializable {
 
     /** Creates a new instance of <code>ApplicationController</code> */
     @Inject
-    public ApplicationController(Provider<DrawingArea> drawingAreaProvider,
-            Provider<CanvasView> viewProvider,
-            Provider<Gesticulate> applicationProvider) {
+    public ApplicationController(Provider<DrawingArea> drawingAreaProvider, Provider<CanvasView> viewProvider) {
         this.drawingAreaProvider = drawingAreaProvider;
         this.viewProvider = viewProvider;
-        this.applicationProvider = applicationProvider;
     }
 
     @FXML
