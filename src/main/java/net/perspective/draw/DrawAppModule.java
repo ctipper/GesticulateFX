@@ -113,6 +113,14 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
+    SketchHandler provideSketchHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        SketchHandler sketchHandler = new SketchHandler(drawarea, view);
+        component.inject(sketchHandler);
+        return sketchHandler;
+    }
+
+    @Provides
+    @Singleton
     RotationHandler provideRotationHandler(DrawingArea drawarea, CanvasView view) {
         return new RotationHandler(drawarea, view);
     }
@@ -122,12 +130,6 @@ public class DrawAppModule {
     SelectionHandler provideSelectionHandler(DrawingArea drawarea,
             CanvasView view, ApplicationController controller) {
         return new SelectionHandler(drawarea, view, controller);
-    }
-
-    @Provides
-    @Singleton
-    SketchHandler provideSketchHandler(DrawingArea drawarea, CanvasView view) {
-        return new SketchHandler(drawarea, view);
     }
 
     @Provides
