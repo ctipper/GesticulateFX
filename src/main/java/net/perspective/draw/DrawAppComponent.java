@@ -89,9 +89,9 @@ public interface DrawAppComponent {
 
     FxAppComponent.Builder fxApp();
 
-    ApplicationController provideApplicationController();
+    ApplicationController applicationController();
     
-    Gesticulate provideGesticulate();
+    Gesticulate Gesticulate();
     
     DrawingArea drawingArea();
     
