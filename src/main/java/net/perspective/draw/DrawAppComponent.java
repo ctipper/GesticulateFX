@@ -75,6 +75,8 @@ public interface DrawAppComponent {
 
     ApplicationController provideApplicationController();
     
+    Gesticulate gesticulate();
+    
     DrawingArea drawingArea();
     
     CanvasView canvasView();

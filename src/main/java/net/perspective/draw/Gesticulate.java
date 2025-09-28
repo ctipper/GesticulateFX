@@ -36,6 +36,7 @@ import java.util.Properties;
 import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javafx.application.Application;
@@ -64,6 +65,7 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
  * @author ctipper
  */
 
+@Singleton
 public class Gesticulate extends Application {
  
     private DrawAppComponent appComponent;
