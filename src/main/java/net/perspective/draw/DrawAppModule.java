@@ -65,8 +65,12 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ApplicationController provideApplicationController(Provider<DrawingArea> drawingAreaProvider, CanvasView view, Gesticulate application) {
-        return new ApplicationController(drawingAreaProvider, view, application);
+    ApplicationController provideApplicationController(Provider<DrawingArea> drawingAreaProvider, 
+            Provider<CanvasView> viewProvider, Provider<Gesticulate> applicationProvider,
+            DrawAppComponent component) {
+        ApplicationController applicationController = new ApplicationController(drawingAreaProvider, viewProvider, applicationProvider);
+        component.inject(applicationController);
+        return applicationController;
     }
 
     @Provides
