@@ -75,8 +75,12 @@ public interface DrawAppComponent {
 
     void inject(TextHandler textHandler);
     
+    void inject(TextKeyHandler textKeyHandler);
+
     void inject(TextController textController);
     
+    void inject(TextItemBehaviour textItemBehaviour);
+
     FxAppComponent.Builder fxApp();
 
     ApplicationController provideApplicationController();
