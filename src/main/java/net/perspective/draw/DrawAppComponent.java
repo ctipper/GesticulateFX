@@ -64,6 +64,8 @@ import net.perspective.draw.workers.WriteOutStreamer;
 public interface DrawAppComponent {
 
     void inject(Gesticulate gesticulate);
+
+    void inject(ApplicationController controller);
     
     void inject(CanvasView view);
 

@@ -113,8 +113,8 @@ import net.perspective.draw.util.FileUtils;
 public class ApplicationController implements Initializable {
 
     private final Provider<DrawingArea> drawingAreaProvider;
-    private final CanvasView view;
-    private final Gesticulate application;
+    private final Provider<CanvasView> viewProvider;
+    private final Provider<Gesticulate> applicationProvider;
     @Inject ShareUtils share;
     @Inject MapController mapper;
     @Inject Provider<Picture> pictureProvider;
@@ -186,75 +186,75 @@ public class ApplicationController implements Initializable {
     @FXML
     private void handleSelectionAction(ActionEvent e) {
         drawingAreaProvider.get().changeHandlers(HandlerType.SELECTION);
-        view.setEditing(KeyHandlerType.MOVE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleRotationAction(ActionEvent e) {
         drawingAreaProvider.get().changeHandlers(HandlerType.ROTATION);
-        view.setEditing(KeyHandlerType.MOVE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleLineAction(ActionEvent e) {
         drawingAreaProvider.get().setDrawType(DrawingType.LINE);
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleLineTypeAction(ActionEvent e) {
         this.setDrawAreaLineType();
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleCircleAction(ActionEvent e) {
         drawingAreaProvider.get().setDrawType(DrawingType.ELLIPSE);
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleSquareAction(ActionEvent e) {
         drawingAreaProvider.get().setDrawType(DrawingType.RECTANGLE);
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent e) {
         drawingAreaProvider.get().setDrawType(DrawingType.ISOSCELES);
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleHexagonAction(ActionEvent e) {
         drawingAreaProvider.get().setDrawType(DrawingType.HEXAGON);
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handlePentagramAction(ActionEvent e) {
         drawingAreaProvider.get().setDrawType(DrawingType.PENTAGRAM);
         drawingAreaProvider.get().changeHandlers(HandlerType.FIGURE);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleSketchTypeAction(ActionEvent e) {
         this.setDrawAreaSketchType();
         drawingAreaProvider.get().changeHandlers(HandlerType.SKETCH);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
     private void handleTextAction(ActionEvent e) {
         drawingAreaProvider.get().changeHandlers(HandlerType.TEXT);
-        view.setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.NONE);
     }
 
     @FXML
@@ -282,8 +282,8 @@ public class ApplicationController implements Initializable {
      */
     @FXML
     private void handleOnQuitAction(ActionEvent e) {
-        application.getStage().fireEvent(new WindowEvent(
-                application.getStage(),
+        applicationProvider.get().getStage().fireEvent(new WindowEvent(
+                applicationProvider.get().getStage(),
                 WindowEvent.WINDOW_CLOSE_REQUEST
             )
         );
@@ -311,7 +311,7 @@ public class ApplicationController implements Initializable {
     private void handleMapInsertAction(ActionEvent e) {
         mapper.createMap();
         drawingAreaProvider.get().changeHandlers(HandlerType.MAP);
-        view.setEditing(KeyHandlerType.MAP);
+        viewProvider.get().setEditing(KeyHandlerType.MAP);
         menubutton.fire();
     }
 
@@ -376,7 +376,7 @@ public class ApplicationController implements Initializable {
         menubutton.fire();
         if (aboutBox == null) {
             aboutBox = new AboutBox();
-            Stage stage = application.getStage();
+            Stage stage = applicationProvider.get().getStage();
             aboutBox.initOwner(stage);
         }
         aboutBox.showAndWait();
@@ -917,11 +917,11 @@ public class ApplicationController implements Initializable {
             String s = comboTheme.getValue();
             comboThemeProperty.setValue(s);
             if (s.equals("System") && Gesticulate.MM_SYSTEM_THEME) {
-                application.setSystemTheme();
+                applicationProvider.get().setSystemTheme();
             } else {
                 themeProperty.setValue(s.equals("Dark"));
                 if (Gesticulate.MM_SYSTEM_THEME) {
-                    application.deregisterThemeListener();
+                    applicationProvider.get().deregisterThemeListener();
                 }
             }
         });
@@ -931,12 +931,12 @@ public class ApplicationController implements Initializable {
         this.themeProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             setAppStyles(newValue);
             // reset application stylesheets
-            application.resetStylesheets(newValue);
+            applicationProvider.get().resetStylesheets(newValue);
         });
         this.gridProperty = new SimpleBooleanProperty();
         this.gridProperty.bindBidirectional(this.checkGrid.selectedProperty());
         this.gridProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            application.drawGrid(newValue);
+            applicationProvider.get().drawGrid(newValue);
         });
         this.guideProperty = new SimpleBooleanProperty();
         this.guideProperty.bindBidirectional(this.checkGuide.selectedProperty());
@@ -1282,7 +1282,7 @@ public class ApplicationController implements Initializable {
                 picture.setStart(shift, shift);
                 ImageItem item = new ImageItem(image);
                 item.setFormat(FileUtils.getExtension(filename));
-                int index = view.setImageItem(item);
+                int index = viewProvider.get().setImageItem(item);
                 double width = (double) image.getWidth();
                 double height = (double) image.getHeight();
                 double scale = 64d / height;
@@ -1290,8 +1290,8 @@ public class ApplicationController implements Initializable {
                 picture.setImage(index, width, height);
                 picture.setScale(scale);
                 Platform.runLater(() -> {
-                    view.setNewItem(picture);
-                    view.resetNewItem();
+                    viewProvider.get().setNewItem(picture);
+                    viewProvider.get().resetNewItem();
                 });
             } catch (IOException ex) {
                 logger.error("Can't fetch resource {}", filename);
@@ -1513,11 +1513,11 @@ public class ApplicationController implements Initializable {
     /** Creates a new instance of <code>ApplicationController</code> */
     @Inject
     public ApplicationController(Provider<DrawingArea> drawingAreaProvider,
-            CanvasView view,
-            Gesticulate application) {
+            Provider<CanvasView> viewProvider,
+            Provider<Gesticulate> applicationProvider) {
         this.drawingAreaProvider = drawingAreaProvider;
-        this.view = view;
-        this.application = application;
+        this.viewProvider = viewProvider;
+        this.applicationProvider = applicationProvider;
     }
 
     @FXML

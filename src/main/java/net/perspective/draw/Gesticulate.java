@@ -155,8 +155,8 @@ public class Gesticulate extends Application {
                 // setSystemTheme();
                 controller.setThemeType("System");
             } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
-                // controller.getThemeProperty().setValue(true); // non default value triggers event
-                // controller.setThemeType("Dark");
+                controller.getThemeProperty().setValue(true); // non default value triggers event
+                controller.setThemeType("Dark");
             } else {
                 controller.setAppStyles(false);
                 resetStylesheets(false);
@@ -277,6 +277,7 @@ public class Gesticulate extends Application {
      * @param isDark is dark theme selected
      */
     public void resetStylesheets(Boolean isDark) {
+        System.out.println("Stage " + (stage==null?"null":"isSet"));
         if (isDark) {
             stage.getScene().getStylesheets().clear();
             stage.getScene().getStylesheets().add("/stylesheets/jmetro-dark.css");
