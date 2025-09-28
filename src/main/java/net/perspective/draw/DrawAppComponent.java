@@ -68,8 +68,10 @@ public interface DrawAppComponent {
     void inject(CanvasView view);
 
     void inject(DrawingArea drawingArea);
-    
+
     void inject(FigureHandler figureHandler);
+
+    void inject(SketchHandler sketchHandler);
 
     FxAppComponent.Builder fxApp();
 
@@ -87,27 +89,27 @@ public interface DrawAppComponent {
 
     DrawAreaListener drawAreaListener();
 
-    FigureHandler provideFigureHandler();
+    FigureHandler figureHandler();
 
-    RotationHandler provideRotationHandler();
+    RotationHandler rotationHandler();
 
-    SelectionHandler provideSelectionHandler();
+    SelectionHandler selectionHandler();
 
-    SketchHandler provideSketchHandler();
+    SketchHandler sketchHandler();
 
-    TextHandler provideTextHandler();
+    TextHandler textHandler();
 
-    MapHandler provideMapHandler();
+    MapHandler mapHandler();
 
     KeyListener keyListener();
 
-    DummyKeyHandler provideDummyKeyHandler();
+    DummyKeyHandler dummyKeyHandler();
 
-    MapKeyHandler provideMapKeyHandler();
+    MapKeyHandler mapKeyHandler();
 
-    MoveKeyHandler provideMoveKeyHandler();
+    MoveKeyHandler moveKeyHandler();
 
-    TextKeyHandler provideTextKeyHandler();
+    TextKeyHandler textKeyHandler();
 
     BehaviourContext behaviourContext();
 
