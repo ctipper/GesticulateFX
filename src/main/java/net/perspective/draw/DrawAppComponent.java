@@ -71,6 +71,8 @@ public interface DrawAppComponent {
 
     void inject(DrawingArea drawingArea);
 
+    void inject(SelectionHandler selectionHandler);
+
     void inject(FigureHandler figureHandler);
 
     void inject(SketchHandler sketchHandler);
@@ -81,13 +83,15 @@ public interface DrawAppComponent {
 
     void inject(TextController textController);
     
+    void inject(FigureItemBehaviour figureItemBehaviour);
+
     void inject(TextItemBehaviour textItemBehaviour);
 
     FxAppComponent.Builder fxApp();
 
     ApplicationController provideApplicationController();
     
-    Gesticulate gesticulate();
+    Gesticulate provideGesticulate();
     
     DrawingArea drawingArea();
     
