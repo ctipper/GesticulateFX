@@ -176,10 +176,11 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea,
-            CanvasView view, ApplicationController controller) {
-        return new TextKeyHandler(drawarea, view, controller);
-    }
+    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea, CanvasView view, 
+            ApplicationController controller, DrawAppComponent component) {
+        TextKeyHandler textKeyHandler = new TextKeyHandler(drawarea, view, controller);
+        component.inject(textKeyHandler);
+        return textKeyHandler;    }
 
     @Provides
     @Singleton
@@ -213,8 +214,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    TextItemBehaviour provideTextItemBehaviour() {
-        return new TextItemBehaviour();
+    TextItemBehaviour provideTextItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        TextItemBehaviour textItemBehaviour = new TextItemBehaviour(drawarea, view);
+        component.inject(textItemBehaviour);
+        return textItemBehaviour;
     }
 
     @Provides

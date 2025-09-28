@@ -28,6 +28,7 @@ import javafx.scene.Cursor;
 import javafx.scene.text.HitInfo;
 import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
@@ -44,23 +45,25 @@ import net.perspective.draw.text.Editor;
 
 public class TextItemBehaviour implements ItemBehaviours {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject DrawAreaListener listener;
-    @Inject TextController textController;
+    @Inject Provider<TextController> textControllerProvider;
 
     /** 
      * Creates a new instance of <code>TextItemBehaviour</code> 
      */
     @Inject
-    public TextItemBehaviour() {
+    public TextItemBehaviour(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
         HitInfo currentHit;
 
-        Editor editor = textController.getEditor();
+        Editor editor = textControllerProvider.get().getEditor();
         TextFlow layout = drawarea.getTextLayout(item);
 
         // currently fix for vertical TextFlow is not known
@@ -85,7 +88,7 @@ public class TextItemBehaviour implements ItemBehaviours {
 
         view.setSelected(index);
         view.setEditing(KeyHandlerType.TEXT);
-        textController.editItem((Text) item, currentHit.getInsertionIndex());
+        textControllerProvider.get().editItem((Text) item, currentHit.getInsertionIndex());
         view.setTextHighlight(index);
     }
 
@@ -102,7 +105,7 @@ public class TextItemBehaviour implements ItemBehaviours {
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         HitInfo currentHit;
 
-        Editor editor = textController.getEditor();
+        Editor editor = textControllerProvider.get().getEditor();
         TextFlow layout = drawarea.getTextLayout(item);
 
         // currently fix for vertical TextFlow is not known

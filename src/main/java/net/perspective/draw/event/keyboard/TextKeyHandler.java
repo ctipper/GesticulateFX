@@ -23,6 +23,7 @@
 package net.perspective.draw.event.keyboard;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
@@ -45,7 +46,7 @@ public class TextKeyHandler implements KeyHandler {
     private final CanvasView view;
     private final ApplicationController controller;
     @Inject KeyListener keylistener;
-    @Inject TextController textController;
+    @Inject Provider<TextController> textControllerProvider;
     private int selection = -1;
     private boolean selectToLeft = false;
     private DrawingType drawingtype;
@@ -59,8 +60,7 @@ public class TextKeyHandler implements KeyHandler {
      * Create a new instance of <code>TextKeyHandler</code>
      */
     @Inject
-    public TextKeyHandler(DrawingArea drawarea,
-            CanvasView view, ApplicationController controller) {
+    public TextKeyHandler(DrawingArea drawarea, CanvasView view, ApplicationController controller) {
         this.drawarea = drawarea;
         this.view = view;
         this.controller = controller;
@@ -72,7 +72,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyPressed() {
-        Editor editor = textController.getEditor();
+        Editor editor = textControllerProvider.get().getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem drawitem = view.getDrawings().get(selection);
@@ -90,19 +90,19 @@ public class TextKeyHandler implements KeyHandler {
                     case B -> {
                         // Bold
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            textController.formatSelectedText(TextController.FONT_BOLD);
+                            textControllerProvider.get().formatSelectedText(TextController.FONT_BOLD);
                         }
                     }
                     case I -> {
                         // Italic
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            textController.formatSelectedText(TextController.FONT_ITALIC);
+                            textControllerProvider.get().formatSelectedText(TextController.FONT_ITALIC);
                         }
                     }
                     case U -> {
                         // Underline
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            textController.formatSelectedText(TextController.FONT_UNDERLINED);
+                            textControllerProvider.get().formatSelectedText(TextController.FONT_UNDERLINED);
                         }
                     }
                     case X -> {
@@ -265,7 +265,7 @@ public class TextKeyHandler implements KeyHandler {
      */
     @Override
     public void keyTyped() {
-        Editor editor = textController.getEditor();
+        Editor editor = textControllerProvider.get().getEditor();
         selection = view.getSelected();
         if ((selection != -1) && (view.isEditing())) {
             DrawItem drawitem = view.getDrawings().get(selection);
