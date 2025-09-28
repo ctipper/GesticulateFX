@@ -37,8 +37,8 @@ import net.perspective.draw.geom.DrawItem;
 
 public class MoveKeyHandler implements KeyHandler {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private DrawingArea drawarea;
+    private CanvasView view;
     @Inject KeyListener keylistener;
     private DrawingType drawingtype;
     private HandlerType handlertype;
@@ -50,7 +50,9 @@ public class MoveKeyHandler implements KeyHandler {
      * Creates a new instance of <code>MoveKeyHandler</code>
      */
     @Inject
-    public MoveKeyHandler() {
+    public MoveKeyHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
         handlertype = HandlerType.SELECTION;
     }
 

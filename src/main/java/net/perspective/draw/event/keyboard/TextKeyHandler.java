@@ -38,11 +38,12 @@ import net.perspective.draw.text.Editor;
  *
  * @author ctipper
  */
+
 public class TextKeyHandler implements KeyHandler {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
-    @Inject ApplicationController controller;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    private final ApplicationController controller;
     @Inject KeyListener keylistener;
     @Inject TextController textController;
     private int selection = -1;
@@ -58,7 +59,11 @@ public class TextKeyHandler implements KeyHandler {
      * Create a new instance of <code>TextKeyHandler</code>
      */
     @Inject
-    public TextKeyHandler() {
+    public TextKeyHandler(DrawingArea drawarea,
+            CanvasView view, ApplicationController controller) {
+        this.drawarea = drawarea;
+        this.view = view;
+        this.controller = controller;
         handlerType = HandlerType.SELECTION;
     }
 

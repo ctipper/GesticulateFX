@@ -37,8 +37,8 @@ import net.perspective.draw.enums.HandlerType;
 
 public class MapKeyHandler implements KeyHandler {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject MapController mapper;
     @Inject KeyListener keylistener;
     private int selection = -1;
@@ -51,7 +51,9 @@ public class MapKeyHandler implements KeyHandler {
      * Creates a new instance of <code>MapKeyHandler</code> 
      */
     @Inject
-    public MapKeyHandler() {
+    public MapKeyHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override
