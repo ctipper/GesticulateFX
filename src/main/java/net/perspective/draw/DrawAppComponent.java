@@ -91,6 +91,8 @@ public interface DrawAppComponent {
 
     void inject(ShareUtils shareUtils);
 
+    void inject(ImageLoadWorker imageLoadWorker);
+
     FxAppComponent.Builder fxApp();
 
     ApplicationController applicationController();
