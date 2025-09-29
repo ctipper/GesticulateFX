@@ -264,8 +264,13 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ReadInFunnel provideReadInFunnel() {
-        return new ReadInFunnel();
+    ReadInFunnel provideReadInFunnel(Provider<DrawingArea> drawareaProvider,
+            Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        ReadInFunnel readInFunnel = new ReadInFunnel(drawareaProvider, viewProvider, controllerProvider);
+        component.inject(readInFunnel);
+        return readInFunnel;
     }
 
     @Provides
@@ -282,7 +287,7 @@ public class DrawAppModule {
             DrawAppComponent component) {
         ImageLoadWorker imageLoadWorker = new ImageLoadWorker(drawareaProvider, viewProvider, controllerProvider);
         component.inject(imageLoadWorker);
-        return imageLoadWorker;    
+        return imageLoadWorker;
     }
 
     @Provides

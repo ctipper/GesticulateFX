@@ -93,6 +93,8 @@ public interface DrawAppComponent {
 
     void inject(ImageLoadWorker imageLoadWorker);
 
+    void inject(ReadInFunnel readInFunnel);
+
     FxAppComponent.Builder fxApp();
 
     ApplicationController applicationController();
