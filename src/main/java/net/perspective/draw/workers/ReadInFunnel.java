@@ -62,9 +62,9 @@ import org.slf4j.LoggerFactory;
 
 public class ReadInFunnel extends Task<Object> {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
-    @Inject ApplicationController controller;
+    private final Provider<DrawingArea> drawareaProvider;
+    private final Provider<CanvasView> viewProvider;
+    private final Provider<ApplicationController> controllerProvider;
     @Inject ShareUtils share;
     @Inject Provider<Picture> pictureProvider;
     @Inject Provider<StreetMap> streetMapProvider;
@@ -77,7 +77,12 @@ public class ReadInFunnel extends Task<Object> {
     private static final Logger logger = LoggerFactory.getLogger(ReadInFunnel.class.getName());
 
     @Inject
-    public ReadInFunnel() {
+    public ReadInFunnel(Provider<DrawingArea> drawareaProvider,
+            Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider) {
+        this.drawareaProvider = drawareaProvider;
+        this.viewProvider = viewProvider;
+        this.controllerProvider = controllerProvider;
         success = false;
     }
 
@@ -97,16 +102,16 @@ public class ReadInFunnel extends Task<Object> {
         logger.info("Open completed.");
         Platform.runLater(() -> {
             if (success) {
-                drawarea.prepareDrawing();
+                drawareaProvider.get().prepareDrawing();
                 for (DrawItem drawitem : drawings) {
                     if (drawitem instanceof Picture picture) {
                         var i = picture.getImageIndex();
-                        var j = view.setImageItem(pictures.get(i));
+                        var j = viewProvider.get().setImageItem(pictures.get(i));
                         picture.setImageIndex(j);
                     }
                     drawitem = checkDrawings(drawitem);
-                    view.setNewItem(drawitem);
-                    view.resetNewItem();
+                    viewProvider.get().setNewItem(drawitem);
+                    viewProvider.get().resetNewItem();
                 }
             }
         });
@@ -120,10 +125,10 @@ public class ReadInFunnel extends Task<Object> {
             }
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
-                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controller.getProgressProperty().unbind();
+                controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.FALSE);
+                controllerProvider.get().getProgressProperty().unbind();
                 if (success) {
-                    controller.setStatusMessage("Opened document");
+                    controllerProvider.get().setStatusMessage("Opened document");
                 }
             });
         });

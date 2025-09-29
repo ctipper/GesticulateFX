@@ -4,7 +4,6 @@
  * Created on 24 Sept 2025 08:56:16
  *
  */
-
 /**
  * Copyright (c) 2025 e-conomist
  *
@@ -23,15 +22,14 @@
  */
 package net.perspective.draw;
 
-import javax.inject.Provider;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.function.Function;
-
+import javax.inject.Provider;
 import dagger.Module;
 import dagger.Provides;
 import javafx.fxml.FXMLLoader;

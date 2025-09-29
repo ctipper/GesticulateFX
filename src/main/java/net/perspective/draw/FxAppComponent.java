@@ -24,8 +24,10 @@
 package net.perspective.draw;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import javax.inject.Provider;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
 import javafx.application.Application;
@@ -42,6 +44,8 @@ import javafx.stage.Stage;
 interface FxAppComponent {
 
     Function<URL, FXMLLoader> fxmlLoaderFactory();
+
+    Map<Class<?>, Provider<Object>> controllers();
 
     default FXMLLoader loader(URL fxmlUrl) {
         return fxmlLoaderFactory().apply(Objects.requireNonNull(fxmlUrl));
