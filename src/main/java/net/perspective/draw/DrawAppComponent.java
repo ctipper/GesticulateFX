@@ -95,6 +95,12 @@ public interface DrawAppComponent {
 
     void inject(ReadInFunnel readInFunnel);
 
+    void inject(PDFWorker pdfWorker);
+
+    void inject(SVGWorker svgWorker);
+
+    void inject(PNGWorker pngWorker);
+
     FxAppComponent.Builder fxApp();
 
     ApplicationController applicationController();

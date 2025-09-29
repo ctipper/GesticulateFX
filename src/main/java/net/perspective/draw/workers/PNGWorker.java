@@ -33,6 +33,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ShareUtils;
@@ -47,8 +48,8 @@ import org.slf4j.LoggerFactory;
 
 public class PNGWorker extends Task<Object> {
 
-    @Inject CanvasView view;
-    @Inject ApplicationController controller;
+    private final Provider<CanvasView> viewProvider;
+    private final Provider<ApplicationController> controllerProvider;
     @Inject ShareUtils share;
     protected File file;
     private boolean opacity;
@@ -57,7 +58,10 @@ public class PNGWorker extends Task<Object> {
     private static final Logger logger = LoggerFactory.getLogger(PNGWorker.class.getName());
 
     @Inject
-    public PNGWorker() {
+    public PNGWorker(Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider) {
+        this.viewProvider = viewProvider;
+        this.controllerProvider = controllerProvider;
         this.opacity = true;
         this.margin = 0.0;
     }
@@ -88,7 +92,7 @@ public class PNGWorker extends Task<Object> {
     public void done() {
         logger.info("PNG export completed.");
         Platform.runLater(() -> {
-            controller.getSnapshotProperty().setValue(false);
+            controllerProvider.get().getSnapshotProperty().setValue(false);
         });
         CompletableFuture.runAsync(() -> {
             try {
@@ -98,8 +102,8 @@ public class PNGWorker extends Task<Object> {
             }
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
-                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controller.setStatusMessage("Exported to PNG");
+                controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.FALSE);
+                controllerProvider.get().setStatusMessage("Exported to PNG");
             });
         });
     }
@@ -115,7 +119,7 @@ public class PNGWorker extends Task<Object> {
 
         public void make() {
             // Calculate draw area
-            final CanvasPoint[] bounds = view.getBounds();
+            final CanvasPoint[] bounds = viewProvider.get().getBounds();
             CanvasPoint start = bounds[0].shifted(-margin, -margin).grow(scale).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin).grow(scale);
 
@@ -136,7 +140,7 @@ public class PNGWorker extends Task<Object> {
             g2.transform(java.awt.geom.AffineTransform.getTranslateInstance(0, 0));
             g2.transform(java.awt.geom.AffineTransform.getScaleInstance(scale, scale));
             // Render image
-            view.getDrawings().stream().forEach((item) -> {
+            viewProvider.get().getDrawings().stream().forEach((item) -> {
                 item.draw(g2);
             });
             g2.dispose();

@@ -292,20 +292,32 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    PDFWorker providePDFWorker() {
-        return new PDFWorker();
+    PDFWorker providePDFWorker(Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        PDFWorker pdfWorker = new PDFWorker(viewProvider, controllerProvider);
+        component.inject(pdfWorker);
+        return pdfWorker;
     }
 
     @Provides
     @Singleton
-    SVGWorker provideSVGWorker() {
-        return new SVGWorker();
+    SVGWorker provideSVGWorker(Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        SVGWorker svgWorker = new SVGWorker(viewProvider, controllerProvider);
+        component.inject(svgWorker);
+        return svgWorker;
     }
 
     @Provides
     @Singleton
-    PNGWorker providePNGWorker() {
-        return new PNGWorker();
+    PNGWorker providePNGWorker(Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        PNGWorker pngWorker = new PNGWorker(viewProvider, controllerProvider);
+        component.inject(pngWorker);
+        return pngWorker;
     }
 
     @Provides
