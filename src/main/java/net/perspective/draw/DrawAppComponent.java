@@ -4,7 +4,6 @@
  * Created on 20 Sept 2025 14:06:39
  *
  */
-
 /**
  * Copyright (c) 2025 e-conomist
  *
@@ -59,6 +58,7 @@ import net.perspective.draw.workers.WriteOutStreamer;
  *
  * @author ctipper
  */
+
 @Singleton
 @Component(modules = {DrawAppModule.class, DrawAppBindingModule.class})
 public interface DrawAppComponent {
@@ -66,7 +66,7 @@ public interface DrawAppComponent {
     void inject(Gesticulate gesticulate);
 
     void inject(ApplicationController controller);
-    
+
     void inject(CanvasView view);
 
     void inject(DrawingArea drawingArea);
@@ -78,27 +78,29 @@ public interface DrawAppComponent {
     void inject(SketchHandler sketchHandler);
 
     void inject(TextHandler textHandler);
-    
+
     void inject(TextKeyHandler textKeyHandler);
 
     void inject(TextController textController);
-    
+
     void inject(FigureItemBehaviour figureItemBehaviour);
 
     void inject(TextItemBehaviour textItemBehaviour);
 
     void inject(MoveKeyHandler moveKeyHandler);
 
+    void inject(ShareUtils shareUtils);
+
     FxAppComponent.Builder fxApp();
 
     ApplicationController applicationController();
-    
+
     Gesticulate Gesticulate();
-    
+
     DrawingArea drawingArea();
-    
+
     CanvasView canvasView();
-    
+
     CanvasTransferHandler canvasTransferHandler();
 
     Dropper Dropper();

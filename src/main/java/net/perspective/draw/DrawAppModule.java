@@ -253,8 +253,13 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ShareUtils provideShareUtils() {
-        return new ShareUtils();
+    ShareUtils provideShareUtils(Provider<Gesticulate> applicationProvider,
+            Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        ShareUtils shareUtils = new ShareUtils(applicationProvider, viewProvider, controllerProvider);
+        component.inject(shareUtils);
+        return shareUtils;
     }
 
     @Provides
