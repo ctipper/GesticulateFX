@@ -276,8 +276,13 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ImageLoadWorker provideImageLoadWorker() {
-        return new ImageLoadWorker();
+    ImageLoadWorker provideImageLoadWorker(Provider<DrawingArea> drawareaProvider,
+            Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        ImageLoadWorker imageLoadWorker = new ImageLoadWorker(drawareaProvider, viewProvider, controllerProvider);
+        component.inject(imageLoadWorker);
+        return imageLoadWorker;    
     }
 
     @Provides
