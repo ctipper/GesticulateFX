@@ -181,8 +181,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    MoveKeyHandler provideMoveKeyHandler(DrawingArea drawarea, CanvasView view) {
-        return new MoveKeyHandler(drawarea, view);
+    MoveKeyHandler provideMoveKeyHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        MoveKeyHandler moveKeyHandler = new MoveKeyHandler(drawarea, view);
+        component.inject(moveKeyHandler);
+        return moveKeyHandler;
     }
 
     @Provides
@@ -191,7 +193,8 @@ public class DrawAppModule {
             ApplicationController controller, DrawAppComponent component) {
         TextKeyHandler textKeyHandler = new TextKeyHandler(drawarea, view, controller);
         component.inject(textKeyHandler);
-        return textKeyHandler;    }
+        return textKeyHandler;
+    }
 
     @Provides
     @Singleton
