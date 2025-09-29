@@ -119,6 +119,7 @@ public class Gesticulate extends Application {
             loader.setControllerFactory(param -> appComponent.applicationController());
             final Parent root = loader.load();
             controller = appComponent.applicationController();
+            appComponent.inject(controller);
             controller.setApplication(this);
             // Put the loaded user interface onto the primary stage.
             Scene scene = new Scene(root);
