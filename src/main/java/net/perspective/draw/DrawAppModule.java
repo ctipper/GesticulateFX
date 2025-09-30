@@ -275,8 +275,13 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    WriteOutStreamer provideWriteOutStreamer() {
-        return new WriteOutStreamer();
+    WriteOutStreamer provideWriteOutStreamer(Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider,
+            DrawAppComponent component) {
+        WriteOutStreamer writeOutStreamer = new WriteOutStreamer(viewProvider, controllerProvider);
+        component.inject(writeOutStreamer);
+        return writeOutStreamer;
+
     }
 
     @Provides
