@@ -43,15 +43,17 @@ import net.perspective.draw.util.V2;
 
 public class GroupedItemBehaviour implements ItemBehaviours {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject DrawAreaListener listener;
 
     /** 
      * Creates a new instance of <code>GroupedItemBehaviour</code> 
      */
     @Inject
-    public GroupedItemBehaviour() {
+    public GroupedItemBehaviour(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override

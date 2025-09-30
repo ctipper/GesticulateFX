@@ -85,6 +85,12 @@ public interface DrawAppComponent {
 
     void inject(FigureItemBehaviour figureItemBehaviour);
 
+    void inject(PictureItemBehaviour pictureItemBehaviour);
+
+    void inject(GroupedItemBehaviour groupedItemBehaviour);
+
+    void inject(MapItemBehaviour mapItemBehaviour);
+
     void inject(TextItemBehaviour textItemBehaviour);
 
     void inject(MoveKeyHandler moveKeyHandler);

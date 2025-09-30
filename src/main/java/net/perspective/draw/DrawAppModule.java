@@ -212,20 +212,26 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    PictureItemBehaviour providePictureItemBehaviour() {
-        return new PictureItemBehaviour();
+    PictureItemBehaviour providePictureItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        PictureItemBehaviour pictureItemBehaviour = new PictureItemBehaviour(drawarea, view);
+        component.inject(pictureItemBehaviour);
+        return pictureItemBehaviour;
     }
 
     @Provides
     @Singleton
-    GroupedItemBehaviour provideGroupedItemBehaviour() {
-        return new GroupedItemBehaviour();
+    GroupedItemBehaviour provideGroupedItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        GroupedItemBehaviour groupedItemBehaviour = new GroupedItemBehaviour(drawarea, view);
+        component.inject(groupedItemBehaviour);
+        return groupedItemBehaviour;
     }
 
     @Provides
     @Singleton
-    MapItemBehaviour provideMapItemBehaviour() {
-        return new MapItemBehaviour();
+    MapItemBehaviour provideMapItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        MapItemBehaviour mapItemBehaviour = new MapItemBehaviour(drawarea, view);
+        component.inject(mapItemBehaviour);
+        return mapItemBehaviour;
     }
 
     @Provides
