@@ -30,9 +30,12 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -40,13 +43,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.util.CanvasPoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A structure for rendering an image that holds a reference to an external list 
@@ -57,8 +57,8 @@ import org.slf4j.LoggerFactory;
 
 public class Picture implements DrawItem, Serializable {
 
-    @Inject protected transient DrawingArea drawarea;
-    @Inject protected transient CanvasView view;
+    protected transient DrawingArea drawarea;
+    protected transient CanvasView view;
     protected int index;
     protected CanvasPoint start, end;   // start is _untransformed_ coord of TL, end is offset
     protected double scale;
@@ -71,8 +71,11 @@ public class Picture implements DrawItem, Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Picture.class.getName());
 
     /** Creates a new instance of <code>Picture</code> */
-    public Picture() {
-        this(0, 0);
+    @Inject
+    public Picture(DrawingArea drawarea, CanvasView view) {
+        this(0,0);
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     /**
