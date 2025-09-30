@@ -71,6 +71,16 @@ public class Picture implements DrawItem, Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Picture.class.getName());
 
     /** Creates a new instance of <code>Picture</code> */
+    public Picture() {
+        this(0,0);
+    }
+
+    /**
+     * Creates a new instance of <code>Picture</code>
+     *
+     * @param drawarea
+     * @param view
+     */
     @Inject
     public Picture(DrawingArea drawarea, CanvasView view) {
         this(0,0);

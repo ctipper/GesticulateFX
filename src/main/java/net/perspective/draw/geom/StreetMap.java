@@ -30,6 +30,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.gluonhq.maps.MapPoint;
@@ -78,6 +79,17 @@ public class StreetMap extends Picture {
     private static final Logger logger = LoggerFactory.getLogger(StreetMap.class.getName());
 
     /** Creates a new instance of <code>StreetMap</code> */
+    public StreetMap() {
+        this(0,0);
+    }
+
+    /**
+     * Creates a new instance of <code>StreetMap</code>
+     *
+     * @param drawarea
+     * @param view
+     */
+    @Inject
     public StreetMap(DrawingArea drawarea, CanvasView view) {
         this(0,0);
         this.drawarea = drawarea;
