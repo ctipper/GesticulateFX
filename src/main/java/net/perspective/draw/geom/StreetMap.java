@@ -23,17 +23,17 @@
  */
 package net.perspective.draw.geom;
 
-import com.gluonhq.maps.MapPoint;
-import com.gluonhq.maps.MapView;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.gluonhq.maps.MapPoint;
+import com.gluonhq.maps.MapView;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
@@ -52,10 +52,9 @@ import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.util.CanvasPoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A structure for rendering an image of a street map
@@ -79,8 +78,10 @@ public class StreetMap extends Picture {
     private static final Logger logger = LoggerFactory.getLogger(StreetMap.class.getName());
 
     /** Creates a new instance of <code>StreetMap</code> */
-    public StreetMap() {
-        this(0, 0);
+    public StreetMap(DrawingArea drawarea, CanvasView view) {
+        this(0,0);
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     /**

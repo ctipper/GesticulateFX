@@ -329,13 +329,13 @@ public class DrawAppModule {
     }
 
     @Provides
-    Picture providePicture() {
-        return new Picture();
+    Picture providePicture(DrawingArea drawarea, CanvasView view) {
+        return new Picture(drawarea, view);
     }
 
     @Provides
-    StreetMap provideStreetMap() {
-        return new StreetMap();
+    StreetMap provideStreetMap(DrawingArea drawarea, CanvasView view) {
+        return new StreetMap(drawarea, view);
     }
 
 }
