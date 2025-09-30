@@ -63,8 +63,8 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class MapController {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final Provider<DrawingArea> drawareaProvider;
+    private final Provider<CanvasView> viewProvider;
     @Inject Provider<StreetMap> streetMapProvider;
     private Slider zoomSlider;
     private Button zoomInButton;
@@ -85,7 +85,9 @@ public class MapController {
 
     /** Creates a new instance of <code>MapController</code> */
     @Inject
-    public MapController() {
+    public MapController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider) {
+        this.drawareaProvider = drawareaProvider;
+        this.viewProvider = viewProvider;
         mapindex = -1;
     }
 
@@ -102,11 +104,11 @@ public class MapController {
         streetmap.init();
         Image image = createCompatibleImage(width, height);
         ImageItem img = new ImageItem(image);
-        int index = view.setImageItem(img);
+        int index = viewProvider.get().setImageItem(img);
         streetmap.setImage(index, width, height);
-        view.setNewItem(streetmap);
-        view.resetNewItem();
-        view.setSelected(view.getDrawings().indexOf(streetmap));
+        viewProvider.get().setNewItem(streetmap);
+        viewProvider.get().resetNewItem();
+        viewProvider.get().setSelected(viewProvider.get().getDrawings().indexOf(streetmap));
         this.initMap();
     }
     
@@ -114,10 +116,10 @@ public class MapController {
      * Initialise selected map
      */
     public void initMap() {
-        view.setMapping(true);
-        mapindex = view.getSelected();
+        viewProvider.get().setMapping(true);
+        mapindex = viewProvider.get().getSelected();
         // Remove MapView event filters
-        if (view.getDrawings().get(mapindex) instanceof StreetMap streetMap) {
+        if (viewProvider.get().getDrawings().get(mapindex) instanceof StreetMap streetMap) {
             map = streetMap;
             map.resetHandlers();
             initializeZoomSlider(map);
@@ -129,12 +131,12 @@ public class MapController {
      */
     public void finaliseMap() {
         if (mapindex != -1) {
-            DrawItem item = view.getDrawings().get(mapindex);
+            DrawItem item = viewProvider.get().getDrawings().get(mapindex);
             if (item instanceof StreetMap streetMap) {
                 streetMap.filterHandlers();
                 resizeMap(streetMap);
             }
-            view.setMapping(false);
+            viewProvider.get().setMapping(false);
             mapindex = -1;
             removeSlider();
         }
@@ -144,8 +146,8 @@ public class MapController {
      * Set keyboard and mouse handlers on exiting mapping mode
      */
     public void quitMapping() {
-        drawarea.changeHandlers(HandlerType.SELECTION);
-        view.setEditing(KeyHandlerType.MOVE);
+        drawareaProvider.get().changeHandlers(HandlerType.SELECTION);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     /**
@@ -156,7 +158,7 @@ public class MapController {
     public void resizeMap(StreetMap item) {
         item.setLocation();
         Image image = createCompatibleImage(item, (int) item.getEnd().getX(), (int) item.getEnd().getY());
-        view.replaceImage(item.getImageIndex(), image);
+        viewProvider.get().replaceImage(item.getImageIndex(), image);
     }
 
     /**
@@ -183,7 +185,7 @@ public class MapController {
         zoomSlider.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             setZoom(newValue.doubleValue());
         });
-        drawarea.getCanvas().getChildren().add(zoomSlider);
+        drawareaProvider.get().getCanvas().getChildren().add(zoomSlider);
 
         int zsize = 18;
         zoomInButton = new Button("+");
@@ -196,7 +198,7 @@ public class MapController {
         zoomInButton.setOnAction(e -> {
             zoomIn();
         });
-        drawarea.getCanvas().getChildren().add(zoomInButton);
+        drawareaProvider.get().getCanvas().getChildren().add(zoomInButton);
 
         zoomOutButton = new Button("-");
         zoomOutButton.setLayoutX(left + 10 + zsize);
@@ -208,7 +210,7 @@ public class MapController {
         zoomOutButton.setOnAction(e -> {
             zoomOut();
         });
-        drawarea.getCanvas().getChildren().add(zoomOutButton);
+        drawareaProvider.get().getCanvas().getChildren().add(zoomOutButton);
 
         /**
          * close map glyph
@@ -227,7 +229,7 @@ public class MapController {
         quiticon.getStyleClass().add("menuicon");
         quiticon.setGraphic(icon);
         quiticon.setOnAction(this::handleQuitAction);
-        drawarea.getCanvas().getChildren().add(quiticon);
+        drawareaProvider.get().getCanvas().getChildren().add(quiticon);
 
         geoLocation = new TextField();
         geoLocation.setMinWidth(180);
@@ -236,7 +238,7 @@ public class MapController {
         geoLocation.setLayoutY((int) map.getUp()[0].y + 10);
         geoLocation.setFocusTraversable(true);
         geoLocation.setText("");
-        drawarea.getCanvas().getChildren().add(geoLocation);
+        drawareaProvider.get().getCanvas().getChildren().add(geoLocation);
     }
 
     /**
@@ -291,11 +293,11 @@ public class MapController {
     }
 
     public void removeSlider() {
-        drawarea.getCanvas().getChildren().remove(zoomSlider);     // remove zoomSlider if necessary
-        drawarea.getCanvas().getChildren().remove(zoomInButton);   // remove zoomInButton if necessary
-        drawarea.getCanvas().getChildren().remove(zoomOutButton);  // remove zoomOutButton if necessary
-        drawarea.getCanvas().getChildren().remove(quiticon);       // remove quiticon if necessary
-        drawarea.getCanvas().getChildren().remove(geoLocation);       // remove geoLocation if necessary
+        drawareaProvider.get().getCanvas().getChildren().remove(zoomSlider);     // remove zoomSlider if necessary
+        drawareaProvider.get().getCanvas().getChildren().remove(zoomInButton);   // remove zoomInButton if necessary
+        drawareaProvider.get().getCanvas().getChildren().remove(zoomOutButton);  // remove zoomOutButton if necessary
+        drawareaProvider.get().getCanvas().getChildren().remove(quiticon);       // remove quiticon if necessary
+        drawareaProvider.get().getCanvas().getChildren().remove(geoLocation);       // remove geoLocation if necessary
     }
 
     /**
@@ -314,7 +316,7 @@ public class MapController {
      * @param y 
      */
     public void putLocation(double x, double y) {
-        if (view.isMapping()) {
+        if (viewProvider.get().isMapping()) {
             MapPoint loc = map.getPosition(x, y);
             geoLocation.setText(String.format("%.6f %.6f", new Object[] { loc.getLatitude(), loc.getLongitude() }));
             logger.debug("Geolocation: {}, {}", new Object[] { loc.getLatitude(), loc.getLongitude() });
@@ -336,7 +338,7 @@ public class MapController {
      * Refresh map layout
      */
     public void moveMap() {
-        if (view.isMapping()) {
+        if (viewProvider.get().isMapping()) {
             map.refreshLayout();
         }
     }
@@ -359,7 +361,7 @@ public class MapController {
         path_c.setContent(SVG_QUIT_C);
         path_c.getStyleClass().add("svgPath");
         path_c.setFill(Color.TRANSPARENT);
-        if (drawarea.isDarkModeEnabled()) {
+        if (drawareaProvider.get().isDarkModeEnabled()) {
             path_a.setStyle("-fx-stroke:#3a3a3a;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
             path_b.setStyle("-fx-stroke:#3a3a3a;-fx-stroke-width:4.5;-fx-stroke-line-cap:butt;");
             path_c.setStyle("-fx-stroke:#3a3a3a;");
@@ -384,10 +386,10 @@ public class MapController {
      * @return an {@link net.perspective.draw.geom.StreetMap}
      */
     public StreetMap copyMap(StreetMap item) {
-        view.getImageItems().add(new ImageItem(Instant.now()));
-        item.setImageIndex(view.getImageItems().size() - 1);
+        viewProvider.get().getImageItems().add(new ImageItem(Instant.now()));
+        item.setImageIndex(viewProvider.get().getImageItems().size() - 1);
         Image image = createCompatibleImage(item, (int) item.getEnd().getX(), (int) item.getEnd().getY());
-        view.getImageItem(item.getImageIndex()).setImage(image);
+        viewProvider.get().getImageItem(item.getImageIndex()).setImage(image);
         return item;
     }
 

@@ -79,9 +79,9 @@ public interface DrawAppComponent {
 
     void inject(TextHandler textHandler);
 
-    void inject(TextKeyHandler textKeyHandler);
+    void inject(MapHandler mapHandler);
 
-    void inject(TextController textController);
+    void inject(TextKeyHandler textKeyHandler);
 
     void inject(FigureItemBehaviour figureItemBehaviour);
 
@@ -92,6 +92,10 @@ public interface DrawAppComponent {
     void inject(MapItemBehaviour mapItemBehaviour);
 
     void inject(TextItemBehaviour textItemBehaviour);
+
+    void inject(TextController textController);
+
+    void inject(MapController mapController);
 
     void inject(MoveKeyHandler moveKeyHandler);
 
