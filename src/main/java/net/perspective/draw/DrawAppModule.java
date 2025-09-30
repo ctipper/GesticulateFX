@@ -115,7 +115,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     FigureHandler provideFigureHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         FigureHandler figureHandler = new FigureHandler(drawarea, view);
         component.inject(figureHandler);
@@ -123,7 +122,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     SketchHandler provideSketchHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         SketchHandler sketchHandler = new SketchHandler(drawarea, view);
         component.inject(sketchHandler);
@@ -131,13 +129,11 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     RotationHandler provideRotationHandler(DrawingArea drawarea, CanvasView view) {
         return new RotationHandler(drawarea, view);
     }
 
     @Provides
-    @Singleton
     SelectionHandler provideSelectionHandler(DrawingArea drawarea,
             CanvasView view, ApplicationController controller,
             DrawAppComponent component) {
@@ -147,7 +143,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     TextHandler provideTextHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         TextHandler textHandler = new TextHandler(drawarea, view);
         component.inject(textHandler);
@@ -155,7 +150,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     MapHandler provideMapHandler(DrawAppComponent component) {
         MapHandler mapHandler = new MapHandler();
         component.inject(mapHandler);
@@ -169,7 +163,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     DummyKeyHandler provideDummyKeyHandler(DrawAppComponent component) {
         DummyKeyHandler dummyKeyHandler = new DummyKeyHandler();
         component.inject(dummyKeyHandler);
@@ -177,7 +170,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     MapKeyHandler provideMapKeyHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         MapKeyHandler mapKeyHandler = new MapKeyHandler(drawarea, view);
         component.inject(mapKeyHandler);
@@ -185,7 +177,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     MoveKeyHandler provideMoveKeyHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         MoveKeyHandler moveKeyHandler = new MoveKeyHandler(drawarea, view);
         component.inject(moveKeyHandler);
@@ -193,7 +184,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     TextKeyHandler provideTextKeyHandler(DrawingArea drawarea, CanvasView view,
             ApplicationController controller, DrawAppComponent component) {
         TextKeyHandler textKeyHandler = new TextKeyHandler(drawarea, view, controller);
@@ -208,7 +198,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     FigureItemBehaviour provideFigureItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         FigureItemBehaviour figureItemBehaviour = new FigureItemBehaviour(drawarea, view);
         component.inject(figureItemBehaviour);
@@ -216,7 +205,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     PictureItemBehaviour providePictureItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         PictureItemBehaviour pictureItemBehaviour = new PictureItemBehaviour(drawarea, view);
         component.inject(pictureItemBehaviour);
@@ -224,7 +212,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     GroupedItemBehaviour provideGroupedItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         GroupedItemBehaviour groupedItemBehaviour = new GroupedItemBehaviour(drawarea, view);
         component.inject(groupedItemBehaviour);
@@ -232,7 +219,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     MapItemBehaviour provideMapItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         MapItemBehaviour mapItemBehaviour = new MapItemBehaviour(drawarea, view);
         component.inject(mapItemBehaviour);
@@ -240,7 +226,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     TextItemBehaviour provideTextItemBehaviour(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
         TextItemBehaviour textItemBehaviour = new TextItemBehaviour(drawarea, view);
         component.inject(textItemBehaviour);
@@ -277,7 +262,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     ReadInFunnel provideReadInFunnel(Provider<DrawingArea> drawareaProvider,
             Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
@@ -288,7 +272,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     WriteOutStreamer provideWriteOutStreamer(Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
@@ -299,7 +282,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     ImageLoadWorker provideImageLoadWorker(Provider<DrawingArea> drawareaProvider,
             Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
@@ -310,7 +292,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     PDFWorker providePDFWorker(Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
@@ -320,7 +301,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     SVGWorker provideSVGWorker(Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
@@ -330,7 +310,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     PNGWorker providePNGWorker(Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
