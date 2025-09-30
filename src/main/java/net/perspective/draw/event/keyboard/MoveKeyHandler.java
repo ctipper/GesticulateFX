@@ -37,8 +37,8 @@ import net.perspective.draw.geom.DrawItem;
 
 public class MoveKeyHandler implements KeyHandler {
 
-    private DrawingArea drawarea;
-    private CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject KeyListener keylistener;
     private DrawingType drawingtype;
     private HandlerType handlertype;

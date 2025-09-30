@@ -4,7 +4,6 @@
  * Created on 20 Sept 2025 14:06:39
  *
  */
-
 /**
  * Copyright (c) 2025 e-conomist
  *
@@ -71,7 +70,7 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ApplicationController provideApplicationController(Provider<DrawingArea> drawingAreaProvider, 
+    ApplicationController provideApplicationController(Provider<DrawingArea> drawingAreaProvider,
             Provider<CanvasView> viewProvider, DrawAppComponent component) {
         ApplicationController applicationController = new ApplicationController(drawingAreaProvider, viewProvider);
         return applicationController;
@@ -88,13 +87,13 @@ public class DrawAppModule {
     @Provides
     @Singleton
     CanvasView provideCanvasView(Provider<DrawingArea> drawareaProvider,
-    Provider<ApplicationController> controllerProvider,
-    Provider<TextController> textControllerProvider,
-    DrawAppComponent component) {
+            Provider<ApplicationController> controllerProvider,
+            Provider<TextController> textControllerProvider,
+            DrawAppComponent component) {
         CanvasView view = new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
         component.inject(view);
         return view;
-        
+
     }
 
     @Provides
@@ -171,14 +170,18 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    DummyKeyHandler provideDummyKeyHandler() {
-        return new DummyKeyHandler();
+    DummyKeyHandler provideDummyKeyHandler(DrawAppComponent component) {
+        DummyKeyHandler dummyKeyHandler = new DummyKeyHandler();
+        component.inject(dummyKeyHandler);
+        return dummyKeyHandler;
     }
 
     @Provides
     @Singleton
-    MapKeyHandler provideMapKeyHandler(DrawingArea drawarea, CanvasView view) {
-        return new MapKeyHandler(drawarea, view);
+    MapKeyHandler provideMapKeyHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        MapKeyHandler mapKeyHandler = new MapKeyHandler(drawarea, view);
+        component.inject(mapKeyHandler);
+        return mapKeyHandler;
     }
 
     @Provides
@@ -191,7 +194,7 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea, CanvasView view, 
+    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea, CanvasView view,
             ApplicationController controller, DrawAppComponent component) {
         TextKeyHandler textKeyHandler = new TextKeyHandler(drawarea, view, controller);
         component.inject(textKeyHandler);
@@ -247,10 +250,11 @@ public class DrawAppModule {
     @Provides
     @Singleton
     MapController provideMapController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-             DrawAppComponent component) {
+            DrawAppComponent component) {
         MapController mapController = new MapController(drawareaProvider, viewProvider);
         component.inject(mapController);
-        return mapController;    }
+        return mapController;
+    }
 
     @Provides
     @Singleton
@@ -337,7 +341,7 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    G2 provideG2(Provider<DrawingArea> drawareaProvider, 
+    G2 provideG2(Provider<DrawingArea> drawareaProvider,
             Provider<ApplicationController> controllerProvider,
             Provider<TextController> textControllerProvider) {
         return new G2(drawareaProvider, controllerProvider, textControllerProvider);
