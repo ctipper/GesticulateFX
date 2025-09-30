@@ -43,15 +43,17 @@ import net.perspective.draw.util.V2;
 
 public class PictureItemBehaviour implements ItemBehaviours {
 
-    @Inject DrawingArea drawarea;
-    @Inject CanvasView view;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
     @Inject DrawAreaListener listener;
 
     /** 
      * Creates a new instance of <code>PictureItemBehaviour</code> 
      */
     @Inject
-    public PictureItemBehaviour() {
+    public PictureItemBehaviour(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override
