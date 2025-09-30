@@ -95,6 +95,8 @@ public interface DrawAppComponent {
 
     void inject(ReadInFunnel readInFunnel);
 
+    void inject(WriteOutStreamer writeOutStreamer);
+
     void inject(PDFWorker pdfWorker);
 
     void inject(SVGWorker svgWorker);
