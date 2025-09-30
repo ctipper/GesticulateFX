@@ -157,8 +157,10 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    MapHandler provideMapHandler() {
-        return new MapHandler();
+    MapHandler provideMapHandler(DrawAppComponent component) {
+        MapHandler mapHandler = new MapHandler();
+        component.inject(mapHandler);
+        return mapHandler;
     }
 
     @Provides
@@ -244,9 +246,11 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    MapController provideMapController() {
-        return new MapController();
-    }
+    MapController provideMapController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
+             DrawAppComponent component) {
+        MapController mapController = new MapController(drawareaProvider, viewProvider);
+        component.inject(mapController);
+        return mapController;    }
 
     @Provides
     @Singleton
