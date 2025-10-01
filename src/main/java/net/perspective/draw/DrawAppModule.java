@@ -246,9 +246,9 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    TextController provideTextController(DrawingArea drawarea, Provider<CanvasView> viewProvider,
-            ApplicationController controller, DrawAppComponent component) {
-        TextController textController = new TextController(drawarea, viewProvider, controller);
+    TextController provideTextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider, DrawAppComponent component) {
+        TextController textController = new TextController(drawareaProvider, viewProvider, controllerProvider);
         component.inject(textController);
         return textController;
     }
