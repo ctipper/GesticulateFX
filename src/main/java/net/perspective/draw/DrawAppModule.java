@@ -98,8 +98,11 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    CanvasTransferHandler provideCanvasTransferHandler() {
-        return new CanvasTransferHandler();
+    CanvasTransferHandler provideCanvasTransferHandler(Provider<DrawingArea> drawareaProvider, 
+            Provider<CanvasView> viewProvider, DrawAppComponent component) {
+        CanvasTransferHandler canvasTransferHandler = new CanvasTransferHandler(drawareaProvider, viewProvider);
+        component.inject(canvasTransferHandler);
+        return canvasTransferHandler;
     }
 
     @Provides

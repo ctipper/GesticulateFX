@@ -117,6 +117,8 @@ public interface DrawAppComponent {
 
     void inject(PNGWorker pngWorker);
 
+    void inject(CanvasTransferHandler canvasTransferHandler);
+
     FxAppComponent.Builder fxApp();
 
     ApplicationController applicationController();
