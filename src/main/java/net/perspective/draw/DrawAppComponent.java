@@ -81,6 +81,8 @@ public interface DrawAppComponent {
 
     void inject(MapHandler mapHandler);
 
+    void inject(RotationHandler rotationHandler);
+
     void inject(DummyKeyHandler dummyKeyHandler);
 
     void inject(MapKeyHandler mapKeyHandler);

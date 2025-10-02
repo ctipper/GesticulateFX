@@ -4,6 +4,7 @@
  * Created on 20 Sept 2025 14:06:39
  *
  */
+
 /**
  * Copyright (c) 2025 e-conomist
  *
@@ -87,8 +88,7 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    CanvasView provideCanvasView(Provider<DrawingArea> drawareaProvider,
-            Provider<ApplicationController> controllerProvider,
+    CanvasView provideCanvasView(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> controllerProvider,
             Provider<TextController> textControllerProvider,
             DrawAppComponent component) {
         CanvasView view = new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
@@ -99,7 +99,7 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    CanvasTransferHandler provideCanvasTransferHandler(Provider<DrawingArea> drawareaProvider, 
+    CanvasTransferHandler provideCanvasTransferHandler(Provider<DrawingArea> drawareaProvider,
             Provider<CanvasView> viewProvider, DrawAppComponent component) {
         CanvasTransferHandler canvasTransferHandler = new CanvasTransferHandler(drawareaProvider, viewProvider);
         component.inject(canvasTransferHandler);
@@ -133,14 +133,15 @@ public class DrawAppModule {
     }
 
     @Provides
-    RotationHandler provideRotationHandler(DrawingArea drawarea, CanvasView view) {
-        return new RotationHandler(drawarea, view);
+    RotationHandler provideRotationHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
+        RotationHandler rotationHandler = new RotationHandler(drawarea, view);
+        component.inject(rotationHandler);
+        return rotationHandler;
     }
 
     @Provides
-    SelectionHandler provideSelectionHandler(DrawingArea drawarea,
-            CanvasView view, ApplicationController controller,
-            DrawAppComponent component) {
+    SelectionHandler provideSelectionHandler(DrawingArea drawarea, CanvasView view,
+            ApplicationController controller, DrawAppComponent component) {
         SelectionHandler selectionHandler = new SelectionHandler(drawarea, view, controller);
         component.inject(selectionHandler);
         return selectionHandler;
@@ -248,14 +249,13 @@ public class DrawAppModule {
     @Provides
     @Singleton
     TextController provideTextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,  Provider<Editor> editorProvider) {
+            Provider<ApplicationController> controllerProvider, Provider<Editor> editorProvider) {
         return new TextController(drawareaProvider, viewProvider, controllerProvider, editorProvider);
     }
 
     @Provides
     @Singleton
-    ShareUtils provideShareUtils(Provider<Gesticulate> applicationProvider,
-            Provider<CanvasView> viewProvider,
+    ShareUtils provideShareUtils(Provider<Gesticulate> applicationProvider, Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
         ShareUtils shareUtils = new ShareUtils(applicationProvider, viewProvider, controllerProvider);
@@ -264,8 +264,7 @@ public class DrawAppModule {
     }
 
     @Provides
-    ReadInFunnel provideReadInFunnel(Provider<DrawingArea> drawareaProvider,
-            Provider<CanvasView> viewProvider,
+    ReadInFunnel provideReadInFunnel(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
         ReadInFunnel readInFunnel = new ReadInFunnel(drawareaProvider, viewProvider, controllerProvider);
@@ -284,8 +283,7 @@ public class DrawAppModule {
     }
 
     @Provides
-    ImageLoadWorker provideImageLoadWorker(Provider<DrawingArea> drawareaProvider,
-            Provider<CanvasView> viewProvider,
+    ImageLoadWorker provideImageLoadWorker(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
             Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
         ImageLoadWorker imageLoadWorker = new ImageLoadWorker(drawareaProvider, viewProvider, controllerProvider);
@@ -294,8 +292,7 @@ public class DrawAppModule {
     }
 
     @Provides
-    PDFWorker providePDFWorker(Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,
+    PDFWorker providePDFWorker(Provider<CanvasView> viewProvider, Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
         PDFWorker pdfWorker = new PDFWorker(viewProvider, controllerProvider);
         component.inject(pdfWorker);
@@ -303,8 +300,7 @@ public class DrawAppModule {
     }
 
     @Provides
-    SVGWorker provideSVGWorker(Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,
+    SVGWorker provideSVGWorker(Provider<CanvasView> viewProvider, Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
         SVGWorker svgWorker = new SVGWorker(viewProvider, controllerProvider);
         component.inject(svgWorker);
@@ -312,8 +308,7 @@ public class DrawAppModule {
     }
 
     @Provides
-    PNGWorker providePNGWorker(Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,
+    PNGWorker providePNGWorker(Provider<CanvasView> viewProvider, Provider<ApplicationController> controllerProvider,
             DrawAppComponent component) {
         PNGWorker pngWorker = new PNGWorker(viewProvider, controllerProvider);
         component.inject(pngWorker);
@@ -322,8 +317,7 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    G2 provideG2(Provider<DrawingArea> drawareaProvider,
-            Provider<ApplicationController> controllerProvider,
+    G2 provideG2(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> controllerProvider,
             Provider<TextController> textControllerProvider) {
         return new G2(drawareaProvider, controllerProvider, textControllerProvider);
     }
