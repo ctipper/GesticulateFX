@@ -74,6 +74,20 @@
             <artifactId>dagger-compiler</artifactId>
             <version>2.57.1</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.squareup</groupId>
+                    <artifactId>kotlinpoet</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.squareup</groupId>
+                    <artifactId>kotlinpoet-metadata</artifactId> <!-- if present -->
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -270,7 +284,7 @@
                 </executions>
                 <configuration>
                     <executable>${env.JAVA_HOME}/bin/java</executable>
-                    <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing -XX:+ShowCodeDetailsInExceptionMessages --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics net.perspective.draw.Gesticulate</commandlineArgs>
+                    <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing -XX:+ShowCodeDetailsInExceptionMessages --enable-native-access=javafx.graphics net.perspective.draw.Gesticulate</commandlineArgs>
                 </configuration>
             </plugin>
 

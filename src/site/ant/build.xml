@@ -58,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -72,7 +72,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME};${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -86,7 +86,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--module-path" />
          <arg value="${env.JAVA_HOME}:${javafx.path}/jmods" />
          <arg value="--add-modules" />
-         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
+         <arg value="java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" />
          <arg value="--output" />
          <arg value="target/build/${bundle.dir}/${runtime.dir}" />
       </exec>
@@ -161,7 +161,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--main-jar"/>
          <arg value="${jlink.launcher.name}-${version.public}.jar"/>
          <arg value="--java-options" />
-         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics" />
+         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --enable-native-access=javafx.graphics" />
          <arg value="--copyright" />
          <arg value="Copyright © 2025 Christopher Tipper" />
          <arg value="--mac-package-identifier" />
@@ -199,7 +199,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--main-jar"/>
          <arg value="${jlink.launcher.name}-${version.public}.jar"/>
          <arg value="--java-options" />
-         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics" />
+         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --enable-native-access=javafx.graphics" />
          <arg value="--copyright" />
          <arg value="Copyright © 2025 Christopher Tipper" />
          <arg value="--vendor" />
@@ -229,7 +229,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--main-jar"/>
          <arg value="${jlink.launcher.name}-${version.public}.jar"/>
          <arg value="--java-options" />
-         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics" />
+         <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --enable-native-access=javafx.graphics" />
          <arg value="--copyright" />
          <arg value="Copyright © 2025 Christopher Tipper" />
          <arg value="--vendor" />
