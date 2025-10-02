@@ -284,7 +284,7 @@
                 </executions>
                 <configuration>
                     <executable>${env.JAVA_HOME}/bin/java</executable>
-                    <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing -XX:+ShowCodeDetailsInExceptionMessages --enable-native-access=javafx.graphics net.perspective.draw.Gesticulate</commandlineArgs>
+                    <commandlineArgs>-cp %classpath --add-opens=java.base/java.lang=ALL-UNNAMED --module-path ${env.JAVAFX_HOME}/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing -XX:+ShowCodeDetailsInExceptionMessages --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics net.perspective.draw.Gesticulate</commandlineArgs>
                 </configuration>
             </plugin>
 
