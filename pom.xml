@@ -16,7 +16,7 @@
     </organization>
 
     <properties>
-        <java.version>24</java.version>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>25-ea+29</javafx.version>
         <slf4j.version>2.0.17</slf4j.version>
@@ -276,7 +276,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    <release>24</release>
+                    <release>${java.version}</release>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <executable>${env.JAVA_HOME}/bin/javac</executable>

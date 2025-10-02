@@ -76,6 +76,7 @@ public class SelectionHandler implements Handler {
     /**
      * Creates a new instance of <code>SelectionHandler</code> 
      */
+    @Inject
     public SelectionHandler() {
     }
 

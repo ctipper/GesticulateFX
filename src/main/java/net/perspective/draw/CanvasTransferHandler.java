@@ -34,6 +34,7 @@ import java.lang.reflect.InvocationTargetException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
@@ -46,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author ctipper
  */
-
+@Singleton
 public class CanvasTransferHandler {
 
     @Inject private Injector injector;
@@ -177,7 +178,7 @@ public class CanvasTransferHandler {
         }
         
         if (drawing instanceof Grouped grouped) {
-            var item = injector.getInstance(Grouped.class);
+            var item = new Grouped();
             for (DrawItem shape : grouped.getDrawItems()) {
                 item.addDrawItem(checkDrawings(shape));
             }
