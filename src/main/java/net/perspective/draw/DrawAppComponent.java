@@ -99,8 +99,6 @@ public interface DrawAppComponent {
 
     void inject(TextItemBehaviour textItemBehaviour);
 
-    void inject(TextController textController);
-
     void inject(MapController mapController);
 
     void inject(ShareUtils shareUtils);

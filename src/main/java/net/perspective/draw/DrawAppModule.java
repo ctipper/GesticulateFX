@@ -46,6 +46,7 @@ import net.perspective.draw.event.keyboard.MoveKeyHandler;
 import net.perspective.draw.event.keyboard.TextKeyHandler;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
+import net.perspective.draw.text.Editor;
 import net.perspective.draw.util.G2;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
@@ -247,10 +248,8 @@ public class DrawAppModule {
     @Provides
     @Singleton
     TextController provideTextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider, DrawAppComponent component) {
-        TextController textController = new TextController(drawareaProvider, viewProvider, controllerProvider);
-        component.inject(textController);
-        return textController;
+            Provider<ApplicationController> controllerProvider,  Provider<Editor> editorProvider) {
+        return new TextController(drawareaProvider, viewProvider, controllerProvider, editorProvider);
     }
 
     @Provides
