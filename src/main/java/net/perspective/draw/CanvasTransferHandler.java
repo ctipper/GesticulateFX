@@ -47,6 +47,7 @@ import net.perspective.draw.geom.StreetMap;
  * 
  * @author ctipper
  */
+
 @Singleton
 public class CanvasTransferHandler {
 
