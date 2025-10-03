@@ -212,7 +212,7 @@ public class CanvasView {
     }
 
     /**
-     * Use the textControllerProvider's rich text markup
+     * Use the textController's rich text markup
      * 
      * @param isRichText formatted text active
      */

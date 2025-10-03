@@ -19,3 +19,10 @@ Third-Party Components and Their Licenses
   Licensed under the Apache License, Version 2.0. You may obtain a copy of the license at:  
   http://www.apache.org/licenses/LICENSE-2.0  
   Unless required by law or agreed to in writing, software under the Apache License is distributed on an “AS IS” basis, without warranties or conditions of any kind.
+
+- AppDirs  
+  https://github.com/harawata/appdirs  
+  Licensed under the Apache License, Version 2.0. You may obtain a copy of the license at:  
+  http://www.apache.org/licenses/LICENSE-2.0  
+  Unless required by law or agreed to in writing, software under the Apache License is distributed on an “AS IS” basis, without warranties or conditions of any kind.  
+
