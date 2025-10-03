@@ -67,7 +67,7 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 @Singleton
 public class Gesticulate extends Application {
- 
+
     private DrawAppComponent appComponent;
     private ApplicationController controller;
     @Inject Provider<DrawingArea> drawareaProvider;
@@ -91,7 +91,7 @@ public class Gesticulate extends Application {
 
     /**
      * Init the application
-     * 
+     *
      * @throws Exception
      */
     @Override
@@ -104,107 +104,95 @@ public class Gesticulate extends Application {
 
     /**
      * Construct the user interface
-     * 
+     *
      * @param primaryStage
      * @throws Exception
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        try {
-            FxAppComponent fxApp = appComponent.fxApp()
+        FxAppComponent fxApp = appComponent.fxApp()
                 .application(this)
                 .mainWindow(primaryStage)
                 .build();
-            FXMLLoader loader = fxApp.loader(getClass().getResource("/fxml/Application.fxml"));
-            loader.setControllerFactory(param -> appComponent.applicationController());
-            final Parent root = loader.load();
-            controller = appComponent.applicationController();
-            appComponent.inject(controller);
-            controller.setApplication(this);
-            // Put the loaded user interface onto the primary stage.
-            Scene scene = new Scene(root);
-            // keyboard events are consumed by the scene
-            keylistener.initializeHandlers(scene);
+        FXMLLoader loader = fxApp.loader(getClass().getResource("/fxml/Application.fxml"));
+        loader.setControllerFactory(param -> appComponent.applicationController());
+        final Parent root = loader.load();
+        controller = appComponent.applicationController();
+        appComponent.inject(controller);
+        controller.setApplication(this);
+        // Put the loaded user interface onto the primary stage.
+        Scene scene = new Scene(root);
+        // keyboard events are consumed by the scene
+        keylistener.initializeHandlers(scene);
 
-            primaryStage.setTitle("GesticulateFX");
-            primaryStage.setResizable(true);
-            primaryStage.setScene(scene);
-            primaryStage.setOnCloseRequest((WindowEvent e) -> {
-                stop();
+        primaryStage.setTitle("GesticulateFX");
+        primaryStage.setResizable(true);
+        primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest((WindowEvent e) -> {
+            stop();
+        });
+        // Size the primary stage
+        this.sizeStage(primaryStage);
+
+        // Show the primary stage
+        primaryStage.show();
+        this.stage = primaryStage;
+
+        // Initialise the scroll area
+        final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
+        // retrieve user preferences
+        this.userPrefs = getUserPreferences();
+
+        // Initialize the canvas and apply handlers
+        drawareaProvider.get().init(pane.getWidth(), pane.getHeight());
+        logger.trace("initialized stage");
+
+        // set the theme from user preferences
+        if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
+            // setSystemTheme();
+            controller.setThemeType("System");
+        } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
+            controller.getThemeProperty().setValue(true); // non default value triggers event
+            controller.setThemeType("Dark");
+        } else {
+            controller.setAppStyles(false);
+            resetStylesheets(false);
+            controller.setThemeType("Light");
+        }
+
+        // configure canvas background
+        var canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"))
+                .orElseGet(controller::getThemeBackgroundColor);
+        controller.setCanvasBackgroundColor(canvasColor);
+        controller.setBackgroundPickerColor(canvasColor);
+        controller.adjustThemeFillColor(canvasColor);
+        drawareaProvider.get().setTheme();
+
+        // Install the canvas
+        pane.setContent(drawareaProvider.get().getScene());
+        this.setOnResize(pane);
+
+        // open canvas from file if requested
+        final Parameters parameters = getParameters();
+        final List<String> args = parameters.getRaw();
+        final List<File> files = new ArrayList<>();
+        for (String arg : args) {
+            files.add(new File(arg));
+        }
+        if (!files.isEmpty()) {
+            share.loadCanvas(files);
+        }
+        if (MAC_OS_X) {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.setOpenFileHandler((OpenFilesEvent e) -> {
+                share.loadCanvas(e.getFiles());
             });
-            // Size the primary stage
-            this.sizeStage(primaryStage);
-
-            // Show the primary stage
-            primaryStage.show();
-            this.stage = primaryStage;
-
-            // Initialise the scroll area
-            final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
-            // retrieve user preferences
-            this.userPrefs = getUserPreferences();
-
-            // Initialize the canvas and apply handlers
-            drawareaProvider.get().init(pane.getWidth(), pane.getHeight());
-            logger.trace("initialized stage");
-
-            // set the theme from user preferences
-            if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
-                // setSystemTheme();
-                controller.setThemeType("System");
-            } else if (Boolean.parseBoolean(userPrefs.getProperty("darkTheme"))) {
-                controller.getThemeProperty().setValue(true); // non default value triggers event
-                controller.setThemeType("Dark");
-            } else {
-                controller.setAppStyles(false);
-                resetStylesheets(false);
-                controller.setThemeType("Light");
-            }
-
-            // configure canvas background
-            var canvasColor = Optional.ofNullable(this.userPrefs.getProperty("canvasColor"))
-                    .orElseGet(controller::getThemeBackgroundColor);
-            controller.setCanvasBackgroundColor(canvasColor);
-            controller.setBackgroundPickerColor(canvasColor);
-            controller.adjustThemeFillColor(canvasColor);
-            drawareaProvider.get().setTheme();
-
-            // Install the canvas
-            pane.setContent(drawareaProvider.get().getScene());
-            this.setOnResize(pane);
-
-            // open canvas from file if requested
-            final Parameters parameters = getParameters();
-            final List<String> args = parameters.getRaw();
-            final List<File> files = new ArrayList<>();
-            for (String arg : args) {
-                files.add(new File(arg));
-            }
-            if (!files.isEmpty()) {
-                share.loadCanvas(files);
-            }
-            if (MAC_OS_X) {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.setOpenFileHandler((OpenFilesEvent e) -> {
-                    share.loadCanvas(e.getFiles());
-                });
-            }
-        } catch (IOException e) {
-            logger.error("Failed to load FXML: {}", e.getMessage());
-            e.printStackTrace();
-            // Show error dialog or exit gracefully
-            Platform.exit();
-        } catch (Exception e) {
-            logger.error("Error: {}", e.getMessage());
-            e.printStackTrace();
-            // Show error dialog or exit gracefully
-            Platform.exit();
         }
     }
 
     /**
      * Resize scrollpane on window resize
-     * 
+     *
      * @param pane
      */
     public void setOnResize(ScrollPane pane) {
@@ -220,7 +208,7 @@ public class Gesticulate extends Application {
 
     /**
      * Set the size of the stage
-     * 
+     *
      * @param stage the stage
      */
     public void sizeStage(Stage stage) {
@@ -232,7 +220,7 @@ public class Gesticulate extends Application {
 
     /**
      * Retrieve the stage
-     * 
+     *
      * @return the stage
      */
     public Stage getStage() {
@@ -271,7 +259,7 @@ public class Gesticulate extends Application {
 
     /**
      * Reset aopplication stylesheets
-     * 
+     *
      * @param isDark is dark theme selected
      */
     public void resetStylesheets(Boolean isDark) {
@@ -325,7 +313,7 @@ public class Gesticulate extends Application {
 
     /**
      * Persist the user preferences
-     * 
+     *
      * @param prefs the user preferences as properties
      */
     public void setUserPreferences(Properties prefs) {
@@ -342,7 +330,7 @@ public class Gesticulate extends Application {
 
     /**
      * Retrieve the user preferences
-     * 
+     *
      * @return user preferencies as properties
      */
     public Properties getUserPreferences() {
