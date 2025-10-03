@@ -8,7 +8,7 @@ To build and run, a `JAVAFX_HOME` environment variable needs to be set and this 
 
 Platform builds are in the site directory using `ant` script. This assumes that the JDK is in `~/Applications` folder.
 
-An ant runner is provided `mvn clean package -P ant-builder` for app bundle or `mvn clean install -P ant-builder` for platform installer.
+An ant runner is provided `mvn clean package -P ant-bundle` for app bundle or `mvn clean install -P ant-builder` for platform installer.
 
 ![GesticulateFX, sketch freehand diagrams using JavaFX](https://www.e-conomist.me.uk/images/144dpi/gesticulate-fx-15.png)
 

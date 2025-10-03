@@ -350,8 +350,14 @@
     </build>
 
     <profiles>
+        <!-- Profile for running bundle macOS/Linux only -->
         <profile>
-            <id>ant-builder</id>
+            <id>ant-bundle</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -367,10 +373,26 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <ant antfile="./src/site/ant/build.xml" target="bundle" />
+                                        <ant antfile="src/site/ant/build.xml" target="bundle"/>
                                     </target>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile for running installer always -->
+        <profile>
+            <id>ant-builder</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
                             <execution>
                                 <id>installer</id>
                                 <phase>install</phase>
@@ -379,7 +401,7 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <ant antfile="./src/site/ant/build.xml" target="installer" />
+                                        <ant antfile="src/site/ant/build.xml" target="installer"/>
                                     </target>
                                 </configuration>
                             </execution>
