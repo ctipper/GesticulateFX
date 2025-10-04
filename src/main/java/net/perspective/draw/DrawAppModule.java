@@ -139,8 +139,8 @@ public class DrawAppModule {
     }
 
     @Provides
-    SelectionHandler provideSelectionHandler(DrawingArea drawarea, CanvasView view,
-            ApplicationController controller, DrawAppComponent component) {
+    SelectionHandler provideSelectionHandler(DrawingArea drawarea, CanvasView view, ApplicationController controller,
+            DrawAppComponent component) {
         SelectionHandler selectionHandler = new SelectionHandler(drawarea, view, controller);
         component.inject(selectionHandler);
         return selectionHandler;
@@ -188,8 +188,8 @@ public class DrawAppModule {
     }
 
     @Provides
-    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea, CanvasView view,
-            ApplicationController controller, DrawAppComponent component) {
+    TextKeyHandler provideTextKeyHandler(DrawingArea drawarea, CanvasView view, ApplicationController controller,
+            DrawAppComponent component) {
         TextKeyHandler textKeyHandler = new TextKeyHandler(drawarea, view, controller);
         component.inject(textKeyHandler);
         return textKeyHandler;
@@ -263,53 +263,46 @@ public class DrawAppModule {
     }
 
     @Provides
-    ReadInFunnel provideReadInFunnel(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,
+    ReadInFunnel provideReadInFunnel(DrawingArea drawarea, CanvasView view, ApplicationController controller,
             DrawAppComponent component) {
-        ReadInFunnel readInFunnel = new ReadInFunnel(drawareaProvider, viewProvider, controllerProvider);
+        ReadInFunnel readInFunnel = new ReadInFunnel(drawarea, view, controller);
         component.inject(readInFunnel);
         return readInFunnel;
     }
 
     @Provides
-    WriteOutStreamer provideWriteOutStreamer(Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,
-            DrawAppComponent component) {
-        WriteOutStreamer writeOutStreamer = new WriteOutStreamer(viewProvider, controllerProvider);
+    WriteOutStreamer provideWriteOutStreamer(CanvasView view, ApplicationController controller, DrawAppComponent component) {
+        WriteOutStreamer writeOutStreamer = new WriteOutStreamer(view, controller);
         component.inject(writeOutStreamer);
         return writeOutStreamer;
 
     }
 
     @Provides
-    ImageLoadWorker provideImageLoadWorker(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider,
+    ImageLoadWorker provideImageLoadWorker(DrawingArea drawarea, CanvasView view, ApplicationController controller,
             DrawAppComponent component) {
-        ImageLoadWorker imageLoadWorker = new ImageLoadWorker(drawareaProvider, viewProvider, controllerProvider);
+        ImageLoadWorker imageLoadWorker = new ImageLoadWorker(drawarea, view, controller);
         component.inject(imageLoadWorker);
         return imageLoadWorker;
     }
 
     @Provides
-    PDFWorker providePDFWorker(Provider<CanvasView> viewProvider, Provider<ApplicationController> controllerProvider,
-            DrawAppComponent component) {
-        PDFWorker pdfWorker = new PDFWorker(viewProvider, controllerProvider);
+    PDFWorker providePDFWorker(CanvasView view, ApplicationController controller, DrawAppComponent component) {
+        PDFWorker pdfWorker = new PDFWorker(view, controller);
         component.inject(pdfWorker);
         return pdfWorker;
     }
 
     @Provides
-    SVGWorker provideSVGWorker(Provider<CanvasView> viewProvider, Provider<ApplicationController> controllerProvider,
-            DrawAppComponent component) {
-        SVGWorker svgWorker = new SVGWorker(viewProvider, controllerProvider);
+    SVGWorker provideSVGWorker(CanvasView view, ApplicationController controller, DrawAppComponent component) {
+        SVGWorker svgWorker = new SVGWorker(view, controller);
         component.inject(svgWorker);
         return svgWorker;
     }
 
     @Provides
-    PNGWorker providePNGWorker(Provider<CanvasView> viewProvider, Provider<ApplicationController> controllerProvider,
-            DrawAppComponent component) {
-        PNGWorker pngWorker = new PNGWorker(viewProvider, controllerProvider);
+    PNGWorker providePNGWorker(CanvasView view, ApplicationController controller, DrawAppComponent component) {
+        PNGWorker pngWorker = new PNGWorker(view, controller);
         component.inject(pngWorker);
         return pngWorker;
     }

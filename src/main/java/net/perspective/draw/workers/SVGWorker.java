@@ -28,7 +28,6 @@ import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javax.inject.Inject;
-import javax.inject.Provider;
 import org.jfree.svg.SVGGraphics2D;
 import org.jfree.svg.SVGHints;
 import net.perspective.draw.ApplicationController;
@@ -45,8 +44,8 @@ import org.slf4j.LoggerFactory;
 
 public class SVGWorker extends Task<Object> {
 
-    private final Provider<CanvasView> viewProvider;
-    private final Provider<ApplicationController> controllerProvider;
+    private final CanvasView view;
+    private final ApplicationController controller;
     @Inject ShareUtils share;
     private File file;
     private double margin;
@@ -54,10 +53,9 @@ public class SVGWorker extends Task<Object> {
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
     @Inject
-    public SVGWorker(Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider) {
-        this.viewProvider = viewProvider;
-        this.controllerProvider = controllerProvider;
+    public SVGWorker(CanvasView view, ApplicationController controller) {
+        this.view = view;
+        this.controller = controller;
         this.margin = 0.0;
     }
 
@@ -86,8 +84,8 @@ public class SVGWorker extends Task<Object> {
             }
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
-                controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controllerProvider.get().setStatusMessage("Exported to SVG");
+                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
+                controller.setStatusMessage("Exported to SVG");
             });
         });
     }
@@ -101,7 +99,7 @@ public class SVGWorker extends Task<Object> {
 
         public void make() {
             // Calculate drawing bounds
-            final CanvasPoint[] bounds = viewProvider.get().getBounds();
+            final CanvasPoint[] bounds = view.getBounds();
             CanvasPoint start = bounds[0].shifted(-margin, -margin).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin);
 
@@ -121,7 +119,7 @@ public class SVGWorker extends Task<Object> {
             g2.translate(-start.x, -start.y);
 
             // Ask to render into the SVG Graphics2D implementation.
-            viewProvider.get().getDrawings().stream().forEach((item) -> {
+            view.getDrawings().stream().forEach((item) -> {
                 item.draw(g2);
             });
 
