@@ -113,8 +113,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
       <echo if:set="onwindows" message="Delete builds"/>
 
-      <chmod dir="target/build/${app.name}" includes="**/*" perm="ugo+w" failonerror="false" if:set="onwindows"/>
-
       <delete dir="target/build/${app.name}" includeEmptyDirs="true" failonerror="false" quiet="true" if:set="onwindows"/>
 
       <delete if:set="onwindows">
