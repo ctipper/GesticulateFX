@@ -107,7 +107,6 @@ public class DrawAppModule {
     }
 
     @Provides
-    @Singleton
     Dropper provideDropper() {
         return new Dropper();
     }
