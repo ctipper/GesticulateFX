@@ -65,9 +65,9 @@ import org.slf4j.LoggerFactory;
 public class ImageLoadWorker extends Task<Object> {
 
     private List<Image> images;
-    private final Provider<DrawingArea> drawareaProvider;
-    private final Provider<CanvasView> viewProvider;
-    private final Provider<ApplicationController> controllerProvider;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    private final ApplicationController controller;
     @Inject ShareUtils share;
     @Inject Provider<Picture> pictureProvider;
     private List<File> imageFiles;
@@ -79,20 +79,18 @@ public class ImageLoadWorker extends Task<Object> {
     private static final Logger logger = LoggerFactory.getLogger(ImageLoadWorker.class.getName());
 
     @Inject
-    public ImageLoadWorker(Provider<DrawingArea> drawareaProvider,
-            Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider) {
-        this.drawareaProvider = drawareaProvider;
-        this.viewProvider = viewProvider;
-        this.controllerProvider = controllerProvider;
+    public ImageLoadWorker(DrawingArea drawarea, CanvasView view, ApplicationController controller) {
+        this.drawarea = drawarea;
+        this.view = view;
+        this.controller = controller;
         this.shift = 20.0;
         success = false;
     }
 
     @Override
     protected Object call() throws Exception {
-        pageWidth = drawareaProvider.get().getScene().getWidth();
-        pageHeight = drawareaProvider.get().getScene().getHeight();
+        pageWidth = drawarea.getScene().getWidth();
+        pageHeight = drawarea.getScene().getHeight();
         this.imageFiles = share.getImageFiles();
         return new ImageLoader();
     }
@@ -107,15 +105,15 @@ public class ImageLoadWorker extends Task<Object> {
                     picture.setStart(shift, shift);
                     ImageItem item = new ImageItem(image);
                     item.setFormat(FileUtils.getExtension(imageFiles.get(images.indexOf(image))));
-                    int index = viewProvider.get().setImageItem(item);
+                    int index = view.setImageItem(item);
                     double width = (double) image.getWidth();
                     double height = (double) image.getHeight();
                     double scale = getScale(width, height);
                     logger.trace("Image relative scale: {}", scale);
                     picture.setImage(index, width, height);
                     picture.setScale(scale);
-                    viewProvider.get().setNewItem(picture);
-                    viewProvider.get().resetNewItem();
+                    view.setNewItem(picture);
+                    view.resetNewItem();
                     shift = shift + 10.0;
                 }
             }
@@ -131,10 +129,10 @@ public class ImageLoadWorker extends Task<Object> {
             }
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
-                controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controllerProvider.get().getProgressProperty().unbind();
+                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
+                controller.getProgressProperty().unbind();
                 if (success) {
-                    controllerProvider.get().setStatusMessage("Read Pictures");
+                    controller.setStatusMessage("Read Pictures");
                 }
             });
         });

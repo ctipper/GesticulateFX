@@ -37,7 +37,6 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ImageItem;
@@ -61,18 +60,17 @@ import org.slf4j.LoggerFactory;
 
 public class WriteOutStreamer extends Task<Object> {
 
-    private final Provider<CanvasView> viewProvider;
-    private final Provider<ApplicationController> controllerProvider;
+    private final CanvasView view;
+    private final ApplicationController controller;
     @Inject ShareUtils share;
     private File file;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
 
     @Inject
-    public WriteOutStreamer(Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider) {
-        this.viewProvider = viewProvider;
-        this.controllerProvider = controllerProvider;
+    public WriteOutStreamer(CanvasView view, ApplicationController controller) {
+        this.view = view;
+        this.controller = controller;
     }
 
     public void setFile(File file) {
@@ -96,9 +94,9 @@ public class WriteOutStreamer extends Task<Object> {
             }
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
-                controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controllerProvider.get().getProgressProperty().unbind();
-                controllerProvider.get().setStatusMessage("Saved document");
+                controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
+                controller.getProgressProperty().unbind();
+                controller.setStatusMessage("Saved document");
             });
         });
     }
@@ -136,7 +134,7 @@ public class WriteOutStreamer extends Task<Object> {
             ZipEntry entry = new ZipEntry("content/pictures.xml");
             zos.putNextEntry(entry);
 
-            List<ImageItem> pictures = viewProvider.get().getImageItems();
+            List<ImageItem> pictures = view.getImageItems();
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
             encoder.setPersistenceDelegate(java.time.Instant.class,
                 new InstantPersistenceDelegate());
@@ -167,7 +165,7 @@ public class WriteOutStreamer extends Task<Object> {
             entry = new ZipEntry("content/canvas.xml");
             zos.putNextEntry(entry);
 
-            List<DrawItem> drawings = viewProvider.get().getDrawings();
+            List<DrawItem> drawings = view.getDrawings();
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
             encoder.setPersistenceDelegate(java.awt.BasicStroke.class,
                 new BasicStrokePersistenceDelegate());
