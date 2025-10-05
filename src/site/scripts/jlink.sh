@@ -1,2 +1,2 @@
 #!/bin/bash
-jlink --no-header-files --no-man-pages --strip-debug --strip-native-commands --module-path "$JAVA_HOME:$JAVAFX_HOME/jmods" --add-modules "java.base,java.compiler,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.unsupported,jdk.xml.dom" --output target/build/bundle/runtime
+jlink --no-header-files --no-man-pages --strip-debug --strip-native-commands --module-path "$JAVA_HOME:$JAVAFX_HOME/jmods" --add-modules "java.base,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.xml.dom" --output target/build/bundle/runtime
