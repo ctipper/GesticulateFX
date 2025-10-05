@@ -81,8 +81,7 @@ public class SelectionHandler implements Handler {
      * Creates a new instance of <code>SelectionHandler</code> 
      */
     @Inject
-    public SelectionHandler(DrawingArea drawarea,
-            CanvasView view, ApplicationController controller) {
+    public SelectionHandler(DrawingArea drawarea, CanvasView view, ApplicationController controller) {
         this.drawarea = drawarea;
         this.view = view;
         this.controller = controller;
