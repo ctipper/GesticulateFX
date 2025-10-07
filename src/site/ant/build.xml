@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
    <target name="jlink" depends="-init-project">
 
       <!-- remove existing runtime -->
-      <delete dir="target/build/${bundle.dir}/${runtime.dir}" />
+      <delete dir="${bundle.dir}/${runtime.dir}" />
 
       <exec executable="${runtime.path}/bin/jlink" if:set="onmacos" failonerror="true" newenvironment="true">
          <env key="JAVA_HOME" value="${runtime.path}"/>
@@ -60,7 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--add-modules" />
          <arg value="java.base,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="target/build/${bundle.dir}/${runtime.dir}" />
+         <arg value="${bundle.dir}/${runtime.dir}" />
       </exec>
 
       <exec executable="${runtime.windows.path}/bin/jlink" if:set="onwindows" failonerror="true" newenvironment="true">
@@ -74,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--add-modules" />
          <arg value="java.base,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="target/build/${bundle.dir}/${runtime.dir}" />
+         <arg value="${bundle.dir}/${runtime.dir}" />
       </exec>
 
       <exec executable="${runtime.windows.path}/bin/jlink" if:set="onlinux" failonerror="true" newenvironment="true">
@@ -88,57 +88,57 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--add-modules" />
          <arg value="java.base,java.datatransfer,java.desktop,java.logging,java.sql,java.xml,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.swing,jdk.xml.dom" />
          <arg value="--output" />
-         <arg value="target/build/${bundle.dir}/${runtime.dir}" />
+         <arg value="${bundle.dir}/${runtime.dir}" />
       </exec>
    </target>
 
    <target name="bundle" depends="jlink" description="Build App Bundle">
 
-      <mkdir dir="target/build/${bundle.dir}/${dist.dir}" />
-      <mkdir dir="target/build/${bundle.dir}/${dist.dir}/lib" />
+      <mkdir dir="${bundle.dir}/${dist.dir}" />
+      <mkdir dir="${bundle.dir}/${dist.dir}/lib" />
 
       <!-- remove existing libraries -->
       <delete>
-         <fileset file="target/build/${bundle.dir}/${dist.dir}/*"/>
-         <fileset file="target/build/${bundle.dir}/${dist.dir}/lib/*" />
+         <fileset file="${bundle.dir}/${dist.dir}/*"/>
+         <fileset file="${bundle.dir}/${dist.dir}/lib/*" />
       </delete>
 
       <echo if:set="onmacos" message="Delete bundles"/>
 
-      <delete dir="target/build/${app.name}.app" if:set="onmacos"/>
+      <delete dir="${build.dir}/${app.name}.app" if:set="onmacos"/>
 
       <delete if:set="onmacos">
-         <fileset file="target/build/*.dmg"/>
+         <fileset file="${build.dir}/*.dmg"/>
       </delete>
 
       <echo if:set="onwindows" message="Delete builds"/>
 
-      <delete dir="target/build/${app.name}" includeEmptyDirs="true" failonerror="false" quiet="true" if:set="onwindows"/>
+      <delete dir="${build.dir}/${app.name}" includeEmptyDirs="true" failonerror="false" quiet="true" if:set="onwindows"/>
 
       <delete if:set="onwindows">
-         <fileset file="target/build/${app.name}_Setup_*.exe"/>
+         <fileset file="${build.dir}/${app.name}_Setup_*.exe"/>
       </delete>
 
-      <delete dir="target/build/temp" if:set="onwindows"/>
+      <delete dir="${build.dir}/temp" if:set="onwindows"/>
 
       <echo if:set="onlinux" message="Delete builds"/>
 
-      <delete dir="target/build/${app.name}" if:set="onlinux"/>
+      <delete dir="${build.dir}/${app.name}" if:set="onlinux"/>
 
       <delete if:set="onlinux">
-         <fileset file="target/build/gesticulatefx*.deb"/>
+         <fileset file="${build.dir}/gesticulatefx*.deb"/>
       </delete>
 
-      <delete dir="target/build/temp" if:set="onlinux"/>
+      <delete dir="${build.dir}/temp" if:set="onlinux"/>
 
-      <copy todir="target/build/${bundle.dir}/${dist.dir}">
-         <fileset dir="target/build/app">
+      <copy todir="${bundle.dir}/${dist.dir}">
+         <fileset dir="${build.dir}/app">
             <include name="${jlink.launcher.name}-${version.public}.jar"/>
          </fileset>
       </copy>
 
-      <copy todir="target/build/${bundle.dir}/${dist.dir}/lib">
-         <fileset dir="target/build/app/lib">
+      <copy todir="${bundle.dir}/${dist.dir}/lib">
+         <fileset dir="${build.dir}/app/lib">
             <include name="**/*.jar"/>
             <exclude name="**/javafx-*.jar"/>
          </fileset>
@@ -149,11 +149,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input"/>
-         <arg value="target/build/${bundle.dir}/${dist.dir}"/>
+         <arg value="${bundle.dir}/${dist.dir}"/>
          <arg value="--dest"/>
-         <arg value="target/build"/>
+         <arg value="${build.dir}"/>
          <arg value="--runtime-image"/>
-         <arg value="target/build/${bundle.dir}/${runtime.dir}"/>
+         <arg value="${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--main-class"/>
@@ -171,15 +171,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
-         <arg value="src/site/deploy/macosx/${bundle.icon}"/>
+         <arg value="${deploy.dir}/macosx/${bundle.icon}"/>
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/macosx/bundle.properties" />
+         <arg value="${deploy.dir}/macosx/bundle.properties" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/macosx/jpeg.properties" />
+         <arg value="${deploy.dir}/macosx/jpeg.properties" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/macosx/png.properties" />
+         <arg value="${deploy.dir}/macosx/png.properties" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/macosx/svg+xml.properties" />
+         <arg value="${deploy.dir}/macosx/svg+xml.properties" />
       </exec>
 
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" if:set="onwindows" failonerror="false" newenvironment="true">
@@ -187,11 +187,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input" />
-         <arg value="target/build/${bundle.dir}/${dist.dir}"/>
+         <arg value="${bundle.dir}/${dist.dir}"/>
          <arg value="--dest"/>
-         <arg value="target/build"/>
+         <arg value="${build.dir}"/>
          <arg value="--runtime-image"/>
-         <arg value="target/build/${bundle.dir}/${runtime.dir}"/>
+         <arg value="${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--main-class"/>
@@ -207,9 +207,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
-         <arg value="src/site/deploy/windows/${bundle.windows.icon}"/>
+         <arg value="${deploy.dir}/windows/${bundle.windows.icon}"/>
          <arg value="--temp" />
-         <arg value="target/build/temp" />
+         <arg value="${build.dir}/temp" />
       </exec>
 
       <exec executable="${jpackage.windows.path}/bin/jpackage" if:set="onlinux" failonerror="false" newenvironment="true">
@@ -217,13 +217,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--type"/>
          <arg value="app-image"/>
          <arg value="--input" />
-         <arg value="target/build/${bundle.dir}/${dist.dir}"/>
+         <arg value="${bundle.dir}/${dist.dir}"/>
          <arg value="--dest"/>
-         <arg value="target/build"/>
+         <arg value="${build.dir}"/>
          <arg value="--runtime-image"/>
-         <arg value="target/build/${bundle.dir}/${runtime.dir}"/>
+         <arg value="${bundle.dir}/${runtime.dir}"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
+         <arg value="--app-version"/>
+         <arg value="${version.public}"/>
          <arg value="--main-class"/>
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
@@ -250,13 +252,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--app-version"/>
-         <arg value="${version.public}"/>
+         <arg value="${version.internal}"/>
          <arg value="--resource-dir"/>
-         <arg value="src/site/deploy/macosx"/>
+         <arg value="${deploy.dir}/macosx"/>
          <arg value="--dest"/>
-         <arg value="target/build"/>
+         <arg value="${build.dir}"/>
          <arg value="--app-image"/>
-         <arg value="target/build/${app.name}.app"/>
+         <arg value="${build.dir}/${app.name}.app"/>
       </exec>
 
       <echo if:set="onlinux" message="Creating DEB package"/>
@@ -267,27 +269,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="deb"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
-         <arg value="--app-version"/>
-         <arg value="${version.public}"/>
          <arg value="--dest"/>
-         <arg value="target/build"/>
+         <arg value="${build.dir}"/>
          <arg value="--app-image"/>
-         <arg value="target/build/${app.name}"/>
+         <arg value="${build.dir}/${app.name}"/>
          <arg value="--install-dir"/>
          <arg value="/opt"/>
          <arg value="--linux-menu-group"/>
          <arg value="Graphics"/>
          <arg value="--linux-shortcut"/>
+         <arg value="--linux-app-release" />
+         <arg value="${version.internal}" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/linux/bundle.properties" />
+         <arg value="${deploy.dir}/linux/bundle.properties" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/linux/jpeg.properties" />
+         <arg value="${deploy.dir}/linux/jpeg.properties" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/linux/png.properties" />
+         <arg value="${deploy.dir}/linux/png.properties" />
          <arg value="--file-associations" />
-         <arg value="src/site/deploy/linux/svg+xml.properties" />
+         <arg value="${deploy.dir}/linux/svg+xml.properties" />
          <arg value="--icon"/>
-         <arg value="src/site/deploy/linux/${bundle.linux.icon}"/>
+         <arg value="${deploy.dir}/linux/${bundle.linux.icon}"/>
       </exec>
 
       <echo if:set="onwindows" message="Calling ISCC"/>
@@ -295,7 +297,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
       <exec executable="${isx.path}/ISCC.exe" osfamily="Windows" 
             dir="src/site/innosetup" 
             logError="true"
-            output="target/build/bundle/gesticulate-fx.log">
+            output="${bundle.dir}/gesticulate-fx.log">
          <arg value="/DMyAppVersion=${version.internal}"/>
          <arg value="gesticulate-fx.iss"/>
       </exec>
