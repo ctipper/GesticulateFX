@@ -249,6 +249,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="dmg"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
+         <arg value="--app-version"/>
+         <arg value="${version.public}"/>
          <arg value="--resource-dir"/>
          <arg value="src/site/deploy/macosx"/>
          <arg value="--dest"/>
@@ -265,6 +267,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="deb"/>
          <arg value="--name"/>
          <arg value="${app.name}"/>
+         <arg value="--app-version"/>
+         <arg value="${version.public}"/>
          <arg value="--dest"/>
          <arg value="target/build"/>
          <arg value="--app-image"/>
