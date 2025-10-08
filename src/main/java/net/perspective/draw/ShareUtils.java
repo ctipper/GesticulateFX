@@ -25,10 +25,12 @@ package net.perspective.draw;
 
 import com.google.inject.Injector;
 import java.io.File;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -351,7 +353,9 @@ public class ShareUtils {
         String now = df.format(d);
 
         // Name file and add timestamp, save to Desktop
-        String path = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
+        String userHome = System.getProperty("user.home");
+        String userPath = Optional.ofNullable(System.getenv("OneDrive")).orElse(userHome);
+        String path = Paths.get(userPath) + File.separator + "Desktop" + File.separator + "Snap Shot " + now + ".png";
         File file = new File(path);
 
         PNGWorker pngWorker = injector.getInstance(PNGWorker.class);

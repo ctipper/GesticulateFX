@@ -14,8 +14,9 @@ An ant runner is provided `mvn clean package -P ant-bundle` for app bundle or `m
 
 ## Possible directions
 
-1 - The branch `inputstream` represents a naive implementation of input method event handling for the text editing feature. After much back-and-forth with an AI it seems that 
-[github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not set up for users to customise this. Currently it would require me to implement with a TextField node as opposed to the custom code with a TextFlow node. This is not too difficult but it would require dismantling the infrastructure to provide formatted text.
+1 - I have previously attempted an implementation of input method event handling for the text editing feature. My goal is to enable the macOS character pallete, though of course emoji are not supported, that's a whole other issue. As a side effect it would of course be possible to enter text in non-alphabetic languages. I have already implemented this in a Swing version of this application. 
+
+After much back-and-forth with an AI it seems that [github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not set up for users to customise this. Currently it would require me to implement using a TextField node as opposed to the existing design with a TextFlow node. This is not too difficult but it would require dismantling the infrastructure to provide formatted text, and that feature is a long term goal.
 
 2 - For the future it would be desirable to provide multi-line text blocks with formatting, similar to [Microsoft OneNote](https://www.onenote.com/). Given that [github.com/openjdk/jfx](https://github.com/openjdk/jfx) is not designed for developers to customise, a third-party library is needed and serialisation is the key challenge.
 
