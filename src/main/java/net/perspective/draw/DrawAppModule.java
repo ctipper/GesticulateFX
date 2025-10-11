@@ -80,18 +80,17 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    DrawingArea provideDrawingArea(CanvasView view, ApplicationController controller, DrawAppComponent component) {
-        DrawingArea drawingArea = new DrawingArea(view, controller);
+    DrawingArea provideDrawingArea(Provider<CanvasView> viewProvider, ApplicationController controller, DrawAppComponent component) {
+        DrawingArea drawingArea = new DrawingArea(viewProvider, controller);
         component.inject(drawingArea);
         return drawingArea;
     }
 
     @Provides
     @Singleton
-    CanvasView provideCanvasView(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> controllerProvider,
-            Provider<TextController> textControllerProvider,
+    CanvasView provideCanvasView(DrawingArea drawarea, ApplicationController controller, TextController textController,
             DrawAppComponent component) {
-        CanvasView view = new CanvasView(drawareaProvider, controllerProvider, textControllerProvider);
+        CanvasView view = new CanvasView(drawarea, controller, textController);
         component.inject(view);
         return view;
 
