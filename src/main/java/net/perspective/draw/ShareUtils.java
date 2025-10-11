@@ -54,8 +54,8 @@ import net.perspective.draw.workers.WriteOutStreamer;
 public class ShareUtils {
 
     private final Provider<Gesticulate> applicationProvider;
-    private final Provider<CanvasView> viewProvider;
-    private final Provider<ApplicationController> controllerProvider;
+    private final CanvasView view;
+    private final ApplicationController controller;
     @Inject Provider<ImageLoadWorker> imageLoadWorkerProvider;
     @Inject Provider<ReadInFunnel> readInFunnelProvider;
     @Inject Provider<WriteOutStreamer> writeOutStreamerProvider;
@@ -69,12 +69,10 @@ public class ShareUtils {
     public final ExecutorService executor;
 
     @Inject
-    public ShareUtils(Provider<Gesticulate> applicationProvider,
-            Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider) {
+    public ShareUtils(Provider<Gesticulate> applicationProvider, CanvasView view, ApplicationController controller) {
         this.applicationProvider = applicationProvider;
-        this.viewProvider = viewProvider;
-        this.controllerProvider = controllerProvider;
+        this.view = view;
+        this.controller = controller;
         this.executor = Executors.newCachedThreadPool();
         this.margin = 5.0;  // half max stroke width
     }
@@ -148,11 +146,11 @@ public class ShareUtils {
         this.setImageFiles(files);
         if (this.getImageFiles() != null) {
             imageLoader = imageLoadWorkerProvider.get();
-            controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-            controllerProvider.get().setProgressIndeterminate();
+            controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+            controller.setProgressIndeterminate();
             executor.submit(imageLoader);
         }
-        controllerProvider.get().setSelectionMode();
+        controller.setSelectionMode();
     }
 
     /**
@@ -181,7 +179,7 @@ public class ShareUtils {
      */
     public void exportCanvas() {
         // Detect empty canvas
-        if (viewProvider.get().getDrawings().isEmpty()) {
+        if (view.getDrawings().isEmpty()) {
             return;
         }
 
@@ -211,7 +209,7 @@ public class ShareUtils {
     public void loadCanvas(List<File> files) {
         File file = files.get(0);
         if (FileUtils.getExtension(file).equals("gst")) {
-            viewProvider.get().clearView();
+            view.clearView();
             readCanvas(file);
         } else {
             readPictures(files);
@@ -227,8 +225,8 @@ public class ShareUtils {
         ReadInFunnel reader = readInFunnelProvider.get();
         reader.setFile(file);
         this.canvasfile = file;
-        controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controllerProvider.get().getProgressProperty().bind(reader.progressProperty());
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.getProgressProperty().bind(reader.progressProperty());
         executor.submit(reader);
     }
 
@@ -241,8 +239,8 @@ public class ShareUtils {
         WriteOutStreamer streamer = writeOutStreamerProvider.get();
         streamer.setFile(file);
         this.canvasfile = file;
-        controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controllerProvider.get().getProgressProperty().bind(streamer.progressProperty());
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.getProgressProperty().bind(streamer.progressProperty());
         executor.submit(streamer);
     }
 
@@ -251,7 +249,7 @@ public class ShareUtils {
      */
     public void exportPDF() {
         // Detect empty canvas
-        if (viewProvider.get().getDrawings().isEmpty()) {
+        if (view.getDrawings().isEmpty()) {
             return;
         }
 
@@ -273,8 +271,8 @@ public class ShareUtils {
         PDFWorker pdfWorker = pdfWorkerProvider.get();
         pdfWorker.setFile(file);
         pdfWorker.setMargin(this.margin);
-        controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controllerProvider.get().setProgressIndeterminate();
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.setProgressIndeterminate();
         executor.submit(pdfWorker);
     }
 
@@ -283,7 +281,7 @@ public class ShareUtils {
      */
     public void exportSVG() {
         // Detect empty canvas
-        if (viewProvider.get().getDrawings().isEmpty()) {
+        if (view.getDrawings().isEmpty()) {
             return;
         }
 
@@ -305,8 +303,8 @@ public class ShareUtils {
         SVGWorker svgWorker = svgWorkerProvider.get();
         svgWorker.setFile(file);
         svgWorker.setMargin(this.margin);
-        controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controllerProvider.get().setProgressIndeterminate();
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.setProgressIndeterminate();
         executor.submit(svgWorker);
     }
 
@@ -315,7 +313,7 @@ public class ShareUtils {
      */
     public void exportPNG() {
         // Detect empty canvas
-        if (viewProvider.get().getDrawings().isEmpty()) {
+        if (view.getDrawings().isEmpty()) {
             return;
         }
 
@@ -338,8 +336,8 @@ public class ShareUtils {
         pngWorker.setFile(file);
         pngWorker.setOpacity(false);
         pngWorker.setMargin(this.margin);
-        controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controllerProvider.get().setProgressIndeterminate();
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.setProgressIndeterminate();
         executor.submit(pngWorker);
     }
 
@@ -348,8 +346,8 @@ public class ShareUtils {
      */
     public void snapshotPNG() {
         // Detect empty canvas
-        if (viewProvider.get().getDrawings().isEmpty()) {
-            controllerProvider.get().getSnapshotProperty().setValue(false);
+        if (view.getDrawings().isEmpty()) {
+            controller.getSnapshotProperty().setValue(false);
             return;
         }
 
@@ -369,8 +367,8 @@ public class ShareUtils {
         PNGWorker pngWorker = pngWorkerProvider.get();
         pngWorker.setFile(file);
         pngWorker.setMargin(this.margin);
-        controllerProvider.get().getProgressVisibleProperty().setValue(Boolean.TRUE);
-        controllerProvider.get().setProgressIndeterminate();
+        controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+        controller.setProgressIndeterminate();
         executor.submit(pngWorker);
     }
 

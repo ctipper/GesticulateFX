@@ -54,7 +54,6 @@ import net.perspective.draw.util.G2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 
  * @author ctipper
@@ -748,8 +747,6 @@ public class CanvasView {
                 setEditing(false);
                 drawarea.setKeyboardHandler(keyHandler);
             }
-
-
         }
     }
 
