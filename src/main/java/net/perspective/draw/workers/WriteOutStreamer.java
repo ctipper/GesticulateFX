@@ -60,15 +60,17 @@ import org.slf4j.LoggerFactory;
 
 public class WriteOutStreamer extends Task<Object> {
 
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    private final CanvasView view;
+    private final ApplicationController controller;
+    @Inject ShareUtils share;
     private File file;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
 
     @Inject
-    public WriteOutStreamer() {
+    public WriteOutStreamer(CanvasView view, ApplicationController controller) {
+        this.view = view;
+        this.controller = controller;
     }
 
     public void setFile(File file) {

@@ -36,6 +36,8 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
@@ -47,15 +49,21 @@ import net.perspective.draw.text.Editor;
  * @author ctipper
  */
 
+@Singleton
 public class G2 {
     
-    @Inject private ApplicationController application;
-    @Inject private DrawingArea drawarea;
-    @Inject private TextController textController;
+    private final Provider<DrawingArea> drawareaProvider;
+    private final Provider<ApplicationController> applicationProvider;
+    private final Provider<TextController> textControllerProvider;
 
     /** Creates a new instance of <code>G2</code> */
     @Inject
-    public G2() {
+    public G2(Provider<DrawingArea> drawareaProvider, 
+            Provider<ApplicationController> applicationProvider,
+            Provider<TextController> textControllerProvider) {
+        this.drawareaProvider = drawareaProvider;
+        this.applicationProvider = applicationProvider;
+        this.textControllerProvider = textControllerProvider;
     }
 
     /**
@@ -67,8 +75,8 @@ public class G2 {
     @SuppressWarnings("deprecation") 
     public Path highlightText(DrawItem item) {
         Path highlight = new Path();
-        Editor editor = textController.getEditor();
-        TextFlow layout = drawarea.getTextLayout(item);
+        Editor editor = textControllerProvider.get().getEditor();
+        TextFlow layout = drawareaProvider.get().getTextLayout(item);
         if (editor.getCaretStart() == editor.getCaretEnd()) {
             // Retrieve caret path for insertion index.
             PathElement[] carets = layout.caretShape(editor.getCaretStart(), true);
@@ -107,7 +115,7 @@ public class G2 {
          * The height of a minor grid cell.
          */
         double height = 10;
-        Color c = Color.web(application.getCanvasBackgroundColor());
+        Color c = Color.web(applicationProvider.get().getCanvasBackgroundColor());
         int r = (int) (c.getRed() * 255);
         int g = (int) (c.getGreen() * 255);
         int b = (int) (c.getBlue() * 255);

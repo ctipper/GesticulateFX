@@ -23,8 +23,8 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.text.Editor;
@@ -37,10 +37,10 @@ import net.perspective.draw.text.Editor;
 @Singleton
 public class TextController {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
+    private final Provider<DrawingArea> drawareaProvider;
+    private final Provider<CanvasView> viewProvider;
+    private final Provider<ApplicationController> controllerProvider;
+    private final Provider<Editor> editorProvider;
     private Editor editor;
 
     public static final int FONT_BOLD = 1;
@@ -51,7 +51,13 @@ public class TextController {
      * Creates a new instance of <code>TextController</code>
      */
     @Inject
-    public TextController() {
+    public TextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
+            Provider<ApplicationController> controllerProvider, Provider<Editor> editorProvider) {
+        this.drawareaProvider = drawareaProvider;
+        this.viewProvider = viewProvider;
+        this.controllerProvider = controllerProvider;
+        this.editorProvider = editorProvider;
+        this.editor = editorProvider.get();
     }
 
     /**
@@ -60,8 +66,9 @@ public class TextController {
      * @param isRichText enable formatted text
      */
     public void enableRichText(boolean isRichText) {
-        if (!view.isEditing()) {
-            this.editor = injector.getInstance(Editor.class);
+        if (!viewProvider.get().isEditing()) {
+            // XXX currently only one implementation
+            this.editor = editorProvider.get();
         }
     }
 
@@ -81,9 +88,9 @@ public class TextController {
      * @return the {@link net.perspective.draw.geom.Text}
      */
     public Text initializeItem(Text item) {
-        item.setFont(drawarea.getFontFamily());
-        item.setStyle(drawarea.getFontStyle());
-        item.setSize(drawarea.getFontSize());
+        item.setFont(drawareaProvider.get().getFontFamily());
+        item.setStyle(drawareaProvider.get().getFontStyle());
+        item.setSize(drawareaProvider.get().getFontSize());
         editor.editText(item);
         editor.commitText(item);
         editor.setCaretStart(0);
@@ -99,9 +106,9 @@ public class TextController {
      * @param start start position
      */
     public void editItem(Text item, int start) {
-        item.setFont(drawarea.getFontFamily());
-        item.setStyle(drawarea.getFontStyle());
-        item.setSize(drawarea.getFontSize());
+        item.setFont(drawareaProvider.get().getFontFamily());
+        item.setStyle(drawareaProvider.get().getFontStyle());
+        item.setSize(drawareaProvider.get().getFontSize());
         editor.editText(item);
         editor.commitText(item);
         editor.setCaretStart(start);
@@ -115,9 +122,9 @@ public class TextController {
      * @param item the {@link net.perspective.draw.geom.Text}
      */
     public void editItem(Text item) {
-        item.setFont(drawarea.getFontFamily());
-        item.setStyle(drawarea.getFontStyle());
-        item.setSize(drawarea.getFontSize());
+        item.setFont(drawareaProvider.get().getFontFamily());
+        item.setStyle(drawareaProvider.get().getFontStyle());
+        item.setSize(drawareaProvider.get().getFontSize());
         editor.editText(item);
         editor.commitText(item);
         editor.setCaretStart(0);
@@ -129,22 +136,22 @@ public class TextController {
      * Cut the selected text
      */
     public void cutSelectedText() {
-        if (view.isEditing()) {
-            Text item = (Text) view.getDrawings().get(view.getSelected());
+        if (viewProvider.get().isEditing()) {
+            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             editor.editText(item);
             editor.cutText();
             editor.commitText(item);
             item.setDimensions();
         }
-        view.moveSelection(view.getSelected());
+        viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
     /**
      * Copy the selected text
      */
     public void copySelectedText() {
-        if (view.isEditing()) {
-            Text item = (Text) view.getDrawings().get(view.getSelected());
+        if (viewProvider.get().isEditing()) {
+            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             editor.editText(item);
             editor.copyText();
             editor.commitText(item);
@@ -155,14 +162,14 @@ public class TextController {
      * Paste the selected text
      */
     public void pasteSelectedText() {
-        if (view.isEditing()) {
-            Text item = (Text) view.getDrawings().get(view.getSelected());
+        if (viewProvider.get().isEditing()) {
+            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             editor.editText(item);
             editor.pasteText();
             editor.commitText(item);
             item.setDimensions();
         }
-        view.moveSelection(view.getSelected());
+        viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
     /**
@@ -175,7 +182,7 @@ public class TextController {
      */
     public void formatSelectedText(int format) {
         this.formatSelected(format);
-        view.moveSelection(view.getSelected());
+        viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
     /**
@@ -186,24 +193,24 @@ public class TextController {
     private void formatSelected(int format) {
         switch (format) {
             case FONT_BOLD -> {
-                if ((drawarea.getFontStyle() & FONT_BOLD) == FONT_BOLD) {
-                    controller.getBoldProperty().setValue(Boolean.FALSE);
+                if ((drawareaProvider.get().getFontStyle() & FONT_BOLD) == FONT_BOLD) {
+                    controllerProvider.get().getBoldProperty().setValue(Boolean.FALSE);
                 } else {
-                    controller.getBoldProperty().setValue(Boolean.TRUE);
+                    controllerProvider.get().getBoldProperty().setValue(Boolean.TRUE);
                 }
             }
             case FONT_ITALIC -> {
-                if ((drawarea.getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
-                    controller.getItalicProperty().setValue(Boolean.FALSE);
+                if ((drawareaProvider.get().getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
+                    controllerProvider.get().getItalicProperty().setValue(Boolean.FALSE);
                 } else {
-                    controller.getItalicProperty().setValue(Boolean.TRUE);
+                    controllerProvider.get().getItalicProperty().setValue(Boolean.TRUE);
                 }
             }
             case FONT_UNDERLINED -> {
-                if ((drawarea.getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
-                    controller.getUnderlinedProperty().setValue(Boolean.FALSE);
+                if ((drawareaProvider.get().getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
+                    controllerProvider.get().getUnderlinedProperty().setValue(Boolean.FALSE);
                 } else {
-                    controller.getUnderlinedProperty().setValue(Boolean.TRUE);
+                    controllerProvider.get().getUnderlinedProperty().setValue(Boolean.TRUE);
                 }
             }
             default -> {

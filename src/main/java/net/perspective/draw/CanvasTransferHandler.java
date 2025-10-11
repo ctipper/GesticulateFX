@@ -23,37 +23,39 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.awt.Graphics2D;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 
  * @author ctipper
  */
+
 @Singleton
 public class CanvasTransferHandler {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private MapController mapper;
+    private final Provider<DrawingArea> drawareaProvider;
+    private final Provider<CanvasView> viewProvider;
+    @Inject MapController mapper;
+    @Inject Provider<Picture> pictureProvider;
+    @Inject Provider<StreetMap> streetMapProvider;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor drawItemFlavor;
@@ -68,7 +70,9 @@ public class CanvasTransferHandler {
     private static final Logger logger = LoggerFactory.getLogger(CanvasTransferHandler.class.getName());
 
     @Inject
-    public CanvasTransferHandler() {
+    public CanvasTransferHandler(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider) {
+        this.drawareaProvider = drawareaProvider;
+        this.viewProvider = viewProvider;
         //Try to create a DataFlavor for drawItems.
         try {
             drawItemFlavor = new DataFlavor(mimeType);
@@ -86,23 +90,23 @@ public class CanvasTransferHandler {
                     // add item to Canvas
                     item.moveTo(shift, shift);
                     item = checkDrawings(item);
-                    view.appendItemToCanvas(item);
+                    viewProvider.get().appendItemToCanvas(item);
                 } else if (dataflavor.equals("imageitem")) {
                     java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
                     Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
-                    Picture picture = injector.getInstance(Picture.class);
+                    Picture picture = pictureProvider.get();
                     picture.moveTo(shift, shift);
                     ImageItem item = new ImageItem(image);
                     item.setFormat("PNG");
-                    int index = view.setImageItem(item);
+                    int index = viewProvider.get().setImageItem(item);
                     double width = (double) image.getWidth();
                     double height = (double) image.getHeight();
                     double scale = getScale(width, height);
                     logger.debug("Image relative scale: {}", scale);
                     picture.setImage(index, width, height);
                     picture.setScale(scale);
-                    view.setNewItem(picture);
-                    view.resetNewItem();
+                    viewProvider.get().setNewItem(picture);
+                    viewProvider.get().resetNewItem();
                 }
                 shift = shift + 20.0;
                 logger.debug("Item added to canvas");
@@ -118,18 +122,18 @@ public class CanvasTransferHandler {
     }
 
     protected Transferable createTransferable() {
-        int selected = view.getSelected();
+        int selected = viewProvider.get().getSelected();
         if (selected == -1) {
             return null;
         }
-        DrawItem data = view.getDrawings().get(selected);
+        DrawItem data = viewProvider.get().getDrawings().get(selected);
         logger.trace("Item createTransferable");
         return new DrawItemTransferable(data);
     }
 
     protected void exportDone(Transferable data, int action) {
         if (action == MOVE) {
-            view.deleteSelectedItem();
+            viewProvider.get().deleteSelectedItem();
             logger.debug("Removed selected item");
             shift = 0;
         } else {
@@ -157,7 +161,7 @@ public class CanvasTransferHandler {
 
     private DrawItem checkDrawings(DrawItem drawing) {
         if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
-            var item = injector.getInstance(Picture.class);
+            var item = pictureProvider.get();
             try {
                 BeanUtils.copyProperties(item, drawing);
                 return item;
@@ -165,7 +169,7 @@ public class CanvasTransferHandler {
                 logger.trace(ex.getMessage());
             }
         } else if (drawing instanceof StreetMap streetmap) {
-            var item = injector.getInstance(StreetMap.class);
+            var item = streetMapProvider.get();
             try {
                 BeanUtils.copyProperties(item, streetmap);
                 item.init();
@@ -203,8 +207,8 @@ public class CanvasTransferHandler {
      * @return 
      */
     private double getScale(double width, double height) {
-        pageWidth = drawarea.getScene().getWidth();
-        pageHeight = drawarea.getScene().getHeight();
+        pageWidth = drawareaProvider.get().getScene().getWidth();
+        pageHeight = drawareaProvider.get().getScene().getHeight();
         if ((width <= pageWidth) && (height <= pageHeight)) {
             return 1d;
         }

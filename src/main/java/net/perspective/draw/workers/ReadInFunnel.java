@@ -23,7 +23,6 @@
  */
 package net.perspective.draw.workers;
 
-import com.google.inject.Injector;
 import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -38,6 +37,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
@@ -62,11 +62,13 @@ import org.slf4j.LoggerFactory;
 
 public class ReadInFunnel extends Task<Object> {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    private final ApplicationController controller;
+    @Inject ShareUtils share;
+    @Inject Provider<Picture> pictureProvider;
+    @Inject Provider<StreetMap> streetMapProvider;
+
     private File file;
     private List<DrawItem> drawings;
     private List<ImageItem> pictures;
@@ -75,7 +77,10 @@ public class ReadInFunnel extends Task<Object> {
     private static final Logger logger = LoggerFactory.getLogger(ReadInFunnel.class.getName());
 
     @Inject
-    public ReadInFunnel() {
+    public ReadInFunnel(DrawingArea drawarea, CanvasView view, ApplicationController controller) {
+        this.drawarea = drawarea;
+        this.view = view;
+        this.controller = controller;
         success = false;
     }
 
@@ -173,7 +178,7 @@ public class ReadInFunnel extends Task<Object> {
         }
 
         if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
-            Picture item = injector.getInstance(Picture.class);
+            Picture item = pictureProvider.get();
             try {
                 BeanUtils.copyProperties(item, drawing);
                 drawing = item;
@@ -181,7 +186,7 @@ public class ReadInFunnel extends Task<Object> {
                 logger.trace(ex.getMessage());
             }
         } else if (drawing instanceof StreetMap) {
-            StreetMap item = injector.getInstance(StreetMap.class);
+            StreetMap item = streetMapProvider.get();
             try {
                 BeanUtils.copyProperties(item, drawing);
                 item.init();

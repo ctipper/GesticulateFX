@@ -40,13 +40,15 @@ import net.perspective.draw.geom.FigureFactory;
 
 public class FigureHandler implements Handler {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
-    @Inject private FigureFactory figurefactory;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    @Inject FigureFactory figurefactory;
+    @Inject DrawAreaListener listener;
 
     @Inject
-    public FigureHandler() {
+    public FigureHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override

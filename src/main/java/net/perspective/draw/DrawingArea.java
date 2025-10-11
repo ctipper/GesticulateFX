@@ -23,7 +23,6 @@
  */
 package net.perspective.draw;
 
-import com.google.inject.Injector;
 import java.awt.BasicStroke;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -50,6 +49,7 @@ import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.enums.*;
 import net.perspective.draw.event.*;
@@ -71,17 +71,16 @@ import static net.perspective.draw.CanvasTransferHandler.MOVE;
 @Singleton
 public class DrawingArea {
 
-    @Inject private Injector injector;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private DrawAreaListener listener;
-    @Inject private KeyListener keylistener;
-    @Inject private CanvasTransferHandler transferhandler;
-    @Inject private FigureFactory figurefactory;
-    @Inject private Dropper dropper;
-    @Inject private MapController mapper;
-    @Inject private G2 g2;
-    @Inject private BehaviourContext context;
+    private final Provider<CanvasView> viewProvider;
+    private final ApplicationController controller;
+    @Inject DrawAreaListener listener;
+    @Inject KeyListener keylistener;
+    @Inject CanvasTransferHandler transferhandler;
+    @Inject FigureFactory figurefactory;
+    @Inject Dropper dropper;
+    @Inject MapController mapper;
+    @Inject G2 g2;
+    @Inject BehaviourContext context;
     private SubScene canvas;
     private Group root;
 
@@ -102,6 +101,19 @@ public class DrawingArea {
     private Transferable clipboard;
     private Clipboard systemClipboard;
 
+    @Inject Provider<SelectionHandler> selectionHandlerProvider;
+    @Inject Provider<FigureHandler> figureHandlerProvider;
+    @Inject Provider<RotationHandler> rotationHandlerProvider;
+    @Inject Provider<SketchHandler> sketchHandlerProvider;
+    @Inject Provider<TextHandler> textHandlerProvider;
+    @Inject Provider<MapHandler> mapHandlerProvider;
+    @Inject Provider<TextKeyHandler> textKeyHandlerProvider;
+    @Inject Provider<MoveKeyHandler> moveKeyHandlerProvider;
+    @Inject Provider<MapKeyHandler> mapKeyHandlerProvider;
+    @Inject Provider<DummyKeyHandler> dummyKeyHandlerProvider;
+    @Inject Provider<MapItemBehaviour> mapItemBehaviourProvider;
+    @Inject Provider<TextItemBehaviour> textItemBehaviourProvider;
+
     private HandlerType handlertype, oldhandlertype;
     private ContextMenu contextmenu;
     private EventHandler<ContextMenuEvent> contextlistener;
@@ -118,26 +130,27 @@ public class DrawingArea {
      * Creates a new instance of <code>DrawingArea</code>
      */
     @Inject
-    public DrawingArea() {
+    public DrawingArea(Provider<CanvasView> viewProvider, ApplicationController controller) {
+        this.viewProvider = viewProvider;
+        this.controller = controller;
     }
 
     void init(double width, double height) {
         root = new Group();
         canvas = new SubScene(root, width, height);
         canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
-        view.setDrawingListener();
-        view.enableRichText(false);
+        viewProvider.get().setDrawingListener();
+        viewProvider.get().enableRichText(false);
         this.prepareDrawing();
         this.setDrawType(DrawingType.SKETCH);
         this.arrowtype = ArrowType.NONE;
         listener.initializeHandlers(canvas);
-        view.setEditing(KeyHandlerType.MOVE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
         this.addContextMenu();
         this.handlertype = HandlerType.SELECTION;
         this.changeHandlers(HandlerType.SELECTION);
         this.gridVisible = false;
         guides = new Grouped();
-        figurefactory = injector.getInstance(FigureFactory.class);
         systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         controller.getStrokeTypeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             /**
@@ -181,11 +194,11 @@ public class DrawingArea {
         });
         controller.getFontFamilyProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             this.setFontFamily(newValue);
-            view.moveSelection(view.getSelected());
+            viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getFontSizeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             this.setFontSize(Integer.parseInt(newValue));
-            view.moveSelection(view.getSelected());
+            viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
@@ -193,7 +206,7 @@ public class DrawingArea {
             } else {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_BOLD);
             }
-            view.moveSelection(view.getSelected());
+            viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
@@ -201,7 +214,7 @@ public class DrawingArea {
             } else {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_ITALIC);
             }
-            view.moveSelection(view.getSelected());
+            viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getUnderlinedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
@@ -209,7 +222,7 @@ public class DrawingArea {
             } else {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_UNDERLINED);
             }
-            view.moveSelection(view.getSelected());
+            viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
     }
 
@@ -226,7 +239,7 @@ public class DrawingArea {
         fontsize = 14;
         fontstyle = java.awt.Font.PLAIN;
         transparency = controller.getOutlineWhen().then(0).otherwise(100).intValue();
-        view.clearView();
+        viewProvider.get().clearView();
         this.clear();
     }
 
@@ -235,7 +248,7 @@ public class DrawingArea {
      */
     public void setTheme() {
         canvas.setFill(Color.web(controller.getCanvasBackgroundColor()));
-        view.moveSelection(view.getSelected());
+        viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
     /**
@@ -311,47 +324,48 @@ public class DrawingArea {
         this.resetContextHandlers();
         switch (handler) {
             case SELECTION -> {
-                listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                listener.setEventHandler(selectionHandlerProvider.get());
                 this.setRotationMode(false);
                 this.setContextHandlers();
                 mapper.finaliseMap();
             }
             case FIGURE -> {
-                listener.setEventHandler(injector.getInstance(FigureHandler.class));
+                listener.setEventHandler(figureHandlerProvider.get());
                 this.setRotationMode(false);
                 mapper.finaliseMap();
-                view.setSelected(-1);
+                viewProvider.get().setSelected(-1);
             }
             case ROTATION -> {
-                listener.setEventHandler(injector.getInstance(RotationHandler.class));
+                listener.setEventHandler(rotationHandlerProvider.get());
                 this.setRotationMode(true);
                 this.setContextHandlers();
                 mapper.finaliseMap();
-                view.setSelected(-1);
+                viewProvider.get().setSelected(-1);
             }
             case SKETCH -> {
-                listener.setEventHandler(injector.getInstance(SketchHandler.class));
+                listener.setEventHandler(sketchHandlerProvider.get());
                 this.setRotationMode(false);
                 mapper.finaliseMap();
-                view.setSelected(-1);
+                viewProvider.get().setSelected(-1);
             }
             case TEXT -> {
-                listener.setEventHandler(injector.getInstance(TextHandler.class));
+                listener.setEventHandler(textHandlerProvider.get());
                 this.setRotationMode(false);
                 this.setContextHandlers();
                 mapper.finaliseMap();
-                view.setSelected(-1);
+                viewProvider.get().setSelected(-1);
             }
-            case MAP -> listener.setEventHandler(injector.getInstance(MapHandler.class));
+            case MAP -> listener.setEventHandler(mapHandlerProvider.get());
             default -> {
-                listener.setEventHandler(injector.getInstance(SelectionHandler.class));
+                listener.setEventHandler(selectionHandlerProvider.get());
                 this.setRotationMode(false);
                 this.setContextHandlers();
                 mapper.finaliseMap();
-                view.setSelected(-1);
+                viewProvider.get().setSelected(-1);
             }
+
         }
-        view.setDrawing(false);
+        viewProvider.get().setDrawing(false);
     }
 
     /**
@@ -361,10 +375,10 @@ public class DrawingArea {
      */
     public void setKeyboardHandler(KeyHandlerType handler) {
         switch (handler) {
-            case TEXT -> keylistener.setEventHandler(injector.getInstance(TextKeyHandler.class));
-            case MOVE -> keylistener.setEventHandler(injector.getInstance(MoveKeyHandler.class));
-            case MAP -> keylistener.setEventHandler(injector.getInstance(MapKeyHandler.class));
-            default -> keylistener.setEventHandler(injector.getInstance(DummyKeyHandler.class));
+            case TEXT -> keylistener.setEventHandler(textKeyHandlerProvider.get());
+            case MOVE -> keylistener.setEventHandler(moveKeyHandlerProvider.get());
+            case MAP -> keylistener.setEventHandler(mapKeyHandlerProvider.get());
+            default -> keylistener.setEventHandler(dummyKeyHandlerProvider.get());
         }
     }
 
@@ -401,11 +415,11 @@ public class DrawingArea {
      * Cut the selected item
      */
     public void cutSelectedItem() {
-        if (view.getSelected() != -1) {
+        if (viewProvider.get().getSelected() != -1) {
             clipboard = transferhandler.createTransferable();
             transferhandler.exportDone(clipboard, MOVE);
             systemClipboard.setContents(clipboard, null);
-            view.setSelected(-1);
+            viewProvider.get().setSelected(-1);
         }
     }
 
@@ -413,7 +427,7 @@ public class DrawingArea {
      * Copy the selected item
      */
     public void copySelectedItem() {
-        if (view.getSelected() != -1) {
+        if (viewProvider.get().getSelected() != -1) {
             clipboard = transferhandler.createTransferable();
             transferhandler.exportDone(clipboard, COPY);
             systemClipboard.setContents(clipboard, null);
@@ -427,7 +441,7 @@ public class DrawingArea {
     public void pasteSelectedItem() {
         clipboard = systemClipboard.getContents(null);
         transferhandler.importData(clipboard);
-        view.setSelected(-1);
+        viewProvider.get().setSelected(-1);
     }
 
     /**
@@ -449,89 +463,89 @@ public class DrawingArea {
         });
         MenuItem menuTextCut = new MenuItem("Cut");
         menuTextCut.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
-                DrawItem item = view.getDrawings().get(view.getSelected());
+            if (viewProvider.get().getSelected() != -1) {
+                DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
                 if (item instanceof Text) {
-                    view.cutTextItem();
-                    view.updateSelectedItem();
-                    view.moveSelection(view.getSelected());
+                    viewProvider.get().cutTextItem();
+                    viewProvider.get().updateSelectedItem();
+                    viewProvider.get().moveSelection(viewProvider.get().getSelected());
                 }
             }
         });
         MenuItem menuTextCopy = new MenuItem("Copy");
         menuTextCopy.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
-                DrawItem item = view.getDrawings().get(view.getSelected());
+            if (viewProvider.get().getSelected() != -1) {
+                DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
                 if (item instanceof Text) {
-                    view.copyTextItem();
-                    view.updateSelectedItem();
-                    view.moveSelection(view.getSelected());
+                    viewProvider.get().copyTextItem();
+                    viewProvider.get().updateSelectedItem();
+                    viewProvider.get().moveSelection(viewProvider.get().getSelected());
                 }
             }
         });
         MenuItem menuTextPaste = new MenuItem("Paste");
         menuTextPaste.setOnAction((ActionEvent e) -> {
-            DrawItem item = view.getDrawings().get(view.getSelected());
+            DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             if (item instanceof Text) {
-                view.pasteTextItem();
-                view.updateSelectedItem();
-                view.moveSelection(view.getSelected());
+                viewProvider.get().pasteTextItem();
+                viewProvider.get().updateSelectedItem();
+                viewProvider.get().moveSelection(viewProvider.get().getSelected());
             }
         });
         // contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
         SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
         MenuItem menuGroup = new MenuItem("Group Selection");
         menuGroup.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                view.groupSelection();
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                viewProvider.get().groupSelection();
             }
         });
         MenuItem menuUnGroup = new MenuItem("Ungroup Selection");
         menuUnGroup.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                view.ungroupSelection();
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                viewProvider.get().ungroupSelection();
             }
         });
         // contextmenu.getItems().addAll(groupSeparator, menuGroup, menuUnGroup);
         SeparatorMenuItem sendSeparator = new SeparatorMenuItem();
         MenuItem menuSBItem = new MenuItem("Send Backwards");
         menuSBItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                view.sendBackwards();
-                view.setSelected(-1);
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                viewProvider.get().sendBackwards();
+                viewProvider.get().setSelected(-1);
             }
         });
         MenuItem menuBFItem = new MenuItem("Bring Forwards");
         menuBFItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                view.bringForwards();
-                view.setSelected(-1);
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                viewProvider.get().bringForwards();
+                viewProvider.get().setSelected(-1);
             }
         });
         MenuItem menuSTBItem = new MenuItem("Send to Back");
         menuSTBItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                view.sendToBack();
-                view.setSelected(-1);
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                viewProvider.get().sendToBack();
+                viewProvider.get().setSelected(-1);
             }
         });
         MenuItem menuBTFItem = new MenuItem("Bring to Front");
         menuBTFItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                view.bringToFront();
-                view.setSelected(-1);
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                viewProvider.get().bringToFront();
+                viewProvider.get().setSelected(-1);
             }
         });
         // contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
         MenuItem menuEditMapItem = new MenuItem("Edit");
         menuEditMapItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (viewProvider.get().getSelected() != -1) {
                 editMapItem();
             }
         });
         MenuItem menuEditTextItem = new MenuItem("Edit");
         menuEditTextItem.setOnAction((ActionEvent e) -> {
-            if (view.getSelected() != -1) {
+            if (viewProvider.get().getSelected() != -1) {
                 editTextItem();
             }
         });
@@ -539,15 +553,15 @@ public class DrawingArea {
         SeparatorMenuItem editSeparator = new SeparatorMenuItem();
         contextlistener = (ContextMenuEvent event) -> {
             contextmenu.getItems().clear();
-            if (view.getSelected() != -1 && !view.isMapping() && !view.isEditing()) {
-                if (view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                if (viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof StreetMap) {
                     contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
-                } else if (view.getDrawings().get(view.getSelected()) instanceof Text) {
+                } else if (viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof Text) {
                     contextmenu.getItems().addAll(menuEditTextItem, editSeparator);
                 }
             }
-            if (view.getSelected() != -1 && !view.isMapping() && view.isEditing()) {
-                if (view.getDrawings().get(view.getSelected()) instanceof Text) {
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && viewProvider.get().isEditing()) {
+                if (viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof Text) {
                     contextmenu.getItems().addAll(menuTextCut, menuTextCopy, menuTextPaste);
                 }
             } else {
@@ -559,7 +573,7 @@ public class DrawingArea {
         };
         popuplistener = (TouchEvent event) -> {
             contextmenu.getItems().clear();
-            if (view.getSelected() != -1 && !view.isMapping() && view.getDrawings().get(view.getSelected()) instanceof StreetMap) {
+            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof StreetMap) {
                 contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
             }
             contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);
@@ -579,11 +593,11 @@ public class DrawingArea {
      * Initiate map edit mode
      */
     protected void editMapItem() {
-        if (view.getSelected() != -1) {
-            DrawItem item = view.getDrawings().get(view.getSelected());
+        if (viewProvider.get().getSelected() != -1) {
+            DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             if (item instanceof StreetMap) {
-                context.setBehaviour(injector.getInstance(MapItemBehaviour.class));
-                context.edit(item, view.getSelected());
+                context.setBehaviour(mapItemBehaviourProvider.get());
+                context.edit(item, viewProvider.get().getSelected());
             }
         }
     }
@@ -592,14 +606,14 @@ public class DrawingArea {
      * Initiate text edit mode
      */
     protected void editTextItem() {
-        if (view.getSelected() != -1) {
-            DrawItem item = view.getDrawings().get(view.getSelected());
+        if (viewProvider.get().getSelected() != -1) {
+            DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             if (item instanceof Text text) {
-                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
-                context.edit(text, view.getSelected());
+                context.setBehaviour(textItemBehaviourProvider.get());
+                context.edit(text, viewProvider.get().getSelected());
                 text.setDimensions();
-                view.updateSelectedItem();
-                view.moveSelection(view.getSelected());
+                viewProvider.get().updateSelectedItem();
+                viewProvider.get().moveSelection(viewProvider.get().getSelected());
             }
         }
     }
@@ -853,7 +867,7 @@ public class DrawingArea {
     public void setStroke(java.awt.Stroke stroke) {
         this.stroke = stroke;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -874,7 +888,7 @@ public class DrawingArea {
     public void setPlainStroke(java.awt.Stroke stroke) {
         this.plainstroke = stroke;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -895,7 +909,7 @@ public class DrawingArea {
     public void setColor(Color color) {
         this.color = color;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -916,7 +930,7 @@ public class DrawingArea {
     public void setFillColor(Color fillcolor) {
         this.fillcolor = fillcolor;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -937,7 +951,7 @@ public class DrawingArea {
     public void setTransparency(int transparency) {
         this.transparency = transparency;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -958,7 +972,7 @@ public class DrawingArea {
     public void setFontFamily(String fontfamily) {
         this.fontfamily = fontfamily;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -979,7 +993,7 @@ public class DrawingArea {
     public void updateFontStyle(int fontstyle) {
         this.fontstyle = fontstyle;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -1009,7 +1023,7 @@ public class DrawingArea {
     public void setFontSize(int fontsize) {
         this.fontsize = fontsize;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -1030,7 +1044,7 @@ public class DrawingArea {
     public void setArrow(ArrowType arrowtype) {
         this.arrowtype = arrowtype;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 
@@ -1049,7 +1063,7 @@ public class DrawingArea {
     public void resetArrow() {
         arrowtype = ArrowType.NONE;
         if (controller.getDropperDisabled()) {
-            view.updateSelectedItem();
+            viewProvider.get().updateSelectedItem();
         }
     }
 

@@ -23,7 +23,6 @@
  */
 package net.perspective.draw.workers;
 
-import com.google.inject.Injector;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +38,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
@@ -65,11 +65,11 @@ import org.slf4j.LoggerFactory;
 public class ImageLoadWorker extends Task<Object> {
 
     private List<Image> images;
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    private final ApplicationController controller;
+    @Inject ShareUtils share;
+    @Inject Provider<Picture> pictureProvider;
     private List<File> imageFiles;
     private double shift;
     private boolean success;
@@ -79,7 +79,10 @@ public class ImageLoadWorker extends Task<Object> {
     private static final Logger logger = LoggerFactory.getLogger(ImageLoadWorker.class.getName());
 
     @Inject
-    public ImageLoadWorker() {
+    public ImageLoadWorker(DrawingArea drawarea, CanvasView view, ApplicationController controller) {
+        this.drawarea = drawarea;
+        this.view = view;
+        this.controller = controller;
         this.shift = 20.0;
         success = false;
     }
@@ -98,7 +101,7 @@ public class ImageLoadWorker extends Task<Object> {
         Platform.runLater(() -> {
             if (!images.isEmpty()) {
                 for (Image image : images) {
-                    Picture picture = injector.getInstance(Picture.class);
+                    Picture picture = pictureProvider.get();
                     picture.setStart(shift, shift);
                     ImageItem item = new ImageItem(image);
                     item.setFormat(FileUtils.getExtension(imageFiles.get(images.indexOf(image))));

@@ -23,9 +23,9 @@
  */
 package net.perspective.draw.event;
 
-import com.google.inject.Injector;
 import javafx.scene.Cursor;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
@@ -42,18 +42,20 @@ import net.perspective.draw.geom.Text;
 
 public class TextHandler implements Handler {
 
-    @Inject private Injector injector;
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
-    @Inject private BehaviourContext context;
-    @Inject private TextController textController;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    @Inject DrawAreaListener listener;
+    @Inject BehaviourContext context;
+    @Inject TextController textController;
+    @Inject Provider<TextItemBehaviour> textItemBehaviourProvider;
 
     /**
      * Creates a new instance of <code>TextHandler</code> 
      */
     @Inject
-    public TextHandler() {
+    public TextHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class TextHandler implements Handler {
             // Text isEditing code here
             if (!listener.getRightClick()) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.setBehaviour(textItemBehaviourProvider.get());
                 context.select(item, 0);
             }
         }
@@ -96,7 +98,7 @@ public class TextHandler implements Handler {
         if (view.getSelected() != -1) {
             DrawItem item = view.getDrawings().get(view.getSelected());
             if (item instanceof Text) {
-                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.setBehaviour(textItemBehaviourProvider.get());
                 context.hover(item);
             }
         } else {
@@ -110,7 +112,7 @@ public class TextHandler implements Handler {
             // Text isSelecting code here
             if (view.getSelected() != -1) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                context.setBehaviour(injector.getInstance(TextItemBehaviour.class));
+                context.setBehaviour(textItemBehaviourProvider.get());
                 context.alter(item, 0, 0);
             }
         }

@@ -44,16 +44,18 @@ import org.slf4j.LoggerFactory;
 
 public class SVGWorker extends Task<Object> {
 
-    @Inject private CanvasView view;
-    @Inject private ApplicationController controller;
-    @Inject private ShareUtils share;
+    private final CanvasView view;
+    private final ApplicationController controller;
+    @Inject ShareUtils share;
     private File file;
     private double margin;
 
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
     @Inject
-    public SVGWorker() {
+    public SVGWorker(CanvasView view, ApplicationController controller) {
+        this.view = view;
+        this.controller = controller;
         this.margin = 0.0;
     }
 

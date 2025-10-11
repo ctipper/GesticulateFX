@@ -54,7 +54,6 @@ import net.perspective.draw.util.G2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 
  * @author ctipper
@@ -63,11 +62,11 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class CanvasView {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private ApplicationController controller;
-    @Inject private Dropper dropper;
-    @Inject private TextController textController;
-    @Inject private G2 g2;
+    private final DrawingArea drawarea;
+    private final ApplicationController controller;
+    private final TextController textController;
+    @Inject Dropper dropper;
+    @Inject G2 g2;
     private final List<DrawItem> list;
     private ObservableList<DrawItem> drawings;
     private final List<ImageItem> images;
@@ -90,7 +89,10 @@ public class CanvasView {
      * Creates a new instance of <code>CanvasView</code>
      */
     @Inject
-    public CanvasView() {
+    public CanvasView(DrawingArea drawarea, ApplicationController controller, TextController textController) {
+        this.drawarea = drawarea;
+        this.controller = controller;
+        this.textController = textController;
         this.list = new ArrayList<>();
         this.images = new ArrayList<>();
         newitem = Optional.empty();

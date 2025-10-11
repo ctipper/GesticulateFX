@@ -41,16 +41,18 @@ import net.perspective.draw.geom.FigureType;
 
 public class SketchHandler implements Handler  {
 
-    @Inject private DrawingArea drawarea;
-    @Inject private CanvasView view;
-    @Inject private DrawAreaListener listener;
-    @Inject private FigureFactory figurefactory;
+    private final DrawingArea drawarea;
+    private final CanvasView view;
+    @Inject DrawAreaListener listener;
+    @Inject FigureFactory figurefactory;
 
     /**
      * Creates a new instance of <code>SketchHandler</code> 
      */
     @Inject
-    public SketchHandler() {
+    public SketchHandler(DrawingArea drawarea, CanvasView view) {
+        this.drawarea = drawarea;
+        this.view = view;
     }
 
     @Override

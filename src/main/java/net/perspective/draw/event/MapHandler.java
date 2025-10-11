@@ -33,8 +33,8 @@ import net.perspective.draw.MapController;
 
 public class MapHandler implements Handler {
 
-    @Inject private DrawAreaListener listener;
-    @Inject private MapController mapper;
+    @Inject DrawAreaListener listener;
+    @Inject MapController mapper;
 
     /**
      * Creates a new instance of <code>MapHandler</code> 

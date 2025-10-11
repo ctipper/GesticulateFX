@@ -23,18 +23,9 @@
  */
 package net.perspective.draw;
 
-import com.cathive.fx.guice.GuiceApplication;
-import com.cathive.fx.guice.GuiceFXMLLoader;
-import com.cathive.fx.guice.GuiceFXMLLoader.Result;
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 import java.awt.Desktop;
 import java.awt.desktop.OpenFilesEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,29 +34,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Consumer;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javafx.application.Application;
 import javafx.application.ColorScheme;
 import javafx.application.Platform;
 import javafx.application.Platform.Preferences;
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.stage.*;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Subscription;
-import javax.inject.Inject;
 import net.harawata.appdirs.AppDirs;
 import net.harawata.appdirs.AppDirsFactory;
-import net.perspective.draw.event.*;
-import net.perspective.draw.event.behaviours.*;
-import net.perspective.draw.event.keyboard.*;
-import net.perspective.draw.geom.*;
-import net.perspective.draw.text.Editor;
-import net.perspective.draw.text.TextEditor;
-import net.perspective.draw.util.G2;
-import net.perspective.draw.workers.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.perspective.draw.event.keyboard.KeyListener;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
@@ -74,13 +64,15 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
  *
  * @author ctipper
  */
-public class Gesticulate extends GuiceApplication {
 
-    @Inject private GuiceFXMLLoader fxmlLoader;
-    @Inject private ApplicationController controller;
-    @Inject private DrawingArea drawarea;
-    @Inject private KeyListener keylistener;
-    @Inject private ShareUtils share;
+@Singleton
+public class Gesticulate extends Application {
+
+    private DrawAppComponent appComponent;
+    private ApplicationController controller;
+    @Inject Provider<DrawingArea> drawareaProvider;
+    @Inject KeyListener keylistener;
+    @Inject ShareUtils share;
     private Stage stage;
     private Properties userPrefs;
 
@@ -99,27 +91,35 @@ public class Gesticulate extends GuiceApplication {
 
     /**
      * Init the application
-     * 
-     * @param modules
+     *
      * @throws Exception
      */
     @Override
-    public void init(final List<Module> modules) throws Exception {
-        modules.add(new FxmlModule());
+    public void init() throws Exception {
+        appComponent = DaggerDrawAppComponent.builder()
+                .drawAppModule(new DrawAppModule())
+                .build();
+        appComponent.inject(this);
     }
 
     /**
      * Construct the user interface
-     * 
+     *
      * @param primaryStage
      * @throws Exception
      */
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        Result result = fxmlLoader.load(getClass().getResource("/fxml/Application.fxml"));
-
-        final Parent root = result.getRoot();
-
+        FxAppComponent fxApp = appComponent.fxApp()
+                .application(this)
+                .mainWindow(primaryStage)
+                .build();
+        FXMLLoader loader = fxApp.loader(getClass().getResource("/fxml/Application.fxml"));
+        loader.setControllerFactory(param -> appComponent.applicationController());
+        final Parent root = loader.load();
+        controller = appComponent.applicationController();
+        appComponent.inject(controller);
+        controller.setApplication(this);
         // Put the loaded user interface onto the primary stage.
         Scene scene = new Scene(root);
         // keyboard events are consumed by the scene
@@ -131,7 +131,6 @@ public class Gesticulate extends GuiceApplication {
         primaryStage.setOnCloseRequest((WindowEvent e) -> {
             stop();
         });
-
         // Size the primary stage
         this.sizeStage(primaryStage);
 
@@ -141,12 +140,12 @@ public class Gesticulate extends GuiceApplication {
 
         // Initialise the scroll area
         final ScrollPane pane = (ScrollPane) scene.lookup("#scrollarea");
-
         // retrieve user preferences
         this.userPrefs = getUserPreferences();
 
         // Initialize the canvas and apply handlers
-        drawarea.init(pane.getWidth(), pane.getHeight());
+        drawareaProvider.get().init(pane.getWidth(), pane.getHeight());
+        logger.trace("initialized stage");
 
         // set the theme from user preferences
         if (MM_SYSTEM_THEME && userPrefs.getProperty("systemTheme").equals("System")) {
@@ -167,10 +166,10 @@ public class Gesticulate extends GuiceApplication {
         controller.setCanvasBackgroundColor(canvasColor);
         controller.setBackgroundPickerColor(canvasColor);
         controller.adjustThemeFillColor(canvasColor);
-        drawarea.setTheme();
+        drawareaProvider.get().setTheme();
 
         // Install the canvas
-        pane.setContent(drawarea.getScene());
+        pane.setContent(drawareaProvider.get().getScene());
         this.setOnResize(pane);
 
         // open canvas from file if requested
@@ -193,23 +192,23 @@ public class Gesticulate extends GuiceApplication {
 
     /**
      * Resize scrollpane on window resize
-     * 
+     *
      * @param pane
      */
     public void setOnResize(ScrollPane pane) {
         pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawarea.getScene().setHeight((double) new_val);
-            drawarea.redrawGrid();
+            drawareaProvider.get().getScene().setHeight((double) new_val);
+            drawareaProvider.get().redrawGrid();
         });
         pane.widthProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawarea.getScene().setWidth((double) new_val);
-            drawarea.redrawGrid();
+            drawareaProvider.get().getScene().setWidth((double) new_val);
+            drawareaProvider.get().redrawGrid();
         });
     }
 
     /**
      * Set the size of the stage
-     * 
+     *
      * @param stage the stage
      */
     public void sizeStage(Stage stage) {
@@ -221,7 +220,7 @@ public class Gesticulate extends GuiceApplication {
 
     /**
      * Retrieve the stage
-     * 
+     *
      * @return the stage
      */
     public Stage getStage() {
@@ -260,7 +259,7 @@ public class Gesticulate extends GuiceApplication {
 
     /**
      * Reset aopplication stylesheets
-     * 
+     *
      * @param isDark is dark theme selected
      */
     public void resetStylesheets(Boolean isDark) {
@@ -283,9 +282,9 @@ public class Gesticulate extends GuiceApplication {
      * @param gridEnabled
      */
     public void drawGrid(boolean gridEnabled) {
-        drawarea.setGrid(gridEnabled);
-        drawarea.setSnapTo(gridEnabled);
-        drawarea.redrawGrid();
+        drawareaProvider.get().setGrid(gridEnabled);
+        drawareaProvider.get().setSnapTo(gridEnabled);
+        drawareaProvider.get().redrawGrid();
     }
 
     /**
@@ -314,7 +313,7 @@ public class Gesticulate extends GuiceApplication {
 
     /**
      * Persist the user preferences
-     * 
+     *
      * @param prefs the user preferences as properties
      */
     public void setUserPreferences(Properties prefs) {
@@ -331,7 +330,7 @@ public class Gesticulate extends GuiceApplication {
 
     /**
      * Retrieve the user preferences
-     * 
+     *
      * @return user preferencies as properties
      */
     public Properties getUserPreferences() {
@@ -376,50 +375,6 @@ public class Gesticulate extends GuiceApplication {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-
-    private static class FxmlModule extends AbstractModule {
-
-        @Override
-        protected void configure() {
-            bind(ApplicationController.class);
-            bind(DrawingArea.class);
-            bind(CanvasView.class);
-            bind(CanvasTransferHandler.class);
-            bind(Dropper.class);
-            bind(DrawAreaListener.class);
-            bind(FigureHandler.class);
-            bind(RotationHandler.class);
-            bind(SelectionHandler.class);
-            bind(SketchHandler.class);
-            bind(TextHandler.class);
-            bind(MapHandler.class);
-            bind(KeyListener.class);
-            bind(DummyKeyHandler.class);
-            bind(MapKeyHandler.class);
-            bind(MoveKeyHandler.class);
-            bind(TextKeyHandler.class);
-            bind(BehaviourContext.class);
-            bind(FigureItemBehaviour.class);
-            bind(PictureItemBehaviour.class);
-            bind(GroupedItemBehaviour.class);
-            bind(MapItemBehaviour.class);
-            bind(TextItemBehaviour.class);
-            bind(FigureFactory.class).to(FigureFactoryImpl.class);
-            bind(MapController.class);
-            bind(TextController.class);
-            bind(Editor.class).to(TextEditor.class);
-            bind(ShareUtils.class);
-            bind(ReadInFunnel.class);
-            bind(WriteOutStreamer.class);
-            bind(ImageLoadWorker.class);
-            bind(PDFWorker.class);
-            bind(SVGWorker.class);
-            bind(PNGWorker.class);
-            bind(G2.class);
-            bind(Picture.class);
-            bind(StreetMap.class);
-        }
     }
 
 }
