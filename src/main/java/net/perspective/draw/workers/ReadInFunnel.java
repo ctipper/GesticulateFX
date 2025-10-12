@@ -102,13 +102,8 @@ public class ReadInFunnel extends Task<Object> {
             if (success) {
                 drawarea.prepareDrawing();
                 for (DrawItem drawitem : drawings) {
-                    if (drawitem instanceof Picture picture) {
-                        var i = picture.getImageIndex();
-                        var j = view.setImageItem(pictures.get(i));
-                        picture.setImageIndex(j);
-                    }
-                    drawitem = checkDrawings(drawitem);
-                    view.setNewItem(drawitem);
+                    DrawItem item = checkDrawings(drawitem);
+                    view.setNewItem(item);
                     view.resetNewItem();
                 }
             }
@@ -177,18 +172,24 @@ public class ReadInFunnel extends Task<Object> {
             }
         }
 
-        if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
+        if (drawing instanceof Picture picture && !(drawing instanceof StreetMap)) {
             Picture item = pictureProvider.get();
             try {
-                BeanUtils.copyProperties(item, drawing);
+                BeanUtils.copyProperties(item, picture);
                 drawing = item;
+                var i = picture.getImageIndex();
+                var j = view.setImageItem(pictures.get(i));
+                picture.setImageIndex(j);
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
-        } else if (drawing instanceof StreetMap) {
+        } else if (drawing instanceof StreetMap streetmap) {
             StreetMap item = streetMapProvider.get();
             try {
-                BeanUtils.copyProperties(item, drawing);
+                BeanUtils.copyProperties(item, streetmap);
+                var i = streetmap.getImageIndex();
+                var j = view.setImageItem(pictures.get(i));
+                streetmap.setImageIndex(j);
                 item.init();
                 item.filterHandlers();
                 drawing = item;
