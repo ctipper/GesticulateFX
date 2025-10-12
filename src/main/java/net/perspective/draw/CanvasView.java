@@ -442,16 +442,13 @@ public class CanvasView {
 
             this.setSelected(-1);
 
-            // eliminate shape to replace from list
-            removals.remove(drawings.get(selected));
-
-            // replace selected
-            drawings.set(selected, groupedItem);
-
+            // delete drawings
             for (DrawItem item : removals) {
-                // delete drawings
                 drawings.remove(item);
             }
+            
+            // replace selected
+            drawings.add(selected, groupedItem);
         }
     }
 
