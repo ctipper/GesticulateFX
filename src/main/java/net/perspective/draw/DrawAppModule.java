@@ -72,9 +72,9 @@ public class DrawAppModule {
 
     @Provides
     @Singleton
-    ApplicationController provideApplicationController(Provider<DrawingArea> drawingAreaProvider,
+    ApplicationController provideApplicationController(Provider<DrawingArea> drawareaProvider,
             Provider<CanvasView> viewProvider, DrawAppComponent component) {
-        ApplicationController applicationController = new ApplicationController(drawingAreaProvider, viewProvider);
+        ApplicationController applicationController = new ApplicationController(drawareaProvider, viewProvider);
         return applicationController;
     }
 
