@@ -149,18 +149,11 @@ public class CanvasView {
                     }
                 } else {
                     if (change.wasRemoved()) {
-                        int i = 0;
-                        List<Node> deleted = new ArrayList<>();
                         for (int j = 0; j < change.getRemovedSize(); j++) {
                             // remove item
-                            deleted.add(nodes.get(change.getFrom() + i + g));
-                            i++;
-                            logger.trace("node " + (change.getFrom() + i) + " removed.");
+                            nodes.remove(change.getFrom() + g);
+                            logger.trace("node " + change.getFrom() + " removed.");
                         }
-                        // delete the nodes from the scene graph
-                        deleted.stream().forEach((delete) -> {
-                            nodes.remove(delete);
-                        });
                     }
                     if (change.wasAdded()) {
                         int i = 0;
