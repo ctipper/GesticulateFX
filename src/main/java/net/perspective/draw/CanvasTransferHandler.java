@@ -160,11 +160,11 @@ public class CanvasTransferHandler {
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
-        if (drawing instanceof Picture && !(drawing instanceof StreetMap)) {
+        if (drawing instanceof Picture picture && !(drawing instanceof StreetMap)) {
             var item = pictureProvider.get();
             try {
-                BeanUtils.copyProperties(item, drawing);
-                return item;
+                BeanUtils.copyProperties(item, picture);
+                drawing = item;
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
@@ -174,8 +174,8 @@ public class CanvasTransferHandler {
                 BeanUtils.copyProperties(item, streetmap);
                 item.init();
                 item.filterHandlers();
-                mapper.copyMap(item);
-                return item;
+                item = mapper.copyMap(item);
+                drawing = item;
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
             }
@@ -189,7 +189,7 @@ public class CanvasTransferHandler {
             item.setAngle(grouped.getAngle());
             item.setTransparency(grouped.getTransparency());
             item.setScale(grouped.getScale());
-            return item;
+            drawing = item;
         }
 
         return drawing;
