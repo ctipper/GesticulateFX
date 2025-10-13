@@ -386,10 +386,10 @@ public class MapController {
      * @return an {@link net.perspective.draw.geom.StreetMap}
      */
     public StreetMap copyMap(StreetMap item) {
-        viewProvider.get().getImageItems().add(new ImageItem(Instant.now()));
-        item.setImageIndex(viewProvider.get().getImageItems().size() - 1);
+        int index = viewProvider.get().setImageItem(new ImageItem(Instant.now()));
+        item.setImageIndex(index);
         Image image = createCompatibleImage(item, (int) item.getEnd().getX(), (int) item.getEnd().getY());
-        viewProvider.get().getImageItem(item.getImageIndex()).setImage(image);
+        viewProvider.get().getImageItem(index).setImage(image);
         return item;
     }
 
