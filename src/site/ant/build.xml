@@ -171,15 +171,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--app-version" />
          <arg value="${version.internal}" />
          <arg value="--icon"/>
-         <arg value="${deploy.dir}/macosx/${bundle.icon}"/>
+         <arg value="${deploy.dir}/macos/${bundle.icon}"/>
          <arg value="--file-associations" />
-         <arg value="${deploy.dir}/macosx/bundle.properties" />
+         <arg value="${deploy.dir}/macos/bundle.properties" />
          <arg value="--file-associations" />
-         <arg value="${deploy.dir}/macosx/jpeg.properties" />
+         <arg value="${deploy.dir}/macos/jpeg.properties" />
          <arg value="--file-associations" />
-         <arg value="${deploy.dir}/macosx/png.properties" />
+         <arg value="${deploy.dir}/macos/png.properties" />
          <arg value="--file-associations" />
-         <arg value="${deploy.dir}/macosx/svg+xml.properties" />
+         <arg value="${deploy.dir}/macos/svg+xml.properties" />
+      </exec>
+
+      <!-- copy macos icon bundle to resources -->
+      <copy file="${deploy.dir}/macos/Assets.car" if:set="onmacos" tofile="${build.dir}/${app.name}.app/Contents/Resources/Assets.car"/>
+
+      <!-- Add plist entry for Assets icon -->
+      <exec executable="/usr/libexec/PlistBuddy" if:set="onmacos" failonerror="false">
+          <arg value="-c"/>
+          <arg value="Add :CFBundleIconName string ${icon.name}"/>
+          <arg value="${build.dir}/${app.name}.app/Contents/Info.plist"/>
+      </exec>
+
+      <!-- prevent original icon from showing in Dock -->
+      <exec executable="/usr/libexec/PlistBuddy" if:set="onmacos" failonerror="false">
+          <arg value="-c"/>
+          <arg value="Delete :CFBundleIconFile"/>
+          <arg value="${build.dir}/${app.name}.app/Contents/Info.plist"/>
       </exec>
 
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" if:set="onwindows" failonerror="false" newenvironment="true">
@@ -254,7 +271,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--app-version"/>
          <arg value="${version.internal}"/>
          <arg value="--resource-dir"/>
-         <arg value="${deploy.dir}/macosx"/>
+         <arg value="${deploy.dir}/macos"/>
          <arg value="--dest"/>
          <arg value="${build.dir}"/>
          <arg value="--app-image"/>
