@@ -1,4 +1,6 @@
-NOTICE
+NOTICE for GesticulateFX
+
+Copyright (C) 2025 Christopher Tipper
 
 This project is licensed under the GNU General Public License, version 3 (GPLv3).  
 See the file `LICENSE` for the full terms.
@@ -10,19 +12,44 @@ Third-Party Components and Their Licenses
 
 - Dagger  
   Copyright © [Google, Inc. and contributors]  
-  Licensed under the Apache License, Version 2.0. You may obtain a copy of the license at:  
+  Licensed under the Apache License, Version 2.0. You may obtain a copy of the
+  license at:
   http://www.apache.org/licenses/LICENSE-2.0  
-  Unless required by law or agreed to in writing, software under the Apache License is distributed on an “AS IS” basis, without warranties or conditions of any kind.  
+  Unless required by law or agreed to in writing, software under the Apache
+  License is distributed on an “AS IS” basis, without warranties or conditions
+  of any kind.
 
 - Apache Batik (SVG Toolkit)  
   Copyright © The Apache Software Foundation  
   Licensed under the Apache License, Version 2.0. You may obtain a copy of the license at:  
   http://www.apache.org/licenses/LICENSE-2.0  
-  Unless required by law or agreed to in writing, software under the Apache License is distributed on an “AS IS” basis, without warranties or conditions of any kind.
+
+  Unless required by law or agreed to in writing, software under the Apache
+  License is distributed on an “AS IS” basis, without warranties or conditions
+  of any kind.
 
 - AppDirs  
   https://github.com/harawata/appdirs  
   Licensed under the Apache License, Version 2.0. You may obtain a copy of the license at:  
   http://www.apache.org/licenses/LICENSE-2.0  
-  Unless required by law or agreed to in writing, software under the Apache License is distributed on an “AS IS” basis, without warranties or conditions of any kind.  
+
+  Unless required by law or agreed to in writing, software under the Apache
+  License is distributed on an “AS IS” basis, without warranties or conditions
+  of any kind.
+
+- Icon Artwork
+  All icon artwork contained in the `resources/icons/` directory (including any
+  with the `.icons`, `.icns`, `.png`, or `.svg` extensions) is original artwork
+  created byChristopher Tipper. These icons are licensed under the same GPL-3.0
+  license as the rest of this project, unless otherwise noted.
+
+  You are free to use, modify, and redistribute these icons under the terms of the
+  GNU General Public License, version 3.
+
+  No Apple or third-party proprietary iconography or design resources are
+  included in this project. All artwork was created independently and is not
+  derived from Apple-provided materials.
+
+  For license details, see:
+  https://www.gnu.org/licenses/gpl-3.0.html
 
