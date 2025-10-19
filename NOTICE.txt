@@ -1,4 +1,47 @@
-NOTICE
+Notices for GesticulateFX
+
+Copyright (C) 2025 Christopher Tipper
+
+This project is licensed under the GNU General Public License, version 3 (GPL-3.0).
+See the LICENSE file for the complete text of the license:
+https://www.gnu.org/licenses/gpl-3.0.html
+
+Icon Artwork
+------------
+
+All original icon artwork contained in the `site/deploy/` directory (including
+any files with the `.icons`, `.icns`, `.png`, or `.svg` extensions) is original
+artwork created by Christopher Tipper.
+
+These icons are licensed under the same GPL-3.0 license as the rest of this
+project, unless otherwise noted.
+
+You are free to use, modify, and redistribute these icons under the terms of the
+GNU General Public License, version 3.
+
+No Apple or third-party proprietary iconography or design resources are included
+in these original works. All artwork was created independently and is not
+derived from Apple-provided materials.
+
+Third-Party Icons
+-----------------
+
+Some icons contained in the `resources/svg/` directory are derived from Font
+Awesome Free 6.6.0 by @fontawesome — https://fontawesome.com Copyright (c) 2024
+Fonticons, Inc.
+
+These icons are licensed under the Creative Commons Attribution 4.0
+International License (CC BY 4.0). You may copy, modify, distribute, and use
+them, provided that proper attribution is given as required by the license.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/ Font Awesome
+Free license summary: https://fontawesome.com/license/free
+
+Summary
+-------
+This project combines original GPL-licensed code and artwork with third-party
+open-licensed icons (Font Awesome Free, CC BY 4.0). All third-party materials
+are identified and attributed above.
 
 Third-Party Components and Their Licenses
 ------------------------------------------
