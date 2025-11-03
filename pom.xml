@@ -19,11 +19,11 @@
         <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>25.0.1</javafx.version>
-        <dagger.version>2.57.1</dagger.version>
+        <dagger.version>2.57.2</dagger.version>
         <slf4j.version>2.0.17</slf4j.version>
-        <log4j.version>2.25.1</log4j.version>
+        <log4j.version>2.25.2</log4j.version>
         <batik.version>1.19</batik.version>
-        <junit.version>5.13.4</junit.version>
+        <junit.version>6.0.0</junit.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -254,7 +254,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -271,7 +271,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>3.14.1</version>
                 <configuration>
                     <release>25</release>
                     <showDeprecation>true</showDeprecation>
@@ -315,7 +315,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.9.0</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -362,7 +362,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <id>bundle</id>
@@ -390,7 +390,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <id>installer</id>
