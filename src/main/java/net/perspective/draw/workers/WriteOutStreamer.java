@@ -24,19 +24,18 @@
 package net.perspective.draw.workers;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
-import javax.imageio.ImageIO;
-import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ImageItem;
@@ -48,10 +47,9 @@ import net.perspective.draw.serialise.BasicStrokePersistenceDelegate;
 import net.perspective.draw.serialise.FigurePersistenceDelegate;
 import net.perspective.draw.serialise.FigureTypePersistenceDelegate;
 import net.perspective.draw.serialise.InstantPersistenceDelegate;
+import net.perspective.draw.serialise.Path2DPersistenceDelegate;
 import net.perspective.draw.serialise.TextPersistenceDelegate;
 import net.perspective.draw.util.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -179,6 +177,8 @@ public class WriteOutStreamer extends Task<Object> {
                 new FigurePersistenceDelegate());
             encoder.setPersistenceDelegate(net.perspective.draw.geom.Text.class,
                 new TextPersistenceDelegate());
+            encoder.setPersistenceDelegate(java.awt.geom.Path2D.Double.class,
+                new Path2DPersistenceDelegate());
             encoder.setExceptionListener((Exception ex) -> {
                 logger.warn(ex.getMessage());
             });

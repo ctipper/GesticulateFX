@@ -1,8 +1,8 @@
-/*
- * FigureType.java
- * 
- * Created on Oct 19, 2013 6:05:23 PM
- * 
+/**
+ * PathData.java
+ *
+ * Created on 8 Aug 2025 19:08:26
+ *
  */
 
 /**
@@ -21,13 +21,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.perspective.draw.geom;
+package net.perspective.draw.serialise;
 
 /**
- * 
+ *
  * @author ctipper
  */
 
-public enum FigureType {
-    LINE, CIRCLE, SQUARE, TRIANGLE, HEXAGON, PENTAGRAM, SKETCH, POLYGON, VECTOR, NONE
+public class PathData {
+
+    private double[][] segments;
+
+    public PathData() {
+    }
+
+    public PathData(double[][] segments) {
+        this.segments = segments;
+    }
+
+    public double[][] getSegments() {
+        return segments;
+    }
+
+    public void setSegments(double[][] segments) {
+        this.segments = segments;
+    }
+
 }

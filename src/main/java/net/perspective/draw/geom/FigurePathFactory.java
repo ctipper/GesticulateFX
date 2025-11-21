@@ -144,6 +144,11 @@ public class FigurePathFactory implements PathFactory {
                 path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
                 path.closePath();
             }
+            case VECTOR -> {
+                if (figure.getPath() != null) {
+                    path = figure.getPath();
+                }
+            }
             default -> {
                 return null;
             }
