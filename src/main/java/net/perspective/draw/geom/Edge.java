@@ -24,9 +24,15 @@
 package net.perspective.draw.geom;
 
 import java.awt.Shape;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
@@ -39,6 +45,8 @@ import net.perspective.draw.util.V2;
 public class Edge extends Figure {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = LoggerFactory.getLogger(Edge.class.getName());
 
     /** Creates a new instance of <code>Edge</code> */
     public Edge() {
@@ -74,8 +82,69 @@ public class Edge extends Figure {
      */
     @Override
     public void setEndPoints() {
-        start = points.get(0);
-        end = points.get(points.size() - 1);
+        try {
+            switch (this.getType()) {
+                case VECTOR -> {
+                    /**
+                     * temporary values for start and end, needed by rotationCentre for lines
+                     */
+                    var coords = getStartAndEndPoints(getPath());
+                    start = coords[0];
+                    end = coords[1];
+                    var bounds = this.getBounds2D().getBounds2D();
+                    start = new CanvasPoint(bounds.getMinX(), bounds.getMinY());
+                    end = new CanvasPoint(bounds.getMaxX(), bounds.getMaxY());
+                }
+                default -> {
+                    if (points == null || points.isEmpty()) {
+                        throw new IllegalStateException("Points list is null or empty for non-VECTOR type");
+                    }
+
+                    start = points.get(0);
+                    end = points.get(points.size() - 1);
+                }
+            }
+        } catch (IllegalStateException | NullPointerException | IndexOutOfBoundsException e) {
+            logger.warn("Error setting endpoints: {}", e.getMessage());
+            e.printStackTrace();
+
+            // Set defaults to avoid leaving them null
+            start = new CanvasPoint(0, 0);
+            end = new CanvasPoint(0, 0);
+        }
+    }
+
+    private CanvasPoint[] getStartAndEndPoints(Path2D.Double curve) {
+        PathIterator iterator = curve.getPathIterator(null);
+        double[] coords = new double[6];
+        CanvasPoint begin = null;
+        CanvasPoint finish = null;
+        CanvasPoint currentSubpathStart = null;
+
+        while (!iterator.isDone()) {
+            int operation = iterator.currentSegment(coords);
+            switch (operation) {
+                case PathIterator.SEG_MOVETO -> {
+                    if (begin == null) {
+                        begin = new CanvasPoint(coords[0], coords[1]);
+                    }
+                    currentSubpathStart = new CanvasPoint(coords[0], coords[1]);
+                    finish = currentSubpathStart;
+                }
+                case PathIterator.SEG_LINETO ->
+                    finish = new CanvasPoint(coords[0], coords[1]);
+                case PathIterator.SEG_QUADTO ->
+                    finish = new CanvasPoint(coords[2], coords[3]);
+                case PathIterator.SEG_CUBICTO ->
+                    finish = new CanvasPoint(coords[4], coords[5]);
+                case PathIterator.SEG_CLOSE -> {
+                    // Path closes back to the start of current subpath
+                    // finish remains at the last drawn point before closing
+                }
+            }
+            iterator.next();
+        }
+        return new CanvasPoint[] { begin, finish };
     }
 
     /**
@@ -85,7 +154,7 @@ public class Edge extends Figure {
     public void setPath() {
         this.path = pathfactory.createPath(this);
         switch (this.type) {
-            case POLYGON -> this.setClosed(true);
+            case POLYGON, VECTOR -> this.setClosed(true);
             default -> this.setClosed(false);
         }
     }
@@ -172,6 +241,25 @@ public class Edge extends Figure {
             center = new CanvasPoint(bound.getCenterX(), bound.getCenterY());
         }
         return center;
+    }
+
+    /**
+     * Translate the figure
+     * 
+     * @param xinc  x increment
+     * @param yinc  y increment
+     */
+    @Override
+    public void moveTo(double xinc, double yinc) {
+        super.moveTo(xinc, yinc);
+        if (this.type == FigureType.VECTOR) {
+            setPath(this.translatePath(getPath(), xinc, yinc));
+        }
+    }
+
+    private Path2D.Double translatePath(Path2D.Double path, double xinc, double yinc) {
+        AffineTransform transform = AffineTransform.getTranslateInstance(xinc, yinc);
+        return (Path2D.Double) path.createTransformedShape(transform);
     }
 
     /**
