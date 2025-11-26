@@ -221,9 +221,18 @@ public class Figure implements DrawItem, Serializable {
     /**
      * Set the path from a List of points
      */
-    @Transient
     public void setPath() {
         this.path = pathfactory.createPath(this);
+        this.setClosed(true);
+    }
+
+    /**
+     * Set the path from a precomputed path
+     * 
+     * @param path 
+     */
+    public void setPath(Path2D.Double path) {
+        this.path = path;
         this.setClosed(true);
     }
 
@@ -232,7 +241,6 @@ public class Figure implements DrawItem, Serializable {
      * 
      * @return path the {@link java.awt.geom.Path2D.Double}
      */
-    @Transient
     public Path2D.Double getPath() {
         return this.path;
     }
@@ -547,7 +555,7 @@ public class Figure implements DrawItem, Serializable {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         switch (this.type) {
-            case LINE, SKETCH, POLYGON -> {
+            case LINE, SKETCH, POLYGON, VECTOR -> {
                 // end points marked
                 anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
                 anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
@@ -1029,6 +1037,7 @@ public class Figure implements DrawItem, Serializable {
 
         // deserialise Stroke
         this.setStroke(readStroke(in));
+        this.setPath(readPath(in));
         this.pointfactory = new FigurePointFactory();
         this.pathfactory = new FigurePathFactory();
     }
@@ -1041,6 +1050,7 @@ public class Figure implements DrawItem, Serializable {
         out.writeObject(java.awt.Color.class);
         out.writeObject(fxToAwt(getFillColor()));
         writeStroke(this.getStroke(), out);
+        writePath(this.getPath(), out);
     }
 
     public static Stroke readStroke(ObjectInputStream stream)
@@ -1085,6 +1095,83 @@ public class Figure implements DrawItem, Serializable {
         } else {
             stream.writeBoolean(true);
         }
+    }
+
+    /**
+     * De-serialise the path property
+     * 
+     * @param stream the input stream
+     * @return {@link java.awt.geom.Path2D.Double}
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static Path2D.Double readPath(ObjectInputStream stream)
+        throws IOException, ClassNotFoundException {
+        Path2D.Double path = new Path2D.Double();
+        boolean isNull = stream.readBoolean();
+        if (!isNull) {
+            double[][] pathData = (double[][]) stream.readObject();
+            for (double[] segment : pathData) {
+                int segmentType = (int) segment[0];
+                switch (segmentType) {
+                    case 0 -> // SEG_MOVETO
+                        path.moveTo(segment[1], segment[2]);
+                    case 1 -> // SEG_LINETO
+                        path.lineTo(segment[1], segment[2]);
+                    case 2 -> // SEG_QUADTO
+                        path.quadTo(segment[1], segment[2], segment[3], segment[4]);
+                    case 3 -> // SEG_CUBICTO
+                        path.curveTo(segment[1], segment[2], segment[3], segment[4], segment[5], segment[6]);
+                    case 4 -> // SEG_CLOSE
+                        path.closePath();
+                }
+            }
+        }
+
+        return path;
+    }
+
+    /**
+     * Serialise the path property
+     * 
+     * @param path the {@link java.awt.geom.Path2D.Double}
+     * @param stream an output stream
+     * @throws IOException
+     */
+    public static void writePath(Path2D.Double path,
+        ObjectOutputStream stream) throws IOException {
+        if (path != null) {
+            stream.writeBoolean(false);
+            stream.writeObject(getPathData(path));
+        } else {
+            stream.writeBoolean(true);
+        }
+    }
+
+    private static double[][] getPathData(Path2D.Double path) {
+        java.util.List<double[]> pathData = new java.util.ArrayList<>();
+        double[] coords = new double[6];
+        java.awt.geom.PathIterator iterator = path.getPathIterator(null);
+
+        while (!iterator.isDone()) {
+            int segmentType = iterator.currentSegment(coords);
+
+            switch (segmentType) {
+                case java.awt.geom.PathIterator.SEG_MOVETO ->
+                    pathData.add(new double[] { 0, coords[0], coords[1] });
+                case java.awt.geom.PathIterator.SEG_LINETO ->
+                    pathData.add(new double[] { 1, coords[0], coords[1] });
+                case java.awt.geom.PathIterator.SEG_QUADTO ->
+                    pathData.add(new double[] { 2, coords[0], coords[1], coords[2], coords[3] });
+                case java.awt.geom.PathIterator.SEG_CUBICTO ->
+                    pathData.add(new double[] { 3, coords[0], coords[1], coords[2], coords[3], coords[4], coords[5] });
+                case java.awt.geom.PathIterator.SEG_CLOSE ->
+                    pathData.add(new double[] { 4 });
+            }
+            iterator.next();
+        }
+
+        return pathData.toArray(double[][]::new);
     }
 
 }
