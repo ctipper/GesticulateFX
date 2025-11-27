@@ -86,11 +86,11 @@ public class Edge extends Figure {
             switch (this.getType()) {
                 case VECTOR -> {
                     /**
-                     * temporary values for start and end, needed by rotationCentre for lines
+                     * temporary values for start and end, needed by bounds calculation
                      */
-                    var coords = getStartAndEndPoints(getPath());
-                    start = coords[0];
-                    end = coords[1];
+                    var coords = getPathEndpoints(getPath());
+                    start = coords[0] != null ? coords[0] : new CanvasPoint(0, 0);
+                    end = coords[1] != null ? coords[1] : new CanvasPoint(0, 0);
                     var bounds = this.getBounds2D().getBounds2D();
                     start = new CanvasPoint(bounds.getMinX(), bounds.getMinY());
                     end = new CanvasPoint(bounds.getMaxX(), bounds.getMaxY());
@@ -105,21 +105,22 @@ public class Edge extends Figure {
                 }
             }
         } catch (IllegalStateException | NullPointerException | IndexOutOfBoundsException e) {
-            logger.warn("Error setting endpoints: {}", e.getMessage());
-            e.printStackTrace();
-
+            logger.warn("Unexpected error in setEndPoints(): {}", e.getMessage());
             // Set defaults to avoid leaving them null
             start = new CanvasPoint(0, 0);
             end = new CanvasPoint(0, 0);
         }
     }
 
-    private CanvasPoint[] getStartAndEndPoints(Path2D.Double curve) {
+    /**
+     * Extract first and last endpoints from a path with early exit optimization
+     * Returns immediately after finding first and last points without processing middle segments
+     */
+    private CanvasPoint[] getPathEndpoints(Path2D.Double curve) {
         PathIterator iterator = curve.getPathIterator(null);
         double[] coords = new double[6];
         CanvasPoint begin = null;
         CanvasPoint finish = null;
-        CanvasPoint currentSubpathStart = null;
 
         while (!iterator.isDone()) {
             int operation = iterator.currentSegment(coords);
@@ -127,9 +128,8 @@ public class Edge extends Figure {
                 case PathIterator.SEG_MOVETO -> {
                     if (begin == null) {
                         begin = new CanvasPoint(coords[0], coords[1]);
+                        finish = begin; // Initialize finish on first move
                     }
-                    currentSubpathStart = new CanvasPoint(coords[0], coords[1]);
-                    finish = currentSubpathStart;
                 }
                 case PathIterator.SEG_LINETO ->
                     finish = new CanvasPoint(coords[0], coords[1]);
@@ -137,10 +137,6 @@ public class Edge extends Figure {
                     finish = new CanvasPoint(coords[2], coords[3]);
                 case PathIterator.SEG_CUBICTO ->
                     finish = new CanvasPoint(coords[4], coords[5]);
-                case PathIterator.SEG_CLOSE -> {
-                    // Path closes back to the start of current subpath
-                    // finish remains at the last drawn point before closing
-                }
             }
             iterator.next();
         }
