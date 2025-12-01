@@ -404,9 +404,7 @@ public class Figure implements DrawItem, Serializable {
      * @return 2D bounding box for figure
      */
     protected Rectangle2D getBounds2D() {
-        java.awt.Shape area = this.bounds();
-        Rectangle2D bound = area.getBounds2D();
-        return bound;
+        return this.bounds().getBounds2D();
     }
 
     /**
@@ -416,11 +414,7 @@ public class Figure implements DrawItem, Serializable {
      */
     @Override
     public java.awt.Shape bounds() {
-        // Get transformed path
-        java.awt.geom.AffineTransform transform = this.getTransform();
-        Path2D.Double p = (Path2D.Double) this.getPath().clone();
-        p.transform(transform);
-        return p;
+        return this.getTransform().createTransformedShape(this.getPath());
     }
 
     /**

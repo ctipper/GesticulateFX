@@ -91,7 +91,7 @@ public class Edge extends Figure {
                     var coords = getPathEndpoints(getPath());
                     start = coords[0] != null ? coords[0] : new CanvasPoint(0, 0);
                     end = coords[1] != null ? coords[1] : new CanvasPoint(0, 0);
-                    var bounds = this.getBounds2D().getBounds2D();
+                    var bounds = this.getBounds2D();
                     start = new CanvasPoint(bounds.getMinX(), bounds.getMinY());
                     end = new CanvasPoint(bounds.getMaxX(), bounds.getMaxY());
                 }
@@ -223,20 +223,19 @@ public class Edge extends Figure {
      */
     @Override
     public CanvasPoint rotationCentre() {
-        CanvasPoint center;
+        CanvasPoint centre;
         Path2D.Double pa = (Path2D.Double) this.getPath().clone();
         pa.closePath();
         Area area = new Area(pa);
         Rectangle2D bound = area.getBounds2D();
-        if (bound.getBounds2D().getWidth() < 4.0
-            && bound.getBounds2D().getHeight() < 4.0) {
-            center = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
+        if (bound.getWidth() < 4.0 && bound.getHeight() < 4.0) {
+            centre = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
         } else if (points.size() < 3) {
-            center = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
+            centre = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
         } else {
-            center = new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+            centre = new CanvasPoint(bound.getCenterX(), bound.getCenterY());
         }
-        return center;
+        return centre;
     }
 
     /**
@@ -283,8 +282,8 @@ public class Edge extends Figure {
         } else {
             bounds = super.bounds();
             // to give zero bound shapes extent
-            if (bounds.getBounds2D().getWidth() < 4.0
-                && bounds.getBounds2D().getHeight() < 4.0) {
+            Rectangle2D boundingBox = bounds.getBounds2D();
+            if (boundingBox.getWidth() < 4.0 && boundingBox.getHeight() < 4.0) {
                 rectangle = new Rectangle2D.Double(-2.0, -2.0, 4.0, 4.0);
                 Area area = new Area(rectangle);
                 AffineTransform transform = new AffineTransform();
