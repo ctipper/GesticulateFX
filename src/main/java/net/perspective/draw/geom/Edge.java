@@ -27,7 +27,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -85,13 +84,7 @@ public class Edge extends Figure {
         try {
             switch (this.getType()) {
                 case VECTOR -> {
-                    /**
-                     * temporary values for start and end, needed by bounds calculation
-                     */
-                    var coords = getPathEndpoints(getPath());
-                    start = coords[0] != null ? coords[0] : new CanvasPoint(0, 0);
-                    end = coords[1] != null ? coords[1] : new CanvasPoint(0, 0);
-                    var bounds = this.getBounds2D();
+                    var bounds = this.getPath().getBounds2D();
                     start = new CanvasPoint(bounds.getMinX(), bounds.getMinY());
                     end = new CanvasPoint(bounds.getMaxX(), bounds.getMaxY());
                 }
@@ -110,37 +103,6 @@ public class Edge extends Figure {
             start = new CanvasPoint(0, 0);
             end = new CanvasPoint(0, 0);
         }
-    }
-
-    /**
-     * Extract first and last endpoints from a path with early exit optimization
-     * Returns immediately after finding first and last points without processing middle segments
-     */
-    private CanvasPoint[] getPathEndpoints(Path2D.Double curve) {
-        PathIterator iterator = curve.getPathIterator(null);
-        double[] coords = new double[6];
-        CanvasPoint begin = null;
-        CanvasPoint finish = null;
-
-        while (!iterator.isDone()) {
-            int operation = iterator.currentSegment(coords);
-            switch (operation) {
-                case PathIterator.SEG_MOVETO -> {
-                    if (begin == null) {
-                        begin = new CanvasPoint(coords[0], coords[1]);
-                        finish = begin; // Initialize finish on first move
-                    }
-                }
-                case PathIterator.SEG_LINETO ->
-                    finish = new CanvasPoint(coords[0], coords[1]);
-                case PathIterator.SEG_QUADTO ->
-                    finish = new CanvasPoint(coords[2], coords[3]);
-                case PathIterator.SEG_CUBICTO ->
-                    finish = new CanvasPoint(coords[4], coords[5]);
-            }
-            iterator.next();
-        }
-        return new CanvasPoint[] { begin, finish };
     }
 
     /**
