@@ -6,7 +6,7 @@
  */
 
 /**
- * Copyright (c) 2025 Christopher Tipper
+ * Copyright (c) 2026 Christopher Tipper
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class AboutBox extends Dialog<ButtonType> {
             aboutLabel[2] = new Label("JRE " + System.getProperty("java.runtime.version"));
         }
         aboutLabel[3] = new Label("JFX " + System.getProperty("javafx.version"));
-        aboutLabel[4] = new Label("Copyright © 2025 Christopher Tipper");
+        aboutLabel[4] = new Label("Copyright © 2026 Christopher Tipper");
         aboutLabel[5] = new Label("All rights reserved.");
         aboutLabel[0].setStyle("-fx-font-size: 16px;");
         aboutLabel[1].setStyle("-fx-font-size: 13px;");
