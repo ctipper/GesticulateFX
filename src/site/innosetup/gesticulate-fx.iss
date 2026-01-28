@@ -20,18 +20,24 @@
 #define AppPublisher "e-conomist"
 #define AppExeName "GesticulateFX.exe"
 #define AppURL "https://www.e-conomist.me.uk/"
+
 #ifndef MyAppVersion
   #define FileVerStr GetFileVersion(AppExeName)
   #define AppVerStr FileVerStr
+  #define VersionSuffix ""
 #else
   #define AppVerStr MyAppVersion
   #define FileVerStr StringChange(MyAppVersion, "-SNAPSHOT", "")
+  // Extract the suffix (everything after the hyphen)
+  #if Pos("-", MyAppVersion) > 0
+    #define VersionSuffix Copy(MyAppVersion, Pos("-", MyAppVersion), 99)
+  #else
+    #define VersionSuffix ""
+  #endif
 #endif
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
-; Do not use the same AppId value in installers for other applications.
-; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{99F4279F-E0A4-4D5F-BDE4-668FBEDFE9ED}
 AppName={#AppName}
 AppVersion={#AppVerStr}
@@ -39,7 +45,7 @@ AppVerName={#AppName} {#AppVerStr}
 UninstallDisplayName={#AppName} {#AppVerStr}
 VersionInfoVersion={#FileVerStr}
 VersionInfoTextVersion={#AppVerStr}
-OutputBaseFilename={#AppName}_Setup_{#AppVerStr}
+OutputBaseFilename={#AppName}_Setup_{#FileVerStr}{#VersionSuffix}
 AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
 AppSupportURL={#AppURL}
@@ -51,7 +57,6 @@ Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
 ArchitecturesInstallIn64BitMode=x64
-;SignTool=JSign --name $qGesticulate$q --url $qhttps://www.e-conomist.me.uk/$q $f
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
