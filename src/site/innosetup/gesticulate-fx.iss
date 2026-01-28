@@ -20,15 +20,13 @@
 #define AppPublisher "e-conomist"
 #define AppExeName "GesticulateFX.exe"
 #define AppURL "https://www.e-conomist.me.uk/"
-#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)+1)
 #ifndef MyAppVersion
-#define FileVerStr GetFileVersion(AppExeName)
-#define AppVerStr FileVerStr
+  #define FileVerStr GetFileVersion(AppExeName)
+  #define AppVerStr FileVerStr
+#else
+  #define AppVerStr MyAppVersion
+  #define FileVerStr StringChange(MyAppVersion, "-SNAPSHOT", "")
 #endif
-#ifdef MyAppVersion
-#define FileVerStr StripBuild(MyAppVersion)
-#define AppVerStr MyAppVersion
-#endif   
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.

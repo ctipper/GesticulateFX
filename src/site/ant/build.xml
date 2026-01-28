@@ -222,7 +222,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
          <arg value="--app-version" />
-         <arg value="${version.internal}" />
+         <arg value="${version.public}" />
          <arg value="--icon"/>
          <arg value="${deploy.dir}/windows/${bundle.windows.icon}"/>
          <arg value="--temp" />
