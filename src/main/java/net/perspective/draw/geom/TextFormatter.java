@@ -163,10 +163,11 @@ public class TextFormatter {
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
             Object o = iterator.next();
-            if (o instanceof org.jdom2.Text text1) {
-                cdata += text1.getText();
-            } else if (o instanceof Element element) {
-                cdata += getFlattenedText(element.getContent());
+            switch (o) {
+                case org.jdom2.Text text1 -> cdata += text1.getText();
+                case Element element -> cdata += getFlattenedText(element.getContent());
+                default -> {
+                }
             }
         }
         return cdata;
@@ -347,10 +348,11 @@ public class TextFormatter {
         Iterator iterator = fragment.iterator();
         while (iterator.hasNext()) {
             Object o = iterator.next();
-            if (o instanceof org.jdom2.Text text1) {
-                localoffset += text1.getText().length();
-            } else if (o instanceof Element element) {
-                localoffset += getLocalOffset(element.getContent());
+            switch (o) {
+                case org.jdom2.Text text1 -> localoffset += text1.getText().length();
+                case Element element -> localoffset += getLocalOffset(element.getContent());
+                default -> {
+                }
             }
         }
         return localoffset;

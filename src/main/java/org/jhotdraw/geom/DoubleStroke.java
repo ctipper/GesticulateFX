@@ -372,8 +372,7 @@ public class DoubleStroke implements Stroke, Serializable {
 
         if (stroke != null) {
             stream.writeBoolean(false);
-            if (stroke instanceof BasicStroke) {
-                BasicStroke s = (BasicStroke) stroke;
+            if (stroke instanceof BasicStroke s) {
                 stream.writeObject(BasicStroke.class);
                 stream.writeFloat(s.getLineWidth());
                 stream.writeInt(s.getEndCap());

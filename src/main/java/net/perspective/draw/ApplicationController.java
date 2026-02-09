@@ -1180,12 +1180,12 @@ public class ApplicationController implements Initializable {
      * Set the status text transition
      */
     private void setupStatusTransition() {
-        FadeTransition ft = new FadeTransition(Duration.millis(2000), statusbar);
+        FadeTransition ft = new FadeTransition(Duration.millis(2_000), statusbar);
         ft.setFromValue(1.0);
         ft.setToValue(0.0);
         ft.setCycleCount(1);
         statusTransition = new SequentialTransition(
-            new PauseTransition(Duration.millis(3000)),
+            new PauseTransition(Duration.millis(3_000)),
             ft
         );
     }
@@ -1409,7 +1409,7 @@ public class ApplicationController implements Initializable {
         int g = (int) (c.getGreen() * 255);
         int b = (int) (c.getBlue() * 255);
         int rgb = (r << 16) + (g << 8) + b;
-        if (rgb < 0x808080) {
+        if (rgb < 0x80_8080) {
             /**
              * The colour for dark theme.
              */

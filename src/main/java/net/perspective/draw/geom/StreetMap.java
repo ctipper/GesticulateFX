@@ -482,9 +482,7 @@ public class StreetMap extends Picture {
 
     private Group retrieveAttribution() {
         final Label copyright = new Label(
-                """
-                Map data \u00a9 OpenStreetMap contributors, CC-BY-SA.
-                Imagery  \u00a9 OpenStreetMap.""");
+                "Map data \u00a9 OpenStreetMap contributors, CC-BY-SA.\n" + "Imagery  \u00a9 OpenStreetMap.");
         copyright.getStyleClass().add("copyright");
         copyright.setAlignment(Pos.CENTER);
         copyright.setMaxWidth(Double.MAX_VALUE);

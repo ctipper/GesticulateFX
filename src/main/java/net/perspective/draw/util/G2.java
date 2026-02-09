@@ -120,7 +120,7 @@ public class G2 {
         int g = (int) (c.getGreen() * 255);
         int b = (int) (c.getBlue() * 255);
         int rgb = (r << 16) + (g << 8) + b;
-        if (rgb < 0x808080) {
+        if (rgb < 0x80_8080) {
             /**
              * The colour for minor grid cells.
              */
