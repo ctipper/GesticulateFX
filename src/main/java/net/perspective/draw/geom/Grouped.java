@@ -45,14 +45,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A structure for managing groups of shapes
+ * A structure for managing groups of drawItems
  *
  * @author ctipper
  */
 
 public class Grouped implements DrawItem, Serializable {
 
-    public List<DrawItem> shapes;
+    public List<DrawItem> drawItems;
     private int transparency;
     private boolean isVertical;
     private double angle;
@@ -72,21 +72,21 @@ public class Grouped implements DrawItem, Serializable {
     }
 
     /**
-     * Insert a list of shapes
+     * Insert a list of drawItems
      *
-     * @param shapes the list of {@link net.perspective.draw.geom.DrawItem}
+     * @param drawItems the list of {@link net.perspective.draw.geom.DrawItem}
      */
-    public void setDrawItems(List<DrawItem> shapes) {
-        this.shapes = shapes;
+    public void setDrawItems(List<DrawItem> drawItems) {
+        this.drawItems = drawItems;
     }
 
     /**
-     * Retrieve the list of shapes
+     * Retrieve the list of drawItems
      *
-     * @return shapes the list of {@link net.perspective.draw.geom.DrawItem}
+     * @return drawItems the list of {@link net.perspective.draw.geom.DrawItem}
      */
     public List<DrawItem> getDrawItems() {
-        return shapes;
+        return drawItems;
     }
 
     /**
@@ -95,10 +95,10 @@ public class Grouped implements DrawItem, Serializable {
      * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
     public void addDrawItem(DrawItem shape) {
-        if (shapes == null) {
-            shapes = new ArrayList<>();
+        if (drawItems == null) {
+            drawItems = new ArrayList<>();
         }
-        shapes.add(shape);
+        drawItems.add(shape);
         this.setBounds();
     }
 
@@ -108,9 +108,9 @@ public class Grouped implements DrawItem, Serializable {
      * @param shape the {@link net.perspective.draw.geom.DrawItem}
      */
     public void removeDrawItem(DrawItem shape) {
-        if (shapes != null) {
-            shapes.remove(shape);
-            if (!shapes.isEmpty()) {
+        if (drawItems != null) {
+            drawItems.remove(shape);
+            if (!drawItems.isEmpty()) {
                 this.setBounds();
             }
         }
@@ -123,7 +123,7 @@ public class Grouped implements DrawItem, Serializable {
         CanvasPoint topleft, bottomright;
         List<CanvasPoint> points = new ArrayList<>();
 
-        for (DrawItem shape : shapes) {
+        for (DrawItem shape : drawItems) {
             points.add(shape.getTop()[0]);
             points.add(shape.getBottom()[0]);
             points.add(shape.getUp()[0]);
@@ -374,7 +374,7 @@ public class Grouped implements DrawItem, Serializable {
      */
     @Override
     public void moveTo(double xinc, double yinc) {
-        shapes.stream().forEach((shape) -> {
+        drawItems.stream().forEach((shape) -> {
             shape.moveTo(xinc, yinc);
         });
         this.setBounds();
@@ -388,7 +388,7 @@ public class Grouped implements DrawItem, Serializable {
     @Override
     public Node draw() {
         Group group = new Group();
-        for (DrawItem shape : shapes) {
+        for (DrawItem shape : drawItems) {
             group.getChildren().add(shape.draw());
         }
         CanvasPoint c = this.rotationCentre();
@@ -447,7 +447,7 @@ public class Grouped implements DrawItem, Serializable {
         transform.translate(-start.x, -start.y);
         g2.transform(transform);
 
-        for (DrawItem shape : shapes) {
+        for (DrawItem shape : drawItems) {
             shape.draw(g2);
         }
 
