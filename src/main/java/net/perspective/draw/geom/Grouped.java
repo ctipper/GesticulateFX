@@ -53,6 +53,8 @@ import org.slf4j.LoggerFactory;
 public class Grouped implements DrawItem, Serializable {
 
     public List<DrawItem> drawItems;
+    @Deprecated
+    public List<DrawItem> shapes; // Keep for legacy XML compatibility
     private int transparency;
     private boolean isVertical;
     private double angle;
@@ -89,6 +91,27 @@ public class Grouped implements DrawItem, Serializable {
         return drawItems;
     }
 
+    /**
+     * Legacy shapes setter for backwards compatibility
+     * 
+     * @param shapes the list of {@link net.perspective.draw.geom.DrawItem}
+     * @deprecated
+     */
+    @Deprecated
+    public void setShapes(List<DrawItem> shapes) {
+        this.drawItems = shapes;
+    }
+
+    /**
+     * Sync after deserialisation
+     */
+    public void postDeserialize() {
+        if (shapes != null && !shapes.isEmpty()) {
+            drawItems = shapes;
+            shapes = null;
+        }
+    }
+    
     /**
      * Add a shape to the group
      *

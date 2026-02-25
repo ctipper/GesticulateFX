@@ -197,6 +197,7 @@ public class ReadInFunnel extends Task<Object> {
         }
 
         if (drawing instanceof Grouped grouped) {
+            grouped.postDeserialize();
             Grouped item = new Grouped();
             for (DrawItem shape : grouped.getDrawItems()) {
                 item.addDrawItem(checkDrawings(shape));
