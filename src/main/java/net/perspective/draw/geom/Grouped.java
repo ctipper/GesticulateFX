@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 
 public class Grouped implements DrawItem, Serializable {
 
-    public List<DrawItem> drawItems;
+    private List<DrawItem> drawItems;
     @Deprecated
     public List<DrawItem> shapes; // Keep for legacy XML compatibility
     private int transparency;
@@ -89,17 +89,6 @@ public class Grouped implements DrawItem, Serializable {
      */
     public List<DrawItem> getDrawItems() {
         return drawItems;
-    }
-
-    /**
-     * Legacy shapes setter for backwards compatibility
-     * 
-     * @param shapes the list of {@link net.perspective.draw.geom.DrawItem}
-     * @deprecated
-     */
-    @Deprecated
-    public void setShapes(List<DrawItem> shapes) {
-        this.drawItems = shapes;
     }
 
     /**
