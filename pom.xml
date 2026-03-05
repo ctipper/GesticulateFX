@@ -276,7 +276,6 @@
                     <release>25</release>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <executable>${env.JAVA_HOME}/bin/javac</executable>
                     <compilerArgs>
                         <arg>-Xlint:unchecked</arg>
                         <arg>-proc:full</arg>
