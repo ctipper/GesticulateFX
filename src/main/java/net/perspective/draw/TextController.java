@@ -23,12 +23,14 @@
  */
 package net.perspective.draw;
 
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.Text;
 import net.perspective.draw.text.Editor;
+import net.perspective.draw.text.Styler;
 
 /**
  * 
@@ -44,6 +46,8 @@ public class TextController {
     private final Provider<Editor> plainTextEditorProvider;
     private final Provider<Editor> richTextEditorProvider;
     private Editor editor;
+    private Styler styler;
+    private boolean isRichText;
 
     public static final int FONT_BOLD = 1;
     public static final int FONT_ITALIC = 2;
@@ -75,6 +79,12 @@ public class TextController {
         } else {
             this.editor = plainTextEditorProvider.get();
         }
+        if (editor instanceof Styler styler1) {
+            this.styler = styler1;
+        } else {
+            this.styler = null;
+        }
+        this.isRichText = isRichText;
     }
 
     /**
@@ -179,14 +189,18 @@ public class TextController {
 
     /**
      * Format the selected text
-     * 
-     * see {@link net.perspective.draw.text.RichTextEditor} and 
+     *
+     * See {@link net.perspective.draw.text.RichTextEditor} and
      * {@link net.perspective.draw.text.TextEditor}
-     * 
+     *
      * @param format text format property
      */
     public void formatSelectedText(int format) {
-        this.formatSelected(format);
+        if (styler == null) {
+            this.formatSelected(format);
+        } else {
+            this.formatSelectedRichText(format);
+        }
         viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
@@ -224,6 +238,66 @@ public class TextController {
     }
 
     /**
+     * Format selected text
+     *
+     * See {@link net.perspective.draw.text.RichTextEditor}
+     *
+     * @param format text format property
+     */
+    private void formatSelectedRichText(int format) {
+        if (viewProvider.get().isEditing()) {
+            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
+            editor.editText(item);
+            Set<String> styles = styler.detectStyles();
+            editor.commitText(item);
+            switch (format) {
+                case FONT_BOLD -> {
+                    if (styles.contains("b")) {
+                        editor.editText(item);
+                        styler.removeStyle("b");
+                        editor.commitText(item);
+                        controllerProvider.get().getBoldProperty().setValue(Boolean.FALSE);
+                    } else {
+                        editor.editText(item);
+                        styler.createStyle("b");
+                        editor.commitText(item);
+                        controllerProvider.get().getBoldProperty().setValue(Boolean.TRUE);
+                    }
+                }
+                case FONT_ITALIC -> {
+                    if (styles.contains("i")) {
+                        editor.editText(item);
+                        styler.removeStyle("i");
+                        editor.commitText(item);
+                        controllerProvider.get().getItalicProperty().setValue(Boolean.FALSE);
+                    } else {
+                        editor.editText(item);
+                        styler.createStyle("i");
+                        editor.commitText(item);
+                        controllerProvider.get().getItalicProperty().setValue(Boolean.TRUE);
+                    }
+                }
+                case FONT_UNDERLINED -> {
+                    if (styles.contains("u")) {
+                        editor.editText(item);
+                        styler.removeStyle("u");
+                        editor.commitText(item);
+                        controllerProvider.get().getUnderlinedProperty().setValue(Boolean.FALSE);
+                    } else {
+                        editor.editText(item);
+                        styler.createStyle("u");
+                        editor.commitText(item);
+                        controllerProvider.get().getUnderlinedProperty().setValue(Boolean.TRUE);
+                    }
+                }
+                default -> {
+                }
+            }
+            item.setDimensions();
+        }
+    }
+
+    /**
      * Get the clipboard text
      * 
      * @return the text
@@ -239,6 +313,15 @@ public class TextController {
      */
     public void setClipboard(String str) {
         editor.setClipboard(str);
+    }
+
+    /**
+     * Formatted text is enabled
+     *
+     * @return formatted text is enabled
+     */
+    public boolean isRichText() {
+        return isRichText;
     }
 
 }

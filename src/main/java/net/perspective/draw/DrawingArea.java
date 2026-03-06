@@ -140,7 +140,7 @@ public class DrawingArea {
         canvas = new SubScene(root, width, height);
         canvas.setFill(Color.web(controller.getThemeBackgroundColor()));
         viewProvider.get().setDrawingListener();
-        viewProvider.get().enableRichText(false);
+        viewProvider.get().enableRichText(true);
         this.prepareDrawing();
         this.setDrawType(DrawingType.SKETCH);
         this.arrowtype = ArrowType.NONE;
