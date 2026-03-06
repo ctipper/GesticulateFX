@@ -86,7 +86,7 @@ public class RichTextEditor implements Editor, Styler {
     public void editText(Text item) {
         doc = reader.parse(item.getText());
         coalesced = false;
-        storedMarks = null;
+        // Don't clear storedMarks here - they're meant to persist for next input
     }
 
     /**
@@ -142,27 +142,28 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void pasteText() {
-        // remove highlighted text
-        this.removeText();
-        caretend = caretstart;
-        decoalesceText();
         String clip = this.getClipboard();
-
         // Guard against empty clipboard
         if (clip.isEmpty()) {
             return;
         }
 
-        // Resolve to get marks at the insertion point
-        ResolvedPos $pos = doc.resolve(docPos(caretstart));
-        List<Mark> marks = $pos.marks();
+        // remove highlighted text
+        this.removeText();
+        caretend = caretstart;
+        decoalesceText();
+        // Use stored marks if set, otherwise resolve from position
+        List<Mark> marks = activeMarks();
         Slice slice = new Slice(
             Fragment.from(schema.text(clip, marks)), 0, 0
         );
         doc = doc.replace(docPos(caretstart), docPos(caretstart), slice);
-        caretend = caretstart + clip.length();
-        caretstart = caretend;
-        storedMarks = null; // movement cancels stored marks
+
+        caretstart = caretstart + clip.length();
+        caretend = caretstart;
+
+        // Clear stored marks — they've been consumed
+        storedMarks = null;
     }
 
     /**
@@ -206,14 +207,16 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void insertText(String string) {
-        if (string.isEmpty()) return;
+        if (string.isEmpty()) {
+            return;
+        }
 
+        // remove highlighted text
         this.removeText();
         caretend = caretstart;
         decoalesceText();
-
+        // Use stored marks if set, otherwise resolve from position
         List<Mark> marks = activeMarks();
-
         Slice slice = new Slice(
             Fragment.from(schema.text(string, marks)), 0, 0
         );
