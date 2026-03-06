@@ -177,7 +177,7 @@ public interface DrawAppComponent {
 
     TextController TextController();
 
-    @Named("richtext")
+    @Named("plaintext")
     Editor editor();
 
     ShareUtils shareUtils();

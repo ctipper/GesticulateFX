@@ -41,7 +41,8 @@ public class TextController {
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<CanvasView> viewProvider;
     private final Provider<ApplicationController> controllerProvider;
-    private final Provider<Editor> editorProvider;
+    private final Provider<Editor> plainTextEditorProvider;
+    private final Provider<Editor> richTextEditorProvider;
     private Editor editor;
 
     public static final int FONT_BOLD = 1;
@@ -53,12 +54,14 @@ public class TextController {
      */
     @Inject
     public TextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider, @Named("richtext") Provider<Editor> editorProvider) {
+            Provider<ApplicationController> controllerProvider, @Named("plaintext") Provider<Editor> plainTextEditorProvider,
+            @Named("richtext") Provider<Editor> richTextEditorProvider) {
         this.drawareaProvider = drawareaProvider;
         this.viewProvider = viewProvider;
         this.controllerProvider = controllerProvider;
-        this.editorProvider = editorProvider;
-        this.editor = editorProvider.get();
+        this.plainTextEditorProvider = plainTextEditorProvider;
+        this.richTextEditorProvider = richTextEditorProvider;
+        this.editor = plainTextEditorProvider.get();
     }
 
     /**
@@ -67,9 +70,10 @@ public class TextController {
      * @param isRichText enable formatted text
      */
     public void enableRichText(boolean isRichText) {
-        if (!viewProvider.get().isEditing()) {
-            // XXX currently only one implementation
-            this.editor = editorProvider.get();
+        if (isRichText) {
+            this.editor = richTextEditorProvider.get();
+        } else {
+            this.editor = plainTextEditorProvider.get();
         }
     }
 
