@@ -24,20 +24,17 @@
 package net.perspective.draw.geom;
 
 import java.awt.font.TextAttribute;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.text.AttributedString;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jdom2.Content;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaders;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +46,7 @@ import org.slf4j.LoggerFactory;
 public class TextFormatter {
 
     private String text;
-    private org.jdom2.Document currentdom;
-    private SAXBuilder builder;
+    private Document currentDom;
     private int offset;
 
     private static final Logger logger = LoggerFactory.getLogger(TextFormatter.class.getName());
@@ -61,16 +57,7 @@ public class TextFormatter {
 
     /** Creates a new instance of <code>TextFormatter</code> */
     public TextFormatter() {
-        this.initbuilder();
-        this.currentdom = new org.jdom2.Document();
-    }
-
-    private void initbuilder() {
-        // Build the text field with SAX and Xerces, with no validation.
-        builder = new SAXBuilder(XMLReaders.NONVALIDATING);
-        builder.setReuseParser(true);
-        builder.setIgnoringBoundaryWhitespace(false);
-        builder.setIgnoringElementContentWhitespace(false);
+        this.currentDom = null;
     }
 
     /**
@@ -85,8 +72,11 @@ public class TextFormatter {
         javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow();
         offset = 0;
         // Parse Text font attributes and apply
-        List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(currentdom.getContent(), item);
-        tf.getChildren().addAll(textlist);
+        Element root = currentDom.selectFirst("*");
+        if (root != null) {
+            List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(root, item);
+            tf.getChildren().addAll(textlist);
+        }
         return tf;
     }
 
@@ -104,7 +94,10 @@ public class TextFormatter {
         this.setFontAttributes(item, as);
         offset = 0;
         // Set formatting attributes
-        as = this.setFormattingAttributes(currentdom.getContent(), as);
+        Element root = currentDom.selectFirst("*");
+        if (root != null) {
+            as = this.setFormattingAttributes(root, as);
+        }
         return as;
     }
 
@@ -128,22 +121,15 @@ public class TextFormatter {
      */
     private void readTextItem(Text item) {
         String content = normalizeText(item.getText());
-        /**
-         * A naive implementation would use a StringReader jdom api has a
-         * warning about file encodings use an InputStream
-         *
-         * @see
-         * <a href="https://www.jdom.org/docs/apidocs/org/jdom2/input/SAXBuilder.html#build-java.io.Reader-">https://www.jdom.org/docs/apidocs/</a>
-         */
-        ByteArrayInputStream r = new ByteArrayInputStream(content.getBytes());
         try {
-            currentdom = builder.build(r);
-        } catch (JDOMException e) {
-            logger.warn("Malformed input.");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+            // Use XML parser to preserve all whitespace, matching JDOM's setIgnoringElementContentWhitespace(false)
+            currentDom = Jsoup.parse(content, "", Parser.xmlParser());
+        } catch (Exception e) {
+            logger.warn("Malformed input: " + e.getMessage());
+            currentDom = Jsoup.parse("", "", Parser.xmlParser());
         }
-        text = this.getFlattenedText(currentdom.getContent());
+        Element root = currentDom.selectFirst("*");
+        text = (root != null) ? this.getFlattenedText(root) : "";
     }
 
     private String normalizeText(String content) {
@@ -158,19 +144,16 @@ public class TextFormatter {
         return content;
     }
 
-    private String getFlattenedText(List<Content> fragment) {
-        String cdata = "";
-        Iterator iterator = fragment.iterator();
-        while (iterator.hasNext()) {
-            Object o = iterator.next();
-            switch (o) {
-                case org.jdom2.Text text1 -> cdata += text1.getText();
-                case Element element -> cdata += getFlattenedText(element.getContent());
-                default -> {
-                }
+    private String getFlattenedText(Element element) {
+        StringBuilder cdata = new StringBuilder();
+        for (Node node : element.childNodes()) {
+            switch (node) {
+                case TextNode textNode -> cdata.append(textNode.getWholeText());
+                case Element el -> cdata.append(getFlattenedText(el));
+                default -> {}
             }
         }
-        return cdata;
+        return cdata.toString();
     }
 
     private javafx.scene.text.Text setFxFontAttributes(javafx.scene.text.Text tt, String fontfamily, double size, int fontstyle, javafx.scene.paint.Color color) {
@@ -236,123 +219,68 @@ public class TextFormatter {
         as.addAttribute(TextAttribute.KERNING, TextAttribute.KERNING_ON);
     }
 
-    private List<javafx.scene.text.Text> setFxFormattingAttributes(List<Content> list, Text item) {
-        javafx.scene.text.Text tt = new javafx.scene.text.Text();
+    private List<javafx.scene.text.Text> setFxFormattingAttributes(Element element, Text item) {
+        return setFxFormattingAttributesRecursive(element, item, 0);
+    }
+
+    private List<javafx.scene.text.Text> setFxFormattingAttributesRecursive(Element element, Text item, int fontstyle) {
         List<javafx.scene.text.Text> textlist = new ArrayList<>();
-        int start = 0;
-        int end = getFlattenedText(list).length();
-        int fontstyle = 0;
-        List<Content> newlist = new ArrayList<>();
-        Stack<List<Content>> liststack = new Stack<>();
-        Stack<List<Content>> newstack = new Stack<>();
-        Stack<Integer> indices = new Stack<>();
-        Stack<Element> elstack = new Stack<>();
-        int localoffset = 0;
-        boolean finished = false;
-        int i = 0;
-        Content c = list.get(0);
-        while (!finished) {
-            if (i < list.size()) {
-                c = list.get(i);
-                offset = localoffset;
-                if (c instanceof org.jdom2.Text text1) {
-                    localoffset += text1.getText().length();
-                    if ((offset <= start) && (localoffset >= end)) {
-                        tt = new javafx.scene.text.Text(text1.getText());
-                    } else if ((offset <= start) && (localoffset < end) && (localoffset >= start)) {
-                        tt = new javafx.scene.text.Text(text1.getText());
-                    } else if ((offset <= start) && (localoffset < end) && (localoffset < start)) {
-                        tt = new javafx.scene.text.Text(text1.getText());
-                    } else if ((offset > start) && (localoffset >= end) && (offset >= end)) {
-                        tt = new javafx.scene.text.Text(text1.getText());
-                    } else if ((offset > start) && (localoffset >= end) && (offset < end)) {
-                        tt = new javafx.scene.text.Text(text1.getText());
-                    } else if ((offset > start) && (localoffset < end) && (offset < end)) {
-                        tt = new javafx.scene.text.Text(text1.getText());
-                    }
+        for (Node node : element.childNodes()) {
+            switch (node) {
+                case TextNode textNode -> {
+                    String nodeText = textNode.getWholeText();
+                    javafx.scene.text.Text tt = new javafx.scene.text.Text(nodeText);
                     setFxFontAttributes(tt, item.getFont(), item.getSize(), fontstyle, item.getColor());
                     textlist.add(tt);
-                    i++;
-                } else if (c instanceof Element element) {
-                    Element e = element.clone();
-                    if (e.getName().equalsIgnoreCase("b")) {
-                        fontstyle ^= FONT_BOLD;
-                    } else if (e.getName().equalsIgnoreCase("i")) {
-                        fontstyle ^= FONT_ITALIC;
-                    } else if (e.getName().equalsIgnoreCase("u")) {
-                        fontstyle ^= FONT_UNDERLINED;
-                    }
-                    newlist.add(e);
-                    elstack.push(e);
-                    i++;
                 }
-            } else {
-                if (!liststack.empty()) {
-                    i = indices.pop();
-                    list = liststack.pop();
-                    Element e = elstack.pop();
-                    if (e.getName().equalsIgnoreCase("b")) {
-                        fontstyle ^= FONT_BOLD;
-                    } else if (e.getName().equalsIgnoreCase("i")) {
-                        fontstyle ^= FONT_ITALIC;
-                    } else if (e.getName().equalsIgnoreCase("u")) {
-                        fontstyle ^= FONT_UNDERLINED;
+                case Element el -> {
+                    String tag = el.tagName().toLowerCase();
+                    int newStyle = fontstyle;
+                    switch (tag) {
+                        case "b" -> newStyle ^= FONT_BOLD;
+                        case "i" -> newStyle ^= FONT_ITALIC;
+                        case "u" -> newStyle ^= FONT_UNDERLINED;
+                        default -> {}
                     }
-                    e.setContent(newlist);
-                    newlist = newstack.pop();
-                    continue;
-                } else {
-                    finished = true;
+                    textlist.addAll(setFxFormattingAttributesRecursive(el, item, newStyle));
                 }
-            }
-            if (c instanceof Element element) {
-                indices.push(i);
-                liststack.push(list);
-                newstack.push(newlist);
-                list = element.getContent();
-                newlist = new ArrayList<>();
-                i = 0;
+                default -> {}
             }
         }
         return textlist;
     }
 
-    private AttributedString setFormattingAttributes(List<Content> fragment, AttributedString as) {
-        Iterator iterator = fragment.iterator();
-        while (iterator.hasNext()) {
-            Object element = iterator.next();
-            if (element instanceof org.jdom2.Text text1) {
-                offset += text1.getText().length();
-            } else if (element instanceof Element element1) {
-                if (getLocalOffset(element1.getContent()) != 0) {
-                    if (element1.getName().equalsIgnoreCase("b")) {
-                        as.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, offset,
-                                offset + getLocalOffset(element1.getContent()));
-                    } else if (element1.getName().equalsIgnoreCase("i")) {
-                        as.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, offset,
-                                offset + getLocalOffset(element1.getContent()));
-                    } else if (element1.getName().equalsIgnoreCase("u")) {
-                        as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, offset,
-                                offset + getLocalOffset(element1.getContent()));
+    private AttributedString setFormattingAttributes(Element element, AttributedString as) {
+        for (Node node : element.childNodes()) {
+            switch (node) {
+                case TextNode textNode -> offset += textNode.getWholeText().length();
+                case Element el -> {
+                    int localLen = getLocalOffset(el);
+                    if (localLen != 0) {
+                        String tag = el.tagName().toLowerCase();
+                        if (null != tag) switch (tag) {
+                            case "b" -> as.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, offset, offset + localLen);
+                            case "i" -> as.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, offset, offset + localLen);
+                            case "u" -> as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, offset, offset + localLen);
+                            default -> {}
+                        }
+                        as = setFormattingAttributes(el, as);
                     }
-                    as = setFormattingAttributes(element1.getContent(), as);
                 }
+                default -> {}
             }
         }
         return as;
     }
 
-    private int getLocalOffset(List<Content> fragment) {
+    private int getLocalOffset(Element element) {
         // Calculate length of Element text
         int localoffset = 0;
-        Iterator iterator = fragment.iterator();
-        while (iterator.hasNext()) {
-            Object o = iterator.next();
-            switch (o) {
-                case org.jdom2.Text text1 -> localoffset += text1.getText().length();
-                case Element element -> localoffset += getLocalOffset(element.getContent());
-                default -> {
-                }
+        for (Node node : element.childNodes()) {
+            switch (node) {
+                case TextNode textNode -> localoffset += textNode.getWholeText().length();
+                case Element el -> localoffset += getLocalOffset(el);
+                default -> {}
             }
         }
         return localoffset;
