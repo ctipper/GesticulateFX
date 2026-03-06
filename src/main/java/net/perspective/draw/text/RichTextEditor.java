@@ -124,6 +124,7 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void cutText() {
+        this.setClipboard(doc.content().textBetween(docPos(caretstart), docPos(caretend), null, null));
         this.removeText();
         caretend = caretstart;
     }
@@ -146,6 +147,12 @@ public class RichTextEditor implements Editor, Styler {
         caretend = caretstart;
         decoalesceText();
         String clip = this.getClipboard();
+
+        // Guard against empty clipboard
+        if (clip.isEmpty()) {
+            return;
+        }
+
         // Resolve to get marks at the insertion point
         ResolvedPos $pos = doc.resolve(docPos(caretstart));
         List<Mark> marks = $pos.marks();
