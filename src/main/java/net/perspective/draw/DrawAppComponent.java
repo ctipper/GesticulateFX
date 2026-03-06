@@ -23,6 +23,7 @@
  */
 package net.perspective.draw;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import dagger.Component;
 import net.perspective.draw.event.DrawAreaListener;
@@ -176,6 +177,7 @@ public interface DrawAppComponent {
 
     TextController TextController();
 
+    @Named("richtext")
     Editor editor();
 
     ShareUtils shareUtils();

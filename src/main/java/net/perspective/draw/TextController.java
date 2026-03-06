@@ -24,6 +24,7 @@
 package net.perspective.draw;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import net.perspective.draw.geom.Text;
@@ -52,7 +53,7 @@ public class TextController {
      */
     @Inject
     public TextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider, Provider<Editor> editorProvider) {
+            Provider<ApplicationController> controllerProvider, @Named("richtext") Provider<Editor> editorProvider) {
         this.drawareaProvider = drawareaProvider;
         this.viewProvider = viewProvider;
         this.controllerProvider = controllerProvider;
