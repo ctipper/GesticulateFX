@@ -23,6 +23,7 @@
  */
 package net.perspective.draw;
 
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import dagger.Module;
@@ -48,6 +49,8 @@ import net.perspective.draw.event.keyboard.TextKeyHandler;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.text.Editor;
+import net.perspective.draw.text.RichTextEditor;
+import net.perspective.draw.text.TextEditor;
 import net.perspective.draw.util.G2;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
@@ -247,7 +250,7 @@ public class DrawAppModule {
     @Provides
     @Singleton
     TextController provideTextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider, Provider<Editor> editorProvider) {
+            Provider<ApplicationController> controllerProvider, @Named("richtext") Provider<Editor> editorProvider) {
         return new TextController(drawareaProvider, viewProvider, controllerProvider, editorProvider);
     }
 
@@ -320,6 +323,26 @@ public class DrawAppModule {
     @Provides
     StreetMap provideStreetMap(DrawingArea drawarea, CanvasView view) {
         return new StreetMap(drawarea, view);
+    }
+
+    @Provides
+    @Singleton
+    Editor provideDefaultEditor(@Named("plaintext") Editor plainTextEditor) {
+        return plainTextEditor;
+    }
+
+    @Provides
+    @Singleton
+    @Named("plaintext")
+    Editor providePlainTextEditor() {
+        return new TextEditor();
+    }
+
+    @Provides
+    @Singleton
+    @Named("richtext")
+    Editor provideRichTextEditor() {
+        return new RichTextEditor();
     }
 
 }

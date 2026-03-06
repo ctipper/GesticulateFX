@@ -150,6 +150,15 @@
             <version>2.0.6.1</version>
         </dependency>
 
+        <!-- html -->
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.22.1</version>
+            <scope>compile</scope>
+        </dependency>
+    
         <!-- gluon maps -->
 
         <dependency>

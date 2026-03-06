@@ -1,7 +1,7 @@
-/**
- * DrawAppBindingModule.java
+/*
+ * Styler.java
  * 
- * Created on 25 Sept 2025 15:22:47
+ * Created on Jul 17, 2013 3:00:59 PM
  * 
  */
 
@@ -21,24 +21,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.perspective.draw;
+package net.perspective.draw.text;
 
-import javax.inject.Singleton;
-import dagger.Binds;
-import dagger.Module;
-import net.perspective.draw.geom.FigureFactory;
-import net.perspective.draw.geom.FigureFactoryImpl;
+import java.util.Set;
 
 /**
- *
+ * 
  * @author ctipper
  */
 
-@Module
-public abstract class DrawAppBindingModule {
+public interface Styler {
 
-    @Binds
-    @Singleton
-    abstract FigureFactory bindFigureFactory(FigureFactoryImpl impl);
+    /**
+     * return a list of styles at cursor
+     * 
+     * @return the list of styles in fragment
+     */
+    Set<String> detectStyles();
+
+    /**
+     * insert style between carets
+     * 
+     * @param style the style
+     */
+    void createStyle(String style);
+
+    /**
+     * remove the style between carets
+     * 
+     * @param style the style
+     */
+    void removeStyle(String style);
 
 }
