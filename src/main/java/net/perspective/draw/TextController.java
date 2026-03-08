@@ -196,40 +196,43 @@ public class TextController {
      * @param format text format property
      */
     public void formatSelectedText(int format) {
-        if (styler == null) {
-            this.formatSelected(format);
-        } else {
-            this.formatSelectedRichText(format);
-        }
+        this.formatSelected(format);
+        this.formatSelectedRichText(format);
         viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
     /**
      * Format selected text item
      * 
-     * @param format  text formate property
+     * @param format text format property
      */
     private void formatSelected(int format) {
         switch (format) {
             case FONT_BOLD -> {
                 if ((drawareaProvider.get().getFontStyle() & FONT_BOLD) == FONT_BOLD) {
                     controllerProvider.get().getBoldProperty().setValue(Boolean.FALSE);
+                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ FONT_BOLD);
                 } else {
                     controllerProvider.get().getBoldProperty().setValue(Boolean.TRUE);
+                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | FONT_BOLD);
                 }
             }
             case FONT_ITALIC -> {
                 if ((drawareaProvider.get().getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
                     controllerProvider.get().getItalicProperty().setValue(Boolean.FALSE);
+                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ FONT_ITALIC);
                 } else {
                     controllerProvider.get().getItalicProperty().setValue(Boolean.TRUE);
+                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | FONT_ITALIC);
                 }
             }
             case FONT_UNDERLINED -> {
                 if ((drawareaProvider.get().getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
                     controllerProvider.get().getUnderlinedProperty().setValue(Boolean.FALSE);
+                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ FONT_UNDERLINED);
                 } else {
                     controllerProvider.get().getUnderlinedProperty().setValue(Boolean.TRUE);
+                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | FONT_UNDERLINED);
                 }
             }
             default -> {
