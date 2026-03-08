@@ -202,32 +202,17 @@ public class DrawingArea {
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_BOLD);
-            } else {
-                this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_BOLD);
-            }
-            textControllerProvider.get().formatSelectedText(TextFormatter.FONT_BOLD);
+            textControllerProvider.get().formatSelectedText(newValue, TextFormatter.FONT_BOLD);
             viewProvider.get().updateSelectedItem();
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_ITALIC);
-            } else {
-                this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_ITALIC);
-            }
-            textControllerProvider.get().formatSelectedText(TextFormatter.FONT_ITALIC);
+            textControllerProvider.get().formatSelectedText(newValue, TextFormatter.FONT_ITALIC);
             viewProvider.get().updateSelectedItem();
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getUnderlinedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (newValue) {
-                this.updateFontStyle(this.getFontStyle() | TextFormatter.FONT_UNDERLINED);
-            } else {
-                this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_UNDERLINED);
-            }
-            textControllerProvider.get().formatSelectedText(TextFormatter.FONT_UNDERLINED);
+            textControllerProvider.get().formatSelectedText(newValue, TextFormatter.FONT_UNDERLINED);
             viewProvider.get().updateSelectedItem();
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });

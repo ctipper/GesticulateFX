@@ -90,19 +90,22 @@ public class TextKeyHandler implements KeyHandler {
                     case B -> {
                         // Bold
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            textControllerProvider.get().formatSelectedText(TextController.FONT_BOLD);
+                            boolean apply = (drawarea.getFontStyle() & TextController.FONT_BOLD) == TextController.FONT_BOLD;
+                            textControllerProvider.get().formatSelectedText(apply, TextController.FONT_BOLD);
                         }
                     }
                     case I -> {
                         // Italic
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            textControllerProvider.get().formatSelectedText(TextController.FONT_ITALIC);
+                            boolean apply = (drawarea.getFontStyle() & TextController.FONT_ITALIC) == TextController.FONT_ITALIC;
+                            textControllerProvider.get().formatSelectedText(apply, TextController.FONT_ITALIC);
                         }
                     }
                     case U -> {
                         // Underline
                         if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
-                            textControllerProvider.get().formatSelectedText(TextController.FONT_UNDERLINED);
+                            boolean apply = (drawarea.getFontStyle() & TextController.FONT_UNDERLINED) == TextController.FONT_UNDERLINED;
+                            textControllerProvider.get().formatSelectedText(apply, TextController.FONT_UNDERLINED);
                         }
                     }
                     case X -> {
