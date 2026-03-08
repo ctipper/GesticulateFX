@@ -193,8 +193,15 @@ public class TextController {
      *
      * @param format text format property
      */
-    public void formatSelectedText(int format) {
-        this.formatSelectedRichText(format);
+    public void formatSelectedText(boolean apply, int format) {
+        if (apply) {
+            drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | format);
+        } else {
+            drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ format);
+        }
+        if (isRichText()) {
+            this.formatSelectedRichText(format);
+        }
         viewProvider.get().moveSelection(viewProvider.get().getSelected());
     }
 
