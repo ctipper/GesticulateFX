@@ -73,6 +73,7 @@ public class DrawingArea {
 
     private final Provider<CanvasView> viewProvider;
     private final ApplicationController controller;
+    @Inject Provider<TextController> textControllerProvider;
     @Inject DrawAreaListener listener;
     @Inject KeyListener keylistener;
     @Inject CanvasTransferHandler transferhandler;
@@ -206,6 +207,7 @@ public class DrawingArea {
             } else {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_BOLD);
             }
+            textControllerProvider.get().formatSelectedText(TextFormatter.FONT_BOLD);
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -214,6 +216,7 @@ public class DrawingArea {
             } else {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_ITALIC);
             }
+            textControllerProvider.get().formatSelectedText(TextFormatter.FONT_ITALIC);
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
         controller.getUnderlinedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -222,6 +225,7 @@ public class DrawingArea {
             } else {
                 this.updateFontStyle(this.getFontStyle() ^ TextFormatter.FONT_UNDERLINED);
             }
+            textControllerProvider.get().formatSelectedText(TextFormatter.FONT_UNDERLINED);
             viewProvider.get().moveSelection(viewProvider.get().getSelected());
         });
     }

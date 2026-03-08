@@ -250,9 +250,9 @@ public class DrawAppModule {
     @Provides
     @Singleton
     TextController provideTextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider, @Named("plaintext") Provider<Editor> plainTextEditorProvider,
+            @Named("plaintext") Provider<Editor> plainTextEditorProvider,
             @Named("richtext") Provider<Editor> richTextEditorProvider) {
-        return new TextController(drawareaProvider, viewProvider, controllerProvider, plainTextEditorProvider, richTextEditorProvider);
+        return new TextController(drawareaProvider, viewProvider, plainTextEditorProvider, richTextEditorProvider);
     }
 
     @Provides
