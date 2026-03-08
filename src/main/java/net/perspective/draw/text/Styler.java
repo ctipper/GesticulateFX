@@ -48,7 +48,7 @@ public interface Styler {
 
     /**
      * remove the style between carets
-     * 
+     *
      * @param style the style
      */
     void removeStyle(String style);

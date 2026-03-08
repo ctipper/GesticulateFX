@@ -42,7 +42,6 @@ public class TextController {
 
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<CanvasView> viewProvider;
-    private final Provider<ApplicationController> controllerProvider;
     private final Provider<Editor> plainTextEditorProvider;
     private final Provider<Editor> richTextEditorProvider;
     private Editor editor;
@@ -58,11 +57,10 @@ public class TextController {
      */
     @Inject
     public TextController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider,
-            Provider<ApplicationController> controllerProvider, @Named("plaintext") Provider<Editor> plainTextEditorProvider,
+            @Named("plaintext") Provider<Editor> plainTextEditorProvider,
             @Named("richtext") Provider<Editor> richTextEditorProvider) {
         this.drawareaProvider = drawareaProvider;
         this.viewProvider = viewProvider;
-        this.controllerProvider = controllerProvider;
         this.plainTextEditorProvider = plainTextEditorProvider;
         this.richTextEditorProvider = richTextEditorProvider;
         this.editor = plainTextEditorProvider.get();
@@ -196,48 +194,8 @@ public class TextController {
      * @param format text format property
      */
     public void formatSelectedText(int format) {
-        this.formatSelected(format);
         this.formatSelectedRichText(format);
         viewProvider.get().moveSelection(viewProvider.get().getSelected());
-    }
-
-    /**
-     * Format selected text item
-     * 
-     * @param format text format property
-     */
-    private void formatSelected(int format) {
-        switch (format) {
-            case FONT_BOLD -> {
-                if ((drawareaProvider.get().getFontStyle() & FONT_BOLD) == FONT_BOLD) {
-                    controllerProvider.get().getBoldProperty().setValue(Boolean.FALSE);
-                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ FONT_BOLD);
-                } else {
-                    controllerProvider.get().getBoldProperty().setValue(Boolean.TRUE);
-                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | FONT_BOLD);
-                }
-            }
-            case FONT_ITALIC -> {
-                if ((drawareaProvider.get().getFontStyle() & FONT_ITALIC) == FONT_ITALIC) {
-                    controllerProvider.get().getItalicProperty().setValue(Boolean.FALSE);
-                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ FONT_ITALIC);
-                } else {
-                    controllerProvider.get().getItalicProperty().setValue(Boolean.TRUE);
-                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | FONT_ITALIC);
-                }
-            }
-            case FONT_UNDERLINED -> {
-                if ((drawareaProvider.get().getFontStyle() & FONT_UNDERLINED) == FONT_UNDERLINED) {
-                    controllerProvider.get().getUnderlinedProperty().setValue(Boolean.FALSE);
-                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() ^ FONT_UNDERLINED);
-                } else {
-                    controllerProvider.get().getUnderlinedProperty().setValue(Boolean.TRUE);
-                    drawareaProvider.get().updateFontStyle(drawareaProvider.get().getFontStyle() | FONT_UNDERLINED);
-                }
-            }
-            default -> {
-            }
-        }
     }
 
     /**
@@ -252,50 +210,32 @@ public class TextController {
             Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             editor.editText(item);
             Set<String> styles = styler.detectStyles();
-            editor.commitText(item);
             switch (format) {
                 case FONT_BOLD -> {
                     if (styles.contains("b")) {
-                        editor.editText(item);
                         styler.removeStyle("b");
-                        editor.commitText(item);
-                        controllerProvider.get().getBoldProperty().setValue(Boolean.FALSE);
                     } else {
-                        editor.editText(item);
                         styler.createStyle("b");
-                        editor.commitText(item);
-                        controllerProvider.get().getBoldProperty().setValue(Boolean.TRUE);
                     }
                 }
                 case FONT_ITALIC -> {
                     if (styles.contains("i")) {
-                        editor.editText(item);
                         styler.removeStyle("i");
-                        editor.commitText(item);
-                        controllerProvider.get().getItalicProperty().setValue(Boolean.FALSE);
                     } else {
-                        editor.editText(item);
                         styler.createStyle("i");
-                        editor.commitText(item);
-                        controllerProvider.get().getItalicProperty().setValue(Boolean.TRUE);
                     }
                 }
                 case FONT_UNDERLINED -> {
                     if (styles.contains("u")) {
-                        editor.editText(item);
                         styler.removeStyle("u");
-                        editor.commitText(item);
-                        controllerProvider.get().getUnderlinedProperty().setValue(Boolean.FALSE);
                     } else {
-                        editor.editText(item);
                         styler.createStyle("u");
-                        editor.commitText(item);
-                        controllerProvider.get().getUnderlinedProperty().setValue(Boolean.TRUE);
                     }
                 }
                 default -> {
                 }
             }
+            editor.commitText(item);
             item.setDimensions();
         }
     }
