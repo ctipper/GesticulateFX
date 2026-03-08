@@ -390,6 +390,13 @@ public class RichTextEditor implements Editor, Styler {
 
     private List<Mark> storedMarks = null; // null means "use marks from position"
 
+    /**
+     * Clear the stored marks
+     */
+    public void clearStoredMarks() {
+        storedMarks = null;
+    }
+
     private List<Mark> activeMarks() {
         if (storedMarks != null) return storedMarks;
         ResolvedPos $pos = doc.resolve(docPos(caretstart));
