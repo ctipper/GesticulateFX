@@ -209,6 +209,7 @@ public class TextController {
         if (viewProvider.get().isEditing()) {
             Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
             editor.editText(item);
+            styler.clearStoredMarks();
             Set<String> styles = styler.detectStyles();
             switch (format) {
                 case FONT_BOLD -> {

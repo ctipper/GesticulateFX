@@ -53,4 +53,9 @@ public interface Styler {
      */
     void removeStyle(String style);
 
+    /**
+     * Clear the stored marks
+     */
+    void clearStoredMarks();
+
 }
