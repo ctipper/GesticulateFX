@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class TextFormatter {
 
     private String text;
-    private Document currentDom;
+    private Document currentdom;
     private int offset;
 
     private static final Logger logger = LoggerFactory.getLogger(TextFormatter.class.getName());
@@ -57,7 +57,7 @@ public class TextFormatter {
 
     /** Creates a new instance of <code>TextFormatter</code> */
     public TextFormatter() {
-        this.currentDom = null;
+        this.currentdom = null;
     }
 
     /**
@@ -72,9 +72,8 @@ public class TextFormatter {
         javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow();
         offset = 0;
         // Parse Text font attributes and apply
-        Element root = currentDom.selectFirst("*");
-        if (root != null) {
-            List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(root, item);
+        for (Element child : currentdom.children()) {
+            List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(child, item);
             tf.getChildren().addAll(textlist);
         }
         return tf;
@@ -94,9 +93,8 @@ public class TextFormatter {
         this.setFontAttributes(item, as);
         offset = 0;
         // Set formatting attributes
-        Element root = currentDom.selectFirst("*");
-        if (root != null) {
-            as = this.setFormattingAttributes(root, as);
+        for (Element child : currentdom.children()) {
+            as = this.setFormattingAttributes(child, as);
         }
         return as;
     }
@@ -119,23 +117,18 @@ public class TextFormatter {
      *
      * @param item A {@link net.perspective.draw.geom.Text} item
      */
-    private void readTextItem(Text item) {
+    public void readTextItem(Text item) {
         String content = normalizeText(item.getText());
-        try {
-            // Use XML parser to preserve all whitespace, matching JDOM's setIgnoringElementContentWhitespace(false)
-            currentDom = Jsoup.parse(content, "", Parser.xmlParser());
-        } catch (Exception e) {
-            logger.warn("Malformed input: " + e.getMessage());
-            currentDom = Jsoup.parse("", "", Parser.xmlParser());
-        }
-        Element root = currentDom.selectFirst("*");
-        text = (root != null) ? this.getFlattenedText(root) : "";
+        currentdom = Jsoup.parse(content, "", Parser.xmlParser());
+        text = getFlattenedText(currentdom);
     }
 
     private String normalizeText(String content) {
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(content);
         if (!matcher.find()) {
+            // Decode any pre-existing entities before re-escaping
+            content = Parser.unescapeEntities(content, false);
             content = content.replaceAll("&", "&amp;");
             content = content.replaceAll("<", "&lt;");
             content = content.replaceAll(">", "&gt;");
@@ -144,16 +137,8 @@ public class TextFormatter {
         return content;
     }
 
-    private String getFlattenedText(Element element) {
-        StringBuilder cdata = new StringBuilder();
-        for (Node node : element.childNodes()) {
-            switch (node) {
-                case TextNode textNode -> cdata.append(textNode.getWholeText());
-                case Element el -> cdata.append(getFlattenedText(el));
-                default -> {}
-            }
-        }
-        return cdata.toString();
+    private String getFlattenedText(Document doc) {
+        return doc.wholeText();
     }
 
     private javafx.scene.text.Text setFxFontAttributes(javafx.scene.text.Text tt, String fontfamily, double size, int fontstyle, javafx.scene.paint.Color color) {
