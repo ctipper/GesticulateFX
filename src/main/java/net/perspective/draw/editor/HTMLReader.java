@@ -22,7 +22,10 @@ package net.perspective.draw.editor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jsoup.Jsoup;
+import org.jsoup.parser.Parser;
 
 /**
  *
@@ -37,7 +40,8 @@ public class HTMLReader {
         this.schema = schema;
     }
 
-    public Node parse(String html) {
+    public Node parse(String content) {
+        String html = normalizeText(content);
         org.jsoup.nodes.Document jsoupDoc = Jsoup.parseBodyFragment(html);
         List<Node> paragraphs = new ArrayList<>();
 
@@ -98,6 +102,20 @@ public class HTMLReader {
             case "u" -> schema.markType("u");
             default -> null;
         };
+    }
+
+    private String normalizeText(String content) {
+        Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
+        Matcher matcher = parpattern.matcher(content);
+        if (!matcher.find()) {
+            // Decode any pre-existing entities before re-escaping
+            content = Parser.unescapeEntities(content, false);
+            content = content.replaceAll("&", "&amp;");
+            content = content.replaceAll("<", "&lt;");
+            content = content.replaceAll(">", "&gt;");
+            content = "<p>" + content + "</p>";
+        }
+        return content;
     }
 
 }
