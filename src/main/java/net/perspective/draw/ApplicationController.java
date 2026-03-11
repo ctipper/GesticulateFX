@@ -1329,6 +1329,7 @@ public class ApplicationController implements Initializable {
                     button[j].setAlignment(Pos.CENTER);
                     button[j].setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
                     button[j].setMaxSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+                    button[j].setFocusTraversable(false);
                     button[j].setOnAction(this::insertSVGAction);
                 } catch (IOException ex) {
                     logger.error("Can't fetch resource {}", svgStrings.get(i * 4 + j));
