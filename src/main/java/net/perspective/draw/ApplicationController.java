@@ -999,7 +999,7 @@ public class ApplicationController implements Initializable {
         this.strokeStyleProperty.bindBidirectional(stylecombobox.valueProperty());
         
         // setup stroke color picker
-        Color color = Color.web("#4860E0");
+        Color color = Color.BLACK;
         colorpicker.getStyleClass().add("button");
         colorpicker.setValue(color);
         colorpicker.setStyle(backgroundStyle(color));
