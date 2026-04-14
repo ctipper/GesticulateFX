@@ -619,9 +619,12 @@ public class Figure implements DrawItem, Serializable {
             ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 1.0);
             g2.setComposite(ac);
         }
-        g2.setStroke(getStroke());
-        g2.setColor(fxToAwt(getColor()));
-        g2.draw(getPath());
+        Stroke s = getStroke();
+        if (!(s instanceof BasicStroke bs && bs.getLineWidth() == 0f)) {
+            g2.setStroke(s);
+            g2.setColor(fxToAwt(getColor()));
+            g2.draw(getPath());
+        }
 
         // reset graphics context
         g2.setTransform(defaultTransform);
