@@ -34,5 +34,8 @@ public interface PathFactory {
 
     public Path2D.Double createPath(Figure figure);
 
+    default Path2D.Double createPath(Figure figure, Path2D.Double existing) {
+        return createPath(figure);
+    }
 }
 

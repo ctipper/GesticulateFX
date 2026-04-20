@@ -40,15 +40,21 @@ public class FigurePathFactory implements PathFactory {
 
     @Override
     public Path2D.Double createPath(Figure figure) {
+        return createPath(figure, null);
+    }
+
+    @Override
+    public Path2D.Double createPath(Figure figure, Path2D.Double existing) {
         CanvasPoint p0, p1, p2, p3;
         double x, y, w, h;
         CanvasPoint[] cPoints;
 
-        path = new Path2D.Double();
+        path = (existing != null) ? existing : new Path2D.Double();
         java.util.List<CanvasPoint> points = figure.getPoints();
         switch (figure.getType()) {
             case LINE -> {
                 if (points.size() > 1) {
+                    path.reset();
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
                 } else {
@@ -62,32 +68,20 @@ public class FigurePathFactory implements PathFactory {
                     p1 = points.get(1);
                     p2 = points.get(2);
                     p3 = points.get(3);
-                    // handles cases where clockwise/anti-clockwise points
                     if (p0.x < p2.x && p0.y < p2.y) {
-                        x = p0.x;
-                        y = p0.y;
-                        w = p2.x - x;
-                        h = p2.y - y;
+                        x = p0.x; y = p0.y; w = p2.x - x; h = p2.y - y;
                     } else if (p0.x > p2.x && p0.y > p2.y) {
-                        x = p2.x;
-                        y = p2.y;
-                        w = p0.x - x;
-                        h = p0.y - y;
+                        x = p2.x; y = p2.y; w = p0.x - x; h = p0.y - y;
                     } else if (p3.x > p1.x && p3.y > p1.y) {
-                        x = p1.x;
-                        y = p1.y;
-                        w = p3.x - x;
-                        h = p3.y - y;
+                        x = p1.x; y = p1.y; w = p3.x - x; h = p3.y - y;
                     } else if (p3.x < p1.x && p3.y < p1.y) {
-                        x = p3.x;
-                        y = p3.y;
-                        w = p1.x - x;
-                        h = p1.y - y;
+                        x = p3.x; y = p3.y; w = p1.x - x; h = p1.y - y;
                     }
+                    path.reset();
                     if (figure.getType().equals(FigureType.CIRCLE)) {
-                        path = new Path2D.Double(new Ellipse2D.Double(x, y, w, h));
+                        path.append(new Ellipse2D.Double(x, y, w, h), false);
                     } else {
-                        path = new Path2D.Double(new RoundRectangle2D.Double(x, y, w, h, 5, 5));
+                        path.append(new RoundRectangle2D.Double(x, y, w, h, 5, 5), false);
                     }
                 } else {
                     return null;
@@ -95,6 +89,7 @@ public class FigurePathFactory implements PathFactory {
             }
             case TRIANGLE -> {
                 if (points.size() > 2) {
+                    path.reset();
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
                     path.lineTo(points.get(2).x, points.get(2).y);
@@ -105,6 +100,7 @@ public class FigurePathFactory implements PathFactory {
             }
             case HEXAGON -> {
                 if (points.size() > 5) {
+                    path.reset();
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
                     path.lineTo(points.get(2).x, points.get(2).y);
@@ -118,6 +114,7 @@ public class FigurePathFactory implements PathFactory {
             }
             case PENTAGRAM -> {
                 if (points.size() > 8) {
+                    path.reset();
                     path.moveTo(points.get(0).x, points.get(0).y);
                     path.lineTo(points.get(1).x, points.get(1).y);
                     path.lineTo(points.get(2).x, points.get(2).y);
@@ -136,21 +133,24 @@ public class FigurePathFactory implements PathFactory {
             case SKETCH -> {
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);
-                path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
+                Path2D.Double sketchResult = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
+                path.reset();
+                path.append(sketchResult.getPathIterator(null), false);
             }
             case POLYGON -> {
                 cPoints = new CanvasPoint[points.size()];
                 points.toArray(cPoints);
-                path = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
+                Path2D.Double polygonResult = Bezier.fitBezierPath(cPoints, 0.75).toGeneralPath();
+                path.reset();
+                path.append(polygonResult.getPathIterator(null), false);
                 path.closePath();
             }
             case VECTOR -> {
-                if (figure.getPath() != null) {
-                    path = figure.getPath();
-                }
+                // path is managed externally via setPath(Path2D.Double), return unchanged
             }
             default -> {
-                return null;
+                path.reset();
+                return path;
             }
         }
         return path;

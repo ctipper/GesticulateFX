@@ -106,14 +106,15 @@ public class Edge extends Figure {
     }
 
     /**
-     * Set the path from a List of points
+     * Mark the path dirty so it is rebuilt lazily on next {@link #getPath()} call.
+     * VECTOR paths are managed externally and are never marked dirty here.
      */
     @Override
     public void setPath() {
-        this.path = pathfactory.createPath(this);
-        switch (this.type) {
-            case POLYGON, VECTOR -> this.setClosed(true);
-            default -> this.setClosed(false);
+        switch (this.getType()) {
+            case VECTOR -> this.setClosed(true);
+            case POLYGON -> { this.pathDirty = true; this.setClosed(true); }
+            default -> { this.pathDirty = true; this.setClosed(false); }
         }
     }
 

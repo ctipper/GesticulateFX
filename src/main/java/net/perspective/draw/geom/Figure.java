@@ -61,6 +61,7 @@ public class Figure implements DrawItem, Serializable {
     protected CanvasPoint start, end;       // start, end are _untransformed_ canvas coordinates of TL/BR corners
     protected FigureType type;
     protected transient Path2D.Double path;
+    protected transient boolean pathDirty;
     protected transient PointFactory pointfactory;
     protected transient PathFactory pathfactory;
     protected transient Stroke stroke;
@@ -219,29 +220,34 @@ public class Figure implements DrawItem, Serializable {
     }
 
     /**
-     * Set the path from a List of points
+     * Mark the path dirty so it is rebuilt lazily on next {@link #getPath()} call.
      */
     public void setPath() {
-        this.path = pathfactory.createPath(this);
+        this.pathDirty = true;
         this.setClosed(true);
     }
 
     /**
      * Set the path from a precomputed path
-     * 
-     * @param path 
+     *
+     * @param path
      */
     public void setPath(Path2D.Double path) {
         this.path = path;
+        this.pathDirty = false;
         this.setClosed(true);
     }
 
     /**
-     * Returns the path describing the figure
-     * 
-     * @return path the {@link java.awt.geom.Path2D.Double}
+     * Returns the path describing the figure, rebuilding lazily if geometry changed.
+     *
+     * @return path
      */
     public Path2D.Double getPath() {
+        if (pathDirty) {
+            this.path = pathfactory.createPath(this, this.path);
+            this.pathDirty = false;
+        }
         return this.path;
     }
 
