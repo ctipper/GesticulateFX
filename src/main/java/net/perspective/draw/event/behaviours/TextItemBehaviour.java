@@ -23,9 +23,10 @@
  */
 package net.perspective.draw.event.behaviours;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.text.HitInfo;
+import javafx.scene.Group;
 import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -61,34 +62,30 @@ public class TextItemBehaviour implements ItemBehaviours {
 
     @Override
     public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
-        HitInfo currentHit;
-
         Editor editor = textControllerProvider.get().getEditor();
-        TextFlow layout = drawarea.getTextLayout(item);
+        Group layout = drawarea.getTextLayout(item);
 
-        // currently fix for vertical TextFlow is not known
+        // currently fix for vertical text is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
-        currentHit = layout.getHitInfo(point);
+        int caretIndex = hitTextLayout(layout, point);
 
-        editor.setCaretStart(currentHit.getInsertionIndex());
-        editor.setCaretEnd(editor.getCaretStart());
+        editor.setCaretStart(caretIndex);
+        editor.setCaretEnd(caretIndex);
         view.setTextHighlight(index);
         return true;
     }
 
     @Override
     public void editItem(BehaviourContext context, DrawItem item, int index) {
-        HitInfo currentHit;
+        Group layout = drawarea.getTextLayout(item);
 
-        TextFlow layout = drawarea.getTextLayout(item);
-
-        // currently fix for vertical TextFlow is not known
+        // currently fix for vertical text is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
-        currentHit = layout.getHitInfo(point);
+        int caretIndex = hitTextLayout(layout, point);
 
         view.resetSelected(index);
         view.setEditing(KeyHandlerType.TEXT);
-        textControllerProvider.get().editItem((Text) item, currentHit.getInsertionIndex());
+        textControllerProvider.get().editItem((Text) item, caretIndex);
         view.setTextHighlight(index);
     }
 
@@ -103,21 +100,45 @@ public class TextItemBehaviour implements ItemBehaviours {
 
     @Override
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
-        HitInfo currentHit;
-
         Editor editor = textControllerProvider.get().getEditor();
-        TextFlow layout = drawarea.getTextLayout(item);
+        Group layout = drawarea.getTextLayout(item);
 
-        // currently fix for vertical TextFlow is not known
+        // currently fix for vertical text is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
-        currentHit = layout.getHitInfo(point);
+        int select = hitTextLayout(layout, point);
 
-        int select = currentHit.getInsertionIndex();
         if (select > editor.getCaretStart()) {
             editor.setCaretEnd(select);
         } else if (select < editor.getCaretEnd()) {
             editor.setCaretStart(select);
         }
         view.setTextHighlight(view.getSelected());
+    }
+
+    private int hitTextLayout(Group group, Point2D point) {
+        int offset = 0;
+        var children = group.getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) instanceof TextFlow tf) {
+                Bounds bounds = tf.getBoundsInParent();
+                boolean isLast = (i == children.size() - 1);
+                if (point.getY() <= bounds.getMaxY() || isLast) {
+                    Point2D local = new Point2D(
+                        Math.max(0.0, point.getX() - bounds.getMinX()),
+                        Math.max(0.0, point.getY() - bounds.getMinY())
+                    );
+                    return offset + tf.getHitInfo(local).getInsertionIndex();
+                }
+                offset += paragraphLength(tf);
+            }
+        }
+        return offset;
+    }
+
+    private int paragraphLength(TextFlow tf) {
+        return tf.getChildren().stream()
+            .filter(n -> n instanceof javafx.scene.text.Text)
+            .mapToInt(n -> ((javafx.scene.text.Text) n).getText().length())
+            .sum();
     }
 }

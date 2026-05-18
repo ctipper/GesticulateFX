@@ -24,6 +24,7 @@
 package net.perspective.draw.util;
 
 import java.util.Arrays;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -56,7 +57,13 @@ public class G2 {
     private final Provider<ApplicationController> applicationProvider;
     private final Provider<TextController> textControllerProvider;
 
-    /** Creates a new instance of <code>G2</code> */
+    /** 
+     * Creates a new instance of <code>G2</code>
+     * 
+     * @param drawareaProvider 
+     * @param applicationProvider
+     * @param textControllerProvider 
+     */
     @Inject
     public G2(Provider<DrawingArea> drawareaProvider, 
             Provider<ApplicationController> applicationProvider,
@@ -68,35 +75,64 @@ public class G2 {
 
     /**
      * Highlight the text control or provide a visual cursor
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
-     * @return a {@link javafx.scene.shape.Path}
+     * @return a {@link javafx.scene.Group} of highlight paths, one per paragraph
      */
-    @SuppressWarnings("deprecation") 
-    public Path highlightText(DrawItem item) {
-        Path highlight = new Path();
+    @SuppressWarnings("deprecation")
+    public Group highlightText(DrawItem item) {
+        Group highlightGroup = new Group();
         Editor editor = textControllerProvider.get().getEditor();
-        TextFlow layout = drawareaProvider.get().getTextLayout(item);
-        if (editor.getCaretStart() == editor.getCaretEnd()) {
-            // Retrieve caret path for insertion index.
-            PathElement[] carets = layout.caretShape(editor.getCaretStart(), true);
-            highlight.getElements().addAll(Arrays.asList(carets));
-            highlight.setStroke(Color.BLACK);
-            highlight.setFill(Color.BLACK);
-        } else {
-            PathElement[] path = layout.rangeShape​(editor.getCaretStart(), editor.getCaretEnd());
-            highlight.getElements().addAll(Arrays.asList(path));
-            highlight.setStroke(Color.TRANSPARENT);
-            highlight.setFill(Color.rgb(110, 165, 232, 0.3));
+        Group layout = drawareaProvider.get().getTextLayout(item);
+        int caretStart = editor.getCaretStart();
+        int caretEnd = editor.getCaretEnd();
+        boolean isCaret = (caretStart == caretEnd);
+        int offset = 0;
+        var children = layout.getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) instanceof TextFlow tf) {
+                Bounds bounds = tf.getBoundsInParent();
+                int tfLen = paragraphLength(tf);
+                boolean isLast = (i == children.size() - 1);
+                Path path = new Path();
+                if (isCaret) {
+                    if (caretStart >= offset && (caretStart < offset + tfLen || isLast)) {
+                        PathElement[] carets = tf.getCaretShape(caretStart - offset, true);
+                        path.getElements().addAll(Arrays.asList(carets));
+                        path.setStroke(Color.BLACK);
+                        path.setFill(Color.BLACK);
+                    }
+                } else {
+                    if (caretEnd > offset && caretStart < offset + tfLen) {
+                        int localStart = Math.max(0, caretStart - offset);
+                        int localEnd = Math.min(tfLen, caretEnd - offset);
+                        PathElement[] range = tf.getRangeShape(localStart, localEnd, false);
+                        path.getElements().addAll(Arrays.asList(range));
+                        path.setStroke(Color.TRANSPARENT);
+                        path.setFill(Color.rgb(110, 165, 232, 0.3));
+                    }
+                }
+                if (!path.getElements().isEmpty()) {
+                    path.setStrokeLineJoin(StrokeLineJoin.ROUND);
+                    path.setStrokeLineCap(StrokeLineCap.ROUND);
+                    path.setStrokeWidth(1);
+                    path.getTransforms().add(new Translate(bounds.getMinX(), bounds.getMinY()));
+                    highlightGroup.getChildren().add(path);
+                }
+                offset += tfLen;
+            }
         }
-        highlight.setStrokeLineJoin(StrokeLineJoin.ROUND);
-        highlight.setStrokeLineCap(StrokeLineCap.ROUND);
-        highlight.setStrokeWidth(1);
-        // move highlight origin
         CanvasPoint axis = item.rotationCentre();
-        highlight.getTransforms().add(new Rotate((item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
-        highlight.getTransforms().add(new Translate(axis.x, axis.y));
-        return highlight;
+        highlightGroup.getTransforms().add(new Rotate((item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
+        highlightGroup.getTransforms().add(new Translate(axis.x, axis.y));
+        return highlightGroup;
+    }
+
+    private int paragraphLength(TextFlow tf) {
+        return tf.getChildren().stream()
+            .filter(n -> n instanceof javafx.scene.text.Text)
+            .mapToInt(n -> ((javafx.scene.text.Text) n).getText().length())
+            .sum();
     }
 
     /**

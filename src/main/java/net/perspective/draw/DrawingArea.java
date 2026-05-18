@@ -47,7 +47,6 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextFlow;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -129,6 +128,9 @@ public class DrawingArea {
 
     /**
      * Creates a new instance of <code>DrawingArea</code>
+     * 
+     * @param viewProvider
+     * @param controller
      */
     @Inject
     public DrawingArea(Provider<CanvasView> viewProvider, ApplicationController controller) {
@@ -634,8 +636,8 @@ public class DrawingArea {
      *
      * @return the {@link javafx.scene.text.TextFlow}
      */
-    public TextFlow getTextLayout(DrawItem item) {
-        TextFlow layout = ((Text) item).getLayout();
+    public Group getTextLayout(DrawItem item) {
+        Group layout = ((Text) item).getLayout();
         return layout;
     }
 
