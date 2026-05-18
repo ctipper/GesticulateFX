@@ -38,6 +38,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 #scrollarea {
     -fx-background-color: #3a3a3a;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
 #statusbar {
     -fx-background-color: #1d1d1d;

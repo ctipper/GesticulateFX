@@ -45,6 +45,7 @@ import javafx.application.Platform;
 import javafx.application.Platform.Preferences;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -144,7 +145,8 @@ public class Gesticulate extends Application {
         this.userPrefs = getUserPreferences();
 
         // Initialize the canvas and apply handlers
-        drawareaProvider.get().init(pane.getWidth(), pane.getHeight());
+        Bounds viewport = pane.getViewportBounds();
+        drawareaProvider.get().init(viewport.getWidth(), viewport.getHeight());
         logger.trace("initialized stage");
 
         // set the theme from user preferences
@@ -196,12 +198,9 @@ public class Gesticulate extends Application {
      * @param pane
      */
     public void setOnResize(ScrollPane pane) {
-        pane.heightProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawareaProvider.get().getScene().setHeight((double) new_val);
-            drawareaProvider.get().redrawGrid();
-        });
-        pane.widthProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-            drawareaProvider.get().getScene().setWidth((double) new_val);
+        pane.viewportBoundsProperty().addListener((ObservableValue<? extends Bounds> ov, Bounds old_val, Bounds new_val) -> {
+            drawareaProvider.get().getScene().setWidth(new_val.getWidth());
+            drawareaProvider.get().getScene().setHeight(new_val.getHeight());
             drawareaProvider.get().redrawGrid();
         });
     }
