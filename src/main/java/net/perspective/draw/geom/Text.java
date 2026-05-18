@@ -84,7 +84,7 @@ public class Text implements DrawItem, Serializable {
      * @param y the y position
      */
     public Text(double x, double y) {
-        text = "Please insert text";
+        text = "Please insert text\nAnd here too";
         color = null;
         start = new CanvasPoint(x, y);
         transparency = 0;
@@ -260,7 +260,7 @@ public class Text implements DrawItem, Serializable {
      * Set the width and height of the item in points
      */
     public void setDimensions() {
-        javafx.scene.text.TextFlow layout = this.getLayout();
+        Group layout = this.getLayout();
         end = new CanvasPoint((double) layout.getLayoutBounds().getWidth(),
             (double) layout.getLayoutBounds().getHeight());
     }
@@ -271,20 +271,18 @@ public class Text implements DrawItem, Serializable {
      * @return the {@link javafx.scene.text.TextFlow}
      */
     @Transient
-    public javafx.scene.text.TextFlow getLayout() {
-        javafx.scene.text.TextFlow tf;
+    public Group getLayout() {
+        Group tf;
         // Verify that this is Rich Text
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(text);
         if (matcher.find()) {
             TextFormatter formatter = new TextFormatter();
-            tf = formatter.readFxFormattedText(this);
+            tf = formatter.readFxFormattedParagraph(this);
         } else {
             TextFormatter formatter = new TextFormatter();
-            javafx.scene.text.Text tt = formatter.readFxText(this);
-            tf = new javafx.scene.text.TextFlow(tt);
+            tf = formatter.readFxParagraph(this);
         }
-        tf.autosize();
         return tf;
     }
 
@@ -429,7 +427,7 @@ public class Text implements DrawItem, Serializable {
      */
     @Override
     public Node draw() {
-        javafx.scene.text.TextFlow layout = getLayout();
+        Group layout = getLayout();
         CanvasPoint axis = this.rotationCentre();
         layout.setLayoutX(axis.x);
         layout.setLayoutY(axis.y);

@@ -35,8 +35,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.parser.Parser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javafx.scene.Group;
 
 /**
  *
@@ -48,8 +47,6 @@ public class TextFormatter {
     private String text;
     private Document currentdom;
     private int offset;
-
-    private static final Logger logger = LoggerFactory.getLogger(TextFormatter.class.getName());
 
     public static final int FONT_BOLD = 1;
     public static final int FONT_ITALIC = 2;
@@ -77,6 +74,24 @@ public class TextFormatter {
             tf.getChildren().addAll(textlist);
         }
         return tf;
+    }
+
+    /**
+     * Return rich text content as a Group of TextFlows, one per paragraph
+     *
+     * @param item A Text item
+     * @return a {@link javafx.scene.Group} containing a {@link javafx.scene.text.TextFlow} per paragraph
+     */
+    public Group readFxFormattedParagraph(Text item) {
+        this.readTextItem(item);
+        Group group = new Group();
+        for (Element child : currentdom.children()) {
+            javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow();
+            List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(child, item);
+            tf.getChildren().addAll(textlist);
+            group.getChildren().add(tf);
+        }
+        return group;
     }
 
     /**
@@ -113,6 +128,25 @@ public class TextFormatter {
     }
 
     /**
+     * Load plain text content into formatter, creating one TextFlow per paragraph
+     *
+     * @param item A Text item
+     * @return a {@link javafx.scene.Group} containing a {@link javafx.scene.text.TextFlow} per paragraph
+     */
+    public Group readFxParagraph(Text item) {
+        this.readTextItem(item);
+        Group group = new Group();
+        for (Element child : currentdom.children()) {
+            String paraText = child.wholeText();
+            javafx.scene.text.Text tt = new javafx.scene.text.Text(paraText);
+            setFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
+            javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(tt);
+            group.getChildren().add(tf);
+        }
+        return group;
+    }
+
+    /**
      * Load Text content into formatter
      *
      * @param item A {@link net.perspective.draw.geom.Text} item
@@ -127,12 +161,16 @@ public class TextFormatter {
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(content);
         if (!matcher.find()) {
-            // Decode any pre-existing entities before re-escaping
-            content = Parser.unescapeEntities(content, false);
-            content = content.replaceAll("&", "&amp;");
-            content = content.replaceAll("<", "&lt;");
-            content = content.replaceAll(">", "&gt;");
-            content = "<p>" + content + "</p>";
+            String[] lines = content.split("\n", -1);
+            StringBuilder sb = new StringBuilder();
+            for (String line : lines) {
+                line = Parser.unescapeEntities(line, false);
+                line = line.replace("&", "&amp;");
+                line = line.replace("<", "&lt;");
+                line = line.replace(">", "&gt;");
+                sb.append("<p>").append(line).append("</p>");
+            }
+            content = sb.toString();
         }
         return content;
     }

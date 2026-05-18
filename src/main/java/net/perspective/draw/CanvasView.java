@@ -76,7 +76,7 @@ public class CanvasView {
     private Group drawingAnchors;
     private Node drawMarquee;
     private Node drawGuides;
-    private Path highlight;
+    private Group highlight;
     private boolean isDrawing;
     private boolean isEditing;
     private boolean isMapping;
@@ -104,8 +104,8 @@ public class CanvasView {
         this.caretTimeline = new Timeline();
         this.caretTimeline.setCycleCount(Timeline.INDEFINITE);
         this.caretTimeline.getKeyFrames().addAll(
-                new KeyFrame(Duration.ZERO, e -> highlight.setStroke(Color.TRANSPARENT)),
-                new KeyFrame(Duration.seconds(.5), e -> highlight.setStroke(Color.BLACK)),
+                new KeyFrame(Duration.ZERO, e -> highlight.getChildren().forEach(n -> ((Path) n).setStroke(Color.TRANSPARENT))),
+                new KeyFrame(Duration.seconds(.5), e -> highlight.getChildren().forEach(n -> ((Path) n).setStroke(Color.BLACK))),
                 new KeyFrame(Duration.seconds(1)));
     }
 
