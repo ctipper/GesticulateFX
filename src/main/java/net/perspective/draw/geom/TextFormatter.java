@@ -85,10 +85,48 @@ public class TextFormatter {
     public Group readFxFormattedParagraph(Text item) {
         this.readTextItem(item);
         Group group = new Group();
+        double yOffset = 0;
         for (Element child : currentdom.children()) {
             javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow();
             List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(child, item);
+            if (textlist.isEmpty()) {
+                javafx.scene.text.Text blank = new javafx.scene.text.Text(" ");
+                setFxFontAttributes(blank, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
+                textlist = List.of(blank);
+                tf.getProperties().put("empty", Boolean.TRUE);
+            }
             tf.getChildren().addAll(textlist);
+            tf.autosize();
+            tf.layout();
+            tf.setLayoutY(yOffset);
+            yOffset += tf.getHeight();
+            group.getChildren().add(tf);
+        }
+        return group;
+    }
+
+    /**
+     * Load plain text content into formatter, creating one TextFlow per paragraph
+     *
+     * @param item A Text item
+     * @return a {@link javafx.scene.Group} containing a {@link javafx.scene.text.TextFlow} per paragraph
+     */
+    public Group readFxParagraph(Text item) {
+        this.readTextItem(item);
+        Group group = new Group();
+        double yOffset = 0;
+        for (Element child : currentdom.children()) {
+            String paraText = child.wholeText();
+            javafx.scene.text.Text tt = new javafx.scene.text.Text(paraText.isEmpty() ? " " : paraText);
+            setFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
+            javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(tt);
+            if (paraText.isEmpty()) {
+                tf.getProperties().put("empty", Boolean.TRUE);
+            }
+            tf.autosize();
+            tf.layout();
+            tf.setLayoutY(yOffset);
+            yOffset += tf.getHeight();
             group.getChildren().add(tf);
         }
         return group;
@@ -115,6 +153,34 @@ public class TextFormatter {
     }
 
     /**
+     * Return formatted text split by paragraph to client
+     *
+     * @param   item  A Text item
+     * @return  A list of AttributedStrings, one per paragraph
+     */
+    public List<AttributedString> readFormattedParagraphs(Text item) {
+        this.readTextItem(item);
+        List<AttributedString> result = new ArrayList<>();
+        if (text.isEmpty()) {
+            result.add(new AttributedString(" "));
+            return result;
+        }
+        for (Element child : currentdom.children()) {
+            String paraText = child.wholeText();
+            if (paraText.isEmpty()) {
+                result.add(null); // null signals an empty paragraph to the caller
+                continue;
+            }
+            AttributedString as = new AttributedString(paraText);
+            this.setFontAttributes(item, as);
+            offset = 0;
+            as = this.setFormattingAttributes(child, as);
+            result.add(as);
+        }
+        return result;
+    }
+
+    /**
      * Load Text content into formatter
      *
      * @param item A Text item
@@ -125,25 +191,6 @@ public class TextFormatter {
         javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
         tt = setFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
         return tt;
-    }
-
-    /**
-     * Load plain text content into formatter, creating one TextFlow per paragraph
-     *
-     * @param item A Text item
-     * @return a {@link javafx.scene.Group} containing a {@link javafx.scene.text.TextFlow} per paragraph
-     */
-    public Group readFxParagraph(Text item) {
-        this.readTextItem(item);
-        Group group = new Group();
-        for (Element child : currentdom.children()) {
-            String paraText = child.wholeText();
-            javafx.scene.text.Text tt = new javafx.scene.text.Text(paraText);
-            setFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
-            javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow(tt);
-            group.getChildren().add(tf);
-        }
-        return group;
     }
 
     /**
