@@ -92,7 +92,7 @@ public class G2 {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i) instanceof TextFlow tf) {
                 Bounds bounds = tf.getBoundsInParent();
-                int tfLen = paragraphLength(tf);
+                int tfLen = Boolean.TRUE.equals(tf.getProperties().get("empty")) ? 0 : paragraphLength(tf);
                 boolean isLast = (i == children.size() - 1);
                 Path path = new Path();
                 if (isCaret) {

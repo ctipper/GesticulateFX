@@ -23,8 +23,10 @@
  */
 package net.perspective.draw.geom;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
@@ -35,9 +37,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.scene.Group;
@@ -46,6 +51,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.TextController;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
 
@@ -63,6 +69,7 @@ public class Text implements DrawItem, Serializable {
     private boolean isVertical;
     private double angle;
     private CanvasPoint start, end;
+    private final float WRAPPING_WIDTH = Float.MAX_VALUE;
 
     private static final HashMap<TextAttribute, Object> map = new HashMap<>();
 
@@ -485,15 +492,16 @@ public class Text implements DrawItem, Serializable {
     @Override
     public void draw(Graphics2D g2) {
         AffineTransform defaultTransform, transform, rotation;
+        double y = 0d;
 
         defaultTransform = g2.getTransform();
 
-        transform = new AffineTransform();
-        TextLayout layout = this.getLayout(g2);
+        List<TextLayoutInfo> layouts = this.getLayout(g2);
 
         g2.setPaint(fxToAwt(getColor()));
+        transform = new AffineTransform();
         CanvasPoint axis = this.rotationCentre();
-        CanvasPoint offset = new CanvasPoint(0.0, end.y - layout.getDescent());
+        CanvasPoint offset = new CanvasPoint(0.0, layouts.getFirst().layout.getAscent());
         offset = V2.rot(offset.x, offset.y, getAngle());
         if (this.isVertical()) {
             offset = V2.rot(offset.x, offset.y, -Math.PI / 2);
@@ -509,7 +517,14 @@ public class Text implements DrawItem, Serializable {
         rotation.setToRotation((float) getAngle());
         transform.concatenate(rotation);
         g2.transform(transform);
-        layout.draw(g2, 0.0f, 0.0f);
+        
+        AffineTransform textTransform = g2.getTransform();
+        for (var info : layouts) {
+            g2.setTransform(textTransform);
+            g2.translate(0d, y);
+            info.layout.draw(g2, 0.0f, 0.0f);
+            y += info.height;
+        }
 
         // reset graphics context
         g2.setTransform(defaultTransform);
@@ -521,23 +536,99 @@ public class Text implements DrawItem, Serializable {
      * @param g2 g2 graphics context {@link java.awt.Graphics2D}
      * @return a TextLayout
      */
-    public TextLayout getLayout(Graphics2D g2) {
-        TextLayout layout;
+    public List<TextLayoutInfo> getLayout(Graphics2D g2) {
+        List<TextLayoutInfo> layouts = new CopyOnWriteArrayList<>();
+        int charPosition = 0;
+        FontRenderContext context = g2.getFontRenderContext();
+
         // Verify that this is Rich Text
-        Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
+        Pattern parpattern = Pattern.compile("<p>(.*?)</p>", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(text);
+
         if (matcher.find()) {
-            FontRenderContext context = g2.getFontRenderContext();
             TextFormatter formatter = new TextFormatter();
-            AttributedString as = formatter.readFormattedText(this);
-            layout = new TextLayout(as.getIterator(), context);
+            List<AttributedString> paragraphs = formatter.readFormattedParagraphs(this);
+            for (int i = 0; i < paragraphs.size(); i++) {
+                AttributedString as = paragraphs.get(i);
+                if (as != null) {
+                    charPosition = addLayouts(layouts, as, context, charPosition);
+                } else {
+                    addEmptyPara(layouts, context, charPosition);
+                }
+                if (i < paragraphs.size() - 1) {
+                    charPosition++; // account for paragraph separator between paragraphs
+                }
+            }
         } else {
-            java.awt.Font thisFont = new java.awt.Font(font, getConvertedFontStyle(), size);
-            thisFont = thisFont.deriveFont(map);
-            FontRenderContext context = g2.getFontRenderContext();
-            layout = new TextLayout(text, thisFont, context);
+            String[] paragraphs = text.split("\n", -1); // -1 keeps empty strings
+            for (int i = 0; i < paragraphs.length; i++) {
+                if (!paragraphs[i].isEmpty()) {
+                    AttributedString as = new AttributedString(paragraphs[i]);
+                    as.addAttribute(TextAttribute.FONT, buildFont());
+                    if ((style & TextController.FONT_UNDERLINED) == TextController.FONT_UNDERLINED) {
+                        as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                    }
+                    charPosition = addLayouts(layouts, as, context, charPosition);
+                } else {
+                    addEmptyPara(layouts, context, charPosition);
+                }
+                if (i < paragraphs.length - 1) {
+                    charPosition++; // account for \n separator between paragraphs
+                }
+            }
         }
-        return layout;
+        return layouts;
+    }
+
+    private int addLayouts(List<TextLayoutInfo> layouts, AttributedString as,
+            FontRenderContext context, int charPosition) {
+        AttributedCharacterIterator iterator = as.getIterator();
+        LineBreakMeasurer measurer = new LineBreakMeasurer(iterator, context);
+        while (measurer.getPosition() < iterator.getEndIndex()) {
+            TextLayout layout = measurer.nextLayout(WRAPPING_WIDTH);
+            TextLayoutInfo info = new TextLayoutInfo();
+            info.layout = layout;
+            info.width = layout.getAdvance();
+            info.height = layout.getAscent() + layout.getDescent() + layout.getLeading();
+            info.paragraphStart = charPosition;
+            charPosition += layout.getCharacterCount();
+            info.paragraphEnd = charPosition;
+            layouts.add(info);
+        }
+        return charPosition;
+    }
+
+    private void addEmptyPara(List<TextLayoutInfo> layouts, FontRenderContext context, int charPosition) {
+        AttributedString space = new AttributedString(" ");
+        space.addAttribute(TextAttribute.FONT, buildFont());
+        AttributedCharacterIterator aci = space.getIterator();
+        TextLayout layout = new LineBreakMeasurer(aci, context).nextLayout(WRAPPING_WIDTH);
+        TextLayoutInfo info = new TextLayoutInfo();
+        info.layout = layout;
+        info.width = 0;
+        info.height = layout.getAscent() + layout.getDescent() + layout.getLeading();
+        info.paragraphStart = charPosition;
+        info.paragraphEnd = charPosition;
+        layouts.add(info);
+    }
+
+    private Font buildFont() {
+        Font f = switch (font) {
+            case "SansSerif" -> new Font(java.awt.Font.SANS_SERIF, getConvertedFontStyle(), size);
+            case "Serif" -> new Font(java.awt.Font.SERIF, getConvertedFontStyle(), size);
+            case "Monospaced" -> new Font(java.awt.Font.MONOSPACED, getConvertedFontStyle(), size);
+            default -> new Font(font, getConvertedFontStyle(), size);
+        };
+        return f.deriveFont(map);
+    }
+
+    public class TextLayoutInfo {
+
+        public TextLayout layout;
+        public float width;
+        public float height;
+        public int paragraphStart; // starting char index in full text
+        public int paragraphEnd;
     }
 
     /**
@@ -554,7 +645,7 @@ public class Text implements DrawItem, Serializable {
             thisstyle = thisstyle | java.awt.Font.ITALIC;
         }
         if ((style & TextFormatter.FONT_UNDERLINED) == TextFormatter.FONT_UNDERLINED) {
-            // No Formatting
+            // Handled separately in TextLayout
         }
         return thisstyle;
     }
