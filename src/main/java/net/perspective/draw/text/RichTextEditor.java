@@ -230,6 +230,46 @@ public class RichTextEditor implements Editor, Styler {
     }
 
     /**
+     * insert new line action
+     */
+    @Override
+    public void insertNewline() {
+        // not yet implemented
+    }
+
+    /**
+     * move caret up action
+     */
+    @Override
+    public void moveCaretUp() {
+        // not yet implemented
+    }
+
+    /**
+     * move caret down action
+     */
+    @Override
+    public void moveCaretDown() {
+        // not yet implemented
+    }
+
+    /**
+     * move caret to start action
+     */
+    @Override
+    public void moveCaretStart() {
+        // not yet implemented
+    }
+
+    /**
+     * move caret to end action
+     */
+    @Override
+    public void moveCaretEnd() {
+        // not yet implemented
+    }
+
+    /**
      * Remove text between caretStart and caretEnd positions. Positions are document-wide token
      * offsets.
      */
@@ -393,6 +433,7 @@ public class RichTextEditor implements Editor, Styler {
     /**
      * Clear the stored marks
      */
+    @Override
     public void clearStoredMarks() {
         storedMarks = null;
     }

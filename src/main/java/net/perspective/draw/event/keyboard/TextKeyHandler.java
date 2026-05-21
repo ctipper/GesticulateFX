@@ -191,24 +191,103 @@ public class TextKeyHandler implements KeyHandler {
                             editor.setCaretStart(editor.getCaretEnd());
                         }
                     }
+                    case KP_UP, UP -> {
+                        if (keylistener.isIsShiftDown()) {
+                            if (editor.getCaretStart() == editor.getCaretEnd()) {
+                                selectToLeft = true;
+                            }
+                            int anchor = selectToLeft ? editor.getCaretEnd() : editor.getCaretStart();
+                            if (!selectToLeft) {
+                                int cursorPos = editor.getCaretEnd();
+                                editor.setCaretStart(cursorPos);
+                                editor.setCaretEnd(cursorPos);
+                            }
+                            editor.moveCaretUp();
+                            int newCursor = editor.getCaretStart();
+                            editor.setCaretStart(Math.min(newCursor, anchor));
+                            editor.setCaretEnd(Math.max(newCursor, anchor));
+                            selectToLeft = (newCursor <= anchor);
+                        } else {
+                            selectToLeft = false;
+                            editor.moveCaretUp();
+                        }
+
+                    }
+                    case KP_DOWN, DOWN -> {
+                        if (keylistener.isIsShiftDown()) {
+                            if (editor.getCaretStart() == editor.getCaretEnd()) {
+                                selectToLeft = false;
+                            }
+                            int anchor = selectToLeft ? editor.getCaretEnd() : editor.getCaretStart();
+                            if (!selectToLeft) {
+                                int cursorPos = editor.getCaretEnd();
+                                editor.setCaretStart(cursorPos);
+                                editor.setCaretEnd(cursorPos);
+                            }
+                            editor.moveCaretDown();
+                            int newCursor = editor.getCaretStart();
+                            editor.setCaretStart(Math.min(newCursor, anchor));
+                            editor.setCaretEnd(Math.max(newCursor, anchor));
+                            selectToLeft = (newCursor < anchor);
+                        } else {
+                            selectToLeft = false;
+                            editor.moveCaretDown();
+                        }
+
+                    }
+                    case HOME -> {
+                        if (keylistener.isIsShiftDown()) {
+                            if (editor.getCaretStart() == editor.getCaretEnd()) {
+                                selectToLeft = true;
+                            }
+                            int anchor = selectToLeft ? editor.getCaretEnd() : editor.getCaretStart();
+                            if (!selectToLeft) {
+                                int cursorPos = editor.getCaretEnd();
+                                editor.setCaretStart(cursorPos);
+                                editor.setCaretEnd(cursorPos);
+                            }
+                            editor.moveCaretStart();
+                            int newCursor = editor.getCaretStart();
+                            editor.setCaretStart(Math.min(newCursor, anchor));
+                            editor.setCaretEnd(Math.max(newCursor, anchor));
+                            selectToLeft = (newCursor <= anchor);
+                        } else {
+                            selectToLeft = false;
+                            editor.moveCaretStart();
+                        }
+                    }
+                    case END -> {
+                        if (keylistener.isIsShiftDown()) {
+                            if (editor.getCaretStart() == editor.getCaretEnd()) {
+                                selectToLeft = false;
+                            }
+                            int anchor = selectToLeft ? editor.getCaretEnd() : editor.getCaretStart();
+                            if (!selectToLeft) {
+                                int cursorPos = editor.getCaretEnd();
+                                editor.setCaretStart(cursorPos);
+                                editor.setCaretEnd(cursorPos);
+                            }
+                            editor.moveCaretEnd();
+                            int newCursor = editor.getCaretStart();
+                            editor.setCaretStart(Math.min(newCursor, anchor));
+                            editor.setCaretEnd(Math.max(newCursor, anchor));
+                            selectToLeft = (newCursor < anchor);
+                        } else {
+                            selectToLeft = false;
+                            editor.moveCaretEnd();
+                        }
+                    }
                     case DELETE -> {
                         // edit
                         editor.deleteChar();
                         editor.commitText(item);
                     }
-                    case HOME -> {
-                        editor.setCaretStart(0);
-                        if (!keylistener.isIsShiftDown()) {
-                            editor.setCaretEnd(0);
-                        }
-                    }
-                    case END -> {
-                        if (!keylistener.isIsShiftDown()) {
-                            editor.setCaretStart(textlength);
-                        }
-                        editor.setCaretEnd(textlength);
-                    }
                     case ENTER -> {
+                        // edit
+                        editor.insertNewline();
+                        editor.commitText(item);
+                    }
+                    case ESCAPE -> {
                         // commit
                         editor.commitText(item);
                         view.updateSelectedItem();

@@ -107,7 +107,7 @@ public class TextController {
         editor.editText(item);
         editor.commitText(item);
         editor.setCaretStart(0);
-        editor.setCaretEnd(editor.readPlainText().length());
+        editor.setCaretEnd(editor.getLength());
         item.setDimensions();
         return item;
     }
@@ -141,7 +141,7 @@ public class TextController {
         editor.editText(item);
         editor.commitText(item);
         editor.setCaretStart(0);
-        editor.setCaretEnd(editor.readPlainText().length());
+        editor.setCaretEnd(editor.getLength());
         item.setDimensions();
     }
 

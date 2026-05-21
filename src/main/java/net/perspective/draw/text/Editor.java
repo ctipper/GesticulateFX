@@ -95,6 +95,31 @@ public interface Editor {
     void insertText(String string);
 
     /**
+     * insert new line action
+     */
+    void insertNewline();
+
+    /**
+     * move caret up action
+     */
+    void moveCaretUp();
+
+    /**
+     * move caret down action
+     */
+    void moveCaretDown();
+
+    /**
+     * move caret to start action
+     */
+    void moveCaretStart();
+
+    /**
+     * move caret to end action
+     */
+    void moveCaretEnd();
+
+    /**
      * Set the starting caret position
      * 
      * @param s A text index
