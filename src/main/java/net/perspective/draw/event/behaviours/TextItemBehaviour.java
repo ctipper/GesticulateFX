@@ -52,7 +52,10 @@ public class TextItemBehaviour implements ItemBehaviours {
     @Inject Provider<TextController> textControllerProvider;
 
     /** 
-     * Creates a new instance of <code>TextItemBehaviour</code> 
+     * Creates a new instance of <code>TextItemBehaviour</code>
+     *  
+     * @param drawarea
+     * @param view
      */
     @Inject
     public TextItemBehaviour(DrawingArea drawarea, CanvasView view) {

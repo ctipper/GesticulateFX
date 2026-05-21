@@ -33,8 +33,11 @@ import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.TextController;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
+import net.perspective.draw.enums.KeyHandlerType;
+import net.perspective.draw.text.Editor;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
@@ -64,6 +67,7 @@ public class SelectionHandler implements Handler {
     @Inject DrawAreaListener listener;
     @Inject BehaviourContext context;
     @Inject FigureFactory figurefactory;
+    @Inject TextController textController;
     @Inject Provider<TextItemBehaviour> textItemBehaviourProvider;
     @Inject Provider<FigureItemBehaviour> figureItemBehaviourProvider;
     @Inject Provider<MapItemBehaviour> mapItemBehaviourProvider;
@@ -79,6 +83,10 @@ public class SelectionHandler implements Handler {
 
     /**
      * Creates a new instance of <code>SelectionHandler</code> 
+     * 
+     * @param drawarea
+     * @param view
+     * @param controller
      */
     @Inject
     public SelectionHandler(DrawingArea drawarea, CanvasView view, ApplicationController controller) {
@@ -191,6 +199,21 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void clickEvent() {
+        if (view.isEditing() && view.getSelected() != -1) {
+            DrawItem current = view.getDrawings().get(view.getSelected());
+            if (!current.contains(listener.getTempX(), listener.getTempY())) {
+                Editor editor = textController.getEditor();
+                if (current instanceof Text item) {
+                    editor.commitText(item);
+                    view.updateSelectedItem();
+                    view.setSelected(-1);
+                    view.setEditing(KeyHandlerType.MOVE);
+                    editor.setCaretStart(0);
+                    editor.setCaretEnd(0);
+                }
+                return;
+            }
+        }
         if (listener.doubleClicked()) {
             List<DrawItem> drawings = view.getDrawings();
             if (!drawings.isEmpty()) {

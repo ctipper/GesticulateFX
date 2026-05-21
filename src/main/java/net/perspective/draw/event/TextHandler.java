@@ -34,6 +34,7 @@ import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.TextItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Text;
+import net.perspective.draw.text.Editor;
 
 /**
  *
@@ -51,6 +52,9 @@ public class TextHandler implements Handler {
 
     /**
      * Creates a new instance of <code>TextHandler</code> 
+     * 
+     * @param drawarea
+     * @param view
      */
     @Inject
     public TextHandler(DrawingArea drawarea, CanvasView view) {
@@ -90,8 +94,21 @@ public class TextHandler implements Handler {
             view.setEditing(KeyHandlerType.TEXT);
             view.setTextHighlight(i);
         } else if (view.getSelected() != -1) {
-            view.updateSelectedItem();
-            view.moveSelection(view.getSelected());
+            DrawItem current = view.getDrawings().get(view.getSelected());
+            if (!current.contains(listener.getTempX(), listener.getTempY())) {
+                Editor editor = textController.getEditor();
+                if (current instanceof Text item) {
+                    editor.commitText(item);
+                    view.updateSelectedItem();
+                    view.setSelected(-1);
+                    view.setEditing(KeyHandlerType.MOVE);
+                    editor.setCaretStart(0);
+                    editor.setCaretEnd(0);
+                }
+            } else {
+                view.updateSelectedItem();
+                view.moveSelection(view.getSelected());
+            }
         }
     }
 
