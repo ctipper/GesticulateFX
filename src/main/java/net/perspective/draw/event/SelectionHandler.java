@@ -199,7 +199,7 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void clickEvent() {
-        if (view.isEditing() && view.getSelected() != -1) {
+        if (view.isEditing() && view.getSelected() != -1 && !listener.wasDragged()) {
             DrawItem current = view.getDrawings().get(view.getSelected());
             if (!current.contains(listener.getTempX(), listener.getTempY())) {
                 Editor editor = textController.getEditor();

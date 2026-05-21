@@ -46,6 +46,7 @@ public class DrawAreaListener {
     private double tempX, tempY;     // Hold co-ordinates of current mouseDragged event.
     private boolean leftbutton, rightbutton;
     private boolean doubleclick;
+    private boolean dragged;
     private double wheel;
     private boolean snapEnabled;
 
@@ -104,6 +105,7 @@ public class DrawAreaListener {
         startX = me.getX();
         startY = me.getY();
         this.rightbutton = MouseButton.SECONDARY == me.getButton();
+        this.dragged = false;
         handler.downEvent();
     }
 
@@ -125,6 +127,7 @@ public class DrawAreaListener {
     protected void mouseDragged(MouseEvent me) {
         tempX = me.getX();
         tempY = me.getY();
+        this.dragged = true;
         handler.dragEvent();
     }
 
@@ -209,6 +212,10 @@ public class DrawAreaListener {
 
     public boolean doubleClicked() {
         return this.doubleclick;
+    }
+
+    public boolean wasDragged() {
+        return this.dragged;
     }
 
     public double getWheel() {
