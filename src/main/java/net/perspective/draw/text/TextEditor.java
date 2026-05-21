@@ -38,7 +38,7 @@ import net.perspective.draw.geom.Text;
 
 public class TextEditor implements Editor {
 
-    private String text;
+    private String[] text;
     private Clipboard clipboard;
     private int caretstart, caretend;
 
@@ -65,13 +65,14 @@ public class TextEditor implements Editor {
         Matcher matcher = parpattern.matcher(item.getText());
         if (matcher.find()) {
             String content = matcher.group(2);
-            content = content.replaceAll("<(.|\n)*?>", "");
+            content = content.replaceAll("(?i)</p>", "\n");
+            content = content.replaceAll("(?s)<.*?>", "");
             content = content.replaceAll("&amp;", "&");
             content = content.replaceAll("&lt;", "<");
             content = content.replaceAll("&gt;", ">");
-            text = content;
+            text = content.split("\n", -1); // -1 keeps empty strings
         } else {
-            text = item.getText();
+            text = item.getText().split("\n", -1);
         }
     }
 
@@ -83,7 +84,7 @@ public class TextEditor implements Editor {
     @Override
     public void commitText(Text item) {
         // Serialise editor content to Text
-        item.setText(text);
+        item.setText(joinTexts(text));
     }
 
     /**
@@ -94,7 +95,7 @@ public class TextEditor implements Editor {
     @Override
     public String readPlainText() {
         // Return unformatted text to client
-        return text;
+        return joinTexts(text);
     }
 
     /**
@@ -105,7 +106,11 @@ public class TextEditor implements Editor {
     @Override
     public int getLength() {
         // return length of text
-        return text.length();
+        int length = 0;
+        for (String line : text) {
+            length += line.length();
+        }
+        return length + Math.max(0, text.length - 1);
     }
 
     /**
@@ -113,12 +118,32 @@ public class TextEditor implements Editor {
      */
     @Override
     public void cutText() {
-        String newText = text.substring(0, caretstart) + text.substring(caretend);
-        this.setClipboard(text.substring(caretstart, caretend));
-        if (newText.length() == 0) {
-            text = " ";
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
+        }
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
+        setClipboard(copySelection(startLine, startOffset, endLine, endOffset));
+
+        String newLine = text[startLine].substring(0, startOffset) + text[endLine].substring(endOffset);
+
+        if (startLine == endLine) {
+            if (newLine.length() == 0 && text.length == 1) {
+                text = new String[]{" "};
+            } else {
+                text[startLine] = newLine;
+            }
         } else {
-            text = newText;
+            replaceLines(startLine, endLine, newLine);
+            if (text.length == 1 && text[0].length() == 0) {
+                text = new String[]{" "};
+            }
         }
         caretend = caretstart;
     }
@@ -128,7 +153,18 @@ public class TextEditor implements Editor {
      */
     @Override
     public void copyText() {
-        this.setClipboard(text.substring(caretstart, caretend));
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
+        }
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
+        setClipboard(copySelection(startLine, startOffset, endLine, endOffset));
     }
 
     /**
@@ -136,17 +172,34 @@ public class TextEditor implements Editor {
      */
     @Override
     public void pasteText() {
-        String startText = text.substring(0, caretstart);
-        String endText = text.substring(caretend);
-        String clip = this.getClipboard();
-        String newText = startText + clip + endText;
-        if (newText.length() == 0) {
-            text = " ";
-        } else {
-            text = newText;
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
         }
-        caretend = caretstart + clip.length();
-        caretstart = caretend;
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
+        String[] clipLines = getClipboard().split("\n", -1);
+
+        if (clipLines.length == 1) {
+            String newLine = text[startLine].substring(0, startOffset) + getClipboard() + text[endLine].substring(endOffset);
+            if (startLine == endLine) {
+                text[startLine] = newLine;
+            } else {
+                replaceLines(startLine, endLine, newLine);
+            }
+        } else {
+            String[] insertLines = clipLines.clone();
+            insertLines[0] = text[startLine].substring(0, startOffset) + clipLines[0];
+            insertLines[clipLines.length - 1] = clipLines[clipLines.length - 1] + text[endLine].substring(endOffset);
+            replaceLines(startLine, endLine, insertLines);
+        }
+        caretstart += getClipboard().length();
+        caretend = caretstart;
     }
 
     /**
@@ -154,21 +207,53 @@ public class TextEditor implements Editor {
      */
     @Override
     public void backSpace() {
-        String newText;
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
+        }
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
         if (caretstart == caretend) {
-            if (caretstart > 0) {
-                newText = text.substring(0, caretstart - 1) + text.substring(caretend);
-                caretstart = caretstart - 1;
+            if (startOffset > 0) {
+                String newLine = text[startLine].substring(0, startOffset - 1) + text[startLine].substring(startOffset);
+                if (newLine.length() == 0 && text.length == 1) {
+                    text = new String[]{" "};
+                } else {
+                    text[startLine] = newLine;
+                }
+                caretstart--;
+                caretend = caretstart;
+            } else if (startLine > 0) {
+                String newLine = text[startLine - 1] + text[startLine];
+                replaceLines(startLine - 1, startLine, newLine);
+                if (text.length == 1 && text[0].length() == 0) {
+                    text = new String[]{" "};
+                }
+                caretstart--;
+                caretend = caretstart;
+            }
+            return;
+        }
+
+        // Selection: delete range caretstart..caretend
+        String newLine = text[startLine].substring(0, startOffset) + text[endLine].substring(endOffset);
+
+        if (startLine == endLine) {
+            if (newLine.length() == 0 && text.length == 1) {
+                text = new String[]{" "};
             } else {
-                newText = text.substring(0, caretstart) + text.substring(caretend);
+                text[startLine] = newLine;
             }
         } else {
-            newText = text.substring(0, caretstart) + text.substring(caretend);
-        }
-        if (newText.length() == 0) {
-            text = " ";
-        } else {
-            text = newText;
+            replaceLines(startLine, endLine, newLine);
+            if (text.length == 1 && text[0].length() == 0) {
+                text = new String[]{" "};
+            }
         }
         caretend = caretstart;
     }
@@ -178,16 +263,41 @@ public class TextEditor implements Editor {
      */
     @Override
     public void deleteChar() {
-        String newText;
-        if (caretend < text.length()) {
-            newText = text.substring(0, caretstart) + text.substring(caretend + 1);
-        } else {
-            newText = text.substring(0, caretstart) + text.substring(caretend);
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
         }
-        if (newText.length() == 0) {
-            text = " ";
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
+        if (caretstart == caretend) {
+            if (endOffset < text[endLine].length()) {
+                endOffset++;
+            } else if (endLine < text.length - 1) {
+                endLine++;
+                endOffset = 0;
+            } else {
+                return;
+            }
+        }
+
+        String newLine = text[startLine].substring(0, startOffset) + text[endLine].substring(endOffset);
+
+        if (startLine == endLine) {
+            if (newLine.length() == 0 && text.length == 1) {
+                text = new String[]{" "};
+            } else {
+                text[startLine] = newLine;
+            }
         } else {
-            text = newText;
+            replaceLines(startLine, endLine, newLine);
+            if (text.length == 1 && text[0].length() == 0) {
+                text = new String[]{" "};
+            }
         }
         caretend = caretstart;
     }
@@ -199,16 +309,113 @@ public class TextEditor implements Editor {
      */
     @Override
     public void insertText(String string) {
-        String startText = text.substring(0, caretstart);
-        String endText = text.substring(caretend);
-        String newText = startText + string + endText;
-        if (newText.length() == 0) {
-            text = " ";
-        } else {
-            text = newText;
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
         }
-        caretend = caretstart + string.length();
-        caretstart = caretend;
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
+        String newLine = text[startLine].substring(0, startOffset) + string + text[endLine].substring(endOffset);
+
+        if (startLine == endLine) {
+            text[startLine] = newLine;
+        } else {
+            replaceLines(startLine, endLine, newLine);
+        }
+        caretstart += string.length();
+        caretend = caretstart;
+    }
+
+    /**
+     * insert new line action
+     */
+    @Override
+    public void insertNewline() {
+        int startLine = 0, startOffset = caretstart;
+        while (startLine < text.length - 1 && startOffset > text[startLine].length()) {
+            startOffset -= (text[startLine].length() + 1);
+            startLine++;
+        }
+        int endLine = 0, endOffset = caretend;
+        while (endLine < text.length - 1 && endOffset > text[endLine].length()) {
+            endOffset -= (text[endLine].length() + 1);
+            endLine++;
+        }
+
+        replaceLines(startLine, endLine,
+                text[startLine].substring(0, startOffset),
+                text[endLine].substring(endOffset));
+        caretstart += 1;
+        caretend = caretstart;
+    }
+
+    /**
+     * move caret up action
+     */
+    @Override
+    public void moveCaretUp() {
+        int line = 0, offset = caretstart;
+        while (line < text.length - 1 && offset > text[line].length()) {
+            offset -= (text[line].length() + 1);
+            line++;
+        }
+        if (line > 0) {
+            int prevLineLength = text[line - 1].length();
+            int newOffset = Math.min(prevLineLength, offset);
+            caretstart = (caretstart - offset) - (prevLineLength + 1) + newOffset;
+            caretend = caretstart;
+        }
+    }
+
+    /**
+     * move caret down action
+     */
+    @Override
+    public void moveCaretDown() {
+        int line = 0, offset = caretstart;
+        while (line < text.length - 1 && offset > text[line].length()) {
+            offset -= (text[line].length() + 1);
+            line++;
+        }
+        if (line < text.length - 1) {
+            int nextLineLength = text[line + 1].length();
+            int newOffset = Math.min(nextLineLength, offset);
+            caretstart = caretstart - offset + text[line].length() + 1 + newOffset;
+            caretend = caretstart;
+        }
+    }
+
+    /**
+     * move caret to start action
+     */
+    @Override
+    public void moveCaretStart() {
+        int line = 0, offset = caretstart;
+        while (line < text.length - 1 && offset > text[line].length()) {
+            offset -= (text[line].length() + 1);
+            line++;
+        }
+        caretstart -= offset;
+        caretend = caretstart;
+    }
+
+    /**
+     * move caret to end action
+     */
+    @Override
+    public void moveCaretEnd() {
+        int line = 0, offset = caretstart;
+        while (line < text.length - 1 && offset > text[line].length()) {
+            offset -= (text[line].length() + 1);
+            line++;
+        }
+        caretstart = caretstart - offset + text[line].length();
+        caretend = caretstart;
     }
 
     /**
@@ -278,6 +485,40 @@ public class TextEditor implements Editor {
             str = "";
         }
         return str;
+    }
+
+    /**
+     * Extract the selected region as a flat newline-delimited string, suitable
+     * for assigning to the clipboard. Used by {@link #cutText()} and
+     * {@link #copyText()}.
+     */
+    private String copySelection(int startLine, int startOffset, int endLine, int endOffset) {
+        if (startLine == endLine) {
+            return text[startLine].substring(startOffset, endOffset);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(text[startLine].substring(startOffset));
+        for (int i = startLine + 1; i < endLine; i++) {
+            sb.append('\n').append(text[i]);
+        }
+        sb.append('\n').append(text[endLine].substring(0, endOffset));
+        return sb.toString();
+    }
+
+    /**
+     * Replace lines {@code startLine} through {@code endLine} (inclusive) with
+     * the given replacement lines, resizing the text array accordingly.
+     */
+    private void replaceLines(int startLine, int endLine, String... replacements) {
+        String[] newText = new String[text.length - (endLine - startLine + 1) + replacements.length];
+        System.arraycopy(text, 0, newText, 0, startLine);
+        System.arraycopy(replacements, 0, newText, startLine, replacements.length);
+        System.arraycopy(text, endLine + 1, newText, startLine + replacements.length, text.length - endLine - 1);
+        text = newText;
+    }
+
+    private String joinTexts(String[] lines) {
+        return String.join("\n", lines);
     }
 
 }

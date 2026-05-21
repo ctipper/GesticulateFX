@@ -96,7 +96,7 @@ public class G2 {
                 boolean isLast = (i == children.size() - 1);
                 Path path = new Path();
                 if (isCaret) {
-                    if (caretStart >= offset && (caretStart < offset + tfLen || isLast)) {
+                    if (caretStart >= offset && (caretStart <= offset + tfLen || isLast)) {
                         PathElement[] carets = tf.getCaretShape(caretStart - offset, true);
                         path.getElements().addAll(Arrays.asList(carets));
                         path.setStroke(Color.BLACK);
@@ -119,7 +119,7 @@ public class G2 {
                     path.getTransforms().add(new Translate(bounds.getMinX(), bounds.getMinY()));
                     highlightGroup.getChildren().add(path);
                 }
-                offset += tfLen;
+                offset += tfLen + (isLast ? 0 : 1);
             }
         }
         CanvasPoint axis = item.rotationCentre();

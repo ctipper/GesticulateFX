@@ -121,15 +121,20 @@ public class TextItemBehaviour implements ItemBehaviours {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i) instanceof TextFlow tf) {
                 Bounds bounds = tf.getBoundsInParent();
+                boolean isEmpty = Boolean.TRUE.equals(tf.getProperties().get("empty"));
+                int tfLen = isEmpty ? 0 : paragraphLength(tf);
                 boolean isLast = (i == children.size() - 1);
                 if (point.getY() <= bounds.getMaxY() || isLast) {
+                    if (isEmpty) {
+                        return offset;
+                    }
                     Point2D local = new Point2D(
                         Math.max(0.0, point.getX() - bounds.getMinX()),
                         Math.max(0.0, point.getY() - bounds.getMinY())
                     );
                     return offset + tf.getHitInfo(local).getInsertionIndex();
                 }
-                offset += paragraphLength(tf);
+                offset += tfLen + 1;
             }
         }
         return offset;
