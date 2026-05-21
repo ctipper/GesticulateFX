@@ -93,7 +93,7 @@ public class TextHandler implements Handler {
             view.setSelected(i);
             view.setEditing(KeyHandlerType.TEXT);
             view.setTextHighlight(i);
-        } else if (view.getSelected() != -1) {
+        } else if (view.getSelected() != -1 && !listener.wasDragged()) {
             DrawItem current = view.getDrawings().get(view.getSelected());
             if (!current.contains(listener.getTempX(), listener.getTempY())) {
                 Editor editor = textController.getEditor();
