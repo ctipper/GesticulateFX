@@ -285,10 +285,10 @@ public class Text implements DrawItem, Serializable {
         Matcher matcher = parpattern.matcher(text);
         if (matcher.find()) {
             TextFormatter formatter = new TextFormatter();
-            tf = formatter.readFxFormattedParagraph(this);
+            tf = formatter.readFxFormattedParagraphs(this);
         } else {
             TextFormatter formatter = new TextFormatter();
-            tf = formatter.readFxParagraph(this);
+            tf = formatter.readFxParagraphs(this);
         }
         return tf;
     }

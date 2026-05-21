@@ -108,12 +108,16 @@ public class HTMLReader {
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(content);
         if (!matcher.find()) {
-            // Decode any pre-existing entities before re-escaping
-            content = Parser.unescapeEntities(content, false);
-            content = content.replaceAll("&", "&amp;");
-            content = content.replaceAll("<", "&lt;");
-            content = content.replaceAll(">", "&gt;");
-            content = "<p>" + content + "</p>";
+            String[] lines = content.split("\n", -1);
+            StringBuilder sb = new StringBuilder();
+            for (String line : lines) {
+                line = Parser.unescapeEntities(line, false);
+                line = line.replace("&", "&amp;");
+                line = line.replace("<", "&lt;");
+                line = line.replace(">", "&gt;");
+                sb.append("<p>").append(line).append("</p>");
+            }
+            content = sb.toString();
         }
         return content;
     }

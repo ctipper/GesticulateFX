@@ -58,31 +58,12 @@ public class TextFormatter {
     }
 
     /**
-     * Return formatted text to client
-     *
-     * @param item A Text item
-     * @return An javafx.scene.text.Text
-     */
-    public javafx.scene.text.TextFlow readFxFormattedText(Text item) {
-        // use raw text from DOM
-        this.readTextItem(item);
-        javafx.scene.text.TextFlow tf = new javafx.scene.text.TextFlow();
-        offset = 0;
-        // Parse Text font attributes and apply
-        for (Element child : currentdom.children()) {
-            List<javafx.scene.text.Text> textlist = setFxFormattingAttributes(child, item);
-            tf.getChildren().addAll(textlist);
-        }
-        return tf;
-    }
-
-    /**
      * Return rich text content as a Group of TextFlows, one per paragraph
      *
      * @param item A Text item
      * @return a {@link javafx.scene.Group} containing a {@link javafx.scene.text.TextFlow} per paragraph
      */
-    public Group readFxFormattedParagraph(Text item) {
+    public Group readFxFormattedParagraphs(Text item) {
         this.readTextItem(item);
         Group group = new Group();
         double yOffset = 0;
@@ -111,7 +92,7 @@ public class TextFormatter {
      * @param item A Text item
      * @return a {@link javafx.scene.Group} containing a {@link javafx.scene.text.TextFlow} per paragraph
      */
-    public Group readFxParagraph(Text item) {
+    public Group readFxParagraphs(Text item) {
         this.readTextItem(item);
         Group group = new Group();
         double yOffset = 0;
@@ -130,26 +111,6 @@ public class TextFormatter {
             group.getChildren().add(tf);
         }
         return group;
-    }
-
-    /**
-     * Return formatted text to client
-     *
-     * @param item A Text item
-     * @return An AttributedString
-     */
-    public AttributedString readFormattedText(Text item) {
-        // use raw text from DOM
-        this.readTextItem(item);
-        AttributedString as = new AttributedString(text);
-        // Parse Text font attributes and apply
-        this.setFontAttributes(item, as);
-        offset = 0;
-        // Set formatting attributes
-        for (Element child : currentdom.children()) {
-            as = this.setFormattingAttributes(child, as);
-        }
-        return as;
     }
 
     /**
@@ -178,19 +139,6 @@ public class TextFormatter {
             result.add(as);
         }
         return result;
-    }
-
-    /**
-     * Load Text content into formatter
-     *
-     * @param item A Text item
-     * @return the {@link javafx.scene.text.Text}
-     */
-    public javafx.scene.text.Text readFxText(Text item) {
-        this.readTextItem(item);
-        javafx.scene.text.Text tt = new javafx.scene.text.Text(text);
-        tt = setFxFontAttributes(tt, item.getFont(), item.getSize(), item.getStyle(), item.getColor());
-        return tt;
     }
 
     /**
