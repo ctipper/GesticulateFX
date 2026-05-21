@@ -58,6 +58,10 @@ public class TextKeyHandler implements KeyHandler {
 
     /**
      * Create a new instance of <code>TextKeyHandler</code>
+     * 
+     * @param drawarea
+     * @param view
+     * @param controller
      */
     @Inject
     public TextKeyHandler(DrawingArea drawarea, CanvasView view, ApplicationController controller) {

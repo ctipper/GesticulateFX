@@ -116,7 +116,7 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public int getLength() {
-        return doc.textLength();
+        return doc.textLength() + Math.max(0, doc.childCount() - 1);
     }
 
     /**
@@ -124,7 +124,7 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void cutText() {
-        this.setClipboard(doc.content().textBetween(docPos(caretstart), docPos(caretend), null, null));
+        setClipboard(doc.content().textBetween(docPos(caretstart), docPos(caretend), "\n", null));
         this.removeText();
         caretend = caretstart;
     }
@@ -134,7 +134,7 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void copyText() {
-        this.setClipboard(doc.content().textBetween(docPos(caretstart), docPos(caretend), null, null));
+        setClipboard(doc.content().textBetween(docPos(caretstart), docPos(caretend), "\n", null));
     }
 
     /**
@@ -142,27 +142,46 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void pasteText() {
-        String clip = this.getClipboard();
-        // Guard against empty clipboard
-        if (clip.isEmpty()) {
+        String clipboardText = getClipboard();
+        if (clipboardText.isEmpty()) {
             return;
         }
 
-        // remove highlighted text
         this.removeText();
         caretend = caretstart;
         decoalesceText();
-        // Use stored marks if set, otherwise resolve from position
         List<Mark> marks = activeMarks();
-        Slice slice = new Slice(
-            Fragment.from(schema.text(clip, marks)), 0, 0
-        );
-        doc = doc.replace(docPos(caretstart), docPos(caretstart), slice);
 
-        caretstart = caretstart + clip.length();
+        String[] lines = clipboardText.split("\n", -1);
+
+        if (lines.length == 1) {
+            Slice slice = new Slice(Fragment.from(schema.text(clipboardText, marks)), 0, 0);
+            doc = doc.replace(docPos(caretstart), docPos(caretstart), slice);
+            caretstart = caretstart + clipboardText.length();
+            caretend = caretstart;
+            storedMarks = null;
+            return;
+        }
+
+        List<Node> newParagraphs = new ArrayList<>();
+        int textPos = 0;
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            if (caretstart >= textPos && caretstart <= textPos + paraLen) {
+                newParagraphs.addAll(splitParagraphAt(para, caretstart - textPos, lines, marks));
+                for (int j = i + 1; j < doc.childCount(); j++) {
+                    newParagraphs.add(doc.child(j));
+                }
+                break;
+            }
+            newParagraphs.add(para);
+            textPos += paraLen + 1; // +1 for the paragraph separator in the caret model
+        }
+
+        doc = schema.nodeType("doc").create(null, Fragment.from(newParagraphs), null);
+        caretstart = caretstart + clipboardText.length();
         caretend = caretstart;
-
-        // Clear stored marks — they've been consumed
         storedMarks = null;
     }
 
@@ -234,7 +253,30 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void insertNewline() {
-        // not yet implemented
+        this.removeText();
+        caretend = caretstart;
+        decoalesceText();
+
+        List<Node> newParagraphs = new ArrayList<>();
+        int textPos = 0;
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            if (caretstart >= textPos && caretstart <= textPos + paraLen) {
+                newParagraphs.addAll(splitParagraphAt(para, caretstart - textPos));
+                for (int j = i + 1; j < doc.childCount(); j++) {
+                    newParagraphs.add(doc.child(j));
+                }
+                break;
+            }
+            newParagraphs.add(para);
+            textPos += paraLen + 1; // +1 for the paragraph separator in the caret model
+        }
+
+        doc = schema.nodeType("doc").create(null, Fragment.from(newParagraphs), null);
+        caretstart += 1;
+        caretend = caretstart;
+        storedMarks = null;
     }
 
     /**
@@ -242,7 +284,21 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void moveCaretUp() {
-        // not yet implemented
+        int textPos = 0;
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            if (caretstart >= textPos && caretstart <= textPos + paraLen) {
+                if (i > 0) {
+                    int offset = caretstart - textPos;
+                    int prevLen = doc.child(i - 1).textLength();
+                    caretstart = textPos - prevLen - 1 + Math.min(prevLen, offset);
+                    caretend = caretstart;
+                }
+                return;
+            }
+            textPos += paraLen + 1;
+        }
     }
 
     /**
@@ -250,7 +306,21 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void moveCaretDown() {
-        // not yet implemented
+        int textPos = 0;
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            if (caretstart >= textPos && caretstart <= textPos + paraLen) {
+                if (i < doc.childCount() - 1) {
+                    int offset = caretstart - textPos;
+                    int nextLen = doc.child(i + 1).textLength();
+                    caretstart = textPos + paraLen + 1 + Math.min(nextLen, offset);
+                    caretend = caretstart;
+                }
+                return;
+            }
+            textPos += paraLen + 1;
+        }
     }
 
     /**
@@ -258,7 +328,17 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void moveCaretStart() {
-        // not yet implemented
+        int textPos = 0;
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            if (caretstart >= textPos && caretstart <= textPos + paraLen) {
+                caretstart = textPos;
+                caretend = caretstart;
+                return;
+            }
+            textPos += paraLen + 1;
+        }
     }
 
     /**
@@ -266,12 +346,22 @@ public class RichTextEditor implements Editor, Styler {
      */
     @Override
     public void moveCaretEnd() {
-        // not yet implemented
+        int textPos = 0;
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            if (caretstart >= textPos && caretstart <= textPos + paraLen) {
+                caretstart = textPos + paraLen;
+                caretend = caretstart;
+                return;
+            }
+            textPos += paraLen + 1;
+        }
     }
 
     /**
      * Remove text between caretStart and caretEnd positions. Positions are document-wide token
-     * offsets.
+     * offsets that count paragraph separators as 1 each.
      */
     private void removeText() {
         if (caretstart == caretend) {
@@ -282,8 +372,91 @@ public class RichTextEditor implements Editor, Styler {
             caretstart = caretend;
             caretend = tmp;
         }
-        doc = doc.replace(docPos(caretstart), docPos(caretend), Slice.EMPTY);
+
+        List<Node> newParagraphs = new ArrayList<>();
+        int textPos = 0;
+        Fragment pendingBefore = null;
+        Node pendingTemplate = null;
+
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+            int paraEnd = textPos + paraLen;
+
+            boolean startsHere = caretstart >= textPos && caretstart <= paraEnd;
+            boolean endsHere   = caretend   >= textPos && caretend   <= paraEnd;
+
+            if (startsHere && endsHere) {
+                int from = caretstart - textPos;
+                int to   = caretend   - textPos;
+                newParagraphs.add(para.copy(
+                    para.content().cut(0, from).append(para.content().cut(to))
+                ));
+            } else if (startsHere) {
+                pendingBefore   = para.content().cut(0, caretstart - textPos);
+                pendingTemplate = para;
+            } else if (endsHere && pendingBefore != null && pendingTemplate != null) {
+                Fragment after = para.content().cut(caretend - textPos);
+                newParagraphs.add(pendingTemplate.copy(pendingBefore.append(after)));
+                pendingBefore   = null;
+                pendingTemplate = null;
+            } else if (pendingBefore == null) {
+                newParagraphs.add(para); // before the removal range
+            }
+            // paragraphs fully inside the range are dropped
+
+            textPos += paraLen + 1;
+        }
+
+        doc = schema.nodeType("doc").create(null, Fragment.from(newParagraphs), null);
         this.coalesceText();
+    }
+
+    /**
+     * Split a paragraph at the given offset, returning two paragraphs with no inserted content.
+     *
+     * @param para   the paragraph node to split
+     * @param offset the character offset within {@code para} at which to split
+     * @return a list of two paragraph nodes: content before and content after the split point
+     */
+    private List<Node> splitParagraphAt(Node para, int offset) {
+        return splitParagraphAt(para, offset, new String[]{"", ""}, List.of());
+    }
+
+    /**
+     * Split a paragraph at the given offset and splice in multi-line clipboard content.
+     * <p>
+     * The first element of {@code lines} is appended to the content before the split; the last
+     * element is prepended to the content after the split; any middle elements become new
+     * paragraphs between them.
+     *
+     * @param para   the paragraph node to split
+     * @param offset the character offset within {@code para} at which to split
+     * @param lines  clipboard text already split on {@code \n}; must have at least two elements
+     * @param marks  marks to apply to the inserted text
+     * @return replacement paragraph nodes to substitute for {@code para} in the document
+     */
+    private List<Node> splitParagraphAt(Node para, int offset, String[] lines, List<Mark> marks) {
+        Fragment before = para.content().cut(0, offset);
+        Fragment after = para.content().cut(offset);
+        NodeType paraType = schema.nodeType("paragraph");
+        List<Node> result = new ArrayList<>();
+
+        Fragment firstLine = lines[0].isEmpty()
+            ? Fragment.EMPTY : Fragment.from(schema.text(lines[0], marks));
+        result.add(para.copy(before.append(firstLine)));
+
+        for (int j = 1; j < lines.length - 1; j++) {
+            Fragment middle = lines[j].isEmpty()
+                ? Fragment.EMPTY : Fragment.from(schema.text(lines[j], marks));
+            result.add(paraType.create(null, middle, null));
+        }
+
+        Fragment lastLine = lines[lines.length - 1].isEmpty()
+            ? Fragment.EMPTY : Fragment.from(schema.text(lines[lines.length - 1], marks));
+        result.add(para.copy(lastLine.append(after)));
+
+        return result;
     }
 
     private void coalesceText() {
@@ -307,17 +480,28 @@ public class RichTextEditor implements Editor, Styler {
     }
 
     /**
-     * Convert a text offset to a document position by finding the content start
-     * of the first textblock in the document tree.
+     * Convert a caretstart/caretend offset to a ProseMirror document position.
+     * Paragraph breaks count as 1 in the caret model but occupy 2 tokens in the
+     * document (closing of one paragraph + opening of the next), so each paragraph
+     * boundary crossed adds 1 extra position beyond the raw text offset.
      */
     private int docPos(int textOffset) {
-        Node node = doc;
-        int offset = 0;
-        while (!node.isTextblock() && node.childCount() > 0) {
-            node = node.firstChild();
-            offset++;
+        int pos = 1; // start inside the first paragraph, after its opening token
+        int remaining = textOffset;
+
+        for (int i = 0; i < doc.childCount(); i++) {
+            Node para = doc.child(i);
+            int paraLen = para.textLength();
+
+            if (remaining <= paraLen) {
+                return pos + remaining;
+            }
+
+            remaining -= paraLen + 1; // +1 for the paragraph separator in caretstart
+            pos += para.nodeSize();   // advance to inside the next paragraph
         }
-        return offset + textOffset;
+
+        return pos; // textOffset out of range — caller's responsibility
     }
 
     /**
