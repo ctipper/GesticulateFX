@@ -18,7 +18,7 @@
     <properties>
         <java.version>26</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>26-ea+27</javafx.version>
+        <javafx.version>26.0.1</javafx.version>
         <dagger.version>2.59.2</dagger.version>
         <slf4j.version>2.0.17</slf4j.version>
         <log4j.version>2.25.3</log4j.version>
