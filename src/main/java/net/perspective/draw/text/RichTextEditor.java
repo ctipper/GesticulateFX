@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javafx.application.Platform;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.editor.*;
 import net.perspective.draw.geom.Text;
 
@@ -38,6 +39,7 @@ import net.perspective.draw.geom.Text;
 
 public class RichTextEditor implements Editor, Styler {
 
+    private final ApplicationController controller;
     private Clipboard clipboard;
     private int caretstart, caretend;
     private boolean coalesced;
@@ -45,13 +47,17 @@ public class RichTextEditor implements Editor, Styler {
     private Node doc;
     private HTMLReader reader;
     private HTMLWriter writer;
+    private String lastSetContent = null;
 
     /** 
      * Creates a new instance of <code>RichTextEditor</code> 
+     * 
+     * @param controller
      */
     @Inject
-    public RichTextEditor() {
+    public RichTextEditor(ApplicationController controller) {
         super();
+        this.controller = controller;
         this.initbuilder();
         caretstart = caretend = 0;
         Platform.runLater(() -> {
@@ -555,6 +561,7 @@ public class RichTextEditor implements Editor, Styler {
         ClipboardContent content = new ClipboardContent();
         content.putString(str);
         clipboard.setContent(content);
+        lastSetContent = str;
     }
 
     /**
@@ -570,6 +577,15 @@ public class RichTextEditor implements Editor, Styler {
         } else {
             str = "";
         }
+        if (!str.equals(lastSetContent)) {
+            String gathered = new TextGatherer().textGatherer(str);
+            if (gathered == null) {
+                controller.setStatusMessage("Text content too large");
+                return "";
+            }
+            str = gathered;
+        }
+
         return str;
     }
 

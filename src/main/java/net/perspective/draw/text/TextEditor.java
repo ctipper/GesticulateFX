@@ -29,6 +29,7 @@ import javafx.application.Platform;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javax.inject.Inject;
+import net.perspective.draw.ApplicationController;
 import net.perspective.draw.geom.Text;
 
 /**
@@ -38,15 +39,19 @@ import net.perspective.draw.geom.Text;
 
 public class TextEditor implements Editor {
 
+    private final ApplicationController controller;
     private String[] text;
     private Clipboard clipboard;
     private int caretstart, caretend;
+    private String lastSetContent = null;
 
     /**
      * Creates a new instance of <code>TextEditor</code>
      */
     @Inject
-    public TextEditor() {
+    public TextEditor(ApplicationController controller) {
+        super();
+        this.controller = controller;
         caretstart = caretend = 0;
         Platform.runLater(() -> {
             clipboard = Clipboard.getSystemClipboard();
@@ -469,6 +474,7 @@ public class TextEditor implements Editor {
         ClipboardContent content = new ClipboardContent();
         content.putString(str);
         clipboard.setContent(content);
+        lastSetContent = str;
     }
 
     /**
@@ -484,6 +490,15 @@ public class TextEditor implements Editor {
         } else {
             str = "";
         }
+        if (!str.equals(lastSetContent)) {
+            String gathered = new TextGatherer().textGatherer(str);
+            if (gathered == null) {
+                controller.setStatusMessage("Text content too large");
+                return "";
+            }
+            str = gathered;
+        }
+
         return str;
     }
 
