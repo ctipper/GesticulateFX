@@ -335,15 +335,15 @@ public class DrawAppModule {
     @Provides
     @Singleton
     @Named("plaintext")
-    Editor providePlainTextEditor() {
-        return new TextEditor();
+    Editor providePlainTextEditor(ApplicationController controller) {
+        return new TextEditor(controller);
     }
 
     @Provides
     @Singleton
     @Named("richtext")
-    Editor provideRichTextEditor() {
-        return new RichTextEditor();
+    Editor provideRichTextEditor(ApplicationController controller) {
+        return new RichTextEditor(controller);
     }
 
 }
