@@ -33,6 +33,9 @@ import net.perspective.draw.editor.*;
 import net.perspective.draw.geom.Text;
 
 /**
+ * Rich-text editor implementing the {@link Editor} and {@link Styler}
+ * interfaces. Manages a ProseMirror-style document model with inline marks
+ * (bold, italic, underline) and caret/selection.
  *
  * @author ctipper
  */
@@ -49,10 +52,10 @@ public class RichTextEditor implements Editor, Styler {
     private HTMLWriter writer;
     private String lastSetContent = null;
 
-    /** 
-     * Creates a new instance of <code>RichTextEditor</code> 
-     * 
-     * @param controller
+    /**
+     * Creates a new instance of <code>RichTextEditor</code>
+     *
+     * @param controller the application controller
      */
     @Inject
     public RichTextEditor(ApplicationController controller) {
@@ -65,8 +68,8 @@ public class RichTextEditor implements Editor, Styler {
         });
     }
 
+    /** Initialise the document schema, HTML reader, and HTML writer. */
     private void initbuilder() {
-        // Build the schema
         schema = new Schema(
             new LinkedHashMap<>(Map.of(
                 "doc",       new NodeSpec("paragraph+", null, false, Map.of(), null),
@@ -227,8 +230,8 @@ public class RichTextEditor implements Editor, Styler {
 
     /**
      * insert string action
-     * 
-     * @param string text
+     *
+     * @param string the text to insert
      */
     @Override
     public void insertText(String string) {
@@ -236,11 +239,9 @@ public class RichTextEditor implements Editor, Styler {
             return;
         }
 
-        // remove highlighted text
         this.removeText();
         caretend = caretstart;
         decoalesceText();
-        // Use stored marks if set, otherwise resolve from position
         List<Mark> marks = activeMarks();
         Slice slice = new Slice(
             Fragment.from(schema.text(string, marks)), 0, 0
@@ -465,6 +466,10 @@ public class RichTextEditor implements Editor, Styler {
         return result;
     }
 
+    /**
+     * Insert a placeholder space when the document is empty so layout always
+     * has at least one text node to measure.
+     */
     private void coalesceText() {
         if (doc.textLength() == 0) {
             ResolvedPos $pos = doc.resolve(docPos(caretstart));
@@ -477,6 +482,7 @@ public class RichTextEditor implements Editor, Styler {
         }
     }
 
+    /** Remove the coalesced placeholder space before inserting real content. */
     private void decoalesceText() {
         if (coalesced) {
             doc = doc.replace(docPos(0), docPos(1), Slice.EMPTY);
@@ -552,12 +558,11 @@ public class RichTextEditor implements Editor, Styler {
 
     /**
      * Set the clipboard text
-     * 
+     *
      * @param str Some textual data
      */
     @Override
     public void setClipboard(String str) {
-        // update system clipboard
         ClipboardContent content = new ClipboardContent();
         content.putString(str);
         clipboard.setContent(content);
@@ -590,13 +595,9 @@ public class RichTextEditor implements Editor, Styler {
     }
 
     /**
-     * Implement Styler interface
-     */
-
-    /**
-     * return a list of styles at cursor
-     * 
-     * @return a set of styles defined by "b" "i" or "u"
+     * Return the set of style names active at the cursor or within the selection.
+     *
+     * @return style names — {@code "b"}, {@code "i"}, or {@code "u"}
      */
     @Override
     public Set<String> detectStyles() {
@@ -606,7 +607,6 @@ public class RichTextEditor implements Editor, Styler {
                 styles.add(mark.type().name());
             }
         } else {
-            // Check all text nodes in the selection range
             int from = docPos(Math.min(caretstart, caretend));
             int to = docPos(Math.max(caretstart, caretend));
             int pos = 0;
@@ -638,6 +638,7 @@ public class RichTextEditor implements Editor, Styler {
         storedMarks = null;
     }
 
+    /** Return the marks to apply to the next insertion: stored marks if set, otherwise position marks. */
     private List<Mark> activeMarks() {
         if (storedMarks != null) return storedMarks;
         ResolvedPos $pos = doc.resolve(docPos(caretstart));
@@ -665,7 +666,6 @@ public class RichTextEditor implements Editor, Styler {
             return;
         }
     
-        // Apply mark to the range — convert text offsets to document positions
         int from = docPos(Math.min(caretstart, caretend));
         int to = docPos(Math.max(caretstart, caretend));
 

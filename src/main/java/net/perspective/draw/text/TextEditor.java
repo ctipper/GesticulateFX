@@ -33,7 +33,9 @@ import net.perspective.draw.ApplicationController;
 import net.perspective.draw.geom.Text;
 
 /**
- * 
+ * Plain-text editor implementing the {@link Editor} interface. Manages a
+ * line-oriented text model with caret/selection and clipboard operations.
+ *
  * @author ctipper
  */
 
@@ -47,6 +49,8 @@ public class TextEditor implements Editor {
 
     /**
      * Creates a new instance of <code>TextEditor</code>
+     *
+     * @param controller the application controller
      */
     @Inject
     public TextEditor(ApplicationController controller) {
@@ -65,7 +69,6 @@ public class TextEditor implements Editor {
      */
     @Override
     public void editText(Text item) {
-        // Load Text content into editor
         Pattern parpattern = Pattern.compile("(<p>)+(.*)(</p>)+", Pattern.DOTALL);
         Matcher matcher = parpattern.matcher(item.getText());
         if (matcher.find()) {
@@ -88,7 +91,6 @@ public class TextEditor implements Editor {
      */
     @Override
     public void commitText(Text item) {
-        // Serialise editor content to Text
         item.setText(joinTexts(text));
     }
 
@@ -99,7 +101,6 @@ public class TextEditor implements Editor {
      */
     @Override
     public String readPlainText() {
-        // Return unformatted text to client
         return joinTexts(text);
     }
 
@@ -110,7 +111,6 @@ public class TextEditor implements Editor {
      */
     @Override
     public int getLength() {
-        // return length of text
         int length = 0;
         for (String line : text) {
             length += line.length();
@@ -309,8 +309,8 @@ public class TextEditor implements Editor {
 
     /**
      * insert text action
-     * 
-     * @param string text
+     *
+     * @param string the text to insert
      */
     @Override
     public void insertText(String string) {
@@ -465,12 +465,11 @@ public class TextEditor implements Editor {
 
     /**
      * Set the clipboard text
-     * 
+     *
      * @param str Some textual data
      */
     @Override
     public void setClipboard(String str) {
-        // update system clipboard
         ClipboardContent content = new ClipboardContent();
         content.putString(str);
         clipboard.setContent(content);
@@ -532,6 +531,7 @@ public class TextEditor implements Editor {
         text = newText;
     }
 
+    /** Join lines into a single newline-delimited string. */
     private String joinTexts(String[] lines) {
         return String.join("\n", lines);
     }
