@@ -69,8 +69,10 @@ public class TextHandler implements Handler {
             // Text isEditing code here
             if (!listener.getRightClick()) {
                 DrawItem item = view.getDrawings().get(view.getSelected());
-                context.setBehaviour(textItemBehaviourProvider.get());
-                context.select(item, 0);
+                if (item instanceof Text) {
+                    context.setBehaviour(textItemBehaviourProvider.get());
+                    context.select(item, 0);
+                }
             }
         }
     }

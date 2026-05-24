@@ -86,7 +86,7 @@ public class TextItemBehaviour implements ItemBehaviours {
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
         currentHit = layout.getHitInfo(point);
 
-        view.setSelected(index);
+        view.resetSelected(index);
         view.setEditing(KeyHandlerType.TEXT);
         textControllerProvider.get().editItem((Text) item, currentHit.getInsertionIndex());
         view.setTextHighlight(index);

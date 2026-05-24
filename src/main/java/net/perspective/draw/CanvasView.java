@@ -562,8 +562,18 @@ public class CanvasView {
     }
 
     /**
+     * Set selection exclusively, clearing any prior multi-selection.
+     *
+     * @param selection selected index
+     */
+    public void resetSelected(int selection) {
+        selectionIndex.clear();
+        setSelected(selection);
+    }
+
+    /**
      * Return the first selected item
-     * 
+     *
      * @param selection selected index
      */
     public void setSelected(int selection) {
