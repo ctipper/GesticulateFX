@@ -132,8 +132,8 @@ public class TextItemBehaviour implements ItemBehaviours {
                         return offset;
                     }
                     Point2D local = new Point2D(
-                        Math.max(0.0, point.getX() - bounds.getMinX()),
-                        Math.max(0.0, point.getY() - bounds.getMinY())
+                        point.getX() - bounds.getMinX(),
+                        point.getY() - bounds.getMinY()
                     );
                     return offset + tf.getHitInfo(local).getInsertionIndex();
                 }
