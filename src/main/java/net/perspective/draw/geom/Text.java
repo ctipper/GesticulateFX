@@ -39,10 +39,12 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javafx.scene.text.TextFlow;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.scene.Group;
@@ -69,6 +71,7 @@ public class Text implements DrawItem, Serializable {
     private boolean isVertical;
     private double angle;
     private CanvasPoint start, end;
+    private transient List<Double> fxParaHeights;
     private final float WRAPPING_WIDTH = Float.MAX_VALUE;
 
     private static final HashMap<TextAttribute, Object> map = new HashMap<>();
@@ -289,6 +292,12 @@ public class Text implements DrawItem, Serializable {
         } else {
             TextFormatter formatter = new TextFormatter();
             tf = formatter.readFxParagraphs(this);
+        }
+        fxParaHeights = new ArrayList<>();
+        for (var child : tf.getChildren()) {
+            if (child instanceof TextFlow flow) {
+                fxParaHeights.add(flow.getHeight());
+            }
         }
         return tf;
     }
@@ -550,10 +559,11 @@ public class Text implements DrawItem, Serializable {
             List<AttributedString> paragraphs = formatter.readFormattedParagraphs(this);
             for (int i = 0; i < paragraphs.size(); i++) {
                 AttributedString as = paragraphs.get(i);
+                float fxHeight = (fxParaHeights != null && i < fxParaHeights.size()) ? fxParaHeights.get(i).floatValue() : 0f;
                 if (as != null) {
-                    charPosition = addLayouts(layouts, as, context, charPosition);
+                    charPosition = addLayouts(layouts, as, context, charPosition, fxHeight);
                 } else {
-                    addEmptyPara(layouts, context, charPosition);
+                    addEmptyPara(layouts, context, charPosition, fxHeight);
                 }
                 if (i < paragraphs.size() - 1) {
                     charPosition++; // account for paragraph separator between paragraphs
@@ -562,15 +572,16 @@ public class Text implements DrawItem, Serializable {
         } else {
             String[] paragraphs = text.split("\n", -1); // -1 keeps empty strings
             for (int i = 0; i < paragraphs.length; i++) {
+                float fxHeight = (fxParaHeights != null && i < fxParaHeights.size()) ? fxParaHeights.get(i).floatValue() : 0f;
                 if (!paragraphs[i].isEmpty()) {
                     AttributedString as = new AttributedString(paragraphs[i]);
                     as.addAttribute(TextAttribute.FONT, buildFont());
                     if ((style & TextController.FONT_UNDERLINED) == TextController.FONT_UNDERLINED) {
                         as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
                     }
-                    charPosition = addLayouts(layouts, as, context, charPosition);
+                    charPosition = addLayouts(layouts, as, context, charPosition, fxHeight);
                 } else {
-                    addEmptyPara(layouts, context, charPosition);
+                    addEmptyPara(layouts, context, charPosition, fxHeight);
                 }
                 if (i < paragraphs.length - 1) {
                     charPosition++; // account for \n separator between paragraphs
@@ -581,7 +592,7 @@ public class Text implements DrawItem, Serializable {
     }
 
     private int addLayouts(List<TextLayoutInfo> layouts, AttributedString as,
-            FontRenderContext context, int charPosition) {
+            FontRenderContext context, int charPosition, float fxHeight) {
         AttributedCharacterIterator iterator = as.getIterator();
         LineBreakMeasurer measurer = new LineBreakMeasurer(iterator, context);
         while (measurer.getPosition() < iterator.getEndIndex()) {
@@ -589,7 +600,7 @@ public class Text implements DrawItem, Serializable {
             TextLayoutInfo info = new TextLayoutInfo();
             info.layout = layout;
             info.width = layout.getAdvance();
-            info.height = layout.getAscent() + layout.getDescent() + layout.getLeading();
+            info.height = fxHeight > 0 ? fxHeight : layout.getAscent() + layout.getDescent() + layout.getLeading();
             info.paragraphStart = charPosition;
             charPosition += layout.getCharacterCount();
             info.paragraphEnd = charPosition;
@@ -598,7 +609,7 @@ public class Text implements DrawItem, Serializable {
         return charPosition;
     }
 
-    private void addEmptyPara(List<TextLayoutInfo> layouts, FontRenderContext context, int charPosition) {
+    private void addEmptyPara(List<TextLayoutInfo> layouts, FontRenderContext context, int charPosition, float fxHeight) {
         AttributedString space = new AttributedString(" ");
         space.addAttribute(TextAttribute.FONT, buildFont());
         AttributedCharacterIterator aci = space.getIterator();
@@ -606,7 +617,7 @@ public class Text implements DrawItem, Serializable {
         TextLayoutInfo info = new TextLayoutInfo();
         info.layout = layout;
         info.width = 0;
-        info.height = layout.getAscent() + layout.getDescent() + layout.getLeading();
+        info.height = fxHeight > 0 ? fxHeight : layout.getAscent() + layout.getDescent() + layout.getLeading();
         info.paragraphStart = charPosition;
         info.paragraphEnd = charPosition;
         layouts.add(info);
