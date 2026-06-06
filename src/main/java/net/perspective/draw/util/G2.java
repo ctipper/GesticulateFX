@@ -103,9 +103,10 @@ public class G2 {
                         path.setFill(Color.BLACK);
                     }
                 } else {
-                    if (caretEnd > offset && caretStart < offset + tfLen) {
+                    int paraEnd = offset + tfLen + (isLast ? 0 : 1);
+                    if (caretEnd > offset && caretStart < paraEnd) {
                         int localStart = Math.max(0, caretStart - offset);
-                        int localEnd = Math.min(tfLen, caretEnd - offset);
+                        int localEnd = Math.min(paragraphLength(tf), caretEnd - offset);
                         PathElement[] range = tf.getRangeShape(localStart, localEnd, false);
                         path.getElements().addAll(Arrays.asList(range));
                         path.setStroke(Color.TRANSPARENT);
