@@ -56,6 +56,7 @@ import net.perspective.draw.event.behaviours.*;
 import net.perspective.draw.event.keyboard.*;
 import net.perspective.draw.geom.*;
 import net.perspective.draw.util.CanvasPoint;
+import net.perspective.draw.util.Messages;
 import net.perspective.draw.util.G2;
 
 import static net.perspective.draw.CanvasTransferHandler.COPY;
@@ -188,11 +189,11 @@ public class DrawingArea {
                     changeHandlers(oldhandlertype);
                 }
                 canvas.setCursor(Cursor.DEFAULT);
-                controller.setStatusMessage("Dropper tool off");
+                controller.setStatusMessage(Messages.get("status.dropperOff"));
             } else if (!oldValue && newValue) {
                 changeHandlers(HandlerType.SELECTION);
                 canvas.setCursor(Cursor.HAND);
-                controller.setStatusMessage("Dropper tool selected");
+                controller.setStatusMessage(Messages.get("status.dropper"));
             }
         });
         controller.getFontFamilyProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {

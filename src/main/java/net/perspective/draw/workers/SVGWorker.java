@@ -34,6 +34,7 @@ import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.util.CanvasPoint;
+import net.perspective.draw.util.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,7 @@ public class SVGWorker extends Task<Object> {
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controller.setStatusMessage("Exported to SVG");
+                controller.setStatusMessage(Messages.get("status.exportedSvg"));
             });
         });
     }

@@ -23,6 +23,8 @@
  */
 package net.perspective.draw.text;
 
+import net.perspective.draw.util.Messages;
+
 import java.util.*;
 import javax.inject.Inject;
 import javafx.application.Platform;
@@ -585,7 +587,7 @@ public class RichTextEditor implements Editor, Styler {
         if (!str.equals(lastSetContent)) {
             String gathered = new TextGatherer().textGatherer(str);
             if (gathered == null) {
-                controller.setStatusMessage("Text content too large");
+                controller.setStatusMessage(Messages.get("status.textTooLarge"));
                 return "";
             }
             str = gathered;

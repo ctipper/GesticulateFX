@@ -51,6 +51,7 @@ import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.util.Messages;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +122,7 @@ public class ReadInFunnel extends Task<Object> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();
                 if (success) {
-                    controller.setStatusMessage("Opened document");
+                    controller.setStatusMessage(Messages.get("status.openedDocument"));
                 }
             });
         });

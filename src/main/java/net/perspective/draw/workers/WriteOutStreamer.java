@@ -50,6 +50,7 @@ import net.perspective.draw.serialise.InstantPersistenceDelegate;
 import net.perspective.draw.serialise.Path2DPersistenceDelegate;
 import net.perspective.draw.serialise.TextPersistenceDelegate;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.util.Messages;
 
 /**
  * 
@@ -94,7 +95,7 @@ public class WriteOutStreamer extends Task<Object> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();
-                controller.setStatusMessage("Saved document");
+                controller.setStatusMessage(Messages.get("status.savedDocument"));
             });
         });
     }

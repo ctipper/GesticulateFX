@@ -103,6 +103,7 @@ import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.util.Messages;
 
 /**
  * 
@@ -1263,7 +1264,7 @@ public class ApplicationController implements Initializable {
         aboutmenu.getStyleClass().add("menuitem");
         aboutmenu.setPrefWidth(150.0);
         aboutmenu.setPrefHeight(20.0);
-        aboutmenu.setText("About...");
+        aboutmenu.setText(Messages.get("menu.app.about"));
         aboutmenu.setOnAction(this::handleAboutBoxAction);
         appmenu.getRowConstraints().add(getRow());
         appmenu.addRow(lastrow + hboxes + 2, about, aboutmenu);

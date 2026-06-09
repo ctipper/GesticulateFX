@@ -25,9 +25,7 @@ package net.perspective.draw;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import javax.inject.Provider;
@@ -36,6 +34,7 @@ import dagger.Provides;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
 import javafx.util.Callback;
+import net.perspective.draw.util.Messages;
 
 /**
  *
@@ -48,11 +47,8 @@ class FxAppModule {
     @Provides
     @FxAppScoped
     ResourceBundle provideResourceBundle() {
-        try {
-            return ResourceBundle.getBundle("ui");
-        } catch (MissingResourceException e) {
-            return ResourceBundle.getBundle("ui", Locale.ENGLISH);
-        }
+        // environment-driven locale, en-GB base; shared with programmatic strings
+        return Messages.getBundle();
     }
 
     @Provides

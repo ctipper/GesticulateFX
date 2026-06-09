@@ -46,6 +46,7 @@ import net.perspective.draw.ImageItem;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.util.Messages;
 import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
@@ -132,7 +133,7 @@ public class ImageLoadWorker extends Task<Object> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
                 controller.getProgressProperty().unbind();
                 if (success) {
-                    controller.setStatusMessage("Read Pictures");
+                    controller.setStatusMessage(Messages.get("status.readPictures"));
                 }
             });
         });

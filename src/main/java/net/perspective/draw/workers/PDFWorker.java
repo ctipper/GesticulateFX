@@ -37,6 +37,7 @@ import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.util.CanvasPoint;
+import net.perspective.draw.util.Messages;
 import org.apache.fop.configuration.Configuration;
 import org.apache.fop.configuration.ConfigurationException;
 import org.apache.fop.configuration.DefaultConfiguration;
@@ -94,7 +95,7 @@ public class PDFWorker extends Task<Object> {
         }, share.executor).thenRun(() -> {
             Platform.runLater(() -> {
                 controller.getProgressVisibleProperty().setValue(Boolean.FALSE);
-                controller.setStatusMessage("Exported to PDF");
+                controller.setStatusMessage(Messages.get("status.exportedPdf"));
             });
         });
     }

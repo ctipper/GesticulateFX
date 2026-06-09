@@ -23,6 +23,8 @@
  */
 package net.perspective.draw;
 
+import net.perspective.draw.util.Messages;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -59,7 +61,7 @@ public class AboutBox extends Dialog<ButtonType> {
         this.getDialogPane().setGraphic(image);
         this.getDialogPane().getButtonTypes().add(OkButtonType);
         Label[] aboutLabel = new Label[6];
-        aboutLabel[0] = new Label("A freehand drawing tool");
+        aboutLabel[0] = new Label(Messages.get("about.tagline"));
         aboutLabel[1] = new Label("Version 1.3");
         // higher java versions use runtime property
         String[] elements = System.getProperty("java.specification.version").split("\\.");
@@ -70,7 +72,7 @@ public class AboutBox extends Dialog<ButtonType> {
         }
         aboutLabel[3] = new Label("JFX " + System.getProperty("javafx.version"));
         aboutLabel[4] = new Label("Copyright © 2026 Christopher Tipper");
-        aboutLabel[5] = new Label("All rights reserved.");
+        aboutLabel[5] = new Label(Messages.get("about.rights"));
         aboutLabel[0].setStyle("-fx-font-size: 16px;");
         aboutLabel[1].setStyle("-fx-font-size: 13px;");
         aboutLabel[2].setStyle("-fx-font-size: 12px;");
