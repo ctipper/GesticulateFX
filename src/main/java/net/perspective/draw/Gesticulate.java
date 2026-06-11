@@ -80,7 +80,7 @@ public class Gesticulate extends Application {
     // parameters for sizing the stage
     private final Screen screen = Screen.getPrimary();
     private final Rectangle2D screenSize = screen.getVisualBounds();
-    private final int sceneWidth = 1_036;
+    private final int sceneWidth = 1_070;
     private final int sceneHeight = (screenSize.getMaxY() < 960 ? (int) screenSize.getMaxY() : (int) (1_080 * .8 + 126));
     private final int frameLeft = (int) (screenSize.getMaxX() - sceneWidth) / 3;
     private final int frameTop = (int) (screenSize.getMaxY() - sceneHeight) / 5;
