@@ -242,7 +242,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--name"/>
          <arg value="${app.name}"/>
          <arg value="--app-version"/>
-         <arg value="${version.public}"/>
+         <arg value="${version.internal}"/>
          <arg value="--main-class"/>
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
@@ -253,8 +253,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="Copyright © 2026 Christopher Tipper" />
          <arg value="--vendor" />
          <arg value="https://www.e-conomist.me.uk/" />
-         <arg value="--app-version" />
-         <arg value="${version.internal}" />
       </exec>
    </target>
 
@@ -295,8 +293,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--linux-menu-group"/>
          <arg value="Graphics"/>
          <arg value="--linux-shortcut"/>
-         <arg value="--linux-app-release" />
-         <arg value="${version.internal}" />
          <arg value="--file-associations" />
          <arg value="${deploy.dir}/linux/bundle.properties" />
          <arg value="--file-associations" />
