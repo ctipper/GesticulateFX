@@ -39,8 +39,9 @@ import org.slf4j.LoggerFactory;
  * translations may contain non-ASCII characters directly.</p>
  *
  * <p>The locale is taken from the environment as the sole authority: German,
- * French, Spanish and Brazilian/European Portuguese load their bundle, every
- * other locale resolves to the en-GB base. The same {@link ResourceBundle} is
+ * French, Spanish, Polish and Brazilian/European Portuguese load their
+ * bundle, every other locale resolves to the en-GB base. The same
+ * {@link ResourceBundle} is
  * fed to the {@code FXMLLoader} (for {@code %key} references in the FXML) and
  * used here for programmatic strings (status messages, the about box).</p>
  *
@@ -67,7 +68,7 @@ public final class Messages {
 
     /**
      * Resolve the UI locale from the environment over the supported set.
-     * German, French and Spanish map to the language; Portuguese is split
+     * German, French, Spanish and Polish map to the language; Portuguese is split
      * into Brazilian ({@code pt_BR}) and European ({@code pt_PT}, the default
      * for any non-Brazilian Portuguese); anything else falls back to en-GB.
      *
@@ -76,7 +77,7 @@ public final class Messages {
     private static Locale selectLocale() {
         Locale def = Locale.getDefault();
         return switch (def.getLanguage()) {
-            case "de", "fr", "es" -> Locale.of(def.getLanguage());
+            case "de", "fr", "es", "pl" -> Locale.of(def.getLanguage());
             case "pt" -> "BR".equals(def.getCountry()) ? Locale.of("pt", "BR") : Locale.of("pt", "PT");
             default -> Locale.UK;
         };
