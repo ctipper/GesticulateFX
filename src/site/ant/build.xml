@@ -199,6 +199,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <arg value="${build.dir}/${app.name}.app/Contents/Info.plist"/>
       </exec>
 
+      <!-- allow per-locale InfoPlist.strings to take effect -->
+      <exec executable="/usr/libexec/PlistBuddy" if:set="onmacos" failonerror="false">
+          <arg value="-c"/>
+          <arg value="Add :CFBundleAllowMixedLocalizations bool true"/>
+          <arg value="${build.dir}/${app.name}.app/Contents/Info.plist"/>
+      </exec>
+
+      <!-- Create localized resource folders with a minimal InfoPlist.strings -->
+
+      <macrodef name="lproj">
+          <attribute name="lang"/>
+          <sequential>
+              <mkdir dir="${build.dir}/${app.name}.app/Contents/Resources/@{lang}.lproj"/>
+              <echo file="${build.dir}/${app.name}.app/Contents/Resources/@{lang}.lproj/InfoPlist.strings" encoding="UTF-8">CFBundleDisplayName = "${app.name}";
+CFBundleName = "${app.name}";
+</echo>
+          </sequential>
+      </macrodef>
+
+      <lproj if:set="onmacos" lang="en"/>
+      <lproj if:set="onmacos" lang="de"/>
+      <lproj if:set="onmacos" lang="pt"/>
+      <lproj if:set="onmacos" lang="pt_BR"/>
+      <lproj if:set="onmacos" lang="es"/>
+      <lproj if:set="onmacos" lang="pl"/>
+      <lproj if:set="onmacos" lang="fr"/>
+
       <exec executable="${jpackage.windows.path}/bin/jpackage.exe" if:set="onwindows" failonerror="false" newenvironment="true">
          <env key="JAVA_HOME" value="${jpackage.windows.path}"/>
          <arg value="--type"/>
