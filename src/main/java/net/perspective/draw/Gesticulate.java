@@ -174,12 +174,18 @@ public class Gesticulate extends Application {
         pane.setContent(drawareaProvider.get().getScene());
         this.setOnResize(pane);
 
-        // open canvas from file if requested
+        // open canvas from file if requested - only accept args that are real,
+        // existing files, so stray launcher switches (e.g. -AppleLanguages) are ignored
         final Parameters parameters = getParameters();
         final List<String> args = parameters.getRaw();
         final List<File> files = new ArrayList<>();
         for (String arg : args) {
-            files.add(new File(arg));
+            final File file = new File(arg);
+            if (file.isFile()) {
+                files.add(file);
+            } else {
+                logger.debug("ignoring non-file argument: {}", arg);
+            }
         }
         if (!files.isEmpty()) {
             share.loadCanvas(files);

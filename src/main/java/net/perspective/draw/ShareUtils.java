@@ -44,9 +44,11 @@ import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.ReadInFunnel;
 import net.perspective.draw.workers.SVGWorker;
 import net.perspective.draw.workers.WriteOutStreamer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * @author ctipper
  */
 
@@ -67,6 +69,8 @@ public class ShareUtils {
     private File canvasfile;
     private final double margin;
     public final ExecutorService executor;
+
+    private static final Logger logger = LoggerFactory.getLogger(ShareUtils.class.getName());
 
     @Inject
     public ShareUtils(Provider<Gesticulate> applicationProvider, CanvasView view, ApplicationController controller) {
@@ -207,12 +211,19 @@ public class ShareUtils {
      * @param files a list of files
      */
     public void loadCanvas(List<File> files) {
-        File file = files.get(0);
-        if (FileUtils.getExtension(file).equals("gst")) {
-            view.clearView();
-            readCanvas(file);
-        } else {
-            readPictures(files);
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+        try {
+            File file = files.get(0);
+            if (FileUtils.getExtension(file).equals("gst")) {
+                view.clearView();
+                readCanvas(file);
+            } else {
+                readPictures(files);
+            }
+        } catch (Exception ex) {
+            logger.error("failed to load canvas from {}", files, ex);
         }
     }
 
