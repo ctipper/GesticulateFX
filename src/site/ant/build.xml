@@ -199,13 +199,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <arg value="${build.dir}/${app.name}.app/Contents/Info.plist"/>
       </exec>
 
-      <!-- allow per-locale InfoPlist.strings to take effect -->
-      <exec executable="/usr/libexec/PlistBuddy" if:set="onmacos" failonerror="false">
-          <arg value="-c"/>
-          <arg value="Add :CFBundleAllowMixedLocalizations bool true"/>
-          <arg value="${build.dir}/${app.name}.app/Contents/Info.plist"/>
-      </exec>
-
       <!-- Create localized resource folders with a minimal InfoPlist.strings -->
 
       <macrodef name="lproj">
