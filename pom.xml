@@ -20,10 +20,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>26.0.1</javafx.version>
         <dagger.version>2.59.2</dagger.version>
-        <slf4j.version>2.0.17</slf4j.version>
-        <log4j.version>2.25.3</log4j.version>
+        <slf4j.version>2.0.18</slf4j.version>
+        <log4j.version>2.26.0</log4j.version>
         <batik.version>1.19</batik.version>
-        <junit.version>6.0.3</junit.version>
+        <junit.version>6.1.0</junit.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.22.1</version>
+            <version>1.22.2</version>
             <scope>compile</scope>
         </dependency>
     
@@ -315,7 +315,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.10.0</version>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -337,7 +337,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
                 <configuration>
                     <skipTests>${skipTests}</skipTests>
                     <argLine>-XX:+ShowCodeDetailsInExceptionMessages</argLine>
@@ -347,7 +347,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
             </plugin>
 
         </plugins>
