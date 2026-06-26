@@ -52,6 +52,7 @@ import net.perspective.draw.text.Editor;
 import net.perspective.draw.text.RichTextEditor;
 import net.perspective.draw.text.TextEditor;
 import net.perspective.draw.util.G2;
+import net.perspective.draw.util.SVGRead;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
@@ -314,6 +315,12 @@ public class DrawAppModule {
     G2 provideG2(Provider<DrawingArea> drawareaProvider, Provider<ApplicationController> controllerProvider,
             Provider<TextController> textControllerProvider) {
         return new G2(drawareaProvider, controllerProvider, textControllerProvider);
+    }
+
+    @Provides
+    @Singleton
+    SVGRead provideSVGRead() {
+        return new SVGRead();
     }
 
     @Provides
