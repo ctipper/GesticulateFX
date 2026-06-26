@@ -49,6 +49,7 @@ import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.text.Editor;
 import net.perspective.draw.util.G2;
+import net.perspective.draw.util.SVGRead;
 import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
@@ -195,6 +196,8 @@ public interface DrawAppComponent {
     PNGWorker providePngWorker();
 
     G2 g2();
+
+    SVGRead svgRead();
 
     Picture picture();
 

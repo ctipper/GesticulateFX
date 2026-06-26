@@ -23,11 +23,8 @@
  */
 package net.perspective.draw;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
@@ -35,14 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import org.apache.batik.anim.dom.SVGDOMImplementation;
-import org.apache.batik.transcoder.SVGAbstractTranscoder;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.TranscodingHints;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.util.SVGConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javafx.animation.FadeTransition;
@@ -104,6 +93,7 @@ import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
 import net.perspective.draw.util.Messages;
+import net.perspective.draw.util.SVGRead;
 
 /**
  * 
@@ -118,6 +108,7 @@ public class ApplicationController implements Initializable {
     private Gesticulate application;
     @Inject ShareUtils share;
     @Inject MapController mapper;
+    @Inject SVGRead svgRead;
     @Inject Provider<Picture> pictureProvider;
     private BooleanProperty snapshotEnabled;
     private BooleanProperty progressBarVisible;
@@ -152,9 +143,10 @@ public class ApplicationController implements Initializable {
     private final String SVG_SKETCH = "M9.683105 12.160538C9.387039 11.739883,8.870743 11.533356,8.366211 11.633789C7.209183 11.864105,6.822739 13.242813,7.049316 14.530975C7.212357 15.457993,7.598648 16.360352,8.366211 16.901367C11.324356 18.986465,15.644501 15.517441,14.160538 10.975342C13.918884 10.235748,13.520340 9.555481,12.975342 9.000000C9.410904 5.367126,3.067444 7.514481,1.781738 12.950684C0.468903 18.501633,5.099258 23.668060,11.000000 23.485840C17.038956 23.299332,21.461807 17.802231,21.008408 11.633789C20.603149 6.120422,16.446732 1.645233,11.000000 0.571884C7.478043 -0.122177,3.828094 0.742279,0.991592 2.942276";
     private final String SVG_POLYGON = "M18.730026 5.361984L13.638016 0.269974C4.441025 0.341461,-2.007233 9.368988,0.907990 18.092010C1.734192 20.564240,3.469177 22.750504,6.000000 23.184021C7.693268 23.474060,11.145432 21.827255,13.638016 20.638016C15.358093 19.817337,18.366989 18.381744,18.730026 18.092010C22.815308 14.831955,22.815308 8.622040,18.730026 5.361984Z";
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class.getName());
+    /** Raster width for SVG icons, supersampled to stay crisp when scaled. */
+    private static final int ICON_WIDTH = 128;
 
-    private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class.getName());
 
     public void setApplication(Gesticulate application) {
         this.application = application;
@@ -1282,7 +1274,7 @@ public class ApplicationController implements Initializable {
         final String filename = ((Button) ev.getSource()).getId().substring(3);
         CompletableFuture.runAsync(() -> {
             try {
-                Image image = SwingFXUtils.toFXImage(rasterizeSVGResource(filename, toRGBCode(drawareaProvider.get().getFillColor())), null);
+                Image image = SwingFXUtils.toFXImage(svgRead.rasterizeResource(filename, toRGBCode(drawareaProvider.get().getFillColor()), ICON_WIDTH), null);
                 Picture picture = pictureProvider.get();
                 picture.setStart(shift, shift);
                 ImageItem item = new ImageItem(image);
@@ -1290,7 +1282,7 @@ public class ApplicationController implements Initializable {
                 int index = viewProvider.get().setImageItem(item);
                 double width = (double) image.getWidth();
                 double height = (double) image.getHeight();
-                double scale = 64d / height;
+                double scale = 48d / height;
                 logger.trace("Image relative scale: {}", scale);
                 picture.setImage(index, width, height);
                 picture.setScale(scale);
@@ -1317,8 +1309,9 @@ public class ApplicationController implements Initializable {
             Button[] button = new Button[4];
             for (int j=0; j < 4; j++) {
                 try {
-                    image[j] = new ImageView(SwingFXUtils.toFXImage(rasterizeSVGResource(svgStrings.get(i * 4 + j), themeAccentColor.getValue()), null));
+                    image[j] = new ImageView(SwingFXUtils.toFXImage(svgRead.rasterizeResource(svgStrings.get(i * 4 + j), themeAccentColor.getValue(), ICON_WIDTH), null));
                     image[j].setFitWidth(35.0);
+                    image[j].setFitHeight(35.0);
                     image[j].setPreserveRatio(true);
                     button[j] = new Button();
                     button[j].setId("ia_" + svgStrings.get(i * 4 + j));
@@ -1463,60 +1456,11 @@ public class ApplicationController implements Initializable {
         "plane-departure.svg", "plane.svg", "recycle.svg", "restroom.svg", "road-barrier.svg", "sailboat.svg", "school.svg", "ship.svg",
         "square-phone.svg", "tractor.svg", "train-subway.svg", "trees.svg", "truck-field.svg", "utensils.svg", "water.svg", "wheelchair.svg");
 
-    private BufferedImage rasterizeSVGResource(String filename, String fillColor) throws IOException {
-
-        final BufferedImage[] imagePointer = new BufferedImage[1];
-
-        // Rendering hints can't be set programatically, so
-        // we override defaults with a temporary stylesheet.
-        // These defaults emphasize quality and precision, and
-        // are more similar to the defaults of other SVG viewers.
-        // SVG documents can still override these defaults.
-        String css = "svg {"
-                + "shape-rendering: geometricPrecision;"
-                + "text-rendering:  geometricPrecision;"
-                + "color-rendering: optimizeQuality;"
-                + "image-rendering: optimizeQuality;"
-                + "fill: " + fillColor + ";"
-                + "}";
-        Path cssFile = Files.createTempFile(Files.createTempDirectory("temp-dir"), "batik-default-override-", ".css");
-        FileUtils.writeStringToFile(cssFile.toFile(), css);
-        TranscodingHints transcoderHints = new TranscodingHints();
-        transcoderHints.put(ImageTranscoder.KEY_XML_PARSER_VALIDATING, Boolean.FALSE);
-        transcoderHints.put(ImageTranscoder.KEY_DOM_IMPLEMENTATION,
-                SVGDOMImplementation.getDOMImplementation());
-        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT_NAMESPACE_URI,
-                SVGConstants.SVG_NAMESPACE_URI);
-        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT, "svg");
-        transcoderHints.put(ImageTranscoder.KEY_USER_STYLESHEET_URI, cssFile.toUri().toString());
-        transcoderHints.put(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, Boolean.TRUE);
-
-        try (InputStream file = getClass().getResourceAsStream("/svg/" + filename)) {
-            TranscoderInput input = new TranscoderInput(file);
-
-            ImageTranscoder t = new ImageTranscoder() {
-
-                @Override
-                public BufferedImage createImage(int width, int height) {
-                    return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-                }
-
-                @Override
-                public void writeImage(BufferedImage image, TranscoderOutput out) throws TranscoderException {
-                    imagePointer[0] = image;
-                }
-            };
-            t.setTranscodingHints(transcoderHints);
-            t.transcode(input, null);
-        } catch (TranscoderException ex) {
-            logger.error("Couldn't convert {}", filename);
-        } catch (IOException ex) {
-            logger.error("Couldn't read SVG image {}", filename);
-        }
-        return imagePointer[0];
-    }
-
-    /** Creates a new instance of <code>ApplicationController</code> */
+    /** 
+     * Creates a new instance of <code>ApplicationController</code>
+     * @param drawareaProvider
+     * @param viewProvider 
+     */
     @Inject
     public ApplicationController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider) {
         this.drawareaProvider = drawareaProvider;

@@ -23,12 +23,8 @@
  */
 package net.perspective.draw.workers;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -47,14 +43,7 @@ import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
 import net.perspective.draw.util.Messages;
-import org.apache.batik.anim.dom.SVGDOMImplementation;
-import org.apache.batik.transcoder.SVGAbstractTranscoder;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.TranscodingHints;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.util.SVGConstants;
+import net.perspective.draw.util.SVGRead;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +59,7 @@ public class ImageLoadWorker extends Task<Object> {
     private final CanvasView view;
     private final ApplicationController controller;
     @Inject ShareUtils share;
+    @Inject SVGRead svgRead;
     @Inject Provider<Picture> pictureProvider;
     private List<File> imageFiles;
     private double shift;
@@ -156,76 +146,13 @@ public class ImageLoadWorker extends Task<Object> {
             images = new ArrayList<>();
             for (File file : imageFiles) {
                 if (FileUtils.getExtension(file.getName()).equals("svg")) {
-                    images.add(SwingFXUtils.toFXImage(rasterize(file), null));
+                    images.add(SwingFXUtils.toFXImage(svgRead.rasterize(file), null));
                 } else {
                     images.add(SwingFXUtils.toFXImage(ImageIO.read(file), null));
                 }
             }
         }
 
-    }
-
-    /**
-     * Transcode SVG document 
-     * 
-     * @see <a href="https://stackoverflow.com/a/11436655">How to get a BufferedImage from a SVG?</a>
-     * 
-     * @param svgFile the file
-     * @return a buffered image
-     * @throws IOException 
-     */
-    public BufferedImage rasterize(File svgFile) throws IOException {
-
-        final BufferedImage[] imagePointer = new BufferedImage[1];
-
-        // Rendering hints can't be set programatically, so
-        // we override defaults with a temporary stylesheet.
-        // These defaults emphasize quality and precision, and
-        // are more similar to the defaults of other SVG viewers.
-        // SVG documents can still override these defaults.
-        String css = "svg {"
-            + "shape-rendering: geometricPrecision;"
-            + "text-rendering:  geometricPrecision;"
-            + "color-rendering: optimizeQuality;"
-            + "image-rendering: optimizeQuality;"
-            + "}";
-        Path cssFile = Files.createTempFile(Files.createTempDirectory("temp-dir"), "batik-default-override-", ".css");
-        FileUtils.writeStringToFile(cssFile.toFile(), css);
-        TranscodingHints transcoderHints = new TranscodingHints();
-        transcoderHints.put(ImageTranscoder.KEY_XML_PARSER_VALIDATING, Boolean.FALSE);
-        transcoderHints.put(ImageTranscoder.KEY_DOM_IMPLEMENTATION,
-            SVGDOMImplementation.getDOMImplementation());
-        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT_NAMESPACE_URI,
-            SVGConstants.SVG_NAMESPACE_URI);
-        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT, "svg");
-        transcoderHints.put(ImageTranscoder.KEY_USER_STYLESHEET_URI, cssFile.toUri().toString());
-        transcoderHints.put(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, Boolean.TRUE);
-
-        try {
-            TranscoderInput input = new TranscoderInput(new FileInputStream(svgFile));
-
-            ImageTranscoder t = new ImageTranscoder() {
-
-                @Override
-                public BufferedImage createImage(int w, int h) {
-                    return new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-                }
-
-                @Override
-                public void writeImage(BufferedImage image, TranscoderOutput out)
-                    throws TranscoderException {
-                    imagePointer[0] = image;
-                }
-            };
-            t.setTranscodingHints(transcoderHints);
-            t.transcode(input, null);
-        } catch (TranscoderException ex) {
-            logger.error("Couldn't convert {}", svgFile.getName());
-        } finally {
-            cssFile.toFile().deleteOnExit();
-        }
-
-        return imagePointer[0];
     }
 
     /**
