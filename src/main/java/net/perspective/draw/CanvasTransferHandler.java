@@ -30,7 +30,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -46,6 +45,7 @@ import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.FileUtils;
+import net.perspective.draw.util.SVGRead;
 
 /**
  * 
@@ -58,6 +58,7 @@ public class CanvasTransferHandler {
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<CanvasView> viewProvider;
     @Inject MapController mapper;
+    @Inject SVGRead svgRead;
     @Inject Provider<ShareUtils> shareProvider;
     @Inject Provider<Picture> pictureProvider;
     @Inject Provider<StreetMap> streetMapProvider;
@@ -145,11 +146,21 @@ public class CanvasTransferHandler {
      */
     private boolean importImageItem(Transferable t) throws UnsupportedFlavorException, IOException {
         java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
-        Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
+        placeImage(SwingFXUtils.toFXImage(toBufferedImage(img), null), "PNG");
+        return true;
+    }
+
+    /**
+     * Place a loaded image onto the canvas as a scaled {@link Picture}.
+     *
+     * @param image the image to add
+     * @param format the source format recorded on the {@link ImageItem}
+     */
+    private void placeImage(Image image, String format) {
         Picture picture = pictureProvider.get();
         picture.moveTo(shift, shift);
         ImageItem item = new ImageItem(image);
-        item.setFormat("PNG");
+        item.setFormat(format);
         int index = viewProvider.get().setImageItem(item);
         double width = (double) image.getWidth();
         double height = (double) image.getHeight();
@@ -159,7 +170,6 @@ public class CanvasTransferHandler {
         picture.setScale(scale);
         viewProvider.get().setNewItem(picture);
         viewProvider.get().resetNewItem();
-        return true;
     }
 
     /**
@@ -186,14 +196,17 @@ public class CanvasTransferHandler {
     }
 
     /**
-     * Paste SVG markup from the clipboard by spooling it to a temporary
-     * {@code .svg} file and loading it like any other image file.
+     * Paste SVG markup from the clipboard by rasterizing it in memory and placing
+     * it on the canvas.
      */
     private boolean importSvgItem(Transferable t) throws UnsupportedFlavorException, IOException {
-        String text = (String) t.getTransferData(DataFlavor.stringFlavor);
-        File file = writeSvgToTempFile(text);
-        // ImageLoadWorker handles threading and the progress indicator
-        shareProvider.get().readPictures(List.of(file));
+        String svg = (String) t.getTransferData(DataFlavor.stringFlavor);
+        BufferedImage buffered = svgRead.rasterize(svg);
+        if (buffered == null) {
+            logger.debug("importData: could not rasterize pasted SVG");
+            return false;
+        }
+        placeImage(SwingFXUtils.toFXImage(buffered, null), "svg");
         return true;
     }
 
@@ -212,22 +225,6 @@ public class CanvasTransferHandler {
         return head.startsWith("<svg")
             || head.startsWith("<!doctype svg")
             || (head.startsWith("<?xml") && head.contains("<svg"));
-    }
-
-    /**
-     * Write pasted SVG markup to a temporary file so it can be rasterized by
-     * {@link net.perspective.draw.util.SVGRead#rasterize(File)} via
-     * {@link ShareUtils#readPictures(List)}.
-     *
-     * @param text the SVG markup
-     * @return a temporary {@code .svg} file holding the markup
-     * @throws IOException if the file cannot be written
-     */
-    private File writeSvgToTempFile(String text) throws IOException {
-        File file = File.createTempFile("clipboard", ".svg");
-        file.deleteOnExit();
-        Files.writeString(file.toPath(), text);
-        return file;
     }
 
     /**
