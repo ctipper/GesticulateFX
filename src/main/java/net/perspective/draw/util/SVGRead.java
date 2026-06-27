@@ -197,7 +197,15 @@ public class SVGRead {
         } catch (TranscoderException ex) {
             logger.error("Couldn't convert {}", name);
         } finally {
-            cssFile.toFile().deleteOnExit();
+            // the stylesheet has been read by transcode(); remove it and its dedicated
+            // directory now rather than accumulating temp files for the JVM's lifetime
+            try {
+                Files.deleteIfExists(cssFile);
+                Files.deleteIfExists(cssFile.getParent());
+            } catch (IOException ex) {
+                cssFile.toFile().deleteOnExit();
+                cssFile.getParent().toFile().deleteOnExit();
+            }
         }
 
         return imagePointer[0];
@@ -214,7 +222,7 @@ public class SVGRead {
      */
     private static float[] viewBoxSize(File svgFile) {
         try (InputStream in = new FileInputStream(svgFile)) {
-            return readViewBox(secureXmlFactory().createXMLStreamReader(in), svgFile.getName());
+            return readViewBox(secureXmlFactory().createXMLStreamReader(in));
         } catch (XMLStreamException | IOException | IllegalArgumentException ex) {
             // IllegalArgumentException covers an unsupported StAX property and a malformed
             // viewBox number (NumberFormatException); either way we fall back to intrinsic sizing.
@@ -231,7 +239,7 @@ public class SVGRead {
      */
     private static float[] viewBoxSize(String svg) {
         try {
-            return readViewBox(secureXmlFactory().createXMLStreamReader(new StringReader(svg)), "clipboard");
+            return readViewBox(secureXmlFactory().createXMLStreamReader(new StringReader(svg)));
         } catch (XMLStreamException | IllegalArgumentException ex) {
             logger.warn("Couldn't read SVG dimensions from pasted markup");
         }
@@ -247,7 +255,7 @@ public class SVGRead {
     }
 
     /** Read the root element's {@code viewBox}, returning a size or {@code null} for intrinsic sizing. */
-    private static float[] readViewBox(XMLStreamReader reader, String name) throws XMLStreamException {
+    private static float[] readViewBox(XMLStreamReader reader) throws XMLStreamException {
         while (reader.hasNext()) {
             if (reader.next() == XMLStreamConstants.START_ELEMENT) {
                 // the root element of an SVG document
