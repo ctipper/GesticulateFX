@@ -187,6 +187,11 @@ public class CanvasTransferHandler {
         }
         if (imageFiles.isEmpty()) {
             logger.debug("importData: no supported image files in selection");
+            // the file list yielded nothing usable; fall back to raw image data
+            // when the transfer also offers it, rather than dropping the paste
+            if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                return importImageItem(t);
+            }
             return false;
         }
         // ImageLoadWorker handles threading and the progress indicator
