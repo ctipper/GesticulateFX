@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.xml.stream.XMLInputFactory;
@@ -87,6 +88,23 @@ public class SVGRead {
     }
 
     /**
+     * Transcode SVG markup held in memory (e.g. pasted from the clipboard), without spooling
+     * it to a temporary file. Treated as untrusted: external resource resolution is disabled.
+     * <p>
+     * Documents that declare only a {@code viewBox} are sized from it, matching {@link #rasterize(File)}.
+     *
+     * @param svg the SVG document markup
+     * @return a buffered image, or {@code null} if Batik could not transcode the markup
+     * @throws IOException
+     */
+    public BufferedImage rasterize(String svg) throws IOException {
+        float[] box = viewBoxSize(svg);
+        float width = box != null ? box[0] : 0f;
+        float height = box != null ? box[1] : 0f;
+        return rasterize(new TranscoderInput(new StringReader(svg)), null, width, height, "clipboard", false);
+    }
+
+    /**
      * Transcode an SVG document bundled as a classpath resource under {@code /svg/},
      * overriding its fill colour.
      *
@@ -138,6 +156,13 @@ public class SVGRead {
                 + "}";
         Path cssFile = Files.createTempFile(Files.createTempDirectory("temp-dir"), "batik-default-override-", ".css");
         FileUtils.writeStringToFile(cssFile.toFile(), css);
+        // Untrusted input carries no document URI, so Batik's same-origin check would also reject
+        // our own injected stylesheet. Base the document in the stylesheet's directory: our
+        // stylesheet is then same-origin (loads), while the document's external references
+        // (other directories, http://, file:///) remain cross-origin and are refused.
+        if (!allowExternalResources && input.getURI() == null) {
+            input.setURI(cssFile.getParent().resolve("document").toUri().toString());
+        }
         TranscodingHints transcoderHints = new TranscodingHints();
         transcoderHints.put(ImageTranscoder.KEY_XML_PARSER_VALIDATING, Boolean.FALSE);
         transcoderHints.put(ImageTranscoder.KEY_DOM_IMPLEMENTATION,
@@ -189,36 +214,61 @@ public class SVGRead {
      */
     private static float[] viewBoxSize(File svgFile) {
         try (InputStream in = new FileInputStream(svgFile)) {
-            XMLInputFactory factory = XMLInputFactory.newFactory();
-            factory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
-            factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
-            XMLStreamReader reader = factory.createXMLStreamReader(in);
-            while (reader.hasNext()) {
-                if (reader.next() == XMLStreamConstants.START_ELEMENT) {
-                    // the root element of an SVG document
-                    if (isAbsolute(reader.getAttributeValue(null, "width"))
-                            && isAbsolute(reader.getAttributeValue(null, "height"))) {
-                        return null;
-                    }
-                    String viewBox = reader.getAttributeValue(null, "viewBox");
-                    if (viewBox != null) {
-                        String[] parts = viewBox.trim().split("[\\s,]+");
-                        if (parts.length == 4) {
-                            float w = Float.parseFloat(parts[2]);
-                            float h = Float.parseFloat(parts[3]);
-                            if (w > 0f && h > 0f) {
-                                float scale = Math.max(1f, MIN_VIEWBOX_DIMENSION / Math.max(w, h));
-                                return new float[]{ w * scale, h * scale };
-                            }
-                        }
-                    }
-                    return null;
-                }
-            }
+            return readViewBox(secureXmlFactory().createXMLStreamReader(in), svgFile.getName());
         } catch (XMLStreamException | IOException | IllegalArgumentException ex) {
             // IllegalArgumentException covers an unsupported StAX property and a malformed
             // viewBox number (NumberFormatException); either way we fall back to intrinsic sizing.
             logger.warn("Couldn't read SVG dimensions from {}", svgFile.getName());
+        }
+        return null;
+    }
+
+    /**
+     * As {@link #viewBoxSize(File)}, but reading from in-memory markup.
+     *
+     * @param svg the SVG document markup
+     * @return {@code {width, height}}, or {@code null} to use Batik's intrinsic sizing
+     */
+    private static float[] viewBoxSize(String svg) {
+        try {
+            return readViewBox(secureXmlFactory().createXMLStreamReader(new StringReader(svg)), "clipboard");
+        } catch (XMLStreamException | IllegalArgumentException ex) {
+            logger.warn("Couldn't read SVG dimensions from pasted markup");
+        }
+        return null;
+    }
+
+    /** A StAX factory hardened against DTD and external entity resolution (XXE). */
+    private static XMLInputFactory secureXmlFactory() {
+        XMLInputFactory factory = XMLInputFactory.newFactory();
+        factory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+        factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
+        return factory;
+    }
+
+    /** Read the root element's {@code viewBox}, returning a size or {@code null} for intrinsic sizing. */
+    private static float[] readViewBox(XMLStreamReader reader, String name) throws XMLStreamException {
+        while (reader.hasNext()) {
+            if (reader.next() == XMLStreamConstants.START_ELEMENT) {
+                // the root element of an SVG document
+                if (isAbsolute(reader.getAttributeValue(null, "width"))
+                        && isAbsolute(reader.getAttributeValue(null, "height"))) {
+                    return null;
+                }
+                String viewBox = reader.getAttributeValue(null, "viewBox");
+                if (viewBox != null) {
+                    String[] parts = viewBox.trim().split("[\\s,]+");
+                    if (parts.length == 4) {
+                        float w = Float.parseFloat(parts[2]);
+                        float h = Float.parseFloat(parts[3]);
+                        if (w > 0f && h > 0f) {
+                            float scale = Math.max(1f, MIN_VIEWBOX_DIMENSION / Math.max(w, h));
+                            return new float[]{ w * scale, h * scale };
+                        }
+                    }
+                }
+                return null;
+            }
         }
         return null;
     }
