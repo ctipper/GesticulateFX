@@ -30,6 +30,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -90,11 +91,11 @@ public class CanvasTransferHandler {
      * Import the contents of a transfer (clipboard paste or drag-and-drop) onto
      * the canvas.
      * <p>
-     * The supported payload is resolved from the transfer's flavors by
+     * The supported payload is resolved from the transfer by
      * {@link #hasDrawItemFlavor} and dispatched to the matching handler:
-     * a serialized {@link DrawItem}, raw image data, or a list of image files.
-     * Each successful import nudges the paste offset so repeated pastes do not
-     * stack exactly on top of one another.
+     * a serialized {@link DrawItem}, raw image data, a list of image files, or
+     * SVG markup. Each successful import nudges the paste offset so repeated
+     * pastes do not stack exactly on top of one another.
      *
      * @param t the transfer to import; its available {@link DataFlavor}s
      *          determine how it is handled
@@ -102,7 +103,7 @@ public class CanvasTransferHandler {
      *         transfer held nothing importable or a transfer error occurred
      */
     public boolean importData(Transferable t) {
-        if (!hasDrawItemFlavor(t.getTransferDataFlavors())) {
+        if (!hasDrawItemFlavor(t)) {
             logger.trace("ImportData");
             return false;
         }
@@ -111,6 +112,7 @@ public class CanvasTransferHandler {
                 case DRAWITEM -> importDrawItem(t);
                 case IMAGEITEM -> importImageItem(t);
                 case FILEITEM -> importFileItem(t);
+                case SVGITEM -> importSvgItem(t);
                 case NONE -> false;
             };
             if (imported) {
@@ -184,6 +186,51 @@ public class CanvasTransferHandler {
     }
 
     /**
+     * Paste SVG markup from the clipboard by spooling it to a temporary
+     * {@code .svg} file and loading it like any other image file.
+     */
+    private boolean importSvgItem(Transferable t) throws UnsupportedFlavorException, IOException {
+        String text = (String) t.getTransferData(DataFlavor.stringFlavor);
+        File file = writeSvgToTempFile(text);
+        // ImageLoadWorker handles threading and the progress indicator
+        shareProvider.get().readPictures(List.of(file));
+        return true;
+    }
+
+    /**
+     * Determine whether pasted text is SVG markup.
+     *
+     * @param text the clipboard string
+     * @return {@code true} if the text looks like an SVG document
+     */
+    private boolean isSvgMarkup(String text) {
+        if (text == null) {
+            return false;
+        }
+        String head = text.stripLeading();
+        head = head.substring(0, Math.min(head.length(), 512)).toLowerCase();
+        return head.startsWith("<svg")
+            || head.startsWith("<!doctype svg")
+            || (head.startsWith("<?xml") && head.contains("<svg"));
+    }
+
+    /**
+     * Write pasted SVG markup to a temporary file so it can be rasterized by
+     * {@link net.perspective.draw.util.SVGRead#rasterize(File)} via
+     * {@link ShareUtils#readPictures(List)}.
+     *
+     * @param text the SVG markup
+     * @return a temporary {@code .svg} file holding the markup
+     * @throws IOException if the file cannot be written
+     */
+    private File writeSvgToTempFile(String text) throws IOException {
+        File file = File.createTempFile("clipboard", ".svg");
+        file.deleteOnExit();
+        Files.writeString(file.toPath(), text);
+        return file;
+    }
+
+    /**
      * Wrap the currently selected drawing in a {@link Transferable} for export
      * (copy or cut).
      *
@@ -228,17 +275,19 @@ public class CanvasTransferHandler {
      * <p>
      * A single transfer may advertise several flavors at once, so they are
      * matched in priority order regardless of their order in the array: a native
-     * {@link DrawItem} first, then a file list, then raw image data. Image files
-     * are preferred over raw image data so they load via {@code ImageLoadWorker}
-     * (svg-aware, threaded, with a progress indicator) rather than being decoded
-     * eagerly.
+     * {@link DrawItem} first, then a file list, then raw image data, and finally
+     * SVG markup carried as text. Image files are preferred over raw image data
+     * so they load via {@code ImageLoadWorker} (svg-aware, threaded, with a
+     * progress indicator) rather than being decoded eagerly; SVG markup is the
+     * lowest priority and only matches when the string actually looks like SVG.
      *
-     * @param flavors the flavors advertised by the transfer
+     * @param t the transfer whose flavors (and, for SVG, content) are inspected
      * @return {@code true} if a supported flavor was found (and {@link #flavor}
      *         set accordingly), {@code false} otherwise (with {@link #flavor}
      *         reset to {@link Flavor#NONE})
      */
-    protected boolean hasDrawItemFlavor(DataFlavor[] flavors) {
+    protected boolean hasDrawItemFlavor(Transferable t) {
+        DataFlavor[] flavors = t.getTransferDataFlavors();
         for (DataFlavor f : flavors) {
             if (drawItemFlavor.equals(f)) {
                 logger.debug(mimeType);
@@ -260,6 +309,20 @@ public class CanvasTransferHandler {
                 return true;
             }
         }
+        for (DataFlavor f : flavors) {
+            if (DataFlavor.stringFlavor.equals(f)) {
+                try {
+                    if (isSvgMarkup((String) t.getTransferData(DataFlavor.stringFlavor))) {
+                        logger.debug("image/svg+xml;class=java.lang.String");
+                        flavor = Flavor.SVGITEM;
+                        return true;
+                    }
+                } catch (UnsupportedFlavorException | IOException e) {
+                    logger.warn("hasDrawItemFlavor: could not read clipboard text");
+                }
+                break;
+            }
+        }
 
         flavor = Flavor.NONE;
         return false;
@@ -267,7 +330,7 @@ public class CanvasTransferHandler {
 
     /** Supported clipboard payloads, resolved by {@link #hasDrawItemFlavor}. */
     private enum Flavor {
-        DRAWITEM, IMAGEITEM, FILEITEM, NONE
+        DRAWITEM, IMAGEITEM, FILEITEM, SVGITEM, NONE
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
