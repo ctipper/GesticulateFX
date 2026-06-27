@@ -30,6 +30,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -42,6 +44,7 @@ import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
+import net.perspective.draw.util.FileUtils;
 
 /**
  * 
@@ -54,12 +57,13 @@ public class CanvasTransferHandler {
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<CanvasView> viewProvider;
     @Inject MapController mapper;
+    @Inject Provider<ShareUtils> shareProvider;
     @Inject Provider<Picture> pictureProvider;
     @Inject Provider<StreetMap> streetMapProvider;
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor drawItemFlavor;
-    String dataflavor = "";
+    private Flavor flavor = Flavor.NONE;
     private double shift;
     private double pageWidth;      // canvas width pixels
     private double pageHeight;     // canvas height pixels
@@ -82,45 +86,110 @@ public class CanvasTransferHandler {
         shift = 10.0;
     }
 
+    /**
+     * Import the contents of a transfer (clipboard paste or drag-and-drop) onto
+     * the canvas.
+     * <p>
+     * The supported payload is resolved from the transfer's flavors by
+     * {@link #hasDrawItemFlavor} and dispatched to the matching handler:
+     * a serialized {@link DrawItem}, raw image data, or a list of image files.
+     * Each successful import nudges the paste offset so repeated pastes do not
+     * stack exactly on top of one another.
+     *
+     * @param t the transfer to import; its available {@link DataFlavor}s
+     *          determine how it is handled
+     * @return {@code true} if a supported item was imported, {@code false} if the
+     *         transfer held nothing importable or a transfer error occurred
+     */
     public boolean importData(Transferable t) {
-        if (hasDrawItemFlavor(t.getTransferDataFlavors())) {
-            try {
-                if (dataflavor.equals("drawitem")) {
-                    DrawItem item = (DrawItem) t.getTransferData(drawItemFlavor);
-                    // add item to Canvas
-                    item.moveTo(shift, shift);
-                    item = checkDrawings(item);
-                    viewProvider.get().appendItemToCanvas(item);
-                } else if (dataflavor.equals("imageitem")) {
-                    java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
-                    Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
-                    Picture picture = pictureProvider.get();
-                    picture.moveTo(shift, shift);
-                    ImageItem item = new ImageItem(image);
-                    item.setFormat("PNG");
-                    int index = viewProvider.get().setImageItem(item);
-                    double width = (double) image.getWidth();
-                    double height = (double) image.getHeight();
-                    double scale = getScale(width, height);
-                    logger.debug("Image relative scale: {}", scale);
-                    picture.setImage(index, width, height);
-                    picture.setScale(scale);
-                    viewProvider.get().setNewItem(picture);
-                    viewProvider.get().resetNewItem();
-                }
+        if (!hasDrawItemFlavor(t.getTransferDataFlavors())) {
+            logger.trace("ImportData");
+            return false;
+        }
+        try {
+            boolean imported = switch (flavor) {
+                case DRAWITEM -> importDrawItem(t);
+                case IMAGEITEM -> importImageItem(t);
+                case FILEITEM -> importFileItem(t);
+                case NONE -> false;
+            };
+            if (imported) {
                 shift = shift + 20.0;
                 logger.debug("Item added to canvas");
-                return true;
-            } catch (UnsupportedFlavorException e) {
-                logger.warn("importData: unsupported data flavor");
-            } catch (IOException e) {
-                logger.warn("importData: I/O exception");
             }
+            return imported;
+        } catch (UnsupportedFlavorException e) {
+            logger.warn("importData: unsupported data flavor");
+        } catch (IOException e) {
+            logger.warn("importData: I/O exception");
         }
-        logger.trace("ImportData");
         return false;
     }
 
+    /**
+     * Paste a serialized {@link DrawItem} onto the canvas.
+     */
+    private boolean importDrawItem(Transferable t) throws UnsupportedFlavorException, IOException {
+        DrawItem item = (DrawItem) t.getTransferData(drawItemFlavor);
+        // add item to Canvas
+        item.moveTo(shift, shift);
+        item = checkDrawings(item);
+        viewProvider.get().appendItemToCanvas(item);
+        return true;
+    }
+
+    /**
+     * Paste raw image data (e.g. copied from another application) onto the canvas.
+     */
+    private boolean importImageItem(Transferable t) throws UnsupportedFlavorException, IOException {
+        java.awt.Image img = (java.awt.Image) t.getTransferData(DataFlavor.imageFlavor);
+        Image image = SwingFXUtils.toFXImage(toBufferedImage(img), null);
+        Picture picture = pictureProvider.get();
+        picture.moveTo(shift, shift);
+        ImageItem item = new ImageItem(image);
+        item.setFormat("PNG");
+        int index = viewProvider.get().setImageItem(item);
+        double width = (double) image.getWidth();
+        double height = (double) image.getHeight();
+        double scale = getScale(width, height);
+        logger.debug("Image relative scale: {}", scale);
+        picture.setImage(index, width, height);
+        picture.setScale(scale);
+        viewProvider.get().setNewItem(picture);
+        viewProvider.get().resetNewItem();
+        return true;
+    }
+
+    /**
+     * Paste image files dropped/copied from the file manager (jpg, jpeg, png,
+     * gif, svg). Unsupported entries are ignored; returns {@code false} when the
+     * selection holds no supported image files.
+     */
+    private boolean importFileItem(Transferable t) throws UnsupportedFlavorException, IOException {
+        @SuppressWarnings("unchecked")
+        List<File> files = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
+        List<File> imageFiles = new ArrayList<>();
+        for (File file : files) {
+            switch (FileUtils.getExtension(file.getName()).toLowerCase()) {
+                case "jpg", "jpeg", "png", "gif", "svg" -> imageFiles.add(file);
+            }
+        }
+        if (imageFiles.isEmpty()) {
+            logger.debug("importData: no supported image files in selection");
+            return false;
+        }
+        // ImageLoadWorker handles threading and the progress indicator
+        shareProvider.get().readPictures(imageFiles);
+        return true;
+    }
+
+    /**
+     * Wrap the currently selected drawing in a {@link Transferable} for export
+     * (copy or cut).
+     *
+     * @return a transferable for the selected item, or {@code null} if nothing
+     *         is selected
+     */
     protected Transferable createTransferable() {
         int selected = viewProvider.get().getSelected();
         if (selected == -1) {
@@ -131,6 +200,16 @@ public class CanvasTransferHandler {
         return new DrawItemTransferable(data);
     }
 
+    /**
+     * Finish an export started by {@link #createTransferable}, after the data
+     * has been handed to the clipboard.
+     * <p>
+     * On {@link #MOVE} the source item is removed from the canvas and the paste
+     * offset is reset; on {@link #COPY} the item is left in place.
+     *
+     * @param data   the transferable that was exported
+     * @param action the completed action, either {@link #COPY} or {@link #MOVE}
+     */
     protected void exportDone(Transferable data, int action) {
         if (action == MOVE) {
             viewProvider.get().deleteSelectedItem();
@@ -143,20 +222,52 @@ public class CanvasTransferHandler {
         logger.trace("ExportDone");
     }
 
+    /**
+     * Resolve which supported payload a transfer offers and record it in
+     * {@link #flavor} for {@link #importData} to dispatch on.
+     * <p>
+     * A single transfer may advertise several flavors at once, so they are
+     * matched in priority order regardless of their order in the array: a native
+     * {@link DrawItem} first, then a file list, then raw image data. Image files
+     * are preferred over raw image data so they load via {@code ImageLoadWorker}
+     * (svg-aware, threaded, with a progress indicator) rather than being decoded
+     * eagerly.
+     *
+     * @param flavors the flavors advertised by the transfer
+     * @return {@code true} if a supported flavor was found (and {@link #flavor}
+     *         set accordingly), {@code false} otherwise (with {@link #flavor}
+     *         reset to {@link Flavor#NONE})
+     */
     protected boolean hasDrawItemFlavor(DataFlavor[] flavors) {
         for (DataFlavor f : flavors) {
             if (drawItemFlavor.equals(f)) {
                 logger.debug(mimeType);
-                dataflavor = "drawitem";
+                flavor = Flavor.DRAWITEM;
                 return true;
-            } else if (DataFlavor.imageFlavor.equals(f)) {
+            }
+        }
+        for (DataFlavor f : flavors) {
+            if (DataFlavor.javaFileListFlavor.equals(f)) {
+                logger.debug("application/x-java-file-list;class=java.util.List");
+                flavor = Flavor.FILEITEM;
+                return true;
+            }
+        }
+        for (DataFlavor f : flavors) {
+            if (DataFlavor.imageFlavor.equals(f)) {
                 logger.debug("image/x-java-image;class=java.awt.Image");
-                dataflavor = "imageitem";
+                flavor = Flavor.IMAGEITEM;
                 return true;
             }
         }
 
+        flavor = Flavor.NONE;
         return false;
+    }
+
+    /** Supported clipboard payloads, resolved by {@link #hasDrawItemFlavor}. */
+    private enum Flavor {
+        DRAWITEM, IMAGEITEM, FILEITEM, NONE
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
