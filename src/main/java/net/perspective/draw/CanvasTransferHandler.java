@@ -65,7 +65,6 @@ public class CanvasTransferHandler {
     String mimeType = DataFlavor.javaSerializedObjectMimeType
         + ";class=net.perspective.draw.geom.DrawItem";
     DataFlavor drawItemFlavor;
-    private Flavor flavor = Flavor.NONE;
     private double shift;
     private double pageWidth;      // canvas width pixels
     private double pageHeight;     // canvas height pixels
@@ -93,7 +92,7 @@ public class CanvasTransferHandler {
      * the canvas.
      * <p>
      * The supported payload is resolved from the transfer by
-     * {@link #hasDrawItemFlavor} and dispatched to the matching handler:
+     * {@link #resolveFlavor} and dispatched to the matching handler:
      * a serialized {@link DrawItem}, raw image data, a list of image files, or
      * SVG markup. Each successful import nudges the paste offset so repeated
      * pastes do not stack exactly on top of one another.
@@ -104,17 +103,17 @@ public class CanvasTransferHandler {
      *         transfer held nothing importable or a transfer error occurred
      */
     public boolean importData(Transferable t) {
-        if (!hasDrawItemFlavor(t)) {
+        Payload payload = resolveFlavor(t);
+        if (payload == null) {
             logger.trace("ImportData");
             return false;
         }
         try {
-            boolean imported = switch (flavor) {
+            boolean imported = switch (payload.flavor()) {
                 case DRAWITEM -> importDrawItem(t);
                 case IMAGEITEM -> importImageItem(t);
                 case FILEITEM -> importFileItem(t);
-                case SVGITEM -> importSvgItem(t);
-                case NONE -> false;
+                case SVGITEM -> importSvgItem(payload.svg());
             };
             if (imported) {
                 shift = shift + 20.0;
@@ -196,11 +195,10 @@ public class CanvasTransferHandler {
     }
 
     /**
-     * Paste SVG markup from the clipboard by rasterizing it in memory and placing
-     * it on the canvas.
+     * Paste SVG markup (already captured during {@link #resolveFlavor}) by
+     * rasterizing it in memory and placing it on the canvas.
      */
-    private boolean importSvgItem(Transferable t) throws UnsupportedFlavorException, IOException {
-        String svg = (String) t.getTransferData(DataFlavor.stringFlavor);
+    private boolean importSvgItem(String svg) throws IOException {
         BufferedImage buffered = svgRead.rasterize(svg);
         if (buffered == null) {
             logger.debug("importData: could not rasterize pasted SVG");
@@ -267,8 +265,8 @@ public class CanvasTransferHandler {
     }
 
     /**
-     * Resolve which supported payload a transfer offers and record it in
-     * {@link #flavor} for {@link #importData} to dispatch on.
+     * Resolve which supported payload a transfer offers, for {@link #importData}
+     * to dispatch on.
      * <p>
      * A single transfer may advertise several flavors at once, so they are
      * matched in priority order regardless of their order in the array: a native
@@ -277,57 +275,57 @@ public class CanvasTransferHandler {
      * so they load via {@code ImageLoadWorker} (svg-aware, threaded, with a
      * progress indicator) rather than being decoded eagerly; SVG markup is the
      * lowest priority and only matches when the string actually looks like SVG.
+     * The SVG text is read once here and carried on the returned {@link Payload}
+     * so the import does not re-read the clipboard.
      *
      * @param t the transfer whose flavors (and, for SVG, content) are inspected
-     * @return {@code true} if a supported flavor was found (and {@link #flavor}
-     *         set accordingly), {@code false} otherwise (with {@link #flavor}
-     *         reset to {@link Flavor#NONE})
+     * @return the resolved {@link Payload}, or {@code null} if nothing importable was found
      */
-    protected boolean hasDrawItemFlavor(Transferable t) {
+    private Payload resolveFlavor(Transferable t) {
         DataFlavor[] flavors = t.getTransferDataFlavors();
         for (DataFlavor f : flavors) {
             if (drawItemFlavor.equals(f)) {
                 logger.debug(mimeType);
-                flavor = Flavor.DRAWITEM;
-                return true;
+                return new Payload(Flavor.DRAWITEM, null);
             }
         }
         for (DataFlavor f : flavors) {
             if (DataFlavor.javaFileListFlavor.equals(f)) {
                 logger.debug("application/x-java-file-list;class=java.util.List");
-                flavor = Flavor.FILEITEM;
-                return true;
+                return new Payload(Flavor.FILEITEM, null);
             }
         }
         for (DataFlavor f : flavors) {
             if (DataFlavor.imageFlavor.equals(f)) {
                 logger.debug("image/x-java-image;class=java.awt.Image");
-                flavor = Flavor.IMAGEITEM;
-                return true;
+                return new Payload(Flavor.IMAGEITEM, null);
             }
         }
         for (DataFlavor f : flavors) {
             if (DataFlavor.stringFlavor.equals(f)) {
                 try {
-                    if (isSvgMarkup((String) t.getTransferData(DataFlavor.stringFlavor))) {
+                    String text = (String) t.getTransferData(DataFlavor.stringFlavor);
+                    if (isSvgMarkup(text)) {
                         logger.debug("image/svg+xml;class=java.lang.String");
-                        flavor = Flavor.SVGITEM;
-                        return true;
+                        return new Payload(Flavor.SVGITEM, text);
                     }
                 } catch (UnsupportedFlavorException | IOException e) {
-                    logger.warn("hasDrawItemFlavor: could not read clipboard text");
+                    logger.warn("resolveFlavor: could not read clipboard text");
                 }
                 break;
             }
         }
 
-        flavor = Flavor.NONE;
-        return false;
+        return null;
     }
 
-    /** Supported clipboard payloads, resolved by {@link #hasDrawItemFlavor}. */
+    /** A resolved clipboard payload: its kind, plus the captured SVG markup for {@link Flavor#SVGITEM}. */
+    private record Payload(Flavor flavor, String svg) {
+    }
+
+    /** Supported clipboard payloads, resolved by {@link #resolveFlavor}. */
     private enum Flavor {
-        DRAWITEM, IMAGEITEM, FILEITEM, SVGITEM, NONE
+        DRAWITEM, IMAGEITEM, FILEITEM, SVGITEM
     }
 
     private DrawItem checkDrawings(DrawItem drawing) {
