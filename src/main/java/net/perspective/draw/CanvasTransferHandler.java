@@ -218,8 +218,7 @@ public class CanvasTransferHandler {
         if (text == null) {
             return false;
         }
-        String head = text.stripLeading();
-        head = head.substring(0, Math.min(head.length(), 512)).toLowerCase();
+        String head = text.stripLeading().toLowerCase();
         return head.startsWith("<svg")
             || head.startsWith("<!doctype svg")
             || (head.startsWith("<?xml") && head.contains("<svg"));
