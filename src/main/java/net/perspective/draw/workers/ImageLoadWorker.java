@@ -145,7 +145,7 @@ public class ImageLoadWorker extends Task<Object> {
         public void make() throws IOException {
             images = new ArrayList<>();
             for (File file : imageFiles) {
-                if (FileUtils.getExtension(file.getName()).equals("svg")) {
+                if (FileUtils.getExtension(file.getName()).equalsIgnoreCase("svg")) {
                     images.add(SwingFXUtils.toFXImage(svgRead.rasterize(file), null));
                 } else {
                     images.add(SwingFXUtils.toFXImage(ImageIO.read(file), null));
