@@ -23,6 +23,7 @@
  */
 package net.perspective.draw.workers;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ import org.slf4j.LoggerFactory;
 public class ImageLoadWorker extends Task<Object> {
 
     private List<Image> images;
+    private List<File> loadedFiles;
     private final DrawingArea drawarea;
     private final CanvasView view;
     private final ApplicationController controller;
@@ -91,11 +93,12 @@ public class ImageLoadWorker extends Task<Object> {
         logger.info("Reading images complete.");
         Platform.runLater(() -> {
             if (!images.isEmpty()) {
-                for (Image image : images) {
+                for (int i = 0; i < images.size(); i++) {
+                    Image image = images.get(i);
                     Picture picture = pictureProvider.get();
                     picture.setStart(shift, shift);
                     ImageItem item = new ImageItem(image);
-                    item.setFormat(FileUtils.getExtension(imageFiles.get(images.indexOf(image))));
+                    item.setFormat(FileUtils.getExtension(loadedFiles.get(i)));
                     int index = view.setImageItem(item);
                     double width = (double) image.getWidth();
                     double height = (double) image.getHeight();
@@ -144,12 +147,22 @@ public class ImageLoadWorker extends Task<Object> {
 
         public void make() throws IOException {
             images = new ArrayList<>();
+            loadedFiles = new ArrayList<>();
             for (File file : imageFiles) {
+                BufferedImage buffered;
                 if (FileUtils.getExtension(file.getName()).equalsIgnoreCase("svg")) {
-                    images.add(SwingFXUtils.toFXImage(svgRead.rasterize(file), null));
+                    buffered = svgRead.rasterize(file);
                 } else {
-                    images.add(SwingFXUtils.toFXImage(ImageIO.read(file), null));
+                    buffered = ImageIO.read(file);
                 }
+                if (buffered == null) {
+                    // a corrupt/unsupported file or a failed SVG transcode; skip it rather
+                    // than NPE in toFXImage and abort the whole batch
+                    logger.warn("Couldn't read image {}", file.getName());
+                    continue;
+                }
+                images.add(SwingFXUtils.toFXImage(buffered, null));
+                loadedFiles.add(file);
             }
         }
 

@@ -80,7 +80,9 @@ public class SVGRead {
         float width = box != null ? box[0] : 0f;
         float height = box != null ? box[1] : 0f;
         try (InputStream file = new FileInputStream(svgFile)) {
-            return rasterize(new TranscoderInput(file), null, width, height, svgFile.getName());
+            // Files may be user-supplied (opened, dropped, or pasted from the clipboard),
+            // so treat them as untrusted and forbid external resource resolution.
+            return rasterize(new TranscoderInput(file), null, width, height, svgFile.getName(), false);
         }
     }
 
@@ -99,7 +101,8 @@ public class SVGRead {
         try (InputStream file = getClass().getResourceAsStream("/svg/" + filename)) {
             // A square box suits the icon glyphs: many declare only a viewBox (no width/height),
             // and Batik would otherwise leave its default height in place, distorting the result.
-            return rasterize(new TranscoderInput(file), fillColor, targetSize, targetSize, filename);
+            // Bundled resources are trusted, so external resource resolution stays enabled.
+            return rasterize(new TranscoderInput(file), fillColor, targetSize, targetSize, filename, true);
         }
     }
 
@@ -111,10 +114,13 @@ public class SVGRead {
      * @param targetWidth the output width in pixels, or {@code 0} to leave Batik's default
      * @param targetHeight the output height in pixels, or {@code 0} to leave Batik's default
      * @param name an identifier used for logging
+     * @param allowExternalResources whether the document may resolve external resources;
+     *     pass {@code false} for untrusted input to prevent it referencing local files or
+     *     remote URLs (SSRF / local-file disclosure)
      * @return a buffered image
      * @throws IOException
      */
-    private BufferedImage rasterize(TranscoderInput input, String fillColor, float targetWidth, float targetHeight, String name) throws IOException {
+    private BufferedImage rasterize(TranscoderInput input, String fillColor, float targetWidth, float targetHeight, String name, boolean allowExternalResources) throws IOException {
 
         final BufferedImage[] imagePointer = new BufferedImage[1];
 
@@ -140,7 +146,7 @@ public class SVGRead {
                 SVGConstants.SVG_NAMESPACE_URI);
         transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT, "svg");
         transcoderHints.put(ImageTranscoder.KEY_USER_STYLESHEET_URI, cssFile.toUri().toString());
-        transcoderHints.put(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, Boolean.TRUE);
+        transcoderHints.put(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, allowExternalResources);
         if (targetWidth > 0f) {
             transcoderHints.put(SVGAbstractTranscoder.KEY_WIDTH, targetWidth);
         }
