@@ -45,7 +45,6 @@ import net.perspective.draw.geom.Grouped;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.geom.StreetMap;
 import net.perspective.draw.util.FileUtils;
-import net.perspective.draw.util.SVGRead;
 
 /**
  * 
@@ -58,7 +57,6 @@ public class CanvasTransferHandler {
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<CanvasView> viewProvider;
     @Inject MapController mapper;
-    @Inject SVGRead svgRead;
     @Inject Provider<ShareUtils> shareProvider;
     @Inject Provider<Picture> pictureProvider;
     @Inject Provider<StreetMap> streetMapProvider;
@@ -200,16 +198,12 @@ public class CanvasTransferHandler {
     }
 
     /**
-     * Paste SVG markup (already captured during {@link #resolveFlavor}) by
-     * rasterizing it in memory and placing it on the canvas.
+     * Paste SVG markup (already captured during {@link #resolveFlavor}). SVG
+     * transcoding can be slow, so it is rasterized in the background by
+     * {@link ShareUtils#readSVGMarkup(String)} with the shared progress indicator.
      */
-    private boolean importSvgItem(String svg) throws IOException {
-        BufferedImage buffered = svgRead.rasterize(svg);
-        if (buffered == null) {
-            logger.debug("importData: could not rasterize pasted SVG");
-            return false;
-        }
-        placeImage(SwingFXUtils.toFXImage(buffered, null), "svg");
+    private boolean importSvgItem(String svg) {
+        shareProvider.get().readSVGMarkup(svg);
         return true;
     }
 
