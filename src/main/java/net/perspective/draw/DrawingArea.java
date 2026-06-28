@@ -805,6 +805,41 @@ public class DrawingArea {
     }
 
     /**
+     * Get a representative scale for fitting an image within the page.
+     *
+     * 1. ImageWidth &gt; pageWidth resize to 80% pageWidth
+     * 2. ImageHeight &gt; pageHeight resize to 80% pageHeight
+     * 3. if imageSize &lt; pageSize do nothing
+     *
+     * @param width the image width in pixels
+     * @param height the image height in pixels
+     * @return the scale factor
+     */
+    public double fitScale(double width, double height) {
+        double pageWidth = getScene().getWidth();
+        double pageHeight = getScene().getHeight();
+        if ((width <= pageWidth) && (height <= pageHeight)) {
+            return 1d;
+        }
+        if ((width <= pageWidth) && (height > pageHeight)) {
+            return 0.8 * pageHeight / height;
+        }
+        if ((width > pageWidth) && (height <= pageHeight)) {
+            return 0.8 * pageWidth / width;
+        }
+        if ((width > pageWidth) && (height > pageHeight)) {
+            double ratio_w = pageWidth / width;
+            double ratio_h = pageHeight / height;
+            if (ratio_w <= ratio_h) {
+                return 0.8 * pageWidth / width;
+            } else {
+                return 0.8 * pageHeight / height;
+            }
+        }
+        return 1d;
+    }
+
+    /**
      * Set the drawing mode
      *
      * @param type the {@link net.perspective.draw.enums.DrawingType}
