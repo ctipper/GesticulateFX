@@ -66,8 +66,6 @@ public class ImageLoadWorker extends Task<Object> {
     private List<File> imageFiles;
     private double shift;
     private boolean success;
-    private double pageWidth;      // canvas width pixels
-    private double pageHeight;     // canvas height pixels
 
     private static final Logger logger = LoggerFactory.getLogger(ImageLoadWorker.class.getName());
 
@@ -82,8 +80,6 @@ public class ImageLoadWorker extends Task<Object> {
 
     @Override
     protected Object call() throws Exception {
-        pageWidth = drawarea.getScene().getWidth();
-        pageHeight = drawarea.getScene().getHeight();
         this.imageFiles = share.getImageFiles();
         return new ImageLoader();
     }
@@ -102,7 +98,7 @@ public class ImageLoadWorker extends Task<Object> {
                     int index = view.setImageItem(item);
                     double width = (double) image.getWidth();
                     double height = (double) image.getHeight();
-                    double scale = getScale(width, height);
+                    double scale = drawarea.fitScale(width, height);
                     logger.trace("Image relative scale: {}", scale);
                     picture.setImage(index, width, height);
                     picture.setScale(scale);
@@ -166,39 +162,6 @@ public class ImageLoadWorker extends Task<Object> {
             }
         }
 
-    }
-
-    /**
-     * Get a representative scale for images larger than page size
-     * 
-     * 1. ImageWidth &gt; pageWidth resize to 80% pageWidth
-     * 2. ImageHeight &gt; pageHeight resize to 80% pageHeight
-     * 3. if imageSize &lt; pageSize do nothing
-     * 
-     * @param width
-     * @param height
-     * @return 
-     */
-    private double getScale(double width, double height) {
-        if ((width <= pageWidth) && (height <= pageHeight)) {
-            return 1d;
-        }
-        if ((width <= pageWidth) && (height > pageHeight)) {
-            return 0.8 * pageHeight / height;
-        }
-        if ((width > pageWidth) && (height <= pageHeight)) {
-            return 0.8 * pageWidth / width;
-        }
-        if ((width > pageWidth) && (height > pageHeight)) {
-            double ratio_w = pageWidth / width;
-            double ratio_h = pageHeight / height;
-            if (ratio_w <= ratio_h) {
-                return 0.8 * pageWidth / width;
-            } else {
-                return 0.8 * pageHeight / height;
-            }
-        }
-        return 1d;
     }
 
 }
