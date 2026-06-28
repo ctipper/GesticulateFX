@@ -42,6 +42,7 @@ import net.perspective.draw.workers.ImageLoadWorker;
 import net.perspective.draw.workers.PDFWorker;
 import net.perspective.draw.workers.PNGWorker;
 import net.perspective.draw.workers.ReadInFunnel;
+import net.perspective.draw.workers.SVGLoadWorker;
 import net.perspective.draw.workers.SVGWorker;
 import net.perspective.draw.workers.WriteOutStreamer;
 import org.slf4j.Logger;
@@ -59,6 +60,7 @@ public class ShareUtils {
     private final CanvasView view;
     private final ApplicationController controller;
     @Inject Provider<ImageLoadWorker> imageLoadWorkerProvider;
+    @Inject Provider<SVGLoadWorker> svgLoadWorkerProvider;
     @Inject Provider<ReadInFunnel> readInFunnelProvider;
     @Inject Provider<WriteOutStreamer> writeOutStreamerProvider;
     @Inject Provider<PDFWorker> pdfWorkerProvider;
@@ -145,6 +147,8 @@ public class ShareUtils {
 
     /**
      * Load images from list of Files
+     * 
+     * @param files
      */
     public void readPictures(List<File> files) {
         this.setImageFiles(files);
@@ -153,6 +157,24 @@ public class ShareUtils {
             controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
             controller.setProgressIndeterminate();
             executor.submit(imageLoader);
+        }
+        controller.setSelectionMode();
+    }
+
+    /**
+     * Rasterize and load SVG markup (e.g. pasted from the clipboard) in the
+     * background. Transcoding can be slow, so it runs off the FX thread with the
+     * shared progress indicator, like {@link #readPictures(List)}.
+     *
+     * @param markup the SVG document markup
+     */
+    public void readSVGMarkup(String markup) {
+        if (markup != null) {
+            SVGLoadWorker svgLoader = svgLoadWorkerProvider.get();
+            svgLoader.setMarkup(markup);
+            controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
+            controller.setProgressIndeterminate();
+            executor.submit(svgLoader);
         }
         controller.setSelectionMode();
     }
