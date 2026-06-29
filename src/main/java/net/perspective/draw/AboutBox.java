@@ -62,7 +62,7 @@ public class AboutBox extends Dialog<ButtonType> {
         this.getDialogPane().getButtonTypes().add(OkButtonType);
         Label[] aboutLabel = new Label[6];
         aboutLabel[0] = new Label(Messages.get("about.tagline"));
-        aboutLabel[1] = new Label("Version 1.3");
+        aboutLabel[1] = new Label("Version 1.3.1");
         // higher java versions use runtime property
         String[] elements = System.getProperty("java.specification.version").split("\\.");
         if (Integer.parseInt(elements[0]) < 2) {
