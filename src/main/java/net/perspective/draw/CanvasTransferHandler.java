@@ -32,6 +32,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -182,12 +183,10 @@ public class CanvasTransferHandler {
             }
         }
         if (imageFiles.isEmpty()) {
+            // A file selection that offers no supported image files must not
+            // fall back to the transfer's imageFlavor: for a file paste/drop
+            // that representation is the OS document icon, not a real bitmap.
             logger.debug("importData: no supported image files in selection");
-            // the file list yielded nothing usable; fall back to raw image data
-            // when the transfer also offers it, rather than dropping the paste
-            if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-                return importImageItem(t);
-            }
             return false;
         }
         // ImageLoadWorker handles threading and the progress indicator
@@ -369,6 +368,7 @@ public class CanvasTransferHandler {
      * @see <a href="https://stackoverflow.com/a/13605411">https://stackoverflow.com</a>
      */
     public BufferedImage toBufferedImage(java.awt.Image img) {
+        Objects.requireNonNull(img, "img");
         if (img instanceof BufferedImage bufferedImage) {
             return bufferedImage;
         }
