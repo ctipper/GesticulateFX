@@ -133,7 +133,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
       <copy todir="${bundle.dir}/${dist.dir}">
          <fileset dir="${build.dir}/app">
-            <include name="${jlink.launcher.name}-${version.public}.jar"/>
+            <include name="${jlink.launcher.name}-${version.internal}.jar"/>
          </fileset>
       </copy>
 
@@ -159,7 +159,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
          <arg value="--main-class"/>
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
-         <arg value="${jlink.launcher.name}-${version.public}.jar"/>
+         <arg value="${jlink.launcher.name}-${version.internal}.jar"/>
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics" />
          <arg value="--copyright" />
@@ -234,7 +234,7 @@ CFBundleName = "${app.name}";
          <arg value="--main-class"/>
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
-         <arg value="${jlink.launcher.name}-${version.public}.jar"/>
+         <arg value="${jlink.launcher.name}-${version.internal}.jar"/>
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics" />
          <arg value="--copyright" />
@@ -266,7 +266,7 @@ CFBundleName = "${app.name}";
          <arg value="--main-class"/>
          <arg value="net.perspective.draw.Gesticulate"/>
          <arg value="--main-jar"/>
-         <arg value="${jlink.launcher.name}-${version.public}.jar"/>
+         <arg value="${jlink.launcher.name}-${version.internal}.jar"/>
          <arg value="--java-options" />
          <arg value="-XX:CompileThreshold=1000 -XX:+TieredCompilation --enable-native-access=ALL-UNNAMED --enable-native-access=javafx.graphics" />
          <arg value="--copyright" />
