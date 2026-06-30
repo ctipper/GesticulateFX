@@ -102,6 +102,10 @@ public class ReadInFunnel extends Task<Object> {
         Platform.runLater(() -> {
             if (success) {
                 drawarea.prepareDrawing();
+                // Rebuild the image list in saved order so each item's imageIndex
+                // resolves to the correct bitmap. Must run after prepareDrawing(),
+                // which clears the image list via clearView().
+                view.getImageItems().addAll(pictures);
                 for (var drawitem : drawings) {
                     var item = checkDrawings(drawitem);
                     view.setNewItem(item);
@@ -177,8 +181,6 @@ public class ReadInFunnel extends Task<Object> {
             Picture item = pictureProvider.get();
             try {
                 BeanUtils.copyProperties(item, picture);
-                var i = picture.getImageIndex();
-                view.setImageItem(pictures.get(i));
                 drawing = item;
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 logger.trace(ex.getMessage());
@@ -187,8 +189,6 @@ public class ReadInFunnel extends Task<Object> {
             StreetMap item = streetMapProvider.get();
             try {
                 BeanUtils.copyProperties(item, streetmap);
-                var i = streetmap.getImageIndex();
-                view.setImageItem(pictures.get(i));
                 item.init();
                 item.filterHandlers();
                 drawing = item;
