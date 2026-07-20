@@ -28,6 +28,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
@@ -71,6 +72,52 @@ public class G2 {
         this.drawareaProvider = drawareaProvider;
         this.applicationProvider = applicationProvider;
         this.textControllerProvider = textControllerProvider;
+    }
+
+    /**
+     * Draw the rotation pivot graphic (centre marker with tick marks).
+     *
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @return a {@link javafx.scene.Group} representing the pivot
+     */
+    public Group drawRotationPivot(DrawItem item) {
+        Group pivotGroup = new Group();
+        Color background = Color.web(drawareaProvider.get().getCanvasBackgroundColor());
+        Color accent = Color.web(drawareaProvider.get().getThemeAccentColor());
+
+        // filled circle with accent outline
+        Circle circle = new Circle(0, 0, 3);
+        circle.setFill(background);
+        circle.setStroke(accent);
+        circle.setStrokeWidth(1);
+        pivotGroup.getChildren().add(circle);
+
+        // centre dot
+        Circle dot = new Circle(0, 0, 0.5);
+        dot.setFill(accent);
+        pivotGroup.getChildren().add(dot);
+
+        // tick marks
+        pivotGroup.getChildren().addAll(
+            tick(-6, 0, -3, 0, accent),
+            tick(3, 0, 6, 0, accent),
+            tick(0, -6, 0, -3, accent),
+            tick(0, 3, 0, 6, accent));
+
+        // transform coordinates with optional 90 deg rotation
+        CanvasPoint centre = item.rotationCentre();
+        pivotGroup.getTransforms().add(new Rotate((item.getAngle() + (item.isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, centre.x, centre.y));
+        pivotGroup.getTransforms().add(new Translate(centre.x, centre.y));
+        return pivotGroup;
+    }
+
+    private Line tick(double x1, double y1, double x2, double y2, Color accent) {
+        Line line = new Line(x1, y1, x2, y2);
+        line.setStroke(accent);
+        line.setStrokeWidth(1);
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
+        line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+        return line;
     }
 
     /**
@@ -144,41 +191,24 @@ public class G2 {
      */
     public Node drawGridLayout(CanvasPoint bounds) {
         Color minorColor, majorColor;
-        /**
-         * The width of a minor grid cell.
-         */
+        // minor grid cell dimensions
         double width = 10;
-        /**
-         * The height of a minor grid cell.
-         */
         double height = 10;
         Color c = Color.web(applicationProvider.get().getCanvasBackgroundColor());
         int r = (int) (c.getRed() * 255);
         int g = (int) (c.getGreen() * 255);
         int b = (int) (c.getBlue() * 255);
         int rgb = (r << 16) + (g << 8) + b;
+        // nudge each channel away from the background (dark: brighten, light: darken),
+        // major lines shifted further than minor, clamped to [0x00, 0xff]
         if (rgb < 0x80_8080) {
-            /**
-             * The colour for minor grid cells.
-             */
             minorColor = new Color(((r <= 0xf8) ? r + 0x07 : 0xff) / 255.0, ((g <= 0xf8) ? g + 0x07 : 0xff) / 255.0, ((b <= 0xf8) ? b + 0x07 : 0xff) / 255.0, 1d);
-            /**
-             * The colour for major grid cells.
-             */
             majorColor = new Color(((r <= 0xf1) ? r + 0x0e : 0xff) / 255.0, ((g <= 0xf1) ? g + 0x0e : 0xff) / 255.0, ((b <= 0xf1) ? b + 0x0e : 0xff) / 255.0, 1d);
         } else {
-            /**
-             * The colour for minor grid cells.
-             */
             minorColor = new Color(((r >= 0x0c) ? r - 0x0c : 0) / 255.0, ((g >= 0x0c) ? g - 0x0c : 0) / 255.0, ((b >= 0x0c) ? b - 0x0c : 0) / 255.0, 1d);
-            /**
-             * The colour for major grid cells.
-             */
             majorColor = new Color(((r >= 0x2d) ? r - 0x2d : 0) / 255.0, ((g >= 0x2d) ? g - 0x2d : 0) / 255.0, ((b >= 0x2d) ? b - 0x2d : 0) / 255.0, 1d);
         }
-        /**
-         * The spacing factor for a major grid cell.
-         */
+        // draw every fifth line as a major grid line
         int majorGridSpacing = 5;
 
         CanvasPoint origin = new CanvasPoint(0, 0);
@@ -187,31 +217,25 @@ public class G2 {
         gridarea.setMouseTransparent(true);
         gridarea.setId("gridArea");
 
-        /**
-         * vertical grid lines are only drawn, if they are at least two pixels apart on the view
-         * coordinate system.
-         */
+        // vertical grid lines
         for (int i = (int) (origin.x / width), m = (int) ((origin.x + bounds.x) / width) + 1; i <= m; i++) {
             Color color = ((i % majorGridSpacing == 0) ? majorColor : minorColor);
 
             point.x = width * i;
-            Line line = new Line((int) point.x, (int) 0,
-                    (int) point.x, (int) (bounds.y));
+            Line line = new Line((int) point.x, 0,
+                    (int) point.x, (int) bounds.y);
             line.setStroke(color);
             line.setStrokeWidth(1.0);
             gridarea.getChildren().add(line);
         }
 
-        /**
-         * horizontal grid lines are only drawn, if they are at least two pixels apart on the view
-         * coordinate system.
-         */
+        // horizontal grid lines
         for (int i = (int) (origin.y / height), m = (int) ((origin.y + bounds.y) / height) + 1; i <= m; i++) {
             Color color = ((i % majorGridSpacing == 0) ? majorColor : minorColor);
 
             point.y = height * i;
-            Line line = new Line((int) 0, (int) point.y,
-                    (int) (bounds.x), (int) point.y);
+            Line line = new Line(0, (int) point.y,
+                    (int) bounds.x, (int) point.y);
             line.setStroke(color);
             line.setStrokeWidth(1.0);
             gridarea.getChildren().add(line);

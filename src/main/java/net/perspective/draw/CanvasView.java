@@ -77,6 +77,7 @@ public class CanvasView {
     private Node drawMarquee;
     private Node drawGuides;
     private Group highlight;
+    private Group itemPivot;
     private boolean isDrawing;
     private boolean isEditing;
     private boolean isMapping;
@@ -98,6 +99,7 @@ public class CanvasView {
         newitem = Optional.empty();
         this.selectionIndex = new LinkedHashSet<>();
         this.drawingAnchors = new Group();
+        this.itemPivot = new Group();
         /**
          * provide cursor animation
          */
@@ -581,12 +583,15 @@ public class CanvasView {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
+            nodes.remove(itemPivot);
             selectionIndex.clear();
             drawingAnchors.getChildren().clear();
+            itemPivot.getChildren().clear();
         } else {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
+            nodes.remove(itemPivot);
             if (!drawarea.isMultiSelectEnabled()) {
                 selectionIndex.clear();
                 drawingAnchors.getChildren().clear();
@@ -594,6 +599,10 @@ public class CanvasView {
             selectionIndex.add(selection);
             drawingAnchors = getAnchors();
             nodes.add(drawingAnchors);
+            if (drawarea.isRotationMode()) {
+                itemPivot = g2.drawRotationPivot(drawings.get(selection));
+                nodes.add(itemPivot);
+            }
             setTextHighlight(selection);
         }
     }
@@ -608,12 +617,17 @@ public class CanvasView {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
+            nodes.remove(itemPivot);
             drawingAnchors.getChildren().clear();
         }
         if (selection != -1) {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             drawingAnchors = getAnchors();
             nodes.add(drawingAnchors);
+            if (drawarea.isRotationMode()) {
+                itemPivot = g2.drawRotationPivot(drawings.get(selection));
+                nodes.add(itemPivot);
+            }
             setTextHighlight(selection);
         }
     }
