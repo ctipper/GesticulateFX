@@ -32,6 +32,8 @@ import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.V2;
@@ -285,4 +287,60 @@ public class Edge extends Figure {
             return theta;
         }
     }
+
+    /**
+     * Create the rotation-handle anchor for an edge.
+     * <p>
+     * Placement depends on the figure type. For {@code SKETCH} and {@code POLYGON}
+     * the pivot starts at the rotation centre and steps up the up-vector until it
+     * leaves the outline (winding number zero), capped at the top of the bounds.
+     * For {@code LINE} it is anchored at the start point. Other types fall back to
+     * {@link Figure#rotateAnchor()}. In each case the glyph is transformed to follow
+     * the shape's rotation, then centred horizontally and lifted clear of the edge.
+     *
+     * @return the rotation handle {@link javafx.scene.Group}
+     */
+    @Override
+    protected javafx.scene.Group rotateAnchor() {
+        javafx.scene.Group glyph = (new RotateIcon()).path();
+        switch (this.getType()) {
+            case SKETCH, POLYGON -> {
+                Path2D.Double p = this.getPath();
+                CanvasPoint centre = this.rotationCentre();
+                double top = p.getBounds2D().getMinY();
+                double x = centre.x;
+                double y = centre.y;
+                // step out along the up-vector until the winding number is zero
+                // (outside the outline); cap at the top of the bounds
+                while (y > top && p.contains(x, y)) {
+                    y -= 4.0;
+                }
+                // transform the pivot so the anchor follows the shape's rotation
+                CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
+                glyph.getTransforms().add(new Translate(u.x, u.y));
+                glyph.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, 0, 0));
+                if (start.y > end.y) {
+                    glyph.getTransforms().add(new Rotate(180, 0, 0));
+                }
+                double width = glyph.getBoundsInLocal().getWidth();
+                double height = glyph.getBoundsInLocal().getHeight();
+                CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+                glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+            }
+            case LINE -> {
+                // end points marked
+                glyph.getTransforms().add(new Translate(start.x, start.y));
+                if (start.y > end.y) {
+                    glyph.getTransforms().add(new Rotate(180, 0, 0));
+                }
+                double width = glyph.getBoundsInLocal().getWidth();
+                double height = glyph.getBoundsInLocal().getHeight();
+                CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+                glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+            }
+            default -> glyph = super.rotateAnchor();
+        }
+        return glyph;
+    }
+
 }

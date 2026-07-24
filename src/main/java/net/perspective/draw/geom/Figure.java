@@ -44,6 +44,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
@@ -559,6 +560,7 @@ public class Figure implements DrawItem, Serializable {
                 // end points marked
                 anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
                 anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));
+                anchors.getChildren().add(this.rotateAnchor());
             }
             case NONE -> {
             }
@@ -572,11 +574,23 @@ public class Figure implements DrawItem, Serializable {
                 anchors.getChildren().add(this.edgeAnchor(drawarea, start.x, center.y));
                 anchors.getChildren().add(this.edgeAnchor(drawarea, center.x, end.y));
                 anchors.getChildren().add(this.edgeAnchor(drawarea, end.x, center.y));
+                anchors.getChildren().add(this.rotateAnchor());
             }
         }
         return anchors;
     }
 
+    /**
+     * Create a circular corner anchor at the given figure coordinate.
+     * <p>
+     * The point is mapped through the figure transform so the anchor tracks the
+     * shape's position and rotation.
+     *
+     * @param drawarea the drawing area, used for theme colours
+     * @param x the anchor x coordinate in figure space
+     * @param y the anchor y coordinate in figure space
+     * @return the anchor {@link javafx.scene.shape.Shape}
+     */
     protected javafx.scene.shape.Shape anchor(DrawingArea drawarea, double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
@@ -589,6 +603,17 @@ public class Figure implements DrawItem, Serializable {
         return anchor;
     }
 
+    /**
+     * Create a square edge anchor at the given figure coordinate.
+     * <p>
+     * The point is mapped through the figure transform and the square is rotated
+     * to match the shape's angle so the anchor sits square to the edge.
+     *
+     * @param drawarea the drawing area, used for theme colours
+     * @param x the anchor x coordinate in figure space
+     * @param y the anchor y coordinate in figure space
+     * @return the anchor {@link javafx.scene.shape.Shape}
+     */
     protected javafx.scene.shape.Shape edgeAnchor(DrawingArea drawarea, double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         javafx.scene.shape.Rectangle anchor = new javafx.scene.shape.Rectangle();
@@ -601,6 +626,34 @@ public class Figure implements DrawItem, Serializable {
         anchor.setStrokeWidth(1.0);
         anchor.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, u.x, u.y));
         return anchor;
+    }
+
+    /**
+     * Create the rotation-handle anchor above the top edge of the figure.
+     * <p>
+     * The pivot is the transformed midpoint of the top edge, so the anchor follows
+     * the shape's rotation exactly like the corner and edge anchors do. The glyph is
+     * placed at that pivot, then rotated to match the shape; the flip corrects for the
+     * sign of {@code (end.y - start.y)}. Finally it is centred horizontally and lifted
+     * clear of the edge, with the offset rotating together with the anchor.
+     *
+     * @return the rotation handle {@link javafx.scene.Group}
+     */
+    protected javafx.scene.Group rotateAnchor() {
+        javafx.scene.Group glyph = (new RotateIcon()).path();
+
+        CanvasPoint u = this.getTransform(new CanvasPoint((start.x + end.x) / 2, start.y));
+
+        glyph.getTransforms().add(new Translate(u.x, u.y));
+        glyph.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, 0, 0));
+        if (start.y > end.y) {
+            glyph.getTransforms().add(new Rotate(180, 0, 0));
+        }
+        double width = glyph.getBoundsInLocal().getWidth();
+        double height = glyph.getBoundsInLocal().getHeight();
+        CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+        glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+        return glyph;
     }
 
     /**
