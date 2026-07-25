@@ -52,6 +52,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.TextController;
 import net.perspective.draw.util.CanvasPoint;
@@ -354,12 +355,22 @@ public class Text implements DrawItem, Serializable {
         return new CanvasPoint[] { e, e };
     }
 
+    /**
+     * Map a point into the item's transformed space.
+     * <p>
+     * Rotates the point about the pivot ({@link #rotationCentre()}, which for Text is
+     * {@code start}) by the item angle, with an optional 90 degree correction when the
+     * text is vertical.
+     *
+     * @param point the point to transform, in un-rotated item space
+     * @return the transformed point (the same instance, mutated)
+     */
     private CanvasPoint getTransform(CanvasPoint point) {
         CanvasPoint centre = this.rotationCentre();
 
         point.translate(-centre.x, -centre.y);
         if (this.getAngle() != 0) {
-            // rotate shape about centroid
+            // rotate about the pivot
             point.rotate(this.getAngle());
         }
         if (this.isVertical()) {
@@ -371,7 +382,13 @@ public class Text implements DrawItem, Serializable {
     }
 
     /**
-     * rotate Text about an anchor with optional 90 deg correction
+     * Build the affine transform that rotates the item about its pivot.
+     * <p>
+     * Rotation is about the pivot ({@link #rotationCentre()}, which for Text is
+     * {@code start}) by the item angle, with an optional 90 degree correction when the
+     * text is vertical.
+     *
+     * @return the {@link java.awt.geom.AffineTransform}
      */
     private AffineTransform getTransform() {
         CanvasPoint centre = this.rotationCentre();
@@ -379,7 +396,7 @@ public class Text implements DrawItem, Serializable {
         AffineTransform transform = new AffineTransform();
         transform.setToTranslation(centre.x, centre.y);
         if (this.getAngle() != 0) {
-            // rotate shape about centroid
+            // rotate about the pivot
             transform.rotate(this.getAngle());
         }
         if (this.isVertical()) {
@@ -490,7 +507,30 @@ public class Text implements DrawItem, Serializable {
         anchor_2.setArcHeight(7.0);
         anchors.getChildren().addAll(anchor_1, anchor_2);
         anchors.getTransforms().add(new Rotate((getAngle() + (isVertical() ? -Math.PI / 2 : 0)) * 180 / Math.PI, axis.x, axis.y));
+        anchors.getChildren().add(this.rotateAnchor());
         return anchors;
+    }
+
+    /**
+     * Create the rotation-handle anchor at the top of the text block.
+     * <p>
+     * Positioned in the block's un-rotated frame; the enclosing {@code anchors} group
+     * applies the block rotation (see {@link #drawAnchors}) so the handle stays fixed
+     * relative to the block.
+     *
+     * @return the rotation handle {@link javafx.scene.Group}
+     */
+    protected javafx.scene.Group rotateAnchor() {
+        javafx.scene.Group glyph = (new RotateIcon()).path();
+
+        CanvasPoint u = new CanvasPoint(start.x + end.x, start.y - 6);
+
+        glyph.getTransforms().add(new Translate(u.x, u.y));
+        double width = glyph.getBoundsInLocal().getWidth();
+        double height = glyph.getBoundsInLocal().getHeight();
+        CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+        glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+        return glyph;
     }
 
     /**
