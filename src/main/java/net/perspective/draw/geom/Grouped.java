@@ -427,9 +427,21 @@ public class Grouped implements DrawItem, Serializable {
         anchors.getChildren().add(this.anchor(drawarea, start.x + scale * (end.x - start.x), start.y));
         anchors.getChildren().add(this.anchor(drawarea, start.x, start.y + scale * (end.y - start.y)));
         anchors.getChildren().add(this.anchor(drawarea, start.x + scale * (end.x - start.x), start.y + scale * (end.y - start.y)));
+        anchors.getChildren().add(this.rotateAnchor());
         return anchors;
     }
 
+    /**
+     * Create a circular corner anchor at the given group coordinate.
+     * <p>
+     * The point is mapped through the group transform so the anchor tracks the
+     * group's position and rotation.
+     *
+     * @param drawarea the drawing area, used for theme colours
+     * @param x the anchor x coordinate in group space
+     * @param y the anchor y coordinate in group space
+     * @return the anchor {@link javafx.scene.shape.Shape}
+     */
     protected javafx.scene.shape.Shape anchor(DrawingArea drawarea, double x, double y) {
         CanvasPoint u = this.getTransform(new CanvasPoint(x, y));
         Circle anchor = new Circle();
@@ -440,6 +452,35 @@ public class Grouped implements DrawItem, Serializable {
         anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         return anchor;
+    }
+
+    /**
+     * Create the rotation-handle anchor above the top edge of the group.
+     * <p>
+     * The pivot is the transformed midpoint of the top edge (scaled by the group's
+     * {@code scale}), so the anchor follows the group's rotation like the corner
+     * anchors do. The glyph is placed at that pivot, then rotated to match the group;
+     * the flip corrects for a negative {@code scale}. Finally it is centred
+     * horizontally and lifted clear of the edge, with the offset rotating together
+     * with the anchor.
+     *
+     * @return the rotation handle {@link javafx.scene.Group}
+     */
+    protected javafx.scene.Group rotateAnchor() {
+        javafx.scene.Group glyph = (new RotateIcon()).path();
+
+        CanvasPoint u = this.getTransform(new CanvasPoint(start.x + scale * (end.x - start.x) / 2, start.y));
+
+        glyph.getTransforms().add(new Translate(u.x, u.y));
+        glyph.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, 0, 0));
+        if (scale < 0d) {
+            glyph.getTransforms().add(new Rotate(180, 0, 0));
+        }
+        double width = glyph.getBoundsInLocal().getWidth();
+        double height = glyph.getBoundsInLocal().getHeight();
+        CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+        glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+        return glyph;
     }
 
     /**

@@ -43,6 +43,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.enums.ContainsType;
@@ -403,6 +405,7 @@ public class Picture implements DrawItem, Serializable {
         anchors.getChildren().add(this.anchor(drawarea, start.x + scale * end.x, start.y));
         anchors.getChildren().add(this.anchor(drawarea, start.x, start.y + scale * end.y));
         anchors.getChildren().add(this.anchor(drawarea, start.x + scale * end.x, start.y + scale * end.y));
+        anchors.getChildren().add(this.rotateAnchor());
         return anchors;
     }
 
@@ -416,6 +419,35 @@ public class Picture implements DrawItem, Serializable {
         anchor.setStroke(Color.web(drawarea.getThemeAccentColor()));
         anchor.setStrokeWidth(1.0);
         return anchor;
+    }
+
+    /**
+     * Create the rotation-handle anchor above the top edge of the picture.
+     * <p>
+     * The pivot is the transformed midpoint of the top edge (scaled by the picture's
+     * {@code scale}), so the anchor follows the picture's rotation like the corner
+     * anchors do. The glyph is placed at that pivot, then rotated to match the picture;
+     * the flip corrects for a negative {@code scale}. Finally it is centred
+     * horizontally and lifted clear of the edge, with the offset rotating together
+     * with the anchor.
+     *
+     * @return the rotation handle {@link javafx.scene.Group}
+     */
+    protected javafx.scene.Group rotateAnchor() {
+        javafx.scene.Group glyph = (new RotateIcon()).path();
+
+        CanvasPoint u = this.getTransform(new CanvasPoint(start.x + scale * end.x / 2, start.y));
+
+        glyph.getTransforms().add(new Translate(u.x, u.y));
+        glyph.getTransforms().add(new Rotate(this.angle * 180 / Math.PI, 0, 0));
+        if (scale < 0d) {
+            glyph.getTransforms().add(new Rotate(180, 0, 0));
+        }
+        double width = glyph.getBoundsInLocal().getWidth();
+        double height = glyph.getBoundsInLocal().getHeight();
+        CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+        glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+        return glyph;
     }
 
     /**
