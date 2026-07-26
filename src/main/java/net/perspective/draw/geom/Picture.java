@@ -434,7 +434,7 @@ public class Picture implements DrawItem, Serializable {
      * @return the rotation handle {@link javafx.scene.Group}
      */
     protected javafx.scene.Group rotateAnchor() {
-        javafx.scene.Group glyph = (new RotateIcon()).path();
+        javafx.scene.Group glyph = RotateIcon.path();
 
         CanvasPoint u = this.getTransform(new CanvasPoint(start.x + scale * end.x / 2, start.y));
 
@@ -443,9 +443,7 @@ public class Picture implements DrawItem, Serializable {
         if (scale < 0d) {
             glyph.getTransforms().add(new Rotate(180, 0, 0));
         }
-        double width = glyph.getBoundsInLocal().getWidth();
-        double height = glyph.getBoundsInLocal().getHeight();
-        CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+        CanvasPoint ROTATEICON = new CanvasPoint(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
         glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
         return glyph;
     }
