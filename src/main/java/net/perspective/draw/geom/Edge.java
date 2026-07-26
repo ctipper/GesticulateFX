@@ -302,7 +302,7 @@ public class Edge extends Figure {
      */
     @Override
     protected javafx.scene.Group rotateAnchor() {
-        javafx.scene.Group glyph = (new RotateIcon()).path();
+        javafx.scene.Group glyph = RotateIcon.path();
         switch (this.getType()) {
             case SKETCH, POLYGON -> {
                 Path2D.Double p = this.getPath();
@@ -322,9 +322,7 @@ public class Edge extends Figure {
                 if (start.y > end.y) {
                     glyph.getTransforms().add(new Rotate(180, 0, 0));
                 }
-                double width = glyph.getBoundsInLocal().getWidth();
-                double height = glyph.getBoundsInLocal().getHeight();
-                CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+                CanvasPoint ROTATEICON = new CanvasPoint(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
                 glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
             }
             case LINE -> {
@@ -333,9 +331,7 @@ public class Edge extends Figure {
                 if (start.y > end.y) {
                     glyph.getTransforms().add(new Rotate(180, 0, 0));
                 }
-                double width = glyph.getBoundsInLocal().getWidth();
-                double height = glyph.getBoundsInLocal().getHeight();
-                CanvasPoint ROTATEICON = new CanvasPoint(-width / 2, -height - 6);
+                CanvasPoint ROTATEICON = new CanvasPoint(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
                 glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
             }
             default -> glyph = super.rotateAnchor();
