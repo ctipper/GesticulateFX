@@ -290,6 +290,19 @@ public class StreetMap extends Picture {
     }
 
     /**
+     * A street map is not rotatable, so it exposes no rotate handle.
+     * <p>
+     * Returns an empty area whose {@code contains} is always false, suppressing the
+     * rotate-handle hover and selection behaviour inherited from {@link Picture}.
+     *
+     * @return an empty {@link java.awt.Shape}
+     */
+    @Override
+    public Shape getRotateBounds() {
+        return new Area();
+    }
+
+    /**
      * Consolidate map properties
      * 
      * @param lat latitude

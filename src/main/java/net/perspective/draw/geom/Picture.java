@@ -348,6 +348,28 @@ public class Picture implements DrawItem, Serializable {
     }
 
     /**
+     * Returns an area that specifies the transformed boundary
+     * of the rotate control icon
+     * 
+     * @return a transformed shape
+     */
+    @Override
+    public java.awt.Shape getRotateBounds() {
+        Rectangle2D rect = new Rectangle2D.Double(0, 0, RotateIcon.ROTATE_WIDTH, RotateIcon.ROTATE_HEIGHT);
+        Area bounds = new Area(rect);
+        AffineTransform transform = new AffineTransform();
+        transform.setToTranslation(scale * end.x / 2 , 0);
+        if (scale < 0d) {
+            transform.rotate(Math.PI);
+        }
+        transform.translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
+        bounds.transform(transform);
+        transform = this.getTransform();
+        bounds.transform(transform);
+        return bounds;
+    }
+
+    /**
      * Detect if a point lies within the bounds, a convenience method
      * 
      * @param x  canvas coordinate
@@ -443,8 +465,7 @@ public class Picture implements DrawItem, Serializable {
         if (scale < 0d) {
             glyph.getTransforms().add(new Rotate(180, 0, 0));
         }
-        CanvasPoint ROTATEICON = new CanvasPoint(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
-        glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+        glyph.getTransforms().add(new Translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6));
         return glyph;
     }
 
