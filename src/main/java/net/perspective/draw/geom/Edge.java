@@ -288,6 +288,50 @@ public class Edge extends Figure {
         }
     }
 
+    @Override
+    public Shape getRotateBounds() {
+        Rectangle2D rect = new Rectangle2D.Double(0, 0, RotateIcon.ROTATE_WIDTH, RotateIcon.ROTATE_HEIGHT);
+        Area bounds = new Area(rect);
+        AffineTransform transform = new AffineTransform();
+        switch (this.getType()) {
+            case SKETCH, POLYGON -> {
+                Path2D.Double p = this.getPath();
+                CanvasPoint centre = this.rotationCentre();
+                double top = p.getBounds2D().getMinY();
+                double x = centre.x;
+                double y = centre.y;
+                // step out along the up-vector until the winding number is zero
+                // (outside the outline); cap at the top of the bounds
+                while (y > top && p.contains(x, y)) {
+                    y -= 4.0;
+                }
+                transform.translate(x, y);
+                if (start.y > end.y) {
+                    transform.rotate(Math.PI);
+                }
+                transform.translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
+            }
+            case LINE -> {
+                transform.setToTranslation(start.x, start.y);
+                if (start.y > end.y) {
+                    transform.rotate(Math.PI);
+                }
+                transform.translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
+            }
+            default -> {
+                transform.setToTranslation((start.x + end.x) / 2, start.y);
+                if (start.y > end.y) {
+                    transform.rotate(Math.PI);
+                }
+                transform.translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
+            }
+        }
+        bounds.transform(transform);
+        transform = this.getTransform();
+        bounds.transform(transform);
+        return bounds;
+    }
+
     /**
      * Create the rotation-handle anchor for an edge.
      * <p>
@@ -322,8 +366,7 @@ public class Edge extends Figure {
                 if (start.y > end.y) {
                     glyph.getTransforms().add(new Rotate(180, 0, 0));
                 }
-                CanvasPoint ROTATEICON = new CanvasPoint(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
-                glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+                glyph.getTransforms().add(new Translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6));
             }
             case LINE -> {
                 // end points marked
@@ -331,8 +374,7 @@ public class Edge extends Figure {
                 if (start.y > end.y) {
                     glyph.getTransforms().add(new Rotate(180, 0, 0));
                 }
-                CanvasPoint ROTATEICON = new CanvasPoint(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6);
-                glyph.getTransforms().add(new Translate(ROTATEICON.x, ROTATEICON.y));
+                glyph.getTransforms().add(new Translate(-RotateIcon.ROTATE_WIDTH / 2, -RotateIcon.ROTATE_HEIGHT - 6));
             }
             default -> glyph = super.rotateAnchor();
         }

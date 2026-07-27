@@ -90,6 +90,13 @@ public interface DrawItem {
     Shape bounds();
 
     /**
+     * Provide the target for selecting rotate behaviour
+     * 
+     * @return shape the mouse rotation target {@link java.awt.Shape}
+     */
+    Shape getRotateBounds();
+
+    /**
      * Detect if a point lies within the bounds, a convenience method
      * 
      * @param x canvas coordinate

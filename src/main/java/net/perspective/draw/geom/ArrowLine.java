@@ -366,6 +366,17 @@ public class ArrowLine extends Figure {
     }
 
     /**
+     * Returns the transformed boundary of the rotate control icon,
+     * delegating to the wrapped line.
+     *
+     * @return a transformed {@link java.awt.Shape}
+     */
+    @Override
+    public Shape getRotateBounds() {
+        return line.getRotateBounds();
+    }
+
+    /**
      * Detect if a point lies within the bounds, a convenience method
      * 
      * @param x canvas coordinate
