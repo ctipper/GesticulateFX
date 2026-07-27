@@ -26,6 +26,7 @@ package net.perspective.draw.event;
 import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
 import javax.inject.Inject;
@@ -41,8 +42,10 @@ import net.perspective.draw.text.Editor;
 import net.perspective.draw.event.behaviours.BehaviourContext;
 import net.perspective.draw.event.behaviours.FigureItemBehaviour;
 import net.perspective.draw.event.behaviours.GroupedItemBehaviour;
+import net.perspective.draw.event.behaviours.ItemBehaviours;
 import net.perspective.draw.event.behaviours.MapItemBehaviour;
 import net.perspective.draw.event.behaviours.PictureItemBehaviour;
+import net.perspective.draw.event.behaviours.RotateBehaviour;
 import net.perspective.draw.event.behaviours.TextItemBehaviour;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Figure;
@@ -68,11 +71,13 @@ public class SelectionHandler implements Handler {
     @Inject BehaviourContext context;
     @Inject FigureFactory figurefactory;
     @Inject TextController textController;
+    @Inject Provider<RotateBehaviour> rotateBehaviourProvider;
     @Inject Provider<TextItemBehaviour> textItemBehaviourProvider;
     @Inject Provider<FigureItemBehaviour> figureItemBehaviourProvider;
     @Inject Provider<MapItemBehaviour> mapItemBehaviourProvider;
     @Inject Provider<PictureItemBehaviour> pictureItemBehaviourProvider;
     @Inject Provider<GroupedItemBehaviour> groupedItemBehaviourProvider;
+    private Optional<ItemBehaviours> activeStrategy;
     private List<Double> coordsX, coordsY;
     private List<Double> midX, midY;
 
@@ -93,6 +98,7 @@ public class SelectionHandler implements Handler {
         this.drawarea = drawarea;
         this.view = view;
         this.controller = controller;
+        this.activeStrategy = Optional.empty();
     }
 
     @Override
@@ -108,6 +114,11 @@ public class SelectionHandler implements Handler {
             view.moveSelection(view.getSelected());
             context.resetContainment();
         }
+        activeStrategy = Optional.empty();
+        if (drawarea.isRotationMode()) {
+            drawarea.getScene().setCursor(Cursor.DEFAULT);
+        }
+        drawarea.setRotationMode(false);
         view.setGuides(false);
         drawarea.resetGuides();
     }
@@ -130,29 +141,37 @@ public class SelectionHandler implements Handler {
                 context.setContainment(ContainsType.NONE);
                 do {
                     DrawItem item = drawings.get(i);
+                    activeStrategy = Optional.ofNullable(rotateBehaviourProvider.get());
+                    context.setBehaviour(activeStrategy.get());
+                    boolean found = context.select(item, i);
+                    if (found) {
+                        drawarea.setRotationMode(true);
+                        break;
+                    }
+                    activeStrategy = Optional.empty();
                     if (item instanceof Figure) {
                         context.setBehaviour(figureItemBehaviourProvider.get());
-                        boolean found = context.select(item, i);
+                        found = context.select(item, i);
                         if (found) {
                             break;
                         }
                     } else if (item instanceof Picture) {
                         if (item instanceof StreetMap) {
                             context.setBehaviour(mapItemBehaviourProvider.get());
-                            boolean found = context.select(item, i);
+                            found = context.select(item, i);
                             if (found) {
                                 break;
                             }
                         } else {
                             context.setBehaviour(pictureItemBehaviourProvider.get());
-                            boolean found = context.select(item, i);
+                            found = context.select(item, i);
                             if (found) {
                                 break;
                             }
                         }
                     } else if (item instanceof Grouped) {
                         context.setBehaviour(groupedItemBehaviourProvider.get());
-                        boolean found = context.select(item, i);
+                        found = context.select(item, i);
                         if (found) {
                             break;
                         }
@@ -254,6 +273,9 @@ public class SelectionHandler implements Handler {
                 context.setBehaviour(textItemBehaviourProvider.get());
                 context.hover(item);
             }
+            activeStrategy = Optional.ofNullable(rotateBehaviourProvider.get());
+            context.setBehaviour(activeStrategy.get());
+            context.hover(item);
         } else {
             if (controller.getDropperDisabled()) {
                 drawarea.getScene().setCursor(Cursor.DEFAULT);
@@ -335,8 +357,42 @@ public class SelectionHandler implements Handler {
                     }
                     view.setGuides(added);
                 }
-                if (item instanceof Text) {
-                    if (!view.isEditing()) {
+                if (activeStrategy.isPresent()) {
+                    context.setBehaviour(activeStrategy.get());
+                    context.alter(item, listener.getTempX(), listener.getTempY());
+                    item.updateProperties(drawarea);
+                    view.updateCanvasItem(selection, item);
+                    view.moveSelection(selection);
+                } else {
+                    if (item instanceof Text) {
+                        if (!view.isEditing()) {
+                            if (listener.isSnapEnabled()) {
+                                xinc = context.getOmega().getX() - item.getStart().getX();
+                                yinc = context.getOmega().getY() - item.getStart().getY();
+                                drawarea.moveToWithIncrements(item, xinc, yinc);
+                            } else {
+                                item.moveTo(xinc, yinc);
+                            }
+                        } else {
+                            context.setBehaviour(textItemBehaviourProvider.get());
+                            context.alter(item, 0, 0);
+                        }
+                    } else if (item instanceof Figure) {
+                        context.setBehaviour(figureItemBehaviourProvider.get());
+                        context.alter(item, xinc, yinc);
+                    } else if (item instanceof Picture) {
+                        if (item instanceof StreetMap) {
+                            context.setBehaviour(mapItemBehaviourProvider.get());
+                            context.alter(item, xinc, yinc);
+                        } else {
+                            context.setBehaviour(pictureItemBehaviourProvider.get());
+                            context.alter(item, xinc, yinc);
+                        }
+                    } else if (item instanceof Grouped) {
+                        context.setBehaviour(groupedItemBehaviourProvider.get());
+                        context.alter(item, xinc, yinc);
+                    } else {
+                        // Rest of shapes
                         if (listener.isSnapEnabled()) {
                             xinc = context.getOmega().getX() - item.getStart().getX();
                             yinc = context.getOmega().getY() - item.getStart().getY();
@@ -344,37 +400,11 @@ public class SelectionHandler implements Handler {
                         } else {
                             item.moveTo(xinc, yinc);
                         }
-                    } else {
-                        context.setBehaviour(textItemBehaviourProvider.get());
-                        context.alter(item, 0, 0);
                     }
-                } else if (item instanceof Figure) {
-                    context.setBehaviour(figureItemBehaviourProvider.get());
-                    context.alter(item, xinc, yinc);
-                } else if (item instanceof Picture) {
-                    if (item instanceof StreetMap) {
-                        context.setBehaviour(mapItemBehaviourProvider.get());
-                        context.alter(item, xinc, yinc);
-                    } else {
-                        context.setBehaviour(pictureItemBehaviourProvider.get());
-                        context.alter(item, xinc, yinc);
-                    }
-                } else if (item instanceof Grouped) {
-                    context.setBehaviour(groupedItemBehaviourProvider.get());
-                    context.alter(item, xinc, yinc);
-                } else {
-                    // Rest of shapes
-                    if (listener.isSnapEnabled()) {
-                        xinc = context.getOmega().getX() - item.getStart().getX();
-                        yinc = context.getOmega().getY() - item.getStart().getY();
-                        drawarea.moveToWithIncrements(item, xinc, yinc);
-                    } else {
-                        item.moveTo(xinc, yinc);
-                    }
+                    item.updateProperties(drawarea);
+                    view.updateCanvasItem(selection, item);
+                    view.moveSelection(selection);
                 }
-                item.updateProperties(drawarea);
-                view.updateCanvasItem(selection, item);
-                view.moveSelection(selection);
             }
             listener.setStartX(listener.getTempX());
             listener.setStartY(listener.getTempY());
