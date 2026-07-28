@@ -109,16 +109,18 @@ public class SelectionHandler implements Handler {
             view.selectShapes(drawarea.getMarquee());
             drawarea.setMultiSelectEnabled(false);
         }
+        // Leave rotation mode before refreshing, so the pivot is dropped
+        // rather than redrawn by moveSelection().
+        if (drawarea.isRotationMode()) {
+            drawarea.getScene().setCursor(Cursor.DEFAULT);
+            drawarea.setRotationMode(false);
+        }
         if (view.getSelected() != -1 && !listener.getRightClick()) {
             view.updateSelectedItem();
             view.moveSelection(view.getSelected());
             context.resetContainment();
         }
         activeStrategy = Optional.empty();
-        if (drawarea.isRotationMode()) {
-            drawarea.getScene().setCursor(Cursor.DEFAULT);
-        }
-        drawarea.setRotationMode(false);
         view.setGuides(false);
         drawarea.resetGuides();
     }
