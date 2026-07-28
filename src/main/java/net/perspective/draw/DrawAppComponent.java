@@ -29,7 +29,6 @@ import dagger.Component;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.event.FigureHandler;
 import net.perspective.draw.event.MapHandler;
-import net.perspective.draw.event.RotationHandler;
 import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.event.TextHandler;
@@ -84,8 +83,6 @@ public interface DrawAppComponent {
 
     void inject(MapHandler mapHandler);
 
-    void inject(RotationHandler rotationHandler);
-
     void inject(DummyKeyHandler dummyKeyHandler);
 
     void inject(MapKeyHandler mapKeyHandler);
@@ -139,8 +136,6 @@ public interface DrawAppComponent {
     DrawAreaListener drawAreaListener();
 
     FigureHandler figureHandler();
-
-    RotationHandler rotationHandler();
 
     SelectionHandler selectionHandler();
 
