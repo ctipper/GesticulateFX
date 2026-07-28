@@ -242,7 +242,7 @@
                 </ToolBar>
             </top>
         </BorderPane>
-        <TilePane id="buttpanel" fx:id="linepanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="294.0" AnchorPane.topAnchor="82.0">
+        <TilePane id="buttpanel" fx:id="linepanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="248.0" AnchorPane.topAnchor="82.0">
             <Button id="buttlineh" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" onAction="#handleHorizontalAction">
                 <graphic>
                     <SVGPath content="M0.000000 11.792053L22.415894 11.792053" fill="TRANSPARENT" styleClass="svgPath" />
@@ -254,7 +254,7 @@
                 </graphic>
             </Button>
         </TilePane>
-        <TilePane id="buttpanel_2" fx:id="sketchpanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="570.0" AnchorPane.topAnchor="82.0">
+        <TilePane id="buttpanel_2" fx:id="sketchpanel" hgap="4" prefRows="1" prefColumns="2" prefTileHeight="41" prefTileWidth="45" tileAlignment="BASELINE_LEFT" translateX="-54.0" translateY="524.0" AnchorPane.topAnchor="82.0">
             <Button id="buttsketch_2" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" onAction="#handleSketchAction">
                 <graphic>
                     <SVGPath content="M9.683105 12.160538C9.387039 11.739883,8.870743 11.533356,8.366211 11.633789C7.209183 11.864105,6.822739 13.242813,7.049316 14.530975C7.212357 15.457993,7.598648 16.360352,8.366211 16.901367C11.324356 18.986465,15.644501 15.517441,14.160538 10.975342C13.918884 10.235748,13.520340 9.555481,12.975342 9.000000C9.410904 5.367126,3.067444 7.514481,1.781738 12.950684C0.468903 18.501633,5.099258 23.668060,11.000000 23.485840C17.038956 23.299332,21.461807 17.802231,21.008408 11.633789C20.603149 6.120422,16.446732 1.645233,11.000000 0.571884C7.478043 -0.122177,3.828094 0.742279,0.991592 2.942276" fill="TRANSPARENT" styleClass="svgPath" />
@@ -306,17 +306,6 @@
                     </tooltip>
                     <graphic>
                         <SVGPath content="M3.6728664049999997 0.6236943L3.6728664049999997 12.36993695 4.43515941 12.33528245 6.5141404099999995 9.840506099999999 9.667261649999999 15.453753949999998 11.0532487 15.419107949999999 11.15719775 13.582674449999999 9.078216750000001 10.394904149999999 9.00891625 9.459362699999998 9.42471245 9.147515549999998 12.369935250000001 9.182161549999998 12.369935250000001 8.142671219999999 4.7470048600000005 0.6583397304999986Z" fillRule="EVEN_ODD" styleClass="svgFill"/>
-                    </graphic>
-                </ToggleButton>
-                <ToggleButton id="buttrotate" fx:id="rotatebutton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" mnemonicParsing="false" onAction="#handleRotationAction" prefHeight="40.0" prefWidth="45.0" styleClass="toolbutton" text="" toggleGroup="$toolToggles" VBox.margin="$x1">
-                    <tooltip>
-                        <Tooltip text="%tooltip.rotate" />
-                    </tooltip>
-                    <graphic>
-                        <Group>
-                            <SVGPath content="M21.629684 21.629684C23.929916 19.348648,25.217789 16.239441,25.204208 13.000000C25.185959 8.644104,22.866867 4.621231,19.102112 2.430817C17.250137 1.353287,15.142548 0.798416,13.000000 0.795792C8.613281 0.790421,4.496872 3.043732,2.430817 6.897888C-1.933624 15.039612,3.776276 24.929062,13.000000 25.204208C14.427063 25.246780,15.847687 24.996307,17.174149 24.468262 M21.629684 21.629684L20.633423 17.644638 M21.629684 21.629684L25.614731 20.633423" styleClass="svgPath"  fill="TRANSPARENT"/>
-                            <SVGPath content="M10.011215 13.000000L15.988785 13.000000 M13.000000 15.988785L13.000000 10.011215" styleClass="svgThinPath" fill="TRANSPARENT" />
-                        </Group>
                     </graphic>
                 </ToggleButton>
                 <Region prefHeight="5.0" />
@@ -436,7 +425,7 @@
                 </Label>
             </children>
         </VBox>
-        <HBox translateX="45.0" translateY="294.0" AnchorPane.topAnchor="82.0">
+        <HBox translateX="45.0" translateY="248.0" AnchorPane.topAnchor="82.0">
             <Button id="buttonafford" fx:id="affordtab" focusTraversable="false" prefWidth="4" prefHeight="52" contentDisplay="GRAPHIC_ONLY" text="" />
             <ToggleButton id="buttontab" fx:id="tabbutton" focusTraversable="false" prefWidth="4" prefHeight="52" text="" contentDisplay="GRAPHIC_ONLY">
                 <graphic>
@@ -444,7 +433,7 @@
                 </graphic>
             </ToggleButton>
         </HBox>
-        <HBox translateX="45.0" translateY="570.0" AnchorPane.topAnchor="82.0">
+        <HBox translateX="45.0" translateY="524.0" AnchorPane.topAnchor="82.0">
             <Button id="buttonafford_2" fx:id="affordtab_2" focusTraversable="false" prefWidth="4" prefHeight="52" contentDisplay="GRAPHIC_ONLY" text="" />
             <ToggleButton id="buttontab_2" fx:id="tabbutton_2" focusTraversable="false" prefWidth="4" prefHeight="52" text="" contentDisplay="GRAPHIC_ONLY">
                 <graphic>

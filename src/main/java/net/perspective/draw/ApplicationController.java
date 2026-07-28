@@ -187,12 +187,6 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
-    private void handleRotationAction(ActionEvent e) {
-        drawareaProvider.get().changeHandlers(HandlerType.ROTATION);
-        viewProvider.get().setEditing(KeyHandlerType.MOVE);
-    }
-
-    @FXML
     private void handleLineAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.LINE);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);

@@ -104,7 +104,6 @@ public class DrawingArea {
 
     @Inject Provider<SelectionHandler> selectionHandlerProvider;
     @Inject Provider<FigureHandler> figureHandlerProvider;
-    @Inject Provider<RotationHandler> rotationHandlerProvider;
     @Inject Provider<SketchHandler> sketchHandlerProvider;
     @Inject Provider<TextHandler> textHandlerProvider;
     @Inject Provider<MapHandler> mapHandlerProvider;
@@ -327,13 +326,6 @@ public class DrawingArea {
             case FIGURE -> {
                 listener.setEventHandler(figureHandlerProvider.get());
                 this.setRotationMode(false);
-                mapper.finaliseMap();
-                viewProvider.get().setSelected(-1);
-            }
-            case ROTATION -> {
-                listener.setEventHandler(rotationHandlerProvider.get());
-                this.setRotationMode(true);
-                this.setContextHandlers();
                 mapper.finaliseMap();
                 viewProvider.get().setSelected(-1);
             }

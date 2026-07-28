@@ -31,7 +31,6 @@ import dagger.Provides;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.event.FigureHandler;
 import net.perspective.draw.event.MapHandler;
-import net.perspective.draw.event.RotationHandler;
 import net.perspective.draw.event.SelectionHandler;
 import net.perspective.draw.event.SketchHandler;
 import net.perspective.draw.event.TextHandler;
@@ -132,13 +131,6 @@ public class DrawAppModule {
         SketchHandler sketchHandler = new SketchHandler(drawarea, view);
         component.inject(sketchHandler);
         return sketchHandler;
-    }
-
-    @Provides
-    RotationHandler provideRotationHandler(DrawingArea drawarea, CanvasView view, DrawAppComponent component) {
-        RotationHandler rotationHandler = new RotationHandler(drawarea, view);
-        component.inject(rotationHandler);
-        return rotationHandler;
     }
 
     @Provides
