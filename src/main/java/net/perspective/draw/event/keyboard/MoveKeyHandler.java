@@ -44,8 +44,6 @@ public class MoveKeyHandler implements KeyHandler {
     private HandlerType handlertype;
     private boolean pressed = false;
 
-    private static final boolean MAC_OS_X = System.getProperty("os.name").toLowerCase().startsWith("mac os x");
-
     /**
      * Creates a new instance of <code>MoveKeyHandler</code>
      */
@@ -75,14 +73,16 @@ public class MoveKeyHandler implements KeyHandler {
                     }
                 }
                 case KP_LEFT, LEFT -> {
-                    if (drawarea.isRotationMode()) {
+                    if (keylistener.isIsAltDown()) {
+                        drawarea.setRotationMode(true);
                         drawarea.rotateLeft(item);
                     } else {
                         drawarea.snapLeft(item);
-                    }
+                    }    
                 }
                 case KP_RIGHT, RIGHT -> {
-                    if (drawarea.isRotationMode()) {
+                    if (keylistener.isIsAltDown()) {
+                        drawarea.setRotationMode(true);
                         drawarea.rotateRight(item);
                     } else {
                         drawarea.snapRight(item);
@@ -104,19 +104,19 @@ public class MoveKeyHandler implements KeyHandler {
             switch (keylistener.getKeyCode()) {
                 case X -> {
                     // cut selected
-                    if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                    if (keylistener.isIsShortcutDown()) {
                         drawarea.cutSelectedItem();
                     }
                 }
                 case C -> {
                     // copy selected
-                    if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                    if (keylistener.isIsShortcutDown()) {
                         drawarea.copySelectedItem();
                     }
                 }
                 case V -> {
                     // paste selected
-                    if (!MAC_OS_X && keylistener.isIsControlDown() || MAC_OS_X && keylistener.isIsMetaDown()) {
+                    if (keylistener.isIsShortcutDown()) {
                         drawarea.pasteSelectedItem();
                     }
                 }
@@ -142,6 +142,8 @@ public class MoveKeyHandler implements KeyHandler {
 
     @Override
     public void keyReleased() {
+        // changeHandlers() below resets rotation mode, so capture it first.
+        boolean wasRotating = drawarea.isRotationMode();
         switch (keylistener.getKeyCode()) {
             case ALT, ALT_GRAPH -> {
                 drawarea.setDrawType(drawingtype);
@@ -151,6 +153,13 @@ public class MoveKeyHandler implements KeyHandler {
             }
             default -> {
             }
+        }
+        // Only leave rotation mode once Alt is released.
+        if (!keylistener.isIsAltDown() && wasRotating) {
+            if (!HandlerType.ROTATION.equals(drawarea.getHandlerType())) {
+                drawarea.setRotationMode(false);
+            }
+            view.moveSelection(view.getSelected());
         }
     }
 
