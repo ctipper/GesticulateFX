@@ -143,12 +143,17 @@ public class SelectionHandler implements Handler {
                 context.setContainment(ContainsType.NONE);
                 do {
                     DrawItem item = drawings.get(i);
-                    activeStrategy = Optional.ofNullable(rotateBehaviourProvider.get());
-                    context.setBehaviour(activeStrategy.get());
-                    boolean found = context.select(item, i);
-                    if (found) {
-                        drawarea.setRotationMode(true);
-                        break;
+                    boolean found;
+                    // The rotate handle is only drawn on the selected item, so
+                    // only that item offers it as a hit target.
+                    if (i == view.getSelected()) {
+                        activeStrategy = Optional.ofNullable(rotateBehaviourProvider.get());
+                        context.setBehaviour(activeStrategy.get());
+                        found = context.select(item, i);
+                        if (found) {
+                            drawarea.setRotationMode(true);
+                            break;
+                        }
                     }
                     activeStrategy = Optional.empty();
                     if (item instanceof Figure) {
