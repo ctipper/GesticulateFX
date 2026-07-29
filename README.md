@@ -10,7 +10,7 @@ Platform builds are in the site directory using `ant` script. This assumes that 
 
 An ant runner is provided `mvn clean package -P ant-bundle` for app bundle or `mvn clean install -P ant-builder` for platform installer.
 
-![GesticulateFX, sketch freehand diagrams using JavaFX](https://www.e-conomist.me.uk/images/144dpi/gesticulate-fx-15.png)
+![GesticulateFX, sketch freehand diagrams using JavaFX](https://www.e-conomist.me.uk/images/144dpi/gesticulate-fx-16.png)
 
 ## Help wanted
 
