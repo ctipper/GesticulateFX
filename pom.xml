@@ -18,12 +18,12 @@
     <properties>
         <java.version>26</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>26.0.1</javafx.version>
-        <dagger.version>2.60</dagger.version>
+        <javafx.version>26.0.2</javafx.version>
+        <dagger.version>2.60.1</dagger.version>
         <slf4j.version>2.0.18</slf4j.version>
-        <log4j.version>2.26.0</log4j.version>
+        <log4j.version>2.26.1</log4j.version>
         <batik.version>1.19</batik.version>
-        <junit.version>6.1.0</junit.version>
+        <junit.version>6.1.2</junit.version>
         <skipTests>true</skipTests>
     </properties>
 

@@ -80,6 +80,7 @@ public class G2 {
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      * @return a {@link javafx.scene.Group} representing the pivot
      */
+    @SuppressWarnings("deprecation")
     public Group drawRotationPivot(DrawItem item) {
         Group pivotGroup = new Group();
         Color background = Color.web(drawareaProvider.get().getCanvasBackgroundColor());
