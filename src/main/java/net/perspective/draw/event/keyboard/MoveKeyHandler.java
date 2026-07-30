@@ -78,7 +78,7 @@ public class MoveKeyHandler implements KeyHandler {
                         drawarea.rotateLeft(item);
                     } else {
                         drawarea.snapLeft(item);
-                    }    
+                    }
                 }
                 case KP_RIGHT, RIGHT -> {
                     if (keylistener.isIsAltDown()) {
