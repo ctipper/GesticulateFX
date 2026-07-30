@@ -280,8 +280,7 @@ public class SelectionHandler implements Handler {
                 context.setBehaviour(textItemBehaviourProvider.get());
                 context.hover(item);
             }
-            activeStrategy = Optional.ofNullable(rotateBehaviourProvider.get());
-            context.setBehaviour(activeStrategy.get());
+            context.setBehaviour(rotateBehaviourProvider.get());
             context.hover(item);
         } else {
             if (controller.getDropperDisabled()) {
