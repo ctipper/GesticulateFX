@@ -102,8 +102,19 @@ public class RotateBehaviour  implements ItemBehaviours {
             }
 
             double h1 = V2.L2(A);
-            CanvasPoint q1 = new CanvasPoint(A.x / h1, A.y / h1);
             double h2 = V2.L2(B);
+
+            if (h1 == 0d || h2 == 0d) {
+                // a pointer on the rotation centre has no direction, a NaN angle would stick to the item
+                if (h2 != 0d) {
+                    // the reference point was degenerate, adopt the current one instead
+                    listener.setStartX(listener.getTempX());
+                    listener.setStartY(listener.getTempY());
+                }
+                return;
+            }
+
+            CanvasPoint q1 = new CanvasPoint(A.x / h1, A.y / h1);
             CanvasPoint q2 = new CanvasPoint(B.x / h2, B.y / h2);
 
             double cos_t = V2.dot(q1, q2);
