@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.perspective.draw.geom.DrawItem;
@@ -168,14 +167,23 @@ public class ItemStore {
     /** Tombstones awaiting commit by {@link #removeItems()}. Guarded by {@code lock}. */
     private final Set<ItemId> removed = new LinkedHashSet<>();
 
+    /**
+     * Slots written since the last {@link #drainDirty()}. Guarded by {@code lock}.
+     *
+     * <p>Exists because an in-place edit is undetectable by a reader. The EDT is permitted to
+     * mutate a published item and republish the same instance, which no comparison — {@code ==}
+     * or {@code equals} — can distinguish from no change at all. So the writer records it.</p>
+     *
+     * <p>Accumulates rather than being cleared per publication: a reader that coalesces several
+     * publications into one pass must still learn about every slot touched across them.</p>
+     */
+    private final Set<ItemId> dirty = new LinkedHashSet<>();
+
     private long revision;
     private int batchDepth;
 
     /** The published view. Volatile: written under lock, read without. */
     private volatile Snapshot snapshot = new Snapshot(List.of(), Map.of(), 0L);
-
-    /** Invoked after each publication, on the EDT. May be null. */
-    private Runnable repaintCallback;
 
     /**
      * Notified after each publication.
@@ -201,22 +209,13 @@ public class ItemStore {
     /**
      * Set the listener notified after each publication.
      *
-     * <p>Swing: {@code store.setListener(r -> SwingUtilities.invokeLater(canvas::repaint))}.
-     * JavaFX: see {@code FxSnapshotBinder}.</p>
+     * <p>This is the only notification the store emits — see {@link FxSnapshotBinder}, which
+     * registers here and marshals onto the FX thread. Nothing renders if it is left unset.</p>
      *
      * @param listener the listener, or null to disable
      */
     public void setListener(SnapshotListener listener) {
         this.listener = listener;
-    }
-
-    /**
-     * Set the callback invoked on the EDT after each publication.
-     *
-     * @param repaintCallback typically {@code canvas::repaint}, or null to disable
-     */
-    public void setRepaintCallback(Runnable repaintCallback) {
-        this.repaintCallback = repaintCallback;
     }
 
     /**
@@ -226,6 +225,37 @@ public class ItemStore {
      */
     public Snapshot snapshot() {
         return snapshot;
+    }
+
+    /**
+     * Take the set of slots written since the last call, and clear it.
+     *
+     * <p>Identifies items that changed without changing instance — an EDT edit applied in place
+     * and republished. A reader cannot detect those itself, so the store records them here.</p>
+     *
+     * <p><strong>Drain before reading {@link #snapshot()}, never after.</strong> Draining first
+     * means every id returned is guaranteed to be at least as new in that snapshot; a write
+     * landing in the gap is simply not drained, and the publication it performed has already
+     * scheduled the reader again, so it is picked up on the next pass. Draining second can strand
+     * a write: its id is taken while its state is missing from the older snapshot already read,
+     * and nothing schedules another pass.</p>
+     *
+     * <p>Single-consumer: whoever drains takes sole responsibility for applying the result.</p>
+     *
+     * @return the dirty slot ids, in write order
+     */
+    public Set<ItemId> drainDirty() {
+        lock.lock();
+        try {
+            if (dirty.isEmpty()) {
+                return Set.of();
+            }
+            Set<ItemId> out = new LinkedHashSet<>(dirty);
+            dirty.clear();
+            return out;
+        } finally {
+            lock.unlock();
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -471,6 +501,7 @@ public class ItemStore {
                 items.add(id);
                 logger.info("Update: Replaced item.");
             }
+            dirty.add(id);
             publish();
             return id;
         } finally {
@@ -493,6 +524,7 @@ public class ItemStore {
                 return false;
             }
             itemsById.put(id, item);
+            dirty.add(id);
             publish();
             return true;
         } finally {
@@ -724,6 +756,7 @@ public class ItemStore {
             items.clear();
             itemsById.clear();
             removed.clear();
+            dirty.clear();                  // the slots are gone; nothing to refresh
             publish();
         } finally {
             lock.unlock();
@@ -759,6 +792,10 @@ public class ItemStore {
 
     /**
      * Rebuild and publish the snapshot. Caller must hold {@code lock}.
+     *
+     * <p>The listener is notified with the lock still held and on the writing thread, so it must
+     * not block or touch the scene graph — it schedules and returns. See
+     * {@link FxSnapshotBinder#attach}.</p>
      */
     private void publish() {
         if (batchDepth > 0) {
@@ -766,9 +803,9 @@ public class ItemStore {
         }
         revision++;
         snapshot = new Snapshot(List.copyOf(items), Map.copyOf(itemsById), revision);
-        Runnable callback = repaintCallback;
-        if (callback != null) {
-            SwingUtilities.invokeLater(callback);
+        SnapshotListener notify = listener;
+        if (notify != null) {
+            notify.published(revision);
         }
     }
 
@@ -854,6 +891,7 @@ public class ItemStore {
                 items.clear();
                 itemsById.clear();
                 removed.clear();
+                dirty.clear();              // ids are re-minted below
                 for (DrawItem item : loaded) {
                     ItemId id = mint();
                     itemsById.put(id, item);
