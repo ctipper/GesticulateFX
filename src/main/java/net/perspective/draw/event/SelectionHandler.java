@@ -232,6 +232,19 @@ public class SelectionHandler implements Handler {
     @Override
     public void clickEvent() {
         DrawItem current = store.lookupId(view.getSelectedId());
+        if (view.isEditing() && current == null) {
+            /*
+             * The item being edited went away under us — a sync removal, most likely. Leave edit
+             * mode rather than sit in it with nothing selected, where keystrokes reach no item and
+             * the caret animates against a stale id.
+             */
+            Editor editor = textController.getEditor();
+            view.setSelected(-1);
+            view.setEditing(KeyHandlerType.MOVE);
+            editor.setCaretStart(0);
+            editor.setCaretEnd(0);
+            return;
+        }
         if (view.isEditing() && current != null && !listener.wasDragged()) {
             if (!current.contains(listener.getTempX(), listener.getTempY())) {
                 Editor editor = textController.getEditor();
