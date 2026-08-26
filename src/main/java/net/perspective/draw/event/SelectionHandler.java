@@ -121,7 +121,7 @@ public class SelectionHandler implements Handler {
         }
         if (view.getSelected() != -1 && !listener.getRightClick()) {
             view.updateSelectedItem();
-            view.moveSelection(view.getSelected());
+            view.refreshSelection();
             context.resetContainment();
         }
         activeStrategy = Optional.empty();

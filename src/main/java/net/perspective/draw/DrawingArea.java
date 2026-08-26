@@ -198,26 +198,26 @@ public class DrawingArea {
         });
         controller.getFontFamilyProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             this.setFontFamily(newValue);
-            viewProvider.get().moveSelection(viewProvider.get().getSelected());
+            viewProvider.get().refreshSelection();
         });
         controller.getFontSizeProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             this.setFontSize(Integer.parseInt(newValue));
-            viewProvider.get().moveSelection(viewProvider.get().getSelected());
+            viewProvider.get().refreshSelection();
         });
         controller.getBoldProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             textControllerProvider.get().formatSelectedText(newValue, TextFormatter.FONT_BOLD);
             viewProvider.get().updateSelectedItem();
-            viewProvider.get().moveSelection(viewProvider.get().getSelected());
+            viewProvider.get().refreshSelection();
         });
         controller.getItalicProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             textControllerProvider.get().formatSelectedText(newValue, TextFormatter.FONT_ITALIC);
             viewProvider.get().updateSelectedItem();
-            viewProvider.get().moveSelection(viewProvider.get().getSelected());
+            viewProvider.get().refreshSelection();
         });
         controller.getUnderlinedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             textControllerProvider.get().formatSelectedText(newValue, TextFormatter.FONT_UNDERLINED);
             viewProvider.get().updateSelectedItem();
-            viewProvider.get().moveSelection(viewProvider.get().getSelected());
+            viewProvider.get().refreshSelection();
         });
     }
 
@@ -243,7 +243,7 @@ public class DrawingArea {
      */
     public void setTheme() {
         canvas.setFill(Color.web(controller.getCanvasBackgroundColor()));
-        viewProvider.get().moveSelection(viewProvider.get().getSelected());
+        viewProvider.get().refreshSelection();
     }
 
     /**
@@ -456,7 +456,7 @@ public class DrawingArea {
                 if (item instanceof Text) {
                     viewProvider.get().cutTextItem();
                     viewProvider.get().updateSelectedItem();
-                    viewProvider.get().moveSelection(viewProvider.get().getSelected());
+                    viewProvider.get().refreshSelection();
                 }
             }
         });
@@ -467,7 +467,7 @@ public class DrawingArea {
                 if (item instanceof Text) {
                     viewProvider.get().copyTextItem();
                     viewProvider.get().updateSelectedItem();
-                    viewProvider.get().moveSelection(viewProvider.get().getSelected());
+                    viewProvider.get().refreshSelection();
                 }
             }
         });
@@ -477,7 +477,7 @@ public class DrawingArea {
             if (item instanceof Text) {
                 viewProvider.get().pasteTextItem();
                 viewProvider.get().updateSelectedItem();
-                viewProvider.get().moveSelection(viewProvider.get().getSelected());
+                viewProvider.get().refreshSelection();
             }
         });
         // contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);

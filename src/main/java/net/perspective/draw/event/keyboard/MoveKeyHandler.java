@@ -26,6 +26,8 @@ package net.perspective.draw.event.keyboard;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
+import net.perspective.draw.ItemStore;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
 import net.perspective.draw.geom.DrawItem;
@@ -39,6 +41,7 @@ public class MoveKeyHandler implements KeyHandler {
 
     private final DrawingArea drawarea;
     private final CanvasView view;
+    @Inject ItemStore store;
     @Inject KeyListener keylistener;
     private DrawingType drawingtype;
     private HandlerType handlertype;
@@ -59,8 +62,9 @@ public class MoveKeyHandler implements KeyHandler {
         /**
          * Keyboard movement semantics
          */
-        if ((view.getSelected() != -1) && !view.isEditing()) {
-            DrawItem item = view.getDrawings().get(view.getSelected());
+        ItemId id = view.getSelectedId();
+        DrawItem item = store.lookupId(id);
+        if (item != null && !view.isEditing()) {
             switch (keylistener.getKeyCode()) {
                 case KP_UP, UP -> {
                     if (!drawarea.isRotationMode()) {
@@ -94,8 +98,13 @@ public class MoveKeyHandler implements KeyHandler {
                 default -> {
                 }
             }
-            view.moveSelection(view.getSelected());
-            view.updateCanvasItem(view.getSelected(), item);
+            /*
+             * The snap and rotate cases above edit the item in place, so it has to be republished
+             * or the change never reaches the canvas. After DELETE the slot is gone and both calls
+             * no-op on the stale id, which is what stops the item being resurrected.
+             */
+            view.updateCanvasItem(id, item);
+            view.refreshSelection();
         }
         /**
          * Keyboard paste operation semantics
@@ -159,7 +168,7 @@ public class MoveKeyHandler implements KeyHandler {
             if (!HandlerType.ROTATION.equals(drawarea.getHandlerType())) {
                 drawarea.setRotationMode(false);
             }
-            view.moveSelection(view.getSelected());
+            view.refreshSelection();
         }
     }
 

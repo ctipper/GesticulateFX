@@ -156,7 +156,7 @@ public class TextController {
             editor.commitText(item);
             item.setDimensions();
         }
-        viewProvider.get().moveSelection(viewProvider.get().getSelected());
+        viewProvider.get().refreshSelection();
     }
 
     /**
@@ -182,7 +182,7 @@ public class TextController {
             editor.commitText(item);
             item.setDimensions();
         }
-        viewProvider.get().moveSelection(viewProvider.get().getSelected());
+        viewProvider.get().refreshSelection();
     }
 
     /**
@@ -202,7 +202,7 @@ public class TextController {
         if (isRichText()) {
             this.formatSelectedRichText(format);
         }
-        viewProvider.get().moveSelection(viewProvider.get().getSelected());
+        viewProvider.get().refreshSelection();
     }
 
     /**

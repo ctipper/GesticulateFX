@@ -713,17 +713,37 @@ public class CanvasView {
     }
 
     /**
-     * Add a DrawItem to the selection by index.
+     * Select a DrawItem by index and show the selection.
      *
-     * <p>Compatibility shim for call sites not yet migrated. Resolves the index against the
-     * current snapshot immediately, so the stored id is stable even though the index was not.
-     * Prefer {@link #setSelectedId} where an id is already to hand.</p>
+     * <p>Compatibility shim; prefer {@link #setSelected(ItemId)}.</p>
      *
      * @param selection the index, or -1 to clear
      */
     public void setSelected(int selection) {
-        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         if (selection == -1) {
+            setSelected((ItemId) null);
+            return;
+        }
+        List<ItemId> order = store.getItems();
+        if (selection < 0 || selection >= order.size()) {
+            return;                                  // stale index; leave selection untouched
+        }
+        setSelected(order.get(selection));
+    }
+
+    /**
+     * Select a DrawItem and show the selection.
+     *
+     * <p>Distinct from {@link #setSelectedId}, which only records membership. This also redraws
+     * the anchors, the rotation pivot and the caret highlight, so it is what to call when the
+     * selection changes outside a mouse gesture — restoring one after a modal interlude, say.
+     * Within a gesture the handler's mouse-up already refreshes the overlay.</p>
+     *
+     * @param id the slot id, or null to clear
+     */
+    public void setSelected(ItemId id) {
+        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+        if (id == null) {
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
             nodes.remove(itemPivot);
@@ -733,8 +753,9 @@ public class CanvasView {
             return;
         }
         Snapshot snap = store.snapshot();
-        if (selection < 0 || selection >= snap.size()) {
-            return;                                  // stale index; leave selection untouched
+        DrawItem item = snap.get(id);
+        if (item == null) {
+            return;                                  // stale id; leave selection untouched
         }
         nodes.remove(drawingAnchors);
         nodes.remove(highlight);
@@ -743,14 +764,14 @@ public class CanvasView {
             selectionIds.clear();
             drawingAnchors.getChildren().clear();
         }
-        setSelectedId(snap.order().get(selection));  // must precede getAnchors(), which reads the selection
+        setSelectedId(id);                           // must precede getAnchors(), which reads the selection
         drawingAnchors = getAnchors(snap);
         nodes.add(drawingAnchors);
         if (drawarea.isRotationMode()) {
-            itemPivot = g2.drawRotationPivot(snap.at(selection));
+            itemPivot = g2.drawRotationPivot(item);
             nodes.add(itemPivot);
         }
-        setTextHighlight(selection);
+        setTextHighlight(id);
     }
 
     /**
@@ -777,6 +798,18 @@ public class CanvasView {
         int before = selectionIds.size();
         selectionIds.removeIf(id -> snap.get(id) == null);
         return before - selectionIds.size();
+    }
+
+    /**
+     * Redraw the overlay for whatever is currently selected.
+     *
+     * <p>The common case by far: an item has been moved, resized or restyled in place and the
+     * anchors need to follow it. Replaces {@code moveSelection(getSelected())}, which resolved the
+     * selection to an index only to resolve it straight back again — and silently did nothing if
+     * the two resolutions disagreed.</p>
+     */
+    public void refreshSelection() {
+        moveSelection(this.getSelectedId());
     }
 
     /**
