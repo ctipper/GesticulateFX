@@ -111,7 +111,7 @@ public class TextHandler implements Handler {
                 }
             } else {
                 view.updateSelectedItem();
-                view.moveSelection(view.getSelected());
+                view.refreshSelection();
             }
         }
     }

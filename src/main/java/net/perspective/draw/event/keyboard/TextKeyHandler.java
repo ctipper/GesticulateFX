@@ -27,6 +27,8 @@ import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
+import net.perspective.draw.ItemStore;
 import net.perspective.draw.TextController;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
@@ -45,9 +47,12 @@ public class TextKeyHandler implements KeyHandler {
     private final DrawingArea drawarea;
     private final CanvasView view;
     private final ApplicationController controller;
+    @Inject ItemStore store;
     @Inject KeyListener keylistener;
     @Inject Provider<TextController> textControllerProvider;
-    private int selection = -1;
+    /** Selection stashed across an Alt interlude. Held as an id: an index would rot if the
+     * document changed while the key was down. */
+    private ItemId selection;
     private boolean selectToLeft = false;
     private DrawingType drawingtype;
     private HandlerType handlerType;
@@ -77,9 +82,9 @@ public class TextKeyHandler implements KeyHandler {
     @Override
     public void keyPressed() {
         Editor editor = textControllerProvider.get().getEditor();
-        selection = view.getSelected();
-        if ((selection != -1) && (view.isEditing())) {
-            DrawItem drawitem = view.getDrawings().get(selection);
+        selection = view.getSelectedId();
+        DrawItem drawitem = store.lookupId(selection);
+        if (drawitem != null && view.isEditing()) {
             if (drawitem instanceof Text item) {
                 // edit
                 int textlength = editor.getLength();
@@ -305,7 +310,7 @@ public class TextKeyHandler implements KeyHandler {
                 }
                 item.setDimensions();
                 view.updateSelectedItem();
-                view.moveSelection(view.getSelected());
+                view.refreshSelection();
             }
         }
         switch (keylistener.getKeyCode()) {
@@ -313,7 +318,7 @@ public class TextKeyHandler implements KeyHandler {
                 if (!pressed) {
                     drawingtype = drawarea.getDrawType().orElse(null);
                     handlerType = drawarea.getHandlerType();
-                    selection = view.getSelected();
+                    selection = view.getSelectedId();
                     drawarea.setDrawType(null);
                     drawarea.changeHandlers(HandlerType.SELECTION);
                     isEditing = view.isEditing();
@@ -352,9 +357,9 @@ public class TextKeyHandler implements KeyHandler {
     @Override
     public void keyTyped() {
         Editor editor = textControllerProvider.get().getEditor();
-        selection = view.getSelected();
-        if ((selection != -1) && (view.isEditing())) {
-            DrawItem drawitem = view.getDrawings().get(selection);
+        selection = view.getSelectedId();
+        DrawItem drawitem = store.lookupId(selection);
+        if (drawitem != null && view.isEditing()) {
             if (drawitem instanceof Text item) {
                 String keyChar = keylistener.getKeyChar();
                 /**
@@ -378,7 +383,7 @@ public class TextKeyHandler implements KeyHandler {
                     }
                     item.setDimensions();
                     view.updateSelectedItem();
-                    view.moveSelection(view.getSelected());
+                    view.refreshSelection();
                 }
             }
         }

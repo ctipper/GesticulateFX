@@ -26,6 +26,7 @@ package net.perspective.draw.event.keyboard;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.MapController;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.enums.HandlerType;
@@ -41,7 +42,9 @@ public class MapKeyHandler implements KeyHandler {
     private final CanvasView view;
     @Inject MapController mapper;
     @Inject KeyListener keylistener;
-    private int selection = -1;
+    /** Selection stashed across an Alt interlude. Held as an id: an index would rot if the
+     * document changed while the key was down. */
+    private ItemId selection;
     private DrawingType drawingtype;
     private HandlerType handlerType;
     private boolean isMapping = false;
@@ -72,7 +75,7 @@ public class MapKeyHandler implements KeyHandler {
                 if (!pressed) {
                     drawingtype = drawarea.getDrawType().orElse(null);
                     handlerType = drawarea.getHandlerType();
-                    selection = view.getSelected();
+                    selection = view.getSelectedId();
                     drawarea.setDrawType(null);
                     drawarea.changeHandlers(HandlerType.SELECTION);
                     isMapping = view.isMapping();
