@@ -197,6 +197,8 @@ public interface DrawAppComponent {
     Picture picture();
 
     StreetMap streetMap();
+    
+    ItemStore itemStore();
 
     @Component.Builder
     interface Builder {
