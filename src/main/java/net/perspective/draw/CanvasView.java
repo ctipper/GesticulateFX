@@ -281,6 +281,18 @@ public class CanvasView {
     }
 
     /**
+     * Update the item bound to a slot
+     *
+     * @param id the slot id
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     */
+    public void updateCanvasItem(ItemId id, DrawItem item) {
+        if (id != null) {
+            store.replaceItem(id, item);
+        }
+    }
+
+    /**
      * Delete the selected item
      */
     public void deleteSelectedItem() {
@@ -770,9 +782,25 @@ public class CanvasView {
     /**
      * Move the selection and update drawing anchors
      *
+     * <p>Compatibility shim; prefer {@link #moveSelection(ItemId)}.</p>
+     *
      * @param selection selected index
      */
     public void moveSelection(int selection) {
+        List<ItemId> order = store.getItems();
+        moveSelection(selection < 0 || selection >= order.size() ? null : order.get(selection));
+    }
+
+    /**
+     * Move the selection and update drawing anchors
+     *
+     * <p>The anchors are dropped first and rebuilt from the current geometry, so this is the
+     * refresh to call after an item has been moved or resized in place. A null or stale id leaves
+     * the anchors cleared.</p>
+     *
+     * @param id the slot id, or null
+     */
+    public void moveSelection(ItemId id) {
         ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         if (!drawingAnchors.getChildren().isEmpty()) {
             nodes.remove(drawingAnchors);
@@ -780,34 +808,44 @@ public class CanvasView {
             nodes.remove(itemPivot);
             drawingAnchors.getChildren().clear();
         }
-        if (selection == -1) {
-            return;
-        }
         Snapshot snap = store.snapshot();
-        if (selection < 0 || selection >= snap.size()) {
-            return;                                  // stale index; anchors already cleared
+        DrawItem item = snap.get(id);
+        if (item == null) {
+            return;                                  // nothing selected, or stale
         }
         drawingAnchors = getAnchors(snap);
         nodes.add(drawingAnchors);
         if (drawarea.isRotationMode()) {
-            itemPivot = g2.drawRotationPivot(snap.at(selection));
+            itemPivot = g2.drawRotationPivot(item);
             nodes.add(itemPivot);
         }
-        setTextHighlight(selection);
+        setTextHighlight(id);
     }
 
     /**
      * Provide a cursor whilst editing text
-     * 
+     *
+     * <p>Compatibility shim; prefer {@link #setTextHighlight(ItemId)}.</p>
+     *
      * @param selection index of the current drawitem
      */
     public void setTextHighlight(int selection) {
+        List<ItemId> order = store.getItems();
+        setTextHighlight(selection < 0 || selection >= order.size() ? null : order.get(selection));
+    }
+
+    /**
+     * Provide a cursor whilst editing text
+     *
+     * @param id the slot id of the current drawitem
+     */
+    public void setTextHighlight(ItemId id) {
         ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         nodes.remove(highlight);
         if (isEditing()) {
-            DrawItem item = store.lookupId(selection);
+            DrawItem item = store.lookupId(id);
             if (item == null) {
-                return;                              // stale index; caret simply not drawn
+                return;                              // nothing selected, or stale; no caret drawn
             }
             highlight = g2.highlightText(item);
             if (textController.getEditor().getCaretStart() == textController.getEditor().getCaretEnd()) {

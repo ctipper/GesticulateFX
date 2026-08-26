@@ -81,6 +81,7 @@ public class DrawingArea {
     @Inject Dropper dropper;
     @Inject MapController mapper;
     @Inject G2 g2;
+    @Inject ItemStore store;
     @Inject BehaviourContext context;
     private SubScene canvas;
     private Group root;
@@ -580,12 +581,11 @@ public class DrawingArea {
      * Initiate map edit mode
      */
     protected void editMapItem() {
-        if (viewProvider.get().getSelected() != -1) {
-            DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
-            if (item instanceof StreetMap) {
-                context.setBehaviour(mapItemBehaviourProvider.get());
-                context.edit(item, viewProvider.get().getSelected());
-            }
+        ItemId id = viewProvider.get().getSelectedId();
+        DrawItem item = store.lookupId(id);
+        if (item instanceof StreetMap) {
+            context.setBehaviour(mapItemBehaviourProvider.get());
+            context.edit(item, id);
         }
     }
 
@@ -593,15 +593,14 @@ public class DrawingArea {
      * Initiate text edit mode
      */
     protected void editTextItem() {
-        if (viewProvider.get().getSelected() != -1) {
-            DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
-            if (item instanceof Text text) {
-                context.setBehaviour(textItemBehaviourProvider.get());
-                context.edit(text, viewProvider.get().getSelected());
-                text.setDimensions();
-                viewProvider.get().updateSelectedItem();
-                viewProvider.get().moveSelection(viewProvider.get().getSelected());
-            }
+        ItemId id = viewProvider.get().getSelectedId();
+        DrawItem item = store.lookupId(id);
+        if (item instanceof Text text) {
+            context.setBehaviour(textItemBehaviourProvider.get());
+            context.edit(text, id);
+            text.setDimensions();
+            viewProvider.get().updateSelectedItem();
+            viewProvider.get().moveSelection(id);
         }
     }
 

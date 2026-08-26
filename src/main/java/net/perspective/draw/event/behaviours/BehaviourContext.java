@@ -27,6 +27,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.util.CanvasPoint;
@@ -71,23 +72,23 @@ public class BehaviourContext {
 
     /**
      * Activate the strategy's select behaviour
-     * 
+     *
      * @param item  a {@link net.perspective.draw.geom.DrawItem}
-     * @param index  the index of the item in list of drawings
+     * @param id  the slot id of the item
      * @return item is selected
      */
-    public boolean select(DrawItem item, int index) {
-        return strategy.selectItem(this, item, index);
+    public boolean select(DrawItem item, ItemId id) {
+        return strategy.selectItem(this, item, id);
     }
 
     /**
      * Activate the strategy's edit behaviour
-     * 
+     *
      * @param item  a {@link net.perspective.draw.geom.DrawItem}
-     * @param index  the index of the item in list of drawings
+     * @param id  the slot id of the item
      */
-    public void edit(DrawItem item, int index) {
-        strategy.editItem(this, item, index);
+    public void edit(DrawItem item, ItemId id) {
+        strategy.editItem(this, item, id);
     }
 
     /**

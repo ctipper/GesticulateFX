@@ -34,6 +34,9 @@ import javax.inject.Provider;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
+import net.perspective.draw.ItemStore;
+import net.perspective.draw.ItemStore.Snapshot;
 import net.perspective.draw.TextController;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
@@ -67,6 +70,7 @@ public class SelectionHandler implements Handler {
     private final DrawingArea drawarea;
     private final CanvasView view;
     private final ApplicationController controller;
+    @Inject ItemStore store;
     @Inject DrawAreaListener listener;
     @Inject BehaviourContext context;
     @Inject FigureFactory figurefactory;
@@ -127,29 +131,34 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void downEvent() {
-        List<DrawItem> drawings = view.getDrawings();
+        Snapshot snap = store.snapshot();             // one snapshot for the whole gesture
         if (view.isEditing()) {
             // Text isEditing code here
             if (!listener.getRightClick()) {
-                DrawItem item = drawings.get(view.getSelected());
+                ItemId id = view.getSelectedId();
+                DrawItem item = snap.get(id);
                 if (item instanceof Text) {
                     context.setBehaviour(textItemBehaviourProvider.get());
-                    context.select(item, view.getSelected());
+                    context.select(item, id);
                 }
             }
         } else {
-            if (!drawings.isEmpty() && !listener.getRightClick()) {
-                int i = drawings.size() - 1;
+            if (!snap.isEmpty() && !listener.getRightClick()) {
+                ItemId selectedId = view.getSelectedId();
                 context.setContainment(ContainsType.NONE);
-                do {
-                    DrawItem item = drawings.get(i);
+                for (int i = snap.size() - 1; i >= 0; i--) {   // topmost first
+                    ItemId id = snap.order().get(i);
+                    DrawItem item = snap.get(id);
+                    if (item == null) {
+                        continue;
+                    }
                     boolean found;
                     // The rotate handle is only drawn on the selected item, so
                     // only that item offers it as a hit target.
-                    if (i == view.getSelected()) {
+                    if (id.equals(selectedId)) {
                         activeStrategy = Optional.ofNullable(rotateBehaviourProvider.get());
                         context.setBehaviour(activeStrategy.get());
-                        found = context.select(item, i);
+                        found = context.select(item, id);
                         if (found) {
                             drawarea.setRotationMode(true);
                             break;
@@ -158,66 +167,63 @@ public class SelectionHandler implements Handler {
                     activeStrategy = Optional.empty();
                     if (item instanceof Figure) {
                         context.setBehaviour(figureItemBehaviourProvider.get());
-                        found = context.select(item, i);
+                        found = context.select(item, id);
                         if (found) {
                             break;
                         }
                     } else if (item instanceof Picture) {
                         if (item instanceof StreetMap) {
                             context.setBehaviour(mapItemBehaviourProvider.get());
-                            found = context.select(item, i);
+                            found = context.select(item, id);
                             if (found) {
                                 break;
                             }
                         } else {
                             context.setBehaviour(pictureItemBehaviourProvider.get());
-                            found = context.select(item, i);
+                            found = context.select(item, id);
                             if (found) {
                                 break;
                             }
                         }
                     } else if (item instanceof Grouped) {
                         context.setBehaviour(groupedItemBehaviourProvider.get());
-                        found = context.select(item, i);
+                        found = context.select(item, id);
                         if (found) {
                             break;
                         }
-                     } else if (item != null && item.contains(listener.getStartX(), listener.getStartY())) {
+                    } else if (item.contains(listener.getStartX(), listener.getStartY())) {
                         // Rest of Shapes
-                        view.setSelected(i);
+                        view.setSelectedId(id);
                         context.setContainment(ContainsType.SHAPE);
                         break;
                     }
-                    i--;
-                } while (i >= 0);
+                }
                 if (context.getContainment().equals(ContainsType.NONE) && (!view.isMultiSelected() || !drawarea.isMultiSelectEnabled())) {
                     view.setSelected(-1);
                 }
             }
         }
-        if (view.getSelected() != -1 && listener.isSnapEnabled()) {
-            DrawItem selectedItem = drawings.get(view.getSelected());
-            if (selectedItem != null) {
-                CanvasPoint start = selectedItem.getStart();
-                context.setOmega(start.getX(), start.getY());
-            }
+        ItemId selectedId = view.getSelectedId();     // re-read: the loop above may have changed it
+        DrawItem selectedItem = snap.get(selectedId);
+        if (selectedItem != null && listener.isSnapEnabled()) {
+            CanvasPoint start = selectedItem.getStart();
+            context.setOmega(start.getX(), start.getY());
         }
         /**
          * setup data structures for guides
          */
-        if (view.getSelected() != -1 && !listener.isSnapEnabled() && drawarea.isGuideEnabled() && drawings.size() < 15) {
+        if (selectedItem != null && !listener.isSnapEnabled() && drawarea.isGuideEnabled() && snap.size() < 15) {
             coordsX = new ArrayList<>();
             coordsY = new ArrayList<>();
             midX = new ArrayList<>();
             midY = new ArrayList<>();
-            DrawItem item = drawings.get(view.getSelected());
-            if (item != null) {
-                for (var drawing : drawings) {
-                    if (drawings.indexOf(drawing) != view.getSelected()) {
-                        if (!item.bounds().intersects(drawing.bounds().getBounds2D())) {
-                            computeCoords(drawing);
-                        }
-                    }
+            for (ItemId id : snap.order()) {
+                if (id.equals(selectedId)) {
+                    continue;                         // was an O(n) indexOf scan, and wrong for equal items
+                }
+                DrawItem drawing = snap.get(id);
+                if (drawing != null && !selectedItem.bounds().intersects(drawing.bounds().getBounds2D())) {
+                    computeCoords(drawing);
                 }
             }
         }
@@ -225,8 +231,8 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void clickEvent() {
-        if (view.isEditing() && view.getSelected() != -1 && !listener.wasDragged()) {
-            DrawItem current = view.getDrawings().get(view.getSelected());
+        DrawItem current = store.lookupId(view.getSelectedId());
+        if (view.isEditing() && current != null && !listener.wasDragged()) {
             if (!current.contains(listener.getTempX(), listener.getTempY())) {
                 Editor editor = textController.getEditor();
                 if (current instanceof Text item) {
@@ -241,32 +247,30 @@ public class SelectionHandler implements Handler {
             }
         }
         if (listener.doubleClicked()) {
-            List<DrawItem> drawings = view.getDrawings();
-            if (!drawings.isEmpty()) {
-                int i = drawings.size() - 1;
-                do {
-                    DrawItem item = drawings.get(i);
-                    if (item.contains(listener.getTempX(), listener.getTempY())) {
-                        if (item instanceof Text) {
-                            context.setBehaviour(textItemBehaviourProvider.get());
-                            context.edit(item, i);
-                            break;
-                        } else if (item instanceof StreetMap) {
-                            context.setBehaviour(mapItemBehaviourProvider.get());
-                            context.edit(item, i);
-                            break;
-                        }
-                    }
-                    i--;
-                } while (i >= 0);
+            Snapshot snap = store.snapshot();
+            for (int i = snap.size() - 1; i >= 0; i--) {       // topmost first
+                ItemId id = snap.order().get(i);
+                DrawItem item = snap.get(id);
+                if (item == null || !item.contains(listener.getTempX(), listener.getTempY())) {
+                    continue;
+                }
+                if (item instanceof Text) {
+                    context.setBehaviour(textItemBehaviourProvider.get());
+                    context.edit(item, id);
+                    break;
+                } else if (item instanceof StreetMap) {
+                    context.setBehaviour(mapItemBehaviourProvider.get());
+                    context.edit(item, id);
+                    break;
+                }
             }
         }
     }
 
     @Override
     public void hoverEvent() {
-        if (view.getSelected() != -1) {
-            DrawItem item = view.getDrawings().get(view.getSelected());
+        DrawItem item = store.lookupId(view.getSelectedId());
+        if (item != null) {
             if (item instanceof Figure) {
                 context.setBehaviour(figureItemBehaviourProvider.get());
                 context.hover(item);
@@ -297,16 +301,16 @@ public class SelectionHandler implements Handler {
             double xinc = listener.getTempX() - listener.getStartX();
             double yinc = listener.getTempY() - listener.getStartY();
 
-            for (Integer selection : view.getMultiSelection()) {
-                DrawItem item = view.getDrawings().get(selection);
+            for (ItemId selection : view.getMultiSelection()) {
+                DrawItem item = store.lookupId(selection);
 
                 if (item == null) {
-                    continue; // Skip null items
+                    continue;                         // removed since selection
                 }
 
                 if (listener.isSnapEnabled()) {
                     context.setOmega(context.getOmega().getX() + xinc, context.getOmega().getY() + yinc);
-                } else if (drawarea.isGuideEnabled() && view.getDrawings().size() < 15) {
+                } else if (drawarea.isGuideEnabled() && store.size() < 15) {
                     drawarea.resetGuides();
                     // compute bounds X
                     Double topX = item.getTop()[0].getX();
