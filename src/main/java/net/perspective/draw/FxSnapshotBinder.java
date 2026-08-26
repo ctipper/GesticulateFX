@@ -199,8 +199,15 @@ public class FxSnapshotBinder {
          */
         scheduled.set(false);
 
+        /*
+         * Drain before reading the snapshot — see ItemStore.drainDirty(). An id taken here is
+         * guaranteed to be at least as new in the snapshot read next; a write landing in the gap
+         * is not drained, and its own publication has already rescheduled this pass.
+         */
+        Set<ItemId> dirty = store.drainDirty();
+
         Snapshot snap = store.snapshot();            // always the newest, never a queued one
-        if (snap.revision() == appliedRevision) {
+        if (snap.revision() == appliedRevision && dirty.isEmpty()) {
             return;                                  // coalesced away
         }
 
@@ -247,16 +254,28 @@ public class FxSnapshotBinder {
             structural = true;
         }
 
-        // 3. Rebinds: same slot, different instance.
+        /*
+         * 3. Refreshes.
+         *
+         * Two ways a slot's content can change without its position changing. The sync layer
+         * supplies a replacement instance, which shows up as a different identity. The EDT edits
+         * the published item in place and republishes it, which shows up as nothing at all —
+         * dragging out a new figure does exactly this, mutating one instance from mouse-down to
+         * mouse-up — so that case is driven by the store's dirty set rather than by comparison.
+         */
         for (ItemId id : target) {
             DrawItem current = snap.get(id);
             if (current == null) {
                 continue;
             }
             DrawItem previous = bound.get(id);
-            if (previous != current) {               // identity, not equals
+            if (previous == null) {
+                bound.put(id, current);              // just added above; already rendered
+                continue;
+            }
+            if (previous != current || dirty.contains(id)) {
                 bound.put(id, current);
-                if (itemListener != null && previous != null) {
+                if (itemListener != null) {
                     itemListener.rebound(id, current);
                 }
             }
