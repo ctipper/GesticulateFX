@@ -30,14 +30,14 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -53,6 +53,7 @@ import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.G2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.perspective.draw.ItemStore.Snapshot;
 
 /**
  * 
@@ -65,13 +66,15 @@ public class CanvasView {
     private final DrawingArea drawarea;
     private final ApplicationController controller;
     private final TextController textController;
+    @Inject ItemStore store;
+    @Inject FxSnapshotBinder binder;
     @Inject Dropper dropper;
     @Inject G2 g2;
-    private final List<DrawItem> list;
-    private ObservableList<DrawItem> drawings;
     private final List<ImageItem> images;
+    private final Set<ItemId> selectionIds;
+    /** The scene node currently rendering each slot. FX thread only. */
+    private final Map<ItemId, Node> itemNodes;
     private Optional<DrawItem> newitem;
-    private final Set<Integer> selectionIndex;
     private final Timeline caretTimeline;
     private Group drawingAnchors;
     private Node drawMarquee;
@@ -84,6 +87,15 @@ public class CanvasView {
     private boolean isMarquee;
     private boolean hasGuides;
 
+    /**
+     * Node id prefix of the grid layer, set by {@link G2#drawGridLayout}. Matched as a prefix
+     * because {@code redrawGrid} identifies its own nodes the same way.
+     */
+    private static final String GRID_ID = "grid";
+
+    /** Node id of the guides layer, so {@link #itemBase} can recognise it. */
+    static final String GUIDES_ID = "guides";
+
     private static final Logger logger = LoggerFactory.getLogger(CanvasView.class.getName());
 
     /**
@@ -94,10 +106,10 @@ public class CanvasView {
         this.drawarea = drawarea;
         this.controller = controller;
         this.textController = textController;
-        this.list = new ArrayList<>();
         this.images = new ArrayList<>();
+        this.selectionIds = new LinkedHashSet<>();
+        this.itemNodes = new HashMap<>();
         newitem = Optional.empty();
-        this.selectionIndex = new LinkedHashSet<>();
         this.drawingAnchors = new Group();
         this.itemPivot = new Group();
         /**
@@ -120,55 +132,131 @@ public class CanvasView {
     }
 
     /**
+     * Is the item store empty
+     * 
+     * @return is empty
+     */
+    public boolean isEmpty() {
+        return store.isEmpty();
+    }
+
+    /**
      * Remove contents of drawing list
      */
     private void deleteContents() {
-        drawings.clear();
+        store.clear();
         images.clear();
     }
 
     /**
-     * Listener operates on drawing list to handle updates
+     * Mirror the item store onto the canvas
+     *
+     * <p>Replaces the former {@code ObservableList} listener. The store publishes from whichever
+     * thread wrote, so {@link FxSnapshotBinder} coalesces publications onto the FX thread and
+     * reports what actually changed by {@link ItemId}; this class only has to maintain the node
+     * for each slot.</p>
      */
     public void setDrawingListener() {
-        drawings = FXCollections.observableList(list);
-        drawings.addListener((ListChangeListener.Change<? extends DrawItem> change) -> {
-            while (change.next()) {
+        binder.setItemListener(new FxSnapshotBinder.ItemListener() {
+
+            @Override
+            public void added(ItemId id, DrawItem item, int index) {
+                Node node = item.draw();
+                itemNodes.put(id, node);
+                drawarea.getCanvas().getChildren().add(itemBase() + index, node);
+                logger.trace("node added at {}", index);
+            }
+
+            @Override
+            public void rebound(ItemId id, DrawItem item) {
                 ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-                int g = (drawarea.isGridVisible() ? 1 : 0);
-                if (hasGuides()) g += 1;
-                if (change.wasPermutated()) {
-                    for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                        // permutate
-                        nodes.set(change.getPermutation(i) + g, drawings.get(i).draw());
-                        logger.trace("node " + change.getPermutation(i) + " updated from " + i);
-                    }
-                } else if (change.wasUpdated()) {
-                    for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                        // update item
-                        nodes.set(i + g, drawings.get(i).draw());
-                        logger.trace("node " + i + " updated");
-                    }
-                } else {
-                    if (change.wasRemoved()) {
-                        for (int j = 0; j < change.getRemovedSize(); j++) {
-                            // remove item
-                            nodes.remove(change.getFrom() + g);
-                            logger.trace("node " + change.getFrom() + " removed.");
-                        }
-                    }
-                    if (change.wasAdded()) {
-                        int i = 0;
-                        for (DrawItem additem : change.getAddedSubList()) {
-                            // add item
-                            nodes.add(change.getFrom() + i + g, additem.draw());
-                            i++;
-                            logger.trace("node added");
-                        }
-                    }
+                Node previous = itemNodes.get(id);
+                int at = previous == null ? -1 : nodes.indexOf(previous);
+                if (at == -1) {
+                    return;                          // never rendered; the restack will place it
+                }
+                Node node = item.draw();
+                nodes.set(at, node);                 // in place: no index arithmetic
+                itemNodes.put(id, node);
+                logger.trace("node {} updated", at);
+            }
+
+            @Override
+            public void removed(ItemId id) {
+                Node node = itemNodes.remove(id);
+                if (node != null) {
+                    drawarea.getCanvas().getChildren().remove(node);
+                    logger.trace("node removed");
                 }
             }
+
+            @Override
+            public void reordered() {
+                restack();
+            }
         });
+        binder.attach();
+    }
+
+    /**
+     * Index of the first item node among the canvas children
+     *
+     * <p>The canvas holds leading chrome — the grid and the guides, each inserted at index 0 by
+     * {@link DrawingArea#redrawGrid} and {@link #setGuides} — then the item nodes, then whatever
+     * has been appended: the anchors, the caret highlight, the rotation pivot, and the map
+     * controls. Only the leading chrome shifts the item region, and appending never does.</p>
+     *
+     * <p>Counted from the scene graph rather than from {@code isGridVisible()} and
+     * {@code hasGuides()}. Those flags are set in one place and the nodes added in another, so a
+     * moment where they disagree would silently offset every subsequent index by one, corrupting
+     * the wrong node rather than failing.</p>
+     *
+     * @return the index at which item nodes begin
+     */
+    private int itemBase() {
+        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+        int base = 0;
+        while (base < nodes.size() && isChrome(nodes.get(base))) {
+            base++;
+        }
+        return base;
+    }
+
+    /**
+     * @param node a canvas child
+     * @return true if it is leading chrome rather than an item
+     */
+    private static boolean isChrome(Node node) {
+        String id = node.getId();
+        return id != null && (id.startsWith(GRID_ID) || id.equals(GUIDES_ID));
+    }
+
+    /**
+     * Restack the item nodes to match the store's z-order
+     *
+     * <p>Checks before mutating: an add or a remove already leaves the region in order, and only a
+     * genuine reposition needs the list rebuilt. The nodes are reused, so this restacks rather than
+     * redrawing.</p>
+     */
+    private void restack() {
+        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
+        List<Node> ordered = new ArrayList<>(binder.getOrder().size());
+        for (ItemId id : binder.getOrder()) {
+            Node node = itemNodes.get(id);
+            if (node != null) {
+                ordered.add(node);
+            }
+        }
+        int base = itemBase();
+        boolean inOrder = base + ordered.size() <= nodes.size();
+        for (int i = 0; inOrder && i < ordered.size(); i++) {
+            inOrder = nodes.get(base + i) == ordered.get(i);
+        }
+        if (inOrder) {
+            return;
+        }
+        nodes.removeAll(ordered);
+        nodes.addAll(itemBase(), ordered);            // recomputed: removal cannot shift the chrome
     }
 
     /**
@@ -177,18 +265,18 @@ public class CanvasView {
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void appendItemToCanvas(DrawItem item) {
-        drawings.add(item);
+        store.append(item);
     }
 
     /**
      * Update the canvas item at given index
-     * 
+     *
      * @param selection item index
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void updateCanvasItem(int selection, DrawItem item) {
         if (selection != -1) {
-            drawings.set(selection, item);
+            store.replaceItem(selection, item);      // keeps the slot id, so the node is rebound
         }
     }
 
@@ -196,9 +284,10 @@ public class CanvasView {
      * Delete the selected item
      */
     public void deleteSelectedItem() {
-        if (this.getSelected() != -1) {
-            drawings.remove(this.getSelected());
-            setSelected(-1);
+        ItemId id = this.getSelectedId();
+        if (id != null) {
+            setSelected(-1);                         // drops the anchors before the item goes
+            store.removeById(id);
         }
     }
 
@@ -220,7 +309,7 @@ public class CanvasView {
         if (newitem.isEmpty()) {
             this.appendItemToCanvas(item);
         } else {
-            this.updateCanvasItem(drawings.size() - 1, item);
+            this.updateCanvasItem(store.size() - 1, item);
         }
         newitem = Optional.of(item);
     }
@@ -250,7 +339,10 @@ public class CanvasView {
             /**
              * Update item properties
              */
-            DrawItem item = drawings.get(this.getSelected());
+            DrawItem item = store.lookupId(this.getSelected());
+            if (item == null) {
+                return;                              // stale selection
+            }
 
             if (!this.isMultiSelected() && !drawarea.isMultiSelectEnabled()) {
                 item.updateProperties(drawarea);
@@ -283,7 +375,10 @@ public class CanvasView {
             /**
              * Select item properties and update UI
              */
-            DrawItem item = drawings.get(this.getSelected());
+            DrawItem item = store.lookupId(this.getSelected());
+            if (item == null) {
+                return;                              // stale selection
+            }
             switch (item) {
                 case Figure figure -> this.figureDropper(figure);
                 case Text text -> this.textDropper(text);
@@ -350,126 +445,134 @@ public class CanvasView {
         drawarea.updateFontStyle(fontStyle);
     }
 
+// ---------------------------------------------------------------------------
+// Z-order
+// ---------------------------------------------------------------------------
+
     /**
      * Send DrawItem backwards in drawing list
+     *
+     * <p>{@link ItemStore#move} repositions the slot without minting a new id, so the item stays
+     * selected across the move and no re-selection is needed here. The same holds for the three
+     * methods below.</p>
      */
     public void sendBackwards() {
-        if (this.getSelected() != -1) {
-            DrawItem item = drawings.get(this.getSelected());
-            if (this.getSelected() > 0) {
-                int selection = this.getSelected();
-                drawings.remove(selection);
-                if (selection < 2) {
-                    drawings.add(0, item);
-                } else {
-                    drawings.add(selection - 1, item);
-                }
-            }
+        int selection = this.getSelected();
+        if (selection <= 0) {
+            return;                                  // nothing selected, or already at back
         }
+        /*
+         * The original special-cased selection < 2 to insert at 0. That branch was redundant:
+         * for selection == 1, selection - 1 is already 0.
+         */
+        store.move(selection, selection - 1);
     }
 
     /**
      * Send DrawItem to back of drawing list
      */
     public void sendToBack() {
-        if (this.getSelected() != -1) {
-            DrawItem item = drawings.get(this.getSelected());
-            if (this.getSelected() != 0) {
-                int selection = this.getSelected();
-                drawings.remove(selection);
-                drawings.add(0, item);
-            }
+        int selection = this.getSelected();
+        if (selection <= 0) {
+            return;
         }
+        store.move(selection, 0);
     }
 
     /**
      * Bring DrawItem forwards in drawing list
      */
     public void bringForwards() {
-        if (this.getSelected() != -1) {
-            DrawItem item = drawings.get(this.getSelected());
-            if (this.getSelected() < (drawings.size() - 1)) {
-                int selection = this.getSelected();
-                drawings.remove(selection);
-                if (selection >= (drawings.size() - 1)) {
-                    drawings.add(item);
-                } else {
-                    drawings.add(selection + 1, item);
-                }
-            }
+        int selection = this.getSelected();
+        if (selection == -1 || selection >= store.size() - 1) {
+            return;                                  // nothing selected, or already at front
         }
+        /*
+         * The original special-cased selection >= size - 2 to append. Also redundant: removing
+         * selection and then inserting at selection + 1 lands the item at the end either way.
+         */
+        store.move(selection, selection + 1);
     }
 
     /**
      * Bring DrawItem to front of drawing list
      */
     public void bringToFront() {
-        if (this.getSelected() != -1) {
-            DrawItem item = drawings.get(this.getSelected());
-            if (this.getSelected() != drawings.size() - 1) {
-                int selection = this.getSelected();
-                drawings.remove(selection);
-                drawings.add(item);
-            }
+        int selection = this.getSelected();
+        int last = store.size() - 1;
+        if (selection == -1 || selection == last) {
+            return;
         }
+        store.move(selection, last);
     }
+
+// ---------------------------------------------------------------------------
+// Grouping
+// ---------------------------------------------------------------------------
 
     /**
      * Group selected DrawItems
+     *
+     * <p>Members are added to the {@link Grouped} in z-order rather than the order they were
+     * selected in, so the group renders identically to the loose items it replaces. The group
+     * takes over the bottom-most member's slot, keeping that id and its position in the z-order;
+     * the other members are removed. Both mutations publish as one snapshot, so no reader observes
+     * the group and its members coexisting.</p>
      */
     public void groupSelection() {
-        if (this.getSelected() != -1) {
-            Grouped groupedItem = new Grouped();
-            List<DrawItem> removals = new ArrayList<>();
-            List<Integer> selection =  new ArrayList<>();
-            Integer selected = this.getBottomSelected();
-
-            // create a Grouped item and queue items for removal
-            for (Integer index : this.getMultiSelection()) {
-                groupedItem.addDrawItem(drawings.get(index));
-                selection.add(index);
-            }
-            // reverse sort removals
-            Collections.reverse(selection);
-            for (Integer index : selection) {
-                removals.add(drawings.get(index));
-            }
-
-            this.setSelected(-1);
-
-            // delete drawings
-            for (DrawItem item : removals) {
-                drawings.remove(item);
-            }
-            
-            // replace selected
-            drawings.add(selected, groupedItem);
+        Snapshot snap = store.snapshot();            // one snapshot for the whole operation
+        List<ItemId> members = getSelectionInZOrder(snap);
+        if (members.isEmpty()) {
+            return;                                  // nothing selected, or the selection went stale
         }
+
+        ItemId bottom = members.get(0);
+        Grouped groupedItem = new Grouped();
+        List<ItemId> removals = new ArrayList<>(members.size() - 1);
+        for (ItemId id : members) {
+            groupedItem.addDrawItem(snap.get(id));   // non-null: getSelectionInZOrder dropped the rest
+            if (!id.equals(bottom)) {
+                removals.add(id);                    // the bottom slot is replaced, not removed
+            }
+        }
+
+        int bottomIndex = snap.indexOf(bottom);
+        this.setSelected(-1);                        // also clears selectionIds
+        store.batch(() -> {
+            store.replaceItem(bottomIndex, groupedItem);
+            store.removeAllById(removals);           // all above bottomIndex, which therefore holds
+        });
     }
 
     /**
      * Explode selected DrawItem group
+     *
+     * <p>The first member takes over the group's slot, keeping its id and z-position; the rest are
+     * inserted immediately above it, in order. Both mutations publish as one snapshot.</p>
      */
     public void ungroupSelection() {
-        if (this.getSelected() != -1) {
-            int selected = this.getBottomSelected();
-            DrawItem item = drawings.get(selected);
-            if (item instanceof Grouped grouped) {
-                boolean added = false;
-                for (DrawItem shape : grouped.getDrawItems()) {
-                    if (!added) {
-                        // replace selected
-                        drawings.set(selected, shape);
-                        added = true;
-                    } else {
-                        // add drawings
-                        drawings.add(selected, shape);
-                    }
-                    selected++;
-                }
-                this.setSelected(-1);
-            }
+        Snapshot snap = store.snapshot();
+        List<ItemId> members = getSelectionInZOrder(snap);
+        if (members.isEmpty()) {
+            return;
         }
+        ItemId groupId = members.get(0);
+        if (!(snap.get(groupId) instanceof Grouped grouped)) {
+            return;                                  // bottom-most selection is not a group
+        }
+
+        List<DrawItem> shapes = grouped.getDrawItems();
+        int selected = snap.indexOf(groupId);        // non-negative: the id resolved against snap
+        this.setSelected(-1);
+        if (shapes.isEmpty()) {
+            return;                                  // degenerate group; leave the slot as it is
+        }
+        store.batch(() -> {
+            store.replaceItem(selected, shapes.get(0));
+            if (shapes.size() > 1) {
+                store.insertAll(selected + 1, shapes.subList(1, shapes.size()));
+            }
+        });
     }
 
     /**
@@ -486,11 +589,15 @@ public class CanvasView {
 
     /**
      * Get the list of draw items
-     * 
-     * @return list of {@link net.perspective.draw.geom.DrawItem}
+     *
+     * <p>A copy taken from the store's current snapshot, not the live list the old backing
+     * {@code ObservableList} exposed: mutating the result no longer affects the document. Each
+     * call is O(n), so hold the result rather than calling it per item in a loop.</p>
+     *
+     * @return list of {@link net.perspective.draw.geom.DrawItem} in z-order
      */
     public List<DrawItem> getDrawings() {
-        return list;
+        return store.getDrawItems();
     }
 
     /**
@@ -563,73 +670,130 @@ public class CanvasView {
         images.set(index, item);
     }
 
+// ---------------------------------------------------------------------------
+// Mutation
+// ---------------------------------------------------------------------------
+
     /**
      * Set selection exclusively, clearing any prior multi-selection.
      *
-     * @param selection selected index
+     * @param id the slot id, or null to clear
      */
-    public void resetSelected(int selection) {
-        selectionIndex.clear();
-        setSelected(selection);
+    public void resetSelectedId(ItemId id) {
+        selectionIds.clear();
+        setSelectedId(id);
     }
 
     /**
-     * Return the first selected item
+     * Add a DrawItem to the selection.
      *
-     * @param selection selected index
+     * @param id the slot id, or null to clear
+     */
+    public void setSelectedId(ItemId id) {
+        if (id == null) {
+            selectionIds.clear();
+            return;
+        }
+        if (!drawarea.isMultiSelectEnabled()) {
+            selectionIds.clear();
+        }
+        selectionIds.add(id);
+    }
+
+    /**
+     * Add a DrawItem to the selection by index.
+     *
+     * <p>Compatibility shim for call sites not yet migrated. Resolves the index against the
+     * current snapshot immediately, so the stored id is stable even though the index was not.
+     * Prefer {@link #setSelectedId} where an id is already to hand.</p>
+     *
+     * @param selection the index, or -1 to clear
      */
     public void setSelected(int selection) {
+        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         if (selection == -1) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
             nodes.remove(itemPivot);
-            selectionIndex.clear();
+            selectionIds.clear();
             drawingAnchors.getChildren().clear();
             itemPivot.getChildren().clear();
-        } else {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            nodes.remove(drawingAnchors);
-            nodes.remove(highlight);
-            nodes.remove(itemPivot);
-            if (!drawarea.isMultiSelectEnabled()) {
-                selectionIndex.clear();
-                drawingAnchors.getChildren().clear();
-            }
-            selectionIndex.add(selection);
-            drawingAnchors = getAnchors();
-            nodes.add(drawingAnchors);
-            if (drawarea.isRotationMode()) {
-                itemPivot = g2.drawRotationPivot(drawings.get(selection));
-                nodes.add(itemPivot);
-            }
-            setTextHighlight(selection);
+            return;
         }
+        Snapshot snap = store.snapshot();
+        if (selection < 0 || selection >= snap.size()) {
+            return;                                  // stale index; leave selection untouched
+        }
+        nodes.remove(drawingAnchors);
+        nodes.remove(highlight);
+        nodes.remove(itemPivot);
+        if (!drawarea.isMultiSelectEnabled()) {
+            selectionIds.clear();
+            drawingAnchors.getChildren().clear();
+        }
+        setSelectedId(snap.order().get(selection));  // must precede getAnchors(), which reads the selection
+        drawingAnchors = getAnchors(snap);
+        nodes.add(drawingAnchors);
+        if (drawarea.isRotationMode()) {
+            itemPivot = g2.drawRotationPivot(snap.at(selection));
+            nodes.add(itemPivot);
+        }
+        setTextHighlight(selection);
+    }
+
+    /**
+     * Remove an item from the selection.
+     *
+     * @param id the slot id
+     * @return true if it was selected
+     */
+    public boolean deselect(ItemId id) {
+        return selectionIds.remove(id);
+    }
+
+    /**
+     * Drop selected ids whose items no longer exist.
+     *
+     * <p>Call after a remote delete, or anywhere a stale selection would be visible to the user.
+     * Not called automatically: the accessors already skip missing items, so pruning is about
+     * keeping {@link #isMultiSelected()} and the size honest rather than about safety.</p>
+     *
+     * @return the number of ids dropped
+     */
+    public int pruneSelection() {
+        Snapshot snap = store.snapshot();
+        int before = selectionIds.size();
+        selectionIds.removeIf(id -> snap.get(id) == null);
+        return before - selectionIds.size();
     }
 
     /**
      * Move the selection and update drawing anchors
-     * 
+     *
      * @param selection selected index
      */
     public void moveSelection(int selection) {
+        ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         if (!drawingAnchors.getChildren().isEmpty()) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawingAnchors);
             nodes.remove(highlight);
             nodes.remove(itemPivot);
             drawingAnchors.getChildren().clear();
         }
-        if (selection != -1) {
-            ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
-            drawingAnchors = getAnchors();
-            nodes.add(drawingAnchors);
-            if (drawarea.isRotationMode()) {
-                itemPivot = g2.drawRotationPivot(drawings.get(selection));
-                nodes.add(itemPivot);
-            }
-            setTextHighlight(selection);
+        if (selection == -1) {
+            return;
         }
+        Snapshot snap = store.snapshot();
+        if (selection < 0 || selection >= snap.size()) {
+            return;                                  // stale index; anchors already cleared
+        }
+        drawingAnchors = getAnchors(snap);
+        nodes.add(drawingAnchors);
+        if (drawarea.isRotationMode()) {
+            itemPivot = g2.drawRotationPivot(snap.at(selection));
+            nodes.add(itemPivot);
+        }
+        setTextHighlight(selection);
     }
 
     /**
@@ -641,7 +805,11 @@ public class CanvasView {
         ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         nodes.remove(highlight);
         if (isEditing()) {
-            highlight = g2.highlightText(drawings.get(selection));
+            DrawItem item = store.lookupId(selection);
+            if (item == null) {
+                return;                              // stale index; caret simply not drawn
+            }
+            highlight = g2.highlightText(item);
             if (textController.getEditor().getCaretStart() == textController.getEditor().getCaretEnd()) {
                 caretTimeline.play();
             } else {
@@ -653,73 +821,156 @@ public class CanvasView {
 
     /**
      * Define the drawing anchors
-     * 
+     *
+     * <p>Reads the selection, so any id must already be registered before this is called.
+     * Ids whose items have been removed are skipped rather than throwing — a stale member
+     * simply contributes no anchor.</p>
+     *
+     * @param snap the store snapshot to resolve ids against
      * @return anchor {@link javafx.scene.Group}
      */
-    private Group getAnchors() {
+    private Group getAnchors(Snapshot snap) {
         Group anchorGroup = new Group();
-        for (Integer item : selectionIndex) {
-            anchorGroup.getChildren().add(drawings.get(item).drawAnchors(drawarea));
+        for (ItemId id : selectionIds) {
+            DrawItem item = snap.get(id);
+            if (item != null) {
+                anchorGroup.getChildren().add(item.drawAnchors(drawarea));
+            }
         }
         return anchorGroup;
     }
 
+// ---------------------------------------------------------------------------
+// Access
+// ---------------------------------------------------------------------------
+
     /**
-     * Return the first selected item
-     * 
-     * @return index
+     * The primary selected item.
+     *
+     * @return the slot id, or null if nothing is selected
+     */
+    public ItemId getSelectedId() {
+        if (selectionIds.isEmpty()) {
+            return null;
+        }
+        return selectionIds.iterator().next();    // insertion order
+    }
+
+    /**
+     * The primary selected item, as an index.
+     *
+     * <p>Compatibility shim. Returns -1 when nothing is selected <em>or</em> when the selected
+     * item has been removed — callers cannot distinguish, which is the same contract as before.</p>
+     *
+     * <p>Each call is an O(n) scan of the z-order. That is fine for event handling but not inside
+     * a loop: for a pass over many items, take one {@link Snapshot} and use
+     * {@code snap.indexOf(id)}, or work in ids and skip the conversion.</p>
+     *
+     * @return index of the DrawItem, or -1
      */
     public int getSelected() {
-        int i;
-        if (!selectionIndex.isEmpty()) {
-            Integer[] a = selectionIndex.toArray(Integer[]::new);
-            // find first value
-            i = a[0];
-        } else {
-            i = -1;
-        }
-        return i;
+        ItemId id = getSelectedId();
+        return id == null ? -1 : store.indexOf(id);
     }
 
     /**
-     * Return the selection with the lowest index in the 
-     * drawing list
-     * 
-     * @return index
+     * Lowest member of the multi-selection in z-order.
+     *
+     * @return the id, or null if the selection is empty or fully stale
      */
-    public int getBottomSelected() {
-        int i;
-        if (!selectionIndex.isEmpty()) {
-            Integer[] a = selectionIndex.toArray(Integer[]::new);
-            // find minimum value
-            i = a[0];
-            for (Integer as : a) {
-                if (as < i) {
-                    i = as;
-                }
+    public ItemId getBottomSelectedId() {
+        Snapshot snap = store.snapshot();
+        ItemId bottom = null;
+        int bottomIndex = Integer.MAX_VALUE;
+        for (ItemId id : selectionIds) {
+            int index = snap.indexOf(id);
+            if (index != -1 && index < bottomIndex) {
+                bottomIndex = index;
+                bottom = id;
             }
-        } else {
-            i = -1;
         }
-        return i;
+        return bottom;
     }
 
     /**
-     * Get the selection
-     * 
-     * @return set of selected indices
+     * The selection.
+     *
+     * <p>Unmodifiable: the original returned the live Set, letting callers mutate selection state
+     * behind this class's back. May contain ids whose items have been removed —
+     * {@link #getSelectionInZOrder()} or {@code store.lookupAll} filter those.</p>
+     *
+     * @return the selected slot ids, in insertion order
      */
-    public Set<Integer> getMultiSelection() {
-        return selectionIndex;
+    public Set<ItemId> getMultiSelection() {
+        return Collections.unmodifiableSet(selectionIds);
     }
 
     /**
-     * Are multiple items selected
-     * 
-     * @return multi-select active
+     * The selection sorted by z-order, with removed items dropped.
+     *
+     * <p>Use this wherever stacking matters — grouping in particular, since {@code Grouped} takes
+     * members in the order given, and {@link #selectionIds} is in click order.</p>
+     *
+     * @return the selected slot ids, bottom first
+     */
+    public List<ItemId> getSelectionInZOrder() {
+        return getSelectionInZOrder(store.snapshot());
+    }
+
+    /**
+     * The selection sorted by z-order, resolved against a snapshot the caller already holds.
+     *
+     * <p>Walks the z-order and keeps the selected ids, rather than sorting the selection by
+     * {@code indexOf}: one pass with a hash lookup per item, and stale ids fall out for free
+     * because they are not in {@code snap.order()}.</p>
+     *
+     * @param snap the store snapshot to resolve ids against
+     * @return the selected slot ids, bottom first
+     */
+    private List<ItemId> getSelectionInZOrder(Snapshot snap) {
+        List<ItemId> live = new ArrayList<>(selectionIds.size());
+        for (ItemId id : snap.order()) {
+            if (selectionIds.contains(id)) {
+                live.add(id);
+            }
+        }
+        return live;
+    }
+
+    /**
+     * The selected items.
+     *
+     * @return the {@link DrawItem}s, skipping any removed
+     */
+    public List<DrawItem> getSelectedDrawItems() {
+        return store.lookupAll(selectionIds);
+    }
+
+    /**
+     * @param id the slot id
+     * @return true if selected
+     */
+    public boolean isSelected(ItemId id) {
+        return selectionIds.contains(id);
+    }
+
+    /**
+     * Are multiple items selected.
+     *
+     * <p>Counts held ids, including any whose items have been removed. Call
+     * {@link #pruneSelection()} first if that distinction matters.</p>
+     *
+     * @return true if more than one DrawItem is selected
      */
     public boolean isMultiSelected() {
-        return selectionIndex.size() > 1;
+        return selectionIds.size() > 1;
+    }
+
+    /**
+     * @return true if nothing is selected
+     */
+    public boolean hasNoSelection() {
+        return selectionIds.isEmpty();
     }
 
     /**
@@ -730,10 +981,15 @@ public class CanvasView {
     public void selectShapes(DrawItem item) {
         Shape b = item.bounds();
         Rectangle2D boundary = b.getBounds2D();
-        for (DrawItem drawing : drawings) {
+        Snapshot snap = store.snapshot();
+        for (ItemId id : snap.order()) {
+            DrawItem drawing = snap.get(id);
+            if (drawing == null) {
+                continue;
+            }
             Rectangle2D d = drawing.bounds().getBounds2D();
             if (boundary.contains(d)) {
-                this.setSelected(drawings.indexOf(drawing));
+                this.setSelectedId(id);
             }
         }
     }
@@ -878,6 +1134,7 @@ public class CanvasView {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
             nodes.remove(drawGuides);
             drawGuides = drawarea.getGuides().draw();
+            drawGuides.setId(GUIDES_ID);             // leading chrome; see itemBase()
             nodes.add(0, drawGuides);
         } else {
             ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
@@ -906,7 +1163,7 @@ public class CanvasView {
         CanvasPoint start = new CanvasPoint();
         CanvasPoint end = new CanvasPoint();
 
-        for (DrawItem shape : list) {
+        for (DrawItem shape : store.getDrawItems()) {
             points.add(shape.getTop()[0]);
             points.add(shape.getBottom()[0]);
             points.add(shape.getUp()[0]);
