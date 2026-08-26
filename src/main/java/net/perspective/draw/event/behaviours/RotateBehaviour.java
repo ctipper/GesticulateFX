@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javafx.scene.Cursor;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.geom.DrawItem;
@@ -57,10 +58,10 @@ public class RotateBehaviour  implements ItemBehaviours {
     }
 
     @Override
-    public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
+    public boolean selectItem(BehaviourContext context, DrawItem item, ItemId id) {
         boolean found = false;
         if (item.getRotateBounds().contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.SHAPE);
             found = true;
         }
@@ -71,7 +72,7 @@ public class RotateBehaviour  implements ItemBehaviours {
     }
 
     @Override
-    public void editItem(BehaviourContext context, DrawItem item, int index) {
+    public void editItem(BehaviourContext context, DrawItem item, ItemId id) {
         
     }
 

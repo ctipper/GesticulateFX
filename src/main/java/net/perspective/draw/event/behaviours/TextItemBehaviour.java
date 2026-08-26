@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.TextController;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.event.DrawAreaListener;
@@ -64,7 +65,7 @@ public class TextItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
+    public boolean selectItem(BehaviourContext context, DrawItem item, ItemId id) {
         Editor editor = textControllerProvider.get().getEditor();
         Group layout = drawarea.getTextLayout(item);
 
@@ -74,22 +75,22 @@ public class TextItemBehaviour implements ItemBehaviours {
 
         editor.setCaretStart(caretIndex);
         editor.setCaretEnd(caretIndex);
-        view.setTextHighlight(index);
+        view.setTextHighlight(id);
         return true;
     }
 
     @Override
-    public void editItem(BehaviourContext context, DrawItem item, int index) {
+    public void editItem(BehaviourContext context, DrawItem item, ItemId id) {
         Group layout = drawarea.getTextLayout(item);
 
         // currently fix for vertical text is not known
         Point2D point = new Point2D(listener.getTempX() - item.getTop()[0].x, listener.getTempY() - item.getTop()[0].y);
         int caretIndex = hitTextLayout(layout, point);
 
-        view.resetSelected(index);
+        view.resetSelectedId(id);
         view.setEditing(KeyHandlerType.TEXT);
         textControllerProvider.get().editItem((Text) item, caretIndex);
-        view.setTextHighlight(index);
+        view.setTextHighlight(id);
     }
 
     @Override

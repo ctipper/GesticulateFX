@@ -26,6 +26,7 @@ package net.perspective.draw.event.behaviours;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.MapController;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.HandlerType;
@@ -57,30 +58,30 @@ public class MapItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
+    public boolean selectItem(BehaviourContext context, DrawItem item, ItemId id) {
         boolean found = false;
         if (context.getRegion(item.getTop()[0]).
             contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.TL);
             found = true;
         } else if (context.getRegion(item.getDown()[0]).
             contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.BL);
             found = true;
         } else if (context.getRegion(item.getBottom()[0]).
             contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.BR);
             found = true;
         } else if (context.getRegion(item.getUp()[0]).
             contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.TR);
             found = true;
         } else if (item.contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.SHAPE);
             found = true;
         }
@@ -88,8 +89,8 @@ public class MapItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public void editItem(BehaviourContext context, DrawItem item, int index) {
-        view.setSelected(index);
+    public void editItem(BehaviourContext context, DrawItem item, ItemId id) {
+        view.setSelectedId(id);
         drawarea.changeHandlers(HandlerType.MAP);
         view.setEditing(KeyHandlerType.MAP);
         mapper.initMap();

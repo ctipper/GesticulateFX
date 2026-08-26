@@ -28,6 +28,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
+import net.perspective.draw.ItemStore;
 import net.perspective.draw.TextController;
 import net.perspective.draw.enums.KeyHandlerType;
 import net.perspective.draw.event.behaviours.BehaviourContext;
@@ -45,6 +47,7 @@ public class TextHandler implements Handler {
 
     private final DrawingArea drawarea;
     private final CanvasView view;
+    @Inject ItemStore store;
     @Inject DrawAreaListener listener;
     @Inject BehaviourContext context;
     @Inject TextController textController;
@@ -71,9 +74,9 @@ public class TextHandler implements Handler {
     public void downEvent() {
         if (view.isEditing()) {
             // Text isEditing code here
-            int selected = view.getSelected();
-            if (!listener.getRightClick() && selected != -1) {
-                DrawItem item = view.getDrawings().get(selected);
+            ItemId selected = view.getSelectedId();
+            DrawItem item = store.lookupId(selected);
+            if (!listener.getRightClick() && item != null) {
                 if (item instanceof Text && item.contains(listener.getStartX(), listener.getStartY())) {
                     context.setBehaviour(textItemBehaviourProvider.get());
                     context.select(item, selected);

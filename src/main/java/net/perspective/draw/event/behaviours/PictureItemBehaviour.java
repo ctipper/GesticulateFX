@@ -28,6 +28,7 @@ import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.event.DrawAreaListener;
 import net.perspective.draw.geom.DrawItem;
@@ -57,7 +58,7 @@ public class PictureItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
+    public boolean selectItem(BehaviourContext context, DrawItem item, ItemId id) {
         boolean found = false;
         int quad;
 
@@ -68,22 +69,22 @@ public class PictureItemBehaviour implements ItemBehaviours {
                 quad = R2.quadrant(vertex[1], centre);
                 switch (quad) {
                     case 0 -> {
-                        view.setSelected(index);
+                        view.setSelectedId(id);
                         context.setContainment(ContainsType.TR);
                         found = true;
                     }
                     case 1 -> {
-                        view.setSelected(index);
+                        view.setSelectedId(id);
                         context.setContainment(ContainsType.TL);
                         found = true;
                     }
                     case 2 -> {
-                        view.setSelected(index);
+                        view.setSelectedId(id);
                         context.setContainment(ContainsType.BL);
                         found = true;
                     }
                     case 3 -> {
-                        view.setSelected(index);
+                        view.setSelectedId(id);
                         context.setContainment(ContainsType.BR);
                         found = true;
                     }
@@ -96,7 +97,7 @@ public class PictureItemBehaviour implements ItemBehaviours {
             context.setSgndArea(((Picture) item).sgnd_area());
         }
         if (!found && item.contains(listener.getStartX(), listener.getStartY())) {
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.SHAPE);
             found = true;
         }
@@ -104,7 +105,7 @@ public class PictureItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public void editItem(BehaviourContext context, DrawItem item, int index) {
+    public void editItem(BehaviourContext context, DrawItem item, ItemId id) {
         // not implemented
     }
 

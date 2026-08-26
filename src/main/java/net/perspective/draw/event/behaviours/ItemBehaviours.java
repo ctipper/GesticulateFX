@@ -23,18 +23,19 @@
  */
 package net.perspective.draw.event.behaviours;
 
+import net.perspective.draw.ItemId;
 import net.perspective.draw.geom.DrawItem;
 
 /**
- * 
+ *
  * @author ctipper
  */
 
 public interface ItemBehaviours {
 
-    boolean selectItem(BehaviourContext context, DrawItem item, int index);
+    boolean selectItem(BehaviourContext context, DrawItem item, ItemId id);
 
-    void editItem(BehaviourContext context, DrawItem item, int index);
+    void editItem(BehaviourContext context, DrawItem item, ItemId id);
 
     void hoverItem(BehaviourContext context, DrawItem item);
 

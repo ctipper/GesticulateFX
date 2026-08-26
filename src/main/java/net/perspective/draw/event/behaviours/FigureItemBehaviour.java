@@ -28,6 +28,7 @@ import javafx.scene.Cursor;
 import javax.inject.Inject;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
+import net.perspective.draw.ItemId;
 import net.perspective.draw.enums.ContainsType;
 import net.perspective.draw.enums.DrawingType;
 import net.perspective.draw.event.DrawAreaListener;
@@ -59,7 +60,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public boolean selectItem(BehaviourContext context, DrawItem item, int index) {
+    public boolean selectItem(BehaviourContext context, DrawItem item, ItemId id) {
         boolean found = false;
         int quad;
 
@@ -75,22 +76,22 @@ public class FigureItemBehaviour implements ItemBehaviours {
                     quad = R2.quadrant(vertex[1], centre);
                     switch (quad) {
                         case 0 -> {
-                            view.setSelected(index);
+                            view.setSelectedId(id);
                             context.setContainment(ContainsType.TR);
                             found = true;
                         }
                         case 1 -> {
-                            view.setSelected(index);
+                            view.setSelectedId(id);
                             context.setContainment(ContainsType.TL);
                             found = true;
                         }
                         case 2 -> {
-                            view.setSelected(index);
+                            view.setSelectedId(id);
                             context.setContainment(ContainsType.BL);
                             found = true;
                         }
                         case 3 -> {
-                            view.setSelected(index);
+                            view.setSelectedId(id);
                             context.setContainment(ContainsType.BR);
                             found = true;
                         }
@@ -109,22 +110,22 @@ public class FigureItemBehaviour implements ItemBehaviours {
                         quad = R2.quarter(edge[1], centre);
                         switch (quad) {
                             case 0 -> {
-                                view.setSelected(index);
+                                view.setSelectedId(id);
                                 context.setContainment(ContainsType.TT);
                                 found = true;
                             }
                             case 1 -> {
-                                view.setSelected(index);
+                                view.setSelectedId(id);
                                 context.setContainment(ContainsType.LL);
                                 found = true;
                             }
                             case 2 -> {
-                                view.setSelected(index);
+                                view.setSelectedId(id);
                                 context.setContainment(ContainsType.BB);
                                 found = true;
                             }
                             case 3 -> {
-                                view.setSelected(index);
+                                view.setSelectedId(id);
                                 context.setContainment(ContainsType.RR);
                                 found = true;
                             }
@@ -136,13 +137,13 @@ public class FigureItemBehaviour implements ItemBehaviours {
                 }
             }
             if (!found && item.contains(listener.getStartX(), listener.getStartY())) {
-                view.setSelected(index);
+                view.setSelectedId(id);
                 context.setContainment(ContainsType.SHAPE);
                 found = true;
             }
         } else if (item.contains(listener.getStartX(), listener.getStartY())) {
             // All other figures
-            view.setSelected(index);
+            view.setSelectedId(id);
             context.setContainment(ContainsType.SHAPE);
             found = true;
         }
@@ -150,7 +151,7 @@ public class FigureItemBehaviour implements ItemBehaviours {
     }
 
     @Override
-    public void editItem(BehaviourContext context, DrawItem item, int index) {
+    public void editItem(BehaviourContext context, DrawItem item, ItemId id) {
         // not implemented
     }
 
