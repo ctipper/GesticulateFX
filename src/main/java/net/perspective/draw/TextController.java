@@ -149,8 +149,8 @@ public class TextController {
      * Cut the selected text
      */
     public void cutSelectedText() {
-        if (viewProvider.get().isEditing()) {
-            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
+        if (viewProvider.get().isEditing()
+            && viewProvider.get().getSelectedDrawItem() instanceof Text item) {
             editor.editText(item);
             editor.cutText();
             editor.commitText(item);
@@ -163,8 +163,8 @@ public class TextController {
      * Copy the selected text
      */
     public void copySelectedText() {
-        if (viewProvider.get().isEditing()) {
-            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
+        if (viewProvider.get().isEditing()
+            && viewProvider.get().getSelectedDrawItem() instanceof Text item) {
             editor.editText(item);
             editor.copyText();
             editor.commitText(item);
@@ -175,8 +175,8 @@ public class TextController {
      * Paste the selected text
      */
     public void pasteSelectedText() {
-        if (viewProvider.get().isEditing()) {
-            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
+        if (viewProvider.get().isEditing()
+            && viewProvider.get().getSelectedDrawItem() instanceof Text item) {
             editor.editText(item);
             editor.pasteText();
             editor.commitText(item);
@@ -213,8 +213,8 @@ public class TextController {
      * @param format text format property
      */
     private void formatSelectedRichText(int format) {
-        if (viewProvider.get().isEditing()) {
-            Text item = (Text) viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
+        if (viewProvider.get().isEditing()
+            && viewProvider.get().getSelectedDrawItem() instanceof Text item) {
             editor.editText(item);
             styler.clearStoredMarks();
             Set<String> styles = styler.detectStyles();

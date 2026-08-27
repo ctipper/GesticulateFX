@@ -91,14 +91,14 @@ public class TextHandler implements Handler {
             Text item = new Text(listener.getTempX(), listener.getTempY());
             item = textController.initializeItem(item);
             item.updateProperties(drawarea);
-            view.setNewItem(item);
+            // Append directly: setNewItem replaces the top item when a drawing is in progress,
+            // and the append reports the slot, so the selection needs no size arithmetic.
+            ItemId id = view.appendItemToCanvas(item);
             view.resetNewItem();
-            int i = view.getDrawings().size() - 1;
-            view.setSelected(i);
+            view.setSelected(id);
             view.setEditing(KeyHandlerType.TEXT);
-            view.setTextHighlight(i);
-        } else if (view.getSelected() != -1 && !listener.wasDragged()) {
-            DrawItem current = view.getDrawings().get(view.getSelected());
+            view.setTextHighlight(id);                // setSelected ran before edit mode was on
+        } else if (!listener.wasDragged() && view.getSelectedDrawItem() instanceof DrawItem current) {
             if (!current.contains(listener.getTempX(), listener.getTempY())) {
                 Editor editor = textController.getEditor();
                 if (current instanceof Text item) {
@@ -118,8 +118,8 @@ public class TextHandler implements Handler {
 
     @Override
     public void hoverEvent() {
-        if (view.getSelected() != -1) {
-            DrawItem item = view.getDrawings().get(view.getSelected());
+        DrawItem item = view.getSelectedDrawItem();
+        if (item != null) {
             if (item instanceof Text) {
                 context.setBehaviour(textItemBehaviourProvider.get());
                 context.hover(item);
@@ -133,8 +133,8 @@ public class TextHandler implements Handler {
     public void dragEvent() {
         if (view.isEditing()) {
             // Text isSelecting code here
-            if (view.getSelected() != -1) {
-                DrawItem item = view.getDrawings().get(view.getSelected());
+            DrawItem item = view.getSelectedDrawItem();
+            if (item != null) {
                 context.setBehaviour(textItemBehaviourProvider.get());
                 context.alter(item, 0, 0);
             }

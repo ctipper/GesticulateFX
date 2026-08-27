@@ -228,11 +228,10 @@ public class CanvasTransferHandler {
      *         is selected
      */
     protected Transferable createTransferable() {
-        int selected = viewProvider.get().getSelected();
-        if (selected == -1) {
+        DrawItem data = viewProvider.get().getSelectedDrawItem();
+        if (data == null) {
             return null;
         }
-        DrawItem data = viewProvider.get().getDrawings().get(selected);
         logger.trace("Item createTransferable");
         return new DrawItemTransferable(data);
     }
