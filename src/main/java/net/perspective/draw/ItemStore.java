@@ -72,8 +72,7 @@ import net.perspective.draw.geom.DrawItem;
  *
  * <p>Because ids are minted per session, they are meaningless to other peers and must not be sent
  * on the wire or written to a file. The sync layer continues to address items by index; resolve
- * ids to indices at that boundary only, via {@link #indexOf} or {@link #indicesOf}, from a single
- * snapshot.</p>
+ * ids to indices at that boundary only, via {@link #indexOf}, from a single snapshot.</p>
  *
  * <h2>Item mutability contract</h2>
  * <p>The snapshot freezes <em>which</em> items exist and in what order. It does not freeze the
@@ -390,26 +389,7 @@ public class ItemStore {
         return snapshot.indexOf(id);
     }
 
-    /**
-     * Resolve ids to indices against a single snapshot, skipping any no longer present.
-     *
-     * @param ids item ids
-     * @return the indices, ascending
-     */
-    public List<Integer> indicesOf(Collection<ItemId> ids) {
-        Snapshot snap = snapshot;
-        List<Integer> out = new ArrayList<>(ids.size());
-        for (ItemId id : ids) {
-            int index = snap.indexOf(id);
-            if (index != -1) {
-                out.add(index);
-            }
-        }
-        out.sort(null);
-        return out;
-    }
-
-    // -----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
     // Mutators
     // -----------------------------------------------------------------------
 
@@ -425,19 +405,21 @@ public class ItemStore {
     /**
      * Append item to the end of the z-order.
      *
+     * <p>Returns the slot id rather than the index it landed at: the index is only true until the
+     * next mutation, whereas the id keeps naming this item.</p>
+     *
      * @param item the {@link DrawItem}
-     * @return the index at which the item was placed
+     * @return the id of the slot the item was placed in
      */
-    public int append(DrawItem item) {
+    public ItemId append(DrawItem item) {
         lock.lock();
         try {
             ItemId id = mint();
             itemsById.put(id, item);
             items.add(id);
-            int index = items.size() - 1;
-            logger.debug("Create: Appended item at Index: {}", index);
+            logger.debug("Create: Appended item at Index: {}", items.size() - 1);
             publish();
-            return index;
+            return id;
         } finally {
             lock.unlock();
         }
@@ -818,20 +800,7 @@ public class ItemStore {
         return snapshot.revision();
     }
 
-    /**
-     * Capture the document for saving on the EDT.
-     *
-     * <p>Safe when the serialization itself also runs on the EDT. For a background writer use
-     * {@link #saveState()} instead — this method's list is stable but its <em>items</em> are live
-     * references the EDT may still mutate.</p>
-     *
-     * @return the items in z-order
-     */
-    public List<DrawItem> save() {
-        return getDrawItems();
-    }
-
-    /**
+        /**
      * Capture the document together with the revision it was taken at, for a background writer.
      *
      * <p>The capture fixes the set and ordering of items, but not the items themselves: the EDT

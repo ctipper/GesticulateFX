@@ -263,9 +263,10 @@ public class CanvasView {
      * Add item to canvas
      *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @return the id of the slot the item was placed in
      */
-    public void appendItemToCanvas(DrawItem item) {
-        store.append(item);
+    public ItemId appendItemToCanvas(DrawItem item) {
+        return store.append(item);
     }
 
     /**
