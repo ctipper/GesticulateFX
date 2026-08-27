@@ -102,15 +102,17 @@ public class ReadInFunnel extends Task<Object> {
         Platform.runLater(() -> {
             if (success) {
                 drawarea.prepareDrawing();
-                // Rebuild the image list in saved order so each item's imageIndex
-                // resolves to the correct bitmap. Must run after prepareDrawing(),
-                // which clears the image list via clearView().
-                view.getImageItems().addAll(pictures);
+                /*
+                 * Rebuild each item before any of them are published: checkDrawings swaps in
+                 * DI-constructed replacements and recomputes geometry, which is work that must not
+                 * be visible half-done. loadItemsToCanvas then installs the images and the items
+                 * together, in that order, as one publication.
+                 */
+                List<DrawItem> prepared = new ArrayList<>(drawings.size());
                 for (var drawitem : drawings) {
-                    var item = checkDrawings(drawitem);
-                    view.setNewItem(item);
-                    view.resetNewItem();
+                    prepared.add(checkDrawings(drawitem));
                 }
+                view.loadItemsToCanvas(prepared, pictures);
             }
         });
         CompletableFuture.runAsync(() -> {
