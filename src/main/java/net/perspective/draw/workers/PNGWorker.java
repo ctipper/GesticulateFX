@@ -35,6 +35,8 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.ItemStore;
+import net.perspective.draw.ItemStore.SaveState;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.Messages;
@@ -50,10 +52,12 @@ public class PNGWorker extends Task<Object> {
 
     private final CanvasView view;
     private final ApplicationController controller;
+    @Inject ItemStore store;
     @Inject ShareUtils share;
     protected File file;
     private boolean opacity;
     private double margin;
+    private SaveState state;
 
     private static final Logger logger = LoggerFactory.getLogger(PNGWorker.class.getName());
 
@@ -67,6 +71,18 @@ public class PNGWorker extends Task<Object> {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    /**
+     * Capture the document to be exported. Call on the FX thread, before submitting the task.
+     *
+     * <p>Fixes one item list for both the bounds calculation and the render — reading the store
+     * separately for each lets the document change in between, sizing the image for one set of
+     * items and drawing another. {@link ItemStore#saveState()} also records the revision, so an
+     * edit landing mid-export can be reported; see {@link Serialiser#make()}.</p>
+     */
+    public void captureDocument() {
+        state = store.saveState();
     }
 
     public void setOpacity(boolean opacity) {
@@ -117,8 +133,8 @@ public class PNGWorker extends Task<Object> {
         }
 
         public void make() {
-            // Calculate draw area
-            final CanvasPoint[] bounds = view.getBounds();
+            // Calculate draw area — same capture the render below uses
+            final CanvasPoint[] bounds = view.getBounds(state.items());
             CanvasPoint start = bounds[0].shifted(-margin, -margin).grow(scale).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin).grow(scale);
 
@@ -139,7 +155,7 @@ public class PNGWorker extends Task<Object> {
             g2.transform(java.awt.geom.AffineTransform.getTranslateInstance(0, 0));
             g2.transform(java.awt.geom.AffineTransform.getScaleInstance(scale, scale));
             // Render image
-            view.getDrawings().stream().forEach((item) -> {
+            state.items().stream().forEach((item) -> {
                 item.draw(g2);
             });
             g2.dispose();
@@ -155,6 +171,11 @@ public class PNGWorker extends Task<Object> {
                 logger.warn("Failed to write PNG.");
             } catch (IOException e) {
                 logger.warn(e.getMessage());
+            }
+
+            if (store.revision() != state.revision()) {
+                logger.warn("Document changed during PNG export ({} -> {}); the file may not match "
+                    + "either state.", state.revision(), store.revision());
             }
         }
     }

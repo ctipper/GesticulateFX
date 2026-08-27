@@ -1252,13 +1252,27 @@ public class CanvasView {
      * @return bounding {@link net.perspective.draw.util.CanvasPoint}
      */
     public CanvasPoint[] getBounds() {
+        return getBounds(store.getDrawItems());
+    }
+
+    /**
+     * Helper method used by export routines
+     *
+     * <p>Takes the items to measure rather than reading the store, so an exporter can size its
+     * output and render its content from one capture. Reading the store twice lets the document
+     * change in between, giving a canvas sized for one set of items and drawn from another.</p>
+     *
+     * @param items the {@link net.perspective.draw.geom.DrawItem}s to measure
+     * @return bounding {@link net.perspective.draw.util.CanvasPoint}
+     */
+    public CanvasPoint[] getBounds(List<DrawItem> items) {
         CanvasPoint topleft, bottomright;
 
         List<CanvasPoint> points = new ArrayList<>();
         CanvasPoint start = new CanvasPoint();
         CanvasPoint end = new CanvasPoint();
 
-        for (DrawItem shape : store.getDrawItems()) {
+        for (DrawItem shape : items) {
             points.add(shape.getTop()[0]);
             points.add(shape.getBottom()[0]);
             points.add(shape.getUp()[0]);
