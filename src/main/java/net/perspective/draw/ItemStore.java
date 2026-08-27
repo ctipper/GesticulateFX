@@ -515,6 +515,38 @@ public class ItemStore {
     }
 
     /**
+     * Republish a slot whose item was edited in place.
+     *
+     * <p>The instance is unchanged; this exists so that an EDT edit made directly on a published
+     * item still reaches readers. It marks the slot dirty exactly as {@link #replaceItem} does,
+     * which is what a reader needs — an unchanged instance is indistinguishable from no change at
+     * all by {@code ==} or {@code equals}, so without the dirty mark the edit is filtered out and
+     * the node keeps its old geometry. It also bumps the revision, without which the change is
+     * invisible to {@link #saveState()}'s check and the document can be thought unmodified when it
+     * is not.</p>
+     *
+     * <p>In-place editing is legal only from the EDT — see the mutability contract on this class.
+     * The sync thread must go through {@link #replaceItem} with a fresh instance.</p>
+     *
+     * @param id the slot id
+     * @return true if the id was present
+     */
+    public boolean touch(ItemId id) {
+        lock.lock();
+        try {
+            if (!itemsById.containsKey(id)) {
+                logger.trace("Touch: Unknown id: {}", id);
+                return false;
+            }
+            dirty.add(id);
+            publish();
+            return true;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
      * Tombstone the item at index. The item remains visible until {@link #removeItems()} commits
      * the deletion; this is the soft-delete path used by undo.
      *

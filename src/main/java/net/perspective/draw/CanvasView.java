@@ -331,6 +331,22 @@ public class CanvasView {
     }
 
     /**
+     * Republish the selected item after editing it in place.
+     *
+     * <p>Text editing mutates the {@link net.perspective.draw.geom.Text} already in the store —
+     * resizing it via {@code setDimensions} in particular — rather than replacing it. The store
+     * cannot see that write, so nothing refreshes the node and the revision does not move. Call
+     * this after any such edit.</p>
+     *
+     * <p>Distinct from {@link #updateSelectedItem()}, which also reapplies the canvas properties
+     * and so is the wrong call when only the geometry changed. No-op when nothing is selected or
+     * the item has gone.</p>
+     */
+    public void commitSelection() {
+        store.touch(this.getSelectedId());
+    }
+
+    /**
      * Delete the selected item
      */
     public void deleteSelectedItem() {
