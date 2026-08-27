@@ -930,9 +930,14 @@ public class CanvasView {
         ObservableList<Node> nodes = drawarea.getCanvas().getChildren();
         nodes.remove(highlight);
         if (isEditing()) {
-            DrawItem item = store.lookupId(id);
-            if (item == null) {
-                return;                              // nothing selected, or stale; no caret drawn
+            /*
+             * Only a Text carries a caret, and g2.highlightText casts to one. Edit mode and the
+             * selection are set independently, so they can disagree for an instant — restoring a
+             * selection while edit mode is still on, say — and a bare lookup would hand a Grouped
+             * or a Figure to that cast.
+             */
+            if (!(store.lookupId(id) instanceof Text item)) {
+                return;                              // nothing selected, stale, or not a text item
             }
             highlight = g2.highlightText(item);
             if (textController.getEditor().getCaretStart() == textController.getEditor().getCaretEnd()) {

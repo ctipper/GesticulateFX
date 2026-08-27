@@ -50,9 +50,15 @@ public class TextKeyHandler implements KeyHandler {
     @Inject ItemStore store;
     @Inject KeyListener keylistener;
     @Inject Provider<TextController> textControllerProvider;
-    /** Selection stashed across an Alt interlude. Held as an id: an index would rot if the
-     * document changed while the key was down. */
-    private ItemId selection;
+    /**
+     * Selection stashed across an Alt interlude, restored on release.
+     *
+     * <p>Written only when Alt goes down and read only when it comes up. Kept apart from the
+     * per-event selection, which the pressed and typed handlers read into a local: Alt
+     * auto-repeats, so those handlers run again while it is held, and sharing one field let a
+     * selection made during the interlude overwrite the very thing being stashed for restore.</p>
+     */
+    private ItemId stashedSelection;
     private boolean selectToLeft = false;
     private DrawingType drawingtype;
     private HandlerType handlerType;
@@ -82,8 +88,7 @@ public class TextKeyHandler implements KeyHandler {
     @Override
     public void keyPressed() {
         Editor editor = textControllerProvider.get().getEditor();
-        selection = view.getSelectedId();
-        DrawItem drawitem = store.lookupId(selection);
+        DrawItem drawitem = view.getSelectedDrawItem();
         if (drawitem != null && view.isEditing()) {
             if (drawitem instanceof Text item) {
                 // edit
@@ -318,7 +323,7 @@ public class TextKeyHandler implements KeyHandler {
                 if (!pressed) {
                     drawingtype = drawarea.getDrawType().orElse(null);
                     handlerType = drawarea.getHandlerType();
-                    selection = view.getSelectedId();
+                    stashedSelection = view.getSelectedId();
                     drawarea.setDrawType(null);
                     drawarea.changeHandlers(HandlerType.SELECTION);
                     isEditing = view.isEditing();
@@ -343,7 +348,7 @@ public class TextKeyHandler implements KeyHandler {
                 drawarea.changeHandlers(handlerType);
                 drawarea.setMultiSelectEnabled(false);
                 view.setEditing(isEditing);
-                view.setSelected(selection);
+                view.setSelected(stashedSelection);
                 pressed = false;
             }
             default -> {
@@ -357,8 +362,7 @@ public class TextKeyHandler implements KeyHandler {
     @Override
     public void keyTyped() {
         Editor editor = textControllerProvider.get().getEditor();
-        selection = view.getSelectedId();
-        DrawItem drawitem = store.lookupId(selection);
+        DrawItem drawitem = view.getSelectedDrawItem();
         if (drawitem != null && view.isEditing()) {
             if (drawitem instanceof Text item) {
                 String keyChar = keylistener.getKeyChar();

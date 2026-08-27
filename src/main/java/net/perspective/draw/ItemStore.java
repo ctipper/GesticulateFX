@@ -832,7 +832,7 @@ public class ItemStore {
         return snapshot.revision();
     }
 
-        /**
+    /**
      * Capture the document together with the revision it was taken at, for a background writer.
      *
      * <p>The capture fixes the set and ordering of items, but not the items themselves: the EDT
@@ -907,4 +907,5 @@ public class ItemStore {
             lock.unlock();
         }
     }
+
 }
