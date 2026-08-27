@@ -25,6 +25,7 @@ package net.perspective.draw.workers;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
@@ -39,6 +40,8 @@ import javafx.embed.swing.SwingFXUtils;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
 import net.perspective.draw.ImageItem;
+import net.perspective.draw.ItemStore;
+import net.perspective.draw.ItemStore.SaveState;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.serialise.ArrowLinePersistenceDelegate;
@@ -61,8 +64,11 @@ public class WriteOutStreamer extends Task<Object> {
 
     private final CanvasView view;
     private final ApplicationController controller;
+    @Inject ItemStore store;
     @Inject ShareUtils share;
     private File file;
+    private SaveState state;
+    private List<ImageItem> pictures;
 
     private static final Logger logger = LoggerFactory.getLogger(WriteOutStreamer.class.getName());
 
@@ -74,6 +80,20 @@ public class WriteOutStreamer extends Task<Object> {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    /**
+     * Capture the document to be written. Call on the FX thread, before submitting the task.
+     *
+     * <p>{@link #call()} runs on a worker thread, and the image list is plain FX-thread state — a
+     * paste landing mid-write would have the writer iterating a list under mutation. The item list
+     * is safe to read off-thread, being a published snapshot, but the <em>items</em> are live and
+     * the EDT may still edit one in place. {@link ItemStore#saveState()} records the revision so
+     * that can at least be detected; see {@link #make()}.</p>
+     */
+    public void captureDocument() {
+        state = store.saveState();
+        pictures = new ArrayList<>(view.getImageItems());
     }
 
     @Override
@@ -133,7 +153,6 @@ public class WriteOutStreamer extends Task<Object> {
             ZipEntry entry = new ZipEntry("content/pictures.xml");
             zos.putNextEntry(entry);
 
-            List<ImageItem> pictures = view.getImageItems();
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
             encoder.setPersistenceDelegate(java.time.Instant.class,
                 new InstantPersistenceDelegate());
@@ -164,7 +183,7 @@ public class WriteOutStreamer extends Task<Object> {
             entry = new ZipEntry("content/canvas.xml");
             zos.putNextEntry(entry);
 
-            List<DrawItem> drawings = view.getDrawings();
+            List<DrawItem> drawings = state.items();
             encoder = new net.perspective.draw.serialise.XMLEncoder(zos);
             encoder.setPersistenceDelegate(java.awt.BasicStroke.class,
                 new BasicStrokePersistenceDelegate());
@@ -188,6 +207,17 @@ public class WriteOutStreamer extends Task<Object> {
             encoder.finished();
             zos.closeEntry();
             updateProgress(3L, 3L);
+
+            /*
+             * The capture fixed which items exist and in what order, but not the items themselves:
+             * the EDT may have edited one in place while its fields were being read, giving an
+             * item that serialized half-old and half-new. A moved revision is the only evidence of
+             * that, and only holds because every EDT mutation republishes through replaceItem.
+             */
+            if (store.revision() != state.revision()) {
+                logger.warn("Document changed during save ({} -> {}); the written file may not "
+                    + "match either state.", state.revision(), store.revision());
+            }
         }
     }
 

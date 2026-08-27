@@ -205,7 +205,7 @@ public class ShareUtils {
      */
     public void exportCanvas() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.isEmpty()) {
             return;
         }
 
@@ -271,6 +271,7 @@ public class ShareUtils {
     public void writeCanvas(File file) {
         WriteOutStreamer streamer = writeOutStreamerProvider.get();
         streamer.setFile(file);
+        streamer.captureDocument();                  // FX thread: see captureDocument()
         this.canvasfile = file;
         controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.getProgressProperty().bind(streamer.progressProperty());
@@ -282,7 +283,7 @@ public class ShareUtils {
      */
     public void exportPDF() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.isEmpty()) {
             return;
         }
 
@@ -314,7 +315,7 @@ public class ShareUtils {
      */
     public void exportSVG() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.isEmpty()) {
             return;
         }
 
@@ -346,7 +347,7 @@ public class ShareUtils {
      */
     public void exportPNG() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.isEmpty()) {
             return;
         }
 
@@ -379,7 +380,7 @@ public class ShareUtils {
      */
     public void snapshotPNG() {
         // Detect empty canvas
-        if (view.getDrawings().isEmpty()) {
+        if (view.isEmpty()) {
             controller.getSnapshotProperty().setValue(false);
             return;
         }

@@ -261,11 +261,35 @@ public class CanvasView {
 
     /**
      * Add item to canvas
-     * 
+     *
      * @param item the {@link net.perspective.draw.geom.DrawItem}
      */
     public void appendItemToCanvas(DrawItem item) {
         store.append(item);
+    }
+
+    /**
+     * Replace the document with the contents of a file.
+     *
+     * <p>Images are installed before the items, and this ordering is required rather than tidy: a
+     * {@link net.perspective.draw.geom.Picture} renders by resolving its image index against that
+     * list, so an item published ahead of its bitmap has nothing to draw.</p>
+     *
+     * <p>The selection is dropped because {@link ItemStore#load} mints fresh ids, leaving every id
+     * held from before the load — the selection above all — pointing at nothing. Cleared here so a
+     * caller cannot forget.</p>
+     *
+     * <p>One publication for the whole document. Appending item by item instead rebuilds the
+     * snapshot per item, which is O(n²) over a load, and asks the binder to reconcile n times.</p>
+     *
+     * @param items the {@link net.perspective.draw.geom.DrawItem}s in z-order
+     * @param pictures the {@link net.perspective.draw.ImageItem}s in saved order
+     */
+    public void loadItemsToCanvas(List<DrawItem> items, List<ImageItem> pictures) {
+        this.setSelected(-1);
+        images.clear();
+        images.addAll(pictures);
+        store.load(items);
     }
 
     /**
