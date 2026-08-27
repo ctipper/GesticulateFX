@@ -305,6 +305,7 @@ public class ShareUtils {
         PDFWorker pdfWorker = pdfWorkerProvider.get();
         pdfWorker.setFile(file);
         pdfWorker.setMargin(this.margin);
+        pdfWorker.captureDocument();             // FX thread: see captureDocument()
         controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(pdfWorker);
@@ -337,6 +338,7 @@ public class ShareUtils {
         SVGWorker svgWorker = svgWorkerProvider.get();
         svgWorker.setFile(file);
         svgWorker.setMargin(this.margin);
+        svgWorker.captureDocument();             // FX thread: see captureDocument()
         controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(svgWorker);
@@ -370,6 +372,7 @@ public class ShareUtils {
         pngWorker.setFile(file);
         pngWorker.setOpacity(false);
         pngWorker.setMargin(this.margin);
+        pngWorker.captureDocument();             // FX thread: see captureDocument()
         controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(pngWorker);
@@ -401,6 +404,7 @@ public class ShareUtils {
         PNGWorker pngWorker = pngWorkerProvider.get();
         pngWorker.setFile(file);
         pngWorker.setMargin(this.margin);
+        pngWorker.captureDocument();             // FX thread: see captureDocument()
         controller.getProgressVisibleProperty().setValue(Boolean.TRUE);
         controller.setProgressIndeterminate();
         executor.submit(pngWorker);

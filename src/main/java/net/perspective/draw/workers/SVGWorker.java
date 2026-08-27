@@ -32,6 +32,8 @@ import org.jfree.svg.SVGGraphics2D;
 import org.jfree.svg.SVGHints;
 import net.perspective.draw.ApplicationController;
 import net.perspective.draw.CanvasView;
+import net.perspective.draw.ItemStore;
+import net.perspective.draw.ItemStore.SaveState;
 import net.perspective.draw.ShareUtils;
 import net.perspective.draw.util.CanvasPoint;
 import net.perspective.draw.util.Messages;
@@ -47,9 +49,11 @@ public class SVGWorker extends Task<Object> {
 
     private final CanvasView view;
     private final ApplicationController controller;
+    @Inject ItemStore store;
     @Inject ShareUtils share;
     private File file;
     private double margin;
+    private SaveState state;
 
     private static final Logger logger = LoggerFactory.getLogger(SVGWorker.class.getName());
 
@@ -62,6 +66,18 @@ public class SVGWorker extends Task<Object> {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    /**
+     * Capture the document to be exported. Call on the FX thread, before submitting the task.
+     *
+     * <p>Fixes one item list for both the bounds calculation and the render — reading the store
+     * separately for each lets the document change in between, sizing the canvas for one set of
+     * items and drawing another. {@link ItemStore#saveState()} also records the revision, so an
+     * edit landing mid-export can be reported; see {@link Serialiser#make()}.</p>
+     */
+    public void captureDocument() {
+        state = store.saveState();
     }
 
     public void setMargin(double margin) {
@@ -99,8 +115,8 @@ public class SVGWorker extends Task<Object> {
         }
 
         public void make() {
-            // Calculate drawing bounds
-            final CanvasPoint[] bounds = view.getBounds();
+            // Calculate drawing bounds — same capture the render below uses
+            final CanvasPoint[] bounds = view.getBounds(state.items());
             CanvasPoint start = bounds[0].shifted(-margin, -margin).floor();
             CanvasPoint end = bounds[1].shifted(margin, margin);
 
@@ -120,7 +136,7 @@ public class SVGWorker extends Task<Object> {
             g2.translate(-start.x, -start.y);
 
             // Ask to render into the SVG Graphics2D implementation.
-            view.getDrawings().stream().forEach((item) -> {
+            state.items().stream().forEach((item) -> {
                 item.draw(g2);
             });
 
@@ -151,6 +167,11 @@ public class SVGWorker extends Task<Object> {
 
             // Clean up
             g2.dispose();
+
+            if (store.revision() != state.revision()) {
+                logger.warn("Document changed during SVG export ({} -> {}); the file may not match "
+                    + "either state.", state.revision(), store.revision());
+            }
         }
     }
 
