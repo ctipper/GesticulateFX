@@ -808,7 +808,7 @@ public class ItemStore {
      * Rebuild and publish the snapshot. Caller must hold {@code lock}.
      *
      * <p>The listener is notified with the lock still held and on the writing thread, so it must
-     * not block or touch the scene graph — it schedules and returns. See
+     * not block or touch the UI — it schedules and returns. See
      * {@link FxSnapshotBinder#attach}.</p>
      */
     private void publish() {
