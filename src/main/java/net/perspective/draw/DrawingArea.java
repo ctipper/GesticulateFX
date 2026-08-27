@@ -400,10 +400,24 @@ public class DrawingArea {
     }
 
     /**
+     * May the selection be restructured — grouped, ungrouped or restacked.
+     *
+     * <p>The guard shared by the structural context-menu actions. Each needs an item selected and
+     * neither modal editor holding the canvas: reordering the z-order underneath a map or a text
+     * item being edited would leave that editor addressing the wrong thing.</p>
+     *
+     * @return true if a structural action may proceed
+     */
+    private boolean canRestructureSelection() {
+        CanvasView view = viewProvider.get();
+        return view.hasSelection() && !view.isMapping() && !view.isEditing();
+    }
+
+    /**
      * Cut the selected item
      */
     public void cutSelectedItem() {
-        if (viewProvider.get().getSelected() != -1) {
+        if (viewProvider.get().hasSelection()) {
             clipboard = transferhandler.createTransferable();
             transferhandler.exportDone(clipboard, MOVE);
             systemClipboard.setContents(clipboard, null);
@@ -415,7 +429,7 @@ public class DrawingArea {
      * Copy the selected item
      */
     public void copySelectedItem() {
-        if (viewProvider.get().getSelected() != -1) {
+        if (viewProvider.get().hasSelection()) {
             clipboard = transferhandler.createTransferable();
             transferhandler.exportDone(clipboard, COPY);
             systemClipboard.setContents(clipboard, null);
@@ -477,13 +491,13 @@ public class DrawingArea {
         SeparatorMenuItem groupSeparator = new SeparatorMenuItem();
         MenuItem menuGroup = new MenuItem("Group Selection");
         menuGroup.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+            if (canRestructureSelection()) {
                 viewProvider.get().groupSelection();
             }
         });
         MenuItem menuUnGroup = new MenuItem("Ungroup Selection");
         menuUnGroup.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+            if (canRestructureSelection()) {
                 viewProvider.get().ungroupSelection();
             }
         });
@@ -491,28 +505,28 @@ public class DrawingArea {
         SeparatorMenuItem sendSeparator = new SeparatorMenuItem();
         MenuItem menuSBItem = new MenuItem("Send Backwards");
         menuSBItem.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+            if (canRestructureSelection()) {
                 viewProvider.get().sendBackwards();
                 viewProvider.get().setSelected(-1);
             }
         });
         MenuItem menuBFItem = new MenuItem("Bring Forwards");
         menuBFItem.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+            if (canRestructureSelection()) {
                 viewProvider.get().bringForwards();
                 viewProvider.get().setSelected(-1);
             }
         });
         MenuItem menuSTBItem = new MenuItem("Send to Back");
         menuSTBItem.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+            if (canRestructureSelection()) {
                 viewProvider.get().sendToBack();
                 viewProvider.get().setSelected(-1);
             }
         });
         MenuItem menuBTFItem = new MenuItem("Bring to Front");
         menuBTFItem.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+            if (canRestructureSelection()) {
                 viewProvider.get().bringToFront();
                 viewProvider.get().setSelected(-1);
             }
@@ -520,13 +534,13 @@ public class DrawingArea {
         // contextmenu.getItems().addAll(sendSeparator, menuSBItem, menuBFItem, menuSTBItem, menuBTFItem);
         MenuItem menuEditMapItem = new MenuItem("Edit");
         menuEditMapItem.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1) {
+            if (viewProvider.get().hasSelection()) {
                 editMapItem();
             }
         });
         MenuItem menuEditTextItem = new MenuItem("Edit");
         menuEditTextItem.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1) {
+            if (viewProvider.get().hasSelection()) {
                 editTextItem();
             }
         });

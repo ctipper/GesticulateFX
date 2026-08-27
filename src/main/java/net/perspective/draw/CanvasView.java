@@ -1106,10 +1106,19 @@ public class CanvasView {
     }
 
     /**
-     * @return true if nothing is selected
+     * Is there a selection that still resolves to an item.
+     *
+     * <p>Equivalent to the {@code getSelected() != -1} it replaces, but a hash lookup rather than
+     * an O(n) scan of the z-order — the old form built the answer by finding the item's index and
+     * then discarding it.</p>
+     *
+     * <p>Resolution, not set membership: a selection whose item has since been removed reads as no
+     * selection, which is what a caller about to act on that item wants to know.</p>
+     *
+     * @return true if an item is selected and still present
      */
-    public boolean hasNoSelection() {
-        return selectionIds.isEmpty();
+    public boolean hasSelection() {
+        return this.getSelectedDrawItem() != null;
     }
 
     /**
