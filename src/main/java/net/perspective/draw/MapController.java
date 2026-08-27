@@ -65,6 +65,7 @@ public class MapController {
 
     private final Provider<DrawingArea> drawareaProvider;
     private final Provider<CanvasView> viewProvider;
+    @Inject ItemStore store;
     @Inject Provider<StreetMap> streetMapProvider;
     private Slider zoomSlider;
     private Button zoomInButton;
@@ -72,7 +73,8 @@ public class MapController {
     private Button quiticon;
     private TextField geoLocation;
     private StreetMap map;
-    private int mapindex;
+    /** The slot being mapped. An id, not an index: mapping mode outlives document edits. */
+    private ItemId mapid;
 
     private final String SVG_QUIT_A = "M3.7732425 22.718011L22.702213 3.7890409";
     private final String SVG_QUIT_B = "M3.7732425 3.7890409L22.702213 22.718011";
@@ -88,7 +90,7 @@ public class MapController {
     public MapController(Provider<DrawingArea> drawareaProvider, Provider<CanvasView> viewProvider) {
         this.drawareaProvider = drawareaProvider;
         this.viewProvider = viewProvider;
-        mapindex = -1;
+        mapid = null;
     }
 
     /**
@@ -106,9 +108,14 @@ public class MapController {
         ImageItem img = new ImageItem(image);
         int index = viewProvider.get().setImageItem(img);
         streetmap.setImage(index, width, height);
-        viewProvider.get().setNewItem(streetmap);
+        /*
+         * Append directly rather than through setNewItem, which replaces the top item when a
+         * drawing is in progress. The append reports the slot it landed in, so the selection no
+         * longer needs an indexOf scan to find the item just added.
+         */
+        ItemId id = viewProvider.get().appendItemToCanvas(streetmap);
         viewProvider.get().resetNewItem();
-        viewProvider.get().setSelected(viewProvider.get().getDrawings().indexOf(streetmap));
+        viewProvider.get().setSelected(id);
         this.initMap();
     }
     
@@ -117,27 +124,27 @@ public class MapController {
      */
     public void initMap() {
         viewProvider.get().setMapping(true);
-        mapindex = viewProvider.get().getSelected();
+        mapid = viewProvider.get().getSelectedId();
         // Remove MapView event filters
-        if (viewProvider.get().getDrawings().get(mapindex) instanceof StreetMap streetMap) {
+        if (store.lookupId(mapid) instanceof StreetMap streetMap) {
             map = streetMap;
             map.resetHandlers();
             initializeZoomSlider(map);
         }
     }
-    
+
     /**
      * MapView event handlers need to be consumed when mapping control is not active.
      */
     public void finaliseMap() {
-        if (mapindex != -1) {
-            DrawItem item = viewProvider.get().getDrawings().get(mapindex);
-            if (item instanceof StreetMap streetMap) {
+        if (mapid != null) {
+            // Null if the map went away while mapping mode was open; still tear the mode down.
+            if (store.lookupId(mapid) instanceof StreetMap streetMap) {
                 streetMap.filterHandlers();
                 resizeMap(streetMap);
             }
             viewProvider.get().setMapping(false);
-            mapindex = -1;
+            mapid = null;
             removeSlider();
         }
     }
