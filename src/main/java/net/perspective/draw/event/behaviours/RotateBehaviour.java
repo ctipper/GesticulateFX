@@ -89,7 +89,7 @@ public class RotateBehaviour  implements ItemBehaviours {
     public void alterItem(BehaviourContext context, DrawItem item, double xinc, double yinc) {
         CanvasPoint A, B;
 
-        if (view.getSelected() != -1) {
+        if (view.hasSelection()) {
             int selection = view.getSelected();
             drawarea.getScene().setCursor(Cursor.CLOSED_HAND);
             CanvasPoint centre = item.rotationCentre();

@@ -61,7 +61,7 @@ public class MapKeyHandler implements KeyHandler {
 
     @Override
     public void keyPressed() {
-        if ((view.getSelected() != -1) && (view.isMapping())) {
+        if (view.hasSelection() && view.isMapping()) {
             switch (keylistener.getKeyCode()) {
                 case KP_UP, UP -> mapper.moveMap(0, -20);
                 case KP_DOWN, DOWN -> mapper.moveMap(0, 20);
@@ -109,7 +109,7 @@ public class MapKeyHandler implements KeyHandler {
 
     @Override
     public void keyTyped() {
-        if ((view.getSelected() != -1) && (view.isMapping())) {
+        if (view.hasSelection() && view.isMapping()) {
             String c = keylistener.getKeyChar();
             switch (c) {
                 case "+" -> mapper.zoomIn();

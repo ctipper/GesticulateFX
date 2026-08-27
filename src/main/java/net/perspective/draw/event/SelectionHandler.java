@@ -119,7 +119,7 @@ public class SelectionHandler implements Handler {
             drawarea.getScene().setCursor(Cursor.DEFAULT);
             drawarea.setRotationMode(false);
         }
-        if (view.getSelected() != -1 && !listener.getRightClick()) {
+        if (view.hasSelection() && !listener.getRightClick()) {
             view.updateSelectedItem();
             view.refreshSelection();
             context.resetContainment();
@@ -310,7 +310,7 @@ public class SelectionHandler implements Handler {
 
     @Override
     public void dragEvent() {
-        if (view.getSelected() != -1) {
+        if (view.hasSelection()) {
             double xinc = listener.getTempX() - listener.getStartX();
             double yinc = listener.getTempY() - listener.getStartY();
 
