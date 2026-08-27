@@ -127,6 +127,11 @@ public class TextController {
         editor.setCaretStart(start);
         editor.setCaretEnd(start);
         item.setDimensions();
+        /*
+         * Edited in place. Safe to commit against the selection because the only caller,
+         * TextItemBehaviour.editItem, registers the id before calling in.
+         */
+        viewProvider.get().commitSelection();
     }
 
     /**
@@ -155,6 +160,7 @@ public class TextController {
             editor.cutText();
             editor.commitText(item);
             item.setDimensions();
+            viewProvider.get().commitSelection();     // edited in place; republish to refresh
         }
         viewProvider.get().refreshSelection();
     }
@@ -181,6 +187,7 @@ public class TextController {
             editor.pasteText();
             editor.commitText(item);
             item.setDimensions();
+            viewProvider.get().commitSelection();     // edited in place; republish to refresh
         }
         viewProvider.get().refreshSelection();
     }
@@ -245,6 +252,7 @@ public class TextController {
             }
             editor.commitText(item);
             item.setDimensions();
+            viewProvider.get().commitSelection();     // edited in place; republish to refresh
         }
     }
 
