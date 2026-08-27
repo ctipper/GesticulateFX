@@ -65,8 +65,9 @@ public class RotateBehaviour  implements ItemBehaviours {
             context.setContainment(ContainsType.SHAPE);
             found = true;
         }
-        if (view.getSelected() != -1) {
-            omega = view.getDrawings().get(view.getSelected()).getAngle();
+        DrawItem selected = view.getSelectedDrawItem();
+        if (selected != null) {
+            omega = selected.getAngle();
         }
         return found;
     }

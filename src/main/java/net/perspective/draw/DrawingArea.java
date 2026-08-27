@@ -451,30 +451,23 @@ public class DrawingArea {
         });
         MenuItem menuTextCut = new MenuItem("Cut");
         menuTextCut.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1) {
-                DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
-                if (item instanceof Text) {
-                    viewProvider.get().cutTextItem();
-                    viewProvider.get().updateSelectedItem();
-                    viewProvider.get().refreshSelection();
-                }
+            if (viewProvider.get().getSelectedDrawItem() instanceof Text) {
+                viewProvider.get().cutTextItem();
+                viewProvider.get().updateSelectedItem();
+                viewProvider.get().refreshSelection();
             }
         });
         MenuItem menuTextCopy = new MenuItem("Copy");
         menuTextCopy.setOnAction((ActionEvent e) -> {
-            if (viewProvider.get().getSelected() != -1) {
-                DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
-                if (item instanceof Text) {
-                    viewProvider.get().copyTextItem();
-                    viewProvider.get().updateSelectedItem();
-                    viewProvider.get().refreshSelection();
-                }
+            if (viewProvider.get().getSelectedDrawItem() instanceof Text) {
+                viewProvider.get().copyTextItem();
+                viewProvider.get().updateSelectedItem();
+                viewProvider.get().refreshSelection();
             }
         });
         MenuItem menuTextPaste = new MenuItem("Paste");
         menuTextPaste.setOnAction((ActionEvent e) -> {
-            DrawItem item = viewProvider.get().getDrawings().get(viewProvider.get().getSelected());
-            if (item instanceof Text) {
+            if (viewProvider.get().getSelectedDrawItem() instanceof Text) {
                 viewProvider.get().pasteTextItem();
                 viewProvider.get().updateSelectedItem();
                 viewProvider.get().refreshSelection();
@@ -541,15 +534,16 @@ public class DrawingArea {
         SeparatorMenuItem editSeparator = new SeparatorMenuItem();
         contextlistener = (ContextMenuEvent event) -> {
             contextmenu.getItems().clear();
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
-                if (viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof StreetMap) {
+            DrawItem selected = viewProvider.get().getSelectedDrawItem();
+            if (selected != null && !viewProvider.get().isMapping() && !viewProvider.get().isEditing()) {
+                if (selected instanceof StreetMap) {
                     contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
-                } else if (viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof Text) {
+                } else if (selected instanceof Text) {
                     contextmenu.getItems().addAll(menuEditTextItem, editSeparator);
                 }
             }
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && viewProvider.get().isEditing()) {
-                if (viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof Text) {
+            if (selected != null && !viewProvider.get().isMapping() && viewProvider.get().isEditing()) {
+                if (selected instanceof Text) {
                     contextmenu.getItems().addAll(menuTextCut, menuTextCopy, menuTextPaste);
                 }
             } else {
@@ -561,7 +555,7 @@ public class DrawingArea {
         };
         popuplistener = (TouchEvent event) -> {
             contextmenu.getItems().clear();
-            if (viewProvider.get().getSelected() != -1 && !viewProvider.get().isMapping() && viewProvider.get().getDrawings().get(viewProvider.get().getSelected()) instanceof StreetMap) {
+            if (!viewProvider.get().isMapping() && viewProvider.get().getSelectedDrawItem() instanceof StreetMap) {
                 contextmenu.getItems().addAll(menuEditMapItem, editSeparator);
             }
             contextmenu.getItems().addAll(menuCut, menuCopy, menuPaste);

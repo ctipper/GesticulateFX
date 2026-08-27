@@ -983,6 +983,20 @@ public class CanvasView {
     }
 
     /**
+     * The primary selected item.
+     *
+     * <p>Null is the ordinary outcome for "nothing selected" <em>and</em> for a selection whose
+     * item has since been removed, so callers null-check once here instead of testing
+     * {@code getSelected() != -1} and then indexing — a pair that reads as safe but resolves the
+     * selection twice, and throws if the document changed in between.</p>
+     *
+     * @return the selected {@link net.perspective.draw.geom.DrawItem}, or null
+     */
+    public DrawItem getSelectedDrawItem() {
+        return store.lookupId(this.getSelectedId());
+    }
+
+    /**
      * Lowest member of the multi-selection in z-order.
      *
      * @return the id, or null if the selection is empty or fully stale
