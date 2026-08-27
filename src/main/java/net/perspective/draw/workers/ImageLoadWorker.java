@@ -41,6 +41,7 @@ import net.perspective.draw.CanvasView;
 import net.perspective.draw.DrawingArea;
 import net.perspective.draw.ImageItem;
 import net.perspective.draw.ShareUtils;
+import net.perspective.draw.geom.DrawItem;
 import net.perspective.draw.geom.Picture;
 import net.perspective.draw.util.FileUtils;
 import net.perspective.draw.util.Messages;
@@ -89,6 +90,12 @@ public class ImageLoadWorker extends Task<Object> {
         logger.info("Reading images complete.");
         Platform.runLater(() -> {
             if (!images.isEmpty()) {
+                /*
+                 * Each image is registered before the Picture that references it by index, and the
+                 * Pictures are published together at the end: appending them one at a time rebuilds
+                 * the store snapshot per image, which is O(n²) across a multi-image import.
+                 */
+                List<DrawItem> pictures = new ArrayList<>(images.size());
                 for (int i = 0; i < images.size(); i++) {
                     Image image = images.get(i);
                     Picture picture = pictureProvider.get();
@@ -102,10 +109,11 @@ public class ImageLoadWorker extends Task<Object> {
                     logger.trace("Image relative scale: {}", scale);
                     picture.setImage(index, width, height);
                     picture.setScale(scale);
-                    view.setNewItem(picture);
-                    view.resetNewItem();
+                    pictures.add(picture);
                     shift = shift + 10.0;
                 }
+                view.appendItemsToCanvas(pictures);
+                view.resetNewItem();
             }
             share.setImageFiles(null);
         });

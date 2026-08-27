@@ -269,6 +269,19 @@ public class CanvasView {
     }
 
     /**
+     * Add several items to the top of the canvas as one publication.
+     *
+     * <p>Appending in a loop instead rebuilds the snapshot per item, which is O(n²) across the
+     * batch. Unlike {@link #loadItemsToCanvas} this adds to the document rather than replacing it,
+     * so ids held elsewhere stay valid and the selection is left alone.</p>
+     *
+     * @param items the {@link net.perspective.draw.geom.DrawItem}s in z-order
+     */
+    public void appendItemsToCanvas(List<DrawItem> items) {
+        store.insertAll(store.size(), items);
+    }
+
+    /**
      * Replace the document with the contents of a file.
      *
      * <p>Images are installed before the items, and this ordering is required rather than tidy: a
