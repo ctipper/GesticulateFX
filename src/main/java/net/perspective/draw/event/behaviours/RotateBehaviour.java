@@ -132,7 +132,9 @@ public class RotateBehaviour  implements ItemBehaviours {
                 drawarea.rotateTo(item, theta);
             }
 
-            item.updateProperties(drawarea);
+            if (view.isSingleSelection()) {
+                item.updateProperties(drawarea);
+            }
             view.updateCanvasItem(selection, item);
             view.moveSelection(selection);
             listener.setStartX(listener.getTempX());

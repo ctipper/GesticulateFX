@@ -120,7 +120,14 @@ public class SelectionHandler implements Handler {
             drawarea.setRotationMode(false);
         }
         if (view.hasSelection() && !listener.getRightClick()) {
-            view.updateSelectedItem();
+            if (view.isSingleSelection()) {
+                view.updateSelectedItem();
+            } else {
+                // A multi-selection is restyled only from the toolbar, so read properties for
+                // the dropper but write none: the gesture must not conform every member to the
+                // current settings.
+                view.pickSelectedItem();
+            }
             view.refreshSelection();
             context.resetContainment();
         }
@@ -383,7 +390,9 @@ public class SelectionHandler implements Handler {
                 if (activeStrategy.isPresent()) {
                     context.setBehaviour(activeStrategy.get());
                     context.alter(item, listener.getTempX(), listener.getTempY());
-                    item.updateProperties(drawarea);
+                    if (view.isSingleSelection()) {
+                        item.updateProperties(drawarea);
+                    }
                     view.updateCanvasItem(selection, item);
                     view.moveSelection(selection);
                 } else {
@@ -424,7 +433,9 @@ public class SelectionHandler implements Handler {
                             item.moveTo(xinc, yinc);
                         }
                     }
-                    item.updateProperties(drawarea);
+                    if (view.isSingleSelection()) {
+                        item.updateProperties(drawarea);
+                    }
                     view.updateCanvasItem(selection, item);
                     view.moveSelection(selection);
                 }

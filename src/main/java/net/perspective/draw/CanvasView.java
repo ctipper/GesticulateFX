@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -397,61 +398,114 @@ public class CanvasView {
     }
 
     /**
-     * Update the properties of the selected item or select properties
-     * of the selected item if dropper is enabled
+     * Apply the canvas properties to the selected items, or read the properties of the primary
+     * selection when the dropper is enabled.
+     *
+     * <p>Applies to every member of the multi-selection. Members removed since selection are
+     * skipped rather than treated as an error.</p>
+     *
+     * <p>The toolbar calls this whenever a property changes, and it reaches every selected item.
+     * The pointer handlers call it too, but only for a single selection — see
+     * {@link #isSingleSelection()}; on a multi-selection they call {@link #pickSelectedItem()},
+     * which reads without writing.</p>
      */
     public void updateSelectedItem() {
-        if (this.getSelected() != -1 && controller.getDropperDisabled()) {
-            /**
-             * Update item properties
-             */
-            DrawItem item = store.lookupId(this.getSelected());
+        if (!this.hasSelection()) {
+            return;                                  // nothing selected, or stale
+        }
+
+        if (!controller.getDropperDisabled()) {
+            this.pickSelectedItem();
+            return;
+        }
+
+        /**
+         * ONE snapshot for the whole pass. The replacements are computed first and applied in a
+         * single batch: replaceItem publishes per call, and a multi-selection would otherwise
+         * queue one snapshot rebuild per member. Text layout runs outside the store lock.
+         */
+        Snapshot snap = store.snapshot();
+        Map<ItemId, DrawItem> updates = new LinkedHashMap<>();
+        for (ItemId id : this.getSelectionInZOrder(snap)) {
+            DrawItem item = snap.get(id);
             if (item == null) {
-                return;                              // stale selection
+                continue;                            // removed since selection
             }
+            updates.put(id, applyProperties(item));
+        }
+        if (updates.isEmpty()) {
+            return;
+        }
+        store.batch(() -> updates.forEach(store::replaceItem));
+    }
 
-            if (!this.isMultiSelected() && !drawarea.isMultiSelectEnabled()) {
-                item.updateProperties(drawarea);
-            }
-
-            switch (item) {
-                case Figure figure when !(figure instanceof ArrowLine) -> {
-                    FigureType type = figure.getType();
-                    if (drawarea.getArrow() != ArrowType.NONE) {
-                        if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
-                            item = new ArrowLine(figure);
-                            item.updateProperties(drawarea);
-                        }
-                    }
-                }
-                case ArrowLine arrowLine -> {
-                    if (drawarea.getArrow() == ArrowType.NONE) {
-                        item = arrowLine.getLine();
-                        item.updateProperties(drawarea);
-                    } else {
-                        item.updateProperties(drawarea);
-                    }
-                }
-                default -> {
-                }
-            }
-
-            this.updateCanvasItem(this.getSelected(), item);
-        } else if (this.getSelected() != -1 && !controller.getDropperDisabled()) { // dropper enabled
-            /**
-             * Select item properties and update UI
-             */
-            DrawItem item = store.lookupId(this.getSelected());
-            if (item == null) {
-                return;                              // stale selection
-            }
-            switch (item) {
-                case Figure figure -> this.figureDropper(figure);
-                case Text text -> this.textDropper(text);
-                default -> {
-                }
+    /**
+     * Read the properties of the primary selection into the UI, when the dropper is enabled.
+     *
+     * <p>Picking up properties from several items at once has no meaning, so only the primary
+     * selection is read. This writes to the canvas properties, not to the document, so it is safe
+     * to call on selection — where applying properties would not be — and nothing needs
+     * repainting afterwards.</p>
+     */
+    public void pickSelectedItem() {
+        if (controller.getDropperDisabled()) {
+            return;
+        }
+        DrawItem item = this.getSelectedDrawItem();
+        if (item == null) {
+            return;                                  // nothing selected, or stale
+        }
+        switch (item) {
+            case Figure figure -> this.figureDropper(figure);
+            case Text text -> this.textDropper(text);
+            default -> {
             }
         }
+    }
+
+    /**
+     * Apply the canvas properties to an item, converting between
+     * {@link net.perspective.draw.geom.Figure} and {@link net.perspective.draw.geom.ArrowLine}
+     * as the current arrow setting requires.
+     *
+     * <p>Returns the item to store: the same instance when only properties changed, a new one
+     * when the arrow setting forced a conversion. The caller rebinds the slot either way, so the
+     * node is refreshed and the revision moves.</p>
+     *
+     * @param item the {@link net.perspective.draw.geom.DrawItem}
+     * @return the item to store
+     */
+    private DrawItem applyProperties(DrawItem item) {
+        DrawItem result = item;
+
+        switch (result) {
+            case Figure figure when !(figure instanceof ArrowLine) -> {
+                FigureType type = figure.getType();
+                if (drawarea.getArrow() != ArrowType.NONE) {
+                    if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
+                        result = new ArrowLine(figure);
+                    }
+                }
+            }
+            case ArrowLine arrowLine -> {
+                if (drawarea.getArrow() == ArrowType.NONE) {
+                    /**
+                     * getLine() is unset on an ArrowLine built by the no-arg constructor — the
+                     * one the reader uses — so unwrap only when there is a line to unwrap to,
+                     * rather than storing a null item.
+                     */
+                    Figure line = arrowLine.getLine();
+                    if (line != null) {
+                        result = line;
+                    }
+                }
+            }
+            default -> {
+            }
+        }
+
+        result.updateProperties(drawarea);
+        return result;
     }
 
     private void figureDropper(Figure item) {
@@ -1108,6 +1162,21 @@ public class CanvasView {
      */
     public boolean isMultiSelected() {
         return selectionIds.size() > 1;
+    }
+
+    /**
+     * Is exactly one item selected.
+     *
+     * <p>The distinction the pointer handlers draw: a single selection is reapplied the canvas
+     * properties at the end of a gesture, as it always was, while a multi-selection is restyled
+     * only when the user changes a property in the toolbar — pointer work must not conform its
+     * members to the current settings. False while a marquee is still collecting members, since
+     * {@code isMultiSelectEnabled} marks a selection in progress that may yet grow.</p>
+     *
+     * @return true if the selection holds one id and is not still being collected
+     */
+    public boolean isSingleSelection() {
+        return selectionIds.size() == 1 && !drawarea.isMultiSelectEnabled();
     }
 
     /**
