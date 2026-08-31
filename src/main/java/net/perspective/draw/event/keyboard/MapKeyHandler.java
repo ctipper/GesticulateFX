@@ -93,14 +93,18 @@ public class MapKeyHandler implements KeyHandler {
     public void keyReleased() {
         switch (keylistener.getKeyCode()) {
             case ALT, ALT_GRAPH -> {
-                drawarea.setDrawType(drawingtype);
-                drawarea.changeHandlers(handlerType);
-                drawarea.setMultiSelectEnabled(false);
-                view.setMapping(isMapping);
-                view.setSelected(selection);
-                mapper.initMap();
-                pressed = false;
-
+                // Only unwind an interlude this handler actually opened: a release can arrive
+                // with no matching press, when the handler was swapped while the key was held
+                // or the platform took the press for its menu bar.
+                if (pressed) {
+                    drawarea.setDrawType(drawingtype);
+                    drawarea.changeHandlers(handlerType);
+                    drawarea.setMultiSelectEnabled(false);
+                    view.setMapping(isMapping);
+                    view.setSelected(selection);
+                    mapper.initMap();
+                    pressed = false;
+                }
             }
             default -> {
             }
