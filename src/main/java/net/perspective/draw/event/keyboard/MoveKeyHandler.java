@@ -155,10 +155,20 @@ public class MoveKeyHandler implements KeyHandler {
         boolean wasRotating = drawarea.isRotationMode();
         switch (keylistener.getKeyCode()) {
             case ALT, ALT_GRAPH -> {
-                drawarea.setDrawType(drawingtype);
-                drawarea.changeHandlers(handlertype);
-                drawarea.setMultiSelectEnabled(false);
-                pressed = false;
+                // Only unwind an interlude this handler actually opened: a release can arrive
+                // with no matching press, when the handler was swapped while the key was held
+                // or the platform took the press for its menu bar.
+                if (pressed) {
+                    /*
+                     * Restoring the tool drops the selection with it: every changeHandlers() case
+                     * but SELECTION clears it, and a group marquee'd under Alt is not meant to
+                     * outlive the interlude that made it.
+                     */
+                    drawarea.setDrawType(drawingtype);
+                    drawarea.changeHandlers(handlertype);
+                    drawarea.setMultiSelectEnabled(false);
+                    pressed = false;
+                }
             }
             default -> {
             }

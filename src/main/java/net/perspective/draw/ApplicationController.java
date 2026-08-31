@@ -190,62 +190,62 @@ public class ApplicationController implements Initializable {
     private void handleLineAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.LINE);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleLineTypeAction(ActionEvent e) {
         this.setDrawAreaLineType();
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleCircleAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.ELLIPSE);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleSquareAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.RECTANGLE);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleTriangleAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.ISOSCELES);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleHexagonAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.HEXAGON);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handlePentagramAction(ActionEvent e) {
         drawareaProvider.get().setDrawType(DrawingType.PENTAGRAM);
         drawareaProvider.get().changeHandlers(HandlerType.FIGURE);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleSketchTypeAction(ActionEvent e) {
         this.setDrawAreaSketchType();
         drawareaProvider.get().changeHandlers(HandlerType.SKETCH);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
     private void handleTextAction(ActionEvent e) {
         drawareaProvider.get().changeHandlers(HandlerType.TEXT);
-        viewProvider.get().setEditing(KeyHandlerType.NONE);
+        viewProvider.get().setEditing(KeyHandlerType.MOVE);
     }
 
     @FXML
