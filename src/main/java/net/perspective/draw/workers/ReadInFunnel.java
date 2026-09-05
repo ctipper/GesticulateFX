@@ -156,7 +156,7 @@ public class ReadInFunnel extends Task<Object> {
             }
             case Figure figure -> {
                 switch (figure.getType()) {
-                    case LINE, SKETCH, POLYGON -> {
+                    case LINE, SKETCH, POLYGON, CURVE, VECTOR -> {
                         Edge item = new Edge();
                         try {
                             BeanUtils.copyProperties(item, figure);

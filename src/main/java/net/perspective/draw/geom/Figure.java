@@ -580,7 +580,7 @@ public class Figure implements DrawItem, Serializable {
         Group anchors = new Group();
         anchors.setMouseTransparent(true);
         switch (this.type) {
-            case LINE, SKETCH, POLYGON, VECTOR -> {
+            case LINE, SKETCH, CURVE, POLYGON, VECTOR -> {
                 // end points marked
                 anchors.getChildren().add(this.anchor(drawarea, start.x, start.y));
                 anchors.getChildren().add(this.anchor(drawarea, end.x, end.y));

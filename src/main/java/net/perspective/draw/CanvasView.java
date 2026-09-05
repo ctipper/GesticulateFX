@@ -482,7 +482,7 @@ public class CanvasView {
             case Figure figure when !(figure instanceof ArrowLine) -> {
                 FigureType type = figure.getType();
                 if (drawarea.getArrow() != ArrowType.NONE) {
-                    if (type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
+                    if (type.equals(FigureType.CURVE) || type.equals(FigureType.SKETCH) || type.equals(FigureType.LINE)) {
                         result = new ArrowLine(figure);
                     }
                 }

@@ -26,6 +26,7 @@ package net.perspective.draw.geom;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Iterator;
 import net.perspective.draw.util.CanvasPoint;
 import org.jhotdraw.geom.Bezier;
 
@@ -128,6 +129,43 @@ public class FigurePathFactory implements PathFactory {
                     path.closePath();
                 } else {
                     return null;
+                }
+            }
+            case CURVE -> {
+                if (points.size() < 2) {
+                    path.reset();
+                    path.moveTo(points.get(0).x, points.get(0).y);
+                } else if (points.size() < 3) {
+                    path.reset();
+                    path.moveTo(points.get(0).x, points.get(0).y);
+                    path.lineTo(points.get(1).x, points.get(1).y);
+                } else {
+                    /*
+                     * A curve carries its own control points, stored and serialised as
+                     * anchor, (cp1, cp2, anchor)... so the list is 1 + 3n long. Documents
+                     * predating that layout hold bare anchors; ReadInFunnel#setControlPoints
+                     * converts one, and until it is run the list is not curve geometry, so
+                     * run the tail out as straight segments rather than over-read the iterator.
+                     */
+                    Iterator<CanvasPoint> iterator = points.listIterator();
+                    CanvasPoint p_1 = iterator.next();
+                    path.reset();
+                    path.moveTo(p_1.x, p_1.y);
+                    while (iterator.hasNext()) {
+                        CanvasPoint cp1 = iterator.next();
+                        if (!iterator.hasNext()) {
+                            path.lineTo(cp1.x, cp1.y);
+                            break;
+                        }
+                        CanvasPoint cp2 = iterator.next();
+                        if (!iterator.hasNext()) {
+                            path.lineTo(cp1.x, cp1.y);
+                            path.lineTo(cp2.x, cp2.y);
+                            break;
+                        }
+                        CanvasPoint p_2 = iterator.next();
+                        path.curveTo(cp1.x, cp1.y, cp2.x, cp2.y, p_2.x, p_2.y);
+                    }
                 }
             }
             case SKETCH -> {

@@ -65,7 +65,9 @@ public class FigureItemBehaviour implements ItemBehaviours {
         int quad;
 
         FigureType type = ((Figure) item).getType();
-        if (!type.equals(FigureType.SKETCH) && !type.equals(FigureType.POLYGON) && !type.equals(FigureType.LINE)) {
+        if (type.equals(FigureType.SQUARE) || type.equals(FigureType.CIRCLE)
+                || type.equals(FigureType.TRIANGLE) || type.equals(FigureType.HEXAGON)
+                || type.equals(FigureType.PENTAGRAM)) {
             List<CanvasPoint[]> vertices = ((Figure) item).getVertices();
             CanvasPoint centre = item.rotationCentre();
             /**

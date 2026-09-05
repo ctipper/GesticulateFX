@@ -561,8 +561,13 @@ public class ArrowLine extends Figure {
             List<CanvasPoint> coords = P_2();
             int size = coords.size();
             if (size > 2) {
-                // retrieve penultimate coord
-                point = new CanvasPoint(coords.get(size - 2).x, coords.get(size - 2).y);
+                if (this.getType().equals(FigureType.CURVE)) {
+                    // retrieve penultimate coord (end point has not been added)
+                    point = new CanvasPoint(coords.get(size - 1).x, coords.get(size - 1).y);
+                } else {
+                    // retrieve penultimate coord
+                    point = new CanvasPoint(coords.get(size - 2).x, coords.get(size - 2).y);
+                }
             } else {
                 // line start
                 point = new CanvasPoint(coords.get(0).x, coords.get(0).y);
@@ -752,6 +757,20 @@ public class ArrowLine extends Figure {
     @Override
     public List<CanvasPoint[]> getVertices() {
         return line.getVertices();
+    }
+
+    /**
+     * Return a List of 2-tuples of edge mid-points, second point normalised.
+     * Note that the points may not be cyclical.
+     * 
+     * <p>Delegated for the same reason as {@link #getVertices()}: the geometry lives on the
+     * line, and this instance's own start/end are never populated.
+     * 
+     * @return a List of 2-tuples representing transformed edge mid-points
+     */
+    @Override
+    public List<CanvasPoint[]> getEdges() {
+        return line.getEdges();
     }
 
     private void readObject(java.io.ObjectInputStream in)
