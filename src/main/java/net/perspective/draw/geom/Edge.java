@@ -49,6 +49,12 @@ public class Edge extends Figure {
 
     private static final Logger logger = LoggerFactory.getLogger(Edge.class.getName());
 
+    /** an axis shorter than this is degenerate, not merely small */
+    private static final double FLAT = 1e-6;
+
+    /** extent given to a degenerate axis so the shape stays selectable */
+    private static final double MIN_EXTENT = 4.0;
+
     /** Creates a new instance of <code>Edge</code> */
     public Edge() {
         super();
@@ -246,15 +252,14 @@ public class Edge extends Figure {
             bounds = area;
         } else {
             bounds = super.bounds();
-            // to give zero bound shapes extent
-            Rectangle2D boundingBox = bounds.getBounds2D();
-            if (boundingBox.getWidth() < 4.0 && boundingBox.getHeight() < 4.0) {
-                rectangle = new Rectangle2D.Double(-2.0, -2.0, 4.0, 4.0);
-                Area area = new Area(rectangle);
-                AffineTransform transform = new AffineTransform();
-                transform.setToTranslation(start.x, start.y);
-                area.transform(transform);
-                bounds = area;
+            // a collapsed axis leaves no interior to hit; pad only that axis,
+            // centred, so the real geometry stays inside the reported bounds
+            Rectangle2D box = bounds.getBounds2D();
+            if (box.getWidth() < FLAT || box.getHeight() < FLAT) {
+                double w = Math.max(box.getWidth(), MIN_EXTENT);
+                double h = Math.max(box.getHeight(), MIN_EXTENT);
+                bounds = new Area(new Rectangle2D.Double(
+                        box.getCenterX() - w / 2.0, box.getCenterY() - h / 2.0, w, h));
             }
         }
         return bounds;
