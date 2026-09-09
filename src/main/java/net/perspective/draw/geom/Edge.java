@@ -194,19 +194,13 @@ public class Edge extends Figure {
      */
     @Override
     public CanvasPoint rotationCentre() {
-        CanvasPoint centre;
-        Path2D.Double pa = (Path2D.Double) this.getPath().clone();
-        pa.closePath();
-        Area area = new Area(pa);
-        Rectangle2D bound = area.getBounds2D();
-        if (bound.getWidth() < 4.0 && bound.getHeight() < 4.0) {
-            centre = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
-        } else if (points.size() < 3) {
-            centre = new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
-        } else {
-            centre = new CanvasPoint(bound.getCenterX(), bound.getCenterY());
+        Path2D.Double p = this.getPath();
+        if (p == null || p.getCurrentPoint() == null) {
+            // nothing drawn yet, so start/end are all we have
+            return new CanvasPoint(.5 * (start.x + end.x), .5 * (start.y + end.y));
         }
-        return centre;
+        Rectangle2D bound = p.getBounds2D();
+        return new CanvasPoint(bound.getCenterX(), bound.getCenterY());
     }
 
     /**
