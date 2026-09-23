@@ -16,9 +16,9 @@
     </organization>
 
     <properties>
-        <java.version>26</java.version>
+        <java.version>27</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>26.0.2</javafx.version>
+        <javafx.version>27</javafx.version>
         <dagger.version>2.60.1</dagger.version>
         <slf4j.version>2.0.19</slf4j.version>
         <log4j.version>2.26.1</log4j.version>
@@ -279,7 +279,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.16.0</version>
                 <configuration>
-                    <release>26</release>
+                    <release>27</release>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
