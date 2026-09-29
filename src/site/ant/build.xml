@@ -323,6 +323,8 @@ CFBundleName = "${app.name}";
          <arg value="${deploy.dir}/linux/svg+xml.properties" />
          <arg value="--icon"/>
          <arg value="${deploy.dir}/linux/${bundle.linux.icon}"/>
+         <arg value="--license-file"/>
+         <arg value="LICENSE.txt"/>
       </exec>
 
       <echo if:set="onwindows" message="Calling ISCC"/>
