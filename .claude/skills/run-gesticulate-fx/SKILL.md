@@ -12,10 +12,9 @@ which runs `net.perspective.draw.Gesticulate` against the JavaFX module path.
 The agent path is the **driver script**
 [`.claude/skills/run-gesticulate-fx/smoke.sh`](.claude/skills/run-gesticulate-fx/smoke.sh):
 it compiles, launches the app, waits for the window, screenshots it, checks the
-startup log for exceptions, and shuts the app down. This is the right harness
-because the most important failure mode here — a Dagger dependency cycle — is a
-**runtime** error that compiles cleanly and only blows up at startup, so you
-must actually launch to catch it.
+startup log for exceptions, and shuts the app down. Launching is necessary
+because the most significant failure mode here — a Dagger dependency cycle — is
+a **runtime** error: it compiles cleanly and fails only at startup.
 
 > Paths below are relative to the repo root (`<root>/`). The driver lives at
 > `.claude/skills/run-gesticulate-fx/`. **macOS only** — the screenshot is
@@ -33,8 +32,8 @@ must actually launch to catch it.
 - **Maven** on `PATH` (`mvn`). Dependencies resolve from `~/.m2` — runs offline
   (`-o`).
 
-No `apt-get`/extra packages: this is the developer's own macOS host, not a
-headless Linux container.
+No additional packages are required. The driver assumes a configured macOS
+workstation rather than a headless container, and installs nothing.
 
 ## Run (agent path) — preferred
 
@@ -79,17 +78,17 @@ for automated verification.
 ## Gotchas
 
 - **`mvn exec:exec` does not compile.** It only launches. Run `mvn compile`
-  first or you'll launch stale/missing classes. The driver always compiles.
+  first, or stale or missing classes are launched. The driver always compiles.
 - **A Dagger cycle compiles fine and only fails at runtime.** It surfaces as a
   stack trace through `DaggerDrawAppComponent…inject…` / `DoubleCheck` at
   startup. The smoke script greps the log for these — a green `mvn compile` is
   *not* proof the app boots. Break cycles into `@Singleton` classes with
   `Provider<T>` (lazy) injection.
-- **`screencapture -R` grabs screen pixels by region, not a window.** If
-  another window overlaps the app's rectangle you'll capture *that* (this
-  caught us — we screenshotted VS Code sitting over the app). The driver calls
-  `set frontmost … to true` before capturing. Don't drag another window over it
-  mid-run.
+- **`screencapture -R` grabs screen pixels by region, not a window.** Anything
+  overlapping the app's rectangle is captured instead of the app — an editor
+  window left on top yields a screenshot of the editor. The driver calls
+  `set frontmost … to true` before capturing; leave the window uncovered for
+  the duration of the run.
 - **The background launcher "completes" while the app is still running.** When
   you launch in the background, the wrapper returns immediately; the JVM lives
   on. Check liveness with `pgrep -f net.perspective.draw.Gesticulate`, not the
