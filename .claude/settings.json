@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source ./setpath)",
+      "Bash(export JAVA_HOME=\"$HOME/Applications/jdk-27.jdk/Contents/Home\")",
+      "Bash(export JAVAFX_HOME=\"$HOME/Applications/javafx-sdk\")",
+      "Bash(JAVA_HOME=$HOME/Applications/jdk-27.jdk/Contents/Home mvn -q compile)",
+      "Bash(JAVA_HOME=$HOME/Applications/jdk-27.jdk/Contents/Home mvn -o compile)",
+      "Bash(JAVA_HOME=$HOME/Applications/jdk-27.jdk/Contents/Home JAVAFX_HOME=$HOME/Applications/javafx-sdk mvn exec:exec)",
+      "Bash(mvn -q compile)",
+      "Bash(mvn -o compile)",
+      "Bash(mvn -q -o compile)",
+      "Bash(mvn -q exec:exec)",
+      "Bash(mvn -o exec:exec)",
+      "Bash(.claude/skills/run-gesticulate-fx/smoke.sh)",
+      "Bash(pkill -f \"net.perspective.draw\")",
+      "Bash(export JAVA_TOOL_OPTIONS=\"-Duser.language=de -Duser.country=DE\")",
+      "Bash(export JAVA_TOOL_OPTIONS=\"-Duser.language=fr -Duser.country=FR\")",
+      "Bash(export JAVA_TOOL_OPTIONS=\"-Duser.language=pt -Duser.country=PT\")",
+      "Bash(export JAVA_TOOL_OPTIONS=\"-Duser.language=pt -Duser.country=BR\")",
+      "Bash(osascript -e 'tell application \"System Events\" to tell \\(first process whose name contains \"java\"\\) to set w to first window *)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}
